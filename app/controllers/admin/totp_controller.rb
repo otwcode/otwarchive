@@ -1,7 +1,7 @@
 class Admin::TotpController < Admin::BaseController
   before_action :require_admin_owner
   before_action :check_totp_disabled, only: [:new, :create]
-  before_action :check_totp_enabled, only: [:confirm_disable, :disable_totp]
+  before_action :check_totp_enabled, only: [:confirm_disable, :disable]
 
   def new
     current_admin.generate_otp_secret_if_missing!
@@ -9,13 +9,13 @@ class Admin::TotpController < Admin::BaseController
   end
 
   def create
-    unless current_admin.valid_password?(enable_2fa_params[:password])
+    unless current_admin.valid_password?(totp_params[:password])
       flash[:error] = t("devise.failure.admin.invalid")
       return redirect_to new_admin_totp_path
     end
 
-    if current_admin.validate_and_consume_otp!(enable_2fa_params[:otp_attempt])
-      current_admin.enable_otp!
+    if current_admin.validate_and_consume_otp!(totp_params[:otp_attempt])
+      current_admin.enable_totp!
 
       flash[:notice] = t(".success")
       redirect_to show_backup_codes_admin_totp_path
@@ -45,8 +45,8 @@ class Admin::TotpController < Admin::BaseController
     @page_subtitle = t(".page_title")
   end
 
-  def disable_totp
-    unless current_admin.valid_password?(enable_2fa_params[:password])
+  def disable
+    unless current_admin.valid_password?(totp_params[:password])
       flash[:error] = t("devise.failure.admin.invalid")
       return redirect_to confirm_disable_admin_totp_path
     end
@@ -62,11 +62,18 @@ class Admin::TotpController < Admin::BaseController
 
   private
 
+  def require_admin_owner
+    return if params[:admin_id] == current_admin.login
+
+    flash[:error] = t("admin.totp.access.permission_denied_generic")
+    redirect_to root_path
+  end
+
   def check_totp_enabled
     return if current_admin.otp_required_for_login
 
     flash[:error] = t("admin.totp.already_disabled")
-    redirect_to admins_path
+    redirect_to admin_preferences_path
   end
 
   def check_totp_disabled
@@ -76,7 +83,7 @@ class Admin::TotpController < Admin::BaseController
     redirect_to admins_path
   end
 
-  def enable_2fa_params
+  def totp_params
     params.require(:admin).permit(:otp_attempt, :password)
   end
 end

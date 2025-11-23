@@ -10,7 +10,7 @@ class Admin::PasswordsController < Devise::PasswordsController
   def check_if_totp_required
     admin = find_admin_by_reset_password_token(params[:reset_password_token])
 
-    return unless admin
+    return if admin.nil? || admin.new_record?
 
     @totp_required = admin.otp_required_for_login
   end
@@ -18,7 +18,7 @@ class Admin::PasswordsController < Devise::PasswordsController
   def verify_otp_code
     admin = find_admin_by_reset_password_token(admin_params[:reset_password_token])
 
-    return unless admin
+    return if admin.nil? || admin.new_record?
 
     return unless admin.otp_required_for_login && !valid_otp_attempt?(admin)
 
@@ -29,10 +29,10 @@ class Admin::PasswordsController < Devise::PasswordsController
 
   private
 
-  def find_admin_by_reset_password_token(original_token)
-    reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
+  def find_admin_by_reset_password_token(token_from_url)
+    reset_password_token = Devise.token_generator.digest(self, :reset_password_token, token_from_url)
 
-    Admin.find_by(reset_password_token: reset_password_token)
+    Admin.find_for_authentication(reset_password_token: reset_password_token)
   end
 
   def valid_otp_attempt?(admin)

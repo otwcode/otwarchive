@@ -53,7 +53,7 @@ class Admin
         
         redirect_to admins_path
       else
-        flash.now[:alert] = t("admin.sessions.invalid_totp")
+        flash.now[:error] = t("admin.sessions.invalid_totp")
         prompt_for_otp_two_factor(admin)
       end
     end

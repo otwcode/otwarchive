@@ -236,7 +236,7 @@ Rails.application.routes.draw do
     resource :totp, controller: "admin/totp", only: [:create, :new] do
       get :show_backup_codes
       get :confirm_disable
-      post :disable_totp
+      post :disable
     end
   end
 

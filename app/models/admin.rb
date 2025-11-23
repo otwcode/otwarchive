@@ -60,7 +60,7 @@ class Admin < ApplicationRecord
   end
 
   # Ensure that the user is prompted for their OTP when they login
-  def enable_otp!
+  def enable_totp!
     update!(otp_required_for_login: true)
   end
 

@@ -5,7 +5,6 @@ en:
       action_access_denied: Sorry, only an authorized admin can do that.
       not_admin_denied: Please log in as admin
       page_access_denied: Sorry, only an authorized admin can access the page you were trying to reach.
-      permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
     admin_invitations:
       find:
         user_not_found: No results were found. Try another search.
@@ -18,15 +17,20 @@ en:
         page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+    preferences:
+      access:
+        permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
     sessions:
       invalid_totp: Incorrect two-factor authentication code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
     totp:
+      access:
+        permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
       already_disabled: TOTP two-factor authentication is already disabled.
       already_enabled: TOTP two-factor authentication is already enabled.
       create:
         incorrect_code: Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again.
         success: Successfully enabled two-factor authentication; please make note of your backup codes.
-      disable_totp:
+      disable:
         failure: Could not disable two-factor authentication.
         success: Successfully disabled two-factor authentication.
       show_backup_codes:

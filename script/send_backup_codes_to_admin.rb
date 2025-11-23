@@ -11,18 +11,18 @@ login = login.strip
 admin = Admin.find_by(login: login)
 
 unless admin
-  puts "Admin not found."
+  puts "Admin #{login} not found."
   return
 end
 
 unless admin.otp_required_for_login
-  puts "This admin does not have TOTP two-factor authentication enabled."
+  puts "The admin #{login} does not have TOTP two-factor authentication enabled."
   return
 end
 
 codes = admin.generate_otp_backup_codes!
 admin.save!
 
-AdminMailer.totp_2fa_backup_codes(admin, codes).deliver
+AdminMailer.totp_2fa_backup_codes(admin, codes).deliver_now
 
-puts "Backup codes successfully sent to the admin."
+puts "Backup codes successfully sent to the admin #{login}."
