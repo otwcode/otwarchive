@@ -149,9 +149,8 @@ describe InvitationsController do
 
         it "shows invitee email as a link when the invitation is redeemed" do
           redeemed_invitation = create(:invitation,
-            invitee_email: "test@example.org",
-            redeemed_at: Time.current
-          )
+                                       invitee_email: "test@example.org",
+                                       redeemed_at: Time.current)
 
           admin.update!(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
@@ -159,7 +158,7 @@ describe InvitationsController do
           get :show, params: { id: redeemed_invitation.id }
 
           expect(response.body).to include(
-            admin_invitations_find_path(invitation: { invitee_email: "test@example.org" })
+            find_admin_invitations_path(invitation: { invitee_email: "test@example.org" })
           )
           expect(response.body).to include("<a")
           expect(response.body).to include("test@example.org")
@@ -167,9 +166,8 @@ describe InvitationsController do
 
         it "shows invitee email as plain text when the invitation is not redeemed" do
           unredeemed_invitation = create(:invitation,
-            invitee_email: "test@example.org",
-            redeemed_at: nil
-          )
+                                         invitee_email: "test@example.org",
+                                         redeemed_at: nil)
 
           admin.update!(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
@@ -178,7 +176,7 @@ describe InvitationsController do
 
           expect(response.body).to include("test@example.org")
           expect(response.body).not_to include(
-            admin_invitations_find_path(invitation: { invitee_email: "test@example.org" })
+            find_admin_invitations_path(invitation: { invitee_email: "test@example.org" })
           )
         end
       end
