@@ -92,7 +92,7 @@ services:
     stdin_open: true
     tty: true
   resque:
-    profiles:   
+    profiles:
       - dev
     build:
       context: .
