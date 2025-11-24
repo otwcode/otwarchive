@@ -12,7 +12,8 @@
   <dt class="heading"><%= t(".sent_to") %></dt>
   <dd>
     <% if @invitation.redeemed_at %>
-      <%= @invitation.invitee_email %>
+      <%= link_to @invitation.invitee_email,
+          admin_invitations_find_path(invitation: { invitee_email: @invitation.invitee_email }) %>
     <% else %>
       <%= form_for(@invitation) do |f| %>
         <%= error_messages_for @invitation %>
