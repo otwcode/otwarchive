@@ -9,7 +9,7 @@ describe InvitationsController do
   let(:user) { create(:user) }
 
   before do
-    allow(SearchCounts).to receive(:work_count_for_user).and_return(0)
+    allow($elasticsearch).to receive(:count).and_return("count" => 0)
   end
 
   describe "GET #index" do
