@@ -8,6 +8,10 @@ describe InvitationsController do
   let(:admin) { create(:admin) }
   let(:user) { create(:user) }
 
+  before do
+    allow(SearchCounts).to receive(:work_count_for_user).and_return(0)
+  end
+
   describe "GET #index" do
     context "when admin does not have correct authorization" do
       it "redirects with error" do
