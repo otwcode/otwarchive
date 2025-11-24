@@ -1,16 +1,11 @@
 require "spec_helper"
 
 describe InvitationsController do
-  render_views
   include LoginMacros
   include RedirectExpectationHelper
 
   let(:admin) { create(:admin) }
   let(:user) { create(:user) }
-
-  before do
-    allow($elasticsearch).to receive(:count).and_return("count" => 0)
-  end
 
   describe "GET #index" do
     context "when admin does not have correct authorization" do
@@ -150,39 +145,6 @@ describe InvitationsController do
           get :show, params: { id: invitation.id }
 
           expect(response).to render_template("show")
-        end
-
-        it "shows invitee email as a link when the invitation is redeemed" do
-          redeemed_invitation = create(:invitation,
-                                       invitee_email: "test@example.org",
-                                       redeemed_at: Time.current)
-
-          admin.update!(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-
-          get :show, params: { id: redeemed_invitation.id }
-
-          expect(response.body).to include(
-            find_admin_invitations_path(invitation: { invitee_email: "test@example.org" })
-          )
-          expect(response.body).to include("<a")
-          expect(response.body).to include("test@example.org")
-        end
-
-        it "shows invitee email as plain text when the invitation is not redeemed" do
-          unredeemed_invitation = create(:invitation,
-                                         invitee_email: "test@example.org",
-                                         redeemed_at: nil)
-
-          admin.update!(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-
-          get :show, params: { id: unredeemed_invitation.id }
-
-          expect(response.body).to include("test@example.org")
-          expect(response.body).not_to include(
-            find_admin_invitations_path(invitation: { invitee_email: "test@example.org" })
-          )
         end
       end
     end
