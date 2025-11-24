@@ -1,6 +1,7 @@
 require "spec_helper"
 
 describe InvitationsController do
+  render_views
   include LoginMacros
   include RedirectExpectationHelper
 
