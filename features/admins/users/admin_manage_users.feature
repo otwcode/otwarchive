@@ -136,4 +136,3 @@ Feature: Admin Actions to manage users
       And I should see "1 Comment" within "#comments-summary"
       And I should see "Comment on the work Creepy Gift" within "#comments-summary"
       And I should see "<p>Neener</p>" within "#comments-summary"
-
