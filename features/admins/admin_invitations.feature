@@ -409,6 +409,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see a link "default@email.com" within "dl"
     When I follow "default@email.com"
     Then I should see "All or part of an email address"
+      And I should see "default@email.com" within "table"
 
   Scenario: An admin can search the invitation queue, and search parameters are
   kept even if deleting without JavaScript

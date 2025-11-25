@@ -99,9 +99,7 @@ Given "an invitation created by {string} and used by {string}" do |creator, invi
   creator = User.find_by(login: creator)
   invitee = User.find_by(login: invitee)
   invitation = FactoryBot.create(:invitation, creator: creator)
-  invitation.redeemed_at = Time.current
   invitation.mark_as_redeemed(invitee)
-  invitation.save!
 end
 
 ### WHEN
@@ -117,9 +115,7 @@ When /^I use an already used invitation to sign up$/ do
       | invited  | password |
   }
   user = User.find_by(login: "invited")
-  invite.redeemed_at = Time.now
   invite.mark_as_redeemed(user)
-  invite.save
   visit signup_path(invite.token)
 end
 
