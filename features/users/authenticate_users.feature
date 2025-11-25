@@ -14,7 +14,7 @@ Feature: User Authentication
       And I press "Log In"
     Then I should see "The password or username you entered doesn't match our records"
       And I should see "Forgot your password or username?"
-    When I follow "Reset password"
+    When I follow "Reset your password"
     Then I should see "If you've forgotten your password, we can send you an email with instructions to reset your password."
       And I should see the page title "Reset Password"
     When I fill in "Email address" with "sam@example.com"

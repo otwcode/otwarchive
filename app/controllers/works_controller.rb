@@ -1,6 +1,8 @@
 # encoding=utf-8
 
 class WorksController < ApplicationController
+  include WorksHelper
+
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
@@ -174,22 +176,10 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
-    @tag_groups = @work.tag_groups
     if @work.unrevealed?
       @page_subtitle = t(".page_title.unrevealed")
     else
-      page_creator = if @work.anonymous?
-                       ts("Anonymous")
-                     else
-                       @work.pseuds.map(&:byline).sort.join(", ")
-                     end
-      fandoms = @tag_groups["Fandom"]
-      page_title_inner = if fandoms.size > 3
-                           ts("Multifandom")
-                         else
-                           fandoms.empty? ? ts("No fandom specified") : fandoms[0].name
-                         end
-      @page_title = get_page_title(page_title_inner, page_creator, @work.title)
+      @page_title = work_page_title(@work, @work.title)
     end
 
     # Users must explicitly okay viewing of adult content

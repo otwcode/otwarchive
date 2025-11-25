@@ -376,10 +376,12 @@ class Comment < ApplicationRecord
 
     # send notification to the owner of the original comment if they're not the same as the commenter
     if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
-      if self.saved_change_to_edited_at?
-        CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
-      else
-        CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
+      I18n.with_locale(parent_comment_owner&.preference&.locale_for_mails) do
+        if self.saved_change_to_edited_at?
+          CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
+        else
+          CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
+        end
       end
     end
 

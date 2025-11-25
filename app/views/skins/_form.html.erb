@@ -3,7 +3,7 @@
   <legend><%= ts('About') %></legend>
   <h3 class="landmark heading"><%= ts('About') %></h3>
   <dl>      
-    <dt class="required"><%= label_tag 'skin_type', ts('Type') + "*" %> <%= link_to_help 'skins-basics' %></dt>
+    <dt class="required"><%= label_tag "skin_type", "#{t('.skin_type')}*" %> <%= link_to_help "skins-basics" %></dt>
     <dd class="required">
       <% if @skin.id %>
         <% # don't let user change the type of an already-created skin %>
@@ -14,16 +14,20 @@
       <% end %>
     </dd>
   
-    <dt class="required"><%= f.label :title, ts('Title') + "*" %></dt>
-    <dd class="required"><%= f.text_field :title %></dd>
+    <dt class="required"><%= f.label :title, "#{t('.title')}*" %></dt>
+    <dd class="required">
+      <%= f.text_field :title, class: "observe_textlength" %>
+      <%= live_validation_for_field("skin_title", maximum_length: ArchiveConfig.TITLE_MAX) %>
+      <%= generate_countdown_html("skin_title", ArchiveConfig.TITLE_MAX) %>
+    </dd>
 
-    <dt><%= f.label :description, ts('Description') %></dt>
+    <dt><%= f.label :description, t(".description") %></dt>
     <dd><%= f.text_field :description %></dd>
 
-    <dt><%= f.label :icon, ts('Upload a preview (png, jpeg or gif)') %></dt>
+    <dt><%= f.label :icon, t(".icon") %></dt>
     <dd><%= f.file_field :icon %></dd>
 
-    <dt><%= f.label :public, ts('Apply to make public') %> <%= link_to_help 'skins-approval' %></dt>
+    <dt><%= f.label :public, t(".public") %> <%= link_to_help "skins-approval" %></dt>
     <dd><%= f.check_box :public %></dd>
   </dl>
 </fieldset>
