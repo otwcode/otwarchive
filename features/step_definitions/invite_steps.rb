@@ -98,7 +98,10 @@ end
 Given "an invitation created by {string} and used by {string}" do |creator, invitee|
   creator = User.find_by(login: creator)
   invitee = User.find_by(login: invitee)
-  FactoryBot.create(:invitation, creator: creator, invitee: invitee)
+  invitation = FactoryBot.create(:invitation, creator: creator)
+  invitation.redeemed_at = Time.now
+  invitation.mark_as_redeemed(invitee)
+  invitation.save!
 end
 
 ### WHEN

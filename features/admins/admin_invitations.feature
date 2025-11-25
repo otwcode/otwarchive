@@ -406,7 +406,9 @@ Feature: Admin Actions to Manage Invitations
     When I go to creator's manage invitations page
     When I follow the first invitation token url
     Then I should see "Sent to"
-      And I should see a link "invitee" within "dl"
+      And I should see a link "default@email.com" within "dl"
+    When I follow "default@email.com"
+    Then I should see "All or part of an email address"
 
   Scenario: An admin can search the invitation queue, and search parameters are
   kept even if deleting without JavaScript
