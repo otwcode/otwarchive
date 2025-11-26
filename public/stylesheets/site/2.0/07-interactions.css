@@ -653,7 +653,7 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
 
 .toggled form p.footnote, .dynamic form p.footnote {
   float: none;
-  margin: -0.25em auto;
+  margin: auto;
   padding: 0;
 }
 
@@ -672,7 +672,7 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
     box-shadow: none;
 }
 
-.toggled .bookmark form p.footnote {
+.toggled .bookmark form p.footnote, .dynamic .bookmark form p.footnote {
   padding-bottom: 0.643em;
 }
 
@@ -701,6 +701,13 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
 
 .dashboard form dt.landmark {
   clear: both;
+}
+
+/* CONTEXT: blurb */
+
+.blurb form li.input {
+  display: list-item;
+  padding-left: 0;
 }
 
 /* END == */
