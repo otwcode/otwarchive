@@ -168,7 +168,7 @@ Feature: Filters
   Scenario: You can filter through a user's collections to only return collections by the user
     Given I have the collection "So Closed"
       And I am logged in as a random user
-    When I go to testuser4's collection page
+    When I go to testuser4's collections page
       And I fill in "colletion_search_title" with "So Closed"
       And I press "Sort and Filter"
     Then I should see "1 Collection"
