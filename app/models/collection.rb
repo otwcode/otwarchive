@@ -180,11 +180,11 @@ class Collection < ApplicationRecord
   def self.signup_open(challenge_type)
     case challenge_type
     when "PromptMeme"
-      prompt_meme
+      not_closed.where(challenge_type: challenge_type)
         .joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").where("prompt_memes.signup_open = 1")
         .where("prompt_memes.signups_close_at > ?", Time.zone.now).order("prompt_memes.signups_close_at DESC")
     when "GiftExchange"
-      gift_exchange
+      not_closed.where(challenge_type: challenge_type)
         .joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1")
         .where("gift_exchanges.signups_close_at > ?", Time.zone.now).order("gift_exchanges.signups_close_at DESC")
     end
