@@ -57,7 +57,8 @@ module SearchHelper
       controller: :collections,
       action: :index,
       only_path: true,
-      **params.slice(:tag_id, :fandom_id, :collection_id, :pseud_id, :user_id).permit!
+      **params.slice(:title, :challenge_type, :moderated, :multifandom, :closed, :tag,
+      :sort_column, :sort_direction).permit!
     )
   end
 

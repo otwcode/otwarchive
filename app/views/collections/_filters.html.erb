@@ -1,9 +1,10 @@
-<%= form_for @search, as: :collection_search, 
-url: (@user ? user_collections_path(@user) : collections_path), 
-html: { 
-  method: :get, 
-  class: "narrow-hidden filters", 
-  id: "collection-filters" } do |f| %>
+<%= form_for @search, as: :collection_search,
+  url: (@user ? user_collections_path(@user) : collections_path),
+  html: {
+    method: :get,
+    class: "narrow-hidden filters",
+    id: "collection-filters" 
+  } do |f| %>
   <h3 class="landmark heading"><%= t(".landmark") %></h3>
   <%= field_set_tag t(".legend") do %>
     <dl>

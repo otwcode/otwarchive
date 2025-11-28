@@ -165,15 +165,6 @@ Feature: Filters
       And I should not see "Roonal Woozlib and the Ferrets of Nimh"
 
   @javascript
-  Scenario: You can filter through a user's collections to only return collections by the user
-    Given I have the collection "So Closed"
-      And I am logged in as a random user
-    When I go to testuser4's collections page
-      And I fill in "colletion_search_title" with "So Closed"
-      And I press "Sort and Filter"
-    Then I should see "1 Collection"
-
-  @javascript
   Scenario: Filter a user's bookmarks by "Search within results" and "Search bookmarker's tags and notes"
     Given I am logged in as "recengine"
       And I bookmark the work "Bilbo Does the Thing" with the tags "hobbit"

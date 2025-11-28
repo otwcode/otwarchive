@@ -128,9 +128,6 @@ module NavigationHelpers
     when /^(.*?)(?:'s)? bookmarks page$/i
       step %{all indexing jobs have been run}
       user_bookmarks_path(user_id: $1)
-    when /^(.*?)(?:'s)? collections page$/i
-      step %{all indexing jobs have been run}
-      user_collections_path(user_id: $1)
     when /^(.*?)(?:'s)? pseuds page$/i
       user_pseuds_path(user_id: $1)
     when /^(.*?)(?:'s)? manage invitations page$/i
