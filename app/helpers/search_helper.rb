@@ -58,7 +58,7 @@ module SearchHelper
       action: :index,
       only_path: true,
       **params.slice(:title, :challenge_type, :moderated, :multifandom, :closed, :tag,
-      :sort_column, :sort_direction).permit!
+                     :sort_column, :sort_direction).permit!
     )
   end
 
