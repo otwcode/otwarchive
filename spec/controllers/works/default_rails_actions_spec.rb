@@ -272,6 +272,14 @@ describe WorksController, work_search: true do
         include /Only canonical category tags are allowed./
     end
 
+    it "renders new if the work has invalid comment permissions" do
+      work_attributes = attributes_for(:work).except(:posted, :comment_permissions).merge(comment_permissions: "Comment")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include /Comment permissions are invalid./
+    end
+
     context "as a tag wrangler" do
       let(:user) { create(:tag_wrangler) }
 
