@@ -765,6 +765,7 @@ en:
           alt_action: You can however still leave Kudos!
           disable_all: Sorry, this work doesn't allow comments.
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
+          draft: Sorry, you can't comment on a draft.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
       previous_chapter_html: "%{back_arrow_html} Previous Chapter"
