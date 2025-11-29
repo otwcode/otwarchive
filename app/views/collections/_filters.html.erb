@@ -1,4 +1,10 @@
-<%= form_for @search, as: :collection_search, url: collections_path, html: { method: :get, class: "narrow-hidden filters", id: "collection-filters" } do |f| %>
+<%= form_for @search, as: :collection_search,
+  url: (@user ? user_collections_path(@user) : collections_path),
+  html: {
+    method: :get,
+    class: "narrow-hidden filters",
+    id: "collection-filters"
+  } do |f| %>
   <h3 class="landmark heading"><%= t(".landmark") %></h3>
   <%= field_set_tag t(".legend") do %>
     <dl>
@@ -133,7 +139,7 @@
       <dd class="submit actions"><%= submit_tag t(".submit.button") %></dd>
     </dl>
     <p class="footnote">
-      <%= link_to t(".clear_filters"), collections_path %>
+      <%= link_to t(".clear_filters"), collections_original_path %>
     </p>
   <% end %>
   <% # On narrow screens, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
