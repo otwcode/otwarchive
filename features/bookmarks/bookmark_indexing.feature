@@ -165,3 +165,19 @@ Feature: Bookmark Indexing
     Then I should see "BookmarkedWork"
       And I should see "BookmarkedSeries"
       And I should see "BookmarkedExternalWork"
+
+  Scenario: When a bookmark with a tag is searched for, only bookmarks with
+  the searched tag should appear
+    Given I am logged in as "author"
+      And I post the work "An Example Work"
+      And I post the work "Another Example Work"
+      And I am logged in as "bookmarker"
+      And I bookmark the work "An Example Work" with the tags "1k"
+      And I bookmark the work "Another Example Work" with the tags "2k"
+    When I go to bookmarker's user page
+      And I follow "Bookmarks (2)"
+      And I fill in "Search bookmarker's tags and notes" with "2k"
+      And I press "Sort and Filter"
+    Then I should see "1 Bookmark found by bookmarker"
+      And the 1st bookmark result should contain "Another Example Work"
+      And I should not see "An Example Work"
