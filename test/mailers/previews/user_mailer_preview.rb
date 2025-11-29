@@ -157,12 +157,14 @@ class UserMailerPreview < ApplicationMailerPreview
   def invitation_by_other_user
     inviting_user = create(:user)
     invitation = create(:invitation, creator: inviting_user)
+    user = create(:user, :for_mailer_preview)
     UserMailer.invitation(invitation.id)
   end
 
   # URL: /rails/mailers/user_mailer/invitation
   def invitation_by_queue
     invitation = create(:invitation)
+    user = create(:user, :for_mailer_preview)
     UserMailer.invitation(invitation.id)
   end
 
