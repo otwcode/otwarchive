@@ -2243,6 +2243,9 @@ en:
     wizard_form:
       description: Description
       title: Title
+  stats:
+    index:
+      flat_view: Flat View
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
