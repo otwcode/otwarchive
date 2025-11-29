@@ -10,7 +10,7 @@
   
       <dt class="required"><%= f.label :content, ts('Banner text') + '*' %></dt>
       <dd class="required">
-        <p><%= allowed_html_instructions %></p>
+        <p><%= allowed_html_instructions(strip_images: true) %></p>
         <%= f.text_area :content %>
       </dd>
 

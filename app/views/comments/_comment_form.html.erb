@@ -54,7 +54,6 @@
                           commentable_creator: commentable.by_anonymous_creator? ? t(".anonymous_creator") : get_commenter_pseud_or_name(commentable),
                           commentable_link: commentable_description_link(commentable)) %></span>
             <% end %>
-            (<%= allowed_html_instructions %>)
           </h4>
         <% else %>
           <h4 class="heading"><%= t(".comment_as") %> <span class="byline"><%= current_user.default_pseud.name %></span>
@@ -65,9 +64,14 @@
                         commentable_link: commentable_description_link(commentable)) %></span>
             <% end %>
           </h4>
-          <p class="footnote">(<%= allowed_html_instructions %>)</p>
         <% end %>
 
+        <% if comment.new_record? %>
+          <% comment.commentable = commentable.is_a?(CommentDecorator) ? commentable.__getobj__ : Comment.commentable_object(commentable) %>
+          <% comment.set_parent_and_unreviewed %>
+          <% comment.pseud = current_user.default_pseud %>
+        <% end %>
+        <p class="footnote"><%= allowed_html_instructions(strip_images: comment.use_image_safety_mode?) %></p>
       <% else %>
         <dl>
           <dt class="landmark"><%= t(".landmark.note") %>:</dt>
@@ -83,7 +87,7 @@
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", failureMessage: t(".guest_email_failure")) %>
           </dd>
         </dl>
-        <p class="footnote">(<%= allowed_html_instructions %>)</p>
+        <p class="footnote"><%= allowed_html_instructions(strip_images: true) %></p>
       <% end %>
 
       <p>
