@@ -198,6 +198,13 @@ Rails.application.routes.draw do
         post :bulk_update
       end
     end
+    scope :notices do
+      resources :support_notices, path: "support" do
+        member do
+          get :confirm_delete
+        end
+      end
+    end
     resources :user_creations, only: [:destroy] do
       member do
         put :hide
