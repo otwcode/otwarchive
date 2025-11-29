@@ -71,7 +71,7 @@ class Admin
     end
   
     def otp_two_factor_enabled?
-      find_admin&.otp_required_for_login
+      find_admin&.totp_enabled?
     end
   end
 end

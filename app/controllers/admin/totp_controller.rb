@@ -4,12 +4,12 @@ class Admin::TotpController < Admin::BaseController
   before_action :check_totp_enabled, only: [:confirm_disable, :disable]
 
   def new
-    current_admin.generate_otp_secret_if_missing!
+    current_admin.generate_totp_secret_if_missing!
     @page_subtitle = t(".page_title")
   end
 
   def create
-    unless current_admin.valid_password?(totp_params[:password])
+    unless current_admin.valid_password?(totp_params[:password_check])
       flash[:error] = t("devise.failure.admin.invalid")
       return redirect_to new_admin_totp_path
     end
@@ -26,12 +26,12 @@ class Admin::TotpController < Admin::BaseController
   end
 
   def show_backup_codes
-    unless current_admin.otp_required_for_login
+    unless current_admin.totp_enabled?
       flash[:error] = t(".not_enabled")
       return redirect_to new_admin_totp_path
     end
 
-    if current_admin.otp_backup_codes_generated?
+    if current_admin.totp_backup_codes_generated?
       flash[:error] = t(".already_seen")
       return redirect_to admins_path
     end
@@ -46,18 +46,18 @@ class Admin::TotpController < Admin::BaseController
   end
 
   def disable
-    unless current_admin.valid_password?(totp_params[:password])
+    unless current_admin.valid_password?(totp_params[:password_check])
       flash[:error] = t("devise.failure.admin.invalid")
       return redirect_to confirm_disable_admin_totp_path
     end
 
-    if current_admin.disable_otp!
+    if current_admin.disable_totp!
       flash[:notice] = t(".success")
+      redirect_to admin_preferences_path
     else
       flash[:error] = t(".failure")
+      redirect_to confirm_disable_admin_totp_path
     end
-
-    redirect_to admin_preferences_path
   end
 
   private
@@ -70,20 +70,20 @@ class Admin::TotpController < Admin::BaseController
   end
 
   def check_totp_enabled
-    return if current_admin.otp_required_for_login
+    return if current_admin.totp_enabled?
 
     flash[:error] = t("admin.totp.already_disabled")
     redirect_to admin_preferences_path
   end
 
   def check_totp_disabled
-    return unless current_admin.otp_required_for_login
+    return unless current_admin.totp_enabled?
 
     flash[:error] = t("admin.totp.already_enabled")
     redirect_to admins_path
   end
 
   def totp_params
-    params.require(:admin).permit(:otp_attempt, :password)
+    params.require(:admin).permit(:otp_attempt, :password_check)
   end
 end

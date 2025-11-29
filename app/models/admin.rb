@@ -52,20 +52,20 @@ class Admin < ApplicationRecord
 
   attr_accessor :otp_plain_backup_codes
 
-  # Generate an OTP secret it it does not already exist
-  def generate_otp_secret_if_missing!
+  # Generate a TOTP secret it it does not already exist
+  def generate_totp_secret_if_missing!
     return unless otp_secret.nil?
 
     update!(otp_secret: Admin.generate_otp_secret)
   end
 
-  # Ensure that the user is prompted for their OTP when they login
+  # Ensure that the user is prompted for their TOTP when they login
   def enable_totp!
     update!(otp_required_for_login: true)
   end
 
-  # Disable the use of OTP-based two-factor.
-  def disable_otp!
+  # Disable the use of TOTP-based two-factor.
+  def disable_totp!
     update!(
       otp_required_for_login: false,
       otp_secret: nil,
@@ -73,13 +73,18 @@ class Admin < ApplicationRecord
     )
   end
 
-  # URI for OTP two-factor QR code
-  def otp_qr_code_uri
+  # Whether this admin has TOTP enabled.
+  def totp_enabled?
+    otp_required_for_login
+  end
+
+  # URI for TOTP two-factor QR code
+  def totp_qr_code_uri
     otp_provisioning_uri(login, issuer: ArchiveConfig.APP_NAME)
   end
 
   # Determine if backup codes have been generated
-  def otp_backup_codes_generated?
+  def totp_backup_codes_generated?
     otp_backup_codes.present?
   end
 end

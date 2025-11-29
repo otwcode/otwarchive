@@ -6,7 +6,7 @@
 <fieldset>
   <h3 class="heading"><%= t(".step_1.heading") %></h3>
   <p><%= t(".step_1.scan_code") %></p>
-  <p><%= qr_code_as_svg(current_admin.otp_qr_code_uri) %></p>
+  <p><%= qr_code_as_svg(current_admin.totp_qr_code_uri) %></p>
   <p><%= t(".step_1.manually_enter_code") %></p>
   <code class="big">
     <%= current_admin.otp_secret.scan(/.{1,4}/).join(" ") %>
@@ -18,8 +18,8 @@
   <p><%= t(".step_2.instructions") %></p>
   <%= form_with(model: current_admin, url: admin_totp_path, method: :post) do |form| %>
     <dl>
-      <dt><%= form.label :password, t(".step_2.account_password") %></dt>
-      <dd><%= form.password_field :password %></dd>
+      <dt><%= form.label :password_check, t(".step_2.account_password") %></dt>
+      <dd><%= form.password_field :password_check %></dd>
       <dt><%= form.label :otp_attempt, t(".step_2.otp_code") %></dt>
       <dd><%= form.text_field :otp_attempt %></dd>
     </dl>

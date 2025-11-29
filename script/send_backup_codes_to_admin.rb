@@ -15,7 +15,7 @@ unless admin
   return
 end
 
-unless admin.otp_required_for_login
+unless admin.totp_enabled?
   puts "The admin #{login} does not have TOTP two-factor authentication enabled."
   return
 end

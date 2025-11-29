@@ -57,27 +57,27 @@ describe Admin::TotpController do
 
     context "when logged in as admin" do
       before do
-        admin.generate_otp_secret_if_missing!
+        admin.generate_totp_secret_if_missing!
       end
 
       it "allows enabling TOTP" do
         fake_login_admin(admin)
         post :create, params: { admin_id: admin.login, admin: { otp_attempt: admin.current_otp, password: "correct_password" } }
-        expect(admin.reload.otp_required_for_login).to be_truthy
+        expect(admin.reload.totp_enabled?).to be_truthy
         it_redirects_to_with_notice(show_backup_codes_admin_totp_path, "Successfully enabled two-factor authentication; please make note of your backup codes.")
       end
 
       it "denies access when TOTP code is wrong" do
         fake_login_admin(admin)
         post :create, params: { admin_id: admin.login, admin: { otp_attempt: "000000", password: "correct_password" } }
-        expect(admin.reload.otp_required_for_login).to be_falsey
+        expect(admin.reload.totp_enabled?).to be_falsey
         it_redirects_to_with_error(new_admin_totp_path, "Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again.")
       end
 
       it "denies access when password is wrong" do
         fake_login_admin(admin)
         post :create, params: { admin_id: admin.login, admin: { otp_attempt: admin.current_otp, password: "wrong_password" } }
-        expect(admin.reload.otp_required_for_login).to be_falsey
+        expect(admin.reload.totp_enabled?).to be_falsey
         it_redirects_to_with_error(new_admin_totp_path, "The password or admin username you entered doesn't match our records.")
       end
 
@@ -112,7 +112,7 @@ describe Admin::TotpController do
 
     context "when logged in as admin" do
       before do
-        admin.generate_otp_secret_if_missing!
+        admin.generate_totp_secret_if_missing!
       end
 
       it "shows the backup codes once" do
@@ -161,7 +161,7 @@ describe Admin::TotpController do
 
     context "when logged in as admin" do
       before do
-        admin.generate_otp_secret_if_missing!
+        admin.generate_totp_secret_if_missing!
         admin.generate_otp_backup_codes!
         admin.save!
       end
@@ -204,7 +204,7 @@ describe Admin::TotpController do
 
     context "when logged in as admin" do
       before do
-        admin.generate_otp_secret_if_missing!
+        admin.generate_totp_secret_if_missing!
         admin.generate_otp_backup_codes!
         admin.save!
       end
@@ -212,14 +212,14 @@ describe Admin::TotpController do
       it "allows disabling TOTP" do
         fake_login_admin(admin)
         post :disable, params: { admin_id: admin.login, admin: { otp_attempt: admin.current_otp, password: "correct_password" } }
-        expect(admin.reload.otp_required_for_login).to be_falsey
+        expect(admin.reload.totp_enabled?).to be_falsey
         it_redirects_to_with_notice(admin_preferences_path, "Successfully disabled two-factor authentication.")
       end
 
       it "denies access when password is wrong" do
         fake_login_admin(admin)
         post :disable, params: { admin_id: admin.login, admin: { otp_attempt: admin.current_otp, password: "wrong_password" } }
-        expect(admin.reload.otp_required_for_login).to be_truthy
+        expect(admin.reload.totp_enabled?).to be_truthy
         it_redirects_to_with_error(confirm_disable_admin_totp_path, "The password or admin username you entered doesn't match our records.")
       end
 

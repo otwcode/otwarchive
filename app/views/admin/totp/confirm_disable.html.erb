@@ -5,8 +5,8 @@
 <!--main content-->
 <%= form_with(model: current_admin, url: disable_admin_totp_path, method: :post) do |form| %>
   <dl>
-    <dt><%= form.label :password, t(".account_password") %></dt>
-    <dd><%= form.password_field :password %></dd>
+    <dt><%= form.label :password_check, t(".account_password") %></dt>
+    <dd><%= form.password_field :password_check %></dd>
   </dl>
 
   <dt class="landmark"><%= t(".landmark.submit") %></dt>

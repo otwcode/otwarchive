@@ -50,7 +50,7 @@ end
 
 Given "admin {string} has TOTP 2FA enabled" do |login|
   admin = Admin.find_by(login: login) || FactoryBot.create(:admin, login: login)
-  admin.generate_otp_secret_if_missing!
+  admin.generate_totp_secret_if_missing!
   admin.enable_totp!
 end
 

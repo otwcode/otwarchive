@@ -40,7 +40,7 @@ describe Admin::PasswordsController do
     let(:reset_token) { admin.send_reset_password_instructions }
 
     before do
-      admin.generate_otp_secret_if_missing!
+      admin.generate_totp_secret_if_missing!
     end
 
     context "with an invalid code" do

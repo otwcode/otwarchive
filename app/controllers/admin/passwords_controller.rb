@@ -12,7 +12,7 @@ class Admin::PasswordsController < Devise::PasswordsController
 
     return if admin.nil? || admin.new_record?
 
-    @totp_required = admin.otp_required_for_login
+    @totp_required = admin.totp_enabled?
   end
 
   def verify_otp_code
@@ -20,7 +20,7 @@ class Admin::PasswordsController < Devise::PasswordsController
 
     return if admin.nil? || admin.new_record?
 
-    return unless admin.otp_required_for_login && !valid_otp_attempt?(admin)
+    return unless admin.totp_enabled? && !valid_otp_attempt?(admin)
 
     flash[:error] = t("admin.sessions.invalid_totp")
 
