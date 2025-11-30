@@ -105,8 +105,7 @@ describe "rake search:run_world_index_queue" do
   it "reindexes users" do
     user = create(:user)
     IndexQueue.enqueue(user, :world)
-    expect(UserIndexer).to receive(:new)
-                                   .with([user.id.to_s]).and_call_original
+    expect(UserIndexer).to receive(:new).with([user.id.to_s]).and_call_original
 
     subject.invoke
   end
