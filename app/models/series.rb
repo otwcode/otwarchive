@@ -235,7 +235,8 @@ class Series < ApplicationRecord
       methods: [
         :revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :word_count, :work_types]
+        :relationship_ids, :freeform_ids, :word_count, :work_types
+      ]
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
