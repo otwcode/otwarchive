@@ -62,6 +62,7 @@ dl.meta dd ul li, .meta .stats dl, .meta .stats dl dt, .meta .stats dl dd {
 }
 
 /* mod: wrapped data */
+/* TODO: This might just want to be a .settings variation of .meta. Unsure. */
 
 dl.meta:has(.wrapper) {
   padding-block: 0;
