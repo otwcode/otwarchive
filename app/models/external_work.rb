@@ -97,9 +97,10 @@ class ExternalWork < ApplicationRecord
       methods: [
         :posted, :restricted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :creators, :revised_at
+        :relationship_ids, :freeform_ids, :revised_at
       ]
     ).merge(
+      creators: indexed_creators,
       language_id: language&.short,
       bookmarkable_type: "ExternalWork",
       bookmarkable_join: { name: "bookmarkable" }
@@ -116,7 +117,7 @@ class ExternalWork < ApplicationRecord
   end
   alias_method :restricted?, :restricted
 
-  def creators
+  def indexed_creators
     [author]
   end
 

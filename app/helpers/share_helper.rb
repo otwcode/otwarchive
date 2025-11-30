@@ -21,7 +21,7 @@ module ShareHelper
   def get_tweet_text_for_bookmark(bookmark)
     return unless bookmark.bookmarkable.is_a?(Work)
 
-    names = bookmark.bookmarkable.creators.to_sentence
+    names = text_byline(bookmark.bookmarkable)
     fandoms = short_fandom_string(bookmark.bookmarkable)
     "Bookmark of #{bookmark.bookmarkable.title} by #{names} - #{fandoms}".truncate(83)
   end
