@@ -36,6 +36,9 @@ en:
       on_work_html: Comment on the work %{title}
   inbox_helper:
     comment_link_with_chapter_number: Chapter %{position} of %{title}
+  qr_code_helper:
+    qr_code_as_svg:
+      default_label: QR code
   users_helper:
     log:
       ban: Suspended Permanently
