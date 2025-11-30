@@ -1,5 +1,5 @@
 Given /^all indexing jobs have been run$/ do
-  %w[main background stats users].each do |reindex_type|
+  %w[main background stats].each do |reindex_type|
     ScheduledReindexJob.perform(reindex_type)
   end
   Indexer.all.map(&:refresh_index)
