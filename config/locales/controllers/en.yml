@@ -17,9 +17,6 @@ en:
         page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
-    preferences:
-      access:
-        permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
     sessions:
       invalid_totp: Incorrect two-factor authentication code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
     totp:

@@ -134,3 +134,9 @@ a:focus .resp-sharing-button--bluesky {
   background-color: #0168d6;
   border-color: #0168d6;
 }
+
+/* TODO: Find a home for this. */
+
+.step {
+  margin-block: 2.572em;
+}

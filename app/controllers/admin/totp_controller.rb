@@ -53,11 +53,11 @@ class Admin::TotpController < Admin::BaseController
 
     if current_admin.disable_totp!
       flash[:notice] = t(".success")
-      redirect_to admin_preferences_path
     else
       flash[:error] = t(".failure")
-      redirect_to confirm_disable_admin_totp_path
     end
+
+    redirect_to admins_path
   end
 
   private
@@ -73,7 +73,7 @@ class Admin::TotpController < Admin::BaseController
     return if current_admin.totp_enabled?
 
     flash[:error] = t("admin.totp.already_disabled")
-    redirect_to admin_preferences_path
+    redirect_to admins_path
   end
 
   def check_totp_disabled

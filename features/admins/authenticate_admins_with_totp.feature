@@ -5,9 +5,7 @@ Feature: Authenticate Admin Users With TOTP 2FA
       | login | password     | email             |
       | admin | testpassword | admin@example.com |
       And I am logged in as admin "admin" with password "testpassword"
-    When I go to the home page
-      And I follow "My Preferences"
-      And I follow "Enable TOTP"
+    When I follow "Set up two-step verification with an authenticator app"
     Then I should see "Two-Factor Authentication Setup"
     When I fill in "password" with "testpassword"
       And I fill in a valid TOTP token for admin "admin"
@@ -20,9 +18,7 @@ Feature: Authenticate Admin Users With TOTP 2FA
       | login | password     | email             |
       | admin | testpassword | admin@example.com |
       And I am logged in as admin "admin" with password "testpassword"
-    When I go to the home page
-      And I follow "My Preferences"
-      And I follow "Enable TOTP"
+    When I follow "Set up two-step verification with an authenticator app"
     Then I should see "Two-Factor Authentication Setup"
     When I fill in "password" with "wrongpassword"
       And I fill in a valid TOTP token for admin "admin"
@@ -36,9 +32,7 @@ Feature: Authenticate Admin Users With TOTP 2FA
       | login | password     | email             |
       | admin | testpassword | admin@example.com |
       And I am logged in as admin "admin" with password "testpassword"
-    When I go to the home page
-      And I follow "My Preferences"
-      And I follow "Enable TOTP"
+    When I follow "Set up two-step verification with an authenticator app"
     Then I should see "Two-Factor Authentication Setup"
     When I fill in "password" with "testpassword"
       And I fill in "OTP code" with "000000"
@@ -53,9 +47,8 @@ Feature: Authenticate Admin Users With TOTP 2FA
       | admin | testpassword | admin@example.com |
       And I am logged in as admin "admin" with password "testpassword"
       And admin "admin" has TOTP 2FA enabled
-    When I go to the home page
-      And I follow "My Preferences"
-      And I follow "Disable TOTP" 
+    When I follow "Hi, admin!"
+      And I follow "Disable two-step verification"
     Then I should see "Disable Two-Factor Authentication"
     When I fill in "password" with "testpassword"
       And I press "Disable"
@@ -67,9 +60,8 @@ Feature: Authenticate Admin Users With TOTP 2FA
       | admin | testpassword | admin@example.com |
       And I am logged in as admin "admin" with password "testpassword"
       And admin "admin" has TOTP 2FA enabled
-    When I go to the home page
-      And I follow "My Preferences"
-      And I follow "Disable TOTP" 
+    When I follow "Hi, admin!"
+      And I follow "Disable two-step verification"
     Then I should see "Disable Two-Factor Authentication"
     When I fill in "password" with "wrongpassword"
       And I press "Disable"
