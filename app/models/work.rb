@@ -1205,11 +1205,12 @@ class Work < ApplicationRecord
       methods: [
         :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
-        :indexed_creators, :collection_ids, :work_types
+        :collection_ids, :work_types
       ]
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
+      creators: indexed_creators,
       unrevealed: unrevealed?,
       pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
       user_ids: anonymous? || unrevealed? ? nil : user_ids,
