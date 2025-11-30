@@ -510,7 +510,7 @@ class User < ApplicationRecord
   def historic_values(field)
     field = field.to_s
 
-    audits.order(id: :desc).limit(10_000).filter_map do |audit|
+    audits.order(id: :desc).limit(ArchiveConfig.USER_HISTORIC_VALUES_LIMIT).filter_map do |audit|
       audit.audited_changes[field]
     end.flatten.uniq.without(self[field])
   end
