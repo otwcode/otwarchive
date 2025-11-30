@@ -504,7 +504,7 @@ class User < ApplicationRecord
   end
 
   def enqueue_to_index
-    IndexQueue.enqueue(self, :user)
+    IndexQueue.enqueue(self, :users)
   end
 
   # Function to make it easier to retrieve info from the audits table.

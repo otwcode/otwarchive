@@ -395,7 +395,7 @@ describe User do
       it "enqueues the user for reindex" do
         expect do
           user.update!(login: "changed")
-        end.to add_to_reindex_queue(user, :user)
+        end.to add_to_reindex_queue(user, :users)
       end
     end
 
@@ -403,7 +403,7 @@ describe User do
       it "enqueues the user for reindex" do
         expect do
           user.destroy!
-        end.to add_to_reindex_queue(user, :user)
+        end.to add_to_reindex_queue(user, :users)
       end
     end
   end
