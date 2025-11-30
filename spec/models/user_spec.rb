@@ -387,4 +387,24 @@ describe User do
       expect(duplicates).to eq(3)
     end
   end
+
+  describe "reindexing" do
+    let!(:user) { create(:user, login: "before") }
+
+    context "when username is changed" do
+      it "enqueues the user for reindex" do
+        expect do
+          user.update!(login: "changed")
+        end.to add_to_reindex_queue(user, :user)
+      end
+    end
+
+    context "when user is destroyed" do
+      it "enqueues the user for reindex" do
+        expect do
+          user.destroy!
+        end.to add_to_reindex_queue(user, :user)
+      end
+    end
+  end
 end
