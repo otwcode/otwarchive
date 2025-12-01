@@ -503,6 +503,10 @@ class User < ApplicationRecord
     IndexQueue.enqueue_ids(Pseud, pseuds.pluck(:id), :main)
   end
 
+  def enqueue_to_index
+    IndexQueue.enqueue(self, :users)
+  end
+
   # Function to make it easier to retrieve info from the audits table.
   #
   # Looks up all past values of the given field, excluding the current value of
