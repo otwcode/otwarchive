@@ -65,9 +65,9 @@ class CollectionSearchForm
   def sort_options
     [
       ["Date Created", "created_at"],
-      ["Title", "title.keyword"],
+      %w[Title title.keyword],
       ["Bookmarked Items", "public_bookmarked_items_count"],
-      ["Works", "public_works_count"]
+      %w[Works public_works_count]
     ].freeze
   end
 
