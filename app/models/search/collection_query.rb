@@ -1,8 +1,5 @@
-require 'devise/controllers/helpers'
-
 class CollectionQuery < Query
   include TaggableQuery
-  include Devise::Controllers::Helpers
 
   # The "klass" function in the query classes is used only to determine what
   # type of search results to return (that is, which class the QueryResult

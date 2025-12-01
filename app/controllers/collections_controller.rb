@@ -50,7 +50,7 @@ class CollectionsController < ApplicationController
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       @sort_and_filter = true
-      @search = CollectionSearchForm.new(collection_filter_params.merge(page: params[:page]), logged_in_as_admin?)
+      @search = CollectionSearchForm.new(collection_filter_params.merge(page: params[:page]), admin_logged_in=logged_in_as_admin?)
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
     end
