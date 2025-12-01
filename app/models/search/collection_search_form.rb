@@ -25,7 +25,7 @@ class CollectionSearchForm
     define_method(filterable) { options[filterable] }
   end
 
-  def initialize(opts = {}, admin_logged_in: false)
+  def initialize(opts = {}, admin_logged_in = false)
     @options = opts
     @options[:admin_logged_in] = admin_logged_in
     process_options
