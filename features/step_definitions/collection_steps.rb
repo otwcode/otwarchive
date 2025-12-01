@@ -4,7 +4,7 @@ Given /^I have no collections$/ do
   Collection.delete_all
 end
 
-Given /^the collection "([^\"]*)" is deleted$/ do |collection_title|
+Given /^the collection "([^"]*)" is deleted$/ do |collection_title|
   step %{I am logged in as the owner of "#{collection_title}"}
   visit edit_collection_path(Collection.find_by(title: collection_title))
   click_link "Delete Collection"
@@ -12,12 +12,12 @@ Given /^the collection "([^\"]*)" is deleted$/ do |collection_title|
   page.should have_content("Collection was successfully deleted.")
 end
 
-When /^I am logged in as the owner of "([^\"]*)"$/ do |collection|
+When /^I am logged in as the owner of "([^"]*)"$/ do |collection|
   c = Collection.find_by(title: collection)
   step %{I am logged in as "#{c.owners.first.user.login}"}
 end
 
-When /^I view the collection "([^\"]*)"$/ do |collection|
+When /^I view the collection "([^"]*)"$/ do |collection|
   visit collection_path(Collection.find_by(title: collection))
 end
 
@@ -73,7 +73,7 @@ Given /^mod1 lives in Alaska$/ do
   step %{I press "Update"}
 end
 
-Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
+Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^"]*)"(?: with name "([^"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
   mod = ensure_user("moderator")
   collection = FactoryBot.create(:collection, title: title, name: (name.presence || title.gsub(/[^\w]/, "_")), owner: mod.default_pseud)
   collection.collection_preference.update_attribute(:anonymous, true) if anon.present?
@@ -82,7 +82,16 @@ Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?
   collection.collection_preference.update_attribute(:closed, true) if closed.present?
 end
 
-Given /^I open the collection with the title "([^\"]*)"$/ do |title|
+Given /^"([^"]*)"(?: owns )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^"]*)"(?: with name "([^"]*)")?$/ do |owner, hidden, anon, moderated, closed, title, name|
+  user = ensure_user(owner)
+  collection = FactoryBot.create(:collection, title: title, name: (name.presence || title.gsub(/[^\w]/, "_")), owner: user.default_pseud)
+  collection.collection_preference.update_attribute(:anonymous, true) if anon.present?
+  collection.collection_preference.update_attribute(:unrevealed, true) if hidden.present?
+  collection.collection_preference.update_attribute(:moderated, true) if moderated.present?
+  collection.collection_preference.update_attribute(:closed, true) if closed.present?
+end
+
+Given /^I open the collection with the title "([^"]*)"$/ do |title|
   step %{I am logged in as "moderator"}
   visit collection_path(Collection.find_by(title: title))
   step %{I follow "Collection Settings"}
@@ -91,7 +100,7 @@ Given /^I open the collection with the title "([^\"]*)"$/ do |title|
   step %{I am logged out}
 end
 
-Given /^I close the collection with the title "([^\"]*)"$/ do |title|
+Given /^I close the collection with the title "([^"]*)"$/ do |title|
   step %{I am logged in as "moderator"}
   visit collection_path(Collection.find_by(title: title))
   step %{I follow "Collection Settings"}
@@ -107,7 +116,7 @@ Given "I have added a/the co-moderator {string} to collection {string}" do |name
   visit collection_path(Collection.find_by(title: title))
   click_link("Membership")
   step %{I fill in "participants_to_invite" with "#{name}"}
-    step %{I press "Submit"}
+  step %{I press "Submit"}
 
   step %{I select "Moderator" from "#{name}_role"}
   # TODO: fix the form, it is malformed right now
@@ -178,21 +187,19 @@ end
 
 When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
   visit new_collection_path
-  fill_in("collection_name", with: (name.blank? ? title.gsub(/[^\w]/, '_') : name))
+  fill_in("collection_name", with: (name.presence || title.gsub(/[^\w]/, "_")))
   fill_in("collection_title", with: title)
 end
 
 When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
-  name = title.gsub(/[^\w]/, '_') if name.blank?
+  name = title.gsub(/[^\w]/, "_") if name.blank?
   step %{I set up the collection "#{title}" with name "#{name}"}
   step %{I submit}
 end
 
 When /^I add (?:a|the) subcollection "([^"]*)"(?: with name "([^"]*)")? to (?:a|the) parent collection named "([^"]*)"$/ do |title, name, parent_name|
-  if Collection.find_by_name(parent_name).nil?
-    step %{I create the collection "#{parent_name}" with name "#{parent_name}"}
-  end
-  name = title.gsub(/[^\w]/, '_') if name.blank?
+  step %{I create the collection "#{parent_name}" with name "#{parent_name}"} if Collection.find_by_name(parent_name).nil?
+  name = title.gsub(/[^\w]/, "_") if name.blank?
   step %{I set up the collection "#{title}" with name "#{name}"}
   fill_in("collection_parent_name", with: parent_name)
   step %{I submit}
@@ -204,7 +211,7 @@ When /^I sort by fandom$/ do
   end
 end
 
-When /^I reveal works for "([^\"]*)"$/ do |title|
+When /^I reveal works for "([^"]*)"$/ do |title|
   step %{I am logged in as the owner of "#{title}"}
   visit collection_path(Collection.find_by(title: title))
   step %{I follow "Collection Settings"}
@@ -213,7 +220,7 @@ When /^I reveal works for "([^\"]*)"$/ do |title|
   page.should have_content("Collection was successfully updated")
 end
 
-When /^I reveal authors for "([^\"]*)"$/ do |title|
+When /^I reveal authors for "([^"]*)"$/ do |title|
   step %{I am logged in as the owner of "#{title}"}
   visit collection_path(Collection.find_by(title: title))
   step %{I follow "Collection Settings"}
@@ -265,7 +272,7 @@ Then /^the name of the collection "([^"]*)" should be "([^"]*)"$/ do |title, nam
   assert Collection.find_by(title: title).name == name
 end
 
-Then /^I should see a collection not found message for "([^\"]+)"$/ do |collection_name|
+Then /^I should see a collection not found message for "([^"]+)"$/ do |collection_name|
   step %{I should see /We couldn't find the collection(?:.+and)? #{collection_name}/}
 end
 
@@ -273,7 +280,7 @@ Then /^the collection "(.*)" should be deleted/ do |collection|
   assert Collection.where(title: collection).first.nil?
 end
 
-Then /^the work "([^\"]*)" should be hidden from me$/ do |title|
+Then /^the work "([^"]*)" should be hidden from me$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
   expect(page.title).to include("Mystery Work")
@@ -291,21 +298,21 @@ Then /^the work "([^\"]*)" should be hidden from me$/ do |title|
   expect(page).not_to have_content(title)
 end
 
-Then /^the work "([^\"]*)" should be visible to me$/ do |title|
+Then /^the work "([^"]*)" should be visible to me$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
   page.should have_content(title)
   page.should have_content(Sanitize.clean(work.chapters.first.content))
 end
 
-Then /^the author of "([^\"]*)" should be visible to me on the work page$/ do |title|
+Then /^the author of "([^"]*)" should be visible to me on the work page$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
   authors = work.pseuds.uniq.sort.collect(&:byline).join(", ")
   page.should have_content("Anonymous [#{authors}]")
 end
 
-Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
+Then /^the author of "([^"]*)" should be publicly visible$/ do |title|
   work = Work.find_by(title: title)
   byline = work.users.first.pseuds.first.byline
   visit work_path(work)
@@ -318,7 +325,7 @@ Then /^the author of "([^\"]*)" should be publicly visible$/ do |title|
   end
 end
 
-Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
+Then /^the author of "([^"]*)" should be hidden from me$/ do |title|
   step "all indexing jobs have been run"
   work = Work.find_by(title: title)
   byline = work.users.first.pseuds.first.byline
