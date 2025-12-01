@@ -19,12 +19,12 @@ describe CollectionQuery do
     expect(q.generated_query[:sort]).to eq([{ "title.keyword" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
-  it 'sorts by bookmarked items' do
+  it "sorts by bookmarked items" do
     q = CollectionQuery.new(sort_column: "public_bookmarked_items_count", sort_direction: "desc")
-    expect(q.generated_query[:sort]).to eq([{ "public_bookmarkd_items_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
+    expect(q.generated_query[:sort]).to eq([{ "public_bookmarked_items_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
-  it 'sorts by works' do
+  it "sorts by works" do
     q = CollectionQuery.new(sort_column: "public_works_count", sort_direction: "desc")
     expect(q.generated_query[:sort]).to eq([{ "public_works_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
