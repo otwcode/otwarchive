@@ -1,7 +1,7 @@
 <%= render "downloads/download_preface" %>
 
 <div id="chapters" class="userstuff">
-  <% if @chapters.size > 1 %>
+  <% if @work.chaptered? %>
     <% for chapter in @chapters %>
       <%= render "downloads/download_chapter", chapter: chapter %>
     <% end %>
