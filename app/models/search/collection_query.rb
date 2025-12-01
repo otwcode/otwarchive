@@ -1,5 +1,8 @@
+require 'devise/controllers/helpers'
+
 class CollectionQuery < Query
   include TaggableQuery
+  include Devise::Controllers::Helpers
 
   # The "klass" function in the query classes is used only to determine what
   # type of search results to return (that is, which class the QueryResult
@@ -126,6 +129,11 @@ class CollectionQuery < Query
   end
 
   def sort
+    if @user.present? || options[:admin_logged_in]
+      if sort_column.include?("public")
+        options[:sort_column] = sort_column.sub("public", "general")
+      end
+    end
     direction = options[:sort_direction].presence
     direction ||= if sort_column.include?("title") || sort_column.include?("signups_close_at")
                     "asc"

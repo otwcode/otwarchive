@@ -25,8 +25,9 @@ class CollectionSearchForm
     define_method(filterable) { options[filterable] }
   end
 
-  def initialize(opts = {})
+  def initialize(opts = {}, admin_logged_in = false)
     @options = opts
+    @options[:admin_logged_in] = admin_logged_in
     process_options
     @searcher = CollectionQuery.new(@options)
   end
@@ -64,7 +65,9 @@ class CollectionSearchForm
   def sort_options
     [
       ["Date Created", "created_at"],
-      ["Title", "title.keyword"]
+      ["Title", "title.keyword"],
+      ["Bookmarked Items", "public_bookmarked_items_count"],
+      ["Works", "public_works_count"]
     ].freeze
   end
 
