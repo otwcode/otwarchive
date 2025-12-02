@@ -47,11 +47,7 @@ class CollectionIndexer < Indexer
           null_value: "NULL"
         },
         name: { type: "text", analyzer: "simple" },
-        description: { type: "text", analyzer: "standard" },
-        general_works_count: { type: "long" },
-        public_works_count: { type: "long" },
-        general_bookmarked_items_count: { type: "long" },
-        public_bookmarked_items_count: { type: "long" }
+        description: { type: "text", analyzer: "standard" }
       }
     }
   end
