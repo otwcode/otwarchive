@@ -25,9 +25,9 @@ class CollectionSearchForm
     define_method(filterable) { options[filterable] }
   end
 
-  def initialize(opts = {}, admin_logged_in: false)
+  def initialize(opts = {}, **kwargs)
     @options = opts
-    @options[:admin_logged_in] = admin_logged_in
+    @options[:admin_logged_in] = kwargs.fetch(:admin_logged_in, false)
     process_options
     @searcher = CollectionQuery.new(@options)
   end
