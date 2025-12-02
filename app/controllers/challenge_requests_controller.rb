@@ -1,12 +1,11 @@
 class ChallengeRequestsController < ApplicationController
-
   before_action :load_collection
   before_action :check_visibility
 
   def check_visibility
     unless @collection
       flash.now[:notice] = ts("Collection could not be found")
-      redirect_to '/' and return
+      redirect_to "/" and return
     end
     unless @collection.challenge_type == "PromptMeme" || (@collection.challenge_type == "GiftExchange" && @collection.challenge.user_allowed_to_see_requests_summary?(current_user))
       flash.now[:notice] = ts("You are not allowed to view the requests summary!")
@@ -28,14 +27,17 @@ class ChallengeRequestsController < ApplicationController
       INNER JOIN tags ON tags.id = set_taggings.tag_id 
       WHERE prompts.type = 'Request' AND tags.type = 'Fandom' AND prompts.collection_id = " + @collection.id.to_s + " GROUP BY prompts.id ORDER BY tagnames " + @sort_direction
       @requests = Prompt.paginate_by_sql(query, page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-    elsif @sort_column == "prompter" && !@collection.prompts.where(anonymous: true).exists?
-      @requests = @collection.prompts.where("type = 'Request'").
-        joins(challenge_signup: :pseud).
-        order("pseuds.name #{direction}").
-        paginate(page: params[:page])
+    elsif @sort_column == "prompter" && !@collection.prompts.exists?(anonymous: true)
+      @requests = @collection.prompts.where("type = 'Request'")
+        .joins(challenge_signup: :pseud)
+        .order("pseuds.name #{direction}")
+        .paginate(page: params[:page])
+    elsif @sort_column == "prompter" && @collection.prompts.exists?(anonymous: true)
+      @requests = @collection.prompts.where("type = 'Request'")
+        .joins(challenge_signup: :pseud)
+        .paginate(page: params[:page])
     else
       @requests = @collection.prompts.where("type = 'Request'").order(@sort_order).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     end
   end
-
 end
