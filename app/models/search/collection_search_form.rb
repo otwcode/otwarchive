@@ -25,9 +25,9 @@ class CollectionSearchForm
     define_method(filterable) { options[filterable] }
   end
 
-  def initialize(opts = {}, **kwargs)
+  def initialize(opts = {}, admin_logged_in = false) # rubocop:disable Style/OptionalBooleanParameter
     @options = opts
-    @options[:admin_logged_in] = kwargs.fetch(:admin_logged_in, false)
+    @options[:admin_logged_in] = admin_logged_in
     process_options
     @searcher = CollectionQuery.new(@options)
   end
