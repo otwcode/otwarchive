@@ -549,9 +549,7 @@ en:
         close_requests_html: Close Requests &#8593;
         heading:
           for_collection: Sign-ups for %{collection}
-          for_search:
-            one: Sign-up
-            other: Sign-ups
+          for_search: Sign-up
         navigation:
           download_csv: Download (CSV)
           search: Search
