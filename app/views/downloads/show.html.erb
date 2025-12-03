@@ -1,7 +1,8 @@
 <%= render "downloads/download_preface" %>
 
 <div id="chapters" class="userstuff">
-  <% if @work.chaptered? %>
+  <%# chaptered? = expected_number_of_chapters != 1. This includes chapter titles and notes%>
+  <% if @work.chaptered? || @chapter.size > 1 %>
     <% for chapter in @chapters %>
       <%= render "downloads/download_chapter", chapter: chapter %>
     <% end %>
