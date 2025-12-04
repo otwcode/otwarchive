@@ -312,10 +312,10 @@ end
 
 When "I add a new semi-anonymous prompt to my signup" do
   step %{I follow "Add Prompt"}
-    step %{I check "Stargate Atlantis"}
-    step %{I fill in the 1st field with id matching "freeform_tagnames" with "My extra tag"}
-    step %{I check "Semi-anonymous Prompt?"}
-    step %{I press "Submit"}
+  step %{I check "Stargate Atlantis"}
+  step %{I fill in the 1st field with id matching "freeform_tagnames" with "My extra tag"}
+  step %{I check "Semi-anonymous Prompt?"}
+  step %{I press "Submit"}
 end
 
 When /^I add a new prompt to my signup for a prompt meme$/ do
