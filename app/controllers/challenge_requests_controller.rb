@@ -28,16 +28,18 @@ class ChallengeRequestsController < ApplicationController
       WHERE prompts.type = 'Request' AND tags.type = 'Fandom' AND prompts.collection_id = " + @collection.id.to_s + " GROUP BY prompts.id ORDER BY tagnames " + @sort_direction
       @requests = Prompt.paginate_by_sql(query, page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     elsif @sort_column == "prompter" && !@collection.prompts.exists?(anonymous: true)
-      @requests = @collection.prompts.where("type = 'Request'")
+      @requests = @collection.prompts.where(type: "Request")
         .joins(challenge_signup: :pseud)
-        .order("pseuds.name #{direction}")
+        .order(pseuds: { name: direction })
         .paginate(page: params[:page])
     elsif @sort_column == "prompter" && @collection.prompts.exists?(anonymous: true)
-      @requests = @collection.prompts.where("type = 'Request'")
+      @requests = @collection.prompts.where(type: "Request")
         .joins(challenge_signup: :pseud)
         .paginate(page: params[:page])
     else
-      @requests = @collection.prompts.where("type = 'Request'").order(@sort_order).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @requests = @collection.prompts.where(type: "Request")
+        .order(@sort_order)
+        .paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     end
   end
 end
