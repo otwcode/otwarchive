@@ -217,6 +217,17 @@ Feature: Prompt Meme Challenge
   When I view prompts for "Battle 12"
     And I follow "Fandom 1"
   Then I should see "Something else weird"
+
+  Scenario: Sort prompts by prompter with an anonymous prompt doesn't give error page
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+    And I add a new semi-anonymous prompt to my signup
+  When I view prompts for "Battle 12"
+  Then I should not see "Prompter"
+  When I append "?sort_column=prompter" to the URL
+  Then I should see "Prompts for Battle 12"
   
   Scenario: Sign up for a prompt meme with no tags
   
