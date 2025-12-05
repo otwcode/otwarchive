@@ -5,7 +5,7 @@ en:
     anonymous_with_name_byline_html: Anonymous [%{pseud_byline}]
     archivist_byline_html: "%{external_creator} [archived by %{pseud_byline}]"
     help_modal:
-      question_mark: "?"
+      help_symbol: "?"
   collections_helper:
     collection_item_approval_options:
       collection:

@@ -179,9 +179,6 @@ module ApplicationHelper
   # TODO: AO3-7208 Make help modals dynamic and translatable and use link_to_help_modal instead of this method
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
     help_file = ""
-    #if Locale.active && Locale.active.language
-    #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
-    #end
 
     unless !help_file.blank? && File.exists?("#{Rails.root}/public/#{help_file}")
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
@@ -191,7 +188,7 @@ module ApplicationHelper
   end
 
   def link_to_help_modal(help_path, title)
-    link = tag.span(tag.span(t("application_helper.help_modal.question_mark")), class: %w[symbol question])
+    link = tag.span(tag.span(t("application_helper.help_modal.help_symbol")), class: %w[symbol question])
     " ".html_safe + link_to_modal(link, for: help_path, title: title, class: "help symbol question")
   end
 
