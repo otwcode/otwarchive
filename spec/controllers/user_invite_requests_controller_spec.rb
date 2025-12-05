@@ -14,7 +14,13 @@ describe UserInviteRequestsController do
 
     it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
 
-    it "does not allow non-admins to view user invite requests" do
+    it "does not allow guests to access user invite requests" do
+      subject
+
+      it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
+    end
+
+    it "does not allow non-admin users to access user invite requests" do
       fake_login
       subject
 
@@ -31,7 +37,13 @@ describe UserInviteRequestsController do
 
     it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
 
-    it "does not allow non-admins to update user invite requests" do
+    it "does not allow guests to update user invite requests" do
+      subject
+
+      it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
+    end
+
+    it "does not allow non-admin users to update user invite requests" do
       fake_login
       subject
 
