@@ -27,6 +27,7 @@
 <!-- BEGIN revealed -->
 <% if !@work.unrevealed? || logged_in_as_admin? || can_access_unrevealed_work(@work, current_user) %>
 <!-- BEGIN work -->
+<div class="work">
 <!--work description, metadata, notes and messages-->
   <%= render "works/work_header_navigation" %>
 
@@ -73,6 +74,7 @@
 
   </div>
   <!-- END work skin -->
+</div>
 <!-- END work -->
 
 <!-- BEGIN comment section -->
