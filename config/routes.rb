@@ -637,8 +637,11 @@ Rails.application.routes.draw do
     first_login
     preferences_locale
   ].each do |action|
-    get "/help/#{action}" => "help##{action}"
+    get "/help/#{action}", to: "help##{action}"
   end
+
+  # Redirects for moved help files
+  get "/first_login_help", to: redirect("/help/first_login")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
