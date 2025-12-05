@@ -3,11 +3,15 @@
 <%= error_messages_for :chapter %>
 <!--/descriptions-->
 
-<%= render "works/work_skin" %>
+<div id="previewpane">
+  <div class="work">
+    <%= render "works/work_skin" %>
 
-<div id="chapters">
-  <div id="workskin">
-    <%= render @chapter %>
+    <div id="workskin">
+      <div id="chapters">
+        <%= render @chapter %>
+      </div>
+    </div>
   </div>
 </div>
 

@@ -16,20 +16,23 @@
 <% end %>
 <!--/subnav-->
 
+<!-- BEGIN revealed -->
 <% if !@work.unrevealed? || logged_in_as_admin? || can_access_unrevealed_work(@work, current_user) %>
   <!-- BEGIN work -->
   <div class="work">
     <p class="landmark"><a name="top">&nbsp;</a></p>
 
+    <!--work description, metadata, notes and messages-->
     <%= render "works/work_header_navigation" %>
 
     <%= render "works/meta", work: @work %>
 
     <%= render "works/work_skin" %>
 
-<!-- BEGIN section where work skin applies -->
+    <!-- BEGIN section where work skin applies -->
     <div id="workskin">
       <%= render "works/preface" %>
+    <!--/descriptions-->
 
       <div id="chapters">
         <%= render "chapters/chapter", chapter: @chapter %>
@@ -75,5 +78,6 @@
     </script>
   <% end %>
 <% end %>
+<!-- END revealed -->
 
 <%= render "hit_count/include" %>

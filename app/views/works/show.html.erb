@@ -15,7 +15,6 @@
            creator_requests_page: link_to(ts("Co-Creator Requests page"), user_creatorships_path(current_user))).html_safe %>
   </p>
 <% end %>
-
 <!--/descriptions-->
 
 <!--subnav-->
@@ -26,60 +25,60 @@
 
 <!-- BEGIN revealed -->
 <% if !@work.unrevealed? || logged_in_as_admin? || can_access_unrevealed_work(@work, current_user) %>
-<!-- BEGIN work -->
-<div class="work">
-<!--work description, metadata, notes and messages-->
-  <%= render "works/work_header_navigation" %>
+  <!-- BEGIN work -->
+  <div class="work">
+    <!--work description, metadata, notes and messages-->
+    <%= render "works/work_header_navigation" %>
 
-  <%= render "works/meta", work: @work %>
+    <%= render "works/meta", work: @work %>
 
-  <%= render "works/work_skin" %>
+    <%= render "works/work_skin" %>
 
-<!-- BEGIN section where work skin applies -->
-  <div id="workskin">
-    <%= render "works/preface" %>
-<!--/descriptions-->
+    <!-- BEGIN section where work skin applies -->
+    <div id="workskin">
+      <%= render "works/preface" %>
+    <!--/descriptions-->
 
-<!--chapter content-->
-    <div id="chapters" role="article">
-      <% if @chapters %>
-        <% for chapter in @chapters %>
-          <%= render "chapters/chapter", chapter: chapter %>
+      <!--chapter content-->
+      <div id="chapters" role="article">
+        <% if @chapters %>
+          <% for chapter in @chapters %>
+            <%= render "chapters/chapter", chapter: chapter %>
+          <% end %>
+        <% else %>
+          <h3 class="landmark heading" id="work"><%= ts("Work Text:") %></h3>
+          <% cache("#{@chapter.cache_key}-show-content", skip_digest: true) do %>
+            <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
+          <% end %>
         <% end %>
-      <% else %>
-        <h3 class="landmark heading" id="work"><%= ts("Work Text:") %></h3>
-        <% cache("#{@chapter.cache_key}-show-content", skip_digest: true) do %>
-          <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
-        <% end %><!-- end cache -->
-      <% end %>
-    </div>
-<!--/chapter-->
+      </div>
+      <!--/chapter-->
 
-    <% inspired_by = get_inspired_by(@work) %>
-    <% if !@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty? %>
-    <!--afterword-->
-    <div class="afterword preface group">
-      <% unless @work.endnotes.blank? %>
-        <%= render "works/work_endnotes" %>
+      <% inspired_by = get_inspired_by(@work) %>
+      <% if !@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty? %>
+        <!--afterword-->
+        <div class="afterword preface group">
+          <% unless @work.endnotes.blank? %>
+            <%= render "works/work_endnotes" %>
+          <% end %>
+          <% unless @work.series.blank? %>
+            <%= render "works/work_series_links" %>
+          <% end %>
+          <% unless inspired_by.empty? %>
+            <%= render "works/work_approved_children", inspired_by: inspired_by %>
+          <% end %>
+        </div>
+        <!--/afterword-->
       <% end %>
-      <% unless @work.series.blank? %>
-        <%= render "works/work_series_links" %>
-      <% end %>
-      <% unless inspired_by.empty? %>
-        <%= render "works/work_approved_children", inspired_by: inspired_by %>
-      <% end %>
-    </div>
-    <!--/afterword-->
-    <% end %>
 
+    </div>
+    <!-- END work skin -->
   </div>
-  <!-- END work skin -->
-</div>
-<!-- END work -->
+  <!-- END work -->
 
-<!-- BEGIN comment section -->
-<%= render "comments/commentable", commentable: @work %>
-<!-- END comment section -->
+  <!-- BEGIN comment section -->
+  <%= render "comments/commentable", commentable: @work %>
+  <!-- END comment section -->
 <% end %>
 <!-- END revealed -->
 
