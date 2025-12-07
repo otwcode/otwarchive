@@ -164,13 +164,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Allow otp_attempt parameter in the :sign_in controller for admin two-factor authentication
+  # Allow totp_attempt parameter in the :sign_in controller for admin two-factor authentication
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:otp_attempt])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:totp_attempt])
   end
 
   def logged_in?

@@ -20,8 +20,8 @@
     <dt><%= label_tag :edit_password_confirmation, t(".label.confirmation") %></dt>
     <dd><%= f.password_field :password_confirmation, id: :edit_password_confirmation %></dd>
     <% if @totp_required %>
-      <dt><%= f.label :otp_attempt, t(".label.two_factor_authentication_code") %></dt>
-      <dd><%= f.text_field :otp_attempt %></dd>
+      <dt><%= f.label :totp_attempt, t(".label.two_step_verification_code") %></dt>
+      <dd><%= f.text_field :totp_attempt %></dd>
     <% end %>
     <dt class="landmark"><%= t(".landmark.submit") %></dt>
     <dd class="submit actions"><%= f.submit t(".submit") %></dd>

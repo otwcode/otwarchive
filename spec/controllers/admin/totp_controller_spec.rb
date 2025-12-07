@@ -29,7 +29,7 @@ describe Admin::TotpController do
       it "denies access to their own page when TOTP is enabled" do
         fake_login_admin(other_admin)
         get :new, params: { admin_id: other_admin.login }
-        it_redirects_to_with_error(admins_path, "TOTP two-factor authentication is already enabled.")
+        it_redirects_to_with_error(admins_path, "TOTP two-step verification is already enabled.")
       end
 
       it "denies access to other's pages" do
@@ -62,29 +62,29 @@ describe Admin::TotpController do
 
       it "allows enabling TOTP" do
         fake_login_admin(admin)
-        post :create, params: { admin_id: admin.login, admin: { otp_attempt: admin.current_otp, password_check: "correct_password" } }
+        post :create, params: { admin_id: admin.login, admin: { totp_attempt: admin.current_otp, password_check: "correct_password" } }
         expect(admin.reload.totp_enabled?).to be_truthy
-        it_redirects_to_with_notice(show_backup_codes_admin_totp_path, "Successfully enabled two-factor authentication; please make note of your backup codes.")
+        it_redirects_to_with_notice(show_backup_codes_admin_totp_path, "Successfully enabled two-step verification; please make note of your backup codes.")
       end
 
       it "denies access when TOTP code is wrong" do
         fake_login_admin(admin)
-        post :create, params: { admin_id: admin.login, admin: { otp_attempt: "000000", password_check: "correct_password" } }
+        post :create, params: { admin_id: admin.login, admin: { totp_attempt: "000000", password_check: "correct_password" } }
         expect(admin.reload.totp_enabled?).to be_falsey
-        it_redirects_to_with_error(new_admin_totp_path, "Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again.")
+        expect(flash[:error]).to eq("Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again.")
       end
 
       it "denies access when password is wrong" do
         fake_login_admin(admin)
-        post :create, params: { admin_id: admin.login, admin: { otp_attempt: admin.current_otp, password_check: "wrong_password" } }
+        post :create, params: { admin_id: admin.login, admin: { totp_attempt: admin.current_otp, password_check: "wrong_password" } }
         expect(admin.reload.totp_enabled?).to be_falsey
-        it_redirects_to_with_error(new_admin_totp_path, "The password or admin username you entered doesn't match our records.")
+        expect(flash[:error]).to eq("Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.")
       end
 
       it "denies access when TOTP is enabled" do
         fake_login_admin(other_admin)
         post :create, params: { admin_id: other_admin.login }
-        it_redirects_to_with_error(admins_path, "TOTP two-factor authentication is already enabled.")
+        it_redirects_to_with_error(admins_path, "TOTP two-step verification is already enabled.")
       end
 
       it "denies access to other's pages" do
@@ -139,7 +139,7 @@ describe Admin::TotpController do
       it "denies access when TOTP is disabled" do
         fake_login_admin(other_admin)
         get :show_backup_codes, params: { admin_id: other_admin.login }
-        it_redirects_to_with_error(new_admin_totp_path, "Please enable two-factor authentication first.")
+        it_redirects_to_with_error(new_admin_totp_path, "Please enable two-step verification first.")
       end
     end
   end
@@ -176,7 +176,7 @@ describe Admin::TotpController do
         fake_login_admin(other_admin)
         get :confirm_disable, params: { admin_id: other_admin.login }
         it_redirects_to_with_error(admins_path,
-                                   "TOTP two-factor authentication is already disabled.")
+                                   "TOTP two-step verification is already disabled.")
       end
 
       it "denies access to other's pages" do
@@ -211,23 +211,23 @@ describe Admin::TotpController do
 
       it "allows disabling TOTP" do
         fake_login_admin(admin)
-        post :disable, params: { admin_id: admin.login, admin: { otp_attempt: admin.current_otp, password_check: "correct_password" } }
+        post :disable, params: { admin_id: admin.login, admin: { totp_attempt: admin.current_otp, password_check: "correct_password" } }
         expect(admin.reload.totp_enabled?).to be_falsey
-        it_redirects_to_with_notice(admins_path, "Successfully disabled two-factor authentication.")
+        it_redirects_to_with_notice(admins_path, "Successfully disabled two-step verification.")
       end
 
       it "denies access when password is wrong" do
         fake_login_admin(admin)
-        post :disable, params: { admin_id: admin.login, admin: { otp_attempt: admin.current_otp, password_check: "wrong_password" } }
+        post :disable, params: { admin_id: admin.login, admin: { totp_attempt: admin.current_otp, password_check: "wrong_password" } }
         expect(admin.reload.totp_enabled?).to be_truthy
-        it_redirects_to_with_error(confirm_disable_admin_totp_path, "The password or admin username you entered doesn't match our records.")
+        expect(flash[:error]).to eq("Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.")
       end
 
       it "denies access when TOTP is disabled" do
         fake_login_admin(other_admin)
         post :disable, params: { admin_id: other_admin.login }
         it_redirects_to_with_error(admins_path,
-                                   "TOTP two-factor authentication is already disabled.")
+                                   "TOTP two-step verification is already disabled.")
       end
 
       it "denies access to other's pages" do

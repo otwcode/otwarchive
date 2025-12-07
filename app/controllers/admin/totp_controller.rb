@@ -10,30 +10,30 @@ class Admin::TotpController < Admin::BaseController
 
   def create
     unless current_admin.valid_password?(totp_params[:password_check])
-      flash[:error] = t("devise.failure.admin.invalid")
-      return redirect_to new_admin_totp_path
+      flash[:error] = t(".incorrect_password")
+      redirect_to new_admin_totp_path and return
     end
 
-    if current_admin.validate_and_consume_otp!(totp_params[:otp_attempt])
+    if current_admin.validate_and_consume_otp!(totp_params[:totp_attempt])
       current_admin.enable_totp!
 
       flash[:notice] = t(".success")
       redirect_to show_backup_codes_admin_totp_path
     else
       flash[:error] = t(".incorrect_code")
-      redirect_to new_admin_totp_path
+      render action: :new and return
     end
   end
 
   def show_backup_codes
     unless current_admin.totp_enabled?
       flash[:error] = t(".not_enabled")
-      return redirect_to new_admin_totp_path
+      redirect_to new_admin_totp_path and return
     end
 
     if current_admin.totp_backup_codes_generated?
       flash[:error] = t(".already_seen")
-      return redirect_to admins_path
+      redirect_to admins_path and return
     end
 
     @page_subtitle = t(".page_title")
@@ -47,8 +47,8 @@ class Admin::TotpController < Admin::BaseController
 
   def disable
     unless current_admin.valid_password?(totp_params[:password_check])
-      flash[:error] = t("devise.failure.admin.invalid")
-      return redirect_to confirm_disable_admin_totp_path
+      flash.now[:error] = t(".incorrect_password")
+      render action: :confirm_disable and return
     end
 
     if current_admin.disable_totp!
@@ -84,6 +84,6 @@ class Admin::TotpController < Admin::BaseController
   end
 
   def totp_params
-    params.require(:admin).permit(:otp_attempt, :password_check)
+    params.require(:admin).permit(:totp_attempt, :password_check)
   end
 end

@@ -363,7 +363,7 @@ en:
         label:
           confirmation: Confirm new password
           password: New password
-          two_factor_authentication_code: Two-Factor Authentication Code
+          two_step_verification_code: Two-Step Verification Code
         landmark:
           submit: Submit
         page_heading: Set My Admin Password
@@ -384,8 +384,8 @@ en:
         reset_link: Forgot admin password?
         submit: Log In as Admin
       totp:
-        page_heading: Two-Factor Authentication
-        two_factor_authentication_code: Two-Factor Authentication Code
+        page_heading: Two-Step Verification
+        two_step_verification_code: Two-Step Verification Code
     settings:
       index:
         fields:
@@ -426,29 +426,29 @@ en:
       confirm_disable:
         account_password: Admin password
         disable: Disable
-        heading: Disable Two-Factor Authentication
+        heading: Disable Two-Step Verification
         landmark:
           submit: Submit
-        page_title: Disable TOTP
+        page_title: Disable Two-Step Verification
       new:
         confirm_and_enable: Confirm and Enable
         landmark:
           submit: Submit
-        page_title: Enable TOTP
+        page_title: Enable Two-Step Verification
         step_1:
           heading: 'Step 1: Set up your authenticator app'
           manually_enter_code: 'If you cannot scan the QR code, you can also enter the following setup code manually:'
-          scan_code: Please scan the QR code below using an OTP-compatible authenticator app (such as 1Password, Google Authenticator, or Authy).
+          scan_code: Please scan the QR code below using a compatible authenticator app such as 1Password, Google Authenticator, or Authy.
         step_2:
           account_password: Account password
-          heading: 'Step 2: Confirm OTP code'
+          heading: 'Step 2: Confirm two-factor verification code'
           instructions: Please confirm that your authentication application is working by entering a generated code below.
-          otp_code: OTP code
-        two_factor_authentication_set_up: Two-Factor Authentication Setup
+          two_step_verification_code: Two-step verification code
+        two_factor_authentication_set_up: Two-Step Verification Setup
       show_backup_codes:
         finish: Finish
-        heading: Two-Factor Authentication Backup Codes
-        page_title: TOTP Backup Codes
+        heading: Two-Step Verification Backup Codes
+        page_title: Two-Step Verification Backup Codes
         step_3:
           heading: 'Step 3: Save your backup codes'
           write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'

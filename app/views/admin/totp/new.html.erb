@@ -35,8 +35,8 @@
     <dl>
       <dt><%= form.label :password_check, t(".step_2.account_password") %></dt>
       <dd><%= form.password_field :password_check %></dd>
-      <dt><%= form.label :otp_attempt, t(".step_2.otp_code") %></dt>
-      <dd><%= form.text_field :otp_attempt %></dd>
+      <dt><%= form.label :totp_attempt, t(".step_2.two_step_verification_code") %></dt>
+      <dd><%= form.text_field :totp_attempt %></dd>
     </dl>
 
     <dt class="landmark"><%= label_tag :submit, t(".landmark.submit") %></dt>
@@ -48,8 +48,8 @@
   <%# This is the form to add. %>
   <%# = form_with(model: current_admin, url: admin_totp_path, method: :post, class: "simple post") do |form| %>
     <%# <p> %>
-      <%# = form.label :otp_attempt, "6-digit code", class: "landmark" %>
-      <%# = form.text_field :otp_attempt %>
+      <%# = form.label :totp_attempt, "6-digit code", class: "landmark" %>
+      <%# = form.text_field :totp_attempt %>
       <%# = submit_tag "Enable Two-Step Verification" %>
     <%# </p> %>
   <%# end %>
