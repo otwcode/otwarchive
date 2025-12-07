@@ -4,7 +4,7 @@ describe Admin::SupportNoticesController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  SUPPORT_NOTICE_ROLES = %w[superadmin support]
+  support_notice_roles = %w[superadmin support].freeze
 
   let(:admin) { create(:admin, roles: ["superadmin"]) }
   let(:support_notice) { create(:support_notice) }
@@ -41,7 +41,7 @@ describe Admin::SupportNoticesController do
       expect(response).to render_template(:index)
     end
 
-    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action only authorized admins can access", authorized_roles: support_notice_roles
     it_behaves_like "an action users can't access"
   end
 
@@ -52,7 +52,7 @@ describe Admin::SupportNoticesController do
       expect(response).to render_template(:show)
     end
 
-    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action only authorized admins can access", authorized_roles: support_notice_roles
     it_behaves_like "an action users can't access"
   end
 
@@ -63,7 +63,7 @@ describe Admin::SupportNoticesController do
       expect(response).to render_template(:new)
     end
 
-    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action only authorized admins can access", authorized_roles: support_notice_roles
     it_behaves_like "an action users can't access"
   end
 
@@ -80,12 +80,12 @@ describe Admin::SupportNoticesController do
         .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target).to eq(SupportNotice.last)
-      expect(AdminActivity.last.action).to eq("create")
+      expect(AdminActivity.last.action).to eq("create support notice")
       expect(AdminActivity.last.admin).to eq(admin)
       expect(AdminActivity.last.summary).to include(support_notice_params[:notice])
     end
 
-    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action only authorized admins can access", authorized_roles: support_notice_roles
     it_behaves_like "an action users can't access"
   end
 
@@ -96,7 +96,7 @@ describe Admin::SupportNoticesController do
       expect(response).to render_template(:edit)
     end
 
-    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action only authorized admins can access", authorized_roles: support_notice_roles
     it_behaves_like "an action users can't access"
   end
 
@@ -115,12 +115,12 @@ describe Admin::SupportNoticesController do
         .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target).to eq(support_notice)
-      expect(AdminActivity.last.action).to eq("update")
+      expect(AdminActivity.last.action).to eq("update support notice")
       expect(AdminActivity.last.admin).to eq(admin)
       expect(AdminActivity.last.summary).to include(support_notice_params[:notice])
     end
 
-    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action only authorized admins can access", authorized_roles: support_notice_roles
     it_behaves_like "an action users can't access"
   end
 
@@ -131,7 +131,7 @@ describe Admin::SupportNoticesController do
       expect(response).to render_template(:confirm_delete)
     end
 
-    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action only authorized admins can access", authorized_roles: support_notice_roles
     it_behaves_like "an action users can't access"
     it_behaves_like "only inactive notices can be deleted"
   end
@@ -152,11 +152,11 @@ describe Admin::SupportNoticesController do
         .by(1)
       expect(AdminActivity.last.target_id).to eq(support_notice.id)
       expect(AdminActivity.last.admin).to eq(admin)
-      expect(AdminActivity.last.action).to eq("destroy")
+      expect(AdminActivity.last.action).to eq("destroy support notice")
       expect(AdminActivity.last.summary).to include(support_notice.notice)
     end
 
-    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action only authorized admins can access", authorized_roles: support_notice_roles
     it_behaves_like "an action users can't access"
     it_behaves_like "only inactive notices can be deleted"
   end
