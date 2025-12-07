@@ -4,33 +4,13 @@ describe Admin::SupportNoticesController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  SUPPORT_NOTICE_ROLES = %w[superadmin support]
+
   let(:admin) { create(:admin, roles: ["superadmin"]) }
   let(:support_notice) { create(:support_notice) }
   let(:support_notice_params) { attributes_for(:support_notice, notice: "New notice content") }
 
-  shared_examples "only authorized admins are allowed" do |authorized_roles:|
-    authorized_roles.each do |role|
-      it "succeeds for #{role} admins" do
-        fake_login_admin(create(:admin, roles: [role]))
-        subject
-        success
-      end
-    end
-
-    (Admin::VALID_ROLES - authorized_roles).each do |role|
-      it "displays an error to #{role} admins" do
-        fake_login_admin(create(:admin, roles: [role]))
-        subject
-        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
-    end
-
-    it "displays an error to admins with no role" do
-      fake_login_admin(create(:admin, roles: []))
-      subject
-      it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
-    end
-
+  shared_examples "an action users can't access" do
     it "redirects logged out users to root with notice" do
       fake_logout
       subject
@@ -43,7 +23,7 @@ describe Admin::SupportNoticesController do
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
   end
-  
+
   shared_examples "only inactive notices can be deleted" do
     let(:support_notice) { create(:support_notice, :active) }
 
@@ -61,7 +41,8 @@ describe Admin::SupportNoticesController do
       expect(response).to render_template(:index)
     end
 
-    it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
+    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action users can't access"
   end
 
   describe "GET #show" do
@@ -71,7 +52,8 @@ describe Admin::SupportNoticesController do
       expect(response).to render_template(:show)
     end
 
-    it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
+    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action users can't access"
   end
 
   describe "GET #new" do
@@ -81,7 +63,8 @@ describe Admin::SupportNoticesController do
       expect(response).to render_template(:new)
     end
 
-    it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
+    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action users can't access"
   end
 
   describe "POST #create" do
@@ -102,7 +85,8 @@ describe Admin::SupportNoticesController do
       expect(AdminActivity.last.summary).to include(support_notice_params[:notice])
     end
 
-    it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
+    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action users can't access"
   end
 
   describe "GET #edit" do
@@ -112,7 +96,8 @@ describe Admin::SupportNoticesController do
       expect(response).to render_template(:edit)
     end
 
-    it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
+    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action users can't access"
   end
 
   describe "PUT #update" do
@@ -135,7 +120,8 @@ describe Admin::SupportNoticesController do
       expect(AdminActivity.last.summary).to include(support_notice_params[:notice])
     end
 
-    it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
+    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action users can't access"
   end
 
   describe "GET #confirm_delete" do
@@ -145,7 +131,8 @@ describe Admin::SupportNoticesController do
       expect(response).to render_template(:confirm_delete)
     end
 
-    it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
+    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action users can't access"
     it_behaves_like "only inactive notices can be deleted"
   end
 
@@ -169,7 +156,8 @@ describe Admin::SupportNoticesController do
       expect(AdminActivity.last.summary).to include(support_notice.notice)
     end
 
-    it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
+    it_behaves_like "an action only authorized admins can access", authorized_roles: SUPPORT_NOTICE_ROLES
+    it_behaves_like "an action users can't access"
     it_behaves_like "only inactive notices can be deleted"
   end
 end

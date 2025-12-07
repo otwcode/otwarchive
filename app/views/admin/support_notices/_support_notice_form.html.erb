@@ -1,4 +1,4 @@
-<%= form_for @support_notice, url: @support_notice.new_record? ? admin_support_notices_path : admin_support_notice_path(@support_notice), html: { class: "post" } do |f| %>
+<%= form_with model: @support_notice, url: @support_notice.new_record? ? admin_support_notices_path : admin_support_notice_path(@support_notice), html: { class: "post" } do |f| %>
   <%= error_messages_for @support_notice %>
   <p class="required notice"><%= "* #{t('.required_information')}" %></p>
   <fieldset>

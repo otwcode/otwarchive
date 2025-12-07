@@ -20,11 +20,11 @@ en:
     support_notices:
       cannot_delete_active: Active support notices cannot be deleted.
       create:
-        created: Support Notice successfully created.
+        success: Support Notice successfully created.
       destroy:
-        successfully_deleted: Support Notice successfully deleted.
+        success: Support Notice successfully deleted.
       update:
-        updated: Support Notice successfully updated.
+        success: Support Notice successfully updated.
     user_creations:
       confirm_remove_pseud:
         must_have_orphan_pseuds: Sorry, this action is only available for works by orphan_account pseuds.

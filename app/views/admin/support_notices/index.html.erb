@@ -10,10 +10,10 @@
   <%== pagy_nav(@pagy) %>
 
   <!--main content-->
-  <ul class="support-notices index group">
-    <% @support_notices.each { |support_notice| %>
+  <ul class="support-notice index group">
+    <% @support_notices.each do |support_notice| %>
       <%= render "support_notice", support_notice: support_notice %>
-    <% } %>
+    <% end %>
   </ul>
   <!--/content-->
 

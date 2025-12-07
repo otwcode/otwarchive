@@ -455,11 +455,11 @@ en:
           actions: Actions
           content: Support Notice
         required_information: Required Information
-        text: Support Notice Text
+        text: Support notice text
         type:
           caution: Caution
           error: Error
-          label: Support Notice Type
+          label: Support notice type
           notice: Notice
     user_creations:
       confirm_remove_pseud:

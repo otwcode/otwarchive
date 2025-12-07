@@ -1,5 +1,5 @@
 <li class="blurb">
-  <div class="notice <%= support_notice.css_class %>">
+  <div class="<%= support_notice.css_classes %>">
     <blockquote class="userstuff">
       <%= raw sanitize_field(support_notice, :notice, image_safety_mode: true) %>
     </blockquote>

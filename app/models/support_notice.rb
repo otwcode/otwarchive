@@ -5,8 +5,8 @@ class SupportNotice < ApplicationRecord
   validates :support_notice_type, inclusion: { in: SUPPORT_NOTICE_TYPES }
   after_save_commit :ensure_single_active_notice
 
-  def css_class
-    self.support_notice_type == "notice" ? "" : " #{self.support_notice_type}"
+  def css_classes
+    ["notice", self.support_notice_type].uniq.join(" ")
   end
 
   private
@@ -14,6 +14,6 @@ class SupportNotice < ApplicationRecord
   def ensure_single_active_notice
     return unless self.active?
 
-    SupportNotice.where(active: true).where.not(id: self.id).update_all(active: false)
+    SupportNotice.where(active: true).where.not(id: self.id).update(active: false)
   end
 end
