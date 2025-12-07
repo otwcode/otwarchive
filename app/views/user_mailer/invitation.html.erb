@@ -8,7 +8,7 @@
   </p>
 
   <p>
-    <%= t(".about.html", otw_link: style_link(t(".html.otw_link_text"), "https://www.transformativeworks.org")) %>
+    <%= t(".about.html", otw_link: style_link(t(".about.otw_link_text"), "https://www.transformativeworks.org")) %>
   </p>
 
   <p>
@@ -16,14 +16,14 @@
   </p>
 
   <p>
-    <%= t(".join.html", invitation_link: style_link(t(".html.invitation_link_text"), signup_url(invitation_token: @invitation.token))) %>
+    <%= t(".join.html", invitation_link: style_link(t(".join.invitation_link_text"), signup_url(invitation_token: @invitation.token))) %>
   </p>
 
   <p>
-    <%= t(".activation_support.html", support_link: style_link(t(".html.support_link_text"), new_feedback_report_url)) %>
+    <%= t(".activation_support.html", support_link: style_link(t(".activation_support.support_link_text"), new_feedback_report_url)) %>
   </p>
 
   <p>
-    <%= t(".faq.html", faq_link: style_link(t(".html.faq_link_text"), archive_faqs_url)) %>
+    <%= t(".faq.html", faq_link: style_link(t(".faq.faq_link_text"), archive_faqs_url)) %>
   </p>
 <% end %>
