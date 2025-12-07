@@ -31,10 +31,10 @@
         <%= generate_countdown_html("profile_about_me", Profile::ABOUT_ME_MAX) %>
       </dd>
 
-      <% if policy(@user.profile).can_edit_profile? %>
-        <dt><%= f.label :ticket_number, class: "required" %></dt>
-        <dd>
-          <%= f.text_field :ticket_number, class: "required" %>
+      <% if policy(@user.profile).update? %>
+        <dt class="required"><%= f.label :ticket_number %></dt>
+        <dd class="required">
+          <%= f.text_field :ticket_number %>
         </dd>
       <% end %>
 
