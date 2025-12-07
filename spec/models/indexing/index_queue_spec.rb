@@ -65,6 +65,14 @@ describe IndexQueue do
       IndexQueue.new("index:pseud:main").run
     end
 
+    it "should call the user indexer" do
+      user = create(:user)
+      expect(UserIndexer).to receive(:new).with(
+        array_including(user.id.to_s)
+      ).and_call_original
+      IndexQueue.new("index:user:users").run
+    end
+
     it "should call the stat counter indexer" do
       stats = create(:work).stat_counter
       stats.update!(hit_count: 10_000)
