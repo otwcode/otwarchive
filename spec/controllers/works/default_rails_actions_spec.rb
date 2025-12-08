@@ -277,7 +277,7 @@ describe WorksController, work_search: true do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include /Comment permissions are invalid./
+        include "Comment permissions are invalid."
     end
 
     context "as a tag wrangler" do
