@@ -387,6 +387,19 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
     And the cache of the bookmark on "Really Good Thing" should not expire if I have not edited the bookmark
     And the cache of the bookmark on "Really Good Thing" should expire after I edit the bookmark tags
 
+@javascript @load-default-skin
+Scenario: The Save a bookmark form can be reopened after closing it with "X" on some pages (AO3-7215)
+  Given I am logged in as "bookmarker"
+    And the work "Really Good Thing"
+    And I have a bookmark for "Really Good Thing"
+  When I view the work "Really Good Thing"
+    And I follow "1"
+    And I press "Edit"
+  Then I should see "save a bookmark!"
+  When I press "×"
+    And I press "Edit"
+  Then I should see "save a bookmark!"
+
 Scenario: User can't bookmark same work twice
   Given the work "Haven"
     And I am logged in as "Mara"
