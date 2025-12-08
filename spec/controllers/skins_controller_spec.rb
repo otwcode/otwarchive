@@ -6,69 +6,55 @@ describe SkinsController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  let(:admin) { create(:admin) }
+  describe "POST #create" do
+    let(:skin_creator) { create(:user) }
 
-  before { fake_login_admin(admin) }
-
-  describe "GET #edit" do
-    shared_examples "unauthorized admin cannot edit" do
-      it "redirects with error" do
-        get :edit, params: { id: skin.id }
-        it_redirects_to_with_error(root_path(skin), "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
+    before do
+      fake_login_known_user(skin_creator)
     end
 
-    shared_examples "authorized admin can edit" do
-      it "renders edit template" do
-        get :edit, params: { id: skin.id }
-        expect(response).to render_template(:edit)
+    context "when duplicate database inserts happen despite Rails validations" do
+      # https://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of-label-Concurrency+and+integrity
+      #
+      # We fake this scenario by skipping Rails validations.
+      before do
+        allow_any_instance_of(Skin).to receive(:save).and_call_original
+        allow_any_instance_of(Skin).to receive(:save).with(no_args) do |skin|
+          skin.save(validate: false)
+        end
+
+        create(:skin, title: "hello world")
       end
+
+      it "shows the usual validation error" do
+        post :create, params: { skin: { title: "hello world" } }
+
+        expect(response).to render_template(:new)
+        expect(assigns[:skin]).not_to be_valid
+        expect(assigns[:skin].errors[:title]).to include("must be unique")
+      end
+    end
+  end
+
+  site_skin_edit_roles = %w[superadmin].freeze
+  work_skin_edit_roles = %w[superadmin support].freeze
+
+  describe "GET #edit" do
+    subject { get :edit, params: { id: skin.id } }
+    let(:success) do
+      expect(response).to render_template(:edit)
     end
 
     context "with a site skin" do
       let(:skin) { create(:skin, :public) }
 
-      context "when admin has no role" do
-        it_behaves_like "unauthorized admin cannot edit"
-      end
-
-      (Admin::VALID_ROLES - %w[superadmin]).each do |role|
-        context "when admin has #{role} role" do
-          let(:admin) { create(:admin, roles: [role]) }
-
-          it_behaves_like "unauthorized admin cannot edit"
-        end
-      end
-
-      context "when admin has superadmin role" do
-        let(:admin) { create(:admin, roles: ["superadmin"]) }
-
-        it_behaves_like "authorized admin can edit"
-      end
+      it_behaves_like "an action only authorized admins can access", authorized_roles: site_skin_edit_roles
     end
 
     context "with a work skin" do
       let(:skin) { create(:work_skin, :public) }
 
-      context "when admin has no role" do
-        it_behaves_like "unauthorized admin cannot edit"
-      end
-
-      (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
-        context "when admin has #{role} role" do
-          let(:admin) { create(:admin, roles: [role]) }
-
-          it_behaves_like "unauthorized admin cannot edit"
-        end
-      end
-
-      %w[superadmin support].each do |role|
-        context "when admin has #{role} role" do
-          let(:admin) { create(:admin, roles: [role]) }
-
-          it_behaves_like "authorized admin can edit"
-        end
-      end
+      it_behaves_like "an action only authorized admins can access", authorized_roles: work_skin_edit_roles
     end
   end
 
@@ -80,6 +66,9 @@ describe SkinsController do
         }
       }
     end
+    let(:admin) { create(:admin) }
+
+    before { fake_login_admin(admin) }
 
     shared_examples "unauthorized admin cannot update" do
       it "does not modify the skin" do
@@ -145,6 +134,10 @@ describe SkinsController do
   end
 
   describe "POST #set" do
+    let(:admin) { create(:admin) }
+
+    before { fake_login_admin(admin) }
+
     shared_examples "user cannot set it" do
       it "redirects with an error about caching" do
         post :set, params: { id: skin.id }
