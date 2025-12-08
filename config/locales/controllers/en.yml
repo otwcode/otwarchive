@@ -33,7 +33,6 @@ en:
         incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
         success: Successfully disabled two-step verification.
       show_backup_codes:
-        already_seen: You have already seen your backup codes. For security reasons, they cannot be seen again.
         not_enabled: Please enable two-step verification first.
     user_creations:
       confirm_remove_pseud:

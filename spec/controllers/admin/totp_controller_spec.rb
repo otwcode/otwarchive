@@ -121,15 +121,6 @@ describe Admin::TotpController do
         expect(response).to have_http_status(:success)
       end
 
-      it "does not show backup codes when a backup code was already generated" do
-        admin.generate_otp_backup_codes!
-        admin.save!
-
-        fake_login_admin(admin)
-        get :show_backup_codes, params: { admin_id: admin.login }
-        it_redirects_to_with_error(admins_path, "You have already seen your backup codes. For security reasons, they cannot be seen again.")
-      end
-
       it "denies access to other's pages" do
         fake_login_admin(admin)
         get :show_backup_codes, params: { admin_id: other_admin.login }

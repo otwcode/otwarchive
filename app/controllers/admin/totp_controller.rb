@@ -31,11 +31,6 @@ class Admin::TotpController < Admin::BaseController
       redirect_to new_admin_totp_path and return
     end
 
-    if current_admin.totp_backup_codes_generated?
-      flash[:error] = t(".already_seen")
-      redirect_to admins_path and return
-    end
-
     @page_subtitle = t(".page_title")
     @backup_codes = current_admin.generate_otp_backup_codes!
     current_admin.save!
