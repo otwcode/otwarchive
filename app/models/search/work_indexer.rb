@@ -98,13 +98,13 @@ class WorkIndexer < Indexer
         :comments_count,
         :kudos_count,
         :bookmarks_count,
-        :creators,
         :crossover,
         :otp,
         :work_types,
         :nonfiction
       ]
     ).merge(
+      creators: object.indexed_creators,
       language_id: object.language&.short,
       series: series_data(object),
       creator_join: { name: :work }
