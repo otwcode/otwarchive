@@ -503,6 +503,10 @@ class User < ApplicationRecord
     IndexQueue.enqueue_ids(Pseud, pseuds.pluck(:id), :main)
   end
 
+  def enqueue_to_index
+    IndexQueue.enqueue(self, :users)
+  end
+
   # Function to make it easier to retrieve info from the audits table.
   #
   # Looks up all past values of the given field, excluding the current value of
@@ -510,7 +514,7 @@ class User < ApplicationRecord
   def historic_values(field)
     field = field.to_s
 
-    audits.filter_map do |audit|
+    audits.order(id: :desc).limit(ArchiveConfig.USER_HISTORIC_VALUES_LIMIT).filter_map do |audit|
       audit.audited_changes[field]
     end.flatten.uniq.without(self[field])
   end
