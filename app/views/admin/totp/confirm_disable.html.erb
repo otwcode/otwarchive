@@ -3,9 +3,9 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_with(model: current_admin, url: disable_admin_totp_path, method: :post) do |form| %>
+<%= form_with(url: disable_admin_totp_path, method: :post) do |form| %>
   <dl>
-    <dt><%= form.label :password_check, t(".account_password") %></dt>
+    <dt><%= form.label :password_check, t(".admin_password") %></dt>
     <dd><%= form.password_field :password_check %></dd>
   </dl>
 

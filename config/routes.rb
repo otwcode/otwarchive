@@ -236,6 +236,7 @@ Rails.application.routes.draw do
       get :show_backup_codes
       get :confirm_disable
       post :disable
+      post :reauthenticate_create
     end
   end
 

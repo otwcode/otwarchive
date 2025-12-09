@@ -1,20 +1,25 @@
 class Admin::TotpController < Admin::BaseController
   before_action :require_admin_owner
-  before_action :check_totp_disabled, only: [:new, :create]
+  before_action :check_totp_disabled, only: [:new, :reauthenticate_create, :create]
   before_action :check_totp_enabled, only: [:confirm_disable, :disable]
 
   def new
-    current_admin.generate_totp_secret_if_missing!
     @page_subtitle = t(".page_title")
   end
 
-  def create
-    unless current_admin.valid_password?(totp_params[:password_check])
+  def reauthenticate_create
+    unless current_admin.valid_password?(params[:password_check])
       flash[:error] = t(".incorrect_password")
       redirect_to new_admin_totp_path and return
     end
 
-    if current_admin.validate_and_consume_otp!(totp_params[:totp_attempt])
+    current_admin.generate_totp_secret_if_missing!
+    @page_subtitle = t(".page_title")
+    render "confirm_enable"
+  end
+
+  def create
+    if current_admin.validate_and_consume_otp!(params[:totp_attempt])
       current_admin.enable_totp!
 
       flash[:notice] = t(".success")
@@ -41,7 +46,7 @@ class Admin::TotpController < Admin::BaseController
   end
 
   def disable
-    unless current_admin.valid_password?(totp_params[:password_check])
+    unless current_admin.valid_password?(params[:password_check])
       flash.now[:error] = t(".incorrect_password")
       render action: :confirm_disable and return
     end
@@ -76,9 +81,5 @@ class Admin::TotpController < Admin::BaseController
 
     flash[:error] = t("admin.totp.already_enabled")
     redirect_to admins_path
-  end
-
-  def totp_params
-    params.require(:admin).permit(:totp_attempt, :password_check)
   end
 end

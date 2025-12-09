@@ -3,9 +3,9 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_with(model: resource, url: session_path(resource), method: :post) do |form| %>
+<%= form_with(url: session_path(resource), method: :post) do |form| %>
   <dl>
-    <dt><%= label_tag "admin[totp_attempt]", t(".two_step_verification_code") %></dt>
+    <dt><%= form.label :totp_attempt, t(".two_step_verification_code") %></dt>
     <dd>
       <%= form.text_field :totp_attempt %>
     </dd>

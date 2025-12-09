@@ -26,12 +26,13 @@ en:
       already_enabled: TOTP two-step verification is already enabled.
       create:
         incorrect_code: Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again.
-        incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
         success: Successfully enabled two-step verification; please make note of your backup codes.
       disable:
         failure: Could not disable two-step verification.
         incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
         success: Successfully disabled two-step verification.
+      reauthenticate_create:
+        incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
       show_backup_codes:
         not_enabled: Please enable two-step verification first.
     user_creations:

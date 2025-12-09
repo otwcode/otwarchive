@@ -394,19 +394,19 @@ end
 
 When "I fill in a valid TOTP two-step verification code for admin {string}" do |login|
   admin = Admin.find_by(login: login)
-  fill_in "admin[totp_attempt]", with: admin.current_otp
+  fill_in "totp_attempt", with: admin.current_otp
 end
 
 When "I fill in a valid TOTP recovery code for admin {string}" do |login|
   admin = Admin.find_by(login: login)
   codes = admin.generate_otp_backup_codes!
   admin.save!
-  fill_in "admin[totp_attempt]", with: codes.first
+  fill_in "totp_attempt", with: codes.first
   @used_totp_recovery_code = codes.first
 end
 
 When "I fill in a used TOTP recovery code" do
-  fill_in "admin[totp_attempt]", with: @used_totp_recovery_code
+  fill_in "totp_attempt", with: @used_totp_recovery_code
 end
 
 ### THEN

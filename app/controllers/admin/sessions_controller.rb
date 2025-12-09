@@ -19,7 +19,7 @@ class Admin
     def authenticate_with_totp_two_factor
       admin = self.resource = find_admin
   
-      if admin_params[:totp_attempt].present? && session[:otp_admin_id]
+      if params[:totp_attempt].present? && session[:otp_admin_id]
         authenticate_admin_with_otp_two_factor(admin)
       elsif admin&.valid_password?(admin_params[:password])
         prompt_for_otp_two_factor(admin)
@@ -29,8 +29,8 @@ class Admin
     private
   
     def valid_totp_attempt?(admin)
-      admin.validate_and_consume_otp!(admin_params[:totp_attempt]) ||
-        admin.invalidate_otp_backup_code!(admin_params[:totp_attempt])
+      admin.validate_and_consume_otp!(params[:totp_attempt]) ||
+        admin.invalidate_otp_backup_code!(params[:totp_attempt])
     end
   
     def prompt_for_otp_two_factor(admin)
@@ -59,7 +59,7 @@ class Admin
     end
   
     def admin_params
-      params.require(:admin).permit(:login, :password, :totp_attempt)
+      params.require(:admin).permit(:login, :password)
     end
   
     def find_admin

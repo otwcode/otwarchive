@@ -1,0 +1,41 @@
+  <%# TODO:
+    # Rename .two_factor_authentication_set_up to .page_heading.
+    # Rename step_1 and step_2. We don't want numbered keys; it would be a pain if we decided later to make step 1 into "download an app."
+    # Move new text to locale file and update current text in the file.
+    # Replace the old form with the new one once Brian has set it up so you have to enter your password before getting to this page. %>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".two_factor_authentication_set_up") %></h2>
+
+<section class="notes">
+  <h3 class="landmark heading">About Two-Step Verification</h3>
+  <p>Two-step verification, also called two-factor authentication, helps prevent other people from accessing your account even if they know your password. All you need to set it up is an authenticator app such as 1Password, Google Authenticator, or Twilio Authy.</p>
+  <p>When two-step verification is enabled, logging in to your AO3 admin account will require both your admin password and a verification code from your authenticator app.</p>
+</section>
+<!--/descriptions-->
+
+<!--main content-->
+<section class="step group">
+  <h3 class="heading"><%= t(".step_1.heading") %></h3>
+  <p><%= t(".step_1.scan_code") %> <%= t(".step_1.manually_enter_code") %></p>
+  <div class="annotation module">
+    <div class="image"><p class="qr"><%= qr_code_as_svg(current_admin.totp_qr_code_uri) %></p></div>
+    <div class="note">
+      <h4 class="heading">Setup Key</h4>
+      <code><%= current_admin.otp_secret.scan(/.{1,4}/).join(" ") %></code>
+      <p class="footnote">Spaces and capitalization don't matter</p>
+    </div>
+  </div>
+</section>
+
+<section class="step group">
+  <h3 class="heading"><%= t(".step_2.heading") %></h3>
+  <p><%= t(".step_2.instructions") %></p>
+  <%= form_with(url: admin_totp_path, method: :post, class: "simple post") do |form| %>
+    <p>
+      <%= form.label :totp_attempt, ".step_2.6_digit_code", class: "landmark" %>
+      <%= form.text_field :totp_attempt %>
+      <%= form.submit t(".enable_two_step_verification") %>
+    </p>
+  <% end %>
+</section>
+<!--/content-->

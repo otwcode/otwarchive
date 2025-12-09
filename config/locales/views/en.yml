@@ -424,27 +424,30 @@ en:
         success: Archive settings were successfully updated.
     totp:
       confirm_disable:
-        account_password: Admin password
+        admin_password: Admin password
         disable: Disable
         heading: Disable Two-Step Verification
         landmark:
           submit: Submit
         page_title: Disable Two-Step Verification
-      new:
-        confirm_and_enable: Confirm and Enable
-        landmark:
-          submit: Submit
-        page_title: Enable Two-Step Verification
+      confirm_enable:
+        enable_two_step_verification: Enable Two-Step Verification
         step_1:
           heading: 'Step 1: Set up your authenticator app'
           manually_enter_code: 'If you cannot scan the QR code, you can also enter the following setup code manually:'
           scan_code: Please scan the QR code below using a compatible authenticator app such as 1Password, Google Authenticator, or Authy.
         step_2:
-          account_password: Account password
           heading: 'Step 2: Confirm two-factor verification code'
           instructions: Please confirm that your authentication application is working by entering a generated code below.
-          two_step_verification_code: Two-step verification code
         two_factor_authentication_set_up: Two-Step Verification Setup
+      new:
+        admin_password: Admin password
+        continue: Continue
+        page_heading: Confirm Password
+        page_title: Confirm Password
+        required_before_enabling_two_step: Before enabling two-step verification, you need to verify your password.
+      reauthenticate_create:
+        page_title: Enable Two-Step Verification
       show_backup_codes:
         finish: Finish
         heading: Two-Step Verification Backup Codes
