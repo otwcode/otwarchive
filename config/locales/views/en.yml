@@ -549,14 +549,14 @@ en:
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
     index:
+      advanced_search: try our advanced search
+      choose_fandom: choose a fandom
       navigation:
         bookmarks: Bookmarks
         edit: Edit Bookmark
         new: Boorkmark
         new_external_work: Bookmark External Work
         works: Works
-      advanced_search: try our advanced search
-      choose_fandom: choose a fandom
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
   challenge:
     gift_exchange:
