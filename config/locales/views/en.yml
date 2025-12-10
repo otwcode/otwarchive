@@ -536,6 +536,10 @@ en:
           hide_works: hide their works or bookmarks from you
           intro: 'Blocking a user will not:'
   bookmarks:
+    bookmark_blurb:
+      deleted: This has been deleted, sorry!
+      save: Save
+      saved: Saved
     bookmark_owner_navigation:
       delete: Delete
       delete_confirmation: Are you sure you want to delete this bookmark?

@@ -39,4 +39,3 @@ Feature: Edit bookmarks with javascript enabled
     Then I should see "Edit Bookmark"
     When I follow "Edit"
     Then I should see "save a bookmark!"
-
