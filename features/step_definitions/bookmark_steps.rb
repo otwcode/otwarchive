@@ -384,6 +384,11 @@ When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
   visit work_path(work)
 end
 
+# Capybara will not find links without href with the click_link method (see issue #379 on the capybara repository)
+When "I exit the bookmark edit form" do
+  find("a", :text => "×").click
+end
+
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
   step %{I follow "Add To Collection"}
   fill_in("collection_names", with: collection_name)
