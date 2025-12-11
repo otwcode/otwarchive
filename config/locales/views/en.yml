@@ -2107,6 +2107,7 @@ en:
         allow_collection_invitation: Allow others to invite my works to collections.
         allow_gifts: Allow anyone to gift me works.
         heading: Collections, Challenges and Gifts
+        help_title: Collection preferences
         legend: Collections, Challenges and Gifts
         turn_off_collection_emails: Turn off emails from collections.
         turn_off_collection_inbox: Turn off inbox messages from collections.
@@ -2114,6 +2115,7 @@ en:
       comments:
         guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
         heading: Comments
+        help_title: Comment preferences
         legend: Comments
         turn_off_copies_own_comments: Turn off copies of your own comments.
         turn_off_emails: Turn off emails about comments.
@@ -2121,6 +2123,7 @@ en:
         turn_off_kudos_emails: Turn off emails about kudos.
       display:
         heading: Display
+        help_title: Display preferences
         hide_additional_tags: Hide additional tags (you can still choose to show them).
         hide_warnings: Hide warnings (you can still choose to show them).
         hide_work_skins: Hide work skins (you can still choose to show them).
@@ -2130,6 +2133,7 @@ en:
       locale_help_title: Locale preferences
       misc:
         heading: Misc
+        help_title: Misc preferences
         legend: Misc
         turn_off_banner_every_page: Turn off the banner showing on every page.
         turn_on_history: Turn on History.
@@ -2147,10 +2151,12 @@ en:
       privacy:
         allow_co_creator_invite: Allow others to invite me to be a co-creator.
         heading: Privacy
+        help_title: Privacy preferences
         hide_share_buttons: Hide the share buttons on my work.
         hide_work_from_search_engines: Hide my work from search engines when possible.
         legend: Privacy
       public_site_skins: Public Site Skins
+      work_title_format_help_title: Work title format
       your_locale: Your locale
       your_site_skin: Your site skin
       your_time_zone: Your time zone
