@@ -491,4 +491,12 @@ describe CommentsController do
       before { work.update!(collection_names: create(:unrevealed_collection).name) }
     end
   end
+
+  context "on a draft work" do
+    it_behaves_like "no one can add or edit comments" do
+      let(:edit_error_message) { "Sorry, you can't comment on a draft." }
+      let(:work) { comment.ultimate_parent }
+      before { work.update_column(:posted, false) }
+    end
+  end
 end

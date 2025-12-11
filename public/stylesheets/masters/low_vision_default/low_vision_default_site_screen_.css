@@ -150,8 +150,8 @@ pre {
 .actions a:focus,
 input[type="submit"]:hover,
 input[type="submit"]:focus,
-button:hover,
-button:focus {
+.actions button:hover,
+.actions button:focus {
   background: #900;
   color: #eee;
 }

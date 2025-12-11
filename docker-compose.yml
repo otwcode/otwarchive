@@ -90,22 +90,25 @@ services:
       - redis
       - es
       - mc
-      - workers
+      - resque
     # Make `docker compose attach web` work for debugging
     stdin_open: true
     tty: true
-  workers:
+  resque:
     profiles:
       - dev
     build:
       context: .
       dockerfile: ./config/docker/Dockerfile
-    command: bundle exec rake environment resque:work
+    command: bash -c "bundle exec rake environment resque:scheduler & bundle exec rake environment resque:work"
     volumes:
       - .:/otwa
     environment:
       <<: *environment
       QUEUE: '*'
+    depends_on:
+      - db
+      - redis
   chrome:
     profiles:
       - test

@@ -398,6 +398,19 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "oldman@ds9.com"
       And I should see "Invitation was successfully sent."
 
+  Scenario: Sent to field is a link for redeemed invitations
+    Given the user "creator" exists and is activated
+      And the user "invitee" exists and is activated
+      And an invitation created by "creator" and used by "invitee"
+      And I am logged in as a super admin
+    When I go to creator's manage invitations page
+    When I follow the first invitation token url
+    Then I should see "Sent to"
+      And I should see a link "default@email.com" within "dl"
+    When I follow "default@email.com"
+    Then I should see "All or part of an email address"
+      And I should see "default@email.com" within "table"
+
   Scenario: An admin can search the invitation queue, and search parameters are
   kept even if deleting without JavaScript
     Given I am logged in as a "policy_and_abuse" admin
