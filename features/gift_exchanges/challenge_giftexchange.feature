@@ -48,6 +48,18 @@ Feature: Gift Exchange Challenge
       And I follow "Gift Exchange Challenges"
     Then I should see "My Gift Exchange"
 
+  Scenario: Gift exchange in closed collection appears in list of open challenges
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "My Gift Exchange"
+      And I am on "My Gift Exchange" gift exchange edit page
+    When I check "Sign-up open?"
+      And I submit
+    When I am on "My Gift Exchange" collection edit page
+      And I check "This collection is closed"
+      And I submit
+    When I view open challenges
+    Then I should see "My Gift Exchange"
+
   Scenario: Change timezone for a gift exchange
     Given time is frozen at 1/1/2019
       And the gift exchange "My Gift Exchange" is ready for signups
