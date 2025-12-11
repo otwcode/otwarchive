@@ -67,6 +67,34 @@ describe WorksController do
       end
     end
 
+    context "when logged in as a suspended user" do
+      before do
+        drafts_user.update!(suspended: true, suspended_until: 1.week.from_now)
+        fake_login_known_user(drafts_user)
+      end
+
+      it "allows them to view their drafts index" do
+        get :drafts, params: { user_id: drafts_user.login }
+        expect(response).to have_http_status(:ok)
+        expect(flash[:error]).to be_nil
+        expect(assigns(:works)).to contain_exactly(default_pseud_work, other_pseud_work)
+      end
+    end
+
+    context "when logged in as a banned user" do
+      before do
+        drafts_user.update!(banned: true)
+        fake_login_known_user(drafts_user)
+      end
+
+      it "allows them to view their drafts index" do
+        get :drafts, params: { user_id: drafts_user.login }
+        expect(response).to have_http_status(:ok)
+        expect(flash[:error]).to be_nil
+        expect(assigns(:works)).to contain_exactly(default_pseud_work, other_pseud_work)
+      end
+    end
+
     context "when logged in as another user" do
       before { fake_login }
 
