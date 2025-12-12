@@ -1,32 +1,28 @@
-<h4>Collections, Challenges and Gifts Preferences</h4>
+<h4><%= t(".page_heading") %></h4>
 
 <dl id="help">
-  
-  <dt>Allow others to invite my works to collections</dt>
+  <dt><%= t(".allow_collection_invitation.header") %></dt>
   <dd>
     <p>
-      Enabling this option will allow other AO3 users to invite your work into
-      their collection. Your work won't be added to the collection until you
-      have accepted the request. For more information on accepting collection
-      invitations, refer to <a href="/faq/collections#collectionitems">How do I approve or reject an invitation to include my work in a collection?</a>
+      <%= t(".allow_collection_invitation.enabling_html",
+            how_to_approve_faq_link: link_to(t(".allow_collection_invitation.how_to_approve_faq"), archive_faq_path("collections", anchor: "collectionitems"))) %>
     </p>
-    <p>
-      Leaving this option disabled will prevent other users from inviting your
-      works into their collections at all, and you won't receive any
-      notifications.
-    </p>
-    <p>Changing this setting won't affect any existing works in collections.</p>
+    <p><%= t(".allow_collection_invitation.disabling") %></p>
+    <p><%= t(".allow_collection_invitation.changing") %></p>
   </dd>
 
-  <dt>Allow anyone to gift me works</dt>
-  <dd>If this option is disabled, users are only able to give a gift work to you if they're completing a gift exchange assignment or fulfilling a claimed prompt in a prompt meme. If you'd like to allow users to give you gift works outside of assignments and claimed prompts, enable this option. Note that you're always able to refuse gifts individually. Check out <a href="/faq/your-account#refusegift">How do I refuse a gift?</a> for instructions.</dd>
+  <dt><%= t(".allow_gifts.header") %></dt>
+  <dd>
+    <%= t(".allow_gifts.description_html",
+          how_to_refuse_faq_link: link_to(t(".allow_gifts.how_to_refuse_faq"), archive_faq_path("your-account", anchor: "refusegift"))) %>
+  </dd>
   
-  <dt>Turn off emails from collections</dt>
-  <dd>Enable this option if you would prefer not to receive email alerts from collections, such as creator and work reveals. We'll still email you if your username or work is hidden after being added to a collection. Notifications will still be delivered to your Archive inbox unless you have chosen to disable them.</dd>
+  <dt><%= t(".turn_off_collection_emails.header") %></dt>
+  <dd><%= t(".turn_off_collection_emails.description") %></dd>
   
-  <dt>Turn off inbox messages from collections</dt>
-  <dd>Enable this option if you would prefer not to receive notifications in your Archive inbox from collections, for example, notifying you when hidden works are revealed. Notifications will still be emailed to you unless you have chosen to disable them.</dd>
+  <dt><%= t(".turn_off_collection_inbox.header") %></dt>
+  <dd><%= t(".turn_off_collection_inbox.description") %></dd>
   
-  <dt>Turn off emails about gift works</dt>
-  <dd>Enable this option if you would prefer not to receive email alerts when someone gifts a work to you. Notifications will still be displayed on your Gifts page.</dd>
+  <dt><%= t(".turn_off_gift_emails.header") %></dt>
+  <dd><%= t(".turn_off_gift_emails.description") %></dd>
 </dl>

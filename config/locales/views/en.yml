@@ -1074,11 +1074,101 @@ en:
         symbols_html: When browsing the Archive, warnings will be displayed in the blurb of each work. Official warning tags are displayed in bold. A four square grid in the top left corner of each work's blurb indicates the work's rating, completion status, pairing category, and any Archive warnings that apply to it. Refer to the %{symbols_key_chart_link} for more information.
         symbols_key_chart: Symbols Key Chart
       welcome_header: Welcome to the %{app_name}!
+    preferences_collection:
+      allow_collection_invitation:
+        changing: Changing this setting won't affect any existing works in collections.
+        disabling: Leaving this option disabled will prevent other users from inviting your works into their collections at all, and you won't receive any notifications.
+        enabling_html: Enabling this option will allow other AO3 users to invite your work into their collection. Your work won't be added to the collection until you have accepted the request. For more information on accepting collection invitations, refer to %{how_to_approve_faq_link}
+        header: Allow others to invite my works to collections
+        how_to_approve_faq: How do I approve or reject an invitation to include my work in a collection?
+      allow_gifts:
+        description_html: If this option is disabled, users are only able to give a gift work to you if they're completing a gift exchange assignment or fulfilling a claimed prompt in a prompt meme. If you'd like to allow users to give you gift works outside of assignments and claimed prompts, enable this option. Note that you're always able to refuse gifts individually. Check out %{how_to_refuse_faq_link} for instructions.
+        header: Allow anyone to gift me works
+        how_to_refuse_faq: How do I refuse a gift?
+      page_heading: Collections, Challenges and Gifts Preferences
+      turn_off_collection_emails:
+        description: Enable this option if you would prefer not to receive email alerts from collections, such as creator and work reveals. We'll still email you if your username or work is hidden after being added to a collection. Notifications will still be delivered to your Archive inbox unless you have chosen to disable them.
+        header: Turn off emails from collections
+      turn_off_collection_inbox:
+        description: Enable this option if you would prefer not to receive notifications in your Archive inbox from collections, for example, notifying you when hidden works are revealed. Notifications will still be emailed to you unless you have chosen to disable them.
+        header: Turn off inbox messages from collections
+      turn_off_gift_emails:
+        description: Enable this option if you would prefer not to receive email alerts when someone gifts a work to you. Notifications will still be displayed on your Gifts page.
+        header: Turn off emails about gift works
+    preferences_comment:
+      guest_replies_off:
+        description_html: Enable this option if you would prefer not to receive replies from users who aren't logged in to an Archive account on comments you leave on news posts or other creators' works. This setting doesn't apply to comments on your own works; for more on controlling who can interact with you on your works check out the %{posting_and_editing_faq_link}.
+        header: Do not allow guests to reply to my comments on news posts or other users' works
+        posting_and_editing_faq: Posting and Editing FAQ
+      page_heading: Comment Preferences
+      turn_off_copies_own_comments:
+        description: Enable this option if you prefer not to receive emails for your own comments (for example, when you reply to comments on your own works).
+        header: Turn off copies of your own comments
+      turn_off_emails:
+        description: Enable this option if you would prefer not to receive email alerts when someone comments on your work or replies to a comment you have made. Comment notifications will still be delivered to your Archive inbox unless you have chosen to disable them.
+        header: Turn off emails about comments
+      turn_off_inbox:
+        description: Enable this option if you would prefer not to receive notifications in your Archive inbox when someone comments on your work or replies to a comment you have made. Comment notifications will still be emailed to you unless you have chosen to disable them.
+        header: Turn off messages to your inbox about comments
+      turn_off_kudos_emails:
+        description: Enable this option if you would prefer not to receive email notifications when someone leaves kudos on your work.
+        header: Turn off emails about kudos
+    preferences_display:
+      hide_additional_tags:
+        description: When this option is enabled, additional tags on works will be hidden by default. You can click 'Show Additional Tags' to display the tags for any individual work. You must have JavaScript enabled to use this option.
+        header: Hide additional tags (you can still choose to show them)
+      hide_warnings:
+        description: When this option is enabled, Archive warning tags on works will be hidden by default. You can click 'Show Warnings' to display the warnings for any individual work. You must have JavaScript enabled to use this option.
+        header: Hide warnings (you can still choose to show them)
+      hide_work_skins:
+        description: When this option is enabled, the custom skin another user has specified for their work will not be displayed. Instead your normal site skin will be applied.
+        header: Hide other people's work skins
+      page_heading: Display Preferences
+      show_adult_content:
+        description: When this option is enabled, you won't be asked to confirm that you wish to access works rated Mature, Explicit or Not Rated before the work is displayed.
+        header: Show me adult content without checking
+      show_whole_work_default:
+        description: When this option is enabled, works with multiple chapters will display as a single page.
+        header: Show the whole work by default
     preferences_locale:
       locale:
         description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
         header: Set preferred locale
       page_heading: Locale Preferences
+    preferences_misc:
+      page_heading: Miscellaneous Preferences
+      turn_off_banner_every_page:
+        description: Occasionally, Archive staff may notify users of important events or site changes by displaying a banner across all pages on the site. If you want to dismiss the banner while you're logged in, enable this option. Please note that this only hides the banner which was displaying at the time you enabled this option. If the banner is changed, the new banner will be displayed until you enable this option again.
+        header: Turn off the banner showing on every page
+      turn_on_history:
+        description: When enabled, History keeps a log of every work you access on the Archive while logged in. You can delete individual works from your History or clear the whole History. If you enable this option and subsequently disable it, works accessed while the option was enabled will still be saved (but you will have to enable History again to see them).
+        header: Turn on History
+      turn_on_new_user_help:
+        description: Enabling this option will turn on the banner offering information and hints on getting started with the Archive!
+        header: Turn the new user help banner back on
+    preferences_privacy:
+      allow_co_creator_invite:
+        changing: Changing this setting won't affect any existing shared works.
+        disabling: Leaving this option disabled will prevent other users from inviting you to be listed as a co-creator on a new work, chapter or series, and you won't receive any notifications.
+        enabling: Enabling this option will allow other AO3 users to invite you to be listed as a co-creator on a work, chapter, or series. You won't be listed as a co-creator anywhere on the site until you have accepted the request. If you have this option enabled, you can find any requests you receive in your Dashboard under "Co-Creator Requests". You will also receive an email notifying you of the request.
+        header: Allow others to invite me to be a co-creator.
+      hide_share_buttons:
+        description: This preference allows you to disable the one-click share buttons which allow others to recommend your work on external sites like Twitter and Tumblr.
+        header: Hide the share buttons on my work.
+        note: Please note that once you have posted a work online, it is always possible for a reader to copy and paste a link to your work anywhere they wish -- if you want to restrict access to your work here, your best bet is to lock the work to registered users of the Archive.
+      hide_work_from_search_engines:
+        description: Enabling this option will tell search engines not to index your user page, your works, or your series. Please note that not all search engines respect this setting. Pages which list your works or series - for example, the main works page - may also still be indexed. If you wish to avoid your works or series being indexed under any circumstances, we recommend that you restrict them to Archive users only.
+        header: Hide my work from search engines when possible.
+      more_information_html: For more on your preferences and what these options mean, check out our %{preferences_faq_link}.
+      page_heading: Privacy Preferences
+      preferences_faq: Preferences FAQ
+    preferences_work_title_format:
+      description: 'Specify how the page title looks in your browser when you are reading a story. Some examples:'
+      example:
+        default: This is the default format.
+        no_fandom: Don't include the fandom.
+        reverse_underscore: Start with fandom, then with author, then title, with underscores instead of dashes.
+      page_heading: Work Title Format
   home:
     about:
       ao3:

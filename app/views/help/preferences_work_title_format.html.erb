@@ -1,15 +1,13 @@
-<h4>Work Title Format</h4>
+<h4><%= t(".page_heading") %></h4>
 
-<p>
-  Specify how the page title looks in your browser when you are reading a story. Some examples:
-</p>
+<p><%= t(".description") %></p>
 
 <dl>
   <dt>TITLE - AUTHOR - FANDOM</dt>
-  <dd>This is the default format.</dd>
+  <dd><%= t(".example.default") %></dd>
   <dt>TITLE - AUTHOR</dt>
-  <dd>Don't include the fandom</dd>
+  <dd><%= t(".example.no_fandom") %></dd>
   <dt>FANDOM_AUTHOR_TITLE</dt>
-  <dd>Start with fandom, then with author, then title, with underscores instead of dashes.</dd>
+  <dd><%= t(".example.reverse_underscore") %></dd>
 </dl>
 
