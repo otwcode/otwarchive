@@ -243,9 +243,9 @@ class WorksController < ApplicationController
     @hide_dashboard = true
     @unposted = current_user.unposted_work
 
-    # Check if collection is closed and user doesn't have permission
+    # Check if collection is closed and user doesn't have permission to post
     if @collection && @collection.closed? && !@collection.user_is_owner?(current_user) && !@collection.user_is_maintainer?(current_user)
-      flash[:error] = ts("This collection is currently closed to new submissions.")
+      flash[:error] = t(".closed_collection_error", collection_title: @collection.title)
       redirect_to collection_path(@collection) and return
     end
 
