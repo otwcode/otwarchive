@@ -220,7 +220,7 @@ class Work < ApplicationRecord
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, suffix: :comments, default: 1
+  }, suffix: :comments, default: 1, validate: { message: :invalid_permissions }
 
   ########################################################################
   # HOOKS
