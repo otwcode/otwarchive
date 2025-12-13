@@ -3,12 +3,16 @@
 <%= error_messages_for @invitation %>
 <!--/descriptions-->
 <!--subnav-->
-<ul class="navigation actions" role="navigation">
-  <li><%= link_to t(".navigation.requests"), user_invite_requests_path %></li>
-  <% if policy(InviteRequest).can_manage? %>
-    <li><%= link_to t(".navigation.queue"), manage_invite_requests_path %></li>
-  <% end %>
-</ul>
+<% if policy(UserInviteRequest).index? || policy(InviteRequest).can_manage? %>
+  <ul class="navigation actions">
+    <% if policy(UserInviteRequest).index? %>
+      <li><%= link_to t(".navigation.requests"), user_invite_requests_path %></li>
+    <% end %>
+    <% if policy(InviteRequest).can_manage? %>
+      <li><%= link_to t(".navigation.queue"), manage_invite_requests_path %></li>
+    <% end %>
+  </ul>
+<% end %>
 <!--/subnav-->
 <!--main content-->
 <% if policy(Invitation).find? %>
