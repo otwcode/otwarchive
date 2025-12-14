@@ -5,7 +5,10 @@ class Users::SessionsController < Devise::SessionsController
   # POST /users/login
   def create
     super do |resource|
-      message = ts(" <strong>You'll stay logged in for %{number} weeks even if you close your browser, so make sure to log out if you're using a public or shared computer.</strong>", number: ArchiveConfig.DEFAULT_SESSION_LENGTH_IN_WEEKS) unless resource.remember_me
+      unless resource.remember_me
+        message = t("users.sessions.no_remember_me_warning_html",
+                    number: ArchiveConfig.DEFAULT_SESSION_LENGTH_IN_WEEKS)
+      end
       flash[:notice] += message unless message.nil?
       flash[:notice] = flash[:notice].html_safe
 
