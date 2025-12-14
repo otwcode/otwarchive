@@ -162,7 +162,7 @@ class BookmarkSearchForm
   private
 
   def processed_options(opts = {})
-    [:date, :bookmarkable_date, :word_count].each do |countable|
+    %i[date bookmarkable_date word_count].each do |countable|
       if opts[countable].present?
         opts[countable] = opts[countable].gsub("&gt;", ">").
                                           gsub("&lt;", "<")
