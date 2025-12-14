@@ -542,6 +542,8 @@ en:
       from: From
       to: To
       word_count: Word count
+    search_form:
+      word_count: Word count
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
