@@ -69,9 +69,9 @@ describe BookmarkableQuery do
       it "defaults to sorting by created_at (stored in _score)" do
         expect(bookmarkable_query.generated_query[:sort])
           .to eq([{ _score: { order: "desc" } }, { sort_id: { order: "desc" } }])
-          # Computes score by created_at
-          expect(bookmarkable_query.generated_query.dig(:query, :bool, :must, :has_parent, :query, :function_score, :field_value_factor, :field)).to \
-            eq("created_at")
+        # Computes score by created_at
+        expect(bookmarkable_query.generated_query.dig(:query, :bool, :must, :has_parent, :query, :function_score, :field_value_factor, :field)).to \
+          eq("created_at")
       end
     end
 
