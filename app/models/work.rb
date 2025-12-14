@@ -322,14 +322,6 @@ class Work < ApplicationRecord
     IndexQueue.enqueue_ids(Series, series_ids, :background)
   end
 
-  private
-
-  # Visibility or word count has changed, so we need to update series word counts
-  def should_update_series_indexes?
-    pertinent_attributes = %w[id posted restricted word_count hidden_by_admin]
-    (saved_changes.keys & pertinent_attributes).present?
-  end
-
   # If the work gets posted, (un)hidden, or (un)revealed, we should (potentially) reindex the tags,
   # so they get the correct visibility status.
   def update_tag_index
@@ -1303,6 +1295,12 @@ class Work < ApplicationRecord
   end
 
   private
+
+  # Visibility or word count has changed, so we need to update series word counts
+  def should_update_series_indexes?
+    pertinent_attributes = %w[id posted restricted word_count hidden_by_admin]
+    (saved_changes.keys & pertinent_attributes).present?
+  end
 
   def challenge_bypass(gift)
     self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud) ||
