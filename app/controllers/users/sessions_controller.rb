@@ -1,14 +1,11 @@
 class Users::SessionsController < Devise::SessionsController
-
   layout "session"
   before_action :admin_logout_required
 
   # POST /users/login
   def create
     super do |resource|
-      unless resource.remember_me
-        message = ts(" <strong>You'll stay logged in for %{number} weeks even if you close your browser, so make sure to log out if you're using a public or shared computer.</strong>", number: ArchiveConfig.DEFAULT_SESSION_LENGTH_IN_WEEKS)
-      end
+      message = ts(" <strong>You'll stay logged in for %{number} weeks even if you close your browser, so make sure to log out if you're using a public or shared computer.</strong>", number: ArchiveConfig.DEFAULT_SESSION_LENGTH_IN_WEEKS) unless resource.remember_me
       flash[:notice] += message unless message.nil?
       flash[:notice] = flash[:notice].html_safe
 
@@ -16,17 +13,17 @@ class Users::SessionsController < Devise::SessionsController
         if resource.suspended?
           suspension_end = effective_suspension_end_date(resource)
           flash[:error] = t("users.status.suspension_notice_html",
-                           suspended_until: suspension_end,
-                           contact_abuse_link: view_context.link_to(
-                             t("users.contact_abuse"),
-                             new_abuse_report_path
-                           ))
+                            suspended_until: suspension_end,
+                            contact_abuse_link: view_context.link_to(
+                              t("users.contact_abuse"),
+                              new_abuse_report_path
+                            ))
         else
           flash[:error] = t("users.status.ban_notice_html",
-                           contact_abuse_link: view_context.link_to(
-                             t("users.contact_abuse"),
-                             new_abuse_report_path
-                           ))
+                            contact_abuse_link: view_context.link_to(
+                              t("users.contact_abuse"),
+                              new_abuse_report_path
+                            ))
         end
       end
     end
