@@ -259,6 +259,8 @@ class Series < ApplicationRecord
   end
 
   # Word count as seen by registered users
+  # Note: creators will still see hidden works, but these works will not be included
+  # in the series word count
   def general_word_count
     # Exclude works hidden by admin from the word count
     self.works.posted.unhidden.pluck(:word_count).compact.sum
