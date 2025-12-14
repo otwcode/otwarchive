@@ -347,9 +347,9 @@ class ApplicationController < ActionController::Base
   def get_page_title(fandom, author, title, options = {})
     # truncate any piece that is over 15 chars long to the nearest word
     if options[:truncate]
-      fandom = fandom.gsub(/^(.{15}[\w.]*)(.*)/) { Regexp.last_match(2).empty? ? Regexp.last_match(1) : Regexp.last_match(1) + "..." }
-      author = author.gsub(/^(.{15}[\w.]*)(.*)/) { Regexp.last_match(2).empty? ? Regexp.last_match(1) : Regexp.last_match(1) + "..." }
-      title = title.gsub(/^(.{15}[\w.]*)(.*)/) { Regexp.last_match(2).empty? ? Regexp.last_match(1) : Regexp.last_match(1) + "..." }
+      fandom = fandom.gsub(/^(.{15}[\w.]*)(.*)/) { Regexp.last_match(2).empty? ? Regexp.last_match(1) : "#{Regexp.last_match(1)}..." }
+      author = author.gsub(/^(.{15}[\w.]*)(.*)/) { Regexp.last_match(2).empty? ? Regexp.last_match(1) : "#{Regexp.last_match(1)}..." }
+      title = title.gsub(/^(.{15}[\w.]*)(.*)/) { Regexp.last_match(2).empty? ? Regexp.last_match(1) : "#{Regexp.last_match(1)}..." }
     end
 
     if logged_in? && current_user.preference.try(:work_title_format).present?
