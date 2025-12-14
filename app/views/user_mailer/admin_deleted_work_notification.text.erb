@@ -1,7 +1,7 @@
 <% content_for :message do %>
 <%= t("mailer.general.greeting.formal.addressed_html", name: @user.login) %>
 
-<%= t(".deleted.text", title: @work.title) %> <%= t(".attachment") %>
+<%= t(".deleted.text", title: @work.title) %>
 
 <%= t(".tos_violation.text", tos_url: tos_url, content_policy_url: content_url, tos_faq_url: tos_faq_url(anchor: "repost_my_work")) %>
 
