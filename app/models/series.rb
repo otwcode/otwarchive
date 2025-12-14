@@ -230,7 +230,7 @@ class Series < ApplicationRecord
         :revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :creators,
-        :word_count, :public_word_count, :general_word_count, :work_types
+        :public_word_count, :general_word_count, :work_types
       ]
     ).merge(
       language_id: language&.short,

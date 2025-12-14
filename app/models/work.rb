@@ -1213,7 +1213,7 @@ class Work < ApplicationRecord
       root: false,
       only: [
         :title, :summary, :hidden_by_admin, :restricted, :posted,
-        :created_at, :revised_at, :word_count, :complete
+        :created_at, :revised_at, :complete
       ],
       methods: [
         :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
