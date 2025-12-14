@@ -88,9 +88,10 @@ class ApplicationController < ActionController::Base
   end
 
   def transform_sanitized_hash_to_ac_params(key, value)
-    if value.is_a?(Hash)
+    case value
+    when Hash
       ActionController::Parameters.new(value)
-    elsif value.is_a?(Array)
+    when Array
       value.map.with_index do |val, index|
         value[index] = transform_sanitized_hash_to_ac_params(key, val)
       end
