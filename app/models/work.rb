@@ -322,6 +322,8 @@ class Work < ApplicationRecord
     IndexQueue.enqueue_ids(Series, series_ids, :background)
   end
 
+  private
+
   # Visibility or word count has changed, so we need to update series word counts
   def should_update_series_indexes?
     pertinent_attributes = %w[id posted restricted word_count hidden_by_admin]
