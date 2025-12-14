@@ -15,7 +15,7 @@
     <%= @work.title %>
   </h2>
   <h3 class="byline heading">
-    <%= byline(@work).html_safe %>
+    <%= byline(@work) %>
   </h3>
 
   <% if @chapter == @work.first_chapter %>
