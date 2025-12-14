@@ -18,14 +18,8 @@ Feature: Filter bookmarks
       And I should see "english work"
       And I should see "german work"
 
-  # FIXME: currently failing
   Scenario: Filtering series bookmarks by word count with restricted works
     Given a bookmark by "awesome_posterrr" of a mixed visibility series with fandom "What a fandom"
-    # Given I am logged in as "awesome_posterrr"
-    #   And I post the work "Public" as part of a series "Mixed Visibility"
-    #   And I post the work "Restricted" as part of a series "Mixed Visibility"
-    #   And I lock the work "Restricted"
-    #   And I bookmark the series "Mixed Visibility"
     # Logged-in behavior
     When I am logged in as "awesome_posterr"
       And I go to awesome_posterrr's bookmarks page
