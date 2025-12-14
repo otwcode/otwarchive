@@ -83,7 +83,6 @@ Feature: View a work with various options
 
   Scenario: Works and chapters include the navigation, meta, work skin CSS, and
   preface, except in preview mode, which contains more limited information.
-  chapter previews
     Given the work skin "Flair" by "carbon"
       And I am logged in as "carbon"
       And I set up the draft "Elemental"
