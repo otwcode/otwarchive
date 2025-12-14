@@ -297,14 +297,14 @@ en:
       contact_abuse: contact the Policy & Abuse committee
       content_policy: Content Policy
       deleted:
-        html: Your work %{title} was deleted by an AO3 administrator. A copy of your work is attached to this email.
-        text: Your work "%{title}" was deleted by an AO3 administrator. A copy of your work is attached to this email.
+        html: Your work %{title} was deleted by an %{app_name} administrator. A copy of your work is attached to this email.
+        text: Your work "%{title}" was deleted by an %{app_name} administrator. A copy of your work is attached to this email.
       subject: "[%{app_name}] Your work has been deleted by an administrator"
-      tos: AO3 Terms of Service
+      tos: "%{app_name} Terms of Service"
       tos_faq: Terms of Service FAQ
       tos_violation:
         html: If your work was deleted due to being in violation of the %{tos_link} (including the %{content_policy_link}), %{tos_violation_bold}. For more information, please refer to the %{tos_faq_link}.
-        text: 'If your work was deleted due to being in violation of the AO3 Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you may not repost the work without taking action to correct the violation. For more information, please refer to the Terms of Service FAQ: %{tos_faq_url}.'
+        text: 'If your work was deleted due to being in violation of the %{app_name} Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you may not repost the work without taking action to correct the violation. For more information, please refer to the Terms of Service FAQ: %{tos_faq_url}.'
       tos_violation_bold: you may not repost the work without taking action to correct the violation
     admin_hidden_work_notification:
       access:
