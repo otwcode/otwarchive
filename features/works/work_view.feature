@@ -80,3 +80,33 @@ Feature: View a work with various options
     And I press "Post"
   Then I should see "Chapter 1: "
     And I should see "cool chapter title"
+
+  Scenario: Works and chapters include the navigation, meta, work skin CSS, and
+  preface, except in preview mode, which contains more limited information.
+  chapter previews
+    Given the work skin "Flair" by "carbon"
+      And I am logged in as "carbon"
+      And I set up the draft "Elemental"
+      And I select "Flair" from "Select work skin"
+    When I press "Preview"
+    Then I should see the work meta
+      And I should see the work preface
+      And I should see the work styles
+      But I should not see the work header navigation
+    When I press "Post"
+    Then I should see the work header navigation
+      And I should see the work meta
+      And I should see the work preface
+      And I should see the work styles
+    When I follow "Add Chapter"
+      And I fill in "content" with "My chapter's text."
+      And I press "Preview"
+    Then I should see the work styles
+      But I should not see the work header navigation
+      And I should not see the work meta
+      And I should not see the work preface
+    When I press "Post"
+    Then I should see the work header navigation
+      And I should see the work meta
+      And I should see the work preface
+      And I should see the work styles
