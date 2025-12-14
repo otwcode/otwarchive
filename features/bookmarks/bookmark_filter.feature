@@ -51,7 +51,6 @@ Feature: Filter bookmarks
     Then I should see "1 Bookmark by awesome_posterrr"
       And I should see "Mixed Visibility"
 
-  # FIXME: currently failing
   Scenario: Sorting series bookmarks by word count with restricted works
     Given I am logged in as "poster_child"
       And I post the 2 chapter work "In between"
