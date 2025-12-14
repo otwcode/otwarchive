@@ -42,7 +42,6 @@ describe BookmarkSearchForm, bookmark_search: true do
         end
 
         it "sorts bookmarkables correctly when not logged in" do
-          User.current_user = nil
           results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
           # "Ten": 10, "Series to be bookmarked": 5
           # Check word count of returned results
@@ -58,7 +57,6 @@ describe BookmarkSearchForm, bookmark_search: true do
           run_all_indexing_jobs
 
           # Search after the change
-          User.current_user = nil
           results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
           # "Series to be bookmarked": 15, "Ten": 10
           # Check word count of returned results
@@ -74,7 +72,6 @@ describe BookmarkSearchForm, bookmark_search: true do
           run_all_indexing_jobs
 
           # Search after the change
-          User.current_user = nil
           results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
           # "Series to be bookmarked": 15, "Ten": 10
           # Check word count of returned results
@@ -124,7 +121,6 @@ describe BookmarkSearchForm, bookmark_search: true do
           end
 
           it "places external bookmark last" do
-            User.current_user = nil
             results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
             # "Ten": 10, "Series to be bookmarked": 5, "External bookmark": N/A
             # Check titles of returned results
