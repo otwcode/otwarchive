@@ -20,6 +20,8 @@ en:
         url: Offer URL
       challenge_signup/requests:
         url: Request URL
+      chapters:
+        chapter_header: Chapter %{position}
       chapters/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
@@ -86,6 +88,11 @@ en:
           attributes:
             url:
               not_on_archive: does not appear to be on this site.
+        admin_post:
+          attributes:
+            comment_permissions:
+              format: "%{message}"
+              invalid_permissions: Comment permissions are invalid.
         block:
           attributes:
             blocked:
@@ -183,6 +190,7 @@ en:
           no_rules_for_selectors: There don't seem to be any rules for %{selectors}.
           no_valid_css: We couldn't find any valid CSS rules in that code.
           no_valid_css_for_selectors: The code for %{selectors} doesn't seem to be a valid CSS rule.
+          too_long: must be less than %{count} characters long.
           work_skin_banned_value_for_property: The %{property} property in %{selectors} cannot have the value %{value} in work skins, sorry!
           work_skin_custom_properties: Custom properties are not allowed in work skins.
           work_skin_var: The var() function is not allowed in work skins.
@@ -217,7 +225,8 @@ en:
                 other: can only be changed once every %{count} days. You last changed your username on %{renamed_at}.
               invalid: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
             password_confirmation:
-              confirmation: doesn't match new password.
+              confirmation: The passwords you entered do not match. Please try again.
+              format: "%{message}"
             reset_password_token:
               invalid: This password reset link is invalid or expired. Please request a new password reset instead.
             terms_of_service:
@@ -225,6 +234,9 @@ en:
               format: "%{message}"
         work:
           attributes:
+            comment_permissions:
+              format: "%{message}"
+              invalid_permissions: Comment permissions are invalid.
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them.
           blocked_gifts: "%{byline} does not accept gifts."

@@ -37,6 +37,13 @@ run_stats_reindex_queue:
   args: stats
   description: "Kick off a reindex of works with stats updates"
 
+run_users_reindex_queues:
+  every: 13m
+  class: "ScheduledReindexJob"
+  queue: utilities
+  args: users
+  description: "Kick off a reindex of user indexing"
+
 run_update_filter_counts_small:
   every: 2m
   class: "FilterCount"

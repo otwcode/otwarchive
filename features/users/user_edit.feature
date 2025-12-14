@@ -419,7 +419,7 @@ Feature:
       And I am logged in as "editname"
     When I am logged out
       And I follow "Forgot password?"
-      And I fill in "Email address or username" with "editname"
+      And I fill in "Email address" with "bar@ao3.org"
       And I press "Reset Password"
     Then 1 email should be delivered to "bar@ao3.org"
     When all emails have been delivered
@@ -467,7 +467,7 @@ Feature:
     Given I am logged in as "testuser" with password "password"
     When I visit the change password page for testuser
       And I make a typing mistake confirming my new password
-    Then I should see "Password confirmation doesn't match new password."
+    Then I should see "The passwords you entered do not match. Please try again."
 
   Scenario: Change password
 

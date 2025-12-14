@@ -18,7 +18,7 @@ describe CommentsController do
 
       it "redirects logged out users to login path with an error" do
         get :unreviewed, params: { work_id: work.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to see those unreviewed comments.")
+        it_redirects_to_with_error(new_user_session_path(return_to: unreviewed_work_comments_path(work)), "Sorry, you don't have permission to see those unreviewed comments.")
       end
 
       it "redirects to root path with an error when logged in user does not own the commentable" do
@@ -38,6 +38,12 @@ describe CommentsController do
         get :unreviewed, params: { work_id: work.id }
         expect(response).to render_template("unreviewed")
       end
+
+      it "assigns page subtitle using work title format" do
+        fake_login_known_user(user)
+        get :unreviewed, params: { work_id: work.id }
+        expect(assigns[:page_subtitle]).to eq("Unreviewed Comments on #{work.title} - #{work.pseuds.first.byline} - #{work.fandoms.first.name}")
+      end
     end
 
     context "when the commentable is an admin post" do
@@ -45,7 +51,7 @@ describe CommentsController do
 
       it "redirects logged out users to login path with an error" do
         get :unreviewed, params: { admin_post_id: admin_post.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to see those unreviewed comments.")
+        it_redirects_to_with_error(new_user_session_path(return_to: unreviewed_admin_post_comments_path(admin_post)), "Sorry, you don't have permission to see those unreviewed comments.")
       end
 
       it "redirects logged in users to root path with an error" do
@@ -59,6 +65,12 @@ describe CommentsController do
         get :unreviewed, params: { admin_post_id: admin_post.id }
         expect(response).to render_template("unreviewed")
       end
+
+      it "assigns page subtitle using admin post title" do
+        fake_login_admin(create(:admin))
+        get :unreviewed, params: { admin_post_id: admin_post.id }
+        expect(assigns[:page_subtitle]).to eq("Unreviewed Comments on #{admin_post.title}")
+      end
     end
   end
   
@@ -67,18 +79,18 @@ describe CommentsController do
       let(:work) { unreviewed_comment.commentable.work }
       let(:user) { work.users.first }
 
-      it "redirects logged out user to root path with error and does not mark comment reviewed" do
+      it "redirects logged out user to referrer with error and does not mark comment reviewed" do
         put :review_all, params: { work_id: work.id }
-        it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+        it_redirects_to_with_error("/where_i_came_from", "What did you want to review comments on?")
         expect(unreviewed_comment.reload.unreviewed).to be_truthy
       end
 
       context "when logged in" do
         context "when current user does not own the work" do
-          it "redirects to root path with error and does not mark comment reviewed" do
+          it "redirects to referrer with error and does not mark comment reviewed" do
             fake_login
             put :review_all, params: { work_id: work.id }
-            it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+            it_redirects_to_with_error("/where_i_came_from", "What did you want to review comments on?")
             expect(unreviewed_comment.reload.unreviewed).to be_truthy
           end
         end
@@ -106,17 +118,17 @@ describe CommentsController do
       let!(:comment1) { create(:comment, :unreviewed, commentable: admin_post) }
       let!(:comment2) { create(:comment, :unreviewed, commentable: admin_post) }
 
-      it "redirects logged out user to root path with error and does not mark comments reviewed" do
+      it "redirects logged out user to referrer with error and does not mark comments reviewed" do
         put :review_all, params: { admin_post_id: admin_post.id }
-        it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+        it_redirects_to_with_error("/where_i_came_from", "What did you want to review comments on?")
         expect(comment1.reload.unreviewed).to be_truthy
         expect(comment2.reload.unreviewed).to be_truthy
       end
 
-      it "redirects logged in user to root path with error and does not mark comments reviewed" do
+      it "redirects logged in user to referrer with error and does not mark comments reviewed" do
         fake_login
         put :review_all, params: { admin_post_id: admin_post.id }
-        it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+        it_redirects_to_with_error("/where_i_came_from", "What did you want to review comments on?")
         expect(comment1.reload.unreviewed).to be_truthy
         expect(comment2.reload.unreviewed).to be_truthy
       end
@@ -385,7 +397,7 @@ describe CommentsController do
           expect(comment.approved).to be_truthy
           expect(comment.spam).to be_falsey
           it_redirects_to_with_error(
-            new_user_session_path,
+            new_user_session_path(return_to: comment_path(comment)),
             "Sorry, you don't have permission to moderate that comment."
           )
         end
@@ -519,7 +531,7 @@ describe CommentsController do
         expect(comment.approved).to be_falsey
         expect(comment.spam).to be_truthy
         it_redirects_to_with_error(
-          new_user_session_path,
+          new_user_session_path(return_to: comment_path(comment)),
           "Sorry, you don't have permission to moderate that comment."
         )
       end

@@ -178,7 +178,7 @@ Feature: Edit chapters
     And I fill in "content" with "Even more awesomely epic context"
     And I press "Preview"
   Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
-  When I follow "Edit"
+  When I press "Edit"
     And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
     And I press "Post"
     Then I should see "Chapter was successfully posted."
@@ -192,7 +192,7 @@ Feature: Edit chapters
     And I fill in "content" with "Even more awesomely epic context"
     And I press "Preview"
   Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
-  When I follow "Edit"
+  When I press "Edit"
     And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
     And I press "Preview"
   Then I should see "Even more awesomely epic context. Plus bonus epicness"
@@ -220,7 +220,7 @@ Feature: Edit chapters
     And I press "Preview"
   Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
     And I should see "And then they will request more features for it."
-  When I follow "Edit"
+  When I press "Edit"
     And I fill in "content" with "And then they will request more features for it. Like the ability to save easily."
     And I press "Save Draft"
   Then I should see "Chapter was successfully updated."
@@ -249,8 +249,15 @@ Feature: Edit chapters
       And I should not see "Updated" within ".work.meta .stats"
       And I should not see "Completed" within ".work.meta .stats"
     When I follow "Edit Chapter"
+      And I fill in "content" with "this is my edited second chapter"
+      And I press "Preview"
+    Then I should see "this is my edited second chapter"
+    When I press "Edit"
+    Then I should see "this is my edited second chapter"
+    When I wait 1 second
       And I press "Post"
-      Then I should see Completed today
+    Then I should see Completed today
+      And I should see "this is my edited second chapter"
 
 
   Scenario: Posting a new chapter without previewing should set the work's updated date to now
@@ -633,3 +640,87 @@ Feature: Edit chapters
     When I follow "Edit Chapter"
      And I follow "Cancel"
     Then I should see the page title "Camp Friends - Chapter 2 - karma"
+
+  Scenario: Setting chapter position to 1 on new chapter correctly adjusts positions when posting and properly sends out subscription email
+    Given I am logged in as "karma"
+      And the user "second_user" with the email "second_user@example.com" exists
+      And all emails have been delivered
+      And I post the work "You and I"
+      And "second_user" subscribes to work "You and I"
+    When I am logged in as "karma"
+      And I go to the "You and I" work page
+      And I follow "Add Chapter"
+      And I fill in "chapter_position" with "1"
+      And I fill in "chapter_title" with "My New Actual For Real First Chapter"
+      And I fill in "content" with "once upon a time"
+      And I press "Post"
+    Then I should see "Chapter 1: My New Actual For Real First Chapter"
+    When I follow "Next Chapter"
+    Then I should see "Chapter 2"
+      And I should see "That could be an amusing crossover."
+    When subscription notifications are sent
+    Then 1 email should be delivered to "second_user@example.com"
+      And the email should contain exactly "Chapter 1: My New Actual For Real First Chapter"
+      
+  Scenario: Setting chapter position to 1 on new chapter correctly adjusts positions when previewing, 
+  then posting
+    Given I am logged in as "karma"
+      And I post the work "You and I"
+    When I follow "Add Chapter"
+      And I fill in "chapter_position" with "1"
+      And I fill in "chapter_title" with "My New Actual For Real First Chapter"
+      And I fill in "content" with "once upon a time"
+      And I press "Preview"
+      And I press "Post"
+    Then I should see "Chapter 1: My New Actual For Real First Chapter"
+    When I follow "Next Chapter"
+    Then I should see "Chapter 2"
+      And I should see "That could be an amusing crossover."
+  
+  Scenario: Setting new chapter position in multi-chaptered work to middle position correctly adjusts the other chapters' positions
+  and properly sends out subscription email
+    Given I am logged in as "karma"
+      And the user "second_user" with the email "second_user@example.com" exists
+      And all emails have been delivered
+      And I post the chaptered work "Three Chaptered Work"
+      And "second_user" subscribes to work "Three Chaptered Work"
+    When I am logged in as "karma"
+      And I go to the "Three Chaptered Work" work page
+      And I follow "Add Chapter"
+      And I fill in "chapter_position" with "2"
+      And I fill in "chapter_title" with "Second Chapter (Not Third)"
+      And I fill in "content" with "once upon a time"
+      And I press "Post"
+    Then I should see "Chapter 2: Second Chapter (Not Third)"
+    When I follow "Next Chapter"
+    Then I should see "Chapter 3"
+      And I should see "Another Chapter."
+    When I follow "Previous Chapter"
+      And I follow "Previous Chapter"
+    Then I should see "Chapter 1"
+      And I should see "That could be an amusing crossover."
+    When subscription notifications are sent
+    Then 1 email should be delivered to "second_user@example.com"
+      And the email should contain exactly "Chapter 2: Second Chapter (Not Third)"
+
+  Scenario: Setting a new chapter's position outside of total chapter range should append the chapter to the end or beginning
+    Given I am logged in as "karma"
+      And I post the chaptered work "Three Chaptered Work"
+    When I follow "Add Chapter"
+      And I fill in "chapter_position" with "2000"
+      And I fill in "chapter_title" with "Way Out of Range (Positive)"
+      And I fill in "content" with "this should be added to the end"
+      And I press "Post"
+    Then I should see "Chapter 3: Way Out of Range (Positive)"
+    When I follow "Add Chapter"
+      And I fill in "chapter_position" with "-8543"
+      And I fill in "chapter_title" with "Way Out of Range (Negative)"
+      And I fill in "content" with "this should be added to the beginning"
+      And I press "Post"
+    Then I should see "Chapter 1: Way Out of Range (Negative)"
+    When I follow "Add Chapter"
+      And I fill in "chapter_position" with "NaN"
+      And I fill in "chapter_title" with "Not even a number!"
+      And I fill in "content" with "this should be added to the beginning since str.to_i = 0"
+      And I press "Post"
+    Then I should see "Chapter 1: Not even a number!"

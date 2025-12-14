@@ -15,7 +15,7 @@ jobs:
       BUNDLE_ONLY: linters
     steps:
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
@@ -37,7 +37,7 @@ jobs:
       BUNDLE_ONLY: linters
     steps:
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1

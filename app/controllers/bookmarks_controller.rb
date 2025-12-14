@@ -11,8 +11,6 @@ class BookmarksController < ApplicationController
 
   before_action :check_pseud_ownership, only: [:create, :update]
 
-  skip_before_action :store_location, only: [:share]
-
   def check_pseud_ownership
     if params[:bookmark][:pseud_id]
       pseud = Pseud.find(bookmark_params[:pseud_id])
@@ -199,7 +197,8 @@ class BookmarksController < ApplicationController
     @bookmarkable ||= ExternalWork.new(external_work_params)
     @bookmark = Bookmark.new(bookmark_params.merge(bookmarkable: @bookmarkable))
     if @bookmark.errors.empty? && @bookmark.save
-      flash[:notice] = ts("Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.")
+      flash[:notice] = t("bookmarks.create.success")
+      flash[:notice] += t("bookmarks.create.warnings.private_bookmark_added_to_collection") if bookmark_params[:collection_names].present?
       redirect_to(bookmark_path(@bookmark))
     else
       render :new
@@ -257,6 +256,7 @@ class BookmarksController < ApplicationController
     if @bookmark.update(bookmark_params) && errors.empty?
       flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
       flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
+      flash[:notice] += t("bookmarks.create.warnings.private_bookmark_added_to_collection") if new_collections.any? || unapproved_collections.any?
       flash[:notice] = flash[:notice].html_safe
       redirect_to(@bookmark)
     else
@@ -276,7 +276,7 @@ class BookmarksController < ApplicationController
     else
       # Avoid getting an unstyled page if JavaScript is disabled
       flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
-      redirect_back(fallback_location: root_path)
+      redirect_back_or_to @bookmark
     end
   end
 

@@ -19,22 +19,22 @@
       <dt><%= f.label :title, t(".title") %></dt>
       <dd>
         <%= f.text_field :title, class: "observe_textlength" %>
-        <%= live_validation_for_field("profile_attributes_title", presence: false, maximum_length: Profile::PROFILE_TITLE_MAX) %>
-        <%= generate_countdown_html("profile_attributes_title", Profile::PROFILE_TITLE_MAX) %>
+        <%= live_validation_for_field("profile_title", presence: false, maximum_length: Profile::PROFILE_TITLE_MAX) %>
+        <%= generate_countdown_html("profile_title", Profile::PROFILE_TITLE_MAX) %>
       </dd>
 
       <dt><%= f.label :about_me, t(".about_me") %></dt>
       <dd class="description">
         <p><%= allowed_html_instructions %></p>
         <%= f.text_area :about_me, class: "observe_textlength" %>
-        <%= live_validation_for_field("profile_attributes_about_me", presence: false, maximum_length: Profile::ABOUT_ME_MAX) %>
-        <%= generate_countdown_html("profile_attributes_about_me", Profile::ABOUT_ME_MAX) %>
+        <%= live_validation_for_field("profile_about_me", presence: false, maximum_length: Profile::ABOUT_ME_MAX) %>
+        <%= generate_countdown_html("profile_about_me", Profile::ABOUT_ME_MAX) %>
       </dd>
 
-      <% if policy(@user.profile).can_edit_profile? %>
-        <dt><%= f.label :ticket_number, class: "required" %></dt>
-        <dd>
-          <%= f.text_field :ticket_number, class: "required" %>
+      <% if policy(@user.profile).update? %>
+        <dt class="required"><%= f.label :ticket_number %></dt>
+        <dd class="required">
+          <%= f.text_field :ticket_number %>
         </dd>
       <% end %>
 
