@@ -1500,11 +1500,11 @@ describe UserMailer do
       it "instructs user to check email and contact Policy & Abuse" do
         expect(email).to have_html_part_content("check your email")
         expect(email).to have_html_part_content("spam folder")
-        expect(email).to have_html_part_content("contact the Policy &amp; Abuse committee")
+        expect(email).to have_html_part_content("contact the Policy & Abuse committee")
       end
 
       it "directs users to Policy & Abuse in footer" do
-        expect(email).to have_html_part_content("Policy &amp; Abuse")
+        expect(email).to have_html_part_content("Policy & Abuse")
         expect(email).not_to have_html_part_content("contact Support")
       end
     end
