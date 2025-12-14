@@ -72,7 +72,7 @@
   <% unless chapter.endnotes.blank? %>
     <div class="chapter preface group">
       <div class="end notes module" id="chapter_<%= chapter.position.to_s %>_endnotes">
-        <h3 class="heading"><%=h ts("Notes:") %></h3>
+        <h3 class="heading"><%=h ts('Notes:') %></h3>
         <blockquote class="userstuff">
           <%=raw sanitize_field(chapter, :endnotes) %>
         </blockquote>
