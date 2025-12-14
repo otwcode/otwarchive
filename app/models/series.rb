@@ -235,11 +235,12 @@ class Series < ApplicationRecord
       methods: [
         :revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :creators,
-        :word_count, :work_types]
+        :relationship_ids, :freeform_ids, :word_count, :work_types
+      ]
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
+      creators: indexed_creators,
       unrevealed: unrevealed?,
       pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
       user_ids: anonymous? || unrevealed? ? nil : user_ids,
@@ -302,7 +303,7 @@ class Series < ApplicationRecord
     filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
   end
 
-  def creators
+  def indexed_creators
     anonymous? ? ['Anonymous'] : pseuds.map(&:byline)
   end
 

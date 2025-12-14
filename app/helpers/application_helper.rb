@@ -60,11 +60,10 @@ module ApplicationHelper
     link_to content_tag(:span, ts("RSS Feed")), link_to_feed, title: ts("RSS Feed"), class: "rss"
   end
 
-  # 1: default shows just the link to help
-  # 2: show_text = true: shows "plain text with limited html" and link to help
-  def allowed_html_instructions(show_text = true)
-    (show_text ? h(ts("Plain text with limited HTML")) : "".html_safe) +
-      link_to_help("html-help")
+  def allowed_html_instructions(strip_images: false)
+    # i18n-tasks-use t("application_helper.text_limited_html")
+    # i18n-tasks-use t("application_helper.text_limited_html_strip_images_html")
+    t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help("html-help"))
   end
 
   # Byline helpers
@@ -176,18 +175,20 @@ module ApplicationHelper
     link_to content, options[:for], html_options
   end
 
-  # Currently, help files are static. We may eventually want to make these dynamic?
+  # TODO: AO3-7208 Make help modals dynamic and translatable and use link_to_help_modal instead of this method
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
     help_file = ""
-    #if Locale.active && Locale.active.language
-    #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
-    #end
 
     unless !help_file.blank? && File.exists?("#{Rails.root}/public/#{help_file}")
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
 
     " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
+  end
+
+  def link_to_help_modal(help_path, title)
+    link = tag.span(tag.span(t("application_helper.help_modal.help_symbol")), class: %w[symbol question])
+    " ".html_safe + link_to_modal(link, for: help_path, title: title, class: "help symbol question")
   end
 
   # Inserts the flash alert messages for flash[:key] wherever

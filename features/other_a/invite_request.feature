@@ -23,8 +23,7 @@ Feature: Invite requests
   Scenario: Admin sees the request
 
     Given invitations are required
-      And I am logged in as "user1"
-      And I request some invites
+      And one user invite request
     When I view requests as an admin
     Then I should see "user1"
       And the "requests[user1]" field should contain "3"
@@ -33,8 +32,7 @@ Feature: Invite requests
   Scenario: Admin can refuse request
 
     Given invitations are required
-      And I am logged in as "user1"
-      And I request some invites
+      And one user invite request
     When I view requests as an admin
       And I fill in "requests[user1]" with "0"
       And I press "Update"
@@ -44,8 +42,7 @@ Feature: Invite requests
   Scenario: Admin can grant request
 
     Given invitations are required
-      And I am logged in as "user1"
-      And I request some invites
+      And one user invite request
     When I view requests as an admin
       And I fill in "requests[user1]" with "2"
       And I press "Update"
@@ -54,8 +51,7 @@ Feature: Invite requests
   Scenario: User is granted invites
 
     Given invitations are required
-      And I am logged in as "user1"
-      And I request some invites
+      And one user invite request
       And an admin grants the request
     When I try to invite a friend from my user page
     Then I should see "Invite a friend"
@@ -75,8 +71,7 @@ Feature: Invite requests
   Scenario: User can send out invites they have been granted, and the recipient can sign up
 
     Given invitations are required
-      And I am logged in as "user1"
-      And I request some invites
+      And one user invite request
       And an admin grants the request
       And I try to invite a friend from my user page
     When all emails have been delivered
