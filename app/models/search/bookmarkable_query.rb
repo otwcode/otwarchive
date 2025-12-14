@@ -101,20 +101,23 @@ class BookmarkableQuery < Query
   ####################
 
   def sort
-    sort_hash = if sort_column == "bookmarkable_date"
+    sort_hash = case sort_column
+                when "bookmarkable_date"
                   # bookmarkable_date corresponds to the bookmarkable's revised_at date
                   { revised_at: { order: sort_direction, unmapped_type: "date" } }
-                elsif sort_column == "created_at"
+                when "created_at"
                   # When sorting by created_at, we use _score to sort (because the
                   # only way to sort by a child's fields is to store the value in
                   # the _score field and sort by score).
                   { _score: { order: sort_direction } }
-                # We check the word_count cases last, as they are different depending
-                # on whether we include restricted works.
-                elsif include_restricted?
-                  { general_word_count: { order: sort_direction } }
-                else
-                  { public_word_count: { order: sort_direction } }
+                when "word_count"
+                  # Word_count cases are different depending on whether we include
+                  # restricted works
+                  if include_restricted?
+                    { general_word_count: { order: sort_direction } }
+                  else
+                    { public_word_count: { order: sort_direction } }
+                  end
                 end
 
     [sort_hash, { sort_id: { order: sort_direction } }]
