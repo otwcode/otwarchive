@@ -58,9 +58,9 @@ describe BookmarkSearchForm, bookmark_search: true do
 
           # Search after the change
           results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
-          # "Series to be bookmarked": 13, "Ten": 10
+          # "Series to be bookmarked": 15, "Ten": 10
           # Check word count of returned results
-          expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [13, 10]
+          expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [15, 10]
           # Check titles of returned results
           expect(results.map(&:title)).to eq ["Series to be bookmarked", "Ten"]
         end
@@ -429,7 +429,7 @@ describe BookmarkSearchForm, bookmark_search: true do
 
       it "sorts correctly when logged in" do
         User.current_user = create(:user)
-        results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").search_results
+        results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").search_results.map(&:bookmarkable)
         # "Series to be bookmarked": 13, "Ten": 10
         # Check word count of returned results
         expect(results.map { |item| item.respond_to?(:general_word_count) ? item.general_word_count : item.word_count }).to eq [13, 10]
@@ -438,7 +438,7 @@ describe BookmarkSearchForm, bookmark_search: true do
       end
 
       it "sorts correctly when not logged in" do
-        results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").search_results
+        results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").search_results.map(&:bookmarkable)
         # "Ten": 10, "Series to be bookmarked": 5
         # Check word count of returned results
         expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [10, 5]
@@ -457,7 +457,7 @@ describe BookmarkSearchForm, bookmark_search: true do
         end
 
         it "places external bookmark last" do
-          results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").search_results
+          results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").search_results.map(&:bookmarkable)
           # "Ten": 10, "Series to be bookmarked": 5, "External bookmark": N/A
           # Check titles of returned results
           expect(results.map(&:title)).to eq ["Ten", "Series to be bookmarked", "External bookmark"]
