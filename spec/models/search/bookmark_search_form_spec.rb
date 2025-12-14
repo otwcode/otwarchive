@@ -17,14 +17,14 @@ describe BookmarkSearchForm, bookmark_search: true do
         let(:tag) { create(:canonical_fandom) }
 
         let!(:work5) { create(:work, fandom_string: tag.name, chapter_attributes: { content: "one two three four five" }) }
-        let!(:work10r) { create(:work, fandom_string: tag.name, restricted: true, chapter_attributes: { content: "one two three four five six seven eight nine ten" }) }
+        let!(:work8r) { create(:work, fandom_string: tag.name, restricted: true, chapter_attributes: { content: "one two three four five six seven eight" }) }
         let!(:work10) { create(:work, fandom_string: tag.name, title: "Ten", chapter_attributes: { content: "one two three four five six seven eight nine ten" }) }
         # bookmark of public work "Ten" has word_count 10
         let!(:work_bookmark) { create(:bookmark, bookmarkable: work10) }
 
-        let!(:series) { create(:series, title: "Series to be bookmarked", works: [work5, work10r]) }
-        # bookmark of series "Series to be bookmarked" has word_count 5 or 15
-        # depending on whether work10r (a restricted work) is visible
+        let!(:series) { create(:series, title: "Series to be bookmarked", works: [work5, work8r]) }
+        # bookmark of series "Series to be bookmarked" has word_count 5 or 13
+        # depending on whether work8r (a restricted work) is visible
         let!(:series_bookmark) { create(:bookmark, bookmarkable: series) }
 
         before do
@@ -52,7 +52,7 @@ describe BookmarkSearchForm, bookmark_search: true do
 
         it "reindexes when the work wordcount changes" do
           # Update the one public work in the series to have 15 words instead of 5
-          work5.chapters.first.update(content: "This is a work with a word count of fifteen which is more than ten.")
+          work5.chapters.first.update!(content: "This is a work with a word count of fifteen which is more than ten.")
           work5.save
           run_all_indexing_jobs
 
@@ -67,22 +67,22 @@ describe BookmarkSearchForm, bookmark_search: true do
 
         it "reindexes when a work is unrestricted" do
           # Update the restricted work in the series to be public
-          work10r.update(restricted: false)
-          work10r.save
+          work8r.update!(restricted: false)
+          work8r.save
           run_all_indexing_jobs
 
           # Search after the change
           results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
-          # "Series to be bookmarked": 15, "Ten": 10
+          # "Series to be bookmarked": 13, "Ten": 10
           # Check word count of returned results
-          expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [15, 10]
+          expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [13, 10]
           # Check titles of returned results
           expect(results.map(&:title)).to eq ["Series to be bookmarked", "Ten"]
         end
 
         it "reindexes when a work is deleted" do
           # Destroy one of the works in the series
-          work10r.destroy
+          work8r.destroy!
           run_all_indexing_jobs
 
           # Search after the change
@@ -97,7 +97,7 @@ describe BookmarkSearchForm, bookmark_search: true do
 
         it "reindexes when a work is hidden by admin" do
           # Hide one of the works in the series
-          work10r.update(hidden_by_admin: true)
+          work8r.update!(hidden_by_admin: true)
           run_all_indexing_jobs
 
           # Search after the change
