@@ -50,6 +50,9 @@ Feature: Filter bookmarks
       And I press "Sort and Filter"
     Then I should see "1 Bookmark by awesome_posterrr"
       And I should see "Mixed Visibility"
+    When I fill in "To" with "4" within "#work_words"
+      And I press "Sort and Filter"
+    Then I should see "0 Bookmarks by awesome_posterrr"
 
   Scenario: Sorting series bookmarks by word count with restricted works
     Given I am logged in as "poster_child"
