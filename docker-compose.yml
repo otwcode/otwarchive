@@ -56,7 +56,7 @@ services:
     environment:
       - transport.host=localhost
       - bootstrap.memory_lock=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms1500m -Xmx1500m"
       - discovery.type=single-node
       # Silence "security features are not enabled" warnings
       # https://github.com/elastic/elasticsearch/issues/78500
