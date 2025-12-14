@@ -105,12 +105,12 @@ class BookmarkableQuery < Query
                 when "bookmarkable_date"
                   # bookmarkable_date corresponds to the bookmarkable's revised_at date
                   { revised_at: { order: sort_direction, unmapped_type: "date" } }
-                when "created_at", "_score"
+                when "created_at"
                   # When sorting by created_at, we use _score to sort (because the
                   # only way to sort by a child's fields is to store the value in
                   # the _score field and sort by score).
                   { _score: { order: sort_direction } }
-                when "word_count"
+                when "word_count", "_score"
                   # Word_count cases are different depending on whether we include
                   # restricted works
                   if include_restricted?

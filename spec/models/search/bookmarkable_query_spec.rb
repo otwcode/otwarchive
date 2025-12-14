@@ -33,6 +33,11 @@ describe BookmarkableQuery do
         aggregations = bookmarkable_query.generated_query[:aggs]
         expect(aggregations).to be_blank
       end
+
+      it "defaults to sorting by _score" do
+        expect(bookmarkable_query.generated_query[:sort])
+          .to eq([{ _score: { order: "desc" } }, { sort_id: { order: "desc" } }])
+      end
     end
 
     describe "a faceted query" do
@@ -59,6 +64,14 @@ describe BookmarkableQuery do
         # Nest even further to get the tags of the children:
         expect(aggregations.dig(:bookmarks, :aggs, :filtered_bookmarks, :aggs, :tag)).to \
           include({ terms: { field: "tag_ids" } })
+      end
+
+      it "defaults to sorting by created_at (stored in _score)" do
+        expect(bookmarkable_query.generated_query[:sort])
+          .to eq([{ _score: { order: "desc" } }, { sort_id: { order: "desc" } }])
+          # Computes score by created_at
+          expect(bookmarkable_query.generated_query.dig(:query, :bool, :must, :has_parent, :query, :function_score, :field_value_factor, :field)).to \
+            eq("created_at")
       end
     end
 
@@ -98,7 +111,6 @@ describe BookmarkableQuery do
 
     context "when querying as a guest" do
       it "sorts by word count" do
-        User.current_user = nil
         q = BookmarkQuery.new(sort_column: "word_count").bookmarkable_query
         # Sort by public_word_count
         expect(q.generated_query[:sort])
@@ -106,7 +118,6 @@ describe BookmarkableQuery do
       end
 
       it "filters by word count" do
-        User.current_user = nil
         q = BookmarkQuery.new(word_count: "10").bookmarkable_query
         expect(q.generated_query.dig(:query, :bool, :filter))
           .to include({ range: { public_word_count: { gte: 10, lte: 10 } } })
