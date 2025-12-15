@@ -52,9 +52,9 @@ Feature: Gift Exchange Challenge
     Given I am logged in as "mod1"
       And I have created the gift exchange "My Gift Exchange"
       And I am on "My Gift Exchange" gift exchange edit page
-    When I check "Sign-up open?"
+      And I check "Sign-up open?"
       And I submit
-    When I am on "My Gift Exchange" collection edit page
+      And I am on "My Gift Exchange" collection edit page
       And I check "This collection is closed"
       And I submit
     When I view open challenges
