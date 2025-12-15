@@ -299,13 +299,13 @@ en:
       deleted:
         html: Your work %{title} was deleted by an %{app_name} administrator. A copy of your work is attached to this email.
         text: Your work "%{title}" was deleted by an %{app_name} administrator. A copy of your work is attached to this email.
+      may_not_repost: you may not repost the work without taking action to correct the violation
       subject: "[%{app_name}] Your work has been deleted by an administrator"
       tos: "%{app_name} Terms of Service"
       tos_faq: Terms of Service FAQ
       tos_violation:
         html: If your work was deleted due to being in violation of the %{tos_link} (including the %{content_policy_link}), %{may_not_repost_bold}. For more information, please refer to the %{tos_faq_link}.
         text: 'If your work was deleted due to being in violation of the %{app_name} Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you may not repost the work without taking action to correct the violation. For more information, please refer to the Terms of Service FAQ: %{tos_faq_url}.'
-      may_not_repost: you may not repost the work without taking action to correct the violation
     admin_hidden_work_notification:
       access:
         one: While your work is hidden, you will still be able to access it through the link provided above, but it won't be available to other users or listed on your works page.
