@@ -32,14 +32,14 @@ module SearchCounts
   def fandom_count_for_collection(collection)
     Rails.cache.fetch(collection_cache_key(collection, :fandom_count),
                       collection_cache_options) do
-      collection_works_query(collection).field_count(:fandom_ids)
+      get_fandom_hash(collection_works_query(collection)).count
     end
   end
 
   def fandom_ids_for_collection(collection)
     Rails.cache.fetch(collection_cache_key(collection, :fandom_ids),
                       collection_cache_options) do
-      collection_works_query(collection).field_values(:fandom_ids)
+      get_fandom_hash(collection_works_query(collection))
     end
   end
 
@@ -112,6 +112,17 @@ module SearchCounts
 
   def logged_in
     User.current_user ? :logged_in : :logged_out
+  end
+
+  # Helper function to get both categorized and uncategorized fandoms from a WorkQuery object
+  def get_fandom_hash(query)
+    list = []
+    query.search_results.each do |work|
+      work.tag_groups["Fandom"].each do |fandom|
+        list.push(fandom.id)
+      end
+    end
+    list.tally
   end
 
   ######################################################################
