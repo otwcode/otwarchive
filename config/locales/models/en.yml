@@ -88,6 +88,11 @@ en:
           attributes:
             url:
               not_on_archive: does not appear to be on this site.
+        admin_post:
+          attributes:
+            comment_permissions:
+              format: "%{message}"
+              invalid_permissions: Comment permissions are invalid.
         block:
           attributes:
             blocked:
@@ -229,6 +234,9 @@ en:
               format: "%{message}"
         work:
           attributes:
+            comment_permissions:
+              format: "%{message}"
+              invalid_permissions: Comment permissions are invalid.
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them.
           blocked_gifts: "%{byline} does not accept gifts."

@@ -6,44 +6,53 @@
 <!--main content-->
 <div id="previewpane">
   <div class="draft work">
-    <%= render "works/work_header" %>
-    <div id="chapters">
-    <% if @chapters %>
-      <% @chapters.each do |chapter| %>
-        <%= render "chapters/chapter", chapter: chapter %>
-      <% end %>
-    <% else %>
-      <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
-    <% end %>
-    </div>
+    <%= render "works/meta", work: @work %>
 
-    <% inspired_by = get_inspired_by(@work) %>
-    <% if !@work.endnotes.blank? || !@work.serial_works.blank? || !inspired_by.empty? %>
-    <!--afterword-->
-    <div class="afterword preface group">
-      <% unless @work.endnotes.blank? %>
-        <%= render "works/work_endnotes" %>
-      <% end %>
-      <% unless @work.serial_works.blank? %>
-        <%= render "works/work_series_links" %>
-      <% end %>
-      <% unless inspired_by.empty? %>
-        <%= render "works/work_approved_children", inspired_by: inspired_by %>
-      <% end %>
-    </div>
-    <!--/afterword-->
-    <% end %>
+    <%= render "works/work_skin" %>
 
+    <div id="workskin">
+      <%= render "works/preface" %>
+
+      <div id="chapters">
+        <% if @chapters %>
+          <% @chapters.each do |chapter| %>
+            <%= render "chapters/chapter", chapter: chapter %>
+          <% end %>
+        <% else %>
+          <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
+        <% end %>
+      </div>
+
+      <% inspired_by = get_inspired_by(@work) %>
+      <% if !@work.endnotes.blank? || !@work.serial_works.blank? || !inspired_by.empty? %>
+        <!--afterword-->
+        <div class="afterword preface group">
+          <% unless @work.endnotes.blank? %>
+            <%= render "works/work_endnotes" %>
+          <% end %>
+          <% unless @work.serial_works.blank? %>
+            <%= render "works/work_series_links" %>
+          <% end %>
+          <% unless inspired_by.empty? %>
+            <%= render "works/work_approved_children", inspired_by: inspired_by %>
+          <% end %>
+        </div>
+        <!--/afterword-->
+      <% end %>
+
+    </div>
+    <!-- END work skin -->
   </div>
+  <!-- END draft -->
+
+  <div class="clear"><!--presentational--></div>
+
+  <%= form_for(@work) do |f| %>
+    <%= render "hidden_fields", form: f %>
+
+    <%= render "posting_fieldset" %>
+
+  <% end %>
 </div>
-
-<div class="clear"><!--presentational--></div>
-
-<%= form_for(@work) do |f| %>
-  <%= render "hidden_fields", form: f %>
-
-  <%= render "posting_fieldset" %>
-
-<% end %>
-</div>
+<!-- END previewpane -->
 <!--/content-->
