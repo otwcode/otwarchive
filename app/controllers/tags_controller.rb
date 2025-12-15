@@ -12,17 +12,13 @@ class TagsController < ApplicationController
 
   def load_tag
     @tag = Tag.find_by_name(params[:id])
-    unless @tag && @tag.is_a?(Tag)
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
-    end
+    raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'" unless @tag && @tag.is_a?(Tag)
   end
 
   # improved performance for show page
   def load_tag_and_subtags
     @tag = Tag.includes(:direct_sub_tags).find_by_name(params[:id])
-    unless @tag && @tag.is_a?(Tag)
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
-    end
+    raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'" unless @tag && @tag.is_a?(Tag)
   end
 
   # GET /tags
@@ -70,21 +66,31 @@ class TagsController < ApplicationController
     # if tag is NOT wrangled, prepare to show works, collections, and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
       @works = if logged_in? # current_user.is_a?User
-                 @tag.works.visible_to_registered_user.paginate(page: params[:page])
+                 @tag.works.visible_to_registered_user
                elsif logged_in_as_admin?
-                 @tag.works.visible_to_admin.paginate(page: params[:page])
+                 @tag.works.visible_to_admin
                else
-                 @tag.works.visible_to_all.paginate(page: params[:page])
+                 @tag.works.visible_to_all
                end
+      @bookmarks = @tag.bookmarks.visible
+      @collections = @tag.collections
+      # if from a collection, only show items from that collection
+      if @collection.present?
+        @works &= @collection.works
+        @bookmarks &= @collection.bookmarks
+        @collections &= @collection.collections
+      end
+      @works = @works.paginate(page: params[:page])
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
       @collections = @tag.collections.paginate(page: params[:page])
+
     end
     # cache the children, since it's a possibly massive query
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
       children = {}
-      (@tag.child_types - %w(SubTag)).each do |child_type|
-        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count_cache DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
-        children[child_type] = tags.to_a.uniq unless tags.blank?
+      (@tag.child_types - %w[SubTag]).each do |child_type|
+        tags = @tag.send(child_type.underscore.pluralize).order("taggings_count_cache DESC").limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
+        children[child_type] = tags.to_a.uniq if tags.present?
       end
       children
     end
@@ -98,12 +104,12 @@ class TagsController < ApplicationController
     end
     @tag = @tag.merger if !@tag.canonical? && @tag.merger
     # Temp for testing
-    if %w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == 'F/F'
-      if @tag.canonical?
-        @works = @tag.filtered_works.visible_to_all.order('created_at DESC').limit(25)
-      else
-        @works = @tag.works.visible_to_all.order('created_at DESC').limit(25)
-      end
+    if %w[Fandom Character Relationship].include?(@tag.type.to_s) || @tag.name == "F/F"
+      @works = if @tag.canonical?
+                 @tag.filtered_works.visible_to_all.order("created_at DESC").limit(25)
+               else
+                 @tag.works.visible_to_all.order("created_at DESC").limit(25)
+               end
     else
       redirect_to(tag_works_path(tag_id: @tag.to_param)) && return
     end
@@ -127,33 +133,33 @@ class TagsController < ApplicationController
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
 
       # Tags aren't directly on series, so we need to handle them differently
-      if params[:creation_type] == 'Series'
-        if params[:tag_type] == 'warnings'
-          @display_tags = @display_creation.works.visible.collect(&:archive_warnings).flatten.compact.uniq.sort
-        else
-          @display_tags = @display_creation.works.visible.collect(&:freeforms).flatten.compact.uniq.sort
-        end
-      else
-        @display_tags = case params[:tag_type]
-                        when 'warnings'
+      @display_tags = if params[:creation_type] == "Series"
+                        if params[:tag_type] == "warnings"
+                          @display_creation.works.visible.collect(&:archive_warnings).flatten.compact.uniq.sort
+                        else
+                          @display_creation.works.visible.collect(&:freeforms).flatten.compact.uniq.sort
+                        end
+                      else
+                        case params[:tag_type]
+                        when "warnings"
                           @display_creation.archive_warnings
-                        when 'freeforms'
+                        when "freeforms"
                           @display_creation.freeforms
                         end
-      end
+                      end
 
       # The string used in views/tags/show_hidden.js.erb
-      if params[:tag_type] == 'warnings'
-        @display_category = 'warnings'
-      else
-        @display_category = @display_tags.first.class.name.tableize
-      end
+      @display_category = if params[:tag_type] == "warnings"
+                            "warnings"
+                          else
+                            @display_tags.first.class.name.tableize
+                          end
     end
 
     respond_to do |format|
       format.html do
         # This is just a quick fix to avoid script barf if JavaScript is disabled
-        flash[:error] = ts('Sorry, you need to have JavaScript enabled for this.')
+        flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
         redirect_back_or_to root_path
       end
       format.js
@@ -185,10 +191,10 @@ class TagsController < ApplicationController
     raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify)
 
     model = begin
-              type.classify.constantize
-            rescue StandardError
-              nil
-            end
+      type.classify.constantize
+    rescue StandardError
+      nil
+    end
     @tag = model.find_or_create_by_name(tag_params[:name]) if model.is_a? Class
 
     unless @tag&.valid?
@@ -209,32 +215,36 @@ class TagsController < ApplicationController
   def edit
     authorize :wrangling, :read_access? if logged_in_as_admin?
 
-    @page_subtitle = ts('%{tag_name} - Edit', tag_name: @tag.name)
+    @page_subtitle = ts("%{tag_name} - Edit", tag_name: @tag.name)
 
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-      flash[:error] = ts('Please log in as admin')
+      flash[:error] = ts("Please log in as admin")
 
       redirect_to(tag_wranglings_path) && return
     end
 
     @counts = {}
     @uses = ["Works", "Drafts", "Bookmarks", "Private Bookmarks", "External Works", "Collections", "Taggings Count"]
-    @counts['Works'] = @tag.visible_works_count
-    @counts['Drafts'] = @tag.works.unposted.count
-    @counts['Bookmarks'] = @tag.visible_bookmarks_count
-    @counts['Private Bookmarks'] = @tag.bookmarks.not_public.count
-    @counts['External Works'] = @tag.visible_external_works_count
+    @counts["Works"] = @tag.visible_works_count
+    @counts["Drafts"] = @tag.works.unposted.count
+    @counts["Bookmarks"] = @tag.visible_bookmarks_count
+    @counts["Private Bookmarks"] = @tag.bookmarks.not_public.count
+    @counts["External Works"] = @tag.visible_external_works_count
     @counts["Collections"] = @tag.collections.count
-    @counts['Taggings Count'] = @tag.taggings_count
+    @counts["Taggings Count"] = @tag.taggings_count
 
     @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
-    @parents['MetaTag'] = @tag.direct_meta_tags.by_name
+    @parents["MetaTag"] = @tag.direct_meta_tags.by_name
     @children = @tag.children.order(:name).group_by { |tag| tag[:type] }
-    @children['SubTag'] = @tag.direct_sub_tags.by_name
-    @children['Merger'] = @tag.mergers.by_name
+    @children["SubTag"] = @tag.direct_sub_tags.by_name
+    @children["Merger"] = @tag.mergers.by_name
 
     if @tag.respond_to?(:wranglers)
-      @wranglers = @tag.canonical ? @tag.wranglers : (@tag.merger ? @tag.merger.wranglers : [])
+      @wranglers = if @tag.canonical
+                     @tag.wranglers
+                   else
+                     (@tag.merger ? @tag.merger.wranglers : [])
+                   end
     elsif @tag.respond_to?(:fandoms) && !@tag.fandoms.empty?
       @wranglers = @tag.fandoms.collect(&:wranglers).flatten.uniq
     end
@@ -253,21 +263,19 @@ class TagsController < ApplicationController
     types = logged_in_as_admin? ? (Tag::USER_DEFINED + %w[Media]) : Tag::USER_DEFINED
     @tag = @tag.recategorize(new_tag_type) if @tag.can_change_type? && (types + %w[UnsortedTag]).include?(new_tag_type)
 
-    unless params[:tag].empty?
-      @tag.attributes = tag_params
-    end
+    @tag.attributes = tag_params unless params[:tag].empty?
 
     @tag.syn_string = syn_string if @tag.errors.empty? && @tag.save
 
     if @tag.errors.empty? && @tag.save
-      flash[:notice] = ts('Tag was updated.')
+      flash[:notice] = ts("Tag was updated.")
       redirect_to edit_tag_path(@tag)
     else
       @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
-      @parents['MetaTag'] = @tag.direct_meta_tags.by_name
+      @parents["MetaTag"] = @tag.direct_meta_tags.by_name
       @children = @tag.children.order(:name).group_by { |tag| tag[:type] }
-      @children['SubTag'] = @tag.direct_sub_tags.by_name
-      @children['Merger'] = @tag.mergers.by_name
+      @children["SubTag"] = @tag.direct_sub_tags.by_name
+      @children["Merger"] = @tag.mergers.by_name
 
       render :edit
     end
@@ -276,21 +284,20 @@ class TagsController < ApplicationController
   def wrangle
     authorize :wrangling, :read_access? if logged_in_as_admin?
 
-    @page_subtitle = ts('%{tag_name} - Wrangle', tag_name: @tag.name)
+    @page_subtitle = ts("%{tag_name} - Wrangle", tag_name: @tag.name)
     @counts = {}
-    @tag.child_types.map { |t| t.underscore.pluralize.to_sym }.each do |tag_type|
+    @tag.child_types.map { |t| t.underscore.pluralize.to_sym }
+      .each do |tag_type|
       @counts[tag_type] = @tag.send(tag_type).count
     end
 
     show = params[:show]
-    if %w(fandoms characters relationships freeforms sub_tags mergers).include?(show)
-      params[:sort_column] = 'name' unless valid_sort_column(params[:sort_column], 'tag')
-      params[:sort_direction] = 'ASC' unless valid_sort_direction(params[:sort_direction])
-      sort = params[:sort_column] + ' ' + params[:sort_direction]
+    if %w[fandoms characters relationships freeforms sub_tags mergers].include?(show)
+      params[:sort_column] = "name" unless valid_sort_column(params[:sort_column], "tag")
+      params[:sort_direction] = "ASC" unless valid_sort_direction(params[:sort_direction])
+      sort = params[:sort_column] + " " + params[:sort_direction]
       # add a secondary sorting key when the main one is not discerning enough
-      if sort.include?('suggested') || sort.include?('taggings_count_cache')
-        sort += ', name ASC'
-      end
+      sort += ", name ASC" if sort.include?("suggested") || sort.include?("taggings_count_cache")
       # this makes sure params[:status] is safe
       status = params[:status]
       @tags = if %w[unfilterable canonical synonymous unwrangleable].include?(status)
@@ -309,9 +316,9 @@ class TagsController < ApplicationController
   def mass_update
     authorize :wrangling if logged_in_as_admin?
 
-    params[:page] = '1' if params[:page].blank?
-    params[:sort_column] = 'name' unless valid_sort_column(params[:sort_column], 'tag')
-    params[:sort_direction] = 'ASC' unless valid_sort_direction(params[:sort_direction])
+    params[:page] = "1" if params[:page].blank?
+    params[:sort_column] = "name" unless valid_sort_column(params[:sort_column], "tag")
+    params[:sort_direction] = "ASC" unless valid_sort_direction(params[:sort_direction])
     options = { show: params[:show], page: params[:page], sort_column: params[:sort_column], sort_direction: params[:sort_direction], status: params[:status] }
 
     error_messages = []
@@ -331,8 +338,8 @@ class TagsController < ApplicationController
         end
       end
 
-      error_messages << ts('The following tags couldn\'t be made canonical: %{tags_not_saved}', tags_not_saved: not_saved_canonicals.collect(&:name).join(', ')) unless not_saved_canonicals.empty?
-      notice_messages << ts('The following tags were successfully made canonical: %{tags_saved}', tags_saved: saved_canonicals.collect(&:name).join(', ')) unless saved_canonicals.empty?
+      error_messages << ts("The following tags couldn't be made canonical: %{tags_not_saved}", tags_not_saved: not_saved_canonicals.collect(&:name).join(", ")) unless not_saved_canonicals.empty?
+      notice_messages << ts("The following tags were successfully made canonical: %{tags_saved}", tags_saved: saved_canonicals.collect(&:name).join(", ")) unless saved_canonicals.empty?
     end
 
     # remove associated tags
@@ -349,18 +356,16 @@ class TagsController < ApplicationController
         end
       end
 
-      error_messages << ts('The following tags couldn\'t be removed: %{tags_not_saved}', tags_not_saved: not_saved_removed_associateds.collect(&:name).join(', ')) unless not_saved_removed_associateds.empty?
-      notice_messages << ts('The following tags were successfully removed: %{tags_saved}', tags_saved: saved_removed_associateds.collect(&:name).join(', ')) unless saved_removed_associateds.empty?
+      error_messages << ts("The following tags couldn't be removed: %{tags_not_saved}", tags_not_saved: not_saved_removed_associateds.collect(&:name).join(", ")) unless not_saved_removed_associateds.empty?
+      notice_messages << ts("The following tags were successfully removed: %{tags_saved}", tags_saved: saved_removed_associateds.collect(&:name).join(", ")) unless saved_removed_associateds.empty?
     end
 
     # wrangle to fandom(s)
-    if params[:fandom_string].blank? && params[:selected_tags].is_a?(Array) && !params[:selected_tags].empty?
-      error_messages << ts('There were no Fandom tags!')
-    end
+    error_messages << ts("There were no Fandom tags!") if params[:fandom_string].blank? && params[:selected_tags].is_a?(Array) && !params[:selected_tags].empty?
     if params[:fandom_string].present? && params[:selected_tags].is_a?(Array) && !params[:selected_tags].empty?
       canonical_fandoms = []
       noncanonical_fandom_names = []
-      fandom_names = params[:fandom_string].split(',').map(&:squish)
+      fandom_names = params[:fandom_string].split(",").map(&:squish)
 
       fandom_names.each do |fandom_name|
         if (fandom = Fandom.find_by_name(fandom_name)).try(:canonical?)
@@ -380,17 +385,15 @@ class TagsController < ApplicationController
         end
 
         canonical_fandom_names = canonical_fandoms.collect(&:name)
-        options[:fandom_string] = canonical_fandom_names.join(',')
-        notice_messages << ts('The following tags were successfully wrangled to %{canonical_fandoms}: %{tags_saved}', canonical_fandoms: canonical_fandom_names.join(', '), tags_saved: saved_to_fandoms.collect(&:name).join(', ')) unless saved_to_fandoms.empty?
+        options[:fandom_string] = canonical_fandom_names.join(",")
+        notice_messages << ts("The following tags were successfully wrangled to %{canonical_fandoms}: %{tags_saved}", canonical_fandoms: canonical_fandom_names.join(", "), tags_saved: saved_to_fandoms.collect(&:name).join(", ")) unless saved_to_fandoms.empty?
       end
 
-      if noncanonical_fandom_names.present?
-        error_messages << ts('The following names are not canonical fandoms: %{noncanonical_fandom_names}.', noncanonical_fandom_names: noncanonical_fandom_names.join(', '))
-      end
+      error_messages << ts("The following names are not canonical fandoms: %{noncanonical_fandom_names}.", noncanonical_fandom_names: noncanonical_fandom_names.join(", ")) if noncanonical_fandom_names.present?
     end
 
-    flash[:notice] = notice_messages.join('<br />').html_safe unless notice_messages.empty?
-    flash[:error] = error_messages.join('<br />').html_safe unless error_messages.empty?
+    flash[:notice] = notice_messages.join("<br />").html_safe unless notice_messages.empty?
+    flash[:error] = error_messages.join("<br />").html_safe unless error_messages.empty?
 
     redirect_to url_for({ controller: :tags, action: :wrangle, id: params[:id] }.merge(options))
   end
