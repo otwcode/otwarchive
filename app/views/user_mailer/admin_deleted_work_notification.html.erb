@@ -3,7 +3,7 @@
 
   <p><%= t(".deleted.html", title: style_creation_title(@work.title), app_name: ArchiveConfig.APP_SHORT_NAME) %></p>
 
-  <p><%= t(".tos_violation.html", tos_link: tos_link(t(".tos", app_name: ArchiveConfig.APP_SHORT_NAME)), content_policy_link: style_link(t(".content_policy"), content_url), tos_violation_bold: tag.strong(t(".tos_violation_bold")), tos_faq_link: style_link(t(".tos_faq"), tos_faq_url(anchor: "repost_my_work"))) %></p>
+  <p><%= t(".tos_violation.html", tos_link: tos_link(t(".tos", app_name: ArchiveConfig.APP_SHORT_NAME)), content_policy_link: style_link(t(".content_policy"), content_url), may_not_repost_bold: tag.strong(t(".may_not_repost")), tos_faq_link: style_link(t(".tos_faq"), tos_faq_url(anchor: "repost_my_work"))) %></p>
 
   <p><%= t(".check_email.html", contact_abuse_link: abuse_link(t(".contact_abuse"))) %></p>
 <% end %>
