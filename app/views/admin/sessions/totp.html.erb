@@ -1,0 +1,15 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".page_heading") %></h2>
+<!--/descriptions-->
+
+<!--main content-->
+<%= form_with(url: session_path(resource), method: :post) do |form| %>
+  <dl>
+    <dt><%= form.label :totp_attempt, t(".two_step_verification_code") %></dt>
+    <dd>
+      <%= form.text_field :totp_attempt %>
+    </dd>
+  </dl>
+  <p class="submit actions"><%= submit_tag t("admin.sessions.new.submit") %></p>
+<% end %>
+<!--/content-->

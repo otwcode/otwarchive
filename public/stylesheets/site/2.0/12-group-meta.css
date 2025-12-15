@@ -61,6 +61,29 @@ dl.meta dd ul li, .meta .stats dl, .meta .stats dl dt, .meta .stats dl dd {
   margin: 0;
 }
 
+/* mod: wrapped data */
+/* TODO: This might just want to be a .settings variation of .meta. Unsure. */
+
+dl.meta:has(.wrapper) {
+  padding-block: 0;
+}
+
+dl.meta .wrapper {
+  float: left;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  padding-block: 1.286em;
+    box-shadow: none;
+}
+
+dl.meta .wrapper:last-of-type {
+  border-bottom: none
+}
+
+dl.meta .wrapper dd, dl.meta .wrapper dd p:last-of-type {
+  margin: 0;
+}
+
 /* CONTEXTS */
 
 .dashboard .meta .clear {

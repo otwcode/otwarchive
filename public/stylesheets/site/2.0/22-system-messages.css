@@ -84,6 +84,44 @@ dd.complex span.error {
   display: inline-block;
 }
 
+/* annotation module:
+Similar to native figure element, this groups an image or text with additional
+textual information. Unlike the figure element, the content cannot be removed
+from the main flow. */
+
+.annotation {
+  background: #eee;
+  border: 1px solid #ccc;
+  float: none;
+  line-height: 1;
+  margin: 0.643em auto;
+  padding: 1.286em;
+  width: fit-content;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.286em;
+}
+
+.annotation .image {
+  width: auto;
+  float: none;
+  line-height: 1;
+}
+
+.annotation .note {
+  text-align: center;
+}
+
+.annotation .note code {
+  font-size: 1.286em;
+}
+
+.annotation .note .footnote {
+  float: none;
+}
+
 /* contexts */
 
 .actions + .footnote {
