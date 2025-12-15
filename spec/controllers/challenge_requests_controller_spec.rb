@@ -1,12 +1,13 @@
 require "spec_helper"
 
-describe ChallengeRequestsController do 
+describe ChallengeRequestsController, work_search: true do 
   include LoginMacros
   include RedirectExpectationHelper
 
   describe "index" do
     context "when there are anonymous prompts" do
       render_views
+
       it "does not throw a 500 error if sorting by prompter with an anonymous prompt" do
         signup = create(:prompt_meme_signup)  
         signup.requests.create(anonymous: true)
