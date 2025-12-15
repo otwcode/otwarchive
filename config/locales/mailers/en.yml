@@ -313,7 +313,7 @@ en:
       check_email:
         one: Please check your email, including your spam folder, as the Policy & Abuse committee may have already contacted you to explain why your work was hidden.
         other: Please check your email, including your spam folder, as the Policy & Abuse committee may have already contacted you to explain why your works were hidden.
-      contact_abuse: contact the Policy &amp; Abuse committee
+      contact_abuse: contact the Policy & Abuse committee
       content_policy: Content Policy
       help:
         html:
