@@ -2,7 +2,7 @@ require "faker"
 
 FactoryBot.define do
   factory :support_notice do
-    sequence(:notice) { |n| "#{Faker::Lorem.paragraph} (#{n})" }
+    sequence(:notice_content) { |n| "#{Faker::Lorem.paragraph} (#{n})" }
 
     active { false }
     support_notice_type { "notice" }

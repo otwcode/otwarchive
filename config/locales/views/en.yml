@@ -337,9 +337,6 @@ en:
           requests: Manage Requests
         label: Admin
         locales: Locales
-        notices:
-          notices: Notices
-          support: Support
         posts:
           admin_posts: Admin Posts
           faqs: Archive FAQ
@@ -354,6 +351,7 @@ en:
           rejected: Rejected Skins
           skins: Skins
         spam: Spam
+        support_notices: Support Notices
         users:
           email_search: Bulk Email Search
           manage: Manage Users
@@ -437,14 +435,13 @@ en:
         page_heading: New Support Notice
       show:
         page_heading: Support Notice
-      support_notice:
+      support_notice_blurb:
         active: Active
         confirm_delete: Are you sure you want to delete this support notice?
         delete: Delete
         edit: Edit
       support_notice_form:
         actions:
-          cancel: Cancel
           create: Create Support Notice
           update: Update Support Notice
         active: Active
@@ -454,7 +451,7 @@ en:
         legend:
           actions: Actions
           content: Support Notice
-        required_information: Required Information
+        required_information: Required information
         text: Support notice text
         type:
           caution: Caution

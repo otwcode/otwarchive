@@ -7,19 +7,23 @@ class Admin::SupportNoticesController < Admin::BaseController
     authorize(SupportNotice)
 
     @pagy, @support_notices = pagy(SupportNotice.order(active: :desc, updated_at: :desc))
+    @page_subtitle = t(".page_title")
   end
 
   # GET /admin/notices/support/1
   def show
+    @page_subtitle = t(".page_title")
   end
 
   # GET /admin/notices/support/new
   def new
     @support_notice = authorize SupportNotice.new
+    @page_subtitle = t(".page_title")
   end
 
   # GET /admin/notices/support/1/edit
   def edit
+    @page_subtitle = t(".page_title")
   end
 
   # POST /admin/notices/support
@@ -27,7 +31,7 @@ class Admin::SupportNoticesController < Admin::BaseController
     @support_notice = authorize SupportNotice.new(support_notice_params)
 
     if @support_notice.save
-      AdminActivity.log_action(current_admin, @support_notice, action: "create support notice", summary: @support_notice.notice)
+      AdminActivity.log_action(current_admin, @support_notice, action: "create support notice", summary: @support_notice.notice_content)
 
       flash[:notice] = t(".success")
       redirect_to admin_support_notice_path(@support_notice)
@@ -39,7 +43,7 @@ class Admin::SupportNoticesController < Admin::BaseController
   # PUT /admin/notices/support/1
   def update
     if @support_notice.update(support_notice_params)
-      AdminActivity.log_action(current_admin, @support_notice, action: "update support notice", summary: @support_notice.notice)
+      AdminActivity.log_action(current_admin, @support_notice, action: "update support notice", summary: @support_notice.notice_content)
 
       flash[:notice] = t(".success")
       redirect_to admin_support_notice_path(@support_notice)
@@ -50,11 +54,12 @@ class Admin::SupportNoticesController < Admin::BaseController
 
   # GET /admin/notices/support/1/confirm_delete
   def confirm_delete
+    @page_subtitle = t(".page_title")
   end
 
   # DELETE /admin/notices/support/1
   def destroy
-    AdminActivity.log_action(current_admin, @support_notice, action: "destroy support notice", summary: @support_notice.notice)
+    AdminActivity.log_action(current_admin, @support_notice, action: "destroy support notice", summary: @support_notice.notice_content)
     @support_notice.destroy
 
     flash[:notice] = t(".success")
@@ -75,6 +80,6 @@ class Admin::SupportNoticesController < Admin::BaseController
   end
 
   def support_notice_params
-    params.require(:support_notice).permit(:notice, :support_notice_type, :active)
+    params.require(:support_notice).permit(:notice_content, :support_notice_type, :active)
   end
 end

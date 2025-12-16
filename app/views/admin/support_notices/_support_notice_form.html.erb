@@ -5,10 +5,10 @@
     <legend><%= t(".legend.content") %></legend>
     <h3 class="landmark heading"><%= t(".landmark.content") %></h3>
     <dl>
-      <dt class="required"><%= f.label :notice, "#{t('.text')}*" %></dt>
+      <dt class="required"><%= f.label :notice_content, "#{t('.text')}*" %></dt>
       <dd class="required">
         <p><%= allowed_html_instructions %></p>
-        <%= f.text_area :notice %>
+        <%= f.text_area :notice_content %>
       </dd>
       <dt class="required"><%= t(".type.label") %>*</dt>
       <dd class="required">
@@ -35,9 +35,8 @@
   <fieldset>
     <legend><%= t(".legend.actions") %></legend>
     <h3 class="landmark heading"><%= t(".landmark.actions") %></h3>
-    <p class="submit cancel actions">
+    <p class="submit actions">
       <%= f.submit @support_notice.new_record? ? t(".actions.create") : t(".actions.update") %>
-      <%= link_to t(".actions.cancel"), @support_notice.new_record? ? admin_support_notices_path : admin_support_notice_path(@support_notice) %>
     </p>
   </fieldset>
 <% end %>

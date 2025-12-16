@@ -1,24 +1,3 @@
-<li class="blurb">
-  <div class="<%= support_notice.css_classes %>">
-    <blockquote class="userstuff">
-      <%= raw sanitize_field(support_notice, :notice, image_safety_mode: true) %>
-    </blockquote>
-  </div>
-
-  <ul class="actions">
-    <% if policy(SupportNotice).edit? %>
-      <li>
-        <%= link_to t(".edit"), edit_admin_support_notice_path(support_notice) %>
-      </li>
-    <% end %>
-    <% if support_notice.active? %>
-      <li>
-        <span class="active current"><%= t(".active") %></span>
-      </li>
-    <% elsif policy(SupportNotice).destroy? %>
-      <li>
-        <%= link_to t(".delete"), confirm_delete_admin_support_notice_path(support_notice), data: { confirm: t(".confirm_delete") } %>
-      </li>
-    <% end %>
-  </ul>
-</li>
+<blockquote class="<%= css_classes_for_support_notice(support_notice) %>">
+  <%= raw sanitize_field(support_notice, :notice_content, image_safety_mode: true) %>
+</blockquote>

@@ -57,12 +57,7 @@
     <% end %>
 
     <% if policy(SupportNotice).index? %>
-      <li class="dropdown">
-        <%= link_to t(".nav.notices.notices"), admin_support_notices_path %>
-        <ul class="menu">
-          <li><%= link_to t(".nav.notices.support"), admin_support_notices_path %></li>
-        </ul>
-      </li>
+      <li><%= link_to t(".nav.support_notices"), admin_support_notices_path %></li>
     <% end %>
 
     <% if policy(Skin).index? %>
