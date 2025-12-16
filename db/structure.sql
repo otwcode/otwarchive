@@ -1615,7 +1615,7 @@ DROP TABLE IF EXISTS `taggings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `taggings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tagger_id` int(11) DEFAULT NULL,
   `taggable_id` bigint(20) NOT NULL,
   `taggable_type` varchar(100) DEFAULT '',
@@ -1817,6 +1817,7 @@ CREATE TABLE `wrangling_guidelines` (
 
 INSERT INTO `schema_migrations` (version) VALUES
 ('20251112114418'),
+('20251002101320'),
 ('20250906065547'),
 ('20250816213210'),
 ('20250802192331'),

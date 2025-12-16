@@ -1177,7 +1177,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
     t.datetime "updated_at", precision: nil
   end
 
-  create_table "taggings", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "taggings", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "tagger_id"
     t.bigint "taggable_id", null: false
     t.string "taggable_type", limit: 100, default: ""
