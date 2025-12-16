@@ -48,6 +48,7 @@ Rails.application.routes.draw do
 
   #### ERRORS ####
 
+  get '/400', to: 'errors#400'
   get '/403', to: 'errors#403'
   get '/404', to: 'errors#404'
   get '/422', to: 'errors#422'
