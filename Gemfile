@@ -115,7 +115,7 @@ gem "puma_worker_killer"
 group :test do
   gem "rspec-rails", "~> 6.0"
   gem 'pickle'
-  gem 'shoulda-matchers'
+  gem "shoulda-matchers"
   gem "capybara"
   gem "cucumber"
   gem 'database_cleaner'
