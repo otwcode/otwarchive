@@ -13,7 +13,7 @@ class TagWranglersController < ApplicationController
     @assignments = Fandom.in_use.joins("LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id)
                      LEFT JOIN users ON (users.id = wrangling_assignments.user_id)").where(canonical: true)
 
-    @assignments = @assignments.where("name LIKE ?", "#{params[:fandom_string]}%") if params[:fandom_string].present?
+    @assignments = @assignments.where("name LIKE ?", "#{Fandom.sanitize_sql_like(params[:fandom_string])}%") if params[:fandom_string].present?
 
     if params[:wrangler_id].present?
       if params[:wrangler_id] == "No Wrangler"
