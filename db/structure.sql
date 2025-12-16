@@ -353,7 +353,6 @@ CREATE TABLE `challenge_assignments` (
   `defaulted_at` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `pinch_request_signup_id` int(11) DEFAULT NULL,
   `covered_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `assignments_on_creation_id` (`creation_id`),
