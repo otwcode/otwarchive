@@ -14,7 +14,9 @@
       <%= link_to t(".nav.invitations.invitations"), admin_invitations_path %>
       <ul class="menu">
         <li><%= link_to t(".nav.invitations.new"), admin_invitations_path %></li>
-        <li><%= link_to t(".nav.invitations.requests"), user_invite_requests_path %></li>
+        <% if policy(UserInviteRequest).index? %>
+          <li><%= link_to t(".nav.invitations.requests"), user_invite_requests_path %></li>
+        <% end %>
         <% if policy(InviteRequest).can_manage? %>
           <li><%= link_to t(".nav.invitations.queue"), manage_invite_requests_path %></li>
         <% end %>
