@@ -22,7 +22,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 7.2
+    config.load_defaults 8.0
 
     %w[
       app/models/challenge_models
