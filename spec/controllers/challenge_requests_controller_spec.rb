@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe ChallengeRequestsController, work_search: true do 
+describe ChallengeRequestsController, bookmark_search: true, collection_search: true, work_search: true do 
   include LoginMacros
   include RedirectExpectationHelper
 
