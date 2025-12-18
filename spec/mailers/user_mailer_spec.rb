@@ -1523,7 +1523,7 @@ describe UserMailer do
     it_behaves_like "a translated email"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted by an admin"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been deleted by an administrator"
       expect(email).to have_subject(subject)
     end
 
@@ -1540,14 +1540,51 @@ describe UserMailer do
       it "has the correct content" do
         expect(email).to have_html_part_content("Hi <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
-        expect(email).to have_html_part_content("was deleted from the Archive by a site admin")
+        expect(email).to have_html_part_content("was deleted by an AO3 administrator")
+      end
+
+      it "includes ToS violation warning with links" do
+        expect(email).to have_html_part_content("you may not repost the work")
+        expect(email).to have_html_part_content("Terms of Service")
+        expect(email).to have_html_part_content("Content Policy")
+        expect(email).to have_html_part_content("Terms of Service FAQ")
+      end
+
+      it "instructs user to check email and contact Policy & Abuse" do
+        expect(email).to have_html_part_content("check your email")
+        expect(email).to have_html_part_content("spam folder")
+        expect(email).to have_html_part_content("contact the Policy & Abuse committee")
+      end
+
+      it "directs users to Policy & Abuse in footer" do
+        expect(email).to have_html_part_content("Policy & Abuse")
+        expect(email).not_to have_html_part_content("contact Support")
       end
     end
 
     context "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("Hi #{user.login},")
-        expect(email).to have_text_part_content("Your work \"#{work.title}\" was deleted from the Archive by a site admin")
+        expect(email).to have_text_part_content("Your work \"#{work.title}\" was deleted by an AO3 administrator")
+      end
+
+      it "includes ToS violation warning with URLs" do
+        expect(email).to have_text_part_content("you may not repost the work")
+        expect(email).to have_text_part_content("/tos),")
+        expect(email).to have_text_part_content("/content),")
+        expect(email).to have_text_part_content("/tos_faq#repost_my_work")
+      end
+
+      it "instructs user to check email and contact Policy & Abuse" do
+        expect(email).to have_text_part_content("check your email")
+        expect(email).to have_text_part_content("spam folder")
+        expect(email).to have_text_part_content("contact the Policy & Abuse committee")
+        expect(email).to have_text_part_content("/abuse_reports/new")
+      end
+
+      it "directs users to Policy & Abuse in footer" do
+        expect(email).to have_text_part_content("Policy & Abuse")
+        expect(email).not_to have_text_part_content("contact Support")
       end
     end
 

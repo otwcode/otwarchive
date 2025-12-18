@@ -423,10 +423,16 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.admin_hidden_work_notification(works.map(&:id), user.id)
   end
 
-  # URL: /rails/mailers/user_mailer/admin_deleted_work_notification
+  # Sent to a user when an admin deletes their work
+  # URL: /rails/mailers/user_mailer/admin_deleted_work_notification?work_id=2
   def admin_deleted_work_notification
-    work = create(:work)
-    user = create(:user, :for_mailer_preview)
+    if params[:work_id]
+      work = Work.find_by(id: params[:work_id])
+      user = work.users.first
+    else
+      work = create(:work)
+      user = create(:user, :for_mailer_preview)
+    end
     UserMailer.admin_deleted_work_notification(user, work)
   end
 

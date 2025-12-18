@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_04_060231) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
   create_table "abuse_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "email"
     t.string "url", limit: 2080, null: false
@@ -247,7 +247,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_04_060231) do
     t.datetime "defaulted_at", precision: nil
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
-    t.integer "pinch_request_signup_id"
     t.datetime "covered_at", precision: nil
     t.index ["collection_id"], name: "index_challenge_assignments_on_collection_id"
     t.index ["creation_id"], name: "assignments_on_creation_id"
@@ -349,6 +348,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_04_060231) do
     t.boolean "show_random", default: false, null: false
     t.boolean "prompt_meme", default: false, null: false
     t.boolean "email_notify", default: false, null: false
+    t.datetime "unrevealed_updated_at"
+    t.datetime "anonymous_updated_at"
     t.index ["collection_id"], name: "index_collection_preferences_on_collection_id"
   end
 
@@ -385,8 +386,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_04_060231) do
     t.integer "description_sanitizer_version", limit: 2, default: 0, null: false
     t.string "icon_alt_text", default: ""
     t.string "icon_comment_text", default: ""
-    t.boolean "multifandom"
-    t.boolean "open_doors"
+    t.boolean "multifandom", default: false, null: false
+    t.boolean "open_doors", default: false, null: false
     t.index ["name"], name: "index_collections_on_name"
     t.index ["parent_id"], name: "index_collections_on_parent_id"
   end
@@ -529,7 +530,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_04_060231) do
     t.index ["unhidden_works_count"], name: "index_unhidden_works_count"
   end
 
-  create_table "filter_taggings", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "filter_taggings", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "filter_id", null: false
     t.bigint "filterable_id", null: false
     t.string "filterable_type", limit: 100
@@ -790,10 +791,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_04_060231) do
   create_table "preferences", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
     t.boolean "history_enabled", default: true
-    t.boolean "email_visible", default: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
-    t.boolean "date_of_birth_visible", default: false
     t.boolean "comment_emails_off", default: false, null: false
     t.boolean "adult", default: false
     t.boolean "hide_warnings", default: false, null: false
@@ -824,9 +823,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_04_060231) do
 
   create_table "profiles", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
-    t.string "location"
     t.text "about_me"
-    t.date "date_of_birth"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.string "title"
@@ -1115,7 +1112,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_04_060231) do
     t.index ["work_id"], name: "index_hit_counters_on_work_id", unique: true
   end
 
-  create_table "subscriptions", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "subscriptions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
     t.integer "subscribable_id"
     t.string "subscribable_type"
@@ -1180,7 +1177,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_04_060231) do
     t.datetime "updated_at", precision: nil
   end
 
-  create_table "taggings", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "taggings", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "tagger_id"
     t.bigint "taggable_id", null: false
     t.string "taggable_type", limit: 100, default: ""
