@@ -42,6 +42,10 @@ class Challenge::GiftExchangeController < ChallengesController
       # expire the cache on the signup form
       ActionController::Base.new.expire_fragment('challenge_signups/new')
 
+      # allow regenerating matches if none were found previously
+      @challenge.no_potential_matches_found = false
+      @challenge.save
+
       # see if we initialized the tag set
       redirect_to collection_profile_path(@collection)
     else
@@ -65,7 +69,7 @@ class Challenge::GiftExchangeController < ChallengesController
       :signup_instructions_general, :signup_instructions_requests,
       :signup_instructions_offers, :request_url_label, :offer_url_label,
       :offer_description_label, :request_description_label, :works_reveal_at_string,
-      :authors_reveal_at_string,
+      :authors_reveal_at_string, :no_potential_matches_found,
       request_restriction_attributes: [
         :id, :optional_tags_allowed, :title_required, :title_allowed, :description_required,
         :description_allowed, :url_required, :url_allowed, :fandom_num_required,
