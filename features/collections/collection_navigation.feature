@@ -91,6 +91,36 @@ Feature: Basic collection navigation
     Then I should not see "High School Musical"
       And I should see "Steven's Universe"
 
+  Scenario: Uncategorized Fandoms should appear in Collection's Fandoms
+    Given I have the collection "Categoric" with name "categoric"
+      And the tag "Unrelated Fandom" does not exist
+      And I have a canonical "Video Games" fandom tag named "Undertale Fandom"
+    When I am logged in as "Frisk"
+      And I post the work "Categoric Sans" with fandom "Undertale Fandom" in the collection "Categoric"
+      And I post the work "Categoric Papyrus" with fandom "Undertale Fandom"
+      And I post the work "Uncategoric Sans" with fandom "Unrelated Fandom" in the collection "Categoric"
+      And I post the work "Uncategoric Papyrus" with fandom "Unrelated Fandom"
+      And I go to "Categoric" collection's page
+    Then I should see "Fandoms (2)"
+    When I follow "Fandoms (2)"
+    Then I should see "Unrelated Fandom"
+      And I should see "Undertale Fandom"
+    When I select "Uncategorized Fandoms" from "media_id"
+      And I press "Show"
+    Then I should see "Unrelated Fandom"
+      And I should not see "Undertale Fandom"
+
+    # From collection we only see the works in the collection
+    When I follow "Unrelated Fandom"
+    Then I should see "Sans"
+      And I should not see "Papyrus"
+
+    # Else we see all
+    When I follow "Uncategorized Fandoms" within "#header"
+      And I follow "Unrelated Fandom"
+    Then I should see "Sans"
+      And I should see "Papyrus"
+
   Scenario: Browse tags within a collection (or not)
     Given I have a collection "Randomness"
       And a canonical fandom "Naruto"

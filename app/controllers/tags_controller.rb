@@ -82,7 +82,7 @@ class TagsController < ApplicationController
       if @collection.present?
         @works &= @collection.works
         @bookmarks &= @collection.bookmarks
-        @collections &= @collection.collections
+        @collections &= @collection.children
       end
       @works = @works.paginate(page: params[:page])
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
