@@ -7,7 +7,7 @@ gem 'test-unit', '~> 3.2'
 gem 'bundler'
 
 gem "rails", "~> 7.2"
-gem "rails-i18n"
+gem "rails-i18n", "7.0.9"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
 
@@ -90,7 +90,7 @@ gem "globalize", "~> 7.0"
 gem 'rack-dev-mark', '>=0.7.8'
 
 #Phrase-app
-gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
+gem "phraseapp-in-context-editor-ruby", "~> 1.4.0"
 
 # For URL mangling
 gem 'addressable'
@@ -153,9 +153,9 @@ end
 
 group :linters do
   gem "erb_lint", "0.4.0"
-  gem "rubocop", "1.22.3"
-  gem "rubocop-rails", "2.12.4"
-  gem "rubocop-rspec", "2.6.0"
+  gem "rubocop", "1.81.7"
+  gem "rubocop-rails", "2.34.0"
+  gem "rubocop-rspec", "3.8.0"
 end
 
 group :test, :development, :staging do
