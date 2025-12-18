@@ -131,13 +131,10 @@ class Chapter < ApplicationRecord
     self.title.blank? ? self.chapter_header : self.title
   end
 
-  # Header plus title, used in subscriptions
+  # Header plus title, used in subscriptions and creation_link/title_with_word_count mailer helpers
   def full_chapter_title
-    str = chapter_header
-    if title.present?
-      str += ": #{title}"
-    end
-    str
+    # FIRST-STRONG ISOLATE and POP DIRECTIONAL ISOLATE respectively, so bidi titles won't affect the parenthesis around word counts, see AO3-4590
+    self.title.present? ? t(".full_chapter_title", title: "&#x2068;#{self.title}&#x2069;", position: self.position) : t(".chapter_header", position: self.position)
   end
 
   def display_title
