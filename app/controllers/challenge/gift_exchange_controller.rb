@@ -43,7 +43,7 @@ class Challenge::GiftExchangeController < ChallengesController
       ActionController::Base.new.expire_fragment('challenge_signups/new')
 
       # allow regenerating matches if none were found previously
-      if (@challenge.no_potential_matches_found?)
+      if @challenge.no_potential_matches_found?
         @challenge.no_potential_matches_found = false
         @challenge.save!
       end
