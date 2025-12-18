@@ -105,9 +105,6 @@ module Otwarchive
     # Use Resque to run ActiveJobs (including sending delayed mail):
     config.active_job.queue_adapter = :resque
 
-    # todo(8.0): Remove with Rails 8.0 where this option will be deprecated
-    config.active_job.enqueue_after_transaction_commit = :always
-
     config.active_model.i18n_customize_full_message = true
 
     config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST, protocol: "https" }
