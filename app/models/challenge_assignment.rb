@@ -373,7 +373,7 @@ class ChallengeAssignment < ApplicationRecord
     collection.challenge.no_potential_matches_found = no_potential_matches_found
     collection.challenge.save!
 
-    if no_potential_matches_found?
+    if no_potential_matches_found
       if collection.collection_email.present?
         UserMailer.no_potential_matches_notification(collection.id, collection.collection_email).deliver_later
       else
