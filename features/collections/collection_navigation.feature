@@ -131,6 +131,8 @@ Feature: Basic collection navigation
       And I go to "Canons" collection's page
     Then I should see "Fandoms (1)"
       And I should see "Television"
+    When I follow "Fandoms (1)"
+    Then I should not see "Television"
 
   Scenario: Browse tags within a collection (or not)
     Given I have a collection "Randomness"
