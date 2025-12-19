@@ -121,6 +121,17 @@ Feature: Basic collection navigation
     Then I should see "Sans"
       And I should see "Papyrus"
 
+  Scenario: Non-Canonical Fandoms are not double counted
+    Given I have the collection "Canons" with name "canon"
+      And I have a canonical "TV Shows" fandom tag named "TV"
+      And a synonym "Television" of the tag "TV"
+    When I am logged in as "Screen"
+      And I post the work "Full name" with fandom "Television" in the collection "Canons"
+      And I post the work "Small name" with fandom "TV" in the collection "Canons"
+      And I go to "Canons" collection's page
+    Then I should see "Fandoms (1)"
+      And I should see "Television"
+
   Scenario: Browse tags within a collection (or not)
     Given I have a collection "Randomness"
       And a canonical fandom "Naruto"
