@@ -734,6 +734,8 @@ class WorksController < ApplicationController
           else
             redirect_to(tag_works_path(@tag.merger)) && return
           end
+        elsif @collection.present?
+          redirect_to(collection_tag_path(@collection, @tag)) && return
         else
           redirect_to(tag_path(@tag)) && return
         end
