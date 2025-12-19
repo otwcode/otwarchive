@@ -1,0 +1,15 @@
+<div class="admin">
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= t(".page_heading") %></h2>
+  <!--/descriptions-->
+
+  <!--subnav-->
+  <%= render "navigation" %>
+  <!--/subnav-->
+
+  <!--main content-->
+  <ul class="support banner index group">
+    <%= render "support_notice_blurb", support_notice: @support_notice %>
+  </ul>
+  <!--/content-->
+</div>
