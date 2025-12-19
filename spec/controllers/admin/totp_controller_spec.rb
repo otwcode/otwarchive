@@ -119,7 +119,7 @@ describe Admin::TotpController do
         fake_login_admin(admin)
         post :create, params: { admin_id: admin.login, totp_attempt: "000000" }
         expect(admin.reload.totp_enabled?).to be_falsey
-        expect(flash[:error]).to eq("Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again.")
+        expect(flash[:error]).to eq("Incorrect verification code. Your code may have expired, or you may need to set up your authenticator app again.")
       end
 
       it "denies access when TOTP is enabled" do

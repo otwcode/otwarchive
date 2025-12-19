@@ -1,17 +1,17 @@
-<!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t(".heading") %></h2>
-<!--/descriptions-->
+<%= form_with(url: disable_admin_totp_path, method: :post, class: "password simple confirm") do |form| %>
+  <fieldset>
 
-<!--main content-->
-<%= form_with(url: disable_admin_totp_path, method: :post) do |form| %>
-  <dl>
-    <dt><%= form.label :password_check, t(".admin_password") %></dt>
-    <dd><%= form.password_field :password_check %></dd>
-  </dl>
+    <!--Descriptive page name, messages and instructions-->
+    <legend><h2 class="heading"><%= t(".page_heading") %></h2></legend>
+    <p class="note"><%= t(".required_before_disabling") %></p>
+    <!--/descriptions-->
 
-  <dt class="landmark"><%= t(".landmark.submit") %></dt>
-  <dd class="submit actions">
-    <%= form.submit t(".disable") %>
-  </dd>
+    <!--main content-->
+    <p>
+      <%= form.label :password_check, t(".password_label") %>
+      <%= form.password_field :password_check %>
+      <%= form.submit t(".submit") %>
+    </p>
+    <!--/content-->
+  </fieldset>
 <% end %>
-<!--/content-->

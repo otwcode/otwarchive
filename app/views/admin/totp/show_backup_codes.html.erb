@@ -1,18 +1,19 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t(".heading") %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
+
+<p class="note"><%= t(".write_codes_down") %></p>
 <!--/descriptions-->
 
 <!--main content-->
-<h3 class="heading"><%= t(".step_3.heading") %></h3>
-<p><%= t(".step_3.write_codes_down") %></p>
-<% @backup_codes.each do |code| %>
-  <div>
-    <code class="big"><%= code %></code>
-  </div>
-<% end %>
+<ul>
+  <% @backup_codes.each do |code| %>
+    <li>
+      <code><%= code %></code>
+    </li>
+  <% end %>
+</ul>
 
-<dt class="landmark"><%= t(".finish") %></dt>
-<dd class="submit actions">
+<p class="actions">
   <%= link_to t(".finish"), admins_path %>
-</dd>
+</p>
 <!--/content-->

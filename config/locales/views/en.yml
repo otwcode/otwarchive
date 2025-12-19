@@ -384,8 +384,10 @@ en:
         reset_link: Forgot admin password?
         submit: Log In as Admin
       totp:
+        enter_totp: Enter the verification code from your authenticator app to finish logging in to your admin account.
         page_heading: Two-Step Verification
-        two_step_verification_code: Two-Step Verification Code
+        submit: Log In as Admin
+        totp_label: 6-digit verification code
     settings:
       index:
         fields:
@@ -424,37 +426,41 @@ en:
         success: Archive settings were successfully updated.
     totp:
       confirm_disable:
-        admin_password: Admin password
-        disable: Disable
-        heading: Disable Two-Step Verification
-        landmark:
-          submit: Submit
+        page_heading: Disable Two-Step Verification
         page_title: Disable Two-Step Verification
+        password_label: Admin password
+        required_before_disabling: Before disabling two-step verification, you need to verify your password.
+        submit: Disable Two-Step Verification
       confirm_enable:
-        enable_two_step_verification: Enable Two-Step Verification
-        step_1:
+        about:
+          effects_of_enabling: When two-step verification is enabled, logging in to your AO3 admin account will require both your admin password and a verification code from your authenticator app.
+          general_info: Two-step verification, also called two-factor authentication, helps prevent other people from accessing your account even if they know your password. All you need to set it up is an authenticator app such as 1Password, Google Authenticator, or Twilio Authy.
+          heading: About Two-Step Verification
+        app_setup:
           heading: 'Step 1: Set up your authenticator app'
-          manually_enter_code: 'If you cannot scan the QR code, you can also enter the following setup code manually:'
-          scan_code: Please scan the QR code below using a compatible authenticator app such as 1Password, Google Authenticator, or Authy.
-        step_2:
-          heading: 'Step 2: Confirm two-factor verification code'
-          instructions: Please confirm that your authentication application is working by entering a generated code below.
-        two_factor_authentication_set_up: Two-Step Verification Setup
+          instructions: Use your authenticator app to scan the QR code or enter the manual setup key. The app will give you a 6-digit code, which you'll use in the next step.
+          key:
+            format_note: Spaces and capitalization don't matter
+            heading: Setup Key
+        enter_code:
+          heading: 'Step 2: Enter your 6-digit code'
+          instructions: Enter the 6-digit code from your app to enable two-step verification
+          label: 6-digit code
+          submit: Enable Two-Step Verification
+        page_heading: Set Up Two-Step Verification
       new:
-        admin_password: Admin password
-        continue: Continue
         page_heading: Confirm Password
         page_title: Confirm Password
-        required_before_enabling_two_step: Before enabling two-step verification, you need to verify your password.
+        password_label: Admin password
+        required_before_enabling: Before enabling two-step verification, you need to verify your password.
+        submit: Continue
       reauthenticate_create:
         page_title: Enable Two-Step Verification
       show_backup_codes:
         finish: Finish
-        heading: Two-Step Verification Backup Codes
+        page_heading: Two-Step Verification Backup Codes
         page_title: Two-Step Verification Backup Codes
-        step_3:
-          heading: Save your backup codes
-          write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
+        write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
     user_creations:
       confirm_remove_pseud:
         caution: Are you sure you want to remove the creator's pseud from this work?
@@ -501,7 +507,7 @@ en:
           enable_totp: Set up two-step verification with an authenticator app
           enabled: Enabled
           label: Two-step verification
-          regenerate_backup_codes: Re-generate backup codes
+          regenerate_backup_codes: Regenerate backup codes
       confidentiality_reminder: You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s).
       log_out_reminder: Please remember to log out before resuming your normal site activity!
       page_title: Hi, %{login}!

@@ -52,7 +52,8 @@ div.error {
     box-shadow: 1px 1px 2px;
 }
 
-p.notes {
+/* p.notes should be deprecated in favor of p.note and the .notes class reserved for containers that could hold multiple notes, e.g., div, ul, section */
+p.notes, p.note {
   clear: right;
 }
 
@@ -110,15 +111,15 @@ from the main flow. */
   line-height: 1;
 }
 
-.annotation .note {
+.annotation .notes {
   text-align: center;
 }
 
-.annotation .note code {
+.annotation .notes code {
   font-size: 1.286em;
 }
 
-.annotation .note .footnote {
+.annotation .notes .footnote {
   float: none;
 }
 

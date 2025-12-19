@@ -1,15 +1,17 @@
-<!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t(".page_heading") %></h2>
-<!--/descriptions-->
+<%= form_with(url: session_path(resource), method: :post, class: "totp simple confirm") do |form| %>
+  <fieldset>
 
-<!--main content-->
-<%= form_with(url: session_path(resource), method: :post) do |form| %>
-  <dl>
-    <dt><%= form.label :totp_attempt, t(".two_step_verification_code") %></dt>
-    <dd>
+    <!--Descriptive page name, messages and instructions-->
+    <legend><h2 class="heading"><%= t(".page_heading") %></h2></legend>
+    <p class="note"><%= t(".enter_totp") %></p>
+    <!--/descriptions-->
+
+    <!--main content-->
+    <p>
+      <%= form.label :totp_attempt, t(".totp_label") %>
       <%= form.text_field :totp_attempt %>
-    </dd>
-  </dl>
-  <p class="submit actions"><%= submit_tag t("admin.sessions.new.submit") %></p>
+      <%= submit_tag t(".submit") %>
+    </p>
+    <!--/content-->
+  </fieldset>
 <% end %>
-<!--/content-->

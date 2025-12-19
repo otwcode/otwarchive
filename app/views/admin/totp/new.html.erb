@@ -1,25 +1,17 @@
-<!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t(".page_heading") %></h2>
+<%= form_with(url: reauthenticate_create_admin_totp_path, method: :post, class: "password simple confirm") do |form| %>
+  <fieldset>
 
-<section class="notes">
-  <p><%= t(".required_before_enabling_two_step") %></p>
-</section>
-<!--/descriptions-->
+    <!--Descriptive page name, messages and instructions-->
+    <legend><h2 class="heading"><%= t(".page_heading") %></h2></legend>
+    <p class="note"><%= t(".required_before_enabling") %></p>
+    <!--/descriptions-->
 
-<!--main content-->
-<%= form_with(url: reauthenticate_create_admin_totp_path, method: :post, class: "simple post") do |form| %>
-  <p>
-    <%= form.label :password_check, t(".admin_password"), class: "landmark" %>
-    <%= form.password_field :password_check %>
-    <%= form.submit t(".continue") %>
-  </p>
+    <!--main content-->
+    <p>
+      <%= form.label :password_check, t(".password_label") %>
+      <%= form.password_field :password_check %>
+      <%= form.submit t(".submit") %>
+    </p>
+    <!--/content-->
+  </fieldset>
 <% end %>
-  <%# This is the form to add. %>
-  <%# = form_with(model: current_admin, url: admin_totp_path, method: :post, class: "simple post") do |form| %>
-    <%# <p> %>
-      <%# = form.label :totp_attempt, "6-digit code", class: "landmark" %>
-      <%# = form.text_field :totp_attempt %>
-      <%# = submit_tag "Enable Two-Step Verification" %>
-    <%# </p> %>
-  <%# end %>
-<!--/content-->

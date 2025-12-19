@@ -267,4 +267,8 @@ dl.stats dd {
   margin-right: 1.5em
 }
 
+section.step {
+  margin-block: 2.572em;
+}
+
 /* END == */

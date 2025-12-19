@@ -25,7 +25,7 @@ en:
       already_disabled: TOTP two-step verification is already disabled.
       already_enabled: TOTP two-step verification is already enabled.
       create:
-        incorrect_code: Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again.
+        incorrect_code: Incorrect verification code. Your code may have expired, or you may need to set up your authenticator app again.
         success: Successfully enabled two-step verification; please make note of your backup codes.
       disable:
         failure: Could not disable two-step verification.
