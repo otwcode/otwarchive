@@ -98,6 +98,12 @@
       <%= link_to_modal ts("Share"), :for => share_work_path(@work), :title => ts("Share Work") %>
     </li>
   <% end %>
+<!-- adds a button to take the name that the user wants in place -->
+  <% if @work.present? %>
+    <li class="personalize">
+      <button id="yn-button" class="button" type="button">Personalize (Y/N)</button>
+    </li> 
+  <% end %>
 
   <% if current_user && @subscription %>
     <li class="subscribe">
@@ -117,3 +123,48 @@
   <% end %>
 </ul>
 <!-- END navigation -->
+
+<% if @work.present? %>
+    
+  
+<script type="text/javascript">
+  (function() {
+    const initPersonalization = function() {
+      const btn = document.getElementById('yn-button');
+      if (!btn || btn.dataset.initialized) return;
+
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        let name = prompt("Enter your name:");
+        
+        if (name) {
+          name = name.trim();
+          
+          // Validation: One word + Alphanumeric (A-Z, 0-9)
+          const isAlphanumeric = /^[a-z0-9]+$/i.test(name);
+          
+          if (!isAlphanumeric) {
+            alert("Error: Please use only one word with letters or numbers (no spaces or symbols).");
+            return;
+          }
+
+          const workContent = document.querySelector('.userstuff');
+          if (workContent) {
+            const ynRegex = /(?:\(|\[)?y\/n(?:\)|\])?/gi;
+            
+            workContent.innerHTML = workContent.innerHTML.replace(ynRegex, '<strong>' + name + '</strong>');
+          }
+        }
+      });
+      
+      btn.dataset.initialized = "true";
+    };
+
+    document.addEventListener('DOMContentLoaded', initPersonalization)
+    document.addEventListener('page:load', initPersonalization);
+    document.addEventListener('turbolinks:load', initPersonalization);
+  })();
+</script>
+
+<% end %>
