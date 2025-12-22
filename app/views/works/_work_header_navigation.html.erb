@@ -1,4 +1,3 @@
-<!-- BEGIN navigation -->
 <h3 class="landmark heading"><%= ts("Actions") %></h3>
 <ul class="work navigation actions">
   <% if logged_in_as_admin? || permit?("tag_wrangler") %>
@@ -10,7 +9,6 @@
     <li class="edit"><%= link_to ts("Edit"), edit_work_path(@work) %></li>
     <li class="edit tag"><%= link_to ts("Edit Tags"), edit_tags_work_path(@work) %></li>
   <% end %>
-
 
   <% # chapter navigation %>
   <% if @previous_chapter || @next_chapter %>
@@ -42,7 +40,6 @@
   <% elsif @chapters && @chapters.length > 1 %>
     <li class="chapter bychapter"><%= link_to ts("Chapter by Chapter"), [@work, @chapter] %></li>
   <% end %>
-
 
   <% # for users, bookmark and mark to read later %>
   <% if current_user.is_a?(User) %>
@@ -98,11 +95,12 @@
       <%= link_to_modal ts("Share"), :for => share_work_path(@work), :title => ts("Share Work") %>
     </li>
   <% end %>
-<!-- adds a button to take the name that the user wants in place -->
+
+  <% # Personalize Y/N button %>
   <% if @work.present? %>
     <li class="personalize">
       <button id="yn-button" class="button" type="button">Personalize (Y/N)</button>
-    </li> 
+    </li>
   <% end %>
 
   <% if current_user && @subscription %>
@@ -122,11 +120,7 @@
     </li>
   <% end %>
 </ul>
-<!-- END navigation -->
-
 <% if @work.present? %>
-    
-  
 <script type="text/javascript">
   (function() {
     const initPersonalization = function() {
@@ -135,29 +129,24 @@
 
       btn.addEventListener('click', function(e) {
         e.preventDefault();
-        
         let name = prompt("Enter your name:");
-        
+
         if (name) {
           name = name.trim();
-          
-          // Validation: One word + Alphanumeric (A-Z, 0-9)
           const isAlphanumeric = /^[a-z0-9]+$/i.test(name);
-          
+
           if (!isAlphanumeric) {
-            alert("Error: Please use only one word with letters or numbers (no spaces or symbols).");
+            alert("Error: Please use only one word with letters or numbers.");
             return;
           }
 
           const workContent = document.querySelector('.userstuff');
           if (workContent) {
             const ynRegex = /(?:\(|\[)?y\/n(?:\)|\])?/gi;
-            
             workContent.innerHTML = workContent.innerHTML.replace(ynRegex, '<strong>' + name + '</strong>');
           }
         }
       });
-      
       btn.dataset.initialized = "true";
     };
 
@@ -166,5 +155,5 @@
     document.addEventListener('turbolinks:load', initPersonalization);
   })();
 </script>
-
 <% end %>
+
