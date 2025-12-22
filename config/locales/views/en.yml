@@ -363,7 +363,6 @@ en:
         label:
           confirmation: Confirm new password
           password: New password
-          two_step_verification_code: Two-Step Verification Code
         landmark:
           submit: Submit
         page_heading: Set My Admin Password
