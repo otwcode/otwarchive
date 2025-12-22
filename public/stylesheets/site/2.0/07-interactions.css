@@ -687,6 +687,24 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
   clear: right;
 }
 
+/* INTERACTION: CONFIRM (form with the sole purpose of requiring you to enter a string (e.g., password) before you can complete another action) */
+
+.confirm label {
+  display: block;
+  font-weight: bold;
+}
+
+.confirm input[type="text"], .confirm input[type="password"] {
+  margin-block: 0.25em;
+  padding: 0.643em 0.375em;
+}
+
+.confirm input[type="submit"] {
+  margin-block: 0.25em;
+  padding: 0.643em;
+  vertical-align: bottom;
+}
+
 /* CONTEXT: dashboard */
 
 .dashboard > form {
