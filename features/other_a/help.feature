@@ -40,3 +40,12 @@ Feature: Help
     Given I am logged in
     When I go to the first login help page
     Then I should see "Here are some tips to help you get started"
+
+  Scenario: Preferences locale help is translated based on translated email setting
+    When I go to the help preferences locale page
+    Then I should see "Set preferred locale"
+    When I am logged in as "localiser"
+      And a locale with translated emails
+      And the user "localiser" enables translated emails
+      And I go to the help preferences locale page
+    Then I should see "Localised help page for test"
