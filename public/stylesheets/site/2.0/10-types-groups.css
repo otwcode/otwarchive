@@ -126,11 +126,7 @@ https://otwcode.github.io/docs/patterns/indexes.html
 dl.index {
   margin: 0.643em 0;
   border: none;
-  box-shadow: none;
-}
-
-dl.language {
-  clear: right;
+    box-shadow: none;
 }
 
 dl.index dt {
@@ -232,6 +228,10 @@ p.kudos {
   clear: none;
   float: none;
   margin: auto;
+}
+
+dl.language {
+  clear: right;
 }
 
 dl.stats {
