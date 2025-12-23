@@ -8,14 +8,16 @@ describe Subscription do
 
   describe "a creation's" do
     let(:author) { create(:user) }
+    let(:author2) { create(:user) }
     let(:subscriber) { create(:user) }
 
-    let(:work) { create(:work, authors: [author.default_pseud]) }
+    let(:work) { create(:work, authors: [author.default_pseud, author2.default_pseud]) }
     let(:series) { create(:series, works: [work]) }
 
     context "subscriptions with duplicates" do
       it "picks at most one subscription of each type" do
         create(:subscription, user: subscriber, subscribable: author)
+        create(:subscription, user: subscriber, subscribable: author2)
         create(:subscription, user: subscriber, subscribable: work)
         create(:subscription, user: subscriber, subscribable: series)
         series2 = create(:series, works: [work])
