@@ -1,13 +1,12 @@
 <!--REVIEW: trying out articles on these fieldsets to see if that's a better chunker, but may revert after testing. Have also tossed in landmark headings on top level groups-->
 <%= form_for(@work, html: { id: "work-form", class: "verbose post work" }) do |f| %>
-
   <p class="required notice">* <%= ts("Required information") %></p>
 
   <%= render "work_form_tags", include_blank: false %>
 
   <fieldset class="preface" role="article">
-    <legend><%= ts("Preface") %></legend>
-    <h3 class="landmark heading"><%= ts("Preface") %></h3>
+    <legend><%= t("works.preface.title") %></legend>
+    <h3 class="landmark heading"><%= t("works.preface.title") %></h3>
     <dl>
       <dt class="title required">
         <%= f.label :title, ts("Work Title") + "*" %>
@@ -43,8 +42,8 @@
   </fieldset>
 
   <fieldset id="associations" role="article">
-    <legend><%= ts("Associations") %></legend>
-    <h3 class="landmark heading"><%= ts("Associations") %></h3>
+    <legend><%= t("works.associations.title") %></legend>
+    <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
     <dl>
       <% @assignments = get_open_assignments(current_user) %>
       <% if @assignments.any? || @work.challenge_assignments.any? %>
@@ -243,7 +242,7 @@
         <%= render "work_form_associations_language", f: f %>
 
         <dt class="skin">
-          <%= f.label :work_skin_id, ts("Select Work Skin") %>
+          <%= f.label :work_skin_id, t("works.skin.select") %>
           <%= link_to_help "work-skins" %>
         </dt>
         <dd class="skin">
@@ -339,26 +338,8 @@
 
   <% end %><!-- end of fields for chapters -->
 
-  <fieldset class="create">
-    <legend><%= ts("Post") %></legend>
-    <ul class="actions">
-      <% unless @work.new_record? || @work.posted? %>
-        <li>
-          <%= submit_tag ts("Save As Draft"), name: "save_button" %>
-        </li>
-      <% end %>
-      <li>
-        <%= submit_tag ts("Preview"), name: "preview_button" %>
-      </li>
-      <li>
-        <%= submit_tag ts("Post"), name: "post_button",
-              data: { disable_with: ts("Please wait...") } %>
-      </li>
-      <li>
-        <%= submit_tag ts("Cancel"), name: "cancel_button" %>
-      </li>
-    </ul>
-  </fieldset>
+  <%= render "posting_fieldset" %>
+
 <% end %> <!-- end of form_for -->
 
 <%= content_for :footer_js do %>

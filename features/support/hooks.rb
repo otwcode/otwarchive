@@ -25,9 +25,6 @@ Before do
   # Don't authenticate for Zoho.
   allow_any_instance_of(ZohoAuthClient).to receive(:access_token)
 
-  # Reset the current user:
-  User.current_user = nil
-
   # Clear Memcached
   Rails.cache.clear
 
@@ -59,6 +56,14 @@ end
 
 Before "not @javascript" do
   Capybara.app_host = "http://www.example.com"
+end
+
+Before "@no-js-emulation" do
+  Capybara.current_driver = :rack_test_no_data_method
+end
+
+After "@no-js-emulation" do
+  Capybara.use_default_driver
 end
 
 Before "@disable_caching" do

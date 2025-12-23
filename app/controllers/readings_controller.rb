@@ -10,13 +10,14 @@ class ReadingsController < ApplicationController
   end
 
   def index
-    @readings = @user.readings
-    @page_subtitle = ts("History")
+    @readings = @user.readings.visible
+    @page_subtitle = t(".history_page_title")
     if params[:show] == 'to-read'
       @readings = @readings.where(toread: true)
-      @page_subtitle = ts("Marked For Later")
+      @page_subtitle = t(".marked_for_later_page_title")
     end
-    @readings = @readings.order("last_viewed DESC").page(params[:page])
+    @readings = @readings.order("last_viewed DESC")
+    @pagy, @readings = pagy(@readings)
   end
 
   def destroy
@@ -24,14 +25,14 @@ class ReadingsController < ApplicationController
     if @reading.destroy
       success_message = ts('Work successfully deleted from your history.')
       respond_to do |format|
-        format.html { redirect_to request.referer || user_readings_path(current_user, page: params[:page]), notice: success_message }
+        format.html { redirect_back_or_to(user_readings_path(current_user, page: params[:page]), notice: success_message) }
         format.json { render json: { item_success_message: success_message }, status: :ok }
       end
     else
       respond_to do |format|
         format.html do
           flash.keep
-          redirect_to request.referer || user_readings_path(current_user, page: params[:page]), flash: { error: @reading.errors.full_messages }
+          redirect_back_or_to(user_readings_path(current_user, page: params[:page]), flash: { error: @reading.errors.full_messages })
         end
         format.json { render json: { errors: @reading.errors.full_messages }, status: :unprocessable_entity }
       end
@@ -39,14 +40,20 @@ class ReadingsController < ApplicationController
   end
 
   def clear
+    success = true
+
     @user.readings.each do |reading|
-       begin
-         reading.destroy
-       rescue
-         @errors << ts("There were problems deleting your history.")
-       end
-     end
-    flash[:notice] = ts("Your history is now cleared.")
+      reading.destroy!
+    rescue ActiveRecord::RecordNotDestroyed
+      success = false
+    end
+
+    if success
+      flash[:notice] = t(".success")
+    else
+      flash[:error] = t(".error")
+    end
+
     redirect_to user_readings_path(current_user)
   end
 

@@ -220,4 +220,9 @@ module Creatable
     return false unless user.is_a?(User)
     creatorships.for_user(user).exists?
   end
+
+  # Get all orphan_account pseuds that (co-)created this creatable, excluding the orphan_account's default_pseud
+  def orphan_pseuds
+    self.pseuds.where(user_id: User.orphan_account.id, is_default: false)
+  end
 end

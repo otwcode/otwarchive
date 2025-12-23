@@ -55,7 +55,6 @@ class Work < ApplicationRecord
     end
   end
   # statistics
-  has_many :work_links, dependent: :destroy
   has_one :stat_counter, dependent: :destroy
   after_create :create_stat_counter
   def create_stat_counter
@@ -74,6 +73,9 @@ class Work < ApplicationRecord
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :new_gifts
   attr_accessor :preview_mode
+
+  # Virtual attribute for whether the hidden-for-spam email has been sent, so the normal work-hidden email should not be sent
+  attr_accessor :notified_of_hiding_for_spam
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
@@ -214,11 +216,11 @@ class Work < ApplicationRecord
     end
   end
 
-  enum comment_permissions: {
+  enum :comment_permissions, {
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, _suffix: :comments
+  }, suffix: :comments, default: 1, validate: { message: :invalid_permissions }
 
   ########################################################################
   # HOOKS
@@ -242,25 +244,25 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series, :touch_related_works
-  after_destroy :expire_caches, :update_pseud_index
+  after_destroy :expire_caches, :update_pseud_and_collection_indexes
+  after_save :notify_recipients, :expire_caches, :update_pseud_and_collection_indexes, :update_tag_index, :touch_series, :touch_related_works
 
   before_destroy :send_deleted_work_notification, prepend: true
   def send_deleted_work_notification
-    if self.posted?
-      users = self.pseuds.collect(&:user).uniq
-      orphan_account = User.orphan_account
-      unless users.blank?
-        for user in users
-          next if user == orphan_account
-          # Check to see if this work is being deleted by an Admin
-          if User.current_user.is_a?(Admin)
-            # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.admin_deleted_work_notification(user, self).deliver_now
-          else
-            # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.delete_work_notification(user, self).deliver_now
-          end
+    return unless self.posted? && users.present?
+
+    orphan_account = User.orphan_account
+    users.each do |user|
+      next if user == orphan_account
+
+      I18n.with_locale(user.preference.locale_for_mails) do
+        # Check to see if this work is being deleted by an Admin
+        if User.current_user.is_a?(Admin)
+          # this has to use the synchronous version because the work is going to be destroyed
+          UserMailer.admin_deleted_work_notification(user, self).deliver_now
+        else
+          # this has to use the synchronous version because the work is going to be destroyed
+          UserMailer.delete_work_notification(user, self, User.current_user).deliver_now
         end
       end
     end
@@ -296,24 +298,28 @@ class Work < ApplicationRecord
     Work.flush_find_by_url_cache unless imported_from_url.blank?
   end
 
-  def update_pseud_index
-    return unless should_reindex_pseuds?
+  def update_pseud_and_collection_indexes
+    return unless should_update_pseud_and_collection_indexes?
+
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
+    IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end
 
   # Visibility has changed, which means we need to reindex
-  # the work's pseuds, to update their work counts, as well as
-  # the work's bookmarker pseuds, to update their bookmark counts.
-  def should_reindex_pseuds?
-    pertinent_attributes = %w(id posted restricted in_anon_collection
-                              in_unrevealed_collection hidden_by_admin)
+  # * the work's pseuds, to update their work counts, as well as
+  # * the work's bookmarker pseuds, to update their bookmark counts
+  # * the work's associated collections to update their bookmark counts.
+  def should_update_pseud_and_collection_indexes?
+    pertinent_attributes = %w[id posted restricted in_anon_collection
+                              in_unrevealed_collection hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
-  # If the work gets posted, we should (potentially) reindex the tags,
-  # so they get the correct draft-only status.
+  # If the work gets posted, (un)hidden, or (un)revealed, we should (potentially) reindex the tags,
+  # so they get the correct visibility status.
   def update_tag_index
-    return unless saved_change_to_posted?
+    return unless saved_change_to_posted? || saved_change_to_hidden_by_admin? || saved_change_to_in_unrevealed_collection?
+
     taggings.each(&:update_search)
   end
 
@@ -434,7 +440,11 @@ class Work < ApplicationRecord
   # need to update the chapter to add the other creators on the work.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
-    raise Exception.new("Sorry, we can't remove all creators of a work.") if pseuds_with_author_removed.empty?
+
+    if pseuds_with_author_removed.empty?
+      errors.add(:base, ts("Sorry, we can't remove all creators of a work."))
+      raise ActiveRecord::RecordInvalid, self
+    end
 
     transaction do
       chapters.each do |chapter|
@@ -606,6 +616,14 @@ class Work < ApplicationRecord
     # Invalidate chapter count cache
     self.invalidate_work_chapter_count(self)
     return if self.posted? && !chapter.posted?
+
+    unless self.posted_changed?
+      if chapter.posted_changed?
+        self.major_version = self.major_version + 1
+      else
+        self.minor_version = self.minor_version + 1
+      end
+    end
 
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.current
       self.set_revised_at(Time.current) # a new chapter is being posted, so most recent update is now
@@ -877,7 +895,7 @@ class Work < ApplicationRecord
   # Note that because the two filter counts both include unrevealed works, we
   # don't need to check whether in_unrevealed_collection has changed -- it
   # won't change the counts either way.
-  # (Modelled on Work.should_reindex_pseuds?)
+  # (Modelled on Work.should_update_pseud_and_collection_indexes?)
   def should_reset_filters?
     pertinent_attributes = %w(id posted restricted hidden_by_admin)
     (saved_changes.keys & pertinent_attributes).present?
@@ -1098,6 +1116,7 @@ class Work < ApplicationRecord
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
+      user_role: "user",
       comment_date_gmt: created_at.to_time.iso8601,
       blog_lang: language.short,
       comment_author: user.login,
@@ -1121,7 +1140,10 @@ class Work < ApplicationRecord
     return unless spam?
     admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
+      return if self.hidden_by_admin
+
       self.hidden_by_admin = true
+      notify_of_hiding_for_spam
     end
   end
 
@@ -1145,13 +1167,22 @@ class Work < ApplicationRecord
 
   def notify_of_hiding
     return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
+    return if notified_of_hiding_for_spam
+
     users.each do |user|
-      if spam?
-        UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
-      else
-        UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
+      I18n.with_locale(user.preference.locale_for_mails) do
+        UserMailer.admin_hidden_work_notification([id], user.id).deliver_after_commit
       end
     end
+  end
+
+  def notify_of_hiding_for_spam
+    users.each do |user|
+      I18n.with_locale(user.preference.locale_for_mails) do
+        UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
+      end
+    end
+    self.notified_of_hiding_for_spam = true
   end
 
   #############################################################################
@@ -1174,11 +1205,12 @@ class Work < ApplicationRecord
       methods: [
         :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
         :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
-        :creators, :collection_ids, :work_types
+        :collection_ids, :work_types
       ]
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
+      creators: indexed_creators,
       unrevealed: unrevealed?,
       pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
       user_ids: anonymous? || unrevealed? ? nil : user_ids,
@@ -1198,7 +1230,7 @@ class Work < ApplicationRecord
     stat_counter&.hit_count
   end
 
-  def creators
+  def indexed_creators
     if anonymous?
       ["Anonymous"]
     else
@@ -1209,38 +1241,7 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    # Short-circuit the check if there's only one fandom tag:
-    return false if fandoms.size == 1
-
-    # Replace fandoms with their mergers if possible,
-    # as synonyms should have no meta tags themselves
-    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
-
-    # For each fandom, find the set of all meta tags for that fandom (including
-    # the fandom itself).
-    meta_tag_groups = all_without_syns.map do |f|
-      # TODO: This is more complicated than it has to be. Once the
-      # meta_taggings table is fixed so that the inherited meta-tags are
-      # correctly calculated, this can be simplified.
-      boundary = [f] + f.meta_tags
-      all_meta_tags = []
-
-      until boundary.empty?
-        all_meta_tags.concat(boundary)
-        boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
-      end
-
-      all_meta_tags.uniq
-    end
-
-    # Two fandoms are "related" if they share at least one meta tag. A work is
-    # considered a crossover if there is no single fandom on the work that all
-    # the other fandoms on the work are "related" to.
-    meta_tag_groups.none? do |meta_tags1|
-      meta_tag_groups.all? do |meta_tags2|
-        (meta_tags1 & meta_tags2).any?
-      end
-    end
+    FandomCrossover.check_for_crossover(fandoms)
   end
 
   # Does this work have only one relationship tag?
@@ -1248,7 +1249,8 @@ class Work < ApplicationRecord
   def otp
     return true if relationships.size == 1
 
-    all_without_syns = relationships.map { |r| r.merger ? r.merger : r }.uniq.compact
+    all_without_syns = relationships.map { |r| r.merger_id || r.id }
+      .uniq
     all_without_syns.count == 1
   end
 

@@ -3,49 +3,7 @@
 require "spec_helper"
 
 describe AdminMailer do
-  describe "#comment_notification" do
-    let(:email) { described_class.comment_notification(comment.id) }
-
-    context "when the comment is on an admin post" do
-      let(:comment) { create(:comment, :on_admin_post) }
-
-      context "and the comment's contents contain an image" do
-        let(:image_tag) { "<img src=\"an_image.png\" />" }
-
-        before do
-          comment.comment_content += image_tag
-          comment.save!
-        end
-
-        it "strips the image from the email message" do
-          expect(email).not_to have_html_part_content(image_tag)
-        end
-      end
-    end
-  end
-
-  describe "#edited_comment_notification" do
-    let(:email) { described_class.edited_comment_notification(comment.id) }
-
-    context "when the comment is on an admin post" do
-      let(:comment) { create(:comment, :on_admin_post) }
-
-      context "and the comment's contents contain an image" do
-        let(:image_tag) { "<img src=\"an_image.png\" />" }
-
-        before do
-          comment.comment_content += image_tag
-          comment.save!
-        end
-
-        it "strips the image from the email message" do
-          expect(email).not_to have_html_part_content(image_tag)
-        end
-      end
-    end
-  end
-
-  describe "send_spam_alert" do
+  describe "#send_spam_alert" do
     let(:spam_user) { create(:user) }
 
     let(:spam1) do
@@ -172,7 +130,7 @@ describe AdminMailer do
     end
   end
 
-  describe "set_password_notification" do
+  describe "#set_password_notification" do
     subject(:email) { AdminMailer.set_password_notification(admin, token) }
 
     let(:admin) { create(:admin) }
@@ -199,7 +157,7 @@ describe AdminMailer do
       it "has the correct content" do
         expect(email).to have_html_part_content("username: </b>#{admin.login}")
         expect(email).to have_html_part_content("URL: </b><a")
-        expect(email).to have_html_part_content(">http://www.example.com/admin/login</a>")
+        expect(email).to have_html_part_content(">https://www.example.com/admin/login</a>")
         expect(email).to have_html_part_content("</a> so you can log in.")
         expect(email).to have_html_part_content(token)
       end
@@ -208,7 +166,7 @@ describe AdminMailer do
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("Admin username: #{admin.login}")
-        expect(email).to have_text_part_content("Admin login URL: http://www.example.com/admin/login")
+        expect(email).to have_text_part_content("Admin login URL: https://www.example.com/admin/login")
         expect(email).to have_text_part_content("so you can log in:")
         expect(email).to have_text_part_content(token)
       end

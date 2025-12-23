@@ -1,10 +1,10 @@
 class FeedbacksController < ApplicationController
-  skip_before_action :store_location
   before_action :load_support_languages
 
   def new
-    @feedback = Feedback.new
     @admin_setting = AdminSetting.current
+    @feedback = Feedback.new
+    @feedback.referer = request.referer
     if logged_in_as_admin?
       @feedback.email = current_admin.email
     elsif is_registered_user?
@@ -17,13 +17,15 @@ class FeedbacksController < ApplicationController
     @admin_setting = AdminSetting.current
     @feedback = Feedback.new(feedback_params)
     @feedback.rollout = @feedback.rollout_string
-    @feedback.user_agent = request.env["HTTP_USER_AGENT"]
+    @feedback.user_agent = request.env["HTTP_USER_AGENT"]&.to(499)
     @feedback.ip_address = request.remote_ip
+    @feedback.referer = nil unless @feedback.referer && ArchiveConfig.PERMITTED_HOSTS.include?(URI(@feedback.referer).host)
+    @feedback.site_skin = helpers.current_skin
     if @feedback.save
       @feedback.email_and_send
       flash[:notice] = t("successfully_sent",
         default: "Your message was sent to the Archive team - thank you!")
-      redirect_back_or_default(root_path)
+      redirect_to(url_from(@feedback.referer) || root_path)
     else
       flash[:error] = t("failure_send",
         default: "Sorry, your message could not be saved - please try again!")
@@ -39,8 +41,7 @@ class FeedbacksController < ApplicationController
 
   def feedback_params
     params.require(:feedback).permit(
-      :comment, :email, :summary, :username, :language
+      :comment, :email, :summary, :username, :language, :referer
     )
   end
-
 end

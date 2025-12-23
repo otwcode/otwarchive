@@ -12,13 +12,13 @@
   # present.
   givers = names.dup
   givers << t(".guest", count: guest_count) unless guest_count.zero?
-  givers_list = givers.to_sentence
+  givers_list = to_sentence(givers)
 %>
 
 <% if kudo_count == 1 && guest_count == 1 %>
-<%= t(".text.single_guest", commentable_title: commentable_title, commentable_url: commentable_url) %>
+<%= t(".single_guest.text", commentable_title: commentable_title, commentable_url: commentable_url) %>
 <% else %>
-<%= t(".text.left_kudos", givers_list: givers_list, commentable_title: commentable_title, commentable_url: commentable_url, count: kudo_count) %>
+<%= t(".left_kudos.text", givers_list: givers_list, commentable_title: commentable_title, commentable_url: commentable_url, count: kudo_count) %>
 <% end %>
 
 <% if (index < @commentables.length - 1) %>

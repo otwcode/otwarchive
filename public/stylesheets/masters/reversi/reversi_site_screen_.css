@@ -61,6 +61,8 @@ li.relationships a,
 th,
 #dashboard .secondary,
 .secondary,
+.work.navigation .download,
+.javascript .work.navigation .download .secondary,
 .thread .even,
 .system .tweet_list li,
 .ui-datepicker tr:hover {
@@ -80,7 +82,7 @@ th,
 .javascript,
 .statistics .index li:nth-of-type(even),
 #tos_prompt,
-.announcement input[type="submit"] {
+.nomination dt {
   background: #333;
 }
 
@@ -116,6 +118,8 @@ fieldset fieldset.listbox,
 .wrapper,
 #dashboard .secondary,
 .secondary,
+.work.navigation .download,
+.javascript .work.navigation .download .secondary,
 form blockquote.userstuff,
 .thread .comment,
 .toggled form {
@@ -158,6 +162,8 @@ fieldset fieldset.listbox,
 
 #footer a:hover,
 #footer a:focus,
+#footer button:hover,
+#footer button:focus,
 .autocomplete .dropdown ul li:hover,
 .autocomplete .dropdown li.selected,
 a.tag:hover,
@@ -184,6 +190,7 @@ a.tag:hover,
 #header p,
 #dashboard a:hover,
 .actions a:hover,
+.actions button:hover,
 .actions input:hover,
 .delete a,
 span.delete,
@@ -256,6 +263,7 @@ span.series .divider {
 .actions a:link,
 .action,
 .action:link,
+.actions button,
 .actions input,
 input[type="submit"],
 button,
@@ -270,9 +278,13 @@ button,
 }
 
 .actions a:hover,
+.actions button:hover,
 .actions input:hover,
 #dashboard a:hover,
+label.action:hover,
+.action:hover,
 .actions a:focus,
+.actions button:focus,
 .actions input:focus,
 #dashboard a:focus,
 .actions .disabled select {
@@ -357,4 +369,19 @@ form dd.required {
 .event.announcement .userstuff a,
 .filters .expander {
   color: #eee;
+}
+
+.announcement .action {
+  background: #333;
+}
+
+.announcement .action:hover,
+.announcement .action:focus {
+  color: #fff;
+  box-shadow: inset 2px 2px 2px #000;
+}
+
+.caution {
+  border-color: #807640;
+  color: #dbbc54;
 }

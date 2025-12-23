@@ -2,7 +2,7 @@ Feature: Muting
   Scenario: Users can mute from my muted users page
     Given the user "pest" exists and is activated
       And I am logged in as "muter"
-    When I go to my muted users page
+    When I go to the muted users page for "muter"
       And I fill in "muted_id" with "pest"
       And I press "Mute"
       And I press "Yes, Mute User"
@@ -38,7 +38,7 @@ Feature: Muting
       And I am logged in as "pest"
     When I go to pest's user page
     Then I should not see a link "Mute"
-    When I go to my muted users page
+    When I go to the muted users page for "pest"
       And I fill in "muted_id" with "pest"
       And I press "Mute"
     Then I should see "Sorry, you can't mute yourself."
@@ -47,7 +47,7 @@ Feature: Muting
   Scenario: Users can unmute from the muted users page
     Given the user "unmuter" has muted the user "improving"
       And I am logged in as "unmuter"
-    When I go to my muted users page
+    When I go to the muted users page for "unmuter"
       And I follow "Unmute"
       And I press "Yes, Unmute User"
     Then I should see "You have unmuted the user improving."
@@ -75,7 +75,7 @@ Feature: Muting
       And the user "muter" has muted the user "pest3"
       And the user "muter" has muted the user "pest4"
     When I am logged in as "muter"
-      And I go to my muted users page
+      And I go to the muted users page for "muter"
     Then I should see "pest4" within "ul.pseud li:nth-child(1)"
       And I should see "pest3" within "ul.pseud li:nth-child(2)"
       And I should not see "pest2"
@@ -119,7 +119,7 @@ Feature: Muting
       And I am logged in as "pest"
       And I edit the work "Annoying Work"
       And I add the series "Annoying Series"
-      And I press "Post"
+      And I press "Update"
     When I am logged in as "muter"
       And I go to pest's series page
     Then I should not see "Annoying Series"

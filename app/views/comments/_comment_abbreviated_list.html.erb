@@ -4,7 +4,7 @@
 <dl class="comments index group">
   <% comments.each do |comment| %>
     <dt>
-      <%= ts("Comment on") %>  <%= link_to_comment_ultimate_parent(comment) %>
+      <%= comment_link_with_commentable_name(comment) %>
       <span class="datetime"><%= time_in_zone(comment.created_at) %></span>
     </dt>
     <dd>

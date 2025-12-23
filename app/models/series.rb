@@ -50,9 +50,12 @@ class Series < ApplicationRecord
     having("MAX(works.in_anon_collection) = 0 AND MAX(works.in_unrevealed_collection) = 0")
   }
 
-  scope :for_pseuds, lambda {|pseuds|
-    joins(:approved_creatorships).
-    where("creatorships.pseud_id IN (?)", pseuds.collect(&:id))
+  scope :for_pseud, lambda { |pseud|
+    joins(:approved_creatorships).where(creatorships: { pseud: pseud })
+  }
+
+  scope :for_user, lambda { |user|
+    joins(approved_creatorships: :pseud).where(pseuds: { user: user })
   }
 
   scope :for_blurb, -> { includes(:work_tags, :pseuds) }
@@ -139,19 +142,16 @@ class Series < ApplicationRecord
 
   # Visibility has changed, which means we need to reindex
   # the series' bookmarker pseuds, to update their bookmark counts.
-  def should_reindex_pseuds?
+  def should_update_pseud_and_collection_indexes?
     pertinent_attributes = %w[id restricted hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
-
   def expire_caches
     self.works.touch_all
   end
 
   def expire_byline_cache
-    [true, false].each do |only_path|
-      Rails.cache.delete("#{cache_key}/byline-nonanon/#{only_path}")
-    end
+    Rails.cache.delete(["byline_data", cache_key])
   end
 
   # Change the positions of the serial works in the series
@@ -174,7 +174,12 @@ class Series < ApplicationRecord
   # make sure that we can handle tricky chapter creatorship cases.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
-    raise Exception.new("Sorry, we can't remove all authors of a series.") if pseuds_with_author_removed.empty?
+
+    if pseuds_with_author_removed.empty?
+      errors.add(:base, ts("Sorry, we can't remove all creators of a series."))
+      raise ActiveRecord::RecordInvalid, self
+    end
+
     transaction do
       authored_works_in_series = self.works.merge(author_to_remove.works)
 
@@ -230,11 +235,12 @@ class Series < ApplicationRecord
       methods: [
         :revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :creators,
-        :word_count, :work_types]
+        :relationship_ids, :freeform_ids, :word_count, :work_types
+      ]
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
+      creators: indexed_creators,
       unrevealed: unrevealed?,
       pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
       user_ids: anonymous? || unrevealed? ? nil : user_ids,
@@ -297,7 +303,7 @@ class Series < ApplicationRecord
     filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
   end
 
-  def creators
+  def indexed_creators
     anonymous? ? ['Anonymous'] : pseuds.map(&:byline)
   end
 

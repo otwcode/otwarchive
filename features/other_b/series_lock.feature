@@ -65,3 +65,23 @@ Feature: Locked and partially locked series
       And I should see "Part 1 of Antiholidays"
     When I press "Update"
     Then I should see "Work was successfully updated"
+
+  Scenario: Admins can see locked series on user's series page
+    Given I am logged in as "Accumulator"
+      And I set up the draft "Restricted work" as part of a series "So Restrictive"
+      And I lock the work
+      And I press "Post"
+    When I go to Accumulator's user page
+    Then I should see "Series (1)" within "#dashboard"
+    When I am logged in as a super admin
+      And I go to Accumulator's user page
+    Then I should see "Series (1)" within "#dashboard"
+      And I follow "Series (1)"
+    Then I should see "1 Series by Accumulator"
+      And I should see "So Restrictive"
+    When I log out
+      And I go to Accumulator's user page
+    Then I should see "Series (0)" within "#dashboard"
+      And I follow "Series (0)"
+    Then I should see "0 Series by Accumulator"
+      And I should not see "So Restrictive"

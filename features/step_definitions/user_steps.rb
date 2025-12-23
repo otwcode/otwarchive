@@ -93,22 +93,36 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user.roles = [role]
 end
 
+Given "the role {string}" do |role|
+  FactoryBot.create(:role, name: role)
+end
+
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
   step("I start a new session")
-  step %{I am on the homepage}
-  find_link('login-dropdown').click
+  visit(new_user_session_path(return_to: root_path))
 
-  fill_in "User name or email:", with: login
-  fill_in "Password:", with: password
-  check "Remember Me"
-  click_button "Log In"
+  with_scope("#main") do
+    fill_in "Username or email:", with: login
+    fill_in "Password:", with: password
+    check "Remember me"
+    click_button "Log in"
+  end
+
   step %{I should see "Hi, #{login}!" within "#greeting"}
   step %{confirmation emails have been delivered}
 end
 
 Given /^I am logged in as "([^"]*)"$/ do |login|
   step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
+end
+
+Given "I am logged in as a new user {string}" do |login|
+  step(%{I am logged in as "#{login}"})
+  user = User.find_by(login: login)
+  user.created_at = Time.current
+  user.confirmed_at = Time.current
+  user.save!
 end
 
 Given /^I am logged in$/ do
@@ -121,11 +135,6 @@ Given /^I am logged in as a random user$/ do
   step(%{confirmation emails have been delivered})
 end
 
-Given /^I am logged in as a banned user$/ do
-  step(%{user "banned" is banned})
-  step(%{I am logged in as "banned"})
-end
-
 Given /^user "([^"]*)" is banned$/ do |login|
   user = find_or_create_new_user(login, DEFAULT_PASSWORD)
   user.banned = true
@@ -136,7 +145,7 @@ Given /^I start a new session$/ do
   page.driver.reset!
 end
 
-Given "the user name {string} is on the forbidden list" do |username|
+Given "the username {string} is on the forbidden list" do |username|
   allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([username])
 end
 
@@ -208,12 +217,13 @@ When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
   user.update!(failed_attempts: count.to_i)
 end
 
-When /^I fill in the sign up form with valid data$/ do
+When "I fill in the sign up form with valid data" do
   step(%{I fill in "user_registration_login" with "#{NEW_USER}"})
   step(%{I fill in "user_registration_email" with "test@archiveofourown.org"})
   step(%{I fill in "user_registration_password" with "password1"})
   step(%{I fill in "user_registration_password_confirmation" with "password1"})
   step(%{I check "user_registration_age_over_13"})
+  step(%{I check "user_registration_data_processing"})
   step(%{I check "user_registration_terms_of_service"})
 end
 
@@ -232,6 +242,16 @@ When /^I visit the change username page for (.*)$/ do |login|
   visit change_username_user_path(user)
 end
 
+When "I visit the change email page for {word}" do |login|
+  user = User.find_by(login: login)
+  visit change_email_user_path(user)
+end
+
+When "I visit the change password page for {word}" do |login|
+  user = User.find_by(login: login)
+  visit change_password_user_path(user)
+end
+
 When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   # To make sure that we don't have caching issues with the byline:
   step %{I wait 1 second}
@@ -239,17 +259,68 @@ When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   user.creatorships.unapproved.each(&:accept!)
 end
 
-When "I request a password reset for {string}" do |login|
+When "the email address change confirmation period is set to {int} days" do |amount|
+  allow(Devise).to receive(:confirm_within).and_return(amount.days)
+end
+
+When "I start to change my email to {string}" do |email|
+  step %{I fill in "New email" with "#{email}"}
+  step %{I fill in "Enter new email again" with "#{email}"}
+  step %{I fill in "Password" with "password"}
+  step %{I press "Confirm New Email"}
+end
+
+When "I confirm my email change request to {string}" do |email|
+  step %{I should see "Are you sure you want to change your email address to #{email}?"}
+  step %{I press "Yes, Change Email"}
+end
+
+When "I request to change my email to {string}" do |email|
+  step %{I start to change my email to "#{email}"}
+  step %{I confirm my email change request to "#{email}"}
+end
+
+When "I change my email to {string}" do |email|
+  step %{I follow "My Preferences"}
+  step %{I follow "Change Email"}
+  step %{I request to change my email to "#{email}"}
+  step %{1 email should be delivered to "#{email}"}
+  step %{I follow "confirm your email change" in the email}
+  step %{I should see "Your email has been successfully updated."}
+end
+
+When "I request a password reset for {string}" do |email|
   step(%{I am on the login page})
-  step(%{I follow "Reset password"})
-  step(%{I fill in "Email address or user name" with "#{login}"})
+  step(%{I follow "Reset your password"})
+  step(%{I fill in "Email address" with "#{email}"})
   step(%{I press "Reset Password"})
+end
+
+When "I make a mistake typing my old password" do
+  fill_in("password", with: "newpass1")
+  fill_in("password_confirmation", with: "newpass1")
+  fill_in("password_check", with: "wrong")
+  click_button("Change Password")
+end
+
+When "I make a typing mistake confirming my new password" do
+  fill_in("password", with: "newpass1")
+  fill_in("password_confirmation", with: "newpass2")
+  fill_in("password_check", with: "password")
+  click_button("Change Password")
+end
+
+When "I change my password" do
+  fill_in("password", with: "newpass1")
+  fill_in("password_confirmation", with: "newpass1")
+  fill_in("password_check", with: "password")
+  click_button("Change Password")
 end
 
 # THEN
 
-Then /^I should get the error message for wrong username or password$/ do
-  step(%{I should see "The password or user name you entered doesn't match our records. Please try again"})
+Then "I should get the error message for wrong username or password" do
+  step(%{I should see "The password or username you entered doesn't match our records. Please try again"})
 end
 
 Then /^I should get an activation email for "(.*?)"$/ do |login|
@@ -278,7 +349,8 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  expect(User.current_user).to be(nil)
+  step %{I should not see "Log Out"}
+  step %{I should see "Log In"}
 end
 
 def get_work_name(age, classname, name)
@@ -312,15 +384,18 @@ Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) 
 end
 
 When /^I change my username to "([^"]*)"/ do |new_name|
-  visit change_username_user_path(User.current_user)
-  fill_in("New user name", with: new_name)
+  step %{I follow "My Preferences"}
+  step %{I follow "Change Username"}
+  fill_in("New username", with: new_name)
   fill_in("Password", with: "password")
-  click_button("Change User Name")
+  click_button("Change Username")
   step %{I should get confirmation that I changed my username}
 end
 
 Then /^I should get confirmation that I changed my username$/ do
-  step(%{I should see "Your user name has been successfully updated."})
+  step(%{I should see "Your username has been successfully updated."})
+  step(%{1 email should be delivered})
+  step(%{the email should contain "The username for your .* has been changed to"})
 end
 
 Then /^the user "([^"]*)" should be activated$/ do |login|

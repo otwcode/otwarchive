@@ -88,7 +88,7 @@ module TagsHelper
 
   # Adds the "tag" classname to links (for tag links)
   def link_to_with_tag_class(path, text, options)
-    options[:class] ? options[:class] << " tag" : options[:class] = "tag"
+    options[:class] ? options[:class].dup << " tag" : options[:class] = "tag"
     link_to text, path, options
   end
 
@@ -173,10 +173,10 @@ module TagsHelper
 
   # Returns a nested list of sub tags
   def sub_tag_tree(tag)
-    sub_ul = ""
+    sub_ul = +""
     unless tag.direct_sub_tags.empty?
       sub_ul << "<ul class='tags tree index'>"
-      tag.direct_sub_tags.each do |sub|
+      tag.direct_sub_tags.order(:name).each do |sub|
         sub_ul << "<li>" + link_to_tag(sub)
         unless sub.direct_sub_tags.empty?
           sub_ul << sub_tag_tree(sub)
@@ -191,7 +191,7 @@ module TagsHelper
   def blurb_tag_block(item, tag_groups=nil)
     tag_groups ||= item.tag_groups
     categories = ['ArchiveWarning', 'Relationship', 'Character', 'Freeform']
-    tag_block = ""
+    tag_block = +""
 
     categories.each do |category|
       if tags = tag_groups[category]
@@ -240,9 +240,11 @@ module TagsHelper
 
   def get_title_string(tags, category_name = "")
     if tags && tags.size > 0
-      tags.collect(&:name).join(", ")
+      # We don't use .to_sentence because these aren't links and we risk making any
+      # connector word (e.g., "and") look like part of the final tag.
+      tags.map(&:display_name).join(t("support.array.words_connector"))
     elsif tags.blank? && category_name.blank?
-     "Choose Not To Use Archive Warnings"
+      ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME
     else
       category_name.blank? ? "" : "No" + " " + category_name
     end

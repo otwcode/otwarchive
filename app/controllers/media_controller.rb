@@ -1,10 +1,9 @@
 class MediaController < ApplicationController
   before_action :load_collection
-  skip_before_action :store_location, only: [:show]
 
   def index
     uncategorized = Media.uncategorized
-    @media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
+    @media = Media.canonical.by_name.where.not(name: [ArchiveConfig.MEDIA_UNCATEGORIZED_NAME, ArchiveConfig.MEDIA_NO_TAG_NAME]) + [uncategorized]
     @fandom_listing = {}
     @media.each do |medium|
       if medium == uncategorized
@@ -16,10 +15,10 @@ class MediaController < ApplicationController
           Fandom.public_top(5).joins(:common_taggings).where(canonical: true, common_taggings: {filterable_id: medium.id, filterable_type: 'Tag'})
       end
     end
-    @page_subtitle = ts("Fandoms")
+    @page_subtitle = t(".browser_title")
   end
 
   def show
-    redirect_to medium_fandoms_path(medium_id: params[:id])
+    redirect_to media_fandoms_path(media_id: params[:id])
   end
 end

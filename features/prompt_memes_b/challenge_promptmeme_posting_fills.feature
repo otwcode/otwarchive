@@ -41,10 +41,44 @@ Feature: Prompt Meme Challenge
     And I press "Post"
   Then I should see "Kinky Story"
     And I should find a list for associations
-    And I should see "In response to a prompt by Anonymous in the promptcollection collection"
+    And I should see "In response to a prompt by Anonymous in the The Kissing Game collection"
     And I should see a link "prompt"
     And 1 email should be delivered to "my1@e.org"
 # TODO: when work_anonymous is implemented, test that the prompt filler can be anon too
+
+  Scenario: Translated prompt notification email is sent
+  Given a locale with translated emails
+    And basic tags
+    And the following activated user exists
+      | login   | password | email     |
+      | myname1 | password | my1@e.org |
+    And the user "myname1" enables translated emails
+    And a fandom exists with name: "GhostSoup", canonical: true
+    And I am logged in as "mod1"
+    And I set up a basic promptmeme "The Kissing Game"
+  When I am logged in as "myname1"
+    And I go to "The Kissing Game" collection's page
+    And I follow "Sign Up"
+    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "GhostSoup"
+    And I check "challenge_signup_requests_attributes_0_anonymous"
+    And I press "Submit"
+  Then I should see "Sign-up was successfully created"
+  When I am logged in as "myname2"
+    And I go to "The Kissing Game" collection's page
+    And I follow "Prompts (1)"
+    And I press "Claim"
+  Then I should see "New claim made"
+    And I follow "Fulfill"
+    And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
+    And I fill in "Fandoms" with "GhostSoup"
+    And I fill in "Work Title" with "Kinky Story"
+    And I fill in "content" with "Story written for your kinks, oh mystery reader!"
+  When all emails have been delivered
+    And I press "Post"
+  Then 1 email should be delivered to "my1@e.org"
+    And the email should have "A response to your prompt" in the subject
+    And the email to "myname1" should be translated
 
   Scenario: Fulfilling a claim ticks the right boxes automatically
 
@@ -84,7 +118,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4"
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
-  When I am on my user page
+  When I am on myname4's user page
     And I follow "Claims"
 		And I follow "Fulfilled Claims"
   Then I should see "Fulfilled Story"
@@ -99,7 +133,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4"
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
-  When I am on my user page
+  When I am on myname4's user page
   # Then show me the sidebar # TODO: it has Claims (0) but why?
   Then I should see "Claims (0)"
   When I follow "Claims"
@@ -120,7 +154,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Fulfilled By"
     And I should see "Mystery Work"
 
-  Scenario: Fulfilled claims are shown to mod
+  # Scenario: Fulfilled claims are shown to mod
  # TODO: We need to figure out if we want to hide claims from mods in 100% anonymous prompt memes
 #  Given I have Battle 12 prompt meme fully set up
 #  Given everyone has signed up for Battle 12
@@ -222,7 +256,7 @@ Feature: Prompt Meme Challenge
     And I should not see "Battle 12"
     And I edit the work "Existing Story"
     And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "Battle 12"
   Then I should see "Existing Story"
     And I should see "This work is part of an ongoing challenge"
@@ -241,7 +275,7 @@ Feature: Prompt Meme Challenge
     And I post the work "Existing Story" in the collection "Othercoll"
     And I edit the work "Existing Story"
     And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "Battle 12"
     And I should see "Othercoll"
 
@@ -294,7 +328,7 @@ Feature: Prompt Meme Challenge
     And I fill in the basic work information for "Existing work"
     And I check "random SGA love in Battle 12 (Anonymous)"
     And I press "Preview"
-  When I am on my user page
+  When I am on myname4's user page
     And I follow "Drafts"
     And all emails have been delivered
   When I follow "Post Draft"
@@ -410,7 +444,7 @@ Feature: Prompt Meme Challenge
   Given everyone has signed up for Battle 12
   When I am logged in as "mod1"
   When I claim a prompt from "Battle 12"
-  When I am on my user page
+  When I am on mod1's user page
   Then I should see "Claims (1)"
   When I follow "Claims"
   Then I should see "My Claims"
@@ -437,7 +471,7 @@ Feature: Prompt Meme Challenge
     And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
   When I press "Preview"
     And I press "Post"
-  When I am on my user page
+  When I am on mod1's user page
   Then I follow "Claims"
     And I should not see "mod" within "h4"
   Then I follow "Fulfilled Claims"
@@ -512,7 +546,7 @@ Feature: Prompt Meme Challenge
   Then I should see "For prompter."
   When I follow "Edit"
     And I uncheck "Battle 12 (prompter)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "For prompter."
 
   Scenario: A creator cannot give a gift to a user who disallows gifts if the work is connected to a claim of an anonymous prompt belonging to the recipient
@@ -557,5 +591,5 @@ Feature: Prompt Meme Challenge
   Then I should see "For prompter."
   When I follow "Edit"
     And I uncheck "Battle 12 (prompter)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "For prompter."

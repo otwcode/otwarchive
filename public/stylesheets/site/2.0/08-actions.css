@@ -1,5 +1,5 @@
-/*==ACTIONS: buttons!
-http://otwcode.github.com/docs/front_end_coding/patterns/actions
+/* == ACTIONS: buttons!
+https://otwcode.github.io/docs/patterns/actions.html
 subtypes:
 .action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
 input[type="submit"], button
@@ -20,10 +20,11 @@ ul.actions {
   padding-top: 0;
 }
 
-.actions a, .actions a:link, .action, .action:link, .actions input, input[type="submit"], button, .current, .actions label {
+.actions a, .actions a:link, .action, .action:link, .actions button, .actions input, input[type="submit"], button, .current, .actions label {
   background: #eee;
   color: #444;
   width: auto;
+  font-weight: 400;
   font-size: 100%;
   line-height: 1.286;
   height: 1.286em;
@@ -63,7 +64,6 @@ p.submit, input.submit, dd.submit {
   text-align: right;
 }
 
-
 .actions input[type="checkbox"] {
   background: transparent;
   border: none;
@@ -74,8 +74,8 @@ p.submit, input.submit, dd.submit {
    margin: 0;
  }
 
-/*subtypes and modes
-test note: this pagination clear needs to be kept an eye on*/
+/* subtypes and modes
+test note: this pagination clear needs to be kept an eye on */
 
 ol.pagination, div.pagination, ol.year {
   text-align: center;
@@ -87,7 +87,7 @@ ol.pagination, div.pagination, ol.year {
   color: #111;
 }
 
-.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
+.actions a:hover, .actions button:hover, .actions input:hover, .actions a:focus, .actions button:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
   color: #900;
   border-top: 1px solid #999;
   border-left: 1px solid #999;
@@ -111,7 +111,7 @@ ol.pagination, div.pagination, ol.year {
    border-color: #aaa;
  }
 
-.actions li a, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
+.actions li a, .actions li button, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
   margin: 0.375em auto;
 }
 
@@ -147,7 +147,7 @@ h2.landmark {
 .secondary {
   background: #fff;
   position: absolute;
-  z-index: 99;
+  z-index: 54; /* lower than the z-index of #header .menu */
   border: 2px solid #bbb;
   margin: auto;
   padding: 0 0.375em;
@@ -169,6 +169,11 @@ legend .action:link {
   padding: 0.15em 0.375em;
 }
 
+.heading .actions button {
+  padding: 0.25em 0.75em;
+  margin-left: 0.25em;
+}
+
 th .actions, td .actions {
   float: none;
 }
@@ -181,10 +186,6 @@ dl.stats + .landmark + .actions, .mystery .summary + .landmark + .actions {
 
 .actions .secondary .submit, .nomination .actions {
   float: none;
-}
-
-.chapter .secondary, .download .secondary {
-  top: 3.5em;
 }
 
 .dashboard .landmark {
@@ -218,4 +219,77 @@ dl.index p.actions {
   margin: 0;
 }
 
-/*END== */
+/* context: work navigation actions with secondary navigation */
+
+.work.navigation .download {
+  display: block;
+  margin-block-start: 0;
+  padding: 0.375em 0 0.643em;
+}
+
+.work.navigation .download .secondary {
+  position: static;
+}
+
+/* The next two rule sets move the default .secondary style to the secondary's
+parent when JavaScript is disabled and put it back when it's enabled. */
+.work.navigation .download, .javascript .work.navigation .download .secondary {
+  background: #fff;
+  border: 2px solid #bbb;
+    box-shadow: 2px 2px 5px #bbb;
+}
+
+.work.navigation .download .secondary, .javascript .work.navigation .download {
+  background: transparent;
+  border: none;
+    box-shadow: none;
+}
+
+.javascript .work.navigation li {
+  display: inline-block;
+  margin-block: 0;
+  position: relative;
+}
+
+.javascript .work.navigation .download {
+  padding: 0 0 0 0.25em;
+}
+
+/* The top position is part of a workaround for the behavior described here:
+https://otwarchive.atlassian.net/browse/AO3-4629?focusedCommentId=372231
+  0.375em for top margin
++ 1.286em for height
++ 0.25em * 2 for top and bottom padding (buttons use content-box)
++ 0.25em to compensate for borders */
+.javascript .work.navigation .secondary {
+  position: absolute;
+  right: 0;
+  top: 2.411em;
+    align-items: center;
+    gap: 0 0.643em;
+    justify-content: space-evenly;
+}
+
+/* If we use display without the .expanded qualifier, it will override .hidden's
+display: none and secondary will always be open. */
+.javascript .work.navigation .expanded + .secondary {
+    display: flex;
+}
+
+.javascript .work.navigation .download .secondary {
+  z-index: 53;
+    gap: 0.25em;
+}
+
+.javascript .work.navigation .secondary p {
+  padding: 0;
+    align-items: center;
+    display: flex;
+    gap: 0 0.25em;
+}
+
+.javascript .work.navigation .secondary .actions {
+  padding: 0;
+}
+
+/* END== */

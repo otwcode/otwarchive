@@ -19,7 +19,7 @@
 
 <!--main content-->
 <% unless @collection %>
-  <p class="note"><%= ts('Looking for assignments you were given for a gift exchange? Try') %> <%= link_to ts("My Assignments"), user_assignments_path(@user) %></p>
+  <p class="notes"><%= t(".assignments_note_html", assignments_link: link_to(t(".assignments"), user_assignments_path(@user))) %></p>
 <% end %>
 
 <ol class="prompt index group">

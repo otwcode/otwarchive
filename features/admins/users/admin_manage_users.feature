@@ -8,11 +8,11 @@ Feature: Admin Actions to manage users
     Given the following activated user exists
       | login | password    |
       | dizmo | wrangulator |
-    And I have loaded the "roles" fixture
+      And the role "tag_wrangler"
     When I am logged in as a super admin
-    And I go to the manage users page
-    And I fill in "Name" with "dizmo"
-    And I press "Find"
+      And I go to the manage users page
+      And I fill in "Name" with "dizmo"
+      And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
 
     # change user email
@@ -26,20 +26,20 @@ Feature: Admin Actions to manage users
       And I should see "User was successfully updated."
 
     # Adding and removing roles
-    When I check "user_roles_1"
+    When I check the "tag_wrangler" role checkbox
       And I press "Update"
     # Then show me the html
     Then I should see "User was successfully updated"
-      And the "user_roles_1" checkbox should be checked
+      And the "tag_wrangler" role checkbox should be checked
     When I follow "Details"
     Then I should see "Role: Tag Wrangler" within ".meta"
       And I should see "Role Added: tag_wrangler" within "#user_history"
       And I should see "Change made by testadmin-superadmin"
     When I follow "Manage Roles"
-      And I uncheck "user_roles_1"
+      And I uncheck the "tag_wrangler" role checkbox
       And I press "Update"
     Then I should see "User was successfully updated"
-      And the "user_roles_1" checkbox should not be checked
+      And the "tag_wrangler" role checkbox should not be checked
     When I follow "Details"
     Then I should see "Roles: No roles" within ".meta"
     And I should see "Role Removed: tag_wrangler" within "#user_history"
@@ -63,7 +63,7 @@ Feature: Admin Actions to manage users
     Given the user "new_user" exists and is activated
       And I am logged in as a "support" admin
     When I go to the user administration page for "new_user"
-    Then I should see "Current Login No login recorded"
+    Then I should see "Most Recent Login No login recorded"
       And I should see "Previous Login No previous login recorded"
     When time is frozen at 1/1/2019
       And I am logged in as "new_user"
@@ -72,7 +72,7 @@ Feature: Admin Actions to manage users
       And I am logged in as a "support" admin
       And I go to the user administration page for "new_user"
     Then I should not see "No login recorded"
-      And I should see "2019-01-01 12:00:00 UTC Current Login IP Address: 127.0.0.1"
+      And I should see "2019-01-01 12:00:00 UTC Most Recent Login IP Address: 127.0.0.1"
       And I should see "2019-01-01 12:00:00 UTC Previous Login IP Address: 127.0.0.1"
 
   Scenario: An admin can view a user's email address and invitation
@@ -84,3 +84,55 @@ Feature: Admin Actions to manage users
       And I should see "Invitation: Created without invitation"
     When I go to the user administration page for "user2"
     Then I should see the invitation id for the user "user2"
+
+  Scenario: Admins can view past emails and usernames
+    Given the following activated user exists
+      | login | email      |
+      | cats  | d@fake.com |
+      And I am logged in as "cats"
+      And I want to edit my profile
+      And I change my email to "new@example.com"
+      And all emails have been delivered
+      And I change my username to "new_user"
+    When I am logged in as a super admin
+      And I go to the user administration page for "new_user"
+    Then I should see "Past email: d@fake.com" within ".meta"
+      And I should see "Past username: cats" within ".meta"
+    When I am logged in as a "translation" admin
+      And I go to the user administration page for "new_user"
+    Then I should not see "Past email: d@fake.com"
+      And I should not see "Past username: cats"
+
+  Scenario: An admin can access a user's creations from their administration page
+    Given there is 1 user creation per page
+      And the user "lurker" exists and is activated
+      And I am logged in as "troll"
+      And I post the work "Creepy Gift"
+      And I post the work "NFW"
+      And I post the comment "Neener" on the work "Creepy Gift"
+    When I am logged in as a "support" admin
+      And I go to the user administration page for "lurker"
+    Then the page should have a dashboard sidebar
+      And I should not see "Creations"
+    When I go to lurker's user page
+    Then the page should have a dashboard sidebar
+      And I should not see "Creations"
+    When I am logged in as a "policy_and_abuse" admin
+      And I go to the user administration page for "lurker"
+      And I follow "Creations"
+    Then I should see "Works and Comments by lurker"
+      And I should see "This user has no works or comments."
+      And the page should have a dashboard sidebar
+    When I go to lurker's user page
+      And I follow "Creations"
+    Then I should see "Works and Comments by lurker"
+      And I should see "This user has no works or comments."
+      And the page should have a dashboard sidebar
+    When I go to the user administration page for "troll"
+      And I follow "Creations"
+    Then I should see "Works and Comments by troll"
+      And I should see "1 - 1 of 2 Works" within "#works-summary"
+      And I should see "Creepy Gift" within "#works-summary"
+      And I should see "1 Comment" within "#comments-summary"
+      And I should see "Comment on the work Creepy Gift" within "#comments-summary"
+      And I should see "<p>Neener</p>" within "#comments-summary"

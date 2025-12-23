@@ -1,26 +1,26 @@
 <%= form_for([@user, @pseud], html: { multipart: true }) do |f| %>
 <dl>
-  <dt><%= f.label :name, t(".name") %></dt>
-  <dd>
+  <dt class="required"><%= f.label :name, t(".name") %></dt>
+  <dd class="required">
     <% if @pseud&.name == @user.login %>
       <p class="important informational"><%= @pseud.name %></p>
-      <p class="footnote"><%= t(".change_matching_pseud_html", change_username_link: link_to(t(".change_username"), change_username_user_path(@user))) %></p>
+      <p class="footnote"><%= t(".cannot_change_matching_pseud_html", change_username_link: link_to(t(".change_username"), change_username_user_path(@user))) %></p>
     <% else %>
       <%= f.text_field :name, class: "observe_textlength", disabled: logged_in_as_admin? %>
       <%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) %>
     <% end %>
   </dd>
-  
+
   <dt><%= f.label :is_default, t(".make_default") %></dt>
   <dd><%= f.check_box :is_default, disabled: ((@pseud.name && @user.login == @pseud.name && @pseud.is_default?) || logged_in_as_admin?) %></dd>
-  
+
   <dt><%= f.label :description, t(".description") %></dt>
   <dd>
-    <p><%= allowed_html_instructions %></p>
+    <p><%= allowed_html_instructions(strip_images: true) %></p>
     <%= f.text_area :description, class: "observe_textlength" %>
     <%= generate_countdown_html("pseud_description", Pseud::DESCRIPTION_MAX) %>
   </dd>
- 
+
   <dt><%= t(".icon") %></dt>
   <dd>
     <ul class="notes">
@@ -31,7 +31,7 @@
       <li><%= t(".icon_notes.format") %></li>
       <li><%= t(".icon_notes.size") %></li>
     </ul>
-    <% if @pseud.icon_file_name %>
+    <% if @pseud.icon.attached? %>
       <%= f.check_box :delete_icon, checked: false %>
       <%= f.label :delete_icon, t(".icon_delete") %>
     <% end %>
@@ -51,7 +51,7 @@
 
   <dt>
     <%= f.label :icon_comment_text, t(".icon_comment") %>
-    <%= link_to_help('pseud-icon-comment') %>
+    <%= link_to_help("pseud-icon-comment") %>
   </dt>
   <dd>
     <%= f.text_field :icon_comment_text, class: "observe_textlength", disabled: logged_in_as_admin? %>
@@ -59,11 +59,9 @@
   </dd>
 
   <% if policy(@pseud).can_edit? %>
-    <dt><%= f.label :ticket_number, class: "required" %></dt>
-    <dd>
-      <%= f.text_field :ticket_number, class: "required" %>
-      <%= live_validation_for_field("pseud_ticket_number", numericality: true) %>
-      <p class="footnote"><%= t(".ticket_footnote") %></p>
+    <dt class="required"><%= f.label :ticket_number %></dt>
+    <dd class="required">
+      <%= f.text_field :ticket_number %>
     </dd>
   <% end %>
 

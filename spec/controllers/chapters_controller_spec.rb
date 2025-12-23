@@ -49,7 +49,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :manage, params: { work_id: work.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -100,7 +100,7 @@ describe ChaptersController do
       it "errors and redirects to login when work is restricted" do
         restricted_work = create(:work, restricted: true)
         get :show, params: { work_id: restricted_work.id, id: restricted_work.chapters.first }
-        it_redirects_to(new_user_session_path(restricted: true))
+        it_redirects_to(new_user_session_path(restricted: true, return_to: request.fullpath))
       end
 
       it "assigns @chapters to only posted chapters" do
@@ -112,7 +112,7 @@ describe ChaptersController do
       it "errors and redirects to login when trying to view unposted chapter" do
         chapter = create(:chapter, :draft, work: work)
         get :show, params: { work_id: work.id, id: chapter.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -190,31 +190,59 @@ describe ChaptersController do
     end
 
     it "assigns @page_title with fandom, author name, work title, and chapter" do
-      expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("Testing", user.pseuds.first.name, "My title is long enough - Chapter 1").and_return("page title")
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
-      expect(assigns[:page_title]).to eq("page title")
+      expect(assigns[:page_title]).to start_with("My title is long enough - Chapter 1 - #{user.pseuds.first.name} - Testing [")
     end
 
-    it "assigns @page_title with unrevealed work" do
+    it "assigns @page_subtitle with unrevealed work" do
       allow_any_instance_of(Work).to receive(:unrevealed?).and_return(true)
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
-      expect(assigns[:page_title]).to eq("Mystery Work - Chapter 1")
+      expect(assigns[:page_subtitle]).to eq("Mystery Work - Chapter 1")
     end
 
     it "assigns @page_title with anonymous work" do
       allow_any_instance_of(Work).to receive(:anonymous?).and_return(true)
-      expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("Testing", "Anonymous", "My title is long enough - Chapter 1").and_return("page title")
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
-      expect(assigns[:page_title]).to eq("page title")
+      expect(assigns[:page_title]).to start_with("My title is long enough - Chapter 1 - Anonymous - Testing [")
+    end
+
+    context "when work has many authors" do
+      it "assigns @page_title with all authors" do
+        authors = create_list(:pseud, 5)
+        allow_any_instance_of(Work).to receive(:pseuds).and_return(authors)
+        get :show, params: { work_id: work.id, id: work.chapters.first.id }
+        expect(response).to have_http_status(:ok)
+        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{authors.sort.map(&:byline).join(', ')} - #{work.fandoms.first.name} [")
+      end
     end
 
     context "when work has no fandom" do
       it "assigns @page_title with a placeholder for the fandom" do
-        allow_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [])
-        expect_any_instance_of(ChaptersController).to receive(:get_page_title).with("No fandom specified", user.pseuds.first.name, "#{work.title} - Chapter 1").and_return("page title")
+        allow_any_instance_of(Work).to receive(:fandoms).and_return([])
         get :show, params: { work_id: work.id, id: work.chapters.first.id }
         expect(response).to have_http_status(:ok)
-        expect(assigns[:page_title]).to eq("page title")
+        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - No fandom specified [")
+      end
+    end
+
+    context "when work has two fandoms" do
+      it "assigns @page_title with the first fandom" do
+        first = create(:fandom, name: "The First")
+        second = create(:fandom, name: "The Second")
+        allow_any_instance_of(Work).to receive(:fandoms).and_return([first, second])
+        get :show, params: { work_id: work.id, id: work.chapters.first.id }
+        expect(response).to have_http_status(:ok)
+        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - The First [")
+      end
+    end
+
+    context "when work has many fandoms" do
+      it "assigns @page_title with placeholder for the fandoms" do
+        fandoms = create_list(:fandom, 5)
+        allow_any_instance_of(Work).to receive(:fandoms).and_return(fandoms)
+        get :show, params: { work_id: work.id, id: work.chapters.first.id }
+        expect(response).to have_http_status(:ok)
+        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - Multifandom [")
       end
     end
 
@@ -230,16 +258,14 @@ describe ChaptersController do
       third_chapter = create(:chapter, work: work, position: 3)
       kudo = create(:kudo, commentable: work, user: create(:user))
       tag = create(:fandom)
-      expect_any_instance_of(Work).to receive(:tag_groups).and_return("Fandom" => [tag])
-      expect_any_instance_of(ChaptersController).to receive(:get_page_title).with(tag.name, user.pseuds.first.name, "My title is long enough - Chapter 2").and_return("page title")
+      expect_any_instance_of(Work).to receive(:fandoms).and_return([tag])
       get :show, params: { work_id: work.id, id: second_chapter.id }
       expect(assigns[:work]).to eq work
-      expect(assigns[:tag_groups]).to eq "Fandom" => [tag]
       expect(assigns[:chapter]).to eq second_chapter
       expect(assigns[:chapters]).to eq [work.chapters.first, second_chapter, third_chapter]
       expect(assigns[:previous_chapter]).to eq work.chapters.first
       expect(assigns[:next_chapter]).to eq third_chapter
-      expect(assigns[:page_title]).to eq "page title"
+      expect(assigns[:page_title]).to start_with("My title is long enough - Chapter 2 - #{user.pseuds.first.name} - #{tag.name} [")
       expect(assigns[:kudos]).to eq [kudo]
       expect(assigns[:subscription]).to be_nil
     end
@@ -289,7 +315,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :new, params: { work_id: work.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -334,7 +360,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :edit, params: { work_id: work.id, id: work.chapters.first.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -372,66 +398,66 @@ describe ChaptersController do
         it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
+  end
 
-    context "with valid remove params" do
-      context "when work is multichaptered and co-created" do
-        let!(:co_created_chapter) { create(:chapter, work: work, authors: [user.pseuds.first, co_creator.pseuds.first]) }
+  describe "PATCH #remove_user_creatorship" do
+    context "when work is multichaptered and co-created" do
+      let!(:co_created_chapter) { create(:chapter, work: work, authors: [user.pseuds.first, co_creator.pseuds.first]) }
 
-        context "when logged in user also owns other chapters" do
-          before do
-            fake_login_known_user(user)
-          end
-
-          it "removes user from chapter, gives notice, and redirects to work" do
-            get :edit, params: { work_id: work.id, id: co_created_chapter.id, remove: "me" }
-
-            expect(co_created_chapter.reload.pseuds).to eq [co_creator.pseuds.first]
-            expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
-
-            it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
-          end
+      context "when logged in user also owns other chapters" do
+        before do
+          fake_login_known_user(user)
         end
 
-        context "when logged in user only owns this chapter" do
-          before do
-            fake_login_known_user(co_creator)
-          end
+        it "removes user from chapter, gives notice, and redirects to work" do
+          patch :remove_user_creatorship, params: { id: co_created_chapter.id }
 
-          it "removes user from chapter and delegates removal of the user from the work to the work controller" do
-            get :edit, params: { work_id: work.id, id: co_created_chapter.id, remove: "me" }
+          expect(co_created_chapter.reload.pseuds).to eq [co_creator.pseuds.first]
+          expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
 
-            expect(co_created_chapter.reload.pseuds).to eq [user.pseuds.first]
-            expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
-            
-            it_redirects_to(edit_work_path(work, remove: "me"))
-          end
+          it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
+        end
+      end
+
+      context "when logged in user only owns this chapter" do
+        before do
+          fake_login_known_user(co_creator)
         end
 
-        context "when the logged in user is suspended" do
-          before do
-            fake_login_known_user(suspended_user)
-          end
+        it "removes user from chapter and work" do
+          patch :remove_user_creatorship, params: { id: co_created_chapter.id }
 
-          it "errors and redirects to user page" do
-            get :edit, params: { work_id: suspended_users_work.id, id: suspended_users_work_chapter2.id, remove: "me" }
+          expect(co_created_chapter.reload.pseuds).to eq [user.pseuds.first]
+          expect(work.reload.pseuds).to eq [user.pseuds.first]
+        end
+      end
 
-            expect(flash[:error]).to include("Your account has been suspended")
-          end
+      context "when the logged in user is suspended" do
+        before do
+          fake_login_known_user(suspended_user)
         end
 
-        context "when the logged in user is banned" do
-          before do
-            fake_login_known_user(banned_user)
-          end
+        it "errors and redirects to user page" do
+          suspended_users_work
+          patch :remove_user_creatorship, params: { id: suspended_users_work_chapter2.id }
 
-          it "removes user from chapter, gives notice, and redirects to work" do
-            get :edit, params: { work_id: banned_users_work.id, id: banned_users_work_chapter2.id, remove: "me" }
+          expect(flash[:error]).to include("Your account has been suspended")
+        end
+      end
 
-            expect(banned_users_work_chapter2.reload.pseuds).to eq [co_creator.pseuds.first]
-            expect(banned_users_work.reload.pseuds).to eq [co_creator.pseuds.first, banned_user.pseuds.first]
+      context "when the logged in user is banned" do
+        before do
+          fake_login_known_user(banned_user)
+        end
 
-            it_redirects_to_with_notice(work_path(banned_users_work), "You have been removed as a creator from the chapter.")
-          end
+        it "removes user from chapter, gives notice, and redirects to work" do
+          banned_users_work
+          patch :remove_user_creatorship, params: { id: banned_users_work_chapter2.id }
+
+          expect(banned_users_work_chapter2.reload.pseuds).to eq [co_creator.pseuds.first]
+          expect(banned_users_work.reload.pseuds).to eq [co_creator.pseuds.first, banned_user.pseuds.first]
+
+          it_redirects_to_with_notice(work_path(banned_users_work), "You have been removed as a creator from the chapter.")
         end
       end
     end
@@ -443,7 +469,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         post :create, params: { work_id: work.id, chapter: chapter_attributes }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -516,10 +542,13 @@ describe ChaptersController do
         expect(response).to have_http_status :redirect
       end
 
-      it "updates the work's major version" do
-        expect(work.major_version).to eq(1)
-        post :create, params: { work_id: work.id, chapter: chapter_attributes }
-        expect(assigns[:work].major_version).to eq(2)
+      context "when neither posting nor previewing is explicitly specified" do
+        it "does not update the work's version" do
+          expect do
+            post :create, params: { work_id: work.id, chapter: chapter_attributes }
+          end.to avoid_changing { work.reload.major_version }
+            .and avoid_changing { work.reload.minor_version }
+        end
       end
 
       context "when the post button is clicked" do
@@ -536,6 +565,14 @@ describe ChaptersController do
               .from(1).to(2)
               .and change { work.number_of_posted_chapters }
               .from(1).to(2)
+          end
+
+          it "updates the work's major version" do
+            expect do
+              post :create, params: { work_id: work.id, chapter: chapter_attributes, post_without_preview_button: true }
+            end.to change { work.reload.major_version }
+              .from(1).to(2)
+              .and avoid_changing { work.reload.minor_version }
           end
 
           it "posts the work if the work was not posted before" do
@@ -587,6 +624,13 @@ describe ChaptersController do
               .and avoid_changing { work.number_of_posted_chapters }
           end
 
+          it "does not update the work's version" do
+            expect do
+              post :create, params: { work_id: work.id, chapter: chapter_attributes, preview_button: true }
+            end.to avoid_changing { work.reload.major_version }
+              .and avoid_changing { work.reload.minor_version }
+          end
+
           it "gives a notice that the chapter is a draft and redirects to the chapter preview" do
             post :create, params: { work_id: work.id, chapter: chapter_attributes, preview_button: true }
             it_redirects_to_with_notice(preview_work_chapter_path(work_id: work.id, id: assigns[:chapter].id), "This is a draft chapter in a posted work. It will be kept unless the work is deleted.")
@@ -636,7 +680,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -724,9 +768,11 @@ describe ChaptersController do
       end
 
       it "updates the work's minor version" do
-        expect(work.minor_version).to eq(0)
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
-        expect(assigns[:work].minor_version).to eq(1)
+        expect do
+          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
+        end.to change { work.reload.minor_version }
+          .from(0).to(1)
+          .and avoid_changing { work.reload.major_version }
       end
 
       context "when the post button is clicked" do
@@ -751,6 +797,23 @@ describe ChaptersController do
             unposted_chapter = create(:chapter, :draft, work: work, authors: [user.pseuds.first])
             put :update, params: { work_id: work.id, id: unposted_chapter.id, chapter: chapter_attributes, post_button: true }
             it_redirects_to_with_notice(work_chapter_path(work_id: work.id, id: unposted_chapter.id), "Chapter was successfully posted.")
+          end
+
+          it "updates the work's minor version if the chapter was already posted" do
+            expect do
+              put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes, post_button: true }
+            end.to change { work.reload.minor_version }
+              .from(0).to(1)
+              .and avoid_changing { work.reload.major_version }
+          end
+
+          it "updates the work's major version if the chapter was not already posted" do
+            unposted_chapter = create(:chapter, :draft, work: work, authors: [user.pseuds.first])
+            expect do
+              put :update, params: { work_id: work.id, id: unposted_chapter.id, chapter: chapter_attributes, post_button: true }
+            end.to change { work.reload.major_version }
+              .from(1).to(2)
+              .and avoid_changing { work.reload.minor_version }
           end
         end
 
@@ -813,7 +876,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         post :update_positions, params: { work_id: work.id, chapter: [chapter1, chapter3, chapter2, chapter4] }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -867,18 +930,18 @@ describe ChaptersController do
         before do
           fake_login_known_user(suspended_user)
         end
-        
+
         it "errors and redirects to user page" do
           post :update_positions, params: { work_id: suspended_users_work.id, chapter: [suspended_users_work_chapter2, suspended_users_work.chapters.first] }
           expect(flash[:error]).to include("Your account has been suspended")
         end
       end
-  
+
       context "when the logged in user is banned" do
         before do
           fake_login_known_user(banned_user)
         end
-        
+
         it "errors and redirects to user page" do
           post :update_positions, params: { work_id: banned_users_work.id, chapter: [banned_users_work_chapter2, banned_users_work.chapters.first] }
           expect(flash[:error]).to include("Your account has been banned")
@@ -891,7 +954,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :preview, params: { work_id: work.id, id: work.chapters.first.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -933,7 +996,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         post :post, params: { work_id: work.id, id: @chapter_to_post.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -942,21 +1005,19 @@ describe ChaptersController do
         fake_login_known_user(user)
       end
 
-      it "redirects to work when cancel button is clicked" do
-        post :post, params: { work_id: work.id, id: @chapter_to_post.id, cancel_button: true }
-        it_redirects_to(work)
-      end
-
-      it "redirects to edit when edit button is clicked" do
-        post :post, params: { work_id: work.id, id: @chapter_to_post.id, edit_button: true }
-        it_redirects_to(edit_work_chapter_path(work_id: work.id, id: @chapter_to_post.id))
-      end
-
       context "when the chapter and work are valid" do
         it "posts the chapter and redirects to work" do
           post :post, params: { work_id: work.id, id: @chapter_to_post.id }
           expect(assigns[:chapter].posted).to be true
           it_redirects_to_with_notice(work, "Chapter has been posted!")
+        end
+
+        it "updates the work's major version when posted" do
+          expect do
+            post :post, params: { work_id: work.id, id: @chapter_to_post.id }
+          end.to change { work.reload.major_version }
+            .from(1).to(2)
+            .and avoid_changing { work.reload.minor_version }
         end
 
         it "posts the work if the work was not posted before" do
@@ -1047,7 +1108,7 @@ describe ChaptersController do
       it "errors and redirects to login" do
         pending "clean up chapter filters"
         delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -1067,9 +1128,11 @@ describe ChaptersController do
         let!(:chapter2) { create(:chapter, work: work, position: 2, authors: [user.pseuds.first]) }
 
         it "updates the work's minor version" do
-          expect(work.minor_version).to eq(0)
-          delete :destroy, params: { work_id: work.id, id: chapter2.id }
-          expect(assigns[:work].minor_version).to eq(1)
+          expect do
+            delete :destroy, params: { work_id: work.id, id: chapter2.id }
+          end.to change { work.reload.minor_version }
+            .from(0).to(1)
+            .and avoid_changing { work.reload.major_version }
         end
 
         it "updates the work's revision date" do
@@ -1163,6 +1226,13 @@ describe ChaptersController do
           end.to change { work.number_of_chapters }
             .from(2).to(1)
             .and avoid_changing { work.number_of_posted_chapters }
+        end
+
+        it "does not update the work's version" do
+          expect do
+            delete :destroy, params: { work_id: work.id, id: chapter2.id }
+          end.to avoid_changing { work.reload.major_version }
+            .and avoid_changing { work.reload.minor_version }
         end
       end
 

@@ -16,12 +16,13 @@ module CreationNotifier
 
   # send the appropriate notifications
   def do_notify
-    if self.is_a?(Work)
+    case self
+    when Work
       notify_parents
       notify_subscribers
       notify_prompters
-    elsif self.is_a?(Chapter) && self.position != 1
-      notify_subscribers
+    when Chapter
+      notify_subscribers if work.chapters.posted.count > 1
     end
   end
 
@@ -34,13 +35,14 @@ module CreationNotifier
     recipient_pseuds = Pseud.parse_bylines(self.new_gifts.collect(&:recipient).join(","))[:pseuds]
     # check user prefs to see which recipients want to get gift notifications
     # (since each user has only one preference item, this removes duplicates)
-    recip_ids = Preference.where(user_id: recipient_pseuds.map(&:user_id),
-                                   recipient_emails_off: false).pluck(:user_id)
-    recip_ids.each do |userid|
-      if self.collections.empty? || self.collections.first.nil?
-        UserMailer.recipient_notification(userid, self.id).deliver_after_commit
-      else
-        UserMailer.recipient_notification(userid, self.id, self.collections.first.id).deliver_after_commit
+    recip_preferences = Preference.where(user_id: recipient_pseuds.map(&:user_id), recipient_emails_off: false)
+    recip_preferences.each do |userpref|
+      I18n.with_locale(userpref.locale_for_mails) do
+        if self.collections.empty? || self.collections.first.nil?
+          UserMailer.recipient_notification(userpref.user_id, self.id).deliver_after_commit
+        else
+          UserMailer.recipient_notification(userpref.user_id, self.id, self.collections.first.id).deliver_after_commit
+        end
       end
     end
   end
@@ -83,11 +85,13 @@ module CreationNotifier
 
   # notify prompters of response to their prompt
   def notify_prompters
-    if !self.challenge_claims.empty? && !self.unrevealed?
-      if self.collections.first.nil?
-        UserMailer.prompter_notification(self.id,).deliver_after_commit
-      else
-        UserMailer.prompter_notification(self.id, self.collections.first.id).deliver_after_commit
+    return if self.challenge_claims.empty? || self.unrevealed?
+
+    users = self.challenge_claims.map { |claim| claim.request_signup.pseud.user }
+      .uniq
+    users.each do |user|
+      I18n.with_locale(user.preference.locale_for_mails) do
+        UserMailer.prompter_notification(user.id, self.id, self.collections.first&.id).deliver_after_commit
       end
     end
   end

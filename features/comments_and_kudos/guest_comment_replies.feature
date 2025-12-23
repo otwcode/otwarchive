@@ -2,6 +2,7 @@ Feature: Disallowing guest comment replies
 
   Scenario Outline: Guests cannot reply to a user who has guest comments off on news posts and other users' works
     Given <commentable>
+      And <commentable> with guest comments enabled
       And the user "commenter" turns off guest comment replies
       And a comment "OMG!" by "commenter" on <commentable>
     When I view <commentable> with comments
@@ -18,7 +19,7 @@ Feature: Disallowing guest comment replies
       | the admin post "Change Log" |
 
   Scenario: Guests can reply to a user who has guest comments off on their own work
-    Given the work "Aftermath" by "creator"
+    Given the work "Aftermath" by "creator" with guest comments enabled
       And the user "creator" turns off guest comment replies
       And a comment "OMG!" by "creator" on the work "Aftermath"
     When I view the work "Aftermath" with comments
@@ -31,7 +32,7 @@ Feature: Disallowing guest comment replies
 
   Scenario: Guests can reply to a user who has guest comments off on works co-created by the user
     Given the user "nemesis" turns off guest comment replies
-      And the work "Aftermath" by "creator" and "nemesis"
+      And the work "Aftermath" by "creator" and "nemesis" with guest comments enabled
       And a comment "OMG!" by "nemesis" on the work "Aftermath"
     When I view the work "Aftermath" with comments
     Then I should see a "Comment" button
@@ -58,6 +59,7 @@ Feature: Disallowing guest comment replies
 
   Scenario: Guests can reply to guests
     Given the work "Aftermath"
+      And the work "Aftermath" with guest comments enabled
       And a guest comment on the work "Aftermath"
     When I view the work "Aftermath" with comments
     Then I should see a "Comment" button

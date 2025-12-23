@@ -3,7 +3,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_permitted_parameters
 
   def new
-    @page_title = "Create Account" # Displays "New Registration" otherwise
+    @page_subtitle = t(".page_title")
     super do |resource|
       if params[:invitation_token]
         @invitation = Invitation.find_by(token: params[:invitation_token])
@@ -16,6 +16,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def create
+    @page_subtitle = t(".page_title")
     @hide_dashboard = true
     build_resource(sign_up_params)
 
@@ -50,7 +51,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     devise_parameter_sanitizer.permit(
       :sign_up,
       keys: [
-        :password_confirmation, :email, :age_over_13, :terms_of_service, :accepted_tos_version
+        :password_confirmation, :email, :age_over_13, :data_processing, :terms_of_service, :accepted_tos_version
       ]
     )
   end

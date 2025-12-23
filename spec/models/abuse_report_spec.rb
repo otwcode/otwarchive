@@ -1,6 +1,8 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe AbuseReport do
+  it { is_expected.to validate_presence_of(:url) }
+
   context "when report is not spam" do
     context "valid reports" do
       it "is valid" do
@@ -9,7 +11,7 @@ describe AbuseReport do
     end
 
     context "comment missing" do
-      let(:report_without_comment) {build(:abuse_report, comment: nil)}
+      let(:report_without_comment) { build(:abuse_report, comment: nil) }
       it "is invalid" do
         expect(report_without_comment.save).to be_falsey
         expect(report_without_comment.errors[:comment]).not_to be_empty
@@ -43,7 +45,7 @@ describe AbuseReport do
         let(:work) { create(:work) }
         let(:chapter) { work.chapters.first }
         let(:missing_work_id) { build(:abuse_report, url: "http://archiveofourown.org/chapters/#{chapter.id}/") }
-        
+
         it "saves and adds the correct work id to the URL" do
           expect(missing_work_id.save).to be_truthy
           expect(missing_work_id.url).to eq("http://archiveofourown.org/works/#{work.id}/chapters/#{chapter.id}/")
@@ -77,6 +79,16 @@ describe AbuseReport do
             expect(missing_work_id.url).to eq("https://#{chapter_url}/")
           end
         end
+      end
+    end
+
+    context "with a very long URL" do
+      let(:long_url) { "https://archiveofourown.org/#{'a' * 2080}" }
+      let(:abuse_report) { build(:abuse_report, url: long_url) }
+
+      it "truncates the url to the maximum length" do
+        expect(abuse_report.save).to be_truthy
+        expect(abuse_report.url).to eq(long_url[0..2079])
       end
     end
 
@@ -203,6 +215,37 @@ describe AbuseReport do
       end
     end
 
+    context "when reporting work URLs that cross the reporting period timeframe" do
+      work_url = "http://archiveofourown.org/works/790"
+
+      it "allows reporting a work when old reports are outside the configured period" do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago - 1.day) do
+          ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
+            create(:abuse_report, url: work_url)
+          end
+        end
+
+        report = build(:abuse_report, url: work_url)
+        expect(report.save).to be_truthy
+      end
+
+      it "counts only reports within the configured period" do
+        # Create reports outside the configured period
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago - 1.day) do
+          create_list(:abuse_report, 2) do |abuse_report|
+            abuse_report.url = work_url
+          end
+        end
+        # Create reports within the configured period (one less than max)
+        (ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX - 1).times do
+          create(:abuse_report, url: work_url)
+        end
+        # Should be valid because old reports outside configured time period don't count
+        report = build(:abuse_report, url: work_url)
+        expect(report.save).to be_truthy
+      end
+    end
+
     context "for a user profile reported the maximum number of times" do
       user_url = "http://archiveofourown.org/users/someone"
 
@@ -251,6 +294,37 @@ describe AbuseReport do
         before { travel(32.days) }
 
         it_behaves_like "alright", user_url
+      end
+    end
+
+    context "when reporting user URLs that cross the reporting period timeframe" do
+      user_url = "http://archiveofourown.org/users/someone2"
+
+      it "allows reporting a user URL when old reports are outside the configured period" do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago - 1.day) do
+          ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX.times do
+            create(:abuse_report, url: user_url)
+          end
+        end
+
+        report = build(:abuse_report, url: user_url)
+        expect(report.save).to be_truthy
+      end
+
+      it "counts only reports within the configured period" do
+        # Create reports outside the period
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago - 1.day) do
+          create_list(:abuse_report, 2) do |abuse_report|
+            abuse_report.url = user_url
+          end
+        end
+        # Create reports within the configured period (one less than max)
+        (ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX - 1).times do
+          create(:abuse_report, url: user_url)
+        end
+        # Should be valid because old reports don't count
+        report = build(:abuse_report, url: user_url)
+        expect(report.save).to be_truthy
       end
     end
 
@@ -328,8 +402,8 @@ describe AbuseReport do
 
   context "when report is spam" do
     let(:legit_user) { create(:user) }
-    let(:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
-    let(:safe_report) { build(:abuse_report, username: 'viagra-test-123', email: legit_user.email) }
+    let(:spam_report) { build(:abuse_report, username: "viagra-test-123") }
+    let!(:safe_report) { build(:abuse_report, username: "viagra-test-123", email: legit_user.email) }
 
     before do
       allow(Akismetor).to receive(:spam?).and_return(true)
@@ -340,9 +414,500 @@ describe AbuseReport do
       expect(spam_report.errors[:base]).to include("This report looks like spam to our system!")
     end
 
+    it "is valid even if the email casing is different" do
+      legit_user.email = legit_user.email.upcase
+      legit_user.save
+      User.current_user = legit_user
+      expect(safe_report.save).to be_truthy
+    end
+
     it "is valid even with spam if logged in and providing correct email" do
       User.current_user = legit_user
       expect(safe_report.save).to be_truthy
+    end
+  end
+
+  context "when report is submitted to Akismet" do
+    let(:report) { build(:abuse_report) }
+
+    it "has comment_type \"contact-form\"" do
+      expect(report.akismet_attributes[:comment_type]).to eq("contact-form")
+    end
+
+    it "has user_role \"user-with-nonmatching-email\" when reporter is logged in" do
+      User.current_user = create(:user)
+      expect(report.akismet_attributes[:user_role]).to eq("user-with-nonmatching-email")
+    end
+
+    it "has user_role \"guest\" when reporter is logged out" do
+      expect(report.akismet_attributes[:user_role]).to eq("guest")
+    end
+  end
+
+  describe "#attach_work_download" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
+    let(:ticket_id) { "123" }
+    let(:work) { create(:work) }
+
+    it "does not attach a download for non-work URLs asynchronously" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/someone/")
+
+      expect { subject.attach_work_download(ticket_id) }
+        .not_to have_enqueued_job
+    end
+
+    it "does not attach a download for comment sub-URLs asynchronously" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/comments/")
+
+      expect { subject.attach_work_download(ticket_id) }
+        .not_to have_enqueued_job
+    end
+
+    it "attaches a download for work URLs asynchronously" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+      expect { subject.attach_work_download(ticket_id) }
+        .to have_enqueued_job
+    end
+  end
+
+  describe "#creator_ids" do
+    it "returns no creator ids for non-work URLs" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/someone/")
+
+      expect(subject.creator_ids).to be_nil
+    end
+
+    it "returns no creator ids for comment sub-URLs" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/comments/")
+
+      expect(subject.creator_ids).to be_nil
+    end
+
+    context "for work URLs" do
+      it "returns deletedwork for a work that doesn't exist" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/000/")
+
+        expect(subject.creator_ids).to eq("deletedwork")
+      end
+
+      context "for a single creator" do
+        let(:work) { create(:work) }
+
+        it "returns a single creator id" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq(work.users.first.id.to_s)
+        end
+      end
+
+      context "for an anonymous work" do
+        let(:anonymous_collection) { create(:anonymous_collection) }
+        let(:work) { create(:work, collections: [anonymous_collection]) }
+
+        it "returns a single creator id" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq(work.users.first.id.to_s)
+        end
+      end
+
+      context "for an unrevealed work" do
+        let(:unrevealed_collection) { create(:unrevealed_collection) }
+        let(:work) { create(:work, collections: [unrevealed_collection]) }
+
+        it "returns a single creator id" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq(work.users.first.id.to_s)
+        end
+      end
+
+      context "for multiple pseuds of one creator" do
+        let(:user) { create(:user) }
+        let(:pseud) { create(:pseud, user: user) }
+        let(:work) { create(:work, authors: [pseud, user.default_pseud]) }
+
+        it "returns a single creator id" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+      end
+
+      context "for multiple creators" do
+        let(:user1) { create(:user, id: 10) }
+        let(:user2) { create(:user, id: 11) }
+        let(:work) { create(:work, authors: [user2.default_pseud, user1.default_pseud]) }
+
+        it "returns a sorted list of creator ids" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq("#{user1.id}, #{user2.id}")
+        end
+      end
+
+      context "for an invited co-creator that hasn't accepted yet" do
+        let(:user) { create(:user) }
+        let(:invited) { create(:user) }
+        let(:work) { create(:work, authors: [user.default_pseud, invited.default_pseud]) }
+        let(:creatorship) { work.creatorships.last }
+
+        before do
+          creatorship.approved = false
+          creatorship.save!(validate: false)
+        end
+
+        it "returns only the creator" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+      end
+    end
+
+    context "for an orphaned work" do
+      let!(:orphan_account) { create(:user, login: "orphan_account") }
+      let(:orphaneer) { create(:user, id: 40) }
+      let(:work) { create(:work, authors: [orphaneer.default_pseud]) }
+
+      context "recently orphaned" do
+        before do
+          Creatorship.orphan([orphaneer.default_pseud], [work], false)
+        end
+
+        it "returns orphanedwork and the original creator" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq("orphanedwork, #{orphaneer.id}")
+        end
+      end
+
+      context "orphaned a long time ago" do
+        before do
+          Creatorship.orphan([orphaneer.default_pseud], [work], false)
+          work.original_creators.destroy_all
+        end
+
+        it "returns orphanedwork" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq("orphanedwork")
+        end
+      end
+
+      context "partially orphaned" do
+        let(:cocreator) { create(:user, id: 41) }
+        let(:work) { create(:work, authors: [cocreator.default_pseud, orphaneer.default_pseud]) }
+
+        before do
+          Creatorship.orphan([orphaneer.default_pseud], [work], false)
+        end
+
+        it "returns a sorted list of orphanedwork, the co-creator and the original creator" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq("orphanedwork, #{orphaneer.id}, #{cocreator.id}")
+        end
+      end
+    end
+
+    context "for comment URLs" do
+      it "returns deletedcomment for a comment that doesn't exist" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/000/")
+
+        expect(subject.creator_ids).to eq("deletedcomment")
+      end
+
+      context "for a logged-in comment" do
+        let(:comment) { create(:comment) }
+
+        it "returns the commenter's user ID" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          expect(subject.creator_ids).to eq(comment.user.id.to_s)
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, \" + the commenter's user ID" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, #{comment.user.id}")
+          end
+        end
+      end
+
+      context "for a guest comment" do
+        let(:comment) { create(:comment, :by_guest) }
+
+        it "returns guestcomment" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          expect(subject.creator_ids).to eq("guestcomment")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, guestcomment\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, guestcomment")
+          end
+        end
+      end
+
+      context "for a comment from a deleted account" do
+        let(:user) { create(:user) }
+        let(:comment) { create(:comment, pseud: user.default_pseud) }
+          
+        it "returns deletedaccount" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          user.destroy
+
+          expect(subject.creator_ids).to eq("deletedaccount")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, deletedaccount\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            user.destroy
+
+            expect(subject.creator_ids).to eq("deletedcomment, deletedaccount")
+          end
+        end
+      end
+
+      context "for a comment from orphan_account" do
+        let!(:orphan_account) { create(:user, login: "orphan_account") }
+        let(:comment) { create(:comment, pseud: orphan_account.default_pseud) }
+        
+        it "returns orphanedcomment" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          expect(subject.creator_ids).to eq("orphanedcomment")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, orphanedcomment\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, orphanedcomment")
+          end
+        end
+      end
+    end
+
+    context "for series URLs" do
+      context "for a deleted series" do
+        it "returns \"deletedseries\"" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/000/")
+
+          expect(subject.creator_ids).to eq("deletedseries")
+        end
+      end
+
+      context "for a regular series" do
+        it "returns the user ID of the creator" do
+          series = create(:series)
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+          expect(subject.creator_ids).to eq(series.pseuds.first.user_id.to_s)
+        end
+      end
+
+      context "for a series created by two separate creators" do
+        let(:first_pseud) { create(:pseud) }
+        let(:second_pseud) { create(:pseud) }
+        let(:series) { create(:series, authors: [first_pseud, second_pseud]) }
+
+        before { allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/") }
+
+        it "returns both user ID of the creators" do
+          expect(subject.creator_ids).to eq("#{first_pseud.user_id}, #{second_pseud.user_id}")
+        end
+
+        context "when the series is empty" do
+          it "returns both user ID of the creators" do
+            series.works = []
+            series.save
+          
+            expect(subject.creator_ids).to eq("#{first_pseud.user_id}, #{second_pseud.user_id}")
+          end
+        end
+      end
+
+      context "for a series created by two pseuds of the same user" do
+        it "returns the user ID of the creator" do
+          user = create(:user)
+          first_pseud = create(:pseud, user: user)
+          second_pseud = create(:pseud, user: user)
+          series = create(:series, authors: [first_pseud, second_pseud])
+
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+      end
+
+      context "for an empty series" do
+        it "returns the user ID of the creator" do
+          series = create(:series)
+          series.works = []
+          series.save
+
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+          expect(subject.creator_ids).to eq(series.pseuds.first.user_id.to_s)
+        end
+      end
+
+      context "for an anonymous series (contains anonymous works)" do
+        it "returns the user ID of the creator" do
+          pseud = create(:pseud)
+          anonymous_collection = create(:anonymous_collection)
+          anonymous_work = create(:work, authors: [pseud], collections: [anonymous_collection])
+          series = create(:series, authors: [pseud], works: [anonymous_work])
+
+          expect(series.anonymous?).to be_truthy
+
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+          expect(subject.creator_ids).to eq(series.pseuds.first.user_id.to_s)
+        end
+      end
+
+      context "for an unrevealed series (contains unrevealed works)" do
+        it "returns the user ID of the creator" do
+          pseud = create(:pseud)
+          unrevealed_collection = create(:unrevealed_collection)
+          unrevealed_work = create(:work, authors: [pseud], collections: [unrevealed_collection])
+          series = create(:series, authors: [pseud], works: [unrevealed_work])
+
+          expect(series.unrevealed?).to be_truthy
+
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+          expect(subject.creator_ids).to eq(series.pseuds.first.user_id.to_s)
+        end
+      end
+
+      context "for an orphaned series" do
+        let!(:orphan_account) { create(:user, login: "orphan_account") }
+
+        context "where orphan_account is the only creator" do
+          it "returns \"orphanedseries\"" do
+            series = create(:series, authors: [orphan_account.default_pseud])
+            
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+            expect(subject.creator_ids).to eq("orphanedseries")
+          end
+        end
+
+        context "where there are other normal creators" do
+          it "returns \"orphanedseries, \" followed by the other creators' user IDs" do
+            pseud = create(:pseud)
+            series = create(:series, authors: [pseud, orphan_account.default_pseud])
+            
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+            
+            expect(subject.creator_ids).to eq("orphanedseries, #{pseud.user_id}")
+          end
+        end
+      end
+    end
+    
+    context "for user-related URLs" do
+      let(:user) { create(:user) }
+
+      it "returns the user's ID for the user's dashboard" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/#{user.login}/")
+
+        expect(subject.creator_ids).to eq(user.id.to_s)
+      end
+
+      it "returns the user's ID for the user's works page" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/#{user.login}/works")
+
+        expect(subject.creator_ids).to eq(user.id.to_s)
+      end
+
+      it "returns the user's ID for the user's profile page" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/#{user.login}/profile")
+
+        expect(subject.creator_ids).to eq(user.id.to_s)
+      end
+
+      it "returns the user's ID for the user's pseuds' page" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/#{user.login}/pseuds/#{user.default_pseud.id}")
+
+        expect(subject.creator_ids).to eq(user.id.to_s)
+      end
+
+      context "for the user's work search page" do
+        it "returns the user's ID when the parameter is at the start" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works?user_id=#{user.login}&commit=Sort+and+Filter&work_search[sort_column]=revised_at&work_search[other_tag_names]=&work_search[excluded_tag_names]=&work_search[crossover]=&work_search[complete]=&work_search[words_from]=&work_search[words_to]=&work_search[date_from]=&work_search[date_to]=&work_search[query]=&work_search[language_id]=")
+
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+
+        it "returns the user's ID when the parameter is in the middle" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works?commit=Sort+and+Filter&user_id=#{user.login}&work_search[sort_column]=revised_at&work_search[other_tag_names]=&work_search[excluded_tag_names]=&work_search[crossover]=&work_search[complete]=&work_search[words_from]=&work_search[words_to]=&work_search[date_from]=&work_search[date_to]=&work_search[query]=&work_search[language_id]=")
+
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+
+        it "returns the user's ID when the parameter is at the end" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works?commit=Sort+and+Filter&work_search[sort_column]=revised_at&work_search[other_tag_names]=&work_search[excluded_tag_names]=&work_search[crossover]=&work_search[complete]=&work_search[words_from]=&work_search[words_to]=&work_search[date_from]=&work_search[date_to]=&work_search[query]=&work_search[language_id]=&user_id=#{user.login}")
+
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+      end
+
+      context "for the user's bookmark search page" do
+        it "returns the user's ID when the parameter is at the start" do
+          allow(subject).to receive(:url).and_return("https://archiveofourown.org/bookmarks?user_id=#{user.login}&commit=Sort+and+Filter&bookmark_search%5Bsort_column%5D=created_at&bookmark_search%5Bother_tag_names%5D=&bookmark_search%5Bother_bookmark_tag_names%5D=&bookmark_search%5Bexcluded_tag_names%5D=&bookmark_search%5Bexcluded_bookmark_tag_names%5D=&bookmark_search%5Bbookmarkable_query%5D=&bookmark_search%5Bbookmark_query%5D=&bookmark_search%5Blanguage_id%5D=&bookmark_search%5Brec%5D=0&bookmark_search%5Bwith_notes%5D=0")
+
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+
+        it "returns the user's ID when the parameter is in the middle" do
+          allow(subject).to receive(:url).and_return("https://archiveofourown.org/bookmarks?commit=Sort+and+Filter&user_id=#{user.login}&bookmark_search%5Bsort_column%5D=created_at&bookmark_search%5Bother_tag_names%5D=&bookmark_search%5Bother_bookmark_tag_names%5D=&bookmark_search%5Bexcluded_tag_names%5D=&bookmark_search%5Bexcluded_bookmark_tag_names%5D=&bookmark_search%5Bbookmarkable_query%5D=&bookmark_search%5Bbookmark_query%5D=&bookmark_search%5Blanguage_id%5D=&bookmark_search%5Brec%5D=0&bookmark_search%5Bwith_notes%5D=0")
+
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+
+        it "returns the user's ID when the parameter is at the end" do
+          allow(subject).to receive(:url).and_return("https://archiveofourown.org/bookmarks?commit=Sort+and+Filter&bookmark_search%5Bsort_column%5D=created_at&bookmark_search%5Bother_tag_names%5D=&bookmark_search%5Bother_bookmark_tag_names%5D=&bookmark_search%5Bexcluded_tag_names%5D=&bookmark_search%5Bexcluded_bookmark_tag_names%5D=&bookmark_search%5Bbookmarkable_query%5D=&bookmark_search%5Bbookmark_query%5D=&bookmark_search%5Blanguage_id%5D=&bookmark_search%5Brec%5D=0&bookmark_search%5Bwith_notes%5D=0&user_id=#{user.login}")
+
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+      end
     end
   end
 end

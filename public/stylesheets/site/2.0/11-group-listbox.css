@@ -1,5 +1,5 @@
-/*==GROUP: LISTBOX 
-http://otwcode.github.com/docs/front_end_coding/patterns/listbox
+/* == GROUP: LISTBOX
+https://otwcode.github.io/docs/patterns/listbox.html
 */
 
 .listbox, fieldset fieldset.listbox {
@@ -26,9 +26,14 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
   padding: 0.25em;
 }
 
+.listbox > .notice {
+  margin: 0.25em;
+}
+
 .listbox .index {
   width: auto;
   padding: 0.643em;
+  margin: 0;
   float: none;
   clear: right;
   background: #fff;
@@ -61,14 +66,19 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
   margin-right: 1.5em;
 }
 
-/*Contexts */
+/* Contexts */
 
 .review .listbox {
   overflow: visible;
   position: static;
 }
 
-/*INTERACTION context (show many/more/lots)*/
+/* The height (1.286em) of the buttons plus their veritcal padding (0.25em * 2) plus the vertical padding (0.15em * 2) of the actions container (=2.086em), multiplied by 0.75 because the actions are only 75% of the heading's font size. Unfortunately, this doesn't account for the buttons' vertical borders (1px * 2). */
+.tagset .listbox > .heading:has(.actions) {
+  line-height: 1.5645;
+}
+
+/* INTERACTION context (show many/more/lots) */
 
 .listbox .options {
   overflow: auto;

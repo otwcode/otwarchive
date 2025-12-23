@@ -32,8 +32,7 @@ describe WorksController, work_search: true do
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params: params
-        it_redirects_to_with_error(new_user_session_path,
-                                   "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -95,7 +94,7 @@ describe WorksController, work_search: true do
           { query: "sort by: word count", expected: "word_count" },
           { query: "sort by: words", expected: "word_count" },
           { query: "sort by: word", expected: "word_count" },
-          { query: "sort by: author", expected: "authors_to_sort_on" },
+          { query: "sort by: creator", expected: "authors_to_sort_on" },
           { query: "sort by: title", expected: "title_to_sort_on" },
           { query: "sort by: date", expected: "created_at" },
           { query: "sort by: date posted", expected: "created_at" },
@@ -181,8 +180,7 @@ describe WorksController, work_search: true do
   describe "new" do
     it "doesn't return the form for anyone not logged in" do
       get :new
-      it_redirects_to_with_error(new_user_session_path,
-                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      it_redirects_to_user_login_with_error
     end
 
     it "renders the form if logged in" do
@@ -274,6 +272,14 @@ describe WorksController, work_search: true do
         include /Only canonical category tags are allowed./
     end
 
+    it "renders new if the work has invalid comment permissions" do
+      work_attributes = attributes_for(:work).except(:posted, :comment_permissions).merge(comment_permissions: "Comment")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Comment permissions are invalid."
+    end
+
     context "as a tag wrangler" do
       let(:user) { create(:tag_wrangler) }
 
@@ -313,6 +319,21 @@ describe WorksController, work_search: true do
 
       expect(assigns(:page_title)).to include "No fandom specified"
     end
+
+    it "assigns @page_subtitle with unrevealed work and not @page_title" do
+      work.update!(in_unrevealed_collection: true)
+      get :show, params: { id: work.id }
+      expect(assigns[:page_subtitle]).to eq("Mystery Work")
+      expect(assigns[:page_title]).to be_nil
+    end
+
+    context "when work does not exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "999999999" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe "share" do
@@ -348,6 +369,22 @@ describe WorksController, work_search: true do
       params = { fandom_id: @fandom.id }
       get :index, params: params
       expect(assigns(:fandom)).to eq(@fandom)
+    end
+
+    describe "when the fandom id is invalid" do
+      it "raises a 404 for an invalid id" do
+        params = { fandom_id: 0 }
+        expect { get :index, params: params }
+          .to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    describe "when the fandom id is empty" do
+      it "returns the work" do
+        params = { fandom_id: nil }
+        get :index, params: params
+        expect(assigns(:works)).to include(@work)
+      end
     end
 
     describe "without caching" do
@@ -797,6 +834,51 @@ describe WorksController, work_search: true do
         fake_login_known_user(collected_user)
         get :collected, params: { user_id: collected_user.login }
         expect(assigns(:works)).to include(work, unrevealed_work)
+      end
+    end
+
+    context "with sorting options" do
+      let!(:new_work) do
+        create(:work,
+               title: "New Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 3.days.ago,
+               revised_at: 3.days.ago)
+      end
+
+      let!(:old_work) do
+        create(:work,
+               title: "Old Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 30.days.ago,
+               revised_at: 30.days.ago)
+      end
+
+      let!(:revised_work) do
+        create(:work,
+               title: "Revised Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 20.days.ago,
+               revised_at: 2.days.ago)
+      end
+
+      before { run_all_indexing_jobs }
+
+      it "sorts by date" do
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works).map(&:title)).to eq([revised_work, new_work, old_work].map(&:title))
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_direction: "asc" } }
+        expect(assigns(:works).map(&:title)).to eq([old_work, new_work, revised_work].map(&:title))
+      end
+
+      it "sorts by title" do
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_column: "title_to_sort_on" } }
+        expect(assigns(:works).map(&:title)).to eq([new_work, old_work, revised_work].map(&:title))
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_column: "title_to_sort_on", sort_direction: "desc" } }
+        expect(assigns(:works).map(&:title)).to eq([revised_work, old_work, new_work].map(&:title))
       end
     end
   end

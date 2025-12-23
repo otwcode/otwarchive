@@ -11,7 +11,7 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
     when /the media page/
-      media_path
+      media_index_path
     when /^the search bookmarks page$/i
       step %{all indexing jobs have been run}
       search_bookmarks_path
@@ -21,6 +21,9 @@ module NavigationHelpers
     when /^the search works page$/i
       step %{all indexing jobs have been run}
       search_works_path
+    when /^the collections page$/i
+      step %{all indexing jobs have been run}
+      collections_path
     when /^the search people page$/i
       step %{all indexing jobs have been run}
       search_people_path
@@ -57,8 +60,6 @@ module NavigationHelpers
 
     when /^the tagsets page$/i
       tag_sets_path
-    when /^the unassigned fandoms page$/i
-      unassigned_fandoms_path
     when /^the login page$/i
       new_user_session_path
     when /^account creation page$/i
@@ -67,60 +68,26 @@ module NavigationHelpers
       invite_requests_path
     when /^the manage invite queue page$/i
       manage_invite_requests_path
-    when /my pseuds page/
-      user_pseuds_path(User.current_user)
-    when /my "(.*)" pseud page/
-      user_pseud_path(user_id: User.current_user, id: $1)
-    when /my user page/
-      user_path(User.current_user)
-    when /my preferences page/
-      user_preferences_path(User.current_user)
-    when "my blocked users page"
-      user_blocked_users_path(User.current_user)
     when /the blocked users page for "([^"]*)"/
       user_blocked_users_path(Regexp.last_match(1))
-    when "my muted users page"
-      user_muted_users_path(User.current_user)
     when /the muted users page for "([^"]*)"/
       user_muted_users_path(Regexp.last_match(1))
-    when /my bookmarks page/
-      step %{all indexing jobs have been run}
-      user_bookmarks_path(User.current_user)
-    when /my works page/
-      step %{all indexing jobs have been run}
-      user_works_path(User.current_user)
-    when /my drafts page/
-      drafts_user_works_path(User.current_user)
-    when /my edit multiple works page/
-      show_multiple_user_works_path(User.current_user)
-    when /my subscriptions page/
-      user_subscriptions_path(User.current_user)
-    when /my stats page/
-      user_stats_path(User.current_user)
-    when /my profile page/
-      user_profile_path(User.current_user)
-    when /my claims page/
-      user_claims_path(User.current_user)
-    when /my signups page/
-      user_signups_path(User.current_user)
-    when /my related works page/
-      user_related_works_path(User.current_user)
-    when /my inbox page/
-      user_inbox_path(User.current_user)
-    when /my invitations page/
-      user_invitations_path(User.current_user)
-    when /my co-creator requests page/
-      user_creatorships_path(User.current_user)
+    when /^(.*)'s claims page$/
+      user_claims_path(Regexp.last_match(1))
+    when /^(.*)'s signups page$/
+      user_signups_path(Regexp.last_match(1))
+    when /^(.*)'s inbox page$/
+      user_inbox_path(Regexp.last_match(1))
+    when /^(.*)'s co-creator requests page$/
+      user_creatorships_path(Regexp.last_match(1))
     when /the gifts page$/
       gifts_path
     when /the gifts page for the recipient (.*)$/
       gifts_path(recipient: $1)
-    when /my gifts page/
-      user_gifts_path(User.current_user)
-    when /my assignments page/
-      user_assignments_path(User.current_user)
-    when /^my collection items page$/
-      user_collection_items_path(User.current_user)
+    when /^the assignments page for "(.*)"$/
+      user_assignments_path(Regexp.last_match(1))
+    when /^(.*)'s collection items page$/
+      user_collection_items_path(Regexp.last_match(1))
     when /^(.*)'s gifts page/
       user_gifts_path(user_id: $1)
     when /the import page/
@@ -131,9 +98,6 @@ module NavigationHelpers
       skins_path(skin_type: "WorkSkin")
     when /^(.*?)(?:'s)? user page$/i
       user_path(id: $1)
-    when /^(.*?)(?:'s)? "(.*)" pseud page$/i
-      # TODO: Avoid this in favor of 'the (user|dashboard) page for user "(.*)" with pseud "(.*)', and eventually remove.
-      user_pseud_path(user_id: $1, id: $2)
     when /^the (user|dashboard) page for user "(.*?)" with pseud "(.*?)"$/i
       user_pseud_path(user_id: Regexp.last_match(2), id: Regexp.last_match(3))
     when /^(.*?)(?:'s)? user url$/i
@@ -189,6 +153,8 @@ module NavigationHelpers
       user_profile_path(user_id: $1)
     when /^(.*)'s skins page/
       user_skins_path(user_id: $1)
+    when /^(.*)'s edit multiple works page/
+      show_multiple_user_works_path(user_id: Regexp.last_match(1))
     when /^"(.*)" skin page/
       skin_path(Skin.find_by(title: $1))
     when /^the new skin page/
@@ -271,18 +237,20 @@ module NavigationHelpers
       languages_path
     when /^the wranglers page$/i
       tag_wranglers_path
-    when /^my wrangling page$/i
-      tag_wrangler_path(User.current_user)
     when /^the wrangling page for "(.*)"$/i
       tag_wrangler_path(User.find_by(login: Regexp.last_match(1)))
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
+    when /^the "(.*)" fandoms page$/i
+      media_fandoms_path(Media.find_by(name: Regexp.last_match(1)))
     when /^the "(.*)" tag page$/i
       tag_path(Tag.find_by_name($1))
     when /^the '(.*)' tag edit page$/i
       edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
     when /^the "(.*)" tag edit page$/i
       edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
+    when /^the new tag page$/i
+      new_tag_path
     when /^the wrangling tools page$/
       tag_wranglings_path
     when /^the new external work page$/i
@@ -291,14 +259,28 @@ module NavigationHelpers
       external_works_path
     when /^the external works page with only duplicates$/i
       external_works_path(show: :duplicates)
-    when /^the new user password page$/i
+    when /^the forgot password page$/i
       new_user_password_path
     when /^the edit user password page$/i
       edit_user_password_path
+    when /^the (.*) mass bin$/i
+      tag_wranglings_path(show: Regexp.last_match(1).pluralize)
+    when /^the tags page$/i
+      tags_path
+    when /^the orphan all works page$/i
+      new_orphan_path
+    when /^the activation page for "(.*)"$/i
+      activate_path(id: User.find_by(login: Regexp.last_match(1)).confirmation_token)
+    when /^the first login help page$/i
+      help_first_login_path
 
     # Admin Pages
     when /^the admin-posts page$/i
       admin_posts_path
+    when /^the "(.*)" admin post page$/i
+      admin_post_path(AdminPost.find_by(title: Regexp.last_match(1)))
+    when /^the unreviewed comments page for the admin post "(.*)"$/i
+      unreviewed_admin_post_comments_path(AdminPost.find_by(title: Regexp.last_match(1)))
     when /^the admin-settings page$/i
       admin_settings_path
     when /^the admin-activities page$/i
@@ -306,6 +288,7 @@ module NavigationHelpers
     when /^the admin-blacklist page$/i
       admin_blacklisted_emails_path
     when /^the manage users page$/
+      step "all indexing jobs have been run"
       admin_users_path
     when /^the bulk email search page$/i
       bulk_search_admin_users_path

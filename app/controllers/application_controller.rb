@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
-  include Pundit
+  include ActiveStorage::SetCurrent
+  include Pundit::Authorization
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
@@ -13,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
-  rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
+  rescue_from Elastic::Transport::Transport::Errors::ServiceUnavailable do
     # Non-standard code to distinguish Elasticsearch errors from standard 503s.
     # We can't use 444 because nginx will close connections without sending
     # response headers.
@@ -22,6 +23,12 @@ class ApplicationController < ActionController::Base
 
   def raise_not_found
     redirect_to '/404'
+  end
+
+  rescue_from Rack::Timeout::RequestTimeoutException, with: :raise_timeout
+  
+  def raise_timeout
+    redirect_to timeout_error_path
   end
 
   helper :all # include all helpers, all the time
@@ -41,6 +48,30 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  include Pagy::Backend
+  def pagy(collection, **vars)
+    pagy_overflow_handler do
+      super
+    end
+  end
+
+  def pagy_query_result(query_result, **vars)
+    pagy_overflow_handler do
+      Pagy.new(
+        count: query_result.total_entries,
+        page: query_result.current_page,
+        limit: query_result.per_page,
+        **vars
+      )
+    end
+  end
+
+  def pagy_overflow_handler(*)
+    yield
+  rescue Pagy::OverflowError
+    nil
+  end
+
   def display_auth_error
     respond_to do |format|
       format.html do
@@ -49,7 +80,7 @@ class ApplicationController < ActionController::Base
       format.any(:js, :json) do
         render json: {
           errors: {
-            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='http://kb.iu.edu/data/ahic.html'>clearing your cache</a> if you continue to experience problems.".html_safe
+            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='https://en.wikipedia.org/wiki/Wikipedia:Bypass_your_cache'>clearing your cache</a> if you continue to experience problems.".html_safe
           }
         }, status: :unprocessable_entity
       end
@@ -176,47 +207,14 @@ public
   before_action :load_tos_popup
   def load_tos_popup
     # Integers only, YYYY-MM-DD format of date Board approved TOS
-    @current_tos_version = 20180523
+    @current_tos_version = 2024_11_19 # rubocop:disable Style/NumericLiterals
   end
 
-  # store previous page in session to make redirecting back possible
-  # if already redirected once, don't redirect again.
-  before_action :store_location
-  def store_location
-    if session[:return_to] == "redirected"
-      session.delete(:return_to)
-    elsif request.fullpath.length > 200
-      # Sessions are stored in cookies, which has a 4KB size limit.
-      # Don't store paths that are too long (e.g. filters with lots of exclusions).
-      # Also remove the previous stored path.
-      session.delete(:return_to)
-    else
-      session[:return_to] = request.fullpath
-    end
-  end
-
-  # Redirect to the URI stored by the most recent store_location call or
-  # to the passed default.
-  def redirect_back_or_default(default = root_path)
-    back = session[:return_to]
-    session.delete(:return_to)
-    if back
-      session[:return_to] = "redirected"
-      redirect_to(back) and return
-    else
-      redirect_to(default) and return
-    end
-  end
-
+  include PathCleaner
   def after_sign_in_path_for(resource)
-    if resource.is_a?(Admin)
-      admins_path
-    else
-      back = session[:return_to]
-      session.delete(:return_to)
+    return admins_path if resource.is_a?(Admin)
 
-      back || user_path(current_user)
-    end
+    relative_path(params[:return_to]) || user_path(current_user)
   end
 
   def authenticate_admin!
@@ -252,29 +250,33 @@ public
   # behavior in case the user is not authorized
   # to access the requested action.  For example, a popup window might
   # simply close itself.
-  def access_denied(options ={})
-    store_location
+  def access_denied(options = {})
+    destination = options[:redirect]
     if logged_in?
-      destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
-      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach."
-      redirect_to destination
+      destination ||= user_path(current_user)
+      # i18n-tasks-use t('users.reconfirm_email.access_denied.logged_in')
+      flash[:error] = t(".access_denied.logged_in", default: t("application.access_denied.access_denied.logged_in")) # rubocop:disable I18n/DefaultTranslation
     else
-      destination = options[:redirect].blank? ? new_user_session_path : options[:redirect]
+      destination ||= new_user_session_path(return_to: request.fullpath)
       flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
-      redirect_to destination
     end
+    redirect_to destination
     false
   end
 
   def admin_only_access_denied
     respond_to do |format|
       format.html do
-        flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
+        flash[:error] = t("admin.access.page_access_denied") 
         redirect_to root_path
       end
       format.json do
-        errors = [ts("Sorry, only an authorized admin can do that.")]
+        errors = [t("admin.access.action_access_denied")]
         render json: { errors: errors }, status: :forbidden
+      end
+      format.js do
+        flash[:error] = t("admin.access.page_access_denied") 
+        render js: "window.location.href = '#{root_path}';" 
       end
     end
   end
@@ -305,7 +307,7 @@ public
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
-  before_action :set_current_user
+  around_action :set_current_user
   def set_current_user
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
@@ -315,6 +317,11 @@ public
                                expires_in: 2.hours,
                                race_condition_ttl: 5) { "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}" }.split(",").map(&:to_i)
     end
+
+    yield
+
+    User.current_user = nil
+    @current_user = nil
   end
 
   def load_collection
@@ -334,7 +341,6 @@ public
     redirect_to (fallback || root_path) rescue redirect_to '/'
   end
 
-
   def get_page_title(fandom, author, title, options = {})
     # truncate any piece that is over 15 chars long to the nearest word
     if options[:truncate]
@@ -343,18 +349,17 @@ public
       title = title.gsub(/^(.{15}[\w.]*)(.*)/) {$2.empty? ? $1 : $1 + '...'}
     end
 
-    @page_title = ""
     if logged_in? && !current_user.preference.try(:work_title_format).blank?
-      @page_title = current_user.preference.work_title_format.dup
-      @page_title.gsub!(/FANDOM/, fandom)
-      @page_title.gsub!(/AUTHOR/, author)
-      @page_title.gsub!(/TITLE/, title)
+      page_title = current_user.preference.work_title_format.dup
+      page_title.gsub!(/FANDOM/, fandom)
+      page_title.gsub!(/AUTHOR/, author)
+      page_title.gsub!(/TITLE/, title)
     else
-      @page_title = title + " - " + author + " - " + fandom
+      page_title = "#{title} - #{author} - #{fandom}"
     end
 
-    @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
-    @page_title.html_safe
+    page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
+    page_title.html_safe
   end
 
   public
@@ -390,9 +395,18 @@ public
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended?
-        flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+        suspension_end = current_user.suspended_until
+
+        # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+        unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+        # If the stated suspension end date is after the unban threshold we need to advance a day 
+        suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+        localized_suspension_end = view_context.date_in_zone(suspension_end)
+        flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+        
       else
-        flash[:error] = t("ban_notice", default: "Your account has been banned. You are not permitted to add or edit archive content. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.").html_safe
+        flash[:error] = t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
       end
       redirect_to current_user
     end
@@ -401,8 +415,18 @@ public
   # Prevents temporarily suspended users from deleting content
   def check_user_not_suspended
     return unless current_user.is_a?(User) && current_user.suspended?
+
+    suspension_end = current_user.suspended_until
+
+    # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+    unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+    # If the stated suspension end date is after the unban threshold we need to advance a day 
+    suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+    localized_suspension_end = view_context.date_in_zone(suspension_end)
     
-    flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+    flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+
     redirect_to current_user
   end
 
@@ -425,7 +449,7 @@ public
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to new_user_session_path(restricted: true)
+      redirect_to new_user_session_path(restricted: true, return_to: request.fullpath)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
@@ -447,22 +471,24 @@ public
     end
   end
 
+  # Checks if user is allowed to see related page if parent item is hidden or in unrevealed collection
+  # Checks if user is logged in if parent item is restricted
+  def check_visibility_for(parent)
+    return if logged_in_as_admin? || current_user_owns?(parent) # Admins and the owner can see all related pages
+
+    access_denied(redirect: root_path) if parent.try(:hidden_by_admin) || parent.try(:in_unrevealed_collection) || (parent.respond_to?(:visible?) && !parent.visible?)
+  end
+
   public
 
-  def valid_sort_column(param, model='work')
-    allowed = []
-    if model.to_s.downcase == 'work'
-      allowed = %w(author title date created_at word_count hit_count)
-    elsif model.to_s.downcase == 'tag'
-      allowed = %w[name created_at taggings_count_cache uses]
-    elsif model.to_s.downcase == 'collection'
-      allowed = %w(collections.title collections.created_at)
-    elsif model.to_s.downcase == 'prompt'
-      allowed = %w(fandom created_at prompter)
-    elsif model.to_s.downcase == 'claim'
-      allowed = %w(created_at claimer)
-    end
-    !param.blank? && allowed.include?(param.to_s.downcase)
+  def valid_sort_column(param, model = "work")
+    allowed = {
+      "work" => %w[author title date created_at word_count hit_count],
+      "tag" => %w[name created_at taggings_count_cache uses],
+      "prompt" => %w[fandom created_at prompter],
+      "claim" => %w[created_at claimer]
+    }[model.to_s.downcase]
+    param.present? && allowed.include?(param.to_s.downcase)
   end
 
   def set_sort_order
@@ -490,7 +516,6 @@ public
   # Don't get unnecessary data for json requests
 
   skip_before_action  :load_admin_banner,
-                      :store_location,
                       if: proc { %w(js json).include?(request.format) }
 
 end

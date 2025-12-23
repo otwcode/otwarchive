@@ -30,6 +30,10 @@ Then /^show me the sidebar$/ do
   puts "\n" + find("#dashboard").native.inner_html
 end
 
+Then "the page should have a dashboard sidebar" do
+  expect(page).to have_css("#dashboard")
+end
+
 Then /^I should see errors/ do
   assert find("div.error")
 end
@@ -65,6 +69,10 @@ end
 Then /^I should see Posted now$/ do
   now = Time.zone.now.to_s
   step "I should see \"Posted #{now}\""
+end
+
+When "I fill in {string} with {string} repeated {int} times" do |field, str, count|
+  fill_in(field, with: (str * count))
 end
 
 When /^I fill in "([^\"]*)" with$/ do |field, value|
@@ -128,6 +136,10 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
 end
 
+Then "I should see in the {string} input" do |labeltext, content|
+  find_field(labeltext).value.should == content
+end
+
 Then /^I should see a button with text "(.*?)"(?: within "(.*?)")?$/ do |text, selector|
   assure_xpath_present("input", "value", text, selector)
 end
@@ -138,6 +150,22 @@ end
 
 Then "I should see a link to {string} within {string}" do |url, selector|
   assure_xpath_present("a", "href", url, selector)
+end
+
+Then /^I should see a page link to (.+) within "(.*?)"$/ do |page_name, selector| # rubocop:disable Cucumber/RegexStepName
+  expect(page.find(selector)).to have_link("", href: path_to(page_name))
+end
+
+Then /^I should not see a page link to (.+) within "(.*?)"$/ do |page_name, selector| # rubocop:disable Cucumber/RegexStepName
+  expect(page.find(selector)).to_not have_link("", href: path_to(page_name))
+end
+
+Then "I should see a link {string} within {string}" do |text, selector|
+  expect(page.find(selector)).to have_link(text)
+end
+
+Then "I should not see a link {string} within {string}" do |text, selector|
+  expect(page.find(selector)).to_not have_link(text)
 end
 
 Then "the {string} input should be blank" do |label|
@@ -209,8 +237,14 @@ end
 # "I submit with the 2nd button", but in those cases you probably want to make sure that
 # the different forms have different button text anyway, and submit them using
 # When I press "Button Text"
-When /^I submit with the (\d+)(?:st|nd|rd|th) button$/ do |index|
+When /^I submit with the (\d+)(?:st|nd|rd|th) button$/ do |index| # rubocop:disable Cucumber/RegexStepName
   page.all("input[type='submit']")[(index.to_i - 1)].click
+end
+
+# This is for buttons generated with the button_to helper method. They use a different HTML element,
+# <button> instead of <input type="submit">.
+When /^I click the (\d+)(?:st|nd|rd|th) button$/ do |index| # rubocop:disable Cucumber/RegexStepName
+  page.all("button")[index.to_i - 1].click
 end
 
 # This will submit the first submit button inside a <p class="submit"> by default
@@ -221,12 +255,11 @@ When /^I submit$/ do
   page.all("p.submit input[type='submit']")[0].click
 end
 
-# we want greedy matching for this one so we can handle tags that have attributes in them
-Then /^I should see the text with tags "(.*)"$/ do |text|
+Then "I should see the text with tags {string}" do |text|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
-Then /^I should see the text with tags '(.*)'$/ do |text|
+Then "I should see the text with tags" do |text|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
 

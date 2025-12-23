@@ -22,9 +22,11 @@ module ChallengeCore
       if open_date && open_date.future?
         error_message << ts("If sign-ups are open, sign-up open date cannot be in the future.")
       end
-      if close_date && open_date && close_date.to_s(:number) < open_date.to_s(:number)
+      # rubocop:disable Style/IfUnlessModifier
+      if close_date && open_date && close_date.to_fs(:number) < open_date.to_fs(:number)
         error_message << ts("Close date cannot be before open date.")
       end
+      # rubocop:enable Style/IfUnlessModifier
     end
     unless error_message.empty?
       error_message.each do |errors|
@@ -76,6 +78,19 @@ module ChallengeCore
     true
   end
 
+  def should_update_collection_index?
+    return true if destroyed?
+
+    pertinent_attributes = %w[signup_open signups_open_at signups_close_at assignments_due_at works_reveal_at authors_reveal_at]
+    (self.saved_changes.keys & pertinent_attributes).present?
+  end
+
+  def update_collection_index
+    return if self.collection.blank?
+
+    IndexQueue.enqueue_id(Collection, collection.id, :main)
+  end
+
   module ClassMethods
     # override datetime setters so we can take strings
     def override_datetime_setters
@@ -94,6 +109,9 @@ module ChallengeCore
   end
   
   def self.included(base)
+    base.class_eval do
+      after_commit :update_collection_index, if: :should_update_collection_index?
+    end
     base.extend(ClassMethods)
   end
   

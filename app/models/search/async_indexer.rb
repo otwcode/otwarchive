@@ -1,5 +1,4 @@
 class AsyncIndexer
-
   REDIS = REDIS_GENERAL
 
   ####################
@@ -7,6 +6,13 @@ class AsyncIndexer
   ####################
 
   def self.perform(name)
+    # TODO: Keep the method so we can still run queued jobs from previous
+    # versions. However, tests should no longer depend on it.
+    #
+    # Remove in a future version, once all old jobs have been retried or
+    # cleared.
+    raise "Avoid using AsyncIndexer.perform in tests" if Rails.env.test?
+
     indexer = name.split(":").first.constantize
     ids = REDIS.smembers(name)
 
@@ -41,10 +47,10 @@ class AsyncIndexer
   def initialize(indexer, priority)
     @indexer = indexer
     @priority = case priority.to_s
-                when 'main'
-                  'high'
-                when 'background'
-                  'low'
+                when "main"
+                  "high"
+                when "background"
+                  "low"
                 else
                   priority
                 end
@@ -52,12 +58,11 @@ class AsyncIndexer
 
   def enqueue_ids(ids)
     name = "#{indexer}:#{ids.first}:#{Time.now.to_i}"
-    REDIS.sadd(name, ids)
-    Resque::Job.create(queue, self.class, name)
+    REDIS.sadd?(name, ids)
+    AsyncIndexerJob.set(queue: queue).perform_later(name)
   end
 
   def queue
     "reindex_#{priority}"
   end
-
 end

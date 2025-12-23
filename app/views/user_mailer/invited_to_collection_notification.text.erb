@@ -1,8 +1,12 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.formal", name: @user.login) %>
+<%= t("mailer.general.greeting.formal.addressed_html", name: @user.login) %>
 
-The collection maintainers of "<%= @collection.title %>" (<%= collection_url(@collection) %>) would like to include your work "<%= @work.title.html_safe %>" (<%= work_url(@work) %>) in their collection!
+<%= t(".would_like_to_include.text",
+  collection_title: @collection.title,
+  collection_url: collection_url(@collection),
+  work_title: @work.title,
+  work_url: work_url(@work)) %>
 
-To approve or reject this request, please visit your "Collection Items" page: <%= user_collection_items_url(@user) %>.
+<%= t(".approve.text", collection_items_page_url: user_collection_items_url(@user)) %>
 
 <% end %>

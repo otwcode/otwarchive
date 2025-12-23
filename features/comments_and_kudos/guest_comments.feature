@@ -6,7 +6,7 @@ Feature: Read guest comments
 
 Scenario: View guest comments in homepage, inbox and works
   Given I am logged in as "normal_user"
-    And I post the work "My very meta work about AO3"
+    And I post the work "My very meta work about AO3" with guest comments enabled
     And I am logged out
   When I post a guest comment
   Then I should see "(Guest)"
@@ -31,3 +31,16 @@ Scenario: View logged-in comments in homepage, inbox and works
   Then I should not see "(Guest)"
   When I view the work "My very meta work about AO3" with comments
   Then I should not see "(Guest)"
+
+Scenario: Guest comments with embedded images are rendered as plain text
+  Given I am logged in as "normal_user"
+    And I post the work "foobar" with guest comments enabled
+    And I am logged out
+  When I view the work "foobar"
+  Then I should see "Embedded images (<img> tags) will be displayed as HTML" within ".new_comment"
+  When I post a guest comment "Hello <img src='https://example.com/image.jpg' alt='baz'>"
+  Then I should see "Hello img src="
+    And I should see "https://example.com/image.jpg"
+    And I should see "alt="
+    And I should see "baz"
+    But I should not see the image "src" text "https://example.com/image.jpg"

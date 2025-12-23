@@ -67,6 +67,54 @@ namespace :After do
     end
   end
 
+  desc "Clean up multiple rating tags"
+  task(clean_up_multiple_ratings: :environment) do
+    default_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+    es_results = $elasticsearch.search(index: WorkIndexer.index_name, body: {
+                                         query: {
+                                           bool: {
+                                             filter: {
+                                               script: {
+                                                 script: {
+                                                   source: "doc['rating_ids'].length > 1",
+                                                   lang: "painless"
+                                                 }
+                                               }
+                                             }
+                                           }
+                                         }
+                                       })
+    invalid_works = QueryResult.new("Work", es_results)
+
+    puts "There are #{invalid_works.size} works with multiple ratings."
+
+    fixed_work_ids = []
+    unfixed_word_ids = []
+    invalid_works.each do |work|
+      work.ratings = [default_rating_tag]
+      work.rating_string = default_rating_tag.name
+
+      if work.save
+        fixed_work_ids << work.id
+      else
+        unfixed_word_ids << work.id
+      end
+      print(".") && $stdout.flush
+    end
+
+    unless fixed_work_ids.empty?
+      puts "Cleaned up having multiple ratings on #{fixed_work_ids.size} works:"
+      puts fixed_work_ids.join(", ")
+      $stdout.flush
+    end
+
+    unless unfixed_word_ids.empty?
+      puts "The following #{unfixed_word_ids.size} works failed validations and could not be saved:"
+      puts unfixed_word_ids.join(", ")
+      $stdout.flush
+    end
+  end
+
   desc "Clean up noncanonical rating tags"
   task(clean_up_noncanonical_ratings: :environment) do
     canonical_not_rated_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
@@ -141,42 +189,6 @@ namespace :After do
     puts("Added default rating to works: #{updated_works}") && STDOUT.flush
   end
 
-  desc "Fix pseuds with invalid icon data"
-  task(fix_invalid_pseud_icon_data: :environment) do
-    # From validates_attachment_content_type in pseuds model.
-    valid_types = %w[image/gif image/jpeg image/png]
-
-    # If you change either of these, update lookup_invalid_pseuds.rb in
-    # otwcode/otw-scripts to ensure the proper users are notified.
-    pseuds_with_invalid_icons = Pseud.where("icon_file_name IS NOT NULL AND icon_content_type NOT IN (?)", valid_types)
-    pseuds_with_invalid_text = Pseud.where("CHAR_LENGTH(icon_alt_text) > ? OR CHAR_LENGTH(icon_comment_text) > ?", ArchiveConfig.ICON_ALT_MAX, ArchiveConfig.ICON_COMMENT_MAX)
-
-    invalid_pseuds = [pseuds_with_invalid_icons, pseuds_with_invalid_text].flatten.uniq
-    invalid_pseuds_count = invalid_pseuds.count
-
-    skipped_pseud_ids = []
-
-    # Update the pseuds.
-    puts("Updating #{invalid_pseuds_count} pseuds") && STDOUT.flush
-
-    invalid_pseuds.each do |pseud|
-      # Change icon content type to jpeg if it's jpg.
-      pseud.icon_content_type = "image/jpeg" if pseud.icon_content_type == "image/jpg"
-      # Delete the icon if it's not a valid type.
-      pseud.icon = nil unless (valid_types + ["image/jpg"]).include?(pseud.icon_content_type)
-      # Delete the icon alt text if it's too long.
-      pseud.icon_alt_text = "" if pseud.icon_alt_text.length > ArchiveConfig.ICON_ALT_MAX
-      # Delete the icon comment if it's too long.
-      pseud.icon_comment_text = "" if pseud.icon_comment_text.length > ArchiveConfig.ICON_COMMENT_MAX
-      skipped_pseud_ids << pseud.id unless pseud.save
-      print(".") && STDOUT.flush
-    end
-    if skipped_pseud_ids.any?
-      puts
-      puts("Couldn't update #{skipped_pseud_ids.size} pseud(s): #{skipped_pseud_ids.join(',')}") && STDOUT.flush
-    end
-  end
-
   desc "Backfill renamed_at for existing users"
   task(add_renamed_at_from_log: :environment) do
     total_users = User.all.size
@@ -223,44 +235,6 @@ namespace :After do
     end
   end
 
-  desc "Convert remaining chapter kudos into work kudos"
-  task(clean_up_chapter_kudos: :environment) do
-    kudos = Kudo.where(commentable_type: "Chapter")
-    kudos_count = kudos.count
-
-    puts("Updating #{kudos_count} chapter kudos") && STDOUT.flush
-
-    indestructible_kudo_ids = []
-    unupdatable_kudo_ids = []
-
-    kudos.find_each do |kudo|
-      if kudo.commentable.nil? || kudo.commentable.work.nil?
-        indestructible_kudo_ids << kudo.id unless kudo.destroy
-        print(".") && STDOUT.flush
-        next
-      end
-
-      kudo.commentable = kudo.commentable.work
-      unless kudo.save
-        if kudo.errors.keys == [:ip_address] || kudo.errors.keys == [:user_id]
-          # If it's a uniqueness problem, orphan the kudo and re-save.
-          kudo.ip_address = nil
-          kudo.user_id = nil
-          unupdatable_kudo_ids << kudo.id unless kudo.save
-        else
-          # In other cases, let's be cautious and only log.
-          unupdatable_kudo_ids << kudo.id
-        end
-      end
-      print(".") && STDOUT.flush
-    end
-
-    puts
-    puts("Couldn't destroy #{indestructible_kudo_ids.size} kudo(s): #{indestructible_kudo_ids.join(',')}") if indestructible_kudo_ids.any?
-    puts("Couldn't update #{unupdatable_kudo_ids.size} kudo(s): #{unupdatable_kudo_ids.join(',')}") if unupdatable_kudo_ids.any?
-    STDOUT.flush
-  end
-
   desc "Remove translation_admin role"
   task(remove_translation_admin_role: :environment) do
     r = Role.find_by(name: "translation_admin")
@@ -291,6 +265,369 @@ namespace :After do
     else
       puts("Admin not found.")
     end
+  end
+
+  desc "Add suffix to existing Underage Sex tag in preparation for Underage warning rename"
+  task(add_suffix_to_underage_sex_tag: :environment) do
+    puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
+    login = $stdin.gets.chomp.strip
+    admin = Admin.find_by(login: login)
+
+    if admin.present?
+      User.current_user = admin
+
+      tag = Tag.find_by_name("Underage Sex")
+
+      if tag.blank?
+        puts("No Underage Sex tag found.")
+      elsif tag.is_a?(ArchiveWarning)
+        puts("Underage Sex is already an Archive Warning.")
+      else
+        suffixed_name = "Underage Sex - #{tag.class}"
+        if tag.update(name: suffixed_name)
+          puts("Renamed Underage Sex tag to #{tag.reload.name}.")
+        else
+          puts("Failed to rename Underage Sex tag to #{suffixed_name}.")
+        end
+        $stdout.flush
+      end
+    else
+      puts("Admin not found.")
+    end
+  end
+
+  desc "Rename Underage warning to Underage Sex"
+  task(rename_underage_warning: :environment) do
+    puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
+    login = $stdin.gets.chomp.strip
+    admin = Admin.find_by(login: login)
+
+    if admin.present?
+      User.current_user = admin
+
+      tag = ArchiveWarning.find_by_name("Underage")
+
+      if tag.blank?
+        puts("No Underage warning tag found.")
+      else
+        new_name = "Underage Sex"
+        if tag.update(name: new_name)
+          puts("Renamed Underage warning tag to #{tag.reload.name}.")
+        else
+          puts("Failed to rename Underage warning tag to #{new_name}.")
+        end
+        $stdout.flush
+      end
+    else
+      puts("Admin not found.")
+    end
+  end
+
+  desc "Migrate collection icons to ActiveStorage paths"
+  task(migrate_collection_icons: :environment) do
+    require "aws-sdk-s3"
+    require "open-uri"
+
+    return unless Rails.env.staging? || Rails.env.production?
+
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = "collections/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
+
+    Collection.no_touching do
+      old_bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
+        next if ActiveStorage::Attachment.where(record_type: "Collection", record_id: path_parts[-2]).any?
+
+        collection_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest.new("MD5").tap do |result|
+          while (chunk = old_icon.read(5.megabytes))
+            result << chunk
+          end
+          old_icon.rewind
+        end.base64digest
+
+        key = nil
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
+            filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          key = blob.key
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Collection",
+            record_id: collection_id
+          )
+        end
+
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
+        puts "Finished collection #{collection_id}"
+        $stdout.flush
+      end
+    end
+  end
+
+  desc "Migrate pseud icons to ActiveStorage paths"
+  task(migrate_pseud_icons: :environment) do
+    require "aws-sdk-s3"
+    require "open-uri"
+
+    return unless Rails.env.staging? || Rails.env.production?
+
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = Rails.env.production? ? "icons/" : "staging/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
+
+    Pseud.no_touching do
+      old_bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
+        next if ActiveStorage::Attachment.where(record_type: "Pseud", record_id: path_parts[-2]).any?
+
+        pseud_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest.new("MD5").tap do |result|
+          while (chunk = old_icon.read(5.megabytes))
+            result << chunk
+          end
+          old_icon.rewind
+        end.base64digest
+
+        key = nil
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
+            filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          key = blob.key
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Pseud",
+            record_id: pseud_id
+          )
+        end
+
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
+        puts "Finished pseud #{pseud_id}"
+        $stdout.flush
+      end
+    end
+  end
+
+  desc "Migrate skin icons to ActiveStorage paths"
+  task(migrate_skin_icons: :environment) do
+    require "aws-sdk-s3"
+    require "open-uri"
+
+    return unless Rails.env.staging? || Rails.env.production?
+
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = "skins/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
+
+    Skin.no_touching do
+      old_bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
+        next if ActiveStorage::Attachment.where(record_type: "Skin", record_id: path_parts[-2]).any?
+
+        skin_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest.new("MD5").tap do |result|
+          while (chunk = old_icon.read(5.megabytes))
+            result << chunk
+          end
+          old_icon.rewind
+        end.base64digest
+
+        key = nil
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
+            filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          key = blob.key
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Skin",
+            record_id: skin_id
+          )
+        end
+
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
+        puts "Finished skin #{skin_id}"
+        $stdout.flush
+      end
+    end
+  end
+
+  desc "Reindex tags associated with works that are hidden or unrevealed"
+  task(reindex_hidden_unrevealed_tags: :environment) do
+    hidden_count = Work.hidden.count
+    hidden_batches = (hidden_count + 999) / 1_000
+    puts "Inspecting #{hidden_count} hidden works in #{hidden_batches} batches"
+    Work.hidden.find_in_batches.with_index do |batch, index|
+      batch.each { |work| work.taggings.each(&:update_search) }
+      puts "Finished batch #{index + 1} of #{hidden_batches}"
+    end
+
+    unrevealed_count = Work.unrevealed.count
+    unrevealed_batches = (unrevealed_count + 999) / 1_000
+    puts "Inspecting #{unrevealed_count} unrevealed works in #{unrevealed_batches} batches"
+    Work.unrevealed.find_in_batches.with_index do |batch, index|
+      batch.each { |work| work.taggings.each(&:update_search) }
+      puts "Finished batch #{index + 1} of #{unrevealed_batches}"
+    end
+
+    puts "Finished reindexing tags on hidden and unrevealed works"
+  end
+
+  desc "Convert user kudos from users with the official role to guest kudos"
+  task(convert_official_kudos: :environment) do
+    official_users = Role.find_by(name: "official")&.users
+    if official_users.blank?
+      puts "No official users found"
+    else
+      official_users.each do |user|
+        kudos = user.kudos
+        next if kudos.blank?
+
+        puts "Updating #{kudos.size} kudos from #{user.login}"
+        user.remove_user_from_kudos
+      end
+
+      puts "Finished converting kudos from official users to guest kudos"
+    end
+  end
+
+  desc "Convert user kudos from users with the archivist role to guest kudos"
+  task(convert_archivist_kudos: :environment) do
+    archivist_users = Role.find_by(name: "archivist")&.users
+    if archivist_users.blank?
+      puts "No archivist users found"
+    else
+      archivist_users.each do |user|
+        kudos = user.kudos
+        next if kudos.blank?
+
+        puts "Updating #{kudos.size} kudos from #{user.login}"
+        user.remove_user_from_kudos
+      end
+
+      puts "Finished converting kudos from archivist users to guest kudos"
+    end
+  end
+
+  desc "Create TagSetAssociations for non-canonical tags belonging to canonical fandoms in TagSets"
+  task(create_non_canonical_tagset_associations: :environment) do
+    # We want to get all set taggings where the tag is not canonical, but has a parent fandom that _is_ canonical.
+    # This might be possible with pure Ruby, but unfortunately the parent tag in common_taggings is polymorphic
+    # (even though it doesn't need to be), which makes that trickier.
+    non_canonicals = SetTagging
+      .joins("INNER JOIN `tag_sets` `tag_set` ON `tag_set`.`id` = `set_taggings`.`tag_set_id` INNER JOIN `owned_tag_sets` ON `owned_tag_sets`.`tag_set_id` = `tag_set`.`id` INNER JOIN `tags` `tag` ON `tag`.`id` = `set_taggings`.`tag_id` INNER JOIN `common_taggings` `common_tagging` ON  `common_tagging`.`common_tag_id` = `tag`.`id` INNER JOIN `tags` `parent_tag` ON `common_tagging`.`filterable_id` = `parent_tag`.`id`")
+      .where("`tag`.`canonical` = FALSE AND `tag`.`type` IN ('Character', 'Relationship') AND `tag_set`.`id` IS NOT NULL AND `parent_tag`.`type` = 'Fandom' AND `parent_tag`.`canonical` = TRUE")
+      .distinct
+
+    non_canonicals.find_in_batches.with_index do |batch, index|
+      puts "Creating TagSetAssociations for batch #{index + 1}"
+      batch.each do |set_tagging|
+        owned_tag_set = set_tagging.tag_set.owned_tag_set
+        tag = set_tagging.tag
+
+        fandoms = tag.fandoms.joins(:set_taggings).where(canonical: true, set_taggings: { tag_set_id: set_tagging.tag_set.id })
+        fandoms.find_each do |fandom|
+          TagSetAssociation.create!(owned_tag_set: owned_tag_set, tag: tag, parent_tag: fandom)
+        rescue ActiveRecord::RecordInvalid
+          puts "Association already exists for fandom '#{fandom.name}' and tag '#{tag.name}'"
+        end
+      end
+    end
+  end
+
+  desc "tags existing collections with the fandoms of the collected works and bookmarks"
+  task(add_collection_tags: :environment) do
+    collections = Collection.all
+    total_batches = (collections.count + 999) / 1000
+
+    def approved_taggables(collection)
+      bookmark_visible_revealed = Bookmark.is_public.join_bookmarkable.where(
+        "(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0 AND works.in_unrevealed_collection = 0) OR
+        (series.restricted = 0 AND series.hidden_by_admin = 0) OR
+        (external_works.hidden_by_admin = 0)"
+      )
+      Work.visible_to_all.revealed.in_collection(collection).includes(:fandoms) + \
+        bookmark_visible_revealed.in_collection(collection).includes(:fandoms) + \
+        bookmark_visible_revealed.in_collection(collection).includes(bookmarkable: :fandoms).filter_map { |bookmark| bookmark.bookmarkable unless bookmark.bookmarkable.respond_to?(:unrevealed?) && bookmark.bookmarkable.unrevealed? }
+    end
+
+    Collection.no_touching do
+      collections.find_in_batches.with_index do |batch, index|
+        batch.each do |collection|
+          tags = approved_taggables(collection)
+            .flat_map { |taggable| taggable.try(:fandoms) || taggable.try(:work_tags)&.where(type: "Fandom") || [] }
+            .uniq
+
+          next if tags.empty?
+
+          crossover = FandomCrossover.check_for_crossover(tags)
+          collection.update_attribute(:multifandom, crossover) if crossover
+
+          if tags.length > ArchiveConfig.COLLECTION_TAGS_MAX
+            collection.update(multifandom: crossover)
+          else
+            collection.tags << tags
+          end
+        end
+
+        puts "Collection batch #{index + 1} of #{total_batches} tagged"
+      end
+    end
+  end
+
+  desc "Syncs the Comments.approved column to the new Comments.spam column"
+  task(sync_approved_to_spam: :environment) do
+    # Due to the size of the Comment table, this task doesn't print the typical
+    # "Updating <total> in <total_batches> batches", as getting the total Comment count
+    # could kill the db.
+    Comment.find_in_batches.with_index do |batch, index|
+      batch.each do |comment|
+        comment.update_attribute(:spam, !comment.approved)
+      end
+
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    puts "Job complete."
   end
   # This is the end that you have to put new tasks above.
 end

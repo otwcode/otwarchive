@@ -1,5 +1,13 @@
 ---
 en:
+  application_helper:
+    anonymous_byline: Anonymous
+    anonymous_with_name_byline_html: Anonymous [%{pseud_byline}]
+    archivist_byline_html: "%{external_creator} [archived by %{pseud_byline}]"
+    help_modal:
+      help_symbol: "?"
+    text_limited_html: Plain text with limited HTML %{help_link}
+    text_limited_html_strip_images_html: Plain text with limited HTML %{help_link} Embedded images (&lt;img&gt; tags) will be displayed as HTML, including the image's source link and any alt text.
   collections_helper:
     collection_item_approval_options:
       collection:
@@ -20,7 +28,22 @@ en:
       user:
         bookmark: Bookmarker approval status
         work: Creator approval status
+  comments_helper:
+    actions:
+      cancel: Cancel
+      delete: Delete
+    chapter_link_html: Chapter %{position}
+    comment_link_with_commentable_name:
+      on_admin_post_html: Comment on the news post %{title}
+      on_tag_html: Comment on the tag %{name}
+      on_unknown: Comment on unknown item
+      on_work_html: Comment on the work %{title}
+  inbox_helper:
+    comment_link_with_chapter_number: Chapter %{position} of %{title}
+  series_helper:
+    series_description_html: Part %{index} of %{series_link}
   users_helper:
+    collections_link: Collections (%{coll_number})
     log:
       ban: Suspended Permanently
       email_change: Email Changed
@@ -32,6 +55,7 @@ en:
       lift_suspension: Suspension Lifted
       note: Note Added
       password_change: Password Changed
+      password_reset: Password Reset
       rename: Username Changed
       role_added: 'Role Added: '
       role_removed: 'Role Removed: '
@@ -39,3 +63,10 @@ en:
       troubleshot: Account Troubleshot
       validated: Account Validated
       warn: Warned
+  works_helper:
+    mark_as_read_button: Mark as Read
+    mark_for_later_button: Mark for Later
+    work_page_title:
+      anonymous: Anonymous
+      multifandom: Multifandom
+      unspecified_fandom: No fandom specified

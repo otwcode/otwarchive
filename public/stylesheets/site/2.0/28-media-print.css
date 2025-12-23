@@ -46,7 +46,11 @@ a, a:link, a:visited {
   text-decoration: none;
 }
 
-/*CSS3 perks, print urls after links*/
+.docs .userstuff summary .heading {
+  display: inline;
+}
+
+/* CSS3 perks, print urls after links */
 
 a:after {
   content: " (" attr(href) ") ";

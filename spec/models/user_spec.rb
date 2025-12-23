@@ -103,6 +103,15 @@ describe User do
         end
       end
 
+      context "missing data_processing flag" do
+        let(:no_data_processing) { build(:user, data_processing: "0") }
+
+        it "does not save" do
+          expect(no_data_processing.save).to be_falsey
+          expect(no_data_processing.errors[:data_processing].first).to include("you need to consent to the processing of your personal data")
+        end
+      end
+
       context "missing the terms_of_service flag" do
         let(:no_tos) { build(:user, terms_of_service: "0") }
 
@@ -172,13 +181,13 @@ describe User do
         it "does not save a duplicate email" do
           new_user.email = existing_user.email
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:email].first).to include("has already been taken")
+          expect(new_user.errors[:email].first).to include("This email is already associated with another account. Please try again with a different email address.")
         end
 
         it "does not save a duplicate email with different capitalization" do
           new_user.email = existing_user.email.capitalize
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:email].first).to include("has already been taken")
+          expect(new_user.errors[:email].first).to include("This email is already associated with another account. Please try again with a different email address.")
         end
       end
     end
@@ -187,30 +196,86 @@ describe User do
   describe "#update" do
     let!(:existing_user) { create(:user) }
 
-    it "sets renamed_at if username is changed" do
-      freeze_time
-      existing_user.update!(login: "new_username")
-      expect(existing_user.renamed_at).to eq(Time.current)
+    context "when logged in as an admin" do
+      before do
+        User.current_user = build(:admin)
+      end
+
+      context "when username is changed" do
+        before do
+          allow(existing_user).to receive(:justification_enabled?).and_return(false)
+          allow(existing_user).to receive(:ticket_number).and_return(12_345)
+        end
+
+        it "requires the default format" do
+          existing_user.update(login: "custom_username")
+          expect(existing_user.errors[:login].first).to eq "must use the default. Please contact your chairs to use something else."
+        end
+
+        it "only sets admin_renamed_at" do
+          freeze_time
+          existing_user.update!(login: "user#{existing_user.id}")
+          expect(existing_user.renamed_at).to be nil
+          expect(existing_user.admin_renamed_at).to eq(Time.current)
+        end
+
+        it "creates an admin log item" do
+          old_login = existing_user.login
+          existing_user.update!(login: "user#{existing_user.id}")
+          log_item = existing_user.reload.log_items.last
+          admin = User.current_user
+          expect(log_item.action).to eq(ArchiveConfig.ACTION_RENAME)
+          expect(log_item.admin_id).to eq(admin.id)
+          expect(log_item.note).to eq("Old Username: #{old_login}, New Username: #{existing_user.login}, Changed by: #{admin.login}, Ticket ID: #12345")
+        end
+      end
+
+      context "username was recently changed" do
+        before do
+          existing_user.update!(renamed_at: Time.current)
+        end
+
+        it "does not prevent changing the username" do
+          allow(existing_user).to receive(:justification_enabled?).and_return(false)
+          existing_user.update!(login: "user#{existing_user.id}")
+          expect(existing_user.login).to eq("user#{existing_user.id}")
+        end
+      end
     end
 
-    context "username was recently changed" do
+    context "when logged in as the user themselves" do
       before do
+        User.current_user = existing_user
+      end
+
+      it "sets renamed_at" do
         freeze_time
-        existing_user.update!(login: "new_login")
+        existing_user.update!(login: "new_username")
+        expect(existing_user.renamed_at).to eq(Time.current)
+        expect(existing_user.admin_renamed_at).to be nil
       end
 
-      it "does not allow another rename" do
-        expect { existing_user.update!(login: "new") }
-          .to raise_error(ActiveRecord::RecordInvalid)
-        localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
-        expect(existing_user.errors[:login].first).to eq(
-          "can only be changed once every 7 days. You last changed your user name on #{localized_renamed_at}."
-        )
-      end
+      context "username was recently changed" do
+        before do
+          freeze_time
+          existing_user.update!(login: "new_login")
+        end
 
-      it "allows changing email" do
-        existing_user.update!(email: "new_email@example.com")
-        expect(existing_user.email).to eq("new_email@example.com")
+        it "does not allow another rename" do
+          expect { existing_user.update!(login: "new") }
+            .to raise_error(ActiveRecord::RecordInvalid)
+          localized_renamed_at = I18n.l(existing_user.renamed_at)
+          expect(existing_user.errors[:login].first)
+            .to eq(
+              "can only be changed once every 7 days. You last changed your username on #{localized_renamed_at}."
+            )
+        end
+
+        it "allows changing email" do
+          existing_user.skip_reconfirmation!
+          existing_user.update!(email: "new_email@example.com")
+          expect(existing_user.email).to eq("new_email@example.com")
+        end
       end
     end
 
@@ -260,6 +325,7 @@ describe User do
 
     context "when email is changed" do
       before do
+        existing_user.skip_reconfirmation!
         existing_user.update!(email: "newemail@example.com")
         existing_user.reload
       end
@@ -281,6 +347,7 @@ describe User do
 
       before do
         User.current_user = admin
+        existing_user.skip_reconfirmation!
         existing_user.update!(email: "new_email@example.com")
         existing_user.reload
       end
@@ -318,6 +385,26 @@ describe User do
       expect(not_found).to eq(["unknown@ao3.org", "nobody@example.com"])
       expect(found.size).to eq(emails.map(&:downcase).uniq.size - not_found.size)
       expect(duplicates).to eq(3)
+    end
+  end
+
+  describe "reindexing" do
+    let!(:user) { create(:user, login: "before") }
+
+    context "when username is changed" do
+      it "enqueues the user for reindex" do
+        expect do
+          user.update!(login: "changed")
+        end.to add_to_reindex_queue(user, :users)
+      end
+    end
+
+    context "when user is destroyed" do
+      it "enqueues the user for reindex" do
+        expect do
+          user.destroy!
+        end.to add_to_reindex_queue(user, :users)
+      end
     end
   end
 end

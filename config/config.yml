@@ -34,6 +34,7 @@ RETURN_ADDRESS: 'do-not-reply@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
 SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
+TAG_WRANGLER_SUPERVISORS_ADDRESS: 'tagwranglers-personnel@example.org'
 
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.
@@ -68,6 +69,7 @@ OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes
 REVISION: ''
 ES_URL: 'http://127.0.0.1:9400'
 MEMCACHED_SERVERS: '127.0.0.1:11211'
+ZOHO_URL: 'https://desk.zoho.com'
 
 # tag settings
 DELIMITER_FOR_INPUT: ','  # if you change this, you will need to change
@@ -78,10 +80,13 @@ DELIMITER_FOR_OUTPUT: ', '
 # these can be overridden in the admin controller
 INVITE_FROM_QUEUE_ENABLED: true
 INVITE_FROM_QUEUE_NUMBER: 10
-INVITE_FROM_QUEUE_FREQUENCY: 7
+# How often INVITE_FROM_QUEUE_NUMBER of invites are sent from the queue, in hours
+INVITE_FROM_QUEUE_FREQUENCY: 12
+
+HOURS_BEFORE_RESEND_INVITATION: 24
 # this is whether or not people without invitations can create accounts
 ACCOUNT_CREATION_ENABLED: false
-DAYS_TO_PURGE_UNACTIVATED: 7
+DAYS_TO_CONFIRM_EMAIL_CHANGE: 7
 # number of invites users can request
 MAX_USER_INVITE_REQUEST: 10
 # number of accounts users can block
@@ -98,7 +103,7 @@ TITLE_MIN: 1
 SUMMARY_MAX: 1250
 NOTES_MAX: 5000
 COMMENT_MAX: 10000
-TAG_MAX: 100
+TAG_MAX: 150
 CONTENT_MIN: 10
 CONTENT_MAX: 510000
 CONTENT_MAX_DISPLAYED: 500000
@@ -110,6 +115,7 @@ INFO_MAX: 100000
 FAQ_MAX: 200000
 ICON_ALT_MAX: 250
 ICON_COMMENT_MAX: 50
+ICON_SIZE_KB_MAX: 500
 LOGIN_LENGTH_MIN: 3
 LOGIN_LENGTH_MAX: 40
 PASSWORD_LENGTH_MIN: 6
@@ -161,8 +167,12 @@ IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 
 # max number of abuse reports to accept for a given user profile URL
 ABUSE_REPORTS_PER_USER_MAX: 5
+# time period, in days, used to total number of reports for a given user URL
+ABUSE_REPORTS_PER_USER_PERIOD: 31
 # max number of abuse reports to accept for a given work URL
 ABUSE_REPORTS_PER_WORK_MAX: 5
+# time period, in days, used to total number of reports for a given work URL
+ABUSE_REPORTS_PER_WORK_PERIOD: 31
 # max number of abuse reports to accept from a given email
 ABUSE_REPORTS_PER_EMAIL_MAX: 5
 
@@ -186,11 +196,17 @@ RATE_LIMIT_NUMBER: 300
 RATE_LIMIT_PERIOD: 300
 RATE_LIMIT_LOGIN_ATTEMPTS: 5
 RATE_LIMIT_LOGIN_PERIOD: 20
+RATE_LIMIT_ADMIN_LOGIN_ATTEMPTS: 10
+RATE_LIMIT_ADMIN_LOGIN_PERIOD: 300
 RATE_LIMIT_PER_NGINX_UPSTREAM:
   unicorn_elastic:
     limit: 300
     period: 300
   unicorn_elastic_bookmarks:
+    limit: 300
+    period: 300
+RATE_LIMIT_PER_NGINX_UPSTREAM_USER:
+  unicorn_elastic:
     limit: 300
     period: 300
 RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
@@ -210,6 +226,9 @@ TAGGINGS_COUNT_MIN_CACHE_COUNT: 1000
 # For tagging changes, we only reindex tags used less than a certain number of times
 TAGGINGS_COUNT_REINDEX_LIMIT: 1000
 
+# How many rows we should get from audits for historic email and login values for users
+USER_HISTORIC_VALUES_LIMIT: 10_000
+
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 
@@ -224,7 +243,7 @@ WARNING_NONE_TAG_DISPLAY_NAME: 'No Archive Warnings Apply'
 WARNING_VIOLENCE_TAG_NAME: 'Graphic Depictions Of Violence'
 WARNING_DEATH_TAG_NAME: 'Major Character Death'
 WARNING_NONCON_TAG_NAME: 'Rape/Non-Con'
-WARNING_CHAN_TAG_NAME: 'Underage'
+WARNING_CHAN_TAG_NAME: 'Underage Sex'
 
 RATING_CATEGORY_NAME: 'Rating'
 RATING_DEFAULT_TAG_NAME: 'Not Rated'
@@ -284,6 +303,10 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 # whether a comment should go back into moderation after editing or not
 COMMENT_MODERATION_THRESHOLD: 10
 
+# This is used to determine how tolerant of changes to be when determining
+# whether a comment should be spam checked again when edited
+EDITED_COMMENT_SPAM_CHECK_THRESHOLD: 10
+
 # SANITIZER VERSION
 SANITIZER_VERSION: 4
 
@@ -291,6 +314,12 @@ SANITIZER_VERSION: 4
 NONZERO_INTEGER_PARAMETERS:
   page: 1
   per_page: 25
+
+# Enable image safety mode when sanitizing comments on the following parents for
+# display. This is the parent_type of the comment, not the ultimate_parent,
+# so if you want to add extra sanitization to work comments, use Chapter here.
+# Options: AdminPost, Chapter, Tag.
+PARENTS_WITH_IMAGE_SAFETY_MODE: []
 
 # These fields are encrypted and should not have characters escaped or be treated as HTML
 FIELDS_WITHOUT_SANITIZATION: ["password", "password_check", "password_confirmation"]
@@ -321,7 +350,7 @@ FIELDS_ALLOWING_HTML: ["about_me", "bookmarker_notes", "comment", "comment_conte
 
 FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
 
-FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
+FIELDS_ALLOWING_MEDIA_EMBEDS: ["content"]
 
 FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 
@@ -342,7 +371,7 @@ BANNED_MULTIMEDIA_SRCS: []
 #
 
 # We use this list for properties which can take shorthand values and also have
-# subproperties or variants (ie, because "border" is in here, we allow through: 
+# subproperties or variants (ie, because "border" is in here, we allow through:
 # border-right, border-bottom-left-radius, -moz-border-foo, etc)
 # It is slightly less secure so do NOT put any property in here if you aren't
 # sure all variations on it are okay!
@@ -372,6 +401,7 @@ SUPPORTED_CSS_PROPERTIES:
 - -replace
 - -use-link-source
 - accelerator
+- accent-color
 - align-content
 - align-items
 - align-self
@@ -400,6 +430,7 @@ SUPPORTED_CSS_PROPERTIES:
 - clip
 - color
 - color-profile
+- color-scheme
 - content
 - counter-increment
 - counter-reset
@@ -546,12 +577,20 @@ SUPPORTED_CSS_PROPERTIES:
 - writing-mode
 - z-index
 
-# we allow through any string that is just a-z plus dashes (no spaces), so the
-# only keywords you need to specify would be ones that have something else or 
-# url, if you want to allow url values
+# We allow the !important keyword as well as any string that is just a-z plus
+# dashes, as well as space- or comma-separated lists of such strings. The only
+# keywords you need to specify are keywords that contain other characters.
+#
+# We have the URL_FUNCTION_REGEX in lib/css_cleaner.rb, but including "url" here
+# is necessary to prevent the url() function from being stripped before any
+# value containing it is sanitized. Allowing images in skins should be moved to
+# its own config variable in the future.
+#
+# Do not add other functions here; they are not keywords and are controlled by
+# regular expressions in lib/css_cleaner.rb.
 SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 
-# if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this 
+# if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this
 # kind of resource will be allowed
 SUPPORTED_EXTERNAL_URLS: ["jpg", "jpeg", "png", "gif"]
 
@@ -612,7 +651,7 @@ ACTION_UNSUSPEND: 4
 ACTION_BAN: 5
 ACTION_WARN: 6
 ACTION_RENAME: 7
-ACTION_PASSWORD_RESET: 8
+ACTION_PASSWORD_CHANGE: 8
 ACTION_NEW_EMAIL: 9
 ACTION_TROUBLESHOOT: 10
 ACTION_NOTE: 11
@@ -620,6 +659,7 @@ ACTION_ADD_FNOK: 12
 ACTION_REMOVE_FNOK: 13
 ACTION_ADDED_AS_FNOK: 14
 ACTION_REMOVED_AS_FNOK: 15
+ACTION_PASSWORD_RESET: 16
 
 
 # Elasticsearch index prefix
@@ -639,6 +679,9 @@ CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 # Cache durations for work and bookmark searches (in seconds)
 SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
 SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
+
+# Cache duration for commentable kudos list of names
+MINUTES_UNTIL_COMMENTABLE_KUDOS_LISTS_EXPIRE: 60
 
 # Cache duration for comment counts:
 SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
@@ -664,7 +707,8 @@ HIT_COUNT_ROLLOVER_HOUR: 3
 # The batch size for calculating a work's filters from its tags:
 FILTER_UPDATE_BATCH_SIZE: 100
 
-# URLs for which we should not display the proxy notice. Alphabetical by
+# URLs for which we should not display the proxy notice. URLs from these hosts
+# are allowed in Abuse reports and disallowed in Work imports. Alphabetical by
 # environment.
 PERMITTED_HOSTS: [
   # Production
@@ -726,5 +770,12 @@ PERCONA_ARGS: >
   --max-load Threads_running=15
   --critical-load Threads_running=100
   --set-vars innodb_lock_wait_timeout=2
-  --alter-foreign-keys-method=auto
+  --alter-foreign-keys-method=rebuild_constraints
   --no-check-unique-key-change
+
+# How many shards to have in elastic indexes.
+# Production may have more than 5 for these
+BOOKMARKABLE_SHARDS: 5
+COLLECTION_SHARDS: 5
+WORKS_SHARDS: 5
+USER_SHARDS: 5

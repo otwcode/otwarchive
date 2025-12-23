@@ -1,6 +1,6 @@
 <% content_for :message do %>
 <% if @username.present? %>
-<%= t("mailer.general.greeting.informal.addressed", name: @username) %>
+<%= t("mailer.general.greeting.informal.addressed_html", name: @username) %>
 <% else %>
 <%= t("mailer.general.greeting.informal.unaddressed") %>
 <% end %>
@@ -13,14 +13,14 @@
 
 <%= text_divider %>
 
-<%= work_metadata_label(t(".copy.url")) %>
+<%= metadata_label(t(".copy.url")) %>
 <%= to_plain_text(@url) %>
 
-<%= work_metadata_label(t(".copy.summary")) %>
+<%= metadata_label(t(".copy.summary")) %>
 <%= to_plain_text(raw @summary) %>
 
-<%= work_metadata_label(t(".copy.comment")) %>
-<%= to_plain_text(raw @comment) %>
+<%= metadata_label(t(".copy.comment")) %>
+<%= to_plain_text(raw(strip_images(@comment, keep_src: true))) %>
 
 <%= text_divider %>
 
@@ -30,4 +30,4 @@
 <%= t("mailer.general.signature.abuse_team") %>
 <% end %>
 
-<% content_for :sent_at do %><%= l(Time.now) %><% end %>
+<% content_for :sent_at do %><%= l(Time.current) %><% end %>

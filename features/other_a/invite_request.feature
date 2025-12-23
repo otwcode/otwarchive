@@ -23,8 +23,7 @@ Feature: Invite requests
   Scenario: Admin sees the request
 
     Given invitations are required
-      And I am logged in as "user1"
-      And I request some invites
+      And one user invite request
     When I view requests as an admin
     Then I should see "user1"
       And the "requests[user1]" field should contain "3"
@@ -33,8 +32,7 @@ Feature: Invite requests
   Scenario: Admin can refuse request
 
     Given invitations are required
-      And I am logged in as "user1"
-      And I request some invites
+      And one user invite request
     When I view requests as an admin
       And I fill in "requests[user1]" with "0"
       And I press "Update"
@@ -44,8 +42,7 @@ Feature: Invite requests
   Scenario: Admin can grant request
 
     Given invitations are required
-      And I am logged in as "user1"
-      And I request some invites
+      And one user invite request
     When I view requests as an admin
       And I fill in "requests[user1]" with "2"
       And I press "Update"
@@ -54,8 +51,7 @@ Feature: Invite requests
   Scenario: User is granted invites
 
     Given invitations are required
-      And I am logged in as "user1"
-      And I request some invites
+      And one user invite request
       And an admin grants the request
     When I try to invite a friend from my user page
     Then I should see "Invite a friend"
@@ -75,8 +71,7 @@ Feature: Invite requests
   Scenario: User can send out invites they have been granted, and the recipient can sign up
 
     Given invitations are required
-      And I am logged in as "user1"
-      And I request some invites
+      And one user invite request
       And an admin grants the request
       And I try to invite a friend from my user page
     When all emails have been delivered
@@ -101,16 +96,17 @@ Feature: Invite requests
 
   Scenario: Banned users cannot access their invitations page
 
-    Given I am logged in as a banned user
-    When I go to my invitations page
-    Then I should be on my user page
-    And I should see "Your account has been banned."
+    Given the user "bad_user" is banned
+      And I am logged in as "bad_user"
+    When I go to bad_user's invitations page
+    Then I should be on bad_user's user page
+      And I should see "Your account has been banned."
 
   Scenario:  A user can manage their invitations
 
     Given I am logged in as "user1"
       And "user1" has "5" invitations
-    When I go to my user page
+    When I go to user1's user page
      And I follow "Invitations"
      And I follow "Manage Invitations"
     Then I should see "Unsent (5)"
@@ -151,8 +147,38 @@ Feature: Invite requests
       And I am logged in as a "support" admin
     When I follow "Invite New Users"
       And I fill in "invitation[user_name]" with "user1"
-      And I press "Go"
-    Then I should see "Token"
+      And I press "Search" within "form.invitation.simple.search"
+    Then I should see "Invite token"
     When I follow "Delete"
     Then I should see "Invitation successfully destroyed"
       And "user1" should have "4" invitations
+
+  Scenario: Translated email is sent when invitation request is declined by admin
+    Given a locale with translated emails
+      And invitations are required
+      And the user "user1" exists and is activated
+      And the user "notuser1" exists and is activated
+      And the user "user1" enables translated emails
+      And all emails have been delivered
+    When as "user1" I request some invites
+      And as "notuser1" I request some invites 
+      And I view requests as an admin
+      And I press "Decline All"
+    Then "user1" should be emailed
+      And the email should have "Additional invitation request declined" in the subject
+      And the email to "user1" should be translated
+    Then "notuser1" should be emailed
+      And the email should have "Additional invitation request declined" in the subject
+      And the email to "notuser1" should be non-translated
+
+  Scenario: Translated email is sent when new invitation is given to registered user
+    Given a locale with translated emails
+      And invitations are required
+      And the user "user1" exists and is activated
+      And the user "user1" enables translated emails
+      And all emails have been delivered
+    When as "user1" I request some invites
+      And an admin grants the request
+    Then "user1" should be emailed
+      And the email should have "New invitations" in the subject
+      And the email to "user1" should be translated

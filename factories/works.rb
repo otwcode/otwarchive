@@ -32,6 +32,10 @@ FactoryBot.define do
     factory :draft do
       posted { false }
     end
+
+    trait :guest_comments_on do
+      comment_permissions { :enable_all }
+    end
   end
 
   factory :external_work do
@@ -54,6 +58,7 @@ FactoryBot.define do
 
   factory :external_author_name do |f|
     f.association :external_author
+    name { Faker::Name.first_name }
   end
 
   factory :external_creatorship do |f|

@@ -1,14 +1,14 @@
 class ArchiveFaqsController < ApplicationController
-
   before_action :admin_only, except: [:index, :show]
   before_action :set_locale
   before_action :validate_locale, if: :logged_in_as_admin?
   before_action :require_language_id
+  before_action :default_locale_only, only: [:new, :create, :manage, :update_positions, :confirm_delete, :destroy]
   around_action :with_locale
 
   # GET /archive_faqs
   def index
-    @archive_faqs = ArchiveFaq.order('position ASC')
+    @archive_faqs = ArchiveFaq.order("position ASC")
     unless logged_in_as_admin?
       @archive_faqs = @archive_faqs.with_translations(I18n.locale)
     end
@@ -40,14 +40,14 @@ class ArchiveFaqsController < ApplicationController
   end
 
   protected
+
   def build_questions
-    notice = ""
     num_to_build = params["num_questions"] ? params["num_questions"].to_i : @archive_faq.questions.count
     if num_to_build < @archive_faq.questions.count
-      notice += ts("There are currently %{num} questions. You can only submit a number equal to or greater than %{num}. ", num: @archive_faq.questions.count)
+      notice = ts("There are currently %{num} questions. You can only submit a number equal to or greater than %{num}. ", num: @archive_faq.questions.count)
       num_to_build = @archive_faq.questions.count
     elsif params["num_questions"]
-      notice += ts("Set up %{num} questions. ", num: num_to_build)
+      notice = ts("Set up %{num} questions. ", num: num_to_build)
     end
     num_existing = @archive_faq.questions.count
     num_existing.upto(num_to_build-1) do
@@ -59,9 +59,10 @@ class ArchiveFaqsController < ApplicationController
   end
 
   public
+
   # GET /archive_faqs/new
   def new
-    @archive_faq = ArchiveFaq.new
+    @archive_faq = authorize ArchiveFaq.new
     1.times { @archive_faq.questions.build(attributes: { question: "This is a temporary question", content: "This is temporary content", anchor: "ThisIsATemporaryAnchor"})}
     respond_to do |format|
       format.html # new.html.erb
@@ -70,32 +71,34 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1/edit
   def edit
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
+    authorize :archive_faq, :full_access? if default_locale?
     build_questions
   end
 
   # GET /archive_faqs/manage
   def manage
-    @archive_faqs = ArchiveFaq.order('position ASC')
+    @archive_faqs = authorize ArchiveFaq.order("position ASC")
   end
 
   # POST /archive_faqs
   def create
-    @archive_faq = ArchiveFaq.new(archive_faq_params)
-      if @archive_faq.save
-        flash[:notice] = 'ArchiveFaq was successfully created.'
-        redirect_to(@archive_faq)
-      else
-        render action: "new"
-      end
+    @archive_faq = authorize ArchiveFaq.new(archive_faq_params)
+    if @archive_faq.save
+      flash[:notice] = t(".success")
+      redirect_to(@archive_faq)
+    else
+      render action: "new"
+    end
   end
 
   # PUT /archive_faqs/1
   def update
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
+    authorize :archive_faq, :full_access? if default_locale?
 
     if @archive_faq.update(archive_faq_params)
-      flash[:notice] = 'ArchiveFaq was successfully updated.'
+      flash[:notice] = t(".success")
       redirect_to(@archive_faq)
     else
       render action: "edit"
@@ -104,9 +107,10 @@ class ArchiveFaqsController < ApplicationController
 
   # reorder FAQs
   def update_positions
+    authorize :archive_faq
     if params[:archive_faqs]
       @archive_faqs = ArchiveFaq.reorder_list(params[:archive_faqs])
-      flash[:notice] = ts("Archive FAQs order was successfully updated.")
+      flash[:notice] = t(".success")
     elsif params[:archive_faq]
       params[:archive_faq].each_with_index do |id, position|
         ArchiveFaq.update(id, position: position + 1)
@@ -149,6 +153,13 @@ class ArchiveFaqsController < ApplicationController
     redirect_to url_for(request.query_parameters.merge(language_id: @i18n_locale.to_s))
   end
 
+  def default_locale_only
+    return if default_locale?
+
+    flash[:error] = t("archive_faqs.default_locale_only")
+    redirect_to archive_faqs_path
+  end
+
   # Setting I18n.locale directly is not thread safe
   def with_locale
     I18n.with_locale(@i18n_locale) { yield }
@@ -156,17 +167,21 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1/confirm_delete
   def confirm_delete
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
   end
 
   # DELETE /archive_faqs/1
   def destroy
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
     @archive_faq.destroy
     redirect_to(archive_faqs_path)
   end
 
   private
+
+  def default_locale?
+    @i18n_locale.to_s == I18n.default_locale.to_s
+  end
 
   def archive_faq_params
     params.require(:archive_faq).permit(

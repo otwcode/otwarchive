@@ -18,6 +18,7 @@ When /^I fill in the basic work information for "([^"]*)"$/ do |title|
   select("English", from: "work_language_id")
   fill_in("content", with: DEFAULT_CONTENT)
 end
+
 # Here we set up a draft and can then post it as a draft, preview and post, post,
 # or fill in additional information on the work form.
 # Example: I set up the draft "Foo"
@@ -39,29 +40,27 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with cha
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
-  select(rating.blank? ? DEFAULT_RATING : rating, from: "Rating")
-  check(category.blank? ? DEFAULT_CATEGORY : category)
-  fill_in("Fandoms", with: (fandom.blank? ? DEFAULT_FANDOM : fandom))
-  fill_in("Additional Tags", with: (freeform.blank? ? DEFAULT_FREEFORM : freeform)+(freeform2.blank? ? '' : ','+freeform2))
-  unless character.blank?
-    fill_in("work[character_string]", with: character + ( character2.blank? ? '' : ','+character2 ) )
+  select(rating.presence || DEFAULT_RATING, from: "Rating")
+  check(category.presence || DEFAULT_CATEGORY)
+  fill_in("Fandoms", with: (fandom.presence || DEFAULT_FANDOM))
+  fill_in("Additional Tags", with: (freeform.presence || DEFAULT_FREEFORM) + (freeform2.blank? ? "" : ",#{freeform2}"))
+  if character.present?
+    fill_in("work[character_string]", with: character + (character2.blank? ? "" : ",#{character2}"))
   end
-  unless collection.blank?
+  if collection.present?
     c = Collection.find_by(title: collection)
     fill_in("Collections", with: c.name)
   end
-  unless series.blank?
+  if series.present?
     if page.has_select?("work[series_attributes][id]", with_options: [series])
       select(series, from: "work[series_attributes][id]")
     else
       fill_in("work[series_attributes][title]", with: series)
     end
   end
-  unless relationship.blank?
-    fill_in("work[relationship_string]", with: relationship)
-  end
-  select(pseud, from: "work[author_attributes][ids][]") unless pseud.blank?
-  fill_in("work_recipients", with: "#{recipient}") unless recipient.blank?
+  fill_in("work[relationship_string]", with: relationship) if relationship.present?
+  select(pseud, from: "work[author_attributes][ids][]") if pseud.present?
+  fill_in("work_recipients", with: recipient.to_s) if recipient.present?
 end
 
 # This is the same regexp as above
@@ -70,15 +69,14 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
   work = Work.find_by(title: title)
   if work
     visit preview_work_path(work)
-    click_button("Post")
   else
-    # Note: this will match the above regexp and work just fine even if all the options are blank!
+    # NOTE: this will match the above regexp and work just fine even if all the options are blank!
     step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" with rating "#{rating}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
-    click_button("Post")
   end
+  click_button("Post")
   # Now add the chapters
   if number_of_chapters.present? && number_of_chapters.to_i > 1
-    work = Work.find_by_title(title)
+    work = Work.find_by(title: title)
     visit work_path(work)
     (number_of_chapters.to_i - 1).times do
       step %{I follow "Add Chapter"}
@@ -110,24 +108,12 @@ end
 
 ### GIVEN
 
-Given(/^I have the Battle set loaded$/) do
-  step %{I have loaded the fixtures}
-  step %{I have Battle 12 prompt meme fully set up}
-  step %{everyone has signed up for Battle 12}
-  step %{mod fulfills claim}
-  step %{I reveal the "Battle 12" challenge}
-  step %{I am logged in as "myname4"}
-  step %{the statistics for all works are updated}
-  step %{all indexing jobs have been run}
-end
-
 Given /^I have no works or comments$/ do
   Work.delete_all
   Comment.delete_all
 end
 
 Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)? "([^"]*)"$/ do |n_chapters, n_comments, title|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -151,13 +137,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
 end
 
 Given /^I have a work "([^"]*)"$/ do |work|
-  step %{I am logged in as a random user}
-  step %{I post the work "#{work}"}
-end
-
-Given /^I have a locked work "([^"]*)"$/ do |work|
-  step %{I am logged in as a random user}
-  step %{I post the locked work "#{work}"}
+  step %{the work "#{work}"}
 end
 
 Given /^I have a multi-chapter draft$/ do
@@ -166,7 +146,6 @@ Given /^I have a multi-chapter draft$/ do
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -178,7 +157,6 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -214,10 +192,33 @@ Given "the work {string} by {string}" do |title, login|
   FactoryBot.create(:work, title: title, authors: [user.default_pseud])
 end
 
+Given "the work {string} by {string} with fandom {string}" do |title, login, fandom|
+  user = ensure_user(login)
+  FactoryBot.create(:work, title: title, authors: [user.default_pseud], fandom_string: fandom)
+end
+
+Given "the work {string} by {string} with guest comments enabled" do |title, login|
+  user = ensure_user(login)
+  FactoryBot.create(:work, :guest_comments_on, title: title, authors: [user.default_pseud])
+end
+
 Given "the work {string} by {string} and {string}" do |title, login1, login2|
   user1 = ensure_user(login1)
   user2 = ensure_user(login2)
   FactoryBot.create(:work, title: title, authors: [user1.default_pseud, user2.default_pseud])
+end
+
+Given "the work {string} by {string}, {string} and {string}" do |title, login1, login2, login3|
+  user1 = ensure_user(login1)
+  user2 = ensure_user(login2)
+  user3 = ensure_user(login3)
+  FactoryBot.create(:work, title: title, authors: [user1.default_pseud, user2.default_pseud, user3.default_pseud])
+end
+
+Given "the work {string} by {string} and {string} with guest comments enabled" do |title, login1, login2|
+  user1 = ensure_user(login1)
+  user2 = ensure_user(login2)
+  FactoryBot.create(:work, :guest_comments_on, title: title, authors: [user1.default_pseud, user2.default_pseud])
 end
 
 Given /^the work "([^\"]*)" by "([^\"]*)" with chapter two co-authored with "([^\"]*)"$/ do |work, author, coauthor|
@@ -245,12 +246,17 @@ Given /^I am logged in as the author of "([^"]*)"$/ do |work|
   step %{I am logged in as "#{work.users.first.login}"}
 end
 
-Given /^the spam work "([^\"]*)"$/ do |work|
-  step %{I have a work "#{work}"}
-  step %{I log out}
-  w = Work.find_by_title(work)
+Given "the spam work {string}" do |work|
+  FactoryBot.create(:work, title: work).update_attribute(:spam, true)
+end
+
+Given "the hidden work {string}" do |work|
+  FactoryBot.create(:work, title: work).update_attribute(:hidden_by_admin, true)
+end
+
+Given "the work {string} is marked as spam" do |work|
+  w = Work.find_by(title: work)
   w.update_attribute(:spam, true)
-  w.update_attribute(:hidden_by_admin, true)
 end
 
 Given "the user-defined tag limit is {int}" do |count|
@@ -315,6 +321,12 @@ When /^I post the work "([^"]*)" without preview$/ do |title|
   step %{I post the work "#{title}"}
 end
 
+When "I post the work {string} with guest comments enabled" do |title|
+  step %{I set up the draft "#{title}"}
+  choose("Registered users and guests can comment")
+  step "I post the work without preview"
+end
+
 When /^a chapter is added to "([^"]*)"$/ do |work_title|
   step %{a draft chapter is added to "#{work_title}"}
   click_button("Post")
@@ -348,11 +360,12 @@ When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
 end
 
 # Posts a chapter for the current user
-When /^I post a chapter for the work "([^"]*)"$/ do |work_title|
+When /^I post a chapter for the work "([^"]*)"(?: as "(.*?)")?$/ do |work_title, pseud|
   work = Work.find_by(title: work_title)
   visit work_url(work)
   step %{I follow "Add Chapter"}
   step %{I fill in "content" with "la la la la la la la la la la la"}
+  select(pseud, from: "chapter_author_attributes_ids") if pseud.present?
   step %{I post the chapter}
 end
 
@@ -410,7 +423,9 @@ When /^I edit the multiple works "([^"]*)" and "([^"]*)"/ do |title1, title2|
   unless Work.where(title: title2).exists?
     step %{I post the work "#{title2}"}
   end
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "#{title1}" for editing}
   step %{I select "#{title2}" for editing}
   step %{I press "Edit"}
@@ -419,9 +434,12 @@ end
 When /^I edit multiple works with different comment moderation settings$/ do
   step %{I set up the draft "Work with Comment Moderation Enabled"}
   check("work_moderated_commenting_enabled")
+  choose("Registered users and guests can comment")
   step %{I post the work without preview}
   step %{I post the work "Work with Comment Moderation Disabled"}
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "Work with Comment Moderation Enabled" for editing}
   step %{I select "Work with Comment Moderation Disabled" for editing}
   step %{I press "Edit"}
@@ -440,7 +458,9 @@ When /^I edit multiple works with different commenting settings$/ do
   choose("No one can comment")
   step %{I post the work without preview}
 
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "Work with All Commenting Enabled" for editing}
   step %{I select "Work with Anonymous Commenting Disabled" for editing}
   step %{I select "Work with All Commenting Disabled" for editing}
@@ -450,7 +470,9 @@ end
 When /^I edit multiple works coauthored as "(.*)" with "(.*)"$/ do |author, coauthor|
   step %{I coauthored the work "Shared Work 1" as "#{author}" with "#{coauthor}"}
   step %{I coauthored the work "Shared Work 2" as "#{author}" with "#{coauthor}"}
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "Shared Work 1" for editing}
   step %{I select "Shared Work 2" for editing}
   step %{I press "Edit"}
@@ -497,7 +519,7 @@ end
 When /^I lock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I lock the work}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I unlock the work$/ do
@@ -507,7 +529,7 @@ end
 When /^I unlock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I unlock the work}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I list the work "([^"]*)" as inspiration$/ do |title|
@@ -620,7 +642,7 @@ end
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
   step %{I edit the work "#{work}"}
   step %{I invite the co-author "#{coauthor}"}
-  step %{I post the work without preview}
+  step %{I update the work}
   step %{the user "#{coauthor}" accepts the creator invite for the work "#{work}"}
 end
 
@@ -665,22 +687,24 @@ When /^I add the end notes "([^"]*)"$/ do |notes|
   fill_in("work_endnotes", with: "#{notes}")
 end
 
-When /^I add the beginning notes "([^"]*)" to the work "([^"]*)"$/ do |notes, work|
+When "I add the beginning notes {string} to the work {string}" do |notes, work|
+  step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the beginning notes "#{notes}"}
-  step %{I post the work without preview}
+  step %{I update the work}
 end
 
-When /^I add the end notes "([^"]*)" to the work "([^"]*)"$/ do |notes, work|
+When "I add the end notes {string} to the work {string}" do |notes, work|
+  step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the end notes "#{notes}"}
-  step %{I post the work without preview}
+  step %{I update the work}
 end
 
 When /^I mark the work "([^"]*)" for later$/ do |work|
   work = Work.find_by(title: work)
   visit work_url(work)
-  step %{I follow "Mark for Later"}
+  step %{I press "Mark for Later"}
   step "the readings are saved to the database"
 end
 
@@ -776,4 +800,40 @@ end
 Then "I should not see {string} within the work blurb of {string}" do |content, work|
   work = Work.find_by(title: work)
   step %{I should not see "#{content}" within "li#work_#{work.id}"}
+end
+
+Then "I should see an HTML comment containing the number {int} within {string}" do |expected_number, selector|
+  html = page.find(selector).native.inner_html
+  comment_match = html.match(/.*<!--[^\d]*(\d+)[^\d]*-->.*/)
+  expect(comment_match).not_to be_nil
+  number = comment_match[1].to_i
+  expect(number).to eq(expected_number)
+end
+
+Then "I should see the work header navigation" do
+  expect(page).to have_css("ul.work.navigation.actions")
+end
+
+Then "I should not see the work header navigation" do
+  expect(page).not_to have_css("ul.work.navigation.actions")
+end
+
+Then "I should see the work meta" do
+  expect(page).to have_css("dl.work.meta.group")
+end
+
+Then "I should not see the work meta" do
+  expect(page).not_to have_css("dl.work.meta.group")
+end
+
+Then "I should see the work styles" do
+  expect(page).to have_css("#main style[type=\"text/css\"]")
+end
+
+Then "I should see the work preface" do
+  expect(page).to have_css("div.preface.group h2.title.heading")
+end
+
+Then "I should not see the work preface" do
+  expect(page).not_to have_css("div.preface.group h2.title.heading")
 end

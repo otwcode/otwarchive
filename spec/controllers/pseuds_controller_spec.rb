@@ -57,7 +57,21 @@ describe PseudsController do
   let(:user) { create(:user) }
   let(:pseud) { user.pseuds.first }
 
-  describe "edit" do
+  describe "GET #show" do
+    it "raises a NotFound error if user_id exists but pseud does not exist" do
+      expect do
+        get :show, params: { user_id: user, id: "nonexistent_pseud" }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "raises a NotFound error if user_id does not exist" do
+      expect do
+        get :show, params: { user_id: "nonexistent_user", id: pseud }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe "GET #edit" do
     subject { -> { get :edit, params: { user_id: user, id: pseud } } }
 
     context "when logged in as admin" do
@@ -76,12 +90,31 @@ describe PseudsController do
             subject.call
             expect(response).to render_template(:edit)
           end
+
+          it "returns NotFound error when pseud doesn't exist" do
+            expect { get :edit, params: { user_id: user, id: "fake_pseud" } }
+              .to raise_error(ActiveRecord::RecordNotFound)
+          end
+
+          it "returns NotFound error when user doesn't exist" do
+            expect { get :edit, params: { user_id: "fake_user", id: pseud } }
+              .to raise_error(ActiveRecord::RecordNotFound)
+          end
         end
+      end
+    end
+
+    context "when logged in as user" do
+      before { fake_login_known_user(user) }
+
+      it "returns NotFound error when pseud doesn't exist" do
+        expect { get :edit, params: { user_id: user, id: "fake_pseud" } }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
 
-  describe "update" do
+  describe "PUT #update" do
     shared_examples "an attribute that can be updated by an admin" do
       it "redirects to user_pseud_path with notice" do
         put :update, params: params
@@ -140,8 +173,7 @@ describe PseudsController do
               let(:params) { { user_id: user, id: pseud, pseud: { delete_icon: "1", ticket_number: 1 } } }
 
               before do
-                pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
-                pseud.save
+                pseud.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
               end
 
               it_behaves_like "an attribute that can be updated by an admin"
@@ -149,9 +181,9 @@ describe PseudsController do
               it "removes pseud icon" do
                 expect do
                   put :update, params: params
-                end.to change { pseud.reload.icon_file_name }
-                  .from("icon.gif")
-                  .to(nil)
+                end.to change { pseud.reload.icon.attached? }
+                  .from(true)
+                  .to(false)
               end
             end
 
@@ -186,7 +218,7 @@ describe PseudsController do
     end
   end
 
-  describe "destroy" do
+  describe "DELETE #destroy" do
     subject { -> { post :destroy, params: { user_id: user, id: pseud } } }
 
     context "when logged in as admin" do
@@ -212,13 +244,13 @@ describe PseudsController do
           matching_pseud.reload
 
           post :destroy, params: { user_id: user, id: matching_pseud }
-          it_redirects_to_with_error(user_pseuds_path(user), "You cannot delete the pseud matching your user name, sorry!")
+          it_redirects_to_with_error(user_pseuds_path(user), "You cannot delete the pseud matching your username, sorry!")
         end
       end
     end
   end
 
-  describe "new" do
+  describe "GET #new" do
     subject { -> { get :new, params: { user_id: user } } }
 
     context "when logged in as admin" do
@@ -226,11 +258,19 @@ describe PseudsController do
     end
   end
 
-  describe "create" do
+  describe "POST #create" do
     subject { -> { post :create, params: { user_id: user } } }
 
     context "when logged in as admin" do
       it_behaves_like "an action admins can't access"
+    end
+  end
+
+  describe "GET #index" do
+    it "raises a NotFound error if user_id does not exist" do
+      expect do
+        get :index, params: { user_id: "nonexistent_user" }
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

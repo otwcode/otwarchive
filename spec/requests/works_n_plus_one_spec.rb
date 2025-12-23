@@ -6,7 +6,6 @@ describe "n+1 queries in the WorksController" do
   shared_examples "displaying multiple works efficiently" do
     context "when all works are cached", :n_plus_one do
       populate do |n|
-        User.current_user = nil # prevent treating the logged-in user as the work creator
         WorkIndexer.prepare_for_testing
         create_list(:work, n, **work_attributes)
         run_all_indexing_jobs
@@ -23,7 +22,6 @@ describe "n+1 queries in the WorksController" do
 
     context "when no works are cached", :n_plus_one do
       populate do |n|
-        User.current_user = nil # prevent treating the logged-in user as the work creator
         WorkIndexer.prepare_for_testing
         create_list(:work, n, **work_attributes)
         run_all_indexing_jobs
@@ -73,6 +71,29 @@ describe "n+1 queries in the WorksController" do
       end
 
       let!(:work_attributes) { {} }
+
+      context "when logged in" do
+        before { fake_login }
+
+        it_behaves_like "displaying multiple works efficiently"
+      end
+
+      context "when logged out" do
+        it_behaves_like "displaying multiple works efficiently"
+      end
+    end
+
+    context "when viewing imported recent works" do
+      subject do
+        proc do
+          get works_path
+        end
+      end
+
+      let!(:work_attributes) do
+        archivist = create(:archivist)
+        { authors: [archivist.default_pseud], external_creatorships: [create(:external_creatorship, archivist: archivist)] }
+      end
 
       context "when logged in" do
         before { fake_login }

@@ -16,12 +16,12 @@ Feature: Sign Up for a new account
     Then I should see "<error>"
       And I should not see "Almost Done!"
     Examples:
-      | field                      | value          | error                                           |
-      | user_registration_login                 | xx             | User name is too short (minimum is 3 characters)|
-      | user_registration_login                 | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | User name is too long (maximum is 40 characters)    |
+      | field                                   | value          | error                                           |
+      | user_registration_login                 | xx             | Username is too short (minimum is 3 characters)|
+      | user_registration_login                 | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Username is too long (maximum is 40 characters)    |
       | user_registration_password              | pass           | Password is too short (minimum is 6 characters) |
       | user_registration_password              | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Password is too long (maximum is 40 characters)    |
-      | user_registration_password_confirmation | password2      | Password confirmation doesn't match             |
+      | user_registration_password_confirmation | password2      | The passwords you entered do not match. Please try again.|
       | user_registration_email                 |                | Email should look like an email address         |
       | user_registration_email                 | fake@fake@fake | Email should look like an email address         |
 
@@ -30,21 +30,22 @@ Feature: Sign Up for a new account
     Then I should see "<error>"
       And I should not see "Almost Done!"
     Examples:
-      | field                 | error                                                               |
-      | user_registration_age_over_13      | Sorry, you have to be over 13!                                      |
-      | user_registration_terms_of_service | Sorry, you need to accept the Terms of Service in order to sign up. |
+      | field                              | error                                                                                   |
+      | user_registration_age_over_13      | Sorry, you have to be over 13!                                                          |
+      | user_registration_terms_of_service | Sorry, you need to accept the Terms of Service in order to sign up.                     |
+      | user_registration_data_processing  | Sorry, you need to consent to the processing of your personal data in order to sign up. |
 
   Scenario: The user should be able to sign up after fixing form errors.
     When I fill in the sign up form with valid data
       And I fill in "Valid email" with "lyingrobot@example.com"
-      And I uncheck "Yes, I have read the Terms of Service and agree to them."
+      And I uncheck "Yes, I have read the Terms of Service, including the Content Policy and Privacy Policy, and agree to them."
       And I press "Create Account"
     Then I should see "Sorry, you need to accept the Terms of Service in order to sign up."
       And I should not see "Sorry, you have to be over 13!"
       # Email should be what the user filled in, not the invitee email on the invitation
       And I should see "lyingrobot@example.com" in the "Valid email" input
 
-    When I check "Yes, I have read the Terms of Service and agree to them."
+    When I check "Yes, I have read the Terms of Service, including the Content Policy and Privacy Policy, and agree to them."
       And I fill in "Password" with "password"
       And I fill in "Confirm password" with "password"
       And all emails have been delivered
@@ -61,7 +62,7 @@ Feature: Sign Up for a new account
     When I fill in the sign up form with valid data
       And I fill in "user_registration_login" with "user1"
       And I press "Create Account"
-    Then I should see "User name has already been taken"
+    Then I should see "Username has already been taken"
       And I should not see "Almost Done!"
 
   Scenario: The user should not be able to sign up with a login that is already in use, no matter the case
@@ -71,13 +72,22 @@ Feature: Sign Up for a new account
     When I fill in the sign up form with valid data
       And I fill in "user_registration_login" with "USER1"
       And I press "Create Account"
-    Then I should see "User name has already been taken"
+    Then I should see "Username has already been taken"
       And I should not see "Almost Done!"
 
-  Scenario: The user should be able to create a new account with a valid email and password
+  Scenario: The user should be able to create and activate a new account with a valid email and password
     When I fill in the sign up form with valid data
-      And all emails have been delivered
+    Then I should see the page title "Create Account"
+    When all emails have been delivered
       And I press "Create Account"
-    Then I should see "Almost Done!"
+    Then I should see the page title "Account Created"
+      And I should see "Almost Done!"
       And I should get a new user activation email
       And a new user account should exist
+    When I go to the activation page for "newuser"
+    Then I should see "Account activation complete! Please log in."
+    When I fill in "Username or email:" with "newuser" within "#main"
+      And I fill in "Password:" with "password1" within "#main"
+      And I press "Log in" within "#main"
+    Then I should be on newuser's user page
+      And I should not see "Your account has already been activated."

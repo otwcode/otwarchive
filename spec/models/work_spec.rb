@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Work do
   # see lib/collectible_spec for collection-related tests
@@ -10,16 +10,17 @@ describe Work do
   context "when posted" do
     it "posts the first chapter" do
       work = create(:work)
-      work.first_chapter.posted.should == true
+      expect(work.first_chapter.posted).to eq true
     end
   end
 
   context "create_stat_counter" do
     it "creates a stat counter for that work id" do
-      expect {
+      expect do
         @work = build(:work)
         @work.save!
-      }.to change{ StatCounter.all.count }.by(1)
+      end.to change { StatCounter.all.count }
+        .by(1)
       expect(StatCounter.where(work_id: @work.id)).to exist
     end
   end
@@ -48,10 +49,10 @@ describe Work do
 
     let(:too_short) { ArchiveConfig.TITLE_MIN - 1 }
     it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
-      expect {
+      expect do
         @work = create(:work, title: "     #{too_short}")
         @work.reload
-      }.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
+      end.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
     end
 
     # Reset the min characters in the title, so that the factory is valid
@@ -121,149 +122,86 @@ describe Work do
     end
   end
 
-  describe "#crossover" do
-    it "is not crossover with one fandom" do
-      fandom = create(:canonical_fandom, name: "nge")
-      work = create(:work, fandoms: [fandom])
-      expect(work.crossover).to be_falsy
-    end
+  describe "reindexing" do
+    let!(:work) { create(:work) }
 
-    it "is not crossover with one fandom and one of its synonyms" do
-      rel = create(:canonical_fandom, name: "evanescence")
-      syn = create(:fandom, name: "can't wake up (wake me up inside)", merger: rel)
-      work = create(:work, fandoms: [rel, syn])
-      expect(work.crossover).to be_falsy
-    end
-
-    it "is not crossover with multiple synonyms of one fandom" do
-      rel = create(:canonical_fandom, name: "nge")
-      syn1 = create(:fandom, name: "eva", merger: rel)
-      syn2 = create(:fandom, name: "end of eva", merger: rel)
-      work = create(:work, fandoms: [syn1, syn2])
-      expect(work.crossover).to be_falsy
-    end
-
-    it "is not crossover with fandoms sharing a direct meta tag" do
-      rel1 = create(:canonical_fandom, name: "rebuild")
-      rel2 = create(:canonical_fandom, name: "campus apocalypse")
-      meta_tag = create(:canonical_fandom, name: "nge")
-      meta_tag.update_attribute(:sub_tag_string, "#{rel1.name},#{rel2.name}")
-      rel1.reload
-      rel2.reload
-
-      work = create(:work, fandoms: [rel1, rel2])
-      expect(work.crossover).to be_falsy
-    end
-
-    it "is not a crossover between fandoms sharing an indirect meta tag" do
-      grand = create(:canonical_fandom)
-      parent1 = create(:canonical_fandom)
-      parent2 = create(:canonical_fandom)
-      child1 = create(:canonical_fandom)
-      child2 = create(:canonical_fandom)
-
-      grand.update_attribute(:sub_tag_string, "#{parent1.name},#{parent2.name}")
-      child1.update_attribute(:meta_tag_string, parent1.name)
-      child2.update_attribute(:meta_tag_string, parent2.name)
-
-      work = create(:work, fandom_string: "#{child1.name},#{child2.name}")
-      expect(work.crossover).to be_falsey
-    end
-
-    it "is crossover with fandoms in different meta tag trees" do
-      rel1 = create(:canonical_fandom, name: "rebuild again eventually")
-      rel2 = create(:canonical_fandom, name: "evanescence")
-      meta_tag = create(:canonical_fandom, name: "rebuild")
-      meta_tag.update_attribute(:sub_tag_string, rel1.name)
-      super_meta_tag = create(:canonical_fandom, name: "nge")
-      super_meta_tag.update_attribute(:sub_tag_string, meta_tag.name)
-
-      rel1.reload
-      rel2.reload
-      meta_tag.reload
-      super_meta_tag.reload
-
-      work = create(:work, fandoms: [rel1, rel2])
-      expect(work.crossover).to be_truthy
-
-      work = create(:work, fandoms: [meta_tag, super_meta_tag])
-      expect(work.crossover).to be_falsy
-    end
-
-    it "is crossover with unrelated fandoms" do
-      ships = [create(:canonical_fandom, name: "nge"), create(:canonical_fandom, name: "evanescence")]
-      work = create(:work, fandoms: ships)
-      expect(work.crossover).to be_truthy
-    end
-
-    it "is a crossover when missing meta-taggings" do
-      f1 = create(:canonical_fandom)
-      f2 = create(:canonical_fandom)
-      f3 = create(:canonical_fandom)
-      unrelated = create(:canonical_fandom)
-
-      f2.update_attribute(:meta_tag_string, f3.name)
-      f2.update_attribute(:sub_tag_string, f1.name)
-      f1.meta_tags.delete(f3)
-
-      work = create(:work, fandom_string: "#{f1.name}, #{unrelated.name}")
-      expect(work.crossover).to be_truthy
-    end
-
-    context "when one tagged fandom has two unrelated meta tags" do
-      let(:meta1) { create(:canonical_fandom) }
-      let(:meta2) { create(:canonical_fandom) }
-      let(:fandom) { create(:canonical_fandom) }
-
-      before do
-        fandom.update_attribute(:meta_tag_string, "#{meta1.name},#{meta2.name}")
+    context "tags" do
+      context "when draft status is changed" do
+        it "enqueues tags for reindex" do
+          expect do
+            work.update!(posted: false)
+          end.to add_to_reindex_queue(work.fandoms.last, :main)
+        end
       end
 
-      it "is not a crossover with the fandom's synonym" do
-        syn = create(:fandom, merger: fandom)
-        work = create(:work, fandom_string: "#{fandom.name},#{syn.name}")
-        expect(work.crossover).to be_falsey
+      context "when hidden by an admin" do
+        it "enqueues tags for reindex" do
+          expect do
+            work.update!(hidden_by_admin: true)
+          end.to add_to_reindex_queue(work.fandoms.last, :main)
+        end
       end
 
-      it "is not a crossover with the fandom's meta tag" do
-        work = create(:work, fandom_string: "#{fandom.name},#{meta1.name}")
-        expect(work.crossover).to be_falsey
+      context "when put in an unrevealed collection" do
+        it "enqueues tags for reindex" do
+          expect do
+            work.update!(in_unrevealed_collection: true)
+          end.to add_to_reindex_queue(work.fandoms.last, :main)
+        end
+      end
+    end
+
+    context "collections" do
+      let!(:parent_collection) { create(:collection) }
+      let!(:collection) { create_invalid(:collection, parent: parent_collection) }
+
+      context "when work is created in collection" do
+        it "enqueues the collection for reindex" do
+          expect do
+            create(:work, collections: [collection])
+          end.to add_to_reindex_queue(collection, :background) &
+                 add_to_reindex_queue(parent_collection, :background)
+        end
       end
 
-      it "is not a crossover with another subtag of the fandom's meta tag" do
-        sub = create(:canonical_fandom)
-        sub.update_attribute(:meta_tag_string, meta1.name)
-        work = create(:work, fandom_string: "#{fandom.name},#{sub.name}")
-        expect(work.crossover).to be_falsey
-      end
+      context "when work already exists in the collection" do
+        let!(:work) { create(:work, collections: [collection]) }
 
-      it "is not a crossover with another fandom sharing the same two meta tags" do
-        other = create(:canonical_fandom)
-        other.update_attribute(:meta_tag_string, "#{meta1.name},#{meta2.name}")
-        work = create(:work, fandom_string: "#{fandom.name},#{other.name}")
-        expect(work.crossover).to be_falsey
-      end
+        context "when work is hidden by an admin" do
+          it "enqueues its collection for reindex" do
+            expect do
+              work.update!(hidden_by_admin: true)
+            end.to add_to_reindex_queue(collection, :background) &
+                   add_to_reindex_queue(parent_collection, :background)
+          end
+        end
 
-      it "is not a crossover with another fandom with two unrelated meta tags, only one of which is shared by both fandoms" do
-        # The tag fandom and the tag other share one meta tag (meta2), but
-        # fandom has a meta tag meta1 completely unrelated to other, and other
-        # has a meta tag meta3 completely unrelated to fandom. However, the
-        # shared meta tag means that they are related, and thus a work tagged
-        # with both is not a crossover.
-        meta3 = create(:canonical_fandom)
-        other = create(:canonical_fandom)
-        other.update_attribute(:meta_tag_string, "#{meta2.name},#{meta3.name}")
-        work = create(:work, fandom_string: "#{fandom.name},#{other.name}")
-        expect(work.crossover).to be_falsey
-      end
+        context "when work is restricted" do
+          it "enqueues its collection for reindex" do
+            expect do
+              work.update!(restricted: true)
+            end.to add_to_reindex_queue(collection, :background) &
+                   add_to_reindex_queue(parent_collection, :background)
+          end
+        end
 
-      it "is a crossover with another fandom with two unrelated meta tags, when none of the meta tags are shared" do
-        meta3 = create(:canonical_fandom)
-        meta4 = create(:canonical_fandom)
-        other = create(:canonical_fandom)
-        other.update_attribute(:meta_tag_string, "#{meta3.name},#{meta4.name}")
-        work = create(:work, fandom_string: "#{fandom.name},#{other.name}")
-        expect(work.crossover).to be_truthy
+        context "when work is not significantly changed" do
+          it "doesn't enqueue its collection for reindex" do
+            expect do
+              work.touch
+            end.to not_add_to_reindex_queue(collection, :background) &
+                   not_add_to_reindex_queue(parent_collection, :background)
+          end
+        end
+
+        context "when work is destroyed" do
+          it "enqueues its collection for reindex" do
+            expect do
+              work.destroy!
+            end.to add_to_reindex_queue(collection, :background) &
+                   add_to_reindex_queue(parent_collection, :background)
+          end
+        end
       end
     end
   end
@@ -392,7 +330,7 @@ describe Work do
     let(:work) { build(:work) }
 
     before do
-      work.recipients = recipient1 + "," + recipient2
+      work.recipients = "#{recipient1},#{recipient2}"
     end
 
     it "contains gifts for the same recipients when they are first added" do
@@ -410,7 +348,7 @@ describe Work do
     end
 
     it "only contains one gift if the same recipient is entered twice" do
-      work.recipients = recipient2 + "," + recipient2
+      work.recipients = "#{recipient2},#{recipient2}"
       expect(work.new_gifts.collect(&:recipient)).to eq([recipient2])
     end
   end
@@ -511,8 +449,9 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, true)
       end
       it "automatically hides spam works and sends an email" do
-        expect { @work.update!(spam: true) }.
-          to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect { @work.update!(spam: true) }
+          .to change { ActionMailer::Base.deliveries.count }
+          .by(1)
         expect(@work.reload.hidden_by_admin).to be_truthy
         expect(ActionMailer::Base.deliveries.last.subject).to eq("[AO3] Your work was hidden as spam")
       end
@@ -522,8 +461,8 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, false)
       end
       it "does not automatically hide spam works and does not send an email" do
-        expect { @work.update!(spam: true) }.
-          not_to change { ActionMailer::Base.deliveries.count }
+        expect { @work.update!(spam: true) }
+          .not_to change { ActionMailer::Base.deliveries.count }
         expect(@work.reload.hidden_by_admin).to be_falsey
       end
     end
@@ -580,9 +519,11 @@ describe Work do
       before { work.reload }
 
       it "raises an error" do
-        expect { work.remove_author(to_remove) }.to raise_exception(
-          "Sorry, we can't remove all creators of a work."
-        )
+        expect { work.remove_author(to_remove) }
+          .to raise_error(
+            ActiveRecord::RecordInvalid,
+            "Validation failed: Sorry, we can't remove all creators of a work."
+          )
       end
     end
 
@@ -610,7 +551,8 @@ describe Work do
     let(:work) { create(:work) }
 
     it "does not save an original creator record" do
-      expect { work.destroy }.not_to change { WorkOriginalCreator.count }
+      expect { work.destroy }
+        .not_to change { WorkOriginalCreator.count }
     end
 
     context "when an original creator exists" do
@@ -618,7 +560,8 @@ describe Work do
 
       it "deletes the original creator" do
         work.destroy
-        expect { original_creator.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { original_creator.reload }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

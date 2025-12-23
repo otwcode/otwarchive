@@ -208,5 +208,44 @@ describe KudosController do
         end
       end
     end
+
+    context "when kudos giver is admin" do
+      let(:work) { create(:work) }
+      let(:admin) { create(:admin) }
+
+      before { fake_login_admin(admin) }
+
+      it "redirects to root with notice prompting log out" do
+        post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+        it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
+        expect(assigns(:kudo)).to be_nil
+      end
+
+      context "with format: :js" do
+        it "does not create any kudo" do
+          post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
+          expect(assigns(:kudo)).to be_nil
+        end
+      end
+    end
+  end
+
+  describe "GET #index" do
+    context "denies access for work that isn't visible to user" do
+      subject { get :index, params: { work_id: work } }
+      let(:success) { expect(response).to render_template("index") }
+      let(:success_admin) { success }
+
+      include_examples "denies access for work that isn't visible to user"
+    end
+
+    context "denies access for restricted work to guest" do
+      let(:work) { create(:work, restricted: true) }
+
+      it "redirects with an error" do
+        get :index, params: { work_id: work }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
   end
 end

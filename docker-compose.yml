@@ -8,7 +8,7 @@
 # webserver with the command:
 #
 # ```
-# docker-compose up -d web
+# docker compose up -d web
 # ```
 #
 # Once it is running, it will be visible at http://localhost:3000/
@@ -18,17 +18,16 @@
 # You can run tests like this:
 #
 # ```
-# docker-compose run --rm test bundle exec cucumber features/other_a/autocomplete.feature
+# docker compose run --rm test bundle exec cucumber features/other_a/autocomplete.feature
 # ```
 
-version: "3"
 volumes:
   my-datavolume:
   redis-data:
   esdata1:
 services:
   db:
-    image: mariadb:10.5.4-focal 
+    image: mariadb:10.5.4-focal
     environment:
       - MYSQL_ROOT_PASSWORD=change_me
     ports:
@@ -41,13 +40,13 @@ services:
     volumes:
       - my-datavolume:/var/lib/mysql:rw
   redis:
-    image: redis:5
+    image: redis:7
     ports:
       - "6379:6379"
     volumes:
       - redis-data:/var/lib/redis:rw
   es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.18.2
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -74,6 +73,10 @@ services:
       dockerfile: ./config/docker/Dockerfile
     environment:
       - RAILS_ENV=development
+      # Disable rack-timeout
+      - RACK_TIMEOUT_SERVICE_TIMEOUT=0
+      - GITPOD_WORKSPACE_ID=${GITPOD_WORKSPACE_ID:-}
+      - GITPOD_WORKSPACE_CLUSTER_HOST=${GITPOD_WORKSPACE_CLUSTER_HOST:-}
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/otwa
@@ -84,10 +87,29 @@ services:
       - redis
       - es
       - mc
+      - resque
+    # Make `docker compose attach web` work for debugging
+    stdin_open: true
+    tty: true
+  resque:
+    profiles:
+      - dev
+    build:
+      context: .
+      dockerfile: ./config/docker/Dockerfile
+    command: bash -c "bundle exec rake environment resque:scheduler & bundle exec rake environment resque:work"
+    volumes:
+      - .:/otwa
+    environment:
+      - RAILS_ENV=development
+      - QUEUE=*
+    depends_on:
+      - db
+      - redis
   chrome:
     profiles:
       - test
-    image: selenium/standalone-chrome
+    image: selenium/standalone-chromium
     ports:
       - "4444:4444"
   test:
@@ -101,6 +123,9 @@ services:
       - CHROME_URL=http://chrome:4444
       - DOCKER=true
       - CAPYBARA_PORT=5100
+      - CUCUMBER_PUBLISH_QUIET=true
+      # Silence ebook-convert warning about running as root
+      - QTWEBENGINE_CHROMIUM_FLAGS=--no-sandbox
     command: bundle exec cucumber
     volumes:
       - .:/otwa

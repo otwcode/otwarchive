@@ -60,7 +60,7 @@ module MailerHelper
   end
 
   def opendoors_link(text)
-    style_link(text, "http://opendoors.transformativeworks.org/contact-open-doors/")
+    style_link(text, "https://opendoors.transformativeworks.org/contact-open-doors/")
   end
 
   def styled_divider
@@ -137,25 +137,40 @@ module MailerHelper
       creation_title: title, word_count: creation_word_count(creation))
   end
 
-  # The bylines used in subscription emails to prevent exposing the name(s) of
-  # anonymous creator(s).
-  def creator_links(work)
-    if work.anonymous?
-      "Anonymous"
+  # TODO: Update all mailers to use creator_links or creator_text as
+  # appropriate to eliminate pseuds.map { etc }.to_sentence in the views. Note
+  # that these should never be used on anonymous creations. Text dealing with
+  # Anonymous creations should always have a separate translation, as in the
+  # creation_attribution_ and batch_subscription_subject methods below.
+  def creator_links(creation)
+    to_sentence(creation.pseuds.map { |p| style_pseud_link(p) })
+  end
+
+  def creator_text(creation)
+    to_sentence(creation.pseuds.map { |p| text_pseud(p) })
+  end
+
+  # "by name" or "by name, name, and name", which appears under or after
+  # creation titles.
+  # It's always plain text if the creation is anonymous, so we share that
+  # translation between two methods.
+  def creation_attribution_links(creation)
+    if creation.anonymous?
+      t("mailer.general.creation.attribution.anon")
     else
-      work.pseuds.map { |p| style_pseud_link(p) }.to_sentence.html_safe
+      t("mailer.general.creation.attribution.named.html", creator_links: creator_links(creation))
     end
   end
 
-  def creator_text(work)
-    if work.anonymous?
-      "Anonymous"
+  def creation_attribution_text(creation)
+    if creation.anonymous?
+      t("mailer.general.creation.attribution.anon")
     else
-      work.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
+      t("mailer.general.creation.attribution.named.text", creators: creator_text(creation))
     end
   end
 
-  def work_metadata_label(text)
+  def metadata_label(text)
     text.html_safe + t("mailer.general.metadata_label_indicator")
   end
 
@@ -166,10 +181,8 @@ module MailerHelper
     "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
   end
 
-  # TODO: We're using this for labels in set_password_notification, too. Let's
-  # take the "work" out of the name.
-  def style_work_metadata_label(text)
-    style_bold(work_metadata_label(text))
+  def style_metadata_label(text)
+    style_bold(metadata_label(text))
   end
 
   # Spacing is dealt with in locale files, e.g. " : " for French.
@@ -180,23 +193,182 @@ module MailerHelper
     "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
   end
 
+  # The subject of batch_subscription_notification is based on the first
+  # creation in the email. It uses that creation's creator, so if you subscribe
+  # to user X, who has co-created a work with user Y, and Y posts a chapter that
+  # is not co-created, the subject line will say just "Y posted" even though the
+  # subscription is for X.
+  # Note that we assume this is being used in batch_subscription_notification,
+  # after a subscription.valid_notification_entry?(creation) check. You can
+  # otherwise pass invalid or anonymity-breaking combinations of data to this.
+  def batch_subscription_subject(subscription, creation, additional_creations_count)
+    work = creation.is_a?(Chapter) ? creation.work : creation
+    series = subscription.subscribable if subscription.subscribable_type == "Series"
+
+    base_key = %i[user_mailer batch_subscription_notification subject]
+    translation_keys = base_key.dup
+    translation_keys << (creation.anonymous? ? :anon : :named)
+    translation_keys << :series if series
+    translation_keys << creation.model_name.i18n_key
+    translation_keys << (additional_creations_count.zero? ? :one_entry : :multiple_entries)
+
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.chapter.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.chapter.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.series.chapter.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.series.chapter.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.series.work.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.series.work.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.chapter.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.chapter.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.series.chapter.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.series.chapter.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.series.work.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.series.work.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.work.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.work.one_entry")
+    computed_key = translation_keys.join(".")
+
+    unless creation.anonymous?
+      creator_list = creation.pseuds.map(&:byline).to_sentence
+      # For pluralization: creator publicó, creator y creator2 publicaron.
+      creators_count = creation.pseuds.size
+    end
+    chapter_position = creation.position if creation.is_a?(Chapter)
+    unless additional_creations_count.zero?
+      # "and X more," translated separately so we can pluralize "more" based on X.
+      # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.more")
+      more_translation = t(base_key.dup.push(:more).join("."), count: additional_creations_count)
+    end
+
+    interpolations = {
+      app_name: ArchiveConfig.APP_SHORT_NAME,
+      creators: creator_list,
+      count: creators_count,
+      chapter_position: chapter_position,
+      work_title: work.title,
+      series_title: series&.title,
+      more: more_translation
+    }
+
+    t(computed_key, **interpolations)
+  end
+
+  def batch_subscription_text_preface(creation)
+    work = creation.is_a?(Chapter) ? creation.work : creation
+
+    interpolations = {}
+    unless creation.anonymous?
+      interpolations[:creators] = creator_text(work)
+      # For pluralization: creator publicó, creator y creator2 publicaron.
+      interpolations[:count] = work.pseuds.size
+    end
+    interpolations[:work_title_with_word_count] = creation_title_with_word_count(work) if creation.is_a?(Chapter)
+
+    t(batch_subscription_preface_key(creation, email_format: :text), **interpolations)
+  end
+
+  def batch_subscription_html_preface(creation)
+    work = creation.is_a?(Chapter) ? creation.work : creation
+
+    interpolations = {}
+    unless creation.anonymous?
+      interpolations[:creator_links] = creator_links(work)
+      # For pluralization: creator publicó, creator y creator2 publicaron.
+      interpolations[:count] = work.pseuds.size
+    end
+    interpolations[:work_link_with_word_count] = creation_link_with_word_count(work, work_url(work)) if creation.is_a?(Chapter)
+
+    t(batch_subscription_preface_key(creation, email_format: :html), **interpolations)
+  end
+
   def commenter_pseud_or_name_link(comment)
+    return style_bold(t("roles.anonymous_creator")) if comment.by_anonymous_creator?
+
     if comment.comment_owner.nil?
-      t("roles.guest_commenter_name_html", name: style_bold(comment.comment_owner_name), role: style_role(t("roles.guest_with_parens")))
-    elsif comment.by_anonymous_creator?
-      style_bold(t("roles.anonymous_creator"))
+      t("roles.commenter_name.html", name: style_bold(comment.comment_owner_name), role_with_parens: style_role(t("roles.guest_with_parens")))
     else
-      style_pseud_link(comment.pseud)
+      role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
+      pseud_link = style_link(comment.pseud.byline, user_pseud_url(comment.user, comment.pseud))
+      t("roles.commenter_name.html", name: tag.strong(pseud_link), role_with_parens: style_role(role))
     end
   end
 
   def commenter_pseud_or_name_text(comment)
+    return t("roles.anonymous_creator") if comment.by_anonymous_creator?
+
     if comment.comment_owner.nil?
-      t("roles.guest_commenter_name_text", name: comment.comment_owner_name, role: t("roles.guest_with_parens"))
-    elsif comment.by_anonymous_creator?
-      t("roles.anonymous_creator")
+      t("roles.commenter_name.text", name: comment.comment_owner_name, role_with_parens: t("roles.guest_with_parens"))
     else
-      text_pseud(comment.pseud)
+      role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
+      t("roles.commenter_name.text", name: text_pseud(comment.pseud), role_with_parens: role)
+    end
+  end
+
+  def content_for_commentable_text(comment)
+    if comment.ultimate_parent.is_a?(Tag)
+      t(".content.tag.text",
+        pseud: commenter_pseud_or_name_text(comment),
+        tag: comment.ultimate_parent.commentable_name,
+        tag_url: tag_url(comment.ultimate_parent))
+    elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
+      if comment.parent.title.blank?
+        t(".content.chapter.untitled_text",
+          pseud: commenter_pseud_or_name_text(comment),
+          chapter_position: comment.parent.position,
+          work: comment.ultimate_parent.commentable_name,
+          chapter_url: work_chapter_url(comment.parent.work, comment.parent))
+      else
+        t(".content.chapter.titled_text",
+          pseud: commenter_pseud_or_name_text(comment),
+          chapter_position: comment.parent.position,
+          chapter_title: comment.parent.title,
+          work: comment.ultimate_parent.commentable_name,
+          chapter_url: work_chapter_url(comment.parent.work, comment.parent))
+      end
+    else
+      t(".content.other.text",
+        pseud: commenter_pseud_or_name_text(comment),
+        title: comment.ultimate_parent.commentable_name,
+        commentable_url: polymorphic_url(comment.ultimate_parent))
+    end
+  end
+
+  def content_for_commentable_html(comment)
+    if comment.ultimate_parent.is_a?(Tag)
+      t(".content.tag.html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        tag_link: style_link(comment.ultimate_parent.commentable_name, tag_url(comment.ultimate_parent)))
+    elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
+      t(".content.chapter.html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        chapter_link: style_link(comment.parent.title.blank? ? t(".chapter.untitled", position: comment.parent.position) : t(".chapter.titled", position: comment.parent.position, title: comment.parent.title), work_chapter_url(comment.parent.work, comment.parent)),
+        work_link: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.parent.work)))
+    else
+      t(".content.other.html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        commentable_link: style_creation_link(comment.ultimate_parent.commentable_name, polymorphic_url(comment.ultimate_parent)))
+    end
+  end
+
+  def collection_footer_note_html(is_collection_email, collection)
+    if is_collection_email
+      t("mailer.collections.why_collection_email.html",
+        collection_link: style_footer_link(collection.title, collection_url(collection)))
+    else
+      t("mailer.collections.why_maintainer.html",
+        collection_link: style_footer_link(collection.title, collection_url(collection)))
+    end
+  end
+
+  def collection_footer_note_text(is_collection_email, collection)
+    if is_collection_email
+      t("mailer.collections.why_collection_email.text",
+        collection_title: collection.title,
+        collection_url: collection_url(collection))
+    else
+      t("mailer.collections.why_maintainer.text",
+        collection_title: collection.title,
+        collection_url: collection_url(collection))
     end
   end
 
@@ -234,9 +406,29 @@ module MailerHelper
     type = tags.first.type
     # Fandom tags are linked and to_sentence'd.
     if type == "Fandom"
-      tags.map { |f| style_link(f.name, fandom_url(f)) }.to_sentence.html_safe
+      to_sentence(tags.map { |f| style_link(f.name, fandom_url(f)) })
     else
       work_tag_metadata_list(tags)
     end
   end
-end # end of MailerHelper
+
+  def batch_subscription_preface_key(creation, email_format:)
+    translation_keys = %i[user_mailer batch_subscription_notification preface]
+    translation_keys << (creation.anonymous? ? :anon : :named)
+    translation_keys << creation.model_name.i18n_key
+    translation_keys << (creation.backdate ? :backdated : :new) if creation.is_a?(Work)
+    translation_keys << email_format unless creation.is_a?(Work) && creation.anonymous?
+
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.chapter.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.chapter.text")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.work.backdated")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.work.new")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.chapter.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.chapter.text")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.backdated.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.backdated.text")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.new.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.new.text")
+    translation_keys.join(".")
+  end
+end

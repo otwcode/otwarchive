@@ -1,11 +1,9 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.formal", name: @user.login) %>
+<%= t("mailer.general.greeting.formal.addressed_html", name: @user.login) %>
 
-<%= t('.deleted.text', title: @work.title) %>
+<%= t(".deleted.text", title: @work.title, app_name: ArchiveConfig.APP_SHORT_NAME) %>
 
-<%= t('.import_project.text', opendoors_link: 'http://opendoors.transformativeworks.org/contact-open-doors/') %>
+<%= t(".tos_violation.text", app_name: ArchiveConfig.APP_SHORT_NAME, tos_url: tos_url, content_policy_url: content_url, tos_faq_url: tos_faq_url(anchor: "repost_my_work")) %>
 
-<%= t(".text.tos_violation", contact_abuse_url: new_abuse_report_url) %>
-
-<%= t '.bye' %>
+<%= t(".check_email.text", contact_abuse_url: new_abuse_report_url) %>
 <% end %>

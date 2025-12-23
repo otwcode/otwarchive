@@ -14,7 +14,7 @@ class Query
         body: generated_query,
         track_total_hits: true
       )
-    rescue Elasticsearch::Transport::Transport::Errors::BadRequest
+    rescue Elastic::Transport::Transport::Errors::BadRequest
       { error: "Your search failed because of a syntax error. Please try again." }
     end
   end
@@ -143,6 +143,10 @@ class Query
     { terms: options.merge(field => value) }
   end
 
+  def exists_filter(field)
+    { exists: { field: field } }
+  end
+
   # A filter used to match all words in a particular field, most frequently
   # used for matching non-existent tags. The match query doesn't allow
   # negation/or/and/wildcards, so it should only be used on fields where the
@@ -225,7 +229,7 @@ class Query
   end
 
   def split_query_text_phrases(fieldname, text)
-    str = ""
+    str = +""
     return str if text.blank?
     text.split(",").map(&:squish).each do |phrase|
       str << " #{fieldname}:\"#{phrase}\""
@@ -234,10 +238,10 @@ class Query
   end
 
   def split_query_text_words(fieldname, text)
-    str = ""
+    str = +""
     return str if text.blank?
     text.split(" ").each do |word|
-      if word[0] == "-"
+      if word.length >= 2 && word[0] == "-"
         str << " NOT"
         word.slice!(0)
       end

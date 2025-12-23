@@ -1,13 +1,20 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.formal", name: @user.login) %>
+<%= t("mailer.general.greeting.formal.addressed_html", name: @user.login) %>
 
-<%= t(".text.hidden", title: @work.title, work_url: work_url(@work)) %>
+<% if @works.size == 1 %>
+<%= t(".hidden_one.text", title: @works.first.title, work_url: work_url(@works.first)) %>
+<% else %>
+<%= t(".hidden_multiple", count: @works.size) %>
+<% @works.each do |work| %>
+<%= t(".work_info", title: work.title, work_url: work_url(work)) %>
+<% end %>
+<% end %>
 
-<%= t(".access") %>
+<%= t(".access", count: @works.size) %>
 
-<%= t(".check_email") %>
+<%= t(".check_email", count: @works.size) %>
 
-<%= t(".text.tos_violation", tos_url: tos_url) %>
+<%= t(".tos_violation.text", count: @works.size, tos_url: tos_url, content_policy_url: content_url, tos_faq_url: tos_faq_url(anchor: "policy_procedures_faq")) %>
 
-<%= t(".text.help", contact_abuse_url: new_abuse_report_url) %>
+<%= t(".help.text", count: @works.size, contact_abuse_url: new_abuse_report_url) %>
 <% end %>

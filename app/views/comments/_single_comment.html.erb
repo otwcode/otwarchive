@@ -22,9 +22,9 @@
           <% else %>
             <%= get_commenter_pseud_or_name(single_comment) %>
           <% end %>
-          <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
+          <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.chaptered? %>
             <span class='parent'>
-              <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
+              <%= t(".on_chapter_html", commentable_link: chapter_description_link(single_comment)) %>
             </span>
           <% end %>
           <% if single_comment.unreviewed? %>
@@ -37,7 +37,7 @@
           <%= time_in_zone(single_comment.created_at) %>
         </span>
       </h4>
-      <% cache([single_comment, single_comment.comment_owner, "body"], expires_in: 1.week) do %>
+      <% cache([single_comment, single_comment.comment_owner, "body", image_safety_mode_cache_key(single_comment)], expires_in: 1.week) do %>
         <div class="icon">
           <% if !single_comment.pseud.nil? %>
             <% if single_comment.by_anonymous_creator? %>
@@ -56,7 +56,7 @@
           <p class="notice"><%= ts("This comment has been hidden by an admin.") %></p>
         <% end %>
         <blockquote class="userstuff">
-          <%= raw sanitize_field(single_comment, :comment_content, strip_images: single_comment.ultimate_parent.is_a?(AdminPost)) %>
+          <%= raw single_comment.sanitized_content %>
         </blockquote>
       <% end %>
       <% if single_comment.edited_at.present? %>

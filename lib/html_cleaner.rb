@@ -2,7 +2,9 @@
 module HtmlCleaner
   # If we aren't sure that this field hasn't been sanitized since the last sanitizer version,
   # we sanitize it before we allow it to pass through (and save it if possible).
-  def sanitize_field(object, fieldname, strip_images: false)
+  # For certain highly visible fields, we might want to be cautious about
+  # images. Use image_safety_mode: true to prevent images from embedding as-is.
+  def sanitize_field(object, fieldname, image_safety_mode: false)
     return "" if object.send(fieldname).nil?
 
     sanitizer_version = object.try("#{fieldname}_sanitizer_version")
@@ -15,7 +17,7 @@ module HtmlCleaner
         sanitize_value(fieldname, object.send(fieldname))
       end
 
-    sanitized_field = strip_images(sanitized_field) if strip_images
+    sanitized_field = strip_images(sanitized_field, keep_src: true) if image_safety_mode
     sanitized_field
   end
 
@@ -33,11 +35,6 @@ module HtmlCleaner
 
     # argh, get rid of ____spacer____ inserts
     text.gsub! "____spacer____", ""
-
-    # trash a whole bunch of crappy non-printing format characters stuck
-    # in most commonly by MS Word
-    # \p{Cf} matches all unicode char in the "other, format" category
-    text.gsub!(/\p{Cf}/u, '')
 
     return text
   end
@@ -64,7 +61,7 @@ module HtmlCleaner
         Sanitize::Config::OPEN_ATTRIBUTE_TRANSFORMER,
         Sanitize::Config::RELATIVE_IMAGE_PATH_TRANSFORMER
       ]
-      if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
+      if ArchiveConfig.FIELDS_ALLOWING_MEDIA_EMBEDS.include?(field.to_s)
         transformers << OtwSanitize::EmbedSanitizer.transformer
         transformers << OtwSanitize::MediaSanitizer.transformer
       end
@@ -79,14 +76,9 @@ module HtmlCleaner
         unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
                                         Sanitize::Config::ARCHIVE.merge(transformers: transformers))
       end
-      doc = Nokogiri::HTML::Document.new
+      doc = Nokogiri::HTML5::Document.new
       doc.encoding = "UTF-8"
-      unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
-
-      # Hack! the herald angels sing
-      # TODO: AO3-5801 Switch to an HTML5 serializer that doesn't add invalid closing tags
-      # to track and source elements.
-      unfrozen_value.gsub!(%r{</(source|track)>}, "")
+      unfrozen_value = doc.fragment(unfrozen_value).to_html
     else
       # clean out all tags
       unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
@@ -94,6 +86,11 @@ module HtmlCleaner
 
     # Plain text fields can't contain &amp; entities:
     unfrozen_value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
+
+    # Temporary hack to evade conversions by strip_html_breaks() for textarea:
+    # Accidentally or not, for a long time sanitization code gets nbsp unescaped,
+    # and this replacement keeps that behavior
+    unfrozen_value.gsub!("&nbsp;", "\u00A0")
     unfrozen_value
   end
 
@@ -132,21 +129,20 @@ module HtmlCleaner
 
   def add_paragraphs_to_text(text)
     # Adding paragraphs in place of linebreaks
-    doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
+    doc = Nokogiri::HTML5.fragment("<myroot>#{text}</myroot>")
     myroot = doc.children.first
     ParagraphMaker.process(myroot)
-    myroot.children.to_xhtml
+    myroot.children.to_html
   end
-
 
   ### STRIPPING FOR DISPLAY ONLY
   # Regexps for stripping particular tags and attributes for display.
   # These assume they are running on well-formed XHTML, which we can do
   # because they will only be used on already-cleaned fields.
 
-  # strip img tags
-  def strip_images(value)
-    value.gsub(/<img .*?>/, '')
+  # strip img tags, optionally leaving the HTML attributes (e.g. src and alt) exposed
+  def strip_images(value, keep_src: false)
+    value.gsub(%r{(?:<(img .*?) ?/?>)}, keep_src ? "\\1" : "")
   end
 
   def strip_html_breaks_simple(value)
