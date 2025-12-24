@@ -6,7 +6,7 @@ describe Subscription do
   let(:series) { create(:series) }
   let(:user) { create(:user) }
 
-  describe "a creation's" do
+  describe "de-duplicating subscriptions" do
     let(:author) { create(:user) }
     let(:author2) { create(:user) }
     let(:subscriber) { create(:user) }
@@ -14,7 +14,7 @@ describe Subscription do
     let(:work) { create(:work, authors: [author.default_pseud, author2.default_pseud]) }
     let(:series) { create(:series, works: [work]) }
 
-    context "subscriptions with duplicates" do
+    context "#for_work_with_duplicates"
       it "picks at most one subscription of each type" do
         create(:subscription, user: subscriber, subscribable: author)
         create(:subscription, user: subscriber, subscribable: author2)
@@ -26,7 +26,7 @@ describe Subscription do
       end
     end
 
-    context "subscriptions to notify" do
+    context "#for_work" do
       it "picks only a user's work-type subscription when a user has multiple relevant subscriptions" do
         create(:subscription, user: subscriber, subscribable: author)
         work_subscription = create(:subscription, user: subscriber, subscribable: work)
@@ -41,7 +41,7 @@ describe Subscription do
       end
     end
 
-    context "subscription preference order" do
+    context "#pick_most_relevant_of" do
       let!(:work_subscription) { create(:subscription, user: subscriber, subscribable: work) }
       let!(:series_subscription) { create(:subscription, user: subscriber, subscribable: series) }
       let!(:author_subscription) { create(:subscription, user: subscriber, subscribable: author) }
