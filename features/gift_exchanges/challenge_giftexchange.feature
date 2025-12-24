@@ -226,21 +226,21 @@ Feature: Gift Exchange Challenge
 
   Scenario: When no potential matches can be generated, the Matching page and notification emails reflect that
     Given a locale with translated emails
-      And I create the gift exchange "One Fandom to Match" with the following options
+      And I create the gift exchange "OneFandomToMatch" with the following options
         | value      | minimum | maximum | match |
         | prompts    | 1       | 1       | 1     |
         | fandoms    | 1       | 1       | 1     |
       And the user "moderator" enables translated emails
-      And I have added a co-moderator "mod2" to collection "One Fandom to Match"
-    When the user "badgirlsdoitwell" signs up for "One Fandom to Match" with the following prompts
+      And I have added a co-moderator "mod2" to collection "OneFandomToMatch"
+    When the user "badgirlsdoitwell" signs up for "OneFandomToMatch" with the following prompts
         | type    | characters | fandoms  | freeforms | ratings | categories |
         | request |            | the show |           |         |            |
         | offer   |            | the show |           |         |            |
-      And the user "sweetiepie" signs up for "One Fandom to Match" with the following prompts
+      And the user "sweetiepie" signs up for "OneFandomToMatch" with the following prompts
         | type    | characters | fandoms  | freeforms | ratings | categories |
         | request |            | the book |           |         |            |
         | offer   |            | the book |           |         |            |
-    When I close signups for "One Fandom to Match"
+    When I close signups for "OneFandomToMatch"
       And I follow "Matching"
       And I press "Generate Potential Matches"
     Then I should see "Beginning generation of potential matches."
@@ -255,7 +255,7 @@ Feature: Gift Exchange Challenge
     When I reload the page
     Then I should see "No Potential Matches"
       And I should see "No potential matches were found."
-    When I edit settings for "One Fandom to Match" challenge
+    When I edit settings for "OneFandomToMatch" challenge
       And I submit
       And I follow "Matching"
     Then I should see "No potential matches yet!"
