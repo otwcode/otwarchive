@@ -110,7 +110,7 @@ class Comment < ApplicationRecord
     if ultimate_parent.is_a?(Work)
       comment_type = "fanwork-comment"
       comment_post_modified_gmt = ultimate_parent.revised_at.to_i
-    else
+    elsif ultimate_parent.is_a?(AdminPost)
       comment_type = "comment"
       comment_post_modified_gmt = ultimate_parent.created_at.to_i
     end
