@@ -200,7 +200,7 @@ describe Subscription do
 
       it "returns true for a non-anonymous work" do
         # FIXME: make sure subscription is being set up properly
-        expect(subscribable.subscribable_type).to be("User")
+        expect(subscription.subscribable_type).to be("User")
         expect(subscription.valid_notification_entry?(work)).to be_truthy
       end
 
