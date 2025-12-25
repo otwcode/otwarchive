@@ -203,6 +203,7 @@ describe Subscription do
       end
 
       it "returns true for a non-anonymous chapter" do
+        expect(chapter.pseuds).to contain(author_pseud)
         expect(subscription.valid_notification_entry?(chapter)).to be_truthy
       end
 
