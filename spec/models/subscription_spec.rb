@@ -114,10 +114,10 @@ describe Subscription do
     let(:author_pseud) { create(:user).default_pseud }
     let(:work) { create(:work, authors: [author_pseud]) }
     let(:draft) { build(:draft) }
-    let(:chapter) { build(:chapter, authors: [author_pseud]) }
-    let(:anon_work) { build(:work, authors: [author_pseud], collections: [build(:anonymous_collection)]) }
-    let(:anon_series) { build(:series, works: [anon_work]) }
-    let(:anon_chapter) { build(:chapter, authors:[author_pseud], work: anon_work) }
+    let(:chapter) { create(:chapter, authors: [author_pseud]) }
+    let(:anon_work) { create(:work, authors: [author_pseud], collections: [build(:anonymous_collection)]) }
+    let(:anon_series) { create(:series, works: [anon_work]) }
+    let(:anon_chapter) { create(:chapter, authors:[author_pseud], work: anon_work) }
     let(:orphan_pseud) { create(:user, login: "orphan_account").default_pseud }
 
     it "returns false when the creation is nil" do
