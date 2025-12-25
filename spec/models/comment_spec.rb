@@ -297,8 +297,8 @@ describe Comment do
           work_posted_at = Time.current
           travel_to(1.day.from_now) do
             Chapter.new work_id: subject.commentable.id
-            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.to_i)
-            expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(work_posted_at.to_i)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.iso8601)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(work_posted_at.iso8601)
           end
         end
       end
@@ -311,7 +311,7 @@ describe Comment do
         end
 
         it "has comment_post_modified_gmt as the admin post's creation time", :frozen do
-          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.to_i)
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.iso8601)
         end
       end
 
@@ -327,8 +327,8 @@ describe Comment do
             work_posted_at = Time.current
             travel_to(1.day.from_now) do
               Chapter.new work_id: subject.commentable.commentable.id
-              expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.to_i)
-              expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(work_posted_at.to_i)
+              expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.iso8601)
+              expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(work_posted_at.iso8601)
             end
           end
         end
@@ -341,7 +341,7 @@ describe Comment do
           end
 
           it "has comment_post_modified_gmt as the admin post's creation time", :frozen do
-            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.to_i)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.iso8601)
           end
         end
       end
