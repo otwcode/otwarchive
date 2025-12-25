@@ -111,8 +111,7 @@ describe Subscription do
   describe "#valid_notification_entry?" do
     let(:subscription) { build(:subscription) }
     let(:series) { build(:series) }
-    let(:author) { create(:user) }
-    let(:author_pseud) { author.default_pseud }
+    let(:author_pseud) { create(:user).default_pseud }
     let(:work) { create(:work, authors: [author_pseud]) }
     let(:draft) { build(:draft) }
     let(:chapter) { build(:chapter, authors: [author_pseud]) }
@@ -197,9 +196,11 @@ describe Subscription do
     end
 
     context "when subscribable is a user" do
-      let(:subscription) { build(:subscription, subscribable_type: "User", subscribable: author) }
+      let(:subscription) { build(:subscription, subscribable: author_pseud.user) }
 
       it "returns true for a non-anonymous work" do
+        # FIXME: make sure subscription is being set up properly
+        expect(subscribable.subscribable_type).to be("User")
         expect(subscription.valid_notification_entry?(work)).to be_truthy
       end
 
