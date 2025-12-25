@@ -107,10 +107,11 @@ class Comment < ApplicationRecord
     # While we do have tag comments, those are from logged-in users with special
     # access granted by admins, so we never spam check them, unlike comments on
     # works or admin posts.
-    if ultimate_parent.is_a?(Work)
+    case ultimate_parent
+    when ->(p) { p.is_a?(Work) }
       comment_type = "fanwork-comment"
       comment_post_modified_gmt = ultimate_parent.revised_at.iso8601
-    elsif ultimate_parent.is_a?(AdminPost)
+    when ->(p) { p.is_a?(AdminPost) }
       comment_type = "comment"
       comment_post_modified_gmt = ultimate_parent.created_at.iso8601
     end
