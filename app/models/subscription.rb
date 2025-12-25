@@ -38,6 +38,7 @@ class Subscription < ApplicationRecord
   end
 
   def creator_no_longer_associated_with?(creation)
+    # If we're subscribed to a work or series, it doesn't matter who the creator is, we should send the notification
     return false unless subscribable_type == "User"
 
     # If any of the creation's pseud's users matches the subscribable, then the
@@ -46,7 +47,8 @@ class Subscription < ApplicationRecord
 
     # We reach this case if e.g. someone is subscribed to a user, but they
     # orphan the work before the subscription notification would be sent
-    return true
+    true
+  end
 
   # Guard against scenarios that may break anonymity or other things.
   # Emails should only contain works or chapters.
