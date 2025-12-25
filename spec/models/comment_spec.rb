@@ -292,6 +292,15 @@ describe Comment do
         it "has comment_type \"fanwork-comment\"" do
           expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
         end
+
+        it "has comment_post_modified_gmt as the work's revision time", :frozen do
+          work_posted_at = Time.current
+          travel_to(1.day.from_now) do
+            Chapter.new work_id: subject.commentable.id
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.to_i)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(work_posted_at.to_i)
+          end
+        end
       end
 
       context "when the commentable is an admin post" do
@@ -299,6 +308,10 @@ describe Comment do
 
         it "has comment_type \"comment\"" do
           expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+        end
+
+        it "has comment_post_modified_gmt as the admin post's creation time", :frozen do
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.to_i)
         end
       end
 
@@ -309,6 +322,15 @@ describe Comment do
           it "has comment_type \"fanwork-comment\"" do
             expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
           end
+
+          it "has comment_post_modified_gmt as the work's revision time", :frozen do
+            work_posted_at = Time.current
+            travel_to(1.day.from_now) do
+              Chapter.new work_id: subject.commentable.commentable.id
+              expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.to_i)
+              expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(work_posted_at.to_i)
+            end
+          end
         end
 
         context "when the comment is on an admin post" do
@@ -316,6 +338,10 @@ describe Comment do
 
           it "has comment_type \"comment\"" do
             expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+          end
+
+          it "has comment_post_modified_gmt as the admin post's creation time", :frozen do
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.to_i)
           end
         end
       end
