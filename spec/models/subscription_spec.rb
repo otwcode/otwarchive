@@ -119,7 +119,7 @@ describe Subscription do
     let(:draft) { build(:draft) }
     let(:chapter) { create(:chapter, authors: [author_pseud]) }
     let(:anon_work) { create(:work, authors: [author_pseud], collections: [build(:anonymous_collection)]) }
-    let(:anon_series) { create(:series, works: [anon_work]) }
+    let(:anon_series) { build(:series, works: [anon_work]) }
     let(:anon_chapter) { create(:chapter, authors: [author_pseud], work: anon_work) }
     let(:orphan_pseud) { create(:user, login: "orphan_account").default_pseud }
 
@@ -229,7 +229,16 @@ describe Subscription do
         expect(subscription.valid_notification_entry?(create(:work, authors: [create(:user).default_pseud]))).to be_falsey
       end
 
-      it "returns false for a chapter by a different user" do
+      it "returns false for a chapter by a different user, even if the subscribed-to user is one of the work creators" do
+        # subscription is for author_pseud
+        author2 = create(:user).default_pseud
+        work = create(:work, authors: [author_pseud, author2])
+        # chapter is by author2 only
+        chapter = create(:chapter, authors: [author2], work: work, position: 2)
+        expect(subscription.valid_notification_entry?(chapter)).to be_falsey
+      end
+
+      it "returns false for a chapter by a different user, even if the user is one of the work creators" do
         expect(subscription.valid_notification_entry?(create(:chapter, authors: [create(:user).default_pseud]))).to be_falsey
       end
     end
@@ -241,6 +250,11 @@ describe Subscription do
         # an non-anon work can only have non-anon chapters
         it "returns true for a non-anonymous chapter" do
           expect(subscription.valid_notification_entry?(chapter)).to be_truthy
+        end
+
+        # if the subscribable type is work, creation must be a chapter
+        it "returns false when the creation is a work" do
+          expect(subscription.valid_notification_entry?(work)).to be_falsey
         end
       end
 

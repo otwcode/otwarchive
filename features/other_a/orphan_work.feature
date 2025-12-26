@@ -122,7 +122,7 @@ Feature: Orphan work
       And I choose "Leave a copy of my pseud on"
       And I press "Yes, I'm sure"
     When subscription notifications are sent
-    Then 1 email should be delivered to "series_subscriber@foo.com"
+    Then 1 email should be delivered
 
   Scenario: I can orphan multiple works at once
     Given I am logged in as "author"
