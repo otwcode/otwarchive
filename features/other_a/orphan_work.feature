@@ -90,10 +90,7 @@ Feature: Orphan work
       | login           | password | email                   |
       | work_subscriber | password | work_subscriber@foo.com |
       And I post the work "Torrid Idfic"
-    # FIXME: remove, I'm just trying to understand email logic
-    When subscription notifications are sent
-    Then 0 emails should be delivered to "series_subscriber@foo.com"
-    When I am logged in as "work_subscriber"
+      And I am logged in as "work_subscriber"
       And I view the work "Torrid Idfic"
       And I press "Subscribe"
       And I am logged in as "orphaneer"
@@ -105,30 +102,15 @@ Feature: Orphan work
     When subscription notifications are sent
     Then 1 email should be delivered
 
-  # FIXME: remove duplicate
-  Scenario: Test initial email is 0
-
-    # Make the series exist, but make sure the initial work doesn't
-    # send an email for series_subscriber
-    Given the following activated user exists
-      | login             | password | email                     |
-      | series_subscriber | password | series_subscriber@foo.com |
-      And I add the work "Work to create the series" to series "Shame Seriesss"
-    When subscription notifications are sent
-    Then 0 emails should be delivered to "series_subscriber@foo.com"
-
   Scenario: Orphan a work (leave pseud) but do notify subscribers to the work's series
 
-    # Make the series exist, but make sure the initial work doesn't
-    # send an email for series_subscriber
     Given the following activated user exists
       | login             | password | email                     |
       | series_subscriber | password | series_subscriber@foo.com |
+      # Create the series, so we can subscribe to it before we add a work-to-be-orphaned
       And I add the work "Work to create the series" to series "Shame Series"
-    When subscription notifications are sent
-    Then 0 emails should be delivered to "series_subscriber@foo.com"
-    # Subscribe
-    When I am logged in as "series_subscriber"
+      # Subscribe
+      And I am logged in as "series_subscriber"
       And I view the series "Shame Series"
       And I press "Subscribe"
       # Add a new work to the series, which we then immediately orphan
