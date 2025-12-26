@@ -137,7 +137,7 @@ describe Subscription do
       end
 
       it "returns false when the creation is hidden_by_admin" do
-        expect(subscription.valid_notification_entry?(build(:work, hidden_by_admin: true))).to be_truthy
+        expect(subscription.valid_notification_entry?(build(:work, hidden_by_admin: true))).to be_falsey
       end
     end
 
