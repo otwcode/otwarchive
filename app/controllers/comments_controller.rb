@@ -384,7 +384,8 @@ class CommentsController < ApplicationController
             elsif @comment.unreviewed?
               redirect_to_all_comments(@commentable)
             else
-              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
+              user_chose_to_view_full_work = (current_user.try(:preference).try(:view_full_works) && params[:view_full_work] != "false")
+              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true" || user_chose_to_view_full_work), page: params[:page] })
             end
           end
         end
@@ -689,7 +690,7 @@ class CommentsController < ApplicationController
                   page: options[:page],
                   anchor: options[:anchor])
     else
-      if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
+      if commentable.is_a?(Chapter) && (options[:view_full_work] || (current_user.try(:preference).try(:view_full_works) && options[:view_full_work] != false))
         commentable = commentable.work
       end
       redirect_to polymorphic_path(commentable,
