@@ -1,6 +1,4 @@
 require "redis_test_setup"
-require "yaml"
-
 include RedisTestSetup # rubocop:disable Style/MixinUsage
 
 rails_root = ENV["RAILS_ROOT"] || "#{File.dirname(__FILE__)}/../../.."
