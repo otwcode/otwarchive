@@ -172,6 +172,8 @@ module ApplicationHelper
     options[:title] ||= options[:for]
 
     html_options = { class: "#{options[:class]} modal", title: options[:title] }
+    html_options[:aria_label] = options[:aria_label] if options[:aria_label]
+
     link_to content, options[:for], html_options
   end
 
@@ -183,7 +185,8 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
 
-    " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
+    title = help_entry.split('-').join(' ').capitalize
+    " ".html_safe + link_to_modal(link, for: help_file, title: title, aria_label:title, class: "help symbol question").html_safe
   end
 
   def link_to_help_modal(help_path, title)
