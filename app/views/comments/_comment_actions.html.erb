@@ -1,4 +1,4 @@
-<h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
+<h5 class="landmark heading"><%= t(".comment_actions") %></h5>
 
 <ul class="actions" id="navigation_for_comment_<%= comment.id %>" <% if focused_on_comment(comment) %> style="display:none;"<% end %>>
   <%# The effect is "Frozen" replaces "Reply." We can't do that in the helper
@@ -12,11 +12,11 @@
     <li id="add_comment_reply_link_<%= comment.id %>"><%= add_comment_reply_link comment %></li>
   <% end %>
   <% if comment.depth > 0 %>
-    <li><%= link_to ts("Parent"), comment_path(id: comment.commentable_id) %></li>
-    <li><%= link_to ts("Parent Thread"), comment_path(id: comment.thread) %></li>
+    <li><%= link_to t(".parent"), comment_path(id: comment.commentable_id) %></li>
+    <li><%= link_to t(".parent_thread"), comment_path(id: comment.thread) %></li>
   <% end %>
   <% unless comment.unreviewed? %>
-    <li><%= link_to ts("Thread"), comment %></li>
+    <li><%= link_to t(".thread"), comment %></li>
   <% end %>
   <% if can_freeze_comment?(comment) %>
     <li><%= freeze_comment_button(comment) %></li>
@@ -36,7 +36,7 @@
   <% end %>
   <% if can_review_comment?(comment) %>
     <li id="review_comment_link_<%= comment.id %>">
-      <%= button_to(ts("Approve"), review_comment_path(comment), method: :put) %>
+      <%= button_to(t(".approve"), review_comment_path(comment), method: :put) %>
     </li>
   <% end %>
   <% if can_destroy_comment?(comment) %>
@@ -65,11 +65,11 @@
   <%# This is where the reply-to box will be added when "Reply" is hit, if the user has JavaScript. %>
   <%# If not, we will render the comment form if this is the comment we are replying to. %>
   <% if focused_on_comment(comment) %>
-    <div id="add_comment_reply_placeholder_<%= comment.id %>" title="<%= ts("reply to this comment") %>">
-      <%= render 'comments/comment_form',
-        :comment => Comment.new,
-        :commentable => comment,
-        :button_name => ts("Comment") %>
+    <div id="add_comment_reply_placeholder_<%= comment.id %>" title="<%= t(".reply_to_this") %>">
+      <%= render "comments/comment_form",
+            comment: Comment.new,
+            commentable: comment,
+            button_name: t(".comment") %>
   <% else %>
     <div id="add_comment_reply_placeholder_<%= comment.id %>" style="display: none;">
   <% end %>
