@@ -224,6 +224,42 @@ Feature: Gift Exchange Challenge
     Then I should see "Reviewing Assignments"
       And I should see "Complete"
 
+  Scenario: When no potential matches can be generated, the Matching page and notification emails reflect that
+    Given a locale with translated emails
+      And I create the gift exchange "OneFandomToMatch" with the following options
+        | value      | minimum | maximum | match |
+        | prompts    | 1       | 1       | 1     |
+        | fandoms    | 1       | 1       | 1     |
+      And the user "moderator" enables translated emails
+      And I have added a co-moderator "mod2" to collection "OneFandomToMatch"
+    When the user "badgirlsdoitwell" signs up for "OneFandomToMatch" with the following prompts
+        | type    | characters | fandoms  | freeforms | ratings | categories |
+        | request |            | the show |           |         |            |
+        | offer   |            | the show |           |         |            |
+      And the user "sweetiepie" signs up for "OneFandomToMatch" with the following prompts
+        | type    | characters | fandoms  | freeforms | ratings | categories |
+        | request |            | the book |           |         |            |
+        | offer   |            | the book |           |         |            |
+    When I close signups for "OneFandomToMatch"
+      And I follow "Matching"
+      And I press "Generate Potential Matches"
+    Then I should see "Beginning generation of potential matches."
+      And 1 email should be delivered to "moderator"
+      And the email to "moderator" should be translated
+      And the email should contain "there were no potential matches found"
+      And the email should contain "you are an owner or moderator of the collection"
+      And 1 email should be delivered to "mod2"
+      And the email to "mod2" should be non-translated
+      And the email should contain "there were no potential matches found"
+      And the email should contain "you are an owner or moderator of the collection"
+    When I reload the page
+    Then I should see "No Potential Matches"
+      And I should see "No potential matches were found."
+    When I edit settings for "OneFandomToMatch" challenge
+      And I submit
+      And I follow "Matching"
+    Then I should see "No potential matches yet!"
+
   Scenario: Invalid signups are caught before generation and a translated email is sent
     Given the gift exchange "Awesome Gift Exchange" is ready for matching
       And I create an invalid signup in the gift exchange "Awesome Gift Exchange"
