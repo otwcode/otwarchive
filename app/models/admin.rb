@@ -3,10 +3,13 @@ class Admin < ApplicationRecord
 
   serialize :roles, type: Array, coder: YAML, yaml: { permitted_classes: [String] }
 
-  devise :database_authenticatable,
-         :lockable,
+  devise :lockable,
          :recoverable,
          :validatable,
+         :two_factor_authenticatable,
+         :two_factor_backupable,
+         otp_backup_code_length: ArchiveConfig.ADMIN_TOTP_BACKUP_CODE_LENGTH,
+         otp_number_of_backup_codes: ArchiveConfig.ADMIN_TOTP_BACKUP_CODE_COUNT,
          password_length: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN..ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX,
          reset_password_within: ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES.days,
          lock_strategy: :none,
@@ -39,5 +42,49 @@ class Admin < ApplicationRecord
   def send_set_password_notification
     token = set_reset_password_token
     AdminMailer.set_password_notification(self, token).deliver
+  end
+
+  def to_param
+    login
+  end
+
+  serialize :otp_backup_codes, type: Array, coder: YAML, yaml: { permitted_classes: [String] }
+
+  attr_accessor :otp_plain_backup_codes
+
+  # Generate a TOTP secret it it does not already exist
+  def generate_totp_secret_if_missing!
+    return unless otp_secret.nil?
+
+    update!(otp_secret: Admin.generate_otp_secret)
+  end
+
+  # Ensure that the user is prompted for their TOTP when they login
+  def enable_totp!
+    update!(otp_required_for_login: true)
+  end
+
+  # Disable the use of TOTP-based two-factor.
+  def disable_totp!
+    update!(
+      otp_required_for_login: false,
+      otp_secret: nil,
+      otp_backup_codes: nil
+    )
+  end
+
+  # Whether this admin has TOTP enabled.
+  def totp_enabled?
+    otp_required_for_login
+  end
+
+  # URI for TOTP two-factor QR code
+  def totp_qr_code_uri
+    otp_provisioning_uri(login, issuer: ArchiveConfig.APP_NAME)
+  end
+
+  # Determine if backup codes have been generated
+  def totp_backup_codes_generated?
+    otp_backup_codes.present?
   end
 end

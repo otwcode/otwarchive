@@ -210,10 +210,20 @@ p.kudos {
     word-wrap: break-word;
 }
 
+.icon, p.qr {
+  margin: 0;
+}
+
+/* QR codes should always be displayed as black on white to ensure contrast and compatibility, even in dark mode. They also need a quiet zone. */
+/* TODO: Check that this is okay in Reversi/Dark Mode. */
+p.qr svg {
+  background: #fff;
+  border: 1em solid #fff;
+}
+
 .icon {
   height: 100px;
   width: 100px;
-  margin: 0;
 }
 
 .icon a {
@@ -255,6 +265,10 @@ dl.stats dd {
   float: left; 
   clear: none; 
   margin-right: 1.5em
+}
+
+section.step {
+  margin-block: 2.572em;
 }
 
 /* END == */
