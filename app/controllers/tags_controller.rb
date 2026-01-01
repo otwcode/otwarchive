@@ -70,12 +70,21 @@ class TagsController < ApplicationController
     # if tag is NOT wrangled, prepare to show works, collections, and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
       @works = if logged_in? # current_user.is_a?User
-                 @tag.works.visible_to_registered_user.paginate(page: params[:page])
+                 @tag.works.visible_to_registered_user
                elsif logged_in_as_admin?
-                 @tag.works.visible_to_admin.paginate(page: params[:page])
+                 @tag.works.visible_to_admin
                else
-                 @tag.works.visible_to_all.paginate(page: params[:page])
+                 @tag.works.visible_to_all
                end
+      @bookmarks = @tag.bookmarks.visible
+      @collections = @tag.collections
+      # if from a collection, only show items from that collection
+      if @collection.present?
+        @works &= @collection.works
+        @bookmarks &= @collection.bookmarks
+        @collections &= @collection.children
+      end
+      @works = @works.paginate(page: params[:page])
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
       @collections = @tag.collections.paginate(page: params[:page])
     end
