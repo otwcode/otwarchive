@@ -538,6 +538,11 @@ en:
   bookmarks:
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    external_work_fields:
+      fandoms:
+        help_title: Fandom tags help
+      ratings:
+        help_title: Rating tags help
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
@@ -1079,6 +1084,56 @@ en:
         description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
         header: Set preferred locale
       page_heading: Locale Preferences
+    tags_fandoms:
+      description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
+      more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
+      page_heading: Fandom Tags
+      tags_faq: Tags FAQ
+    tags_ratings:
+      explicit:
+        description: This is for porn, graphic violence, etc.
+        header: Explicit (Adult!)
+      general_audiences:
+        description: This content is suitable for anyone.
+        header: General Audiences
+      mature:
+        description: This is for content with adult themes (sex, violence, etc.) that isn't as graphic as explicit-rated content.
+        header: Mature (Adult!)
+      more_info:
+        html: "(For more information, see the %{ratings_and_warnings_tos_section_link}.)"
+        ratings_and_warnings_tos_section: Ratings and Warnings section of the %{app_name} Terms of Service
+      not_rated:
+        description: For searching, screening, and other Archive functions, this may get treated the same way as explicit-rated content.  In reality, it could be anything from porn to completely family-friendly stuff.  Choose this rating if you prefer not to rate your content (because you don't like ratings, because you're trying to avoid spoilers, etc.).
+        header: Not Rated (Adult!)
+      page_heading: Rating Tags
+      teen_and_up_audiences:
+        description: The content may be inappropriate for audiences under 13.
+        header: Teen And Up Audiences
+    tags_warnings:
+      choose_not_to_use:
+        description: Use this if you don't want to warn for anything. You may also choose this option if you don't know what you should warn for; if you don't like warning for certain topics or warnings in general; if you want to avoid some spoilers, but not others; etc.
+        header: Choose Not To Use Archive Warnings
+      description: "%{app_name} has chosen, for legal and other reasons, to mandate that users either warn for—or explicitly choose not to warn for—a short list of common warnings: Graphic Depictions of Violence, Major Character Death, Rape/Non-Con, and Underage Sex. We understand that creators may wish to not warn for some of these things, or to warn for additional content, and have provided options for them to do so within this framework."
+      graphic_depictions_of_violence:
+        description: This is for gory, graphic, explicitly described violence. Exactly where to draw the line is your call.
+        header: Graphic Depictions Of Violence
+      major_character_death:
+        description: Please use your best judgment about who counts as a major character.
+        header: Major Character Death
+      no_archive_warnings_apply:
+        description: Use this if the Archive warnings don't apply to your content. (In other words, if it contains no graphic depictions of violence, major character death, rape/non-con, or underage sexual activity.)
+        header: No Archive Warnings Apply
+      other_warnings:
+        html: You can also use the "Additional Tags" field to give other or more detailed warnings. Our policies regarding warnings can be found in the %{tos_link} and %{tos_faq_link}.
+        tos: Terms of Service
+        tos_faq: Terms of Service FAQ
+      page_heading: Warning Tags
+      rape_non_con:
+        description: This is your call. If you think your content may be seen as containing non-consensual sexual activity, but you don't feel like using this warning or you're not sure if you should, you always have the option of using "Choose Not to Use Archive Warnings" instead.
+        header: Rape/Non-Con
+      underage_sex:
+        description: This is for descriptions or depictions of sexual activity involving characters under the age of eighteen. (This doesn't include dating activity like kissing or vague references with no actual description or depiction.) This warning generally applies to humans; if you are creating a pornographic work about space aliens who only live for a month or thousand-year-old vampires with twelve-year-old bodies, please just use your best judgment. You are always free to specify characters' ages or to use "Choose Not to Use Archive Warnings".
+        header: Underage Sex
   home:
     about:
       ao3:
@@ -2785,6 +2840,13 @@ en:
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
+    work_form_tags:
+      fandoms:
+        help_title: Fandom tags help
+      ratings:
+        help_title: Rating tags help
+      warnings:
+        help_title: Warning tags help
     work_header_navigation:
       chapter_index:
         button: Chapter Index

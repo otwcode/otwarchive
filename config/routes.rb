@@ -636,12 +636,18 @@ Rails.application.routes.draw do
   %w[
     first_login
     preferences_locale
+    tags_fandoms
+    tags_ratings
+    tags_warnings
   ].each do |action|
     get "/help/#{action}", to: "help##{action}"
   end
 
   # Redirects for moved help files
   get "/first_login_help", to: redirect("/help/first_login")
+  get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
+  get "/help/rating-help.html", to: redirect("/help/tags_ratings")
+  get "/help/warning-help.html", to: redirect("/help/tags_warnings")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
