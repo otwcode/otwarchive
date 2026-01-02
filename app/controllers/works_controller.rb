@@ -823,6 +823,17 @@ class WorksController < ApplicationController
     if logged_in_as_admin?
       options = { action: params[:action] }
 
+      old_language_id = @work.language_id
+      new_language_id = params[:work][:language_id].to_i
+
+      if new_language_id && old_language_id != new_language_id
+        new_language_name = Language.find_by(id: new_language_id).name
+        summary = "<p>Old language: #{@work.language.name}</p><p>New language: #{new_language_name}</p>"
+
+        AdminActivity.log_action(current_admin, @work, action: "edit language", summary: summary)
+        return
+      end
+
       if params[:action] == 'update_tags'
         summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}"
       end

@@ -18,7 +18,7 @@ module AdminHelper
   # handled differently from summaries that use item.inspect (and thus contain
   # angle brackets).
   def admin_activity_summary(activity)
-    if activity.action == "edit pseud" || activity.action == "edit profile"
+    if activity.action == "edit pseud" || activity.action == "edit profile" || activity.action == "edit language"
       raw sanitize_field(activity, :summary)
     else
       activity.summary
