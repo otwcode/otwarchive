@@ -184,7 +184,7 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
 
-    " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split("-").join(" ").capitalize, class: "help symbol question").html_safe
+    " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
   end
 
   def link_to_help_modal(help_path, aria_label)
