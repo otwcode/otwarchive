@@ -187,9 +187,9 @@ module ApplicationHelper
     " ".html_safe + link_to_modal(link, for: help_file, aria_label: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
   end
 
-  def link_to_help_modal(help_path, aria_label)
+  def link_to_help_modal(help_path, title)
     link = tag.span(tag.span(t("application_helper.help_modal.help_symbol")), class: %w[symbol question])
-    " ".html_safe + link_to_modal(link, for: help_path, aria_label: aria_label, class: "help symbol question")
+    " ".html_safe + link_to_modal(link, for: help_path, aria_label: title, class: "help symbol question")
   end
 
   # Inserts the flash alert messages for flash[:key] wherever
