@@ -540,9 +540,6 @@ en:
       deleted: This has been deleted, sorry!
       save: Save
       saved: Saved
-    bookmarkable_blurb:
-      save: Save
-      saved: Saved
     bookmark_owner_navigation:
       delete: Delete
       delete_confirmation: Are you sure you want to delete this bookmark?
@@ -551,6 +548,9 @@ en:
       share_bookmark: Share Bookmark
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    bookmarkable_blurb:
+      save: Save
+      saved: Saved
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
