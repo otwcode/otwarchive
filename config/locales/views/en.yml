@@ -718,7 +718,7 @@ en:
       comment_actions: Comment Actions
       parent: Parent
       parent_thread: Parent Thread
-      reply_to_this: reply to this comment
+      reply_to_this: Reply to this comment
       thread: Thread
     comment_form:
       anonymous_creator: Anonymous Creator
