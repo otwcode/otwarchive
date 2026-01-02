@@ -171,7 +171,7 @@ module ApplicationHelper
     options[:for] ||= ""
 
     html_options = { class: "#{options[:class]} modal", title: options[:title] }
-    html_options[:'aria-label'] = options[:aria_label] if options[:aria_label]
+    html_options[:"aria-label"] = options[:aria_label] if options[:aria_label]
 
     link_to content, options[:for], html_options
   end
