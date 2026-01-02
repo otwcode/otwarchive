@@ -381,6 +381,11 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I press "Update"
     Then I should see "Deutsch"
       And I should not see "English"
+    When I follow "Activities"
+    Then I should see "edit language"
+    When I visit the last activities item
+    Then I should see "Old language: English"
+     And I should see "New language: Deutsch"
 
   Scenario: Admin can edit language on works when previewing first
     Given basic languages
