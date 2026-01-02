@@ -2127,7 +2127,7 @@ en:
         legend: Display
         show_adult_content: Show me adult content without checking.
         show_whole_work_default: Show the whole work by default.
-      locale_help_label: Locale preferences help
+      locale_help_title: Locale preferences help
       misc:
         heading: Misc
         legend: Misc
