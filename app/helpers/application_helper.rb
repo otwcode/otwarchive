@@ -169,10 +169,9 @@ module ApplicationHelper
   def link_to_modal(content = "", options = {})
     options[:class] ||= ""
     options[:for] ||= ""
-    options[:title] ||= options[:for]
 
     html_options = { class: "#{options[:class]} modal", title: options[:title] }
-    html_options[:aria_label] = options[:aria_label] if options[:aria_label]
+    html_options[:'aria-label'] = options[:aria_label] if options[:aria_label]
 
     link_to content, options[:for], html_options
   end
@@ -185,13 +184,12 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
 
-    title = help_entry.split('-').join(' ').capitalize
-    " ".html_safe + link_to_modal(link, for: help_file, title: title, aria_label:title, class: "help symbol question").html_safe
+    " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split("-").join(" ").capitalize, class: "help symbol question").html_safe
   end
 
-  def link_to_help_modal(help_path, title)
+  def link_to_help_modal(help_path, aria_label)
     link = tag.span(tag.span(t("application_helper.help_modal.help_symbol")), class: %w[symbol question])
-    " ".html_safe + link_to_modal(link, for: help_path, title: title, class: "help symbol question")
+    " ".html_safe + link_to_modal(link, for: help_path, aria_label: aria_label, class: "help symbol question")
   end
 
   # Inserts the flash alert messages for flash[:key] wherever
