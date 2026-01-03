@@ -43,6 +43,10 @@ When "I create a newer active support notice" do
   step %{I should see "Support notice successfully created."}
 end
 
+When "there is/are {int} support notice(s) per page" do |amount|
+  allow_any_instance_of(ApplicationController).to receive(:pagy_get_limit).and_return(amount)
+end
+
 ### THEN
 
 Then /^I should see the(?: "([^"]*)")? support notice$/ do |notice_type| # rubocop:disable Cucumber/RegexStepName

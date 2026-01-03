@@ -59,3 +59,13 @@ Feature: Notices on support page
       And I create an active support notice
     When I am on the support notices page
     Then I should not see "Delete"
+
+  Scenario: Support notices are paginated
+    Given I am logged in as a "support" admin
+      And there is 1 support notice per page
+      And I create an "error" support notice
+      And I create an active "caution" support notice
+    When I am on the support notices page
+    Then I should see the "caution" support notice
+    When I follow "2"
+    Then I should see the "error" support notice
