@@ -89,6 +89,10 @@ class User < ApplicationRecord
   has_many :skins, foreign_key: "author_id", dependent: :nullify
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
 
+  # the user's past credentials
+  has_many :user_past_emails, dependent: :destroy
+  has_many :user_past_usernames, dependent: :destroy
+
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :send_wrangler_username_change_notification, if: :is_tag_wrangler?
@@ -96,6 +100,9 @@ class User < ApplicationRecord
   after_update :log_email_change, if: :saved_change_to_email?
   after_update :expire_caches
   before_destroy :remove_user_from_kudos
+
+  after_commit :log_past_username, on: :update
+  after_commit :log_past_emails, on: :update
 
   # Extra callback to make sure readings are deleted in an order consistent
   # with the ReadingsJob.
@@ -183,6 +190,14 @@ class User < ApplicationRecord
   def remove_user_from_kudos
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
     Kudo.where(user: self).update_all(user_id: nil)
+  end
+
+  def log_past_username
+    user_past_usernames.create!(user_id: self.id, username: saved_changes["username"]&.first, changed_at: self.updated_at)
+  end
+
+  def log_past_emails
+    user_past_usernames.create!(user_id: self.id, username: saved_changes["email_address"]&.first, changed_at: self.updated_at)
   end
 
   def read_inbox_comments
