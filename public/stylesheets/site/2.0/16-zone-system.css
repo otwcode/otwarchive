@@ -17,6 +17,14 @@ SUBSECTIONS:
   margin-top: 3em;
 }
 
+.system .support.banner {
+  margin: 0.643em;
+}
+
+.system .support.banner .userstuff {
+  max-width: initial;
+}
+
 /* 1. ZONE: SYSTEM: SPLASH PAGE */
 
 .splash {

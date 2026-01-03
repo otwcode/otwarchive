@@ -46,15 +46,10 @@ end
 ### THEN
 
 Then /^I should see the(?: "([^"]*)")? support notice$/ do |notice_type| # rubocop:disable Cucumber/RegexStepName
-  case notice_type
-  when "notice"
-    expect(page).to have_xpath("//blockquote[@class='notice userstuff']")
-  when "caution"
-    expect(page).to have_xpath("//blockquote[@class='caution notice userstuff']")
-  when "error"
-    expect(page).to have_xpath("//blockquote[@class='error notice userstuff']")
+  if notice_type
+    expect(page).to have_selector(".support.banner.#{notice_type}")
   else
-    expect(page).to have_xpath("//blockquote[contains(@class, 'notice')]")
+    expect(page).to have_selector(".support.banner")
   end
   step %{I should see "This is some support notice text"}
 end
@@ -64,7 +59,7 @@ Then "I should see the edited active support notice" do
 end
 
 Then "I should not see a support notice" do
-  expect(page).to_not have_xpath("//blockquote[contains(@class, 'notice')]")
+  expect(page).to_not have_selector(".support.banner")
   step %{I should not see "support notice text"}
 end
 

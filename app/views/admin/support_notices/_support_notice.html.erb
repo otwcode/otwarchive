@@ -1,3 +1,5 @@
-<blockquote class="<%= css_classes_for_support_notice(support_notice) %>">
-  <%= raw sanitize_field(support_notice, :notice_content, image_safety_mode: true) %>
-</blockquote>
+<div class="<%= css_classes_for_support_notice(support_notice) %> support banner">
+  <div class="userstuff">
+    <%= raw sanitize_field(support_notice, :notice_content, image_safety_mode: true) %>
+  </div>
+</div>
