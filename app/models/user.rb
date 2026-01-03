@@ -544,7 +544,7 @@ class User < ApplicationRecord
       # If the user does not have an existing pseud for the new login
       if new_pseud.blank?
         # If the pseud for the old login doesn't exist
-        unless pseud_to_update.present?
+        if pseud_to_update.blank?
           # shouldn't be able to get here, but just in case
           Pseud.create!(name: login, user_id: id)
         end
