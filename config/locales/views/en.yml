@@ -429,20 +429,18 @@ en:
       index:
         page_heading: Support Notices
       navigation:
-        confirm_delete: Are you sure you want to delete this support notice?
-        delete: Delete Support Notice
-        edit: Edit Support Notice
         index: Support Notices
         new: New Support Notice
       new:
         page_heading: New Support Notice
       show:
         page_heading: Support Notice
-      support_notice_blurb:
+      support_notice_actions:
         active: Active
         confirm_delete: Are you sure you want to delete this support notice?
         delete: Delete
         edit: Edit
+        landmark: Support Notice Actions
       support_notice_form:
         actions:
           create: Create Support Notice

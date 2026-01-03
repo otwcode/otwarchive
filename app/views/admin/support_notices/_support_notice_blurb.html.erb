@@ -1,19 +1,4 @@
 <li class="blurb">
-
   <%= render "support_notice", support_notice: support_notice %>
-
-  <ul class="actions">
-    <li>
-      <%= link_to t(".edit"), edit_admin_support_notice_path(support_notice) %>
-    </li>
-    <% if support_notice.active? %>
-      <li>
-        <span class="active current"><%= t(".active") %></span>
-      </li>
-    <% else %>
-      <li>
-        <%= link_to t(".delete"), confirm_delete_admin_support_notice_path(support_notice), data: { confirm: t(".confirm_delete") } %>
-      </li>
-    <% end %>
-  </ul>
+  <%= render "support_notice_actions", support_notice: support_notice %>
 </li>
