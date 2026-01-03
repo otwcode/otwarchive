@@ -986,6 +986,99 @@ en:
         current_html: For current updates on AO3 performance or downtime, please check our %{status_page_link} and follow %{bluesky_link} on Bluesky or %{tumblr_link} on Tumblr.
         status_page: status page
         tumblr: ao3org
+  help:
+    first_login:
+      additional_info:
+        header: Additional Browsing Information
+        history_mark_later:
+          header: History and Mark for Later
+          history: History
+          history_faq: History and Mark for Later FAQ
+          html: You can access and manage your history by going to %{your_dashboard_link} and selecting the "%{history_link}" link in the side menu in the default browser skin or on top of the page in mobile devices. You can clear your history, or delete individual entries if you don't want these entries to show up in your history. You can also add works to the "Marked for Later" list in your history. For more information on History, please visit the %{history_faq_link}.
+          your_dashboard: your Dashboard
+        subscriptions:
+          header: Subscriptions
+          html: You can subscribe to a work, collection, series of works, or user by selecting the "Subscribe" link at the top or bottom of a work, or at the top or bottom of a collection or series page, or the user's profile page. You can check your subscriptions from %{your_dashboard_link} by selecting the "Subscriptions" link. For more information on Subscriptions, please visit the %{subscriptions_feed_faq_link}.
+          subscriptions_feed_faq: Subscriptions and Feeds FAQ
+          your_dashboard: your Dashboard
+      bookmarking_works:
+        bookmarks_faq: Bookmarks FAQ
+        header: Bookmarking Works
+        html: You can bookmark works on the Archive as well as works hosted on other sites. You can choose to make your bookmarks public or private. You can also mark a public bookmark as a rec (recommendation). Additionally, you can add notes and tags to the bookmark, and/or add it to a collection. For more instructions on managing your Bookmarks, please visit the %{bookmarks_faq_link}.
+      browsing:
+        all_fandoms: All Fandoms
+        fandoms: Fandoms
+        header: Browsing
+        html: You can start browsing works by going to the "%{fandoms_link}" tab at the top of any Archive page in the default skin and selecting either "%{all_fandoms_link}" or one of the subsets such as "%{movies_link}". Alternatively, you can use the %{search_feature_link} to look for specific fandoms, works, or users. You can use the "Sort and Filter" form to narrow down the results in any fandom page. For more instructions, please visit %{search_browse_faq_link} and the %{search_browse_tutorial_link}.
+        movies: Movies
+        search_browse_faq: Search and Browse FAQ
+        search_browse_tutorial: Searching and browsing tutorial
+        search_feature: search feature
+      editing_profile:
+        edit_my_profile: Edit My Profile
+        header: Editing Your Profile, Password, and Preferences
+        html: To add your info, go to %{your_dashboard_link}, select the "%{profile_link}" tab, and select "%{edit_my_profile_link}" from the range of options at the end of the page. Here, you can enter some basic personal information. It's also where to go to change your password. Refer to the %{profile_faq_link} for more information.
+        profile: Profile
+        profile_faq: Profile FAQ
+        your_dashboard: your Dashboard
+      logging_in_out:
+        forgot_password: forgot your password
+        header: Logging In and Logging Out
+        html: To log in, locate the login link and fill in your Username and  Password. The link will be located at the top right of the screen and as indicated by your screenreader if you're using one. If you forget your password, then select "%{forgot_password_link}". To log out, select "Log Out" on the top right corner in the default browser skin.
+      posting_works:
+        header: Posting Works
+        html: To open the Post New Work page, just select the %{post_new_link} link from the menu of the Post tab located at the top right of the page in the default browser skin. Visit the %{posting_editing_faq_link} or check out our %{tutorial_link} for more information.
+        post_new: Post New
+        posting_editing_faq: Posting and Editing FAQ
+        tutorial: 'Tutorial: Posting a Work on AO3'
+      preferences:
+        edit_my_profile: Edit My Profile
+        header: Preferences
+        html: '"%{set_my_preferences_link}" is located next to the "%{edit_my_profile_link}" button, and allows you to adjust certain settings to personalize your experience on the site. The Preferences area controls both the Archive''s behavior (such as whether your history is saved) and the Archive''s appearance. Go to the %{preferences_faq_link} for more details.'
+        preferences_faq: Preferences FAQ
+        set_my_preferences: Set My Preferences
+        skins_detail_html: For more information on how to customize the skins and interface of the Archive, refer to the %{skins_faq_link} and %{tutorials_list_link}.
+        skins_faq: Skins and Archive Interface FAQ
+        tutorials_list: List of Tutorials
+      pseuds:
+        header: Pseuds
+        html: Pseuds are like pen names linked to your account. You can use different pseuds to post your works under the appropriate name while still managing them through the same account. You can %{manage_your_pseuds_link} through your profile page. For more information, please visit the %{pseuds_faq_link}.
+        manage_your_pseuds: manage your pseuds
+        pseuds_faq: Pseuds FAQ
+      support_and_feedback:
+        archive_faq: Archive FAQ
+        contact_support: contact Support
+        header: Support and Feedback
+        html: Some frequently asked questions about the Archive are answered in the broader %{archive_faq_link}. You may also like to check out our %{known_issues_link}. If you need more help, please %{contact_support_link}. If you want to know more about some user-created tools that work with the Archive, please visit the %{unofficial_tools_faq_link}.
+        known_issues: Known Issues
+        unofficial_tools_faq: Unofficial Browser Tools FAQ
+      table_of_contents: Table of Contents
+      tags:
+        header: Tags
+        html: All tags on the Archive—including those for fandoms, relationships, and characters—start out user-created. You can always use the existing tags by selecting from the autocomplete list. If you cannot find the tags you want to use, feel free to create new tags for your works. Behind the scenes, our tag wrangling team will match the tags up with their synonyms, so that people can find your work whether you tag it "<abbr>AMTDI</abbr>", "Aliens Made Them Do It", or "Sex Pollen". Refer to the %{tags_faq_link} to learn more.
+        tags_faq: Tags FAQ
+      tips_to_start: Here are some tips to help you get started.
+      tos:
+        additional_questions_html: If you have additional questions that are not covered here, please %{contact_abuse_link}.
+        contact_abuse: contact our Policy & Abuse team
+        content_policy: Content Policy
+        header: Terms of Service
+        info_html: You can learn about our policies and procedures by reviewing the %{tos_link}, including the %{content_policy_link} and %{privacy_policy_link}. Answers to common questions are available in the %{tos_faq_link}.
+        privacy_policy: Privacy Policy
+        tos: Terms of Service
+        tos_faq: Terms of Service FAQ
+      warnings:
+        archive_specific_warnings: Archive-specific warnings
+        description_html: 'The Archive defines four "primary" %{archive_specific_warnings_link}: "Graphic Depictions Of Violence", "Major Character Death", "Rape/Non-Con", and "Underage Sex". When posting a work, you have the option to explicitly select warnings for this content, deny the presence of such content ("No Archive Warnings Apply"), or choose not to apply warnings regardless of whether or not these warnings are applicable ("Creator Chose Not To Use Archive Warnings"). Remember, "No Archive Warnings Apply" only refers to the listed primary warnings.'
+        header: Warnings
+        symbols_html: When browsing the Archive, warnings will be displayed in the blurb of each work. Official warning tags are displayed in bold. A four square grid in the top left corner of each work's blurb indicates the work's rating, completion status, pairing category, and any Archive warnings that apply to it. Refer to the %{symbols_key_chart_link} for more information.
+        symbols_key_chart: Symbols Key Chart
+      welcome_header: Welcome to the %{app_name}!
+    preferences_locale:
+      locale:
+        description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
+        header: Set preferred locale
+      page_heading: Locale Preferences
   home:
     about:
       ao3:
@@ -1317,93 +1410,6 @@ en:
         volunteer_listings: volunteer position listings
     fandoms:
       all_fandoms: All Fandoms
-    first_login_help:
-      additional_info:
-        header: Additional Browsing Information
-        history_mark_later:
-          header: History and Mark for Later
-          history: History
-          history_faq: History and Mark for Later FAQ
-          html: You can access and manage your history by going to %{your_dashboard_link} and selecting the "%{history_link}" link in the side menu in the default browser skin or on top of the page in mobile devices. You can clear your history, or delete individual entries if you don't want these entries to show up in your history. You can also add works to the "Marked for Later" list in your history. For more information on History, please visit the %{history_faq_link}.
-          your_dashboard: your Dashboard
-        subscriptions:
-          header: Subscriptions
-          html: You can subscribe to a work, collection, series of works, or user by selecting the "Subscribe" link at the top or bottom of a work, or at the top or bottom of a collection or series page, or the user's profile page. You can check your subscriptions from %{your_dashboard_link} by selecting the "Subscriptions" link. For more information on Subscriptions, please visit the %{subscriptions_feed_faq_link}.
-          subscriptions_feed_faq: Subscriptions and Feeds FAQ
-          your_dashboard: your Dashboard
-      bookmarking_works:
-        bookmarks_faq: Bookmarks FAQ
-        header: Bookmarking Works
-        html: You can bookmark works on the Archive as well as works hosted on other sites. You can choose to make your bookmarks public or private. You can also mark a public bookmark as a rec (recommendation). Additionally, you can add notes and tags to the bookmark, and/or add it to a collection. For more instructions on managing your Bookmarks, please visit the %{bookmarks_faq_link}.
-      browsing:
-        all_fandoms: All Fandoms
-        fandoms: Fandoms
-        header: Browsing
-        html: You can start browsing works by going to the "%{fandoms_link}" tab at the top of any Archive page in the default skin and selecting either "%{all_fandoms_link}" or one of the subsets such as "%{movies_link}". Alternatively, you can use the %{search_feature_link} to look for specific fandoms, works, or users. You can use the "Sort and Filter" form to narrow down the results in any fandom page. For more instructions, please visit %{search_browse_faq_link} and the %{search_browse_tutorial_link}.
-        movies: Movies
-        search_browse_faq: Search and Browse FAQ
-        search_browse_tutorial: Searching and browsing tutorial
-        search_feature: search feature
-      editing_profile:
-        edit_my_profile: Edit My Profile
-        header: Editing Your Profile, Password, and Preferences
-        html: To add your info, go to %{your_dashboard_link}, select the "%{profile_link}" tab, and select "%{edit_my_profile_link}" from the range of options at the end of the page. Here, you can enter some basic personal information. It's also where to go to change your password. Refer to the %{profile_faq_link} for more information.
-        profile: Profile
-        profile_faq: Profile FAQ
-        your_dashboard: your Dashboard
-      logging_in_out:
-        forgot_password: forgot your password
-        header: Logging In and Logging Out
-        html: To log in, locate the login link and fill in your Username and  Password. The link will be located at the top right of the screen and as indicated by your screenreader if you're using one. If you forget your password, then select "%{forgot_password_link}". To log out, select "Log Out" on the top right corner in the default browser skin.
-      posting_works:
-        header: Posting Works
-        html: To open the Post New Work page, just select the %{post_new_link} link from the menu of the Post tab located at the top right of the page in the default browser skin. Visit the %{posting_editing_faq_link} or check out our %{tutorial_link} for more information.
-        post_new: Post New
-        posting_editing_faq: Posting and Editing FAQ
-        tutorial: 'Tutorial: Posting a Work on AO3'
-      preferences:
-        edit_my_profile: Edit My Profile
-        header: Preferences
-        html: '"%{set_my_preferences_link}" is located next to the "%{edit_my_profile_link}" button, and allows you to adjust certain settings to personalize your experience on the site. The Preferences area controls both the Archive''s behavior (such as whether your history is saved) and the Archive''s appearance. Go to the %{preferences_faq_link} for more details.'
-        preferences_faq: Preferences FAQ
-        set_my_preferences: Set My Preferences
-        skins_detail_html: For more information on how to customize the skins and interface of the Archive, refer to the %{skins_faq_link} and %{tutorials_list_link}.
-        skins_faq: Skins and Archive Interface FAQ
-        tutorials_list: List of Tutorials
-      pseuds:
-        header: Pseuds
-        html: Pseuds are like pen names linked to your account. You can use different pseuds to post your works under the appropriate name while still managing them through the same account. You can %{manage_your_pseuds_link} through your profile page. For more information, please visit the %{pseuds_faq_link}.
-        manage_your_pseuds: manage your pseuds
-        pseuds_faq: Pseuds FAQ
-      support_and_feedback:
-        archive_faq: Archive FAQ
-        contact_support: contact Support
-        header: Support and Feedback
-        html: Some frequently asked questions about the Archive are answered in the broader %{archive_faq_link}. You may also like to check out our %{known_issues_link}. If you need more help, please %{contact_support_link}. If you want to know more about some user-created tools that work with the Archive, please visit the %{unofficial_tools_faq_link}.
-        known_issues: Known Issues
-        unofficial_tools_faq: Unofficial Browser Tools FAQ
-      table_of_contents: Table of Contents
-      tags:
-        header: Tags
-        html: All tags on the Archive—including those for fandoms, relationships, and characters—start out user-created. You can always use the existing tags by selecting from the autocomplete list. If you cannot find the tags you want to use, feel free to create new tags for your works. Behind the scenes, our tag wrangling team will match the tags up with their synonyms, so that people can find your work whether you tag it "<abbr>AMTDI</abbr>", "Aliens Made Them Do It", or "Sex Pollen". Refer to the %{tags_faq_link} to learn more.
-        tags_faq: Tags FAQ
-      tips_to_start: Here are some tips to help you get started.
-      tos:
-        additional_questions_html: If you have additional questions that are not covered here, please %{contact_abuse_link}.
-        contact_abuse: contact our Policy & Abuse team
-        content_policy: Content Policy
-        header: Terms of Service
-        info_html: You can learn about our policies and procedures by reviewing the %{tos_link}, including the %{content_policy_link} and %{privacy_policy_link}. Answers to common questions are available in the %{tos_faq_link}.
-        privacy_policy: Privacy Policy
-        tos: Terms of Service
-        tos_faq: Terms of Service FAQ
-      warnings:
-        archive_specific_warnings: Archive-specific warnings
-        description_html: 'The Archive defines four "primary" %{archive_specific_warnings_link}: "Graphic Depictions Of Violence", "Major Character Death", "Rape/Non-Con", and "Underage Sex". When posting a work, you have the option to explicitly select warnings for this content, deny the presence of such content ("No Archive Warnings Apply"), or choose not to apply warnings regardless of whether or not these warnings are applicable ("Creator Chose Not To Use Archive Warnings"). Remember, "No Archive Warnings Apply" only refers to the listed primary warnings.'
-        header: Warnings
-        symbols_html: When browsing the Archive, warnings will be displayed in the blurb of each work. Official warning tags are displayed in bold. A four square grid in the top left corner of each work's blurb indicates the work's rating, completion status, pairing category, and any Archive warnings that apply to it. Refer to the %{symbols_key_chart_link} for more information.
-        symbols_key_chart: Symbols Key Chart
-      welcome_header: Welcome to the %{app_name}!
     index:
       browse_or_favorite:
         one: Browse fandoms by media or favorite up to %{count} tag to have it listed here!
@@ -2121,6 +2127,7 @@ en:
         legend: Display
         show_adult_content: Show me adult content without checking.
         show_whole_work_default: Show the whole work by default.
+      locale_help_title: Locale preferences
       misc:
         heading: Misc
         legend: Misc
