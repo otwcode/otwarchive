@@ -42,7 +42,7 @@ end
 
 When /^(?:|I )follow help tag "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector| # rubocop:disable Cucumber/RegexStepName
   with_scope(selector) do
-    find(:xpath, '//*[@aria-label=\'' + link + '\']').click
+    find(:xpath, "//*[@aria-label='#{link}']").click
   end
 end
 
