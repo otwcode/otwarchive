@@ -2,12 +2,8 @@ require 'uri'
 require 'cgi'
 
 module WithinHelpers
-  def with_scope(*args, **options)
-    if args.any? || options.any?
-      within(*args, **options) {yield}
-    else
-      yield
-    end
+  def with_scope(locator)
+    locator ? within(locator) { yield } : yield
   end
 end
 World(WithinHelpers)
