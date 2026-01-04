@@ -575,6 +575,7 @@ module ApplicationHelper
   # returns empty array for works with no series, or non-work creations
   def creation_series_ids_for_css_classes(creation)
     return [] unless %w[Work].include?(creation.class.name)
+    
     creation.series.map { |series| "series-#{series.id}" }
   end
 

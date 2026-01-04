@@ -184,7 +184,6 @@ describe ApplicationHelper do
   end
 
   describe "#creation_series_ids_for_css_classes" do
-
     context "when creation is ExternalWork" do
       let(:external_work) { create(:external_work) }
 
@@ -203,30 +202,29 @@ describe ApplicationHelper do
       end
     end
 
-      context "when creation is work" do
-        let(:series_a) { create(:series) }
-        let(:series_b) { create(:series) }
-        let(:work_a) { series_a.works.first }
-        let(:work_b) {create(:work)}
-        let(:work_c) {create(:work, series: [series_a, series_b] )}
+    context "when creation is work" do
+      let(:series_a) { create(:series) }
+      let(:series_b) { create(:series) }
+      let(:work_a) { series_a.works.first }
+      let(:work_b) { create(:work) }
+      let(:work_c) { create(:work, series: [series_a, series_b]) }
 
-        it "returns empty array for work with no series" do
-          result = helper.creation_series_ids_for_css_classes(work_b)
-          expect(result).to be_empty
-        end
+      it "returns empty array for work with no series" do
+        result = helper.creation_series_ids_for_css_classes(work_b)
+        expect(result).to be_empty
+      end
         
-        it "returns array for work with series" do
-          result = helper.creation_series_ids_for_css_classes(work_a)
-          expect(result).to eq(["series-#{series_a.id}"])
-        end
+      it "returns array for work with series" do
+        result = helper.creation_series_ids_for_css_classes(work_a)
+        expect(result).to eq(["series-#{series_a.id}"])
+      end
         
-        it "returns array for work with multiple series" do
-          result = helper.creation_series_ids_for_css_classes(work_c)
-          expect(result).to eq(["series-#{series_a.id}", "series-#{series_b.id}"])
-        end
+      it "returns array for work with multiple series" do
+        result = helper.creation_series_ids_for_css_classes(work_c)
+        expect(result).to eq(["series-#{series_a.id}", "series-#{series_b.id}"])
       end
     end
-
+  end
 
   describe "#css_classes_for_creation_blurb" do
     let(:default_classes) { "blurb group" }

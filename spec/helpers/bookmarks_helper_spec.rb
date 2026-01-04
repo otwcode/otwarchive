@@ -120,7 +120,6 @@ describe BookmarksHelper do
           result = helper.css_classes_for_bookmark_blurb(work_bookmark.reload)
           expect(result).to eq("#{default_classes} work-#{work.id} series-#{work.series.first.id} user-#{work_creator.id} user-#{bookmarker.id}")
         end
-
       end
 
       context "when work is updated" do
