@@ -101,8 +101,6 @@ class User < ApplicationRecord
   after_update :expire_caches
   before_destroy :remove_user_from_kudos
 
-  after_commit :log_past_username, on: :update
-  after_commit :log_past_emails, on: :update
 
   # Extra callback to make sure readings are deleted in an order consistent
   # with the ReadingsJob.
@@ -190,14 +188,6 @@ class User < ApplicationRecord
   def remove_user_from_kudos
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
     Kudo.where(user: self).update_all(user_id: nil)
-  end
-
-  def log_past_username
-    user_past_usernames.create!(user_id: self.id, username: saved_changes["username"]&.first, changed_at: self.updated_at)
-  end
-
-  def log_past_emails
-    user_past_usernames.create!(user_id: self.id, username: saved_changes["email_address"]&.first, changed_at: self.updated_at)
   end
 
   def read_inbox_comments
@@ -599,6 +589,7 @@ class User < ApplicationRecord
                      else
                        "Old Username: #{login_before_last_save}; New Username: #{login}"
                      end
+    user_past_usernames.create!(user_id: self.id, username: login_before_last_save, changed_at: self.updated_at)
     create_log_item(options)
   end
 
@@ -615,6 +606,7 @@ class User < ApplicationRecord
       admin_id: current_admin&.id
     }
     options[:note] = "Change made by #{current_admin&.login}" if current_admin
+    user_past_emails.create!(user_id: self.id, email_address: email_before_last_save, changed_at: self.updated_at)
     create_log_item(options)
   end
 
