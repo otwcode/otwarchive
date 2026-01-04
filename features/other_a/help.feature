@@ -29,7 +29,7 @@ Feature: Help
     And I fill in "content" with "Well, maybe not so epic."
     And I press "Post"
     And I follow "Add Chapter"
-    And I follow "Chapter title"
+    And I follow help tag "Chapter title"
     Then I should see "You can add a chapter title"
 
   Scenario: Asked to log in if trying to access the first login page as guest

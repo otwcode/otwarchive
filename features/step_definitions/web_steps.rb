@@ -3,7 +3,11 @@ require 'cgi'
 
 module WithinHelpers
   def with_scope(*args, **options)
-    args ? within(*args, **options) { yield } : yield
+    if args.any? || options.any?
+      within(*args, **options) {yield}
+    else
+      yield
+    end
   end
 end
 World(WithinHelpers)
@@ -41,8 +45,8 @@ When /^(?:|I )follow "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
 end
 
 When /^(?:|I )follow help tag "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
-  with_scope('//*[@aria-label=\'' + selector + '\']', kind: :xpath) do
-    click_link(link)
+  with_scope(selector) do
+    find(:xpath, '//*[@aria-label=\'' + link + '\']').click
   end
 end
 
