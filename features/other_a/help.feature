@@ -9,7 +9,7 @@ Feature: Help
     Given I am logged in as "first_user"
     When I go to the collections page
     When I follow "New Collection"
-    And I follow "Collection moderated"
+    And I follow help tag "Collection moderated"
     Then I should see "By default, collections are not moderated"
 
   Scenario: view the help popup for chapter title

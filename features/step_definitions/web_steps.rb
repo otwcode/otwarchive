@@ -2,8 +2,8 @@ require 'uri'
 require 'cgi'
 
 module WithinHelpers
-  def with_scope(locator)
-    locator ? within(locator) { yield } : yield
+  def with_scope(*args, **options)
+    args ? within(*args, **options) { yield } : yield
   end
 end
 World(WithinHelpers)
@@ -36,6 +36,12 @@ end
 
 When /^(?:|I )follow "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
   with_scope(selector) do
+    click_link(link)
+  end
+end
+
+When /^(?:|I )follow help tag "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
+  with_scope('//*[@aria-label=\'' + selector + '\']', kind: :xpath) do
     click_link(link)
   end
 end
