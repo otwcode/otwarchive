@@ -40,7 +40,7 @@ When /^(?:|I )follow "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
   end
 end
 
-When /^(?:|I )follow help tag "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
+When /^(?:|I )follow help tag "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector| # rubocop:disable Cucumber/RegexStepName
   with_scope(selector) do
     find(:xpath, '//*[@aria-label=\'' + link + '\']').click
   end
