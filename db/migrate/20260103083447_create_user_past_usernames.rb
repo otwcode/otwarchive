@@ -5,7 +5,7 @@ class CreateUserPastUsernames < ActiveRecord::Migration[7.2]
       t.string :username
       t.datetime :changed_at
 
-      t.foreign_key :users, column: :user_id
+      add_foreign_key :user_past_usernames, :users
 
       t.timestamps
     end

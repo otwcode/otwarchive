@@ -5,7 +5,7 @@ class CreateUserPastEmails < ActiveRecord::Migration[7.2]
       t.string :email_address
       t.datetime :changed_at
 
-      t.foreign_key :users, column: :user_id
+      add_foreign_key :user_past_emails, :users
 
       t.timestamps
     end
