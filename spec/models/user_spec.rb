@@ -254,6 +254,15 @@ describe User do
         expect(existing_user.renamed_at).to eq(Time.current)
         expect(existing_user.admin_renamed_at).to be nil
       end
+      
+      it "records past username" do
+        freeze_time
+        existing_user.update!(login: "new_username")
+        user_change = existing_user.user_past_usernames.last
+        expect(user_change.user_id).to eq(existing_user.id)
+        expect(user_change.username).not_to eq("new_username")
+        expect(user_change.changed_at).to eq(Time.current)
+      end
 
       context "username was recently changed" do
         before do
@@ -339,6 +348,13 @@ describe User do
         expect(log_item.action).to eq(ArchiveConfig.ACTION_NEW_EMAIL)
         expect(log_item.admin_id).to be_nil
         expect(log_item.note).to eq("System Generated")
+      end
+      
+      it "records previous email" do
+        old_email = existing_user.user_past_emails.last
+        expect(old_email.email_address).not_to eq(existing_user.email)
+        expect(old_email.user_id).to eq(existing_user.id)
+        expect(old_email.changed_at).to eq(existing_user.updated_at)
       end
     end
 

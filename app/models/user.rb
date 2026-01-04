@@ -100,8 +100,7 @@ class User < ApplicationRecord
   after_update :log_email_change, if: :saved_change_to_email?
   after_update :expire_caches
   before_destroy :remove_user_from_kudos
-
-
+  
   # Extra callback to make sure readings are deleted in an order consistent
   # with the ReadingsJob.
   #
