@@ -198,7 +198,7 @@ describe BookmarkQuery do
       end
     end
 
-    context "when run by a guest admin" do
+    context "when run by a guest" do
       Tag::FILTERS.each do |type|
         it "includes #{type.underscore.humanize.downcase} aggregations for the bookmarkable" do
           expect(aggregations[:bookmarkable]).to \
