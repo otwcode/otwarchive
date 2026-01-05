@@ -841,18 +841,18 @@ class WorksController < ApplicationController
       relationships_changed = params[:work][:relationship_string] != @work.relationship_string
       characters_changed = params[:work][:character_string] != @work.character_string
       freeforms_changed = params[:work][:freeform_string] != @work.freeform_string
-      # The category_strings and archive_warning_strings params values
-      # both start with an empty element which has to be dropped here
-      categories_changed = if params[:work][:category_strings].nil?
-                             params[:work][:category_string] != @work.category_string
-                           else
-                             params[:work][:category_strings].drop(1).sort != @work.category_strings.sort
-                           end
-      warnings_changed = if params[:work][:archive_warning_strings].nil?
-                           params[:work][:archive_warning_string] != @work.archive_warning_string
-                         else
-                           params[:work][:archive_warning_strings].drop(1).sort != @work.archive_warning_strings.sort
-                         end
+      # Saving without previewing uses "strings" category and warning parameters
+      # but previewing and saving uses "string" ones
+      if params[:work][:category_strings].nil?
+        categories_changed = params[:work][:category_string] != @work.category_string
+        warnings_changed = params[:work][:archive_warning_string] != @work.archive_warning_string
+      else
+        # The category_strings and archive_warning_strings params values
+        # both start with an empty element which has to be dropped here
+        categories_changed = params[:work][:category_strings].drop(1).sort != @work.category_strings.sort
+        warnings_changed = params[:work][:archive_warning_strings].drop(1).sort != @work.archive_warning_strings.sort
+      end
+
       return unless rating_changed || fandoms_changed || relationships_changed ||
                     characters_changed || freeforms_changed ||
                     categories_changed || warnings_changed
