@@ -229,6 +229,12 @@ TAGGINGS_COUNT_REINDEX_LIMIT: 1000
 # How many rows we should get from audits for historic email and login values for users
 USER_HISTORIC_VALUES_LIMIT: 10_000
 
+# When backfilling user past tables from audits, how many to do in one AuditsBackfillJob
+AUDITS_BACKFILL_JOB_SIZE: 1000
+
+# When backfilling user past tables from audits, how many to do in one transaction
+AUDITS_BACKFILL_BATCH_SIZE: 100
+
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 
