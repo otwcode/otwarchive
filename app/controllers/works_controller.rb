@@ -823,14 +823,16 @@ class WorksController < ApplicationController
     return unless logged_in_as_admin?
 
     if params[:action] == "update_tags"
-      old_language_id = @work.language_id
-      new_language_id = params[:work][:language_id].to_i
+      unless params[:work][:language_id].empty?
+        old_language_id = @work.language_id
+        new_language_id = params[:work][:language_id].to_i
 
-      if new_language_id && old_language_id != new_language_id
-        new_language_name = Language.find_by(id: new_language_id).name
-        edit_language_summary = "<p>Old language: #{@work.language.name}</p><p>New language: #{new_language_name}</p>"
+        if old_language_id != new_language_id
+          new_language_name = Language.find_by(id: new_language_id).name
+          edit_language_summary = "<p>Old language: #{@work.language.name}</p><p>New language: #{new_language_name}</p>"
 
-        AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_language_summary)
+          AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_language_summary)
+        end
       end
 
       # Don't log if nothing changed.
