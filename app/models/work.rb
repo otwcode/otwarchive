@@ -245,7 +245,7 @@ class Work < ApplicationRecord
   after_save :notify_of_hiding
 
   after_destroy :expire_caches, :update_pseud_and_collection_indexes
-  after_save :notify_recipients, :expire_caches, :update_pseud_and_collection_indexes, :update_tag_index, :touch_series, :touch_related_works
+  after_save :notify_recipients, :expire_caches, :update_pseud_and_collection_indexes, :update_series_indexes, :update_tag_index, :touch_series, :touch_related_works
 
   before_destroy :send_deleted_work_notification, prepend: true
   def send_deleted_work_notification
@@ -313,6 +313,13 @@ class Work < ApplicationRecord
     pertinent_attributes = %w[id posted restricted in_anon_collection
                               in_unrevealed_collection hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  def update_series_indexes
+    return unless should_update_series_indexes?
+
+    series_ids = SerialWork.where(work_id: id).pluck(:series_id)
+    IndexQueue.enqueue_ids(Series, series_ids, :background)
   end
 
   # If the work gets posted, (un)hidden, or (un)revealed, we should (potentially) reindex the tags,
@@ -1200,7 +1207,7 @@ class Work < ApplicationRecord
       root: false,
       only: [
         :title, :summary, :hidden_by_admin, :restricted, :posted,
-        :created_at, :revised_at, :word_count, :complete
+        :created_at, :revised_at, :complete
       ],
       methods: [
         :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
@@ -1214,8 +1221,10 @@ class Work < ApplicationRecord
       unrevealed: unrevealed?,
       pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
       user_ids: anonymous? || unrevealed? ? nil : user_ids,
-      bookmarkable_type: 'Work',
-      bookmarkable_join: { name: "bookmarkable" }
+      bookmarkable_type: "Work",
+      bookmarkable_join: { name: "bookmarkable" },
+      public_word_count: word_count,
+      general_word_count: word_count
     )
   end
 
@@ -1286,6 +1295,12 @@ class Work < ApplicationRecord
   end
 
   private
+
+  # Visibility or word count has changed, so we need to update series word counts
+  def should_update_series_indexes?
+    pertinent_attributes = %w[id posted restricted word_count hidden_by_admin]
+    (saved_changes.keys & pertinent_attributes).present?
+  end
 
   def challenge_bypass(gift)
     self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud) ||

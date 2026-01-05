@@ -112,15 +112,9 @@ class Series < ApplicationRecord
     end
   end
 
+  # Show same word count as is used for sorting
   def visible_word_count
-    if User.current_user.nil?
-      # visible_works_wordcount = self.works.posted.unrestricted.sum(:word_count)
-      visible_works_wordcount = self.works.posted.unrestricted.pluck(:word_count).compact.sum
-    else
-      # visible_works_wordcount = self.works.posted.sum(:word_count)
-      visible_works_wordcount = self.works.posted.pluck(:word_count).compact.sum
-    end
-    visible_works_wordcount
+    User.current_user.nil? ? self.public_word_count : self.general_word_count
   end
 
   def anonymous?
@@ -235,7 +229,7 @@ class Series < ApplicationRecord
       methods: [
         :revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :word_count, :work_types
+        :relationship_ids, :freeform_ids, :public_word_count, :general_word_count, :work_types
       ]
     ).merge(
       language_id: language&.short,
@@ -255,6 +249,20 @@ class Series < ApplicationRecord
 
   def word_count
     self.works.posted.pluck(:word_count).compact.sum
+  end
+
+  # Word count as seen by guests
+  def public_word_count
+    # Exclude restricted works and those hidden by admin from the word count
+    self.works.posted.unrestricted.unhidden.pluck(:word_count).compact.sum
+  end
+
+  # Word count as seen by registered users
+  # Note: creators will still see hidden works, but these works will not be included
+  # in the series word count
+  def general_word_count
+    # Exclude works hidden by admin from the word count
+    self.works.posted.unhidden.pluck(:word_count).compact.sum
   end
 
   # FIXME: should series have their own language?

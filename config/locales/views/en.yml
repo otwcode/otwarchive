@@ -538,10 +538,16 @@ en:
   bookmarks:
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    filters:
+      from: From
+      to: To
+      word_count: Word count
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
+    search_form:
+      word_count: Word count
   challenge:
     gift_exchange:
       challenge_signups:
