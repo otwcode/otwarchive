@@ -63,6 +63,7 @@ class BookmarkableQuery < Query
       language_filter,
       filter_id_filter,
       named_tag_inclusion_filter,
+      word_count_filter,
       date_filter
     )
   end
@@ -99,16 +100,25 @@ class BookmarkableQuery < Query
   # SORTING AND AGGREGATIONS
   ####################
 
-  # When sorting by bookmarkable date, we use the revised_at field to order the
-  # results. When sorting by created_at, we use _score to sort (because the
-  # only way to sort by a child's fields is to store the value in the _score
-  # field and sort by score).
   def sort
-    if sort_column == "bookmarkable_date"
-      sort_hash = { revised_at: { order: sort_direction, unmapped_type: "date" } }
-    else
-      sort_hash = { _score: { order: sort_direction } }
-    end
+    sort_hash = case sort_column
+                when "bookmarkable_date"
+                  # bookmarkable_date corresponds to the bookmarkable's revised_at date
+                  { revised_at: { order: sort_direction, unmapped_type: "date" } }
+                when "created_at", "_score"
+                  # When sorting by created_at, we use _score to sort (because the
+                  # only way to sort by a child's fields is to store the value in
+                  # the _score field and sort by score).
+                  { _score: { order: sort_direction } }
+                when "word_count"
+                  # Word_count cases are different depending on whether we include
+                  # restricted works
+                  if include_restricted?
+                    { general_word_count: { order: sort_direction } }
+                  else
+                    { public_word_count: { order: sort_direction } }
+                  end
+                end
 
     [sort_hash, { sort_id: { order: sort_direction } }]
   end
@@ -196,6 +206,27 @@ class BookmarkableQuery < Query
   ####################
   # FILTERS
   ####################
+
+  # Some search/filter pages allow users to specify word_count, others allow users
+  # to specify words_from and words_to. For the purpose of this filter, we assume that
+  # if word_count is specified, words_from and words_to will not be.
+  def word_count_filter
+    return if options[:word_count].blank? && options[:words_from].blank? && options[:words_to].blank?
+
+    if options[:word_count].present?
+      range = SearchRange.parsed(options[:word_count])
+    else
+      range = {}
+      range[:gte] = options[:words_from].delete(",._").to_i if options[:words_from].present?
+      range[:lte] = options[:words_to].delete(",._").to_i if options[:words_to].present?
+    end
+
+    if include_restricted?
+      { range: { general_word_count: range } }
+    else
+      { range: { public_word_count: range } }
+    end
+  end
 
   def complete_filter
     term_filter(:complete, 'true') if options[:complete].present?

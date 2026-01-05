@@ -92,9 +92,9 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And all indexing jobs have been run
     Then I should see "Item was successfully deleted."
       And 2 emails should be delivered
-      And the email to "regular_user" should contain "deleted from the Archive by a site admin"
+      And the email to "regular_user" should contain "was deleted by an AO3 administrator"
       And the email to "regular_user" should be translated
-      And the email to "Another" should contain "deleted from the Archive by a site admin"
+      And the email to "Another" should contain "was deleted by an AO3 administrator"
       And the email to "Another" should be non-translated
     When I visit the last activities item
     Then I should see "destroy"
@@ -116,7 +116,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And all indexing jobs have been run
     Then I should see "Item was successfully deleted."
       And 1 email should be delivered
-      And the email should contain "deleted from the Archive by a site admin"
+      And the email should contain "was deleted by an AO3 administrator"
       And the email should not contain "translation missing"
     When I log out
       And I am on regular_user's works page

@@ -187,3 +187,18 @@ Feature: Work Drafts
       When I follow "Next Chapter"
         And I press "Post Chapter"
       Then I should see "Words:16"
+
+  Scenario: A user should not be able to comment on an unposted work
+    Given I am logged in as "Scott" with password "password"
+      And the draft "scotts commentless draft"
+    When I view the work "scotts commentless draft"
+    Then I should see "Sorry, you can't comment on a draft."
+
+  Scenario: A user should not be able to comment on an unposted chapter
+    Given I am logged in as "Scott" with password "password"
+      And the work "scotts chaptered work"
+      And a chapter is set up for "scotts chaptered work"
+      And I press "Save Draft"
+      And I press "Save Draft"
+    Then I should see "This chapter is a draft and hasn't been posted yet!"
+      And I should see "Sorry, you can't comment on a draft."

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Series do
   let(:unrestricted_work) { create(:work, restricted: false) }
@@ -32,6 +32,58 @@ describe Series do
                                               restricted_work.pseuds)
     expect(series.pseuds).to include(*unrestricted_work.pseuds.to_a)
     expect(series.pseuds).to include(*restricted_work.pseuds.to_a)
+  end
+
+  describe "#visible_word_count" do
+    let(:hidden_work) { create(:work, hidden_by_admin: true) }
+
+    context "when not logged in" do
+      it "counts public work words" do
+        series.works = [unrestricted_work]
+        series.reload
+        expect(series.visible_word_count).to eq(unrestricted_work.word_count)
+      end
+
+      it "excludes restricted work words" do
+        series.works = [unrestricted_work, restricted_work]
+        series.reload
+        expect(series.visible_word_count).to eq(unrestricted_work.word_count)
+      end
+
+      it "excludes hidden-by-admin work words" do
+        series.works = [unrestricted_work, hidden_work]
+        series.reload
+        expect(series.visible_word_count).to eq(unrestricted_work.word_count)
+      end
+    end
+
+    context "when logged in" do
+      let(:creator) { create(:user) }
+      # We get co-creator warnings when creating the series unless we re-create these
+      # works with the logged-in user (co-creator warnings are tested elsewhere)
+      let(:unrestricted_work) { create(:work, restricted: false, authors: [creator.default_pseud]) }
+      let(:restricted_work) { create(:work, restricted: false, authors: [creator.default_pseud]) }
+      let(:hidden_work) { create(:work, hidden_by_admin: true, authors: [creator.default_pseud]) }
+
+      before do
+        User.current_user = creator
+      end
+
+      it "counts public work words" do
+        series = create(:series, works: [unrestricted_work], authors: [creator.default_pseud])
+        expect(series.visible_word_count).to eq(unrestricted_work.word_count)
+      end
+
+      it "includes restricted work words too" do
+        series = create(:series, works: [unrestricted_work, restricted_work], authors: [creator.default_pseud])
+        expect(series.visible_word_count).to eq(unrestricted_work.word_count + restricted_work.word_count)
+      end
+
+      it "excludes hidden-by-admin work words" do
+        series = create(:series, works: [unrestricted_work, hidden_work], authors: [creator.default_pseud])
+        expect(series.visible_word_count).to eq(unrestricted_work.word_count)
+      end
+    end
   end
 
   describe "co-creator permissions" do
