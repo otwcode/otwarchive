@@ -397,8 +397,41 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I press "Preview"
     Then I should see "Preview Tags and Language"
     When I press "Update"
-    Then I should see "Deutsch"
+      Then I should see "Deutsch"
       And I should not see "English"
+
+  Scenario: Admin can edit tags and language at the same time on works
+    Given basic languages
+      And the work "Wrong Tags and Language"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Wrong Tags and Language"
+      And I follow "Edit Tags and Language"
+    When I select "Mature" from "Rating"
+      And I select "Deutsch" from "Choose a language"
+      And I press "Update"
+      And I follow "Activities"
+    Then I should see "update_tags"
+      And I should see "edit language"
+
+  Scenario: When admin does not edit tags or language, no Activities entries are added
+    Given the work "Nothing Wrong"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Nothing Wrong"
+      And I follow "Edit Tags and Language"
+      And I press "Update"
+      And I follow "Activities"
+    Then I should not see "update_tags"
+      And I should not see "edit language"
+  
+  Scenario: test thing to see how it works in tests
+    Given the work "Nothing Wrong"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Nothing Wrong"
+      And I follow "Edit Tags and Language"
+      And I press "Update"
+      And I follow "Activities"
+    Then I should not see "update_tags"
+      And I should not see "edit language"
 
   Scenario: can mark a work as spam
   Given the work "Spammity Spam"
