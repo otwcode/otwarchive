@@ -2240,6 +2240,15 @@ en:
     index:
       page_heading: "%{login}'s Related Works"
   series:
+    series_module:
+      hidden_by_admin_alt: "(Hidden by Admin)"
+      hidden_by_administrator: Hidden by Administrator
+      landmark:
+        fandom: Fandom
+        summary: Summary
+      restricted: Restricted
+      restricted_alt: "(Restricted)"
+      series_by_html: "%{series_title_link} by %{byline}"
     series_order:
       draft_work_title: "%{title} (DRAFT)"
   skins:
