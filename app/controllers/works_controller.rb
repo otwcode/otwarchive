@@ -820,26 +820,40 @@ class WorksController < ApplicationController
   end
 
   def log_admin_activity
-    if logged_in_as_admin?
-      options = { action: params[:action] }
+    # Don't log if it's just a preview
+    # TODO: also don't log if the changes can't be saved (e.g. removing all fandoms from a work)
+    return if params[:preview_button]
 
-      old_language_id = @work.language_id
-      new_language_id = params[:work][:language_id].to_i
+    return unless logged_in_as_admin?
 
-      if new_language_id && old_language_id != new_language_id
+    if params[:action] == "update_tags"
+      old_language_id = @work.language_id.to_s
+      new_language_id = params[:work][:language_id]
+
+      if !new_language_id.empty? && old_language_id != new_language_id
         new_language_name = Language.find_by(id: new_language_id).name
-        summary = "<p>Old language: #{@work.language.name}</p><p>New language: #{new_language_name}</p>"
+        edit_language_summary = "<p>Old language: #{@work.language.name}</p><p>New language: #{new_language_name}</p>"
 
-        AdminActivity.log_action(current_admin, @work, action: "edit language", summary: summary)
+        AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_language_summary)
+      end
+
+      # Don't log if nothing changed.
+      # The category_strings and archive_warning_strings params values
+      # both start with an empty element which has to be dropped here
+      if params[:work][:rating_string] == @work.rating_string &&
+         params[:work][:fandom_string] == @work.fandom_string &&
+         params[:work][:relationship_string] == @work.relationship_string &&
+         params[:work][:character_string] == @work.character_string &&
+         params[:work][:freeform_string] == @work.freeform_string &&
+         params[:work][:category_strings].drop(1) == @work.category_strings &&
+         params[:work][:archive_warning_strings].drop(1) == @work.archive_warning_strings
         return
       end
 
-      if params[:action] == 'update_tags'
-        summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}"
-      end
-
-      AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
+      summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}"
     end
+
+    AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
   end
 
   private
