@@ -397,7 +397,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I press "Preview"
     Then I should see "Preview Tags and Language"
     When I press "Update"
-      Then I should see "Deutsch"
+    Then I should see "Deutsch"
       And I should not see "English"
 
   Scenario: Admin can edit tags and language at the same time on works
