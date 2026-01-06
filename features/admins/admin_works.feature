@@ -422,16 +422,6 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I follow "Activities"
     Then I should not see "update_tags"
       And I should not see "edit language"
-  
-  Scenario: test thing to see how it works in tests
-    Given the work "Nothing Wrong"
-    When I am logged in as a "policy_and_abuse" admin
-      And I view the work "Nothing Wrong"
-      And I follow "Edit Tags and Language"
-      And I press "Update"
-      And I follow "Activities"
-    Then I should not see "update_tags"
-      And I should not see "edit language"
 
   Scenario: can mark a work as spam
   Given the work "Spammity Spam"
