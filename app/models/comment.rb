@@ -65,7 +65,8 @@ class Comment < ApplicationRecord
   validate :check_for_spam, on: :create
 
   def check_for_spam
-    self.approved = skip_spamcheck? || !spam?
+    self.spam = !skip_spamcheck? && spam?
+    self.approved = !self.spam
 
     errors.add(:base, :spam) unless approved
   end
@@ -186,10 +187,12 @@ class Comment < ApplicationRecord
         users << self.comment_owner
       end
       if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
-        if self.reply_comment?
-          CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
-        else
-          CommentMailer.comment_sent_notification(self).deliver_after_commit
+        I18n.with_locale(self.comment_owner.preference.locale_for_mails) do
+          if self.reply_comment?
+            CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+          else
+            CommentMailer.comment_sent_notification(self).deliver_after_commit
+          end
         end
       end
 
@@ -226,10 +229,12 @@ class Comment < ApplicationRecord
       users << self.comment_owner
     end
     if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
-      if self.reply_comment?
-        CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
-      else
-        CommentMailer.comment_sent_notification(self).deliver_after_commit
+      I18n.with_locale(self.comment_owner.preference.locale_for_mails) do
+        if self.reply_comment?
+          CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+        else
+          CommentMailer.comment_sent_notification(self).deliver_after_commit
+        end
       end
     end
 
@@ -371,10 +376,12 @@ class Comment < ApplicationRecord
 
     # send notification to the owner of the original comment if they're not the same as the commenter
     if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
-      if self.saved_change_to_edited_at?
-        CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
-      else
-        CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
+      I18n.with_locale(parent_comment_owner&.preference&.locale_for_mails) do
+        if self.saved_change_to_edited_at?
+          CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
+        else
+          CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
+        end
       end
     end
 
@@ -501,11 +508,13 @@ class Comment < ApplicationRecord
 
   def mark_as_spam!
     update_attribute(:approved, false)
+    update_attribute(:spam, true)
     submit_spam
   end
 
   def mark_as_ham!
     update_attribute(:approved, true)
+    update_attribute(:spam, false)
     submit_ham
   end
 

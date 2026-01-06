@@ -107,7 +107,7 @@ describe CollectionIndexer do
     context "with multiple collections in a batch", :n_plus_one do
       populate { |n| create_list(:collection, n, challenge: create(:gift_exchange)) }
 
-      it "generates a constant number of database queries" do
+      it "generates about 8 database queries per collection" do
         expect do
           CollectionIndexer.new(Collection.ids).index_documents
         end.to perform_linear_number_of_queries(slope: 8) # The eight works/bookmarked items count queries which can't be eliminated with includes

@@ -119,15 +119,9 @@ class Series < ApplicationRecord
     end
   end
 
+  # Show same word count as is used for sorting
   def visible_word_count
-    if User.current_user.nil?
-      # visible_works_wordcount = self.works.posted.unrestricted.sum(:word_count)
-      visible_works_wordcount = self.works.posted.unrestricted.pluck(:word_count).compact.sum
-    else
-      # visible_works_wordcount = self.works.posted.sum(:word_count)
-      visible_works_wordcount = self.works.posted.pluck(:word_count).compact.sum
-    end
-    visible_works_wordcount
+    User.current_user.nil? ? self.public_word_count : self.general_word_count
   end
 
   def anonymous?
@@ -199,12 +193,14 @@ class Series < ApplicationRecord
   end
 
   # returns list of fandoms on this series
-  def allfandoms
-    works.collect(&:fandoms).flatten.compact.uniq.sort
+  def fandoms
+    tag_groups["Fandom"]&.sort || []
   end
 
   def tag_groups
-    self.work_tags.group_by { |t| t.type.to_s }
+    tags = self.work_tags.where(works: { hidden_by_admin: false, posted: true })
+    tags = tags.where(works: { restricted: false }) unless User.current_user
+    tags.group_by { |t| t.type.to_s }
   end
 
   # Grabs the earliest published_at date of the visible works in the series
@@ -229,10 +225,11 @@ class Series < ApplicationRecord
   ######################
 
   def bookmarkable_json
-    methods = %i[creators posted revised_at word_count work_types]
+    methods = %i[posted revised_at word_count work_types]
     %w[general public].each do |visibility|
       methods << :"#{visibility}_tags"
       methods << :"#{visibility}_filter_ids"
+      methods << :"#{visibility}_word_count"
 
       Tag::FILTERS.map(&:underscore).each do |tag_type|
         methods << :"#{visibility}_#{tag_type}_ids"
@@ -249,6 +246,7 @@ class Series < ApplicationRecord
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
+      creators: indexed_creators,
       unrevealed: unrevealed?,
       pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
       user_ids: anonymous? || unrevealed? ? nil : user_ids,
@@ -263,6 +261,20 @@ class Series < ApplicationRecord
 
   def word_count
     self.works.posted.pluck(:word_count).compact.sum
+  end
+
+  # Word count as seen by guests
+  def public_word_count
+    # Exclude restricted works and those hidden by admin from the word count
+    self.works.posted.unrestricted.unhidden.pluck(:word_count).compact.sum
+  end
+
+  # Word count as seen by registered users
+  # Note: creators will still see hidden works, but these works will not be included
+  # in the series word count
+  def general_word_count
+    # Exclude works hidden by admin from the word count
+    self.works.posted.unhidden.pluck(:word_count).compact.sum
   end
 
   # FIXME: should series have their own language?
@@ -316,7 +328,7 @@ class Series < ApplicationRecord
     end
   end
 
-  def creators
+  def indexed_creators
     anonymous? ? ['Anonymous'] : pseuds.map(&:byline)
   end
 

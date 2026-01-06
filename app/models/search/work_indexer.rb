@@ -89,13 +89,13 @@ class WorkIndexer < Indexer
         :comments_count,
         :kudos_count,
         :bookmarks_count,
-        :creators,
         :crossover,
         :otp,
         :work_types,
         :nonfiction
       ]
     ).merge(
+      creators: object.indexed_creators,
       rating_ids: object.general_rating_ids,
       archive_warning_ids: object.general_archive_warning_ids,
       category_ids: object.general_category_ids,

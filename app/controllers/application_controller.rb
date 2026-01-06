@@ -210,44 +210,11 @@ public
     @current_tos_version = 2024_11_19 # rubocop:disable Style/NumericLiterals
   end
 
-  # store previous page in session to make redirecting back possible
-  # if already redirected once, don't redirect again.
-  before_action :store_location
-  def store_location
-    if session[:return_to] == "redirected"
-      session.delete(:return_to)
-    elsif request.fullpath.length > 200
-      # Sessions are stored in cookies, which has a 4KB size limit.
-      # Don't store paths that are too long (e.g. filters with lots of exclusions).
-      # Also remove the previous stored path.
-      session.delete(:return_to)
-    else
-      session[:return_to] = request.fullpath
-    end
-  end
-
-  # Redirect to the URI stored by the most recent store_location call or
-  # to the passed default.
-  def redirect_back_or_default(default = root_path)
-    back = session[:return_to]
-    session.delete(:return_to)
-    if back
-      session[:return_to] = "redirected"
-      redirect_to(back) and return
-    else
-      redirect_to(default) and return
-    end
-  end
-
+  include PathCleaner
   def after_sign_in_path_for(resource)
-    if resource.is_a?(Admin)
-      admins_path
-    else
-      back = session[:return_to]
-      session.delete(:return_to)
+    return admins_path if resource.is_a?(Admin)
 
-      back || user_path(current_user)
-    end
+    relative_path(params[:return_to]) || user_path(current_user)
   end
 
   def authenticate_admin!
@@ -283,18 +250,17 @@ public
   # behavior in case the user is not authorized
   # to access the requested action.  For example, a popup window might
   # simply close itself.
-  def access_denied(options ={})
-    store_location
+  def access_denied(options = {})
+    destination = options[:redirect]
     if logged_in?
-      destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
+      destination ||= user_path(current_user)
       # i18n-tasks-use t('users.reconfirm_email.access_denied.logged_in')
       flash[:error] = t(".access_denied.logged_in", default: t("application.access_denied.access_denied.logged_in")) # rubocop:disable I18n/DefaultTranslation
-      redirect_to destination
     else
-      destination = options[:redirect].blank? ? new_user_session_path : options[:redirect]
+      destination ||= new_user_session_path(return_to: request.fullpath)
       flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
-      redirect_to destination
     end
+    redirect_to destination
     false
   end
 
@@ -375,7 +341,6 @@ public
     redirect_to (fallback || root_path) rescue redirect_to '/'
   end
 
-
   def get_page_title(fandom, author, title, options = {})
     # truncate any piece that is over 15 chars long to the nearest word
     if options[:truncate]
@@ -384,18 +349,17 @@ public
       title = title.gsub(/^(.{15}[\w.]*)(.*)/) {$2.empty? ? $1 : $1 + '...'}
     end
 
-    @page_title = ""
     if logged_in? && !current_user.preference.try(:work_title_format).blank?
-      @page_title = current_user.preference.work_title_format.dup
-      @page_title.gsub!(/FANDOM/, fandom)
-      @page_title.gsub!(/AUTHOR/, author)
-      @page_title.gsub!(/TITLE/, title)
+      page_title = current_user.preference.work_title_format.dup
+      page_title.gsub!(/FANDOM/, fandom)
+      page_title.gsub!(/AUTHOR/, author)
+      page_title.gsub!(/TITLE/, title)
     else
-      @page_title = title + " - " + author + " - " + fandom
+      page_title = "#{title} - #{author} - #{fandom}"
     end
 
-    @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
-    @page_title.html_safe
+    page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
+    page_title.html_safe
   end
 
   public
@@ -485,7 +449,7 @@ public
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to new_user_session_path(restricted: true)
+      redirect_to new_user_session_path(restricted: true, return_to: request.fullpath)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
@@ -552,7 +516,6 @@ public
   # Don't get unnecessary data for json requests
 
   skip_before_action  :load_admin_banner,
-                      :store_location,
                       if: proc { %w(js json).include?(request.format) }
 
 end

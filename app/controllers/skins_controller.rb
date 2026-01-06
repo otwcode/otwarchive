@@ -15,7 +15,8 @@ class SkinsController < ApplicationController
       @preference = current_user.preference
     end
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-      redirect_to new_user_session_path and return unless logged_in?
+      redirect_to new_user_session_path(return_to: request.fullpath) and return unless logged_in?
+
       if @user != current_user
         flash[:error] = "You can only browse your own skins and approved public skins."
         redirect_to skins_path and return
@@ -85,6 +86,15 @@ class SkinsController < ApplicationController
         render :new
       end
     end
+  rescue ActiveRecord::RecordNotUnique
+    # If we pass Rails validations but get rejected by database unique indices, use the usual duplicate error message.
+    @skin.errors.add(:title, :taken)
+
+    if params[:wizard]
+      render :new_wizard
+    else
+      render :new
+    end
   end
 
   # GET /skins/1/edit
@@ -133,7 +143,7 @@ class SkinsController < ApplicationController
     else
       flash[:error] = ts("Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{title} to be added!", title: @skin.title)
     end
-    redirect_to(request.referer || @skin)
+    redirect_back_or_to @skin
   end
 
   def unset
@@ -143,7 +153,7 @@ class SkinsController < ApplicationController
       current_user.preference.save
     end
     flash[:notice] = ts("You are now using the default Archive skin again!")
-    redirect_to(request.referer || root_path)
+    redirect_back_or_to root_path
   end
 
   # GET /skins/1/confirm_delete

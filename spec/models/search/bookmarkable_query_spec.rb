@@ -97,6 +97,11 @@ describe BookmarkableQuery do
         aggregations = bookmarkable_query.generated_query[:aggs]
         expect(aggregations).to be_blank
       end
+
+      it "defaults to sorting by _score" do
+        expect(bookmarkable_query.generated_query[:sort])
+          .to eq([{ _score: { order: "desc" } }, { sort_id: { order: "desc" } }])
+      end
     end
 
     describe "a faceted query" do
@@ -152,6 +157,14 @@ describe BookmarkableQuery do
         expect(aggregations.dig(:bookmarks, :aggs, :filtered_bookmarks, :aggs, :tag)).to \
           include({ terms: { field: "tag_ids" } })
       end
+
+      it "defaults to sorting by created_at (stored in _score)" do
+        expect(bookmarkable_query.generated_query[:sort])
+          .to eq([{ _score: { order: "desc" } }, { sort_id: { order: "desc" } }])
+        # Computes score by created_at
+        expect(bookmarkable_query.generated_query.dig(:query, :bool, :must, :has_child, :query, :function_score, :field_value_factor, :field)).to \
+          eq("created_at")
+      end
     end
 
     it "combines all bookmark filters (positive and negative) in a single has_child query" do
@@ -166,6 +179,25 @@ describe BookmarkableQuery do
     context "when querying as a user" do
       before do
         User.current_user = create(:user)
+      end
+
+      it "sorts by full word count" do
+        q = BookmarkQuery.new(sort_column: "word_count").bookmarkable_query
+        # Sort by general_word_count
+        expect(q.generated_query[:sort])
+          .to eq([{ general_word_count: { order: "desc" } }, { sort_id: { order: "desc" } }])
+      end
+
+      it "filters by total word count" do
+        q = BookmarkQuery.new(word_count: "10").bookmarkable_query
+        expect(q.generated_query.dig(:query, :bool, :filter))
+          .to include({ range: { general_word_count: { gte: 10, lte: 10 } } })
+      end
+
+      it "filters by total word count using words_from" do
+        q = BookmarkQuery.new(words_from: "10").bookmarkable_query
+        expect(q.generated_query.dig(:query, :bool, :filter))
+          .to include({ range: { general_word_count: { gte: 10 } } })
       end
 
       it "converts the 'tag' field to 'general_tags'" do
@@ -236,6 +268,25 @@ describe BookmarkableQuery do
     end
 
     context "when querying as a guest" do
+      it "sorts by word count" do
+        q = BookmarkQuery.new(sort_column: "word_count").bookmarkable_query
+        # Sort by public_word_count
+        expect(q.generated_query[:sort])
+          .to eq([{ public_word_count: { order: "desc" } }, { sort_id: { order: "desc" } }])
+      end
+
+      it "filters by word count" do
+        q = BookmarkQuery.new(word_count: "10").bookmarkable_query
+        expect(q.generated_query.dig(:query, :bool, :filter))
+          .to include({ range: { public_word_count: { gte: 10, lte: 10 } } })
+      end
+
+      it "filters by word count using words_to" do
+        q = BookmarkQuery.new(words_to: "10").bookmarkable_query
+        expect(q.generated_query.dig(:query, :bool, :filter))
+          .to include({ range: { public_word_count: { lte: 10 } } })
+      end
+
       it "converts the 'tag' field to 'public_tags'" do
         bookmark_query = BookmarkQuery.new(bookmarkable_query: "tag:foo")
         q = bookmark_query.bookmarkable_query.generated_query

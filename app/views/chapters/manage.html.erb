@@ -9,7 +9,7 @@
 <div id="manage-chapters">
 
   <p id="drag" class="showme"><%= ts("Drag chapters to change their order.") %><p>
-  <noscript><p><%= ts("Enter new chapter numbers.") %><p></noscript>
+  <noscript><p><%= ts("Enter new chapter numbers.") %></p></noscript>
 
   <%= form_tag url_for(action: 'update_positions') do %>
 
@@ -27,7 +27,7 @@
         <% if !chapter.posted %>(Draft)<% end %>
 
         <ul class="chapter-control actions">
-          <li><%= link_to ts("Edit"), [:edit, @work, chapter] %></li>
+          <li><%= link_to ts("Edit"), edit_work_chapter_path(@work, chapter) %></li>
           <% if @work.chapters.count > 1 %>
             <li>
               <%= link_to ts("Delete"), [@work, chapter],
@@ -51,7 +51,7 @@
 
   <p class="submit actions">
     <%= submit_tag ts("Update Positions") %>
-    <%= link_to ts("Back"), url_for(@work) %>
+    <%= link_to ts("Back"), edit_work_path(@work) %>
   </p>
 
   <% end %>

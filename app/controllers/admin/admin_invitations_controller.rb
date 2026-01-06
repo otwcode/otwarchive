@@ -18,6 +18,8 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def invite_from_queue
+    authorize Invitation
+
     count = invitation_params[:invite_from_queue].to_i
     InviteFromQueueJob.perform_later(count: count, creator: current_admin)
 
@@ -38,6 +40,8 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def find
+    authorize Invitation
+
     unless invitation_params[:user_name].blank?
       @user = User.find_by(login: invitation_params[:user_name])
       @hide_dashboard = true

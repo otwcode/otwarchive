@@ -73,14 +73,11 @@ class Skin < ApplicationRecord
     end
   end
 
-  validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
+  validates :icon_alt_text, length: { maximum: ArchiveConfig.ICON_ALT_MAX }
 
-  validates_length_of :description, allow_blank: true, maximum: ArchiveConfig.SUMMARY_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
+  validates :description, length: { maximum: ArchiveConfig.SUMMARY_MAX }
 
-  validates_length_of :css, allow_blank: true, maximum: ArchiveConfig.CONTENT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
+  validates :css, length: { maximum: ArchiveConfig.CONTENT_MAX }
 
   before_validation :clean_media
   def clean_media
@@ -111,7 +108,9 @@ class Skin < ApplicationRecord
     errors.add(:base, :no_public_preview)
   end
 
-  validates :title, presence: true, uniqueness: { case_sensitive: false }
+  validates :title, presence: true, uniqueness: { case_sensitive: false }, length: { 
+    maximum: ArchiveConfig.TITLE_MAX 
+  }
   validate :allowed_title
   def allowed_title
     return true unless self.title.match(/archive/i)
@@ -554,7 +553,7 @@ class Skin < ApplicationRecord
   end
 
   def self.default
-    Skin.find_by(title: "Default", official: true) || Skin.create_default
+    Skin.find_by(title: "Default", official: true, public: true, role: "site") || Skin.create_default
   end
 
   def self.create_default

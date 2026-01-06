@@ -7,6 +7,8 @@ class ScheduledReindexJob
                 MAIN_CLASSES
               when "stats"
                 %w[StatCounter]
+              when "users"
+                %w[User]
               end
     classes.each { |klass| run_queue(klass, reindex_type) }
   end

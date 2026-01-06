@@ -256,7 +256,7 @@ Feature: Prompt Meme Challenge
     And I should not see "Battle 12"
     And I edit the work "Existing Story"
     And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "Battle 12"
   Then I should see "Existing Story"
     And I should see "This work is part of an ongoing challenge"
@@ -275,7 +275,7 @@ Feature: Prompt Meme Challenge
     And I post the work "Existing Story" in the collection "Othercoll"
     And I edit the work "Existing Story"
     And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "Battle 12"
     And I should see "Othercoll"
 
@@ -546,7 +546,7 @@ Feature: Prompt Meme Challenge
   Then I should see "For prompter."
   When I follow "Edit"
     And I uncheck "Battle 12 (prompter)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "For prompter."
 
   Scenario: A creator cannot give a gift to a user who disallows gifts if the work is connected to a claim of an anonymous prompt belonging to the recipient
@@ -591,5 +591,5 @@ Feature: Prompt Meme Challenge
   Then I should see "For prompter."
   When I follow "Edit"
     And I uncheck "Battle 12 (prompter)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "For prompter."

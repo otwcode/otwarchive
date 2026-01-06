@@ -106,6 +106,7 @@ class ExternalWork < ApplicationRecord
       ],
       methods: methods
     ).merge(
+      creators: indexed_creators,
       language_id: language&.short,
       bookmarkable_type: "ExternalWork",
       bookmarkable_join: { name: "bookmarkable" }
@@ -122,7 +123,7 @@ class ExternalWork < ApplicationRecord
   end
   alias_method :restricted?, :restricted
 
-  def creators
+  def indexed_creators
     [author]
   end
 

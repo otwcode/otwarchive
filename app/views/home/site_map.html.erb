@@ -48,7 +48,7 @@
 
     <h3 class="heading"><%= t(".change_your_account_settings.header") %></h3>
     <ul>
-      <li><%= link_to t(".change_your_account_settings.edit_my_profile"), edit_user_path(current_user) %></li>
+      <li><%= link_to t(".change_your_account_settings.edit_my_profile"), edit_user_profile_path(current_user) %></li>
       <li><%= link_to t(".change_your_account_settings.my_profile"), user_profile_path(current_user) %></li>
       <li><%= link_to t(".change_your_account_settings.manage_my_pseuds"), user_pseuds_path(current_user) %></li>
       <li>

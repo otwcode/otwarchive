@@ -48,6 +48,18 @@ Feature: Gift Exchange Challenge
       And I follow "Gift Exchange Challenges"
     Then I should see "My Gift Exchange"
 
+  Scenario: Gift exchange in closed collection appears in list of open challenges
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "My Gift Exchange"
+      And I am on "My Gift Exchange" gift exchange edit page
+      And I check "Sign-up open?"
+      And I submit
+      And I am on "My Gift Exchange" collection edit page
+      And I check "This collection is closed"
+      And I submit
+    When I view open challenges
+    Then I should see "My Gift Exchange"
+
   Scenario: Change timezone for a gift exchange
     Given time is frozen at 1/1/2019
       And the gift exchange "My Gift Exchange" is ready for signups
@@ -311,7 +323,8 @@ Feature: Gift Exchange Challenge
     # 4 users and the mod should get emails :)
       And 1 email should be delivered to "mod1"
       And the email should have "Assignments sent" in the subject
-      And the email should contain "You have received a message about your collection"
+      And the email should contain "All assignments have now been sent out"
+      And the email should contain "you are an owner or moderator of the collection"
       And the email should not contain "translation missing"
       And 1 email should be delivered to "myname1"
       And the email should contain "You have been assigned the following request"
@@ -670,7 +683,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: A user can explicitly give a gift to a user who disallows gifts if
@@ -687,7 +700,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: If a work is connected to an assignment for a user who blocked the gifter,
@@ -703,7 +716,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: A user can explicitly give a gift to a user who blocked the gifter if
@@ -721,7 +734,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: When there are many assignments, they're paginated

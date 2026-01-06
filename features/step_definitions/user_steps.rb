@@ -100,13 +100,15 @@ end
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
   step("I start a new session")
-  step %{I am on the homepage}
-  find_link('login-dropdown').click
+  visit(new_user_session_path(return_to: root_path))
 
-  fill_in "Username or email:", with: login
-  fill_in "Password:", with: password
-  check "Remember Me"
-  click_button "Log In"
+  with_scope("#main") do
+    fill_in "Username or email:", with: login
+    fill_in "Password:", with: password
+    check "Remember me"
+    click_button "Log in"
+  end
+
   step %{I should see "Hi, #{login}!" within "#greeting"}
   step %{confirmation emails have been delivered}
 end
@@ -245,6 +247,11 @@ When "I visit the change email page for {word}" do |login|
   visit change_email_user_path(user)
 end
 
+When "I visit the change password page for {word}" do |login|
+  user = User.find_by(login: login)
+  visit change_password_user_path(user)
+end
+
 When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   # To make sure that we don't have caching issues with the byline:
   step %{I wait 1 second}
@@ -252,11 +259,62 @@ When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   user.creatorships.unapproved.each(&:accept!)
 end
 
-When "I request a password reset for {string}" do |login|
+When "the email address change confirmation period is set to {int} days" do |amount|
+  allow(Devise).to receive(:confirm_within).and_return(amount.days)
+end
+
+When "I start to change my email to {string}" do |email|
+  step %{I fill in "New email" with "#{email}"}
+  step %{I fill in "Enter new email again" with "#{email}"}
+  step %{I fill in "Password" with "password"}
+  step %{I press "Confirm New Email"}
+end
+
+When "I confirm my email change request to {string}" do |email|
+  step %{I should see "Are you sure you want to change your email address to #{email}?"}
+  step %{I press "Yes, Change Email"}
+end
+
+When "I request to change my email to {string}" do |email|
+  step %{I start to change my email to "#{email}"}
+  step %{I confirm my email change request to "#{email}"}
+end
+
+When "I change my email to {string}" do |email|
+  step %{I follow "My Preferences"}
+  step %{I follow "Change Email"}
+  step %{I request to change my email to "#{email}"}
+  step %{1 email should be delivered to "#{email}"}
+  step %{I follow "confirm your email change" in the email}
+  step %{I should see "Your email has been successfully updated."}
+end
+
+When "I request a password reset for {string}" do |email|
   step(%{I am on the login page})
-  step(%{I follow "Reset password"})
-  step(%{I fill in "Email address or username" with "#{login}"})
+  step(%{I follow "Reset your password"})
+  step(%{I fill in "Email address" with "#{email}"})
   step(%{I press "Reset Password"})
+end
+
+When "I make a mistake typing my old password" do
+  fill_in("password", with: "newpass1")
+  fill_in("password_confirmation", with: "newpass1")
+  fill_in("password_check", with: "wrong")
+  click_button("Change Password")
+end
+
+When "I make a typing mistake confirming my new password" do
+  fill_in("password", with: "newpass1")
+  fill_in("password_confirmation", with: "newpass2")
+  fill_in("password_check", with: "password")
+  click_button("Change Password")
+end
+
+When "I change my password" do
+  fill_in("password", with: "newpass1")
+  fill_in("password_confirmation", with: "newpass1")
+  fill_in("password_check", with: "password")
+  click_button("Change Password")
 end
 
 # THEN

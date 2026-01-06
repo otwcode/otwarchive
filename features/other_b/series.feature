@@ -34,7 +34,7 @@ Feature: Create and Edit Series
     Then I should not see "Rainbow Dash"
     When I edit the work "Rainbow Dash"
       And I select "Ponies" from "Choose one of your existing series:"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Part 2 of Ponies" within "div#series"
       And I should see "Part 2 of Ponies" within "dd.series"
     When I view the series "Ponies"
@@ -131,7 +131,7 @@ Feature: Create and Edit Series
     Then I should not see "Rainbow Dash"
     When I edit the work "Rainbow Dash"
       And I select "Ponies" from "Choose one of your existing series:"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Part 2 of Ponies" within "div#series"
       And I should see "Part 2 of Ponies" within "dd.series"
     When I view the series "Ponies"
@@ -226,7 +226,7 @@ Feature: Create and Edit Series
       And I coauthored the work "Sweetie Bell" as "moon" with "son"
       And I edit the work "Sweetie Bell"
       And I fill in "work_series_attributes_title" with "Ponies"
-      And I post the work
+      And I update the work
     Then I should see "Work was successfully updated."
       And "moon" should be a creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"

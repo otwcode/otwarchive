@@ -425,54 +425,6 @@ describe "rake After:rename_underage_warning" do
   end
 end
 
-describe "rake After:migrate_pinch_request_signup" do
-  context "for an assignment with a request_signup_id" do
-    let(:assignment) { create(:challenge_assignment) }
-
-    it "does nothing" do
-      expect do
-        subject.invoke
-      end.to avoid_changing { assignment.reload.request_signup_id }
-        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
-    end
-  end
-
-  context "for an assignment with a request_signup_id and a pinch_request_signup_id" do
-    let(:collection) { create(:collection) }
-    let(:assignment) do
-      create(:challenge_assignment,
-             collection: collection,
-             pinch_request_signup_id: create(:challenge_signup, collection: collection).id)
-    end
-
-    it "does nothing" do
-      expect do
-        subject.invoke
-      end.to avoid_changing { assignment.reload.request_signup_id }
-        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
-    end
-  end
-
-  context "for an assignment with a pinch_request_signup_id but no request_signup_id" do
-    let(:collection) { create(:collection) }
-    let(:signup) { create(:challenge_signup, collection: collection) }
-    let(:assignment) do
-      assignment = create(:challenge_assignment, collection: collection)
-      assignment.update_columns(request_signup_id: nil, pinch_request_signup_id: signup.id)
-      assignment
-    end
-
-    it "sets the request_signup_id to the pinch_request_signup_id" do
-      expect do
-        subject.invoke
-      end.to change { assignment.reload.request_signup_id }
-        .from(nil)
-        .to(signup.id)
-        .and output("Migrated pinch_request_signup for 1 challenge assignments.\n").to_stdout
-    end
-  end
-end
-
 describe "rake After:reindex_hidden_unrevealed_tags" do
   context "with a posted work" do
     let!(:work) { create(:work) }
@@ -821,5 +773,50 @@ describe "rake After:add_collection_tags" do
       subject.invoke
       expect(collection.reload.tags).to include(*bookmark.fandoms)
     end
+  end
+end
+
+describe "rake After:sync_approved_to_spam" do
+  let(:synced_ham_comment) { create(:comment) }
+  let(:synced_spam_comment) { create(:comment) }
+  let(:unsynced_ham_comment) { create(:comment) }
+  let(:unsynced_spam_comment) { create(:comment) }
+  # Adding a second unsynced spam to ensure more than a single approved: false, spam: false is processed correctly.
+  let(:unsynced_spam_comment_two) { create(:comment) }
+
+  before do
+    # Setup comment states. This is required because approved is set on comment creation via lifecycle hook.
+    synced_ham_comment.update_columns(approved: true, spam: false)
+    synced_spam_comment.update_columns(approved: false, spam: true)
+    unsynced_ham_comment.update_columns(approved: true, spam: true)
+    unsynced_spam_comment.update_columns(approved: false, spam: false)
+    unsynced_spam_comment_two.update_columns(approved: false, spam: false)
+  end
+
+  it "updates spam attribute for all unsynced comments" do
+    subject.invoke
+
+    [unsynced_ham_comment, unsynced_spam_comment, unsynced_spam_comment_two].map(&:reload)
+
+    expect(unsynced_ham_comment.approved).to be_truthy
+    expect(unsynced_ham_comment.spam).to be_falsey
+
+    expect(unsynced_spam_comment.approved).to be_falsey
+    expect(unsynced_spam_comment.spam).to be_truthy
+
+    expect(unsynced_spam_comment_two.approved).to be_falsey
+    expect(unsynced_spam_comment_two.spam).to be_truthy
+  end
+
+  it "does not update synced comments" do
+    subject.invoke
+
+    [synced_ham_comment, synced_spam_comment].map(&:reload)
+
+    expect(synced_ham_comment.approved).to be_truthy
+    expect(synced_ham_comment.spam).to be_falsey
+
+    expect(synced_spam_comment.approved).to be_falsey
+    expect(synced_spam_comment.spam).to be_truthy
   end
 end
