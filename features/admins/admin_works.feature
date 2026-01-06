@@ -413,11 +413,22 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "update_tags"
       And I should see "edit language"
 
-  Scenario: When admin does not edit tags or language, no Activities entries are added
+  Scenario: When admin does not edit tags or language and posts without preview, no Activities entries are added
     Given the work "Nothing Wrong"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Nothing Wrong"
       And I follow "Edit Tags and Language"
+      And I press "Update"
+      And I follow "Activities"
+    Then I should not see "update_tags"
+      And I should not see "edit language"
+
+  Scenario: When admin does not edit tags or language, previews and then posts, no Activities entries are added
+    Given the work "Nothing Wrong"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Nothing Wrong"
+      And I follow "Edit Tags and Language"
+      And I press "Preview"
       And I press "Update"
       And I follow "Activities"
     Then I should not see "update_tags"
