@@ -122,6 +122,21 @@ Feature: User dashboard
   Then I should see "Recent series"
     And I should not see "Anon Series" within "#user-series"
 
+  Scenario: The user dashboard should show series tags in blurbs when appropriate
+  Given I am logged in as "creator"
+    And I post the work "Public Work" with fandom "FandomP" with character "Foobar" as part of a series "Mixed Access"
+    And I post the work "Restricted Work" with fandom "FandomR" with character "Foobar" as part of a series "Mixed Access"
+    And I lock the work "Restricted Work"
+  When I go to creator's user page
+  Then I should see "FandomP"
+    And I should see "FandomR"
+    And I should see "Foobar"
+  When I am logged out
+    And I go to creator's user page
+  Then I should see "FandomP"
+    And I should see "Foobar"
+    But I should not see "FandomR"
+
   Scenario: The user dashboard should list up to five of the user's bookmarks and link to more
   Given dashboard counts expire after 10 seconds
     And I am logged in as "fruitpie"
