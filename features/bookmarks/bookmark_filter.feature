@@ -87,3 +87,19 @@ Feature: Filter bookmarks
     Then I should see "1 Bookmark found by bookmarker"
       And the 1st bookmark result should contain "Another Example Work"
       And I should not see "An Example Work"
+
+  Scenario: Filtering series bookmarks by tags on restricted works
+    Given I am logged in as "poster"
+      And I post the work "Public" with fandom "PublicF" as part of a series "Mixed Visibility"
+      And I post the work "Restricted" with fandom "RestrictedF" as part of a series "Mixed Visibility"
+      And I lock the work "Restricted"
+      And I bookmark the series "Mixed Visibility"
+    When I go to the bookmarks tagged "RestrictedF"
+    Then I should see "Mixed Visibility"
+    When I go to the bookmarks tagged "PublicF"
+    Then I should see "Mixed Visibility"
+    When I am logged out
+      And I go to the bookmarks tagged "RestrictedF"
+    Then I should not see "Mixed Visibility"
+    When I go to the bookmarks tagged "PublicF"
+    Then I should see "Mixed Visibility"

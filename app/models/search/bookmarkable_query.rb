@@ -13,7 +13,7 @@ class BookmarkableQuery < Query
   # return objects from more than one table, so we need to use a special class
   # that can handle IDs of multiple types.
   def klass
-    'BookmarkableDecorator'
+    "BookmarkableDecorator"
   end
 
   def index_name
@@ -93,7 +93,29 @@ class BookmarkableQuery < Query
 
   def bookmarkable_query_text
     query_text = (options[:bookmarkable_query] || "").dup
-    escape_slashes(query_text.strip)
+    escape_restrictable_fields(escape_slashes(query_text.strip))
+  end
+
+  # Internally, we use (public|general)_<fieldname> to denote certain fields with data from all works (general)
+  # versus fields with data only from works visible to guests (public). We do not, however, want users to be able
+  # to query those fields directly. To avoid that, we replace <visibility>_<fieldname> with the appropriate visibility
+  # based on what the application knows of the querier.
+  #
+  # Examples:
+  # When searching as a guest,
+  # escape_tags_field("public_tags:1234") => public_tags:1234
+  # escape_tags_field("general_fandom_ids:1234") => public_fandom_ids:1234
+  # escape_tags_field("tag:1234") => public_tags:1234
+  # When searching as a registered user,
+  # escape_tags_field("public_tags:1234") => general_tags:1234
+  # escape_tags_field("general_character_ids:1234") => general_character_ids:1234
+  # escape_tags_field("tag:1234") => general_tags:1234
+  def escape_restrictable_fields(query)
+    # Special-case for the "tag" convenience field name first, then sanitize visibility level.
+    field_names = "rating_ids|archive_warning_ids|category_ids|fandom_ids|relationship_ids|character_ids|freeform_ids|filter_ids|tags"
+    query.gsub("tag:", "public_tags:").gsub(/(?:(?:public|general)_)?(#{field_names}):/) do
+      "#{restrictable_field_name(Regexp.last_match(1))}:"
+    end
   end
 
   ####################
@@ -132,7 +154,7 @@ class BookmarkableQuery < Query
       %w[rating archive_warning category fandom character relationship freeform].each do |facet_type|
         aggs[facet_type] = {
           terms: {
-            field: "#{facet_type}_ids"
+            field: restrictable_field_name("#{facet_type}_ids").to_s
           }
         }
       end
@@ -229,7 +251,7 @@ class BookmarkableQuery < Query
   end
 
   def complete_filter
-    term_filter(:complete, 'true') if options[:complete].present?
+    term_filter(:complete, "true") if options[:complete].present?
   end
 
   def language_filter
@@ -237,9 +259,9 @@ class BookmarkableQuery < Query
   end
 
   def filter_id_filter
-    if filter_ids.present?
-      filter_ids.map { |filter_id| term_filter(:filter_ids, filter_id) }
-    end
+    return if filter_ids.blank?
+
+    filter_ids.map { |filter_id| term_filter(restrictable_field_name(:filter_ids), filter_id) }
   end
 
   # The date filter on the bookmarkable (i.e. when the bookmarkable was last
@@ -254,42 +276,43 @@ class BookmarkableQuery < Query
   # Note that this is used as an exclusion filter, not an inclusion filter, so
   # the boolean is flipped from the way you might expect.
   def unposted_filter
-    term_filter(:posted, 'false')
+    term_filter(:posted, "false")
   end
 
   # Exclude items hidden by admin from bookmarkable search results.
   # Note that this is used as an exclusion filter, not an inclusion filter, so
   # the boolean is flipped from the way you might expect.
   def hidden_filter
-    term_filter(:hidden_by_admin, 'true')
+    term_filter(:hidden_by_admin, "true")
   end
 
   # Exclude restricted works/series when the user isn't logged in.
   # Note that this is used as an exclusion filter, not an inclusion filter, so
   # the boolean is flipped from the way you might expect.
   def restricted_filter
-    term_filter(:restricted, 'true') unless include_restricted?
+    term_filter(:restricted, "true") unless include_restricted?
   end
 
   def tag_exclusion_filter
-    if exclusion_ids.present?
-      terms_filter(:filter_ids, exclusion_ids)
-    end
+    return if exclusion_ids.blank?
+
+    terms_filter(restrictable_field_name(:filter_ids), exclusion_ids)
   end
 
   # This filter is used to restrict our results to only include bookmarkables
-  # whose "tag" text matches all of the tag names in included_tag_names. This
-  # is useful when the user enters a non-existent tag, which would be discarded
+  # whose "(general|public)_tags" text matches all of the tag names in included_tag_names.
+  # This is useful when the user enters a non-existent tag, which would be discarded
   # by the TaggableQuery.filter_ids function.
   def named_tag_inclusion_filter
     return if included_tag_names.blank?
-    match_filter(:tag, included_tag_names.join(" "))
+
+    match_filter(restrictable_field_name(:tags), included_tag_names.join(" "))
   end
 
   # This set of filters is used to prevent us from matching any bookmarkables
-  # whose "tag" text matches one of the passed-in tag names. This is useful
-  # when the user enters a non-existent tag, which would be discarded by the
-  # TaggableQuery.exclusion_ids function.
+  # whose "(general|public)_tags" text matches one of the passed-in tag names.
+  # This is useful when the user enters a non-existent tag, which would be discarded
+  # by the TaggableQuery.exclusion_ids function.
   #
   # Note that we separate these into different filters to get the logic of tag
   # exclusion right: if we're excluding "A B" and "C D", we want the query to
@@ -297,7 +320,7 @@ class BookmarkableQuery < Query
   # match query.
   def named_tag_exclusion_filter
     excluded_tag_names.map do |tag_name|
-      match_filter(:tag, tag_name)
+      match_filter(restrictable_field_name(:tags), tag_name)
     end
   end
 
@@ -314,5 +337,11 @@ class BookmarkableQuery < Query
     # Use fetch instead of || here to make sure that we don't accidentally
     # override a deliberate choice not to show restricted bookmarks.
     options.fetch(:show_restricted, User.current_user.present?)
+  end
+
+  private
+
+  def restrictable_field_name(field_name)
+    :"#{include_restricted? ? "general" : "public"}_#{field_name}"
   end
 end

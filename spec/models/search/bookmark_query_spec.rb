@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe BookmarkQuery do
   let(:collection) { build_stubbed(:collection) }
@@ -144,11 +144,39 @@ describe BookmarkQuery do
         include({ term: { complete: "true" } })
     end
 
-    it "allows you to filter by bookmarkable tags" do
-      q = BookmarkQuery.new(parent: tag)
-      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
-      expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
-        include({ term: { filter_ids: tag.id } })
+    context "when querying as a guest" do
+      it "allows filtering by unrestricted bookmarkable tags" do
+        q = BookmarkQuery.new(parent: tag)
+        parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+        expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
+          include({ term: { public_filter_ids: tag.id } })
+      end
+    end
+
+    context "when querying as a admin" do
+      before do
+        User.current_user = create(:admin)
+      end
+
+      it "allows filtering by restricted bookmarkable tags" do
+        q = BookmarkQuery.new(parent: tag)
+        parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+        expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
+          include({ term: { general_filter_ids: tag.id } })
+      end
+    end
+
+    context "when querying as a registered user" do
+      before do
+        User.current_user = create(:user)
+      end
+
+      it "allows filtering by restricted bookmarkable tags" do
+        q = BookmarkQuery.new(parent: tag)
+        parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+        expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
+          include({ term: { general_filter_ids: tag.id } })
+      end
     end
 
     it "allows you to filter by bookmarkable language" do
@@ -194,13 +222,47 @@ describe BookmarkQuery do
         include({ terms: { field: "tag_ids" } })
     end
 
-    Tag::FILTERS.each do |type|
-      it "includes #{type.underscore.humanize.downcase} aggregations for the bookmarkable" do
-        expect(aggregations[:bookmarkable]).to \
-          include({ parent: { type: "bookmark" } })
+    context "when run by a logged-in user" do
+      before do
+        User.current_user = create(:user)
+      end
 
-        expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \
-          include({ terms: { field: "#{type.underscore}_ids" } })
+      Tag::FILTERS.each do |type|
+        it "includes #{type.underscore.humanize.downcase} aggregations for the bookmarkable" do
+          expect(aggregations[:bookmarkable]).to \
+            include({ parent: { type: "bookmark" } })
+
+          expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \
+            include({ terms: { field: "general_#{type.underscore}_ids" } })
+        end
+      end
+    end
+
+    context "when run by a logged-in admin" do
+      before do
+        User.current_user = create(:admin)
+      end
+
+      Tag::FILTERS.each do |type|
+        it "includes #{type.underscore.humanize.downcase} aggregations for the bookmarkable" do
+          expect(aggregations[:bookmarkable]).to \
+            include({ parent: { type: "bookmark" } })
+
+          expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \
+            include({ terms: { field: "general_#{type.underscore}_ids" } })
+        end
+      end
+    end
+
+    context "when run by a guest" do
+      Tag::FILTERS.each do |type|
+        it "includes #{type.underscore.humanize.downcase} aggregations for the bookmarkable" do
+          expect(aggregations[:bookmarkable]).to \
+            include({ parent: { type: "bookmark" } })
+
+          expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \
+            include({ terms: { field: "public_#{type.underscore}_ids" } })
+        end
       end
     end
   end

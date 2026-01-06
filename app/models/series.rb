@@ -69,18 +69,25 @@ class Series < ApplicationRecord
   end
 
   # Get the filters for the works in this series
-  def filters
+
+  def general_filters
     Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id
                JOIN works ON works.id = filter_taggings.filterable_id
-               JOIN serial_works ON serial_works.work_id = works.id").
-        where("serial_works.series_id = #{self.id} AND
-               works.posted = 1 AND
-               filter_taggings.filterable_type = 'Work'").
-        group("tags.id")
+               JOIN serial_works ON serial_works.work_id = works.id")
+      .where(serial_works: { series_id: self.id },
+             works: { hidden_by_admin: false, posted: true },
+             filter_taggings: { filterable_type: "Work" })
+      .group("tags.id")
   end
 
-  def direct_filters
-    filters.where("filter_taggings.inherited = 0")
+  def public_filters
+    Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id
+               JOIN works ON works.id = filter_taggings.filterable_id
+               JOIN serial_works ON serial_works.work_id = works.id")
+      .where(serial_works: { series_id: self.id },
+             works: { hidden_by_admin: false, posted: true, restricted: false },
+             filter_taggings: { filterable_type: "Work" })
+      .group("tags.id")
   end
 
   # visibility aped from the work model
@@ -190,10 +197,6 @@ class Series < ApplicationRecord
     tag_groups["Fandom"]&.sort || []
   end
 
-  def author_tags
-    self.work_tags.select{|t| t.type == "Relationship"}.sort + self.work_tags.select{|t| t.type == "Character"}.sort + self.work_tags.select{|t| t.type == "Freeform"}.sort
-  end
-
   def tag_groups
     tags = self.work_tags.where(works: { hidden_by_admin: false, posted: true })
     tags = tags.where(works: { restricted: false }) unless User.current_user
@@ -222,17 +225,24 @@ class Series < ApplicationRecord
   ######################
 
   def bookmarkable_json
+    methods = %i[posted revised_at work_types]
+    %w[general public].each do |visibility|
+      methods << :"#{visibility}_tags"
+      methods << :"#{visibility}_filter_ids"
+      methods << :"#{visibility}_word_count"
+
+      Tag::FILTERS.map(&:underscore).each do |tag_type|
+        methods << :"#{visibility}_#{tag_type}_ids"
+      end
+    end
+
     as_json(
       root: false,
       only: [
         :title, :summary, :hidden_by_admin, :restricted, :created_at,
         :complete
       ],
-      methods: [
-        :revised_at, :posted, :tag, :filter_ids, :rating_ids,
-        :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :public_word_count, :general_word_count, :work_types
-      ]
+      methods: methods
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
@@ -277,40 +287,45 @@ class Series < ApplicationRecord
   end
   alias_method :posted?, :posted
 
-  # Simple name to make it easier for people to use in full-text search
-  def tag
-    (work_tags + filters).uniq.map{ |t| t.name }
+  def tags_visible_to_registered_user
+    work_tags.where(works: { hidden_by_admin: false })
+  end
+
+  def general_tags
+    (tags_visible_to_registered_user.pluck(:name) + general_filters.pluck(:name)).uniq
+  end
+
+  def public_tags
+    (tags_visible_to_registered_user.where(works: { restricted: false }).pluck(:name) + public_filters.pluck(:name)).uniq
   end
 
   # Index all the filters for pulling works
-  def filter_ids
-    (work_tags.pluck(:id) + filters.pluck(:id)).uniq
+  def general_filter_ids
+    (tags_visible_to_registered_user.pluck(:id) + general_filters.pluck(:id)).uniq
   end
 
-  # Index only direct filters (non meta-tags) for facets
-  def filters_for_facets
-    @filters_for_facets ||= direct_filters
+  def public_filter_ids
+    (tags_visible_to_registered_user.where(works: { restricted: false }).pluck(:id) + public_filters.pluck(:id)).uniq
   end
-  def rating_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Rating' }.map{ |t| t.id }
-  end
-  def archive_warning_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'ArchiveWarning' }.map{ |t| t.id }
-  end
-  def category_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Category' }.map{ |t| t.id }
-  end
-  def fandom_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Fandom' }.map{ |t| t.id }
-  end
-  def character_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Character' }.map{ |t| t.id }
-  end
-  def relationship_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Relationship' }.map{ |t| t.id }
-  end
-  def freeform_ids
-    filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
+
+  %w[general public].each do |tag_visibility|
+    # Index only direct filters (non meta-tags) for facets
+    define_method("#{tag_visibility}_direct_filters") do
+      send("#{tag_visibility}_filters").where(filter_taggings: { inherited: false })
+    end
+
+    define_method("#{tag_visibility}_filters_for_facets") do
+      cache_variable = "@#{tag_visibility}_filters_for_facets"
+      instance_variable_set(cache_variable, send("#{tag_visibility}_direct_filters")) unless instance_variable_defined?(cache_variable)
+      instance_variable_get(cache_variable)
+    end
+
+    Tag::FILTERS.each do |tag_type|
+      define_method("#{tag_visibility}_#{tag_type.underscore}_ids") do
+        send("#{tag_visibility}_filters_for_facets").select { |tag| tag.type.to_s == tag_type }
+          .pluck(:id)
+      end
+    end
   end
 
   def indexed_creators
