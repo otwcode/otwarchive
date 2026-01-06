@@ -225,7 +225,7 @@ class Series < ApplicationRecord
   ######################
 
   def bookmarkable_json
-    methods = %i[posted revised_at word_count work_types]
+    methods = %i[posted revised_at work_types]
     %w[general public].each do |visibility|
       methods << :"#{visibility}_tags"
       methods << :"#{visibility}_filter_ids"
