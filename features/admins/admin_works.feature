@@ -400,7 +400,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "Deutsch"
       And I should not see "English"
 
-  Scenario: Admin can edit tags and language at the same time on works
+  Scenario: When admin edits tags and language on works at the same time, both Activities entries are added
     Given basic languages
       And the work "Wrong Tags and Language"
     When I am logged in as a "policy_and_abuse" admin
@@ -413,7 +413,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "update_tags"
       And I should see "edit language"
 
-  Scenario: When admin does not edit tags or language and posts without preview, no Activities entries are added
+  Scenario: When admin does not edit tags or language and posts without previewing, no Activities entries are added
     Given the work "Nothing Wrong"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Nothing Wrong"
