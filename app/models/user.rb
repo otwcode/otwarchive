@@ -100,7 +100,6 @@ class User < ApplicationRecord
   after_update :log_email_change, if: :saved_change_to_email?
   after_update :expire_caches
   before_destroy :remove_user_from_kudos
-  
   # Extra callback to make sure readings are deleted in an order consistent
   # with the ReadingsJob.
   #
@@ -588,7 +587,7 @@ class User < ApplicationRecord
                      else
                        "Old Username: #{login_before_last_save}; New Username: #{login}"
                      end
-    user_past_usernames.create!(user_id: self.id, username: login_before_last_save, changed_at: self.updated_at)
+    user_past_usernames.create!(username: login_before_last_save, changed_at: self.updated_at)
     create_log_item(options)
   end
 
@@ -605,7 +604,7 @@ class User < ApplicationRecord
       admin_id: current_admin&.id
     }
     options[:note] = "Change made by #{current_admin&.login}" if current_admin
-    user_past_emails.create!(user_id: self.id, email_address: email_before_last_save, changed_at: self.updated_at)
+    user_past_emails.create!(email_address: email_before_last_save, changed_at: self.updated_at)
     create_log_item(options)
   end
 

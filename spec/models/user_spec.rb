@@ -356,6 +356,14 @@ describe User do
         expect(old_email.user_id).to eq(existing_user.id)
         expect(old_email.changed_at).to eq(existing_user.updated_at)
       end
+      
+      it "doesn't record previous email before confirmation" do
+        old_email = existing_user.user_past_emails.last
+        existing_user.update!(email: "newemail2@example.com")
+        existing_user.reload
+        after_email = existing_user.user_past_emails.last
+        expect(old_email).to eq(after_email)
+      end
     end
 
     context "as an admin" do

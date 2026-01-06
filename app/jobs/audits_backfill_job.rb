@@ -7,11 +7,11 @@ class AuditsBackfillJob < RedisSetJob
   end
 
   def self.job_size
-    ArchiveConfig.AUDITS_BACKFILL_JOB_SIZE
+    1000
   end
 
   def self.batch_size
-    ArchiveConfig.AUDITS_BACKFILL_BATCH_SIZE
+    100
   end
 
   def perform_on_batch(user_ids)
