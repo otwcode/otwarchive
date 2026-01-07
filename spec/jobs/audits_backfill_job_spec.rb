@@ -9,9 +9,9 @@ describe AuditsBackfillJob do
     before do
       # Manually create audit record so user_past_usernames isn't updated
       existing_user.audits.create!(action: "update", auditable: existing_user, user: existing_user,
-        auditable_id: existing_user.id, audited_changes: { "login" => ["old_login", existing_user.login]})
+                                   auditable_id: existing_user.id, audited_changes: { "login" => ["old_login", existing_user.login] })
       existing_user.audits.create!(action: "update", auditable: existing_user, user: existing_user,
-        auditable_id: existing_user.id, audited_changes: { "email" => ["old@example.com", existing_user.email]})
+                                   auditable_id: existing_user.id, audited_changes: { "email" => ["old@example.com", existing_user.email] })
     end
 
     it "creates backfilled records in user_past_usernames" do
@@ -47,5 +47,4 @@ describe AuditsBackfillJob do
     expect(existing_user.past_usernames.count).to eq(1)
     expect(existing_user.past_usernames.last.username).to eq(old_username)
   end
-
 end
