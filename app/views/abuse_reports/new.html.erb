@@ -103,6 +103,7 @@
       <dt class="required"><%= f.label :url, t(".form.link.label") %></dt>
       <dd class="required">
         <%= f.text_field :url, size: 60, "aria-describedby" => "url-field-description" %>
+        <div></div> <%# Workaround for AO3-6869 -- WebKit bug %>
         <%= live_validation_for_field("abuse_report_url",
                                       failureMessage: t(".form.link.error")) %>
         <p class="footnote" id="url-field-description">
@@ -115,6 +116,7 @@
       </dt>
       <dd class="required">
         <%= f.text_field :summary, class: "observe_textlength", "aria-describedby" => "summary-field-description" %>
+        <div></div> <%# Workaround for AO3-6869 -- WebKit bug %>
         <p class="footnote" id="summary-field-description">
           <%= t(".form.summary.description") %>
         </p>
