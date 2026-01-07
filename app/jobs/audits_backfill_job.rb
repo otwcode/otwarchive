@@ -18,19 +18,19 @@ class AuditsBackfillJob < RedisSetJob
     # scans by users so audits can be taken from users and limited appropriately
     User.where(id: user_ids).find_each do |user|
       # gets past data audits within limits
-      past_data = user.audits.order(id: :desc).limit(ArchiveConfig.USER_HISTORIC_VALUES_LIMIT).filter_map do |audit|
+      past_data = user.audits.order(id: :desc).where(action: "update").limit(ArchiveConfig.USER_HISTORIC_VALUES_LIMIT).filter_map do |audit|
         if audit.audited_changes.key?("login")
-          { username: audit.audited_changes["login"], changed_at: audit.created_at }
+          { username: audit.audited_changes["login"].first, changed_at: audit.created_at }
         elsif audit.audited_changes.key?("email")
-          { email: audit.audited_changes["email"], changed_at: audit.created_at }
+          { email: audit.audited_changes["email"].first, changed_at: audit.created_at }
         end
       end
-      past_data = past_data.uniq(&:username).reject { |audit| audit[:username] == user.login }
-
+      past_data = past_data.uniq{ |audit| audit[:username] }.reject { |audit| audit[:username] == user.login }
+      past_data = past_data.uniq{ |audit| audit[:email] }.reject { |audit| audit[:email] == user.email }
       # adds each type of past data to the appropriate database table
       past_data.each do |audit|
-        user_past_usernames.create!(user_id: user.id, username: audit[:username], changed_at: audit[:changed_at]) if audit.key?(:username)
-        user_past_emails.create!(user_id: user.id, email_address: audit[:email], changed_at: audit[:changed_at]) if audit.key?(:email)
+        UserPastUsername.find_or_create_by!(user_id: user.id, username: audit[:username], changed_at: audit[:changed_at]) if audit.key?(:username)
+        UserPastEmail.find_or_create_by!(user_id: user.id, email_address: audit[:email], changed_at: audit[:changed_at]) if audit.key?(:email)
       end
     end
   end
