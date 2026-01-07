@@ -17,13 +17,13 @@ describe AuditsBackfillJob do
     it "creates backfilled records in user_past_usernames" do
       user_ids = [existing_user.id]
       AuditsBackfillJob.new.perform_on_batch(user_ids)
-      expect(existing_user.user_past_usernames.last.username).to eq("old_login")
+      expect(existing_user.past_usernames.last.username).to eq("old_login")
     end
 
     it "creates backfilled records in user_past_emails" do
       user_ids = [existing_user.id]
       AuditsBackfillJob.new.perform_on_batch(user_ids)
-      expect(existing_user.user_past_emails.last.email_address).to eq("old@example.com")
+      expect(existing_user.past_emails.last.email_address).to eq("old@example.com")
     end
 
     it "contains both backfilled and new changes" do
@@ -31,9 +31,9 @@ describe AuditsBackfillJob do
       AuditsBackfillJob.new.perform_on_batch(user_ids)
       old_username = existing_user.login
       existing_user.update!(login: "new_login")
-      expect(existing_user.user_past_usernames.count).to eq(2)
-      expect(existing_user.user_past_usernames.last.username).to eq(old_username)
-      expect(existing_user.user_past_usernames.first.username).to eq("old_login")
+      expect(existing_user.past_usernames.count).to eq(2)
+      expect(existing_user.past_usernames.last.username).to eq(old_username)
+      expect(existing_user.past_usernames.first.username).to eq("old_login")
     end
   end
 
@@ -44,8 +44,8 @@ describe AuditsBackfillJob do
     user_ids = [existing_user.id]
     AuditsBackfillJob.new.perform_on_batch(user_ids)
 
-    expect(existing_user.user_past_usernames.count).to eq(1)
-    expect(existing_user.user_past_usernames.last.username).to eq(old_username)
+    expect(existing_user.past_usernames.count).to eq(1)
+    expect(existing_user.past_usernames.last.username).to eq(old_username)
   end
 
 end

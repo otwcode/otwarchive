@@ -258,7 +258,7 @@ describe User do
       it "records past username" do
         freeze_time
         existing_user.update!(login: "new_username")
-        user_change = existing_user.user_past_usernames.last
+        user_change = existing_user.past_usernames.last
         expect(user_change.user_id).to eq(existing_user.id)
         expect(user_change.username).not_to eq("new_username")
         expect(user_change.changed_at).to eq(Time.current)
@@ -351,7 +351,7 @@ describe User do
       end
       
       it "records previous email" do
-        old_email = existing_user.user_past_emails.last
+        old_email = existing_user.past_emails.last
         expect(old_email.email_address).not_to eq(existing_user.email)
         expect(old_email.user_id).to eq(existing_user.id)
         expect(old_email.changed_at).to eq(existing_user.updated_at)

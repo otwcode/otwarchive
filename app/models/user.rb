@@ -200,6 +200,14 @@ class User < ApplicationRecord
     unread_inbox_comments.with_bad_comments_removed.count
   end
 
+  def past_emails
+    self.user_past_emails
+  end
+
+  def past_usernames
+    self.user_past_usernames
+  end
+
   scope :alphabetical, -> { order(:login) }
   scope :starting_with, ->(letter) { where("login like ?", "#{letter}%") }
   scope :valid, -> { where(banned: false, suspended: false) }
