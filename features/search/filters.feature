@@ -343,6 +343,17 @@ Feature: Filters
     When I follow "Fandoms"
     Then I should see "The Hobbit (2)"
 
+  Scenario: Tag bookmark pages should be sortable by bookmarked item word count
+    Given bookmarks with various word counts in fandom "Yay a fandom" to search
+    When I go to the bookmarks tagged "Yay a fandom"
+    Then I should see "4 Bookmarked Items in Yay a fandom"
+    When I select "Word Count" from "Sort by"
+      And I press "Sort and Filter"
+    Then "Word Count" should be selected within "Sort by"
+      And "Twenty" should appear before "Fifteen"
+      And "Fifteen" should appear before "Ten"
+      And "Ten" should appear before "Five"
+
   Scenario: Filtering with an invalid query while excluding a tag
     When I go to meatloaf's user page
       And I follow "Works (3)"
