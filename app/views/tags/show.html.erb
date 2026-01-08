@@ -115,7 +115,13 @@
     <p><%= ts("This tag has not been marked common and can't be filtered on (yet).") %></p>  
     <% unless @works.blank? %>
       <div class="work listbox group">
-      <h3 class="heading"><%= ts('Works which have used it as a tag') %>:</h3>
+      <h3 class="heading">
+        <% if @collection.present? %>
+          <%= t(".unwrangled.header.collection")%>
+        <% else %>
+          <%= t(".unwrangled.header.generic")%>
+        <% end %>
+      </h3>
       <%= paginated_section @works do %>
           <ul class="index group">
             <% for work in @works %>

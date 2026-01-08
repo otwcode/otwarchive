@@ -78,15 +78,15 @@ class TagsController < ApplicationController
                end
       @bookmarks = @tag.bookmarks.visible
       @collections = @tag.collections
-      # if from a collection, only show items from that collection
+      # if from a collection, only show works from that collection
       if @collection.present?
         @works &= @collection.works
-        @bookmarks &= @collection.bookmarks
-        @collections &= @collection.children
+        @bookmarks = []
+        @collections = []
       end
       @works = @works.paginate(page: params[:page])
-      @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
-      @collections = @tag.collections.paginate(page: params[:page])
+      @bookmarks = @bookmarks.paginate(page: params[:page])
+      @collections = @collections.paginate(page: params[:page])
     end
     # cache the children, since it's a possibly massive query
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do

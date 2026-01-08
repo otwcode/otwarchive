@@ -100,6 +100,7 @@ Feature: Basic collection navigation
       And I post the work "Categoric Papyrus" with fandom "Undertale"
       And I post the work "Uncategoric Sans" with fandom "Unrelated Fandom" in the collection "Categoric"
       And I post the work "Uncategoric Papyrus" with fandom "Unrelated Fandom"
+      And I bookmark the work "Uncategoric Sans" with the note "Secret Sans" with the tags "Unrelated Fandom"
       And I go to "Categoric" collection's page
     Then I should see "Fandoms (2)"
     When I follow "Fandoms (2)"
@@ -114,12 +115,14 @@ Feature: Basic collection navigation
     When I follow "Unrelated Fandom"
     Then I should see "Sans"
       And I should not see "Papyrus"
+      And I should not see "Secret Sans"
 
     # Else we see all
     When I follow "Uncategorized Fandoms" within "#header"
       And I follow "Unrelated Fandom"
     Then I should see "Sans"
       And I should see "Papyrus"
+      And I should see "Secret Sans"
 
   Scenario: Non-Canonical Fandoms are not double counted
     Given I have the collection "Canons" with name "canon"
