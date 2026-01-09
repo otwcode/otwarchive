@@ -639,7 +639,7 @@ GEM
       raindrops (~> 0.7)
     unidecoder (1.1.2)
     uniform_notifier (1.17.0)
-    uri (1.0.3)
+    uri (1.0.4)
     useragent (0.16.11)
     vcr (6.3.1)
       base64
