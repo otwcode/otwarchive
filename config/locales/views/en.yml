@@ -682,7 +682,7 @@ en:
         fandom: Fandom %{allowed_fandom_count}
   challenge_assignments:
     assignment_blurb:
-      header_draft_html: "%{title_link} (draft)"
+      draft_header: " (draft)"
       stats:
         creation:
           posted: 'Posted:'
