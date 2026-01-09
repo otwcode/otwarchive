@@ -1078,7 +1078,7 @@ en:
       allow_collection_invitation:
         changing: Changing this setting won't affect any existing works in collections.
         disabling: Leaving this option disabled will prevent other users from inviting your works into their collections at all, and you won't receive any notifications.
-        enabling_html: Enabling this option will allow other AO3 users to invite your work into their collection. Your work won't be added to the collection until you have accepted the request. For more information on accepting collection invitations, refer to %{how_to_approve_faq_link}
+        enabling_html: Enabling this option will allow other %{app_name} users to invite your work into their collection. Your work won't be added to the collection until you have accepted the request. For more information on accepting collection invitations, refer to %{how_to_approve_faq_link}
         header: Allow others to invite my works to collections
         how_to_approve_faq: How do I approve or reject an invitation to include my work in a collection?
       allow_gifts:
@@ -1150,7 +1150,7 @@ en:
       allow_co_creator_invite:
         changing: Changing this setting won't affect any existing shared works.
         disabling: Leaving this option disabled will prevent other users from inviting you to be listed as a co-creator on a new work, chapter or series, and you won't receive any notifications.
-        enabling: Enabling this option will allow other AO3 users to invite you to be listed as a co-creator on a work, chapter, or series. You won't be listed as a co-creator anywhere on the site until you have accepted the request. If you have this option enabled, you can find any requests you receive in your Dashboard under "Co-Creator Requests". You will also receive an email notifying you of the request.
+        enabling: Enabling this option will allow other %{app_name} users to invite you to be listed as a co-creator on a work, chapter, or series. You won't be listed as a co-creator anywhere on the site until you have accepted the request. If you have this option enabled, you can find any requests you receive in your Dashboard under "Co-Creator Requests". You will also receive an email notifying you of the request.
         header: Allow others to invite me to be a co-creator.
       hide_share_buttons:
         description: This preference allows you to disable the one-click share buttons which allow others to recommend your work on external sites like Twitter and Tumblr.

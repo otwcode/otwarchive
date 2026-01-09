@@ -5,6 +5,7 @@
   <dd>
     <p>
       <%= t(".allow_collection_invitation.enabling_html",
+            app_name: ArchiveConfig.APP_SHORT_NAME,
             how_to_approve_faq_link: link_to(t(".allow_collection_invitation.how_to_approve_faq"), archive_faq_path("collections", anchor: "collectionitems"))) %>
     </p>
     <p><%= t(".allow_collection_invitation.disabling") %></p>
