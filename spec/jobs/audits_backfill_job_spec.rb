@@ -48,9 +48,9 @@ describe AuditsBackfillJob do
     expect(existing_user.past_usernames.last.username).to eq(old_username)
   end
   
-  it "handles audits with a nil field" do
+  it "handles audits with a empty field" do
     existing_user.audits.create!(action: "update", auditable: existing_user, user: existing_user,
-                                 auditable_id: existing_user.id, audited_changes: { "email" => [nil, existing_user.email] })
+                                 auditable_id: existing_user.id, audited_changes: { "email" => ["", existing_user.email] })
     user_ids = [existing_user.id]
     AuditsBackfillJob.new.perform_on_batch(user_ids)
     expect(existing_user.past_emails.count).to eq(0)
