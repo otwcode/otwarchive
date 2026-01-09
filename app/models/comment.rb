@@ -108,10 +108,10 @@ class Comment < ApplicationRecord
     # access granted by admins, so we never spam check them, unlike comments on
     # works or admin posts.
     case ultimate_parent
-    when ->(p) { p.is_a?(Work) }
+    when Work
       comment_type = "fanwork-comment"
       comment_post_modified_gmt = ultimate_parent.revised_at.iso8601
-    when ->(p) { p.is_a?(AdminPost) }
+    when AdminPost
       comment_type = "comment"
       comment_post_modified_gmt = ultimate_parent.created_at.iso8601
     end
