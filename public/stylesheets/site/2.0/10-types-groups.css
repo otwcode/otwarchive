@@ -230,6 +230,10 @@ p.kudos {
   margin: auto;
 }
 
+dl.language {
+  clear: right;
+}
+
 dl.stats {
   text-align: right;
   background: none;
