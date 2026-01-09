@@ -12,7 +12,10 @@
 <dd>
   <% # link to the work %>
    <% if assignment.creation %>
-     <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, :class => "work" %>
+    <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, :class => "work" %>
+     <% if !assignment.posted? %>
+      <%= t(".draft_header") %>
+    <% end %>
    <% end %>
 
   <% if @collection && @collection.user_is_maintainer?(current_user) %>
