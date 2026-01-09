@@ -293,13 +293,8 @@ describe Comment do
           expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
         end
 
-        it "has comment_post_modified_gmt as the work's revision time", :frozen do
-          work_posted_at = Time.current
-          travel_to(1.day.from_now) do
-            Chapter.new work_id: subject.commentable.id
-            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.iso8601)
-            expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(work_posted_at.iso8601)
-          end
+        it "has comment_post_modified_gmt as the work's revision time" do
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
         end
       end
 
@@ -310,8 +305,8 @@ describe Comment do
           expect(subject.akismet_attributes[:comment_type]).to eq("comment")
         end
 
-        it "has comment_post_modified_gmt as the admin post's creation time", :frozen do
-          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.iso8601)
+        it "has comment_post_modified_gmt as the admin post's creation time" do
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
         end
       end
 
@@ -323,13 +318,8 @@ describe Comment do
             expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
           end
 
-          it "has comment_post_modified_gmt as the work's revision time", :frozen do
-            work_posted_at = Time.current
-            travel_to(1.day.from_now) do
-              Chapter.new work_id: subject.commentable.commentable.id
-              expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.iso8601)
-              expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(work_posted_at.iso8601)
-            end
+          it "has comment_post_modified_gmt as the work's revision time" do
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
           end
         end
 
@@ -340,8 +330,8 @@ describe Comment do
             expect(subject.akismet_attributes[:comment_type]).to eq("comment")
           end
 
-          it "has comment_post_modified_gmt as the admin post's creation time", :frozen do
-            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(Time.current.iso8601)
+          it "has comment_post_modified_gmt as the admin post's creation time" do
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
           end
         end
       end
