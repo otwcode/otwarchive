@@ -17,6 +17,24 @@ en:
         page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+    support_notices:
+      cannot_delete_active: Active support notices cannot be deleted.
+      confirm_delete:
+        page_title: Confirm Delete Support Notice
+      create:
+        success: Support notice successfully created.
+      destroy:
+        success: Support notice successfully deleted.
+      edit:
+        page_title: Edit Support Notice
+      index:
+        page_title: Support Notices
+      new:
+        page_title: New Support Notice
+      show:
+        page_title: Support Notice
+      update:
+        success: Support notice successfully updated.
     user_creations:
       confirm_remove_pseud:
         must_have_orphan_pseuds: Sorry, this action is only available for works by orphan_account pseuds.
