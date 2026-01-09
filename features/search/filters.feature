@@ -1,8 +1,8 @@
 @users
 Feature: Filters
-  In order to ensure filtering works on works and bookmarks
+  In order to ensure filtering works on works, bookmarks and collections
   As a humble user
-  I want to filter on a user's works and bookmarks
+  I want to filter on a user's works, bookmarks and collections
 
   Background:
     Given a canonical fandom "The Hobbit"
@@ -363,3 +363,16 @@ Feature: Filters
     When I fill in "work_search_query" with "bad~query!!!"
       And I press "Sort and Filter"
     Then I should see "Your search failed because of a syntax error"
+
+  @javascript
+  @collections
+  Scenario: Filtering on a user collection page should only return collections by that user.
+    Given "meatloaf" owns the collection "Duplicate Name" with name "collection1"
+      And "recengine" owns the collection "Duplicate Name" with name "collection2"
+      And "recengine" owns the collection "The Hobbits" with name "collectionhobbit"
+      And all indexing jobs have been run
+    When I go to recengine's user page
+      And I follow "Collections (2)"
+      And I fill in "Filter by title" with "Duplicate Name"
+      And I press "Sort and Filter"
+    Then I should see "1 Collection"
