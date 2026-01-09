@@ -1,4 +1,4 @@
-# Job to fill the user_past_usernames and user_past_emails tables using information from the audits table
+# Job to fill the user_past_usernames and user_past_emails tables using information from the audits table 
 class AuditsBackfillJob < RedisSetJob
   queue_as :utilities
 
@@ -19,9 +19,9 @@ class AuditsBackfillJob < RedisSetJob
     User.where(id: user_ids).find_each do |user|
       # gets past data audits within limits
       past_data = user.audits.order(id: :desc).where(action: "update").limit(ArchiveConfig.USER_HISTORIC_VALUES_LIMIT).filter_map do |audit|
-        if audit.audited_changes.key?("login")
+        if audit.audited_changes.key?("login") && audit.audited_changes["login"].nil?
           { username: audit.audited_changes["login"].first, changed_at: audit.created_at }
-        elsif audit.audited_changes.key?("email")
+        elsif audit.audited_changes.key?("email") && audit.audited_changes["email"].nil?
           { email: audit.audited_changes["email"].first, changed_at: audit.created_at }
         end
       end
