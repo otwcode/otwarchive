@@ -173,6 +173,10 @@ ABUSE_REPORTS_PER_USER_PERIOD: 31
 ABUSE_REPORTS_PER_WORK_MAX: 5
 # time period, in days, used to total number of reports for a given work URL
 ABUSE_REPORTS_PER_WORK_PERIOD: 31
+# max number of abuse reports to accept for a given comment URL
+ABUSE_REPORTS_PER_COMMENT_MAX: 3
+# time period, in days, used to total number of reports for a given comment URL
+ABUSE_REPORTS_PER_COMMENT_PERIOD: 30
 # max number of abuse reports to accept from a given email
 ABUSE_REPORTS_PER_EMAIL_MAX: 5
 

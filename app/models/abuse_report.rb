@@ -53,14 +53,15 @@ class AbuseReport < ApplicationRecord
 
   scope :by_date, -> { order('created_at DESC') }
 
-  # Standardize the format of work, chapter, and profile URLs to get it ready
-  # for the url_is_not_over_reported validation.
+  # Standardize the format of work, chapter, comment, and profile URLs
+  # to get it ready for the url_is_not_over_reported validation.
   # Work URLs: "works/123"
   # Chapter URLs: "chapters/123"
+  # Comment URLs: "comments/123"
   # Profile URLs: "users/username"
   before_validation :standardize_url, on: :create
   def standardize_url
-    return unless url =~ %r{((chapters|works)/\d+)} || url =~ %r{(users\/\w+)}
+    return unless url =~ %r{((chapters|works|comments)/\d+)} || url =~ %r{(users/\w+)}
 
     self.url = add_scheme_to_url(url)
     self.url = clean_url(url)
@@ -208,35 +209,36 @@ class AbuseReport < ApplicationRecord
     ReportAttachmentJob.perform_later(ticket_id, work) if work
   end
 
-  # if the URL clearly belongs to a work (i.e. contains "/works/123")
-  # or a user profile (i.e. contains "/users/username")
-  # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX
-  # or ABUSE_REPORTS_PER_USER_MAX times per month
+  # if the URL clearly belongs to a specific piece of content
+  # make sure it isn't reported more than ABUSE_REPORTS_PER_<type>_MAX
+  # times within the configured time period
   def url_is_not_over_reported
-    message = ts('This page has already been reported. Our volunteers only
-                 need one report in order to investigate and resolve an issue,
-                 so please be patient and do not submit another report.')
-    if url =~ /\/works\/\d+/
+    case url
+    when %r{/comments/\d+}
+      comment_params_only = url.match(%r{/comments/\d+/}).to_s
+      comment_report_period = ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD.days.ago
+      existing_reports_total = AbuseReport.where('created_at > ? AND
+                                                 url LIKE ?',
+                                                 comment_report_period,
+                                                 "%#{comment_params_only}%").count
+      errors.add(:base, :over_reported_comment) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_MAX
+    when %r{/works/\d+}
       # use "/works/123/" to avoid matching chapter or external work ids
-      work_params_only = url.match(/\/works\/\d+\//).to_s
+      work_params_only = url.match(%r{/works/\d+/}).to_s
       work_report_period = ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
                                                  work_report_period,
                                                  "%#{work_params_only}%").count
-      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
-        errors.add(:base, message)
-      end
-    elsif url =~ /\/users\/\w+/
-      user_params_only = url.match(/\/users\/\w+\//).to_s
+      errors.add(:base, :over_reported) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
+    when %r{/users/\w+}
+      user_params_only = url.match(%r{/users/\w+/}).to_s
       user_report_period = ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
                                                  user_report_period,
                                                  "%#{user_params_only}%").count
-      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
-        errors.add(:base, message)
-      end
+      errors.add(:base, :over_reported) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
     end
   end
 
