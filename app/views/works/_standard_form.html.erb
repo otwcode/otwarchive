@@ -243,7 +243,7 @@
 
         <dt class="skin">
           <%= f.label :work_skin_id, t("works.skin.select") %>
-          <%= link_to_help "work-skins" %>
+          <%= link_to_help_modal(help_work_skins_path, t("works.skin.help_title")) %>
         </dt>
         <dd class="skin">
           <%= f.collection_select :work_skin_id, all_coauthor_skins, :id, :title,
@@ -281,7 +281,7 @@
 
       <dt class="permissions comments">
         <%= t("comments.commentable.permissions.options.label") %>
-        <%= link_to_help "who-can-comment-on-this-work" %>
+        <%= link_to_help_modal(help_restricted_commenting_path, t("comments.commentable.permissions.options.help_title")) %>
       </dt>
       <dd class="permissions comments">
         <fieldset>
