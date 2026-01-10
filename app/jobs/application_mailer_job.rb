@@ -1,6 +1,4 @@
 class ApplicationMailerJob < ActionMailer::MailDeliveryJob
-  self.enqueue_after_transaction_commit = true
-  
   # TODO: We have a mix of mailers that take ActiveRecords as arguments, and
   # mailers that take IDs as arguments. If an item is unavailable when the
   # notification is sent, it'll produce an ActiveJob::DeserializationError in

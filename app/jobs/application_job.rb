@@ -1,6 +1,4 @@
 class ApplicationJob < ActiveJob::Base
-  self.enqueue_after_transaction_commit = true
-
   include AfterCommitEverywhere
   extend AfterCommitEverywhere
 
