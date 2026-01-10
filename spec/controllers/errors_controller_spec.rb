@@ -1,6 +1,14 @@
 require "spec_helper"
 
 describe ErrorsController do
+  describe "400" do
+    it "returns an HTML 400 page" do
+      get :"400"
+      expect(response.status).to eq(400)
+      expect(response.header["Content-Type"]).to eq("text/html; charset=utf-8")
+    end
+  end
+  
   describe "404" do
     it "returns an HTML 404 page for .html" do
       get :"404", params: { format: :html }
