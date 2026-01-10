@@ -102,8 +102,8 @@ class CollectionIndexer < Indexer
       assignments_due_at: object.challenge&.assignments_due_at,
       works_reveal_at: object.challenge&.works_reveal_at,
       authors_reveal_at: object.challenge&.authors_reveal_at,
-      filter_ids: object.filter_ids,
-      tag: object.tag
+      filter_ids: object.general_filter_ids,
+      tag: object.general_tags
     )
   end
 end

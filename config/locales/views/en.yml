@@ -541,10 +541,16 @@ en:
     external_work_fields:
       fandoms_help_title: Fandom help
       ratings_help_title: Rating help
+    filters:
+      from: From
+      to: To
+      word_count: Word count
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
+    search_form:
+      word_count: Word count
   challenge:
     gift_exchange:
       challenge_signups:
@@ -2287,6 +2293,15 @@ en:
     index:
       page_heading: "%{login}'s Related Works"
   series:
+    series_module:
+      hidden_by_admin_alt: "(Hidden by Admin)"
+      hidden_by_administrator: Hidden by Administrator
+      landmark:
+        fandom: Fandom
+        summary: Summary
+      restricted: Restricted
+      restricted_alt: "(Restricted)"
+      series_by_html: "%{series_title_link} by %{byline}"
     series_order:
       draft_work_title: "%{title} (DRAFT)"
   skins:
