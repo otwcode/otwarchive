@@ -34,7 +34,7 @@
 
     <div class="verification wrapper">
       <dt><%= t(".account.totp.label") %></dt>
-      <% if current_admin.otp_required_for_login %>
+      <% if current_admin.totp_enabled? %>
         <dd>
           <p><%= t(".account.totp.enabled") %></p>
           <p>

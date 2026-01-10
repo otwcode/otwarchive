@@ -24,6 +24,8 @@ en:
         permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
       already_disabled: TOTP two-step verification is already disabled.
       already_enabled: TOTP two-step verification is already enabled.
+      confirm_disable:
+        page_title: Disable Two-Step Verification
       create:
         incorrect_code: Incorrect verification code. Your code may have expired, or you may need to set up your authenticator app again.
         success: Successfully enabled two-step verification; please make note of your backup codes.

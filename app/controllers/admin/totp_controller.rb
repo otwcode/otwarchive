@@ -15,7 +15,6 @@ class Admin::TotpController < Admin::BaseController
 
     current_admin.generate_totp_secret_if_missing!
     @page_subtitle = t(".page_title")
-    render "confirm_enable"
   end
 
   def create
@@ -25,7 +24,7 @@ class Admin::TotpController < Admin::BaseController
       flash[:notice] = t(".success")
       redirect_to show_backup_codes_admin_totp_path
     else
-      flash[:error] = t(".incorrect_code")
+      flash.now[:error] = t(".incorrect_code")
       render action: :new and return
     end
   end

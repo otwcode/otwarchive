@@ -82,9 +82,4 @@ class Admin < ApplicationRecord
   def totp_qr_code_uri
     otp_provisioning_uri(login, issuer: ArchiveConfig.APP_NAME)
   end
-
-  # Determine if backup codes have been generated
-  def totp_backup_codes_generated?
-    otp_backup_codes.present?
-  end
 end

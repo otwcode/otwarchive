@@ -14,6 +14,8 @@ Feature: Authenticate Admin Users With TOTP 2FA
       And I press "Enable Two-Step Verification"
     Then I should see "Successfully enabled two-step verification; please make note of your backup codes."
       And I should see "Finish"
+    When I follow "Finish"
+    Then I should see "Account Settings"
   
   Scenario: Admins cannot enable TOTP 2FA if they provide a wrong password
     Given the following admin exists
@@ -70,6 +72,18 @@ Feature: Authenticate Admin Users With TOTP 2FA
       And I press "Disable"
     Then I should see "Your password was incorrect."
       And I should not see "Successfully disabled two-step verification."
+
+  Scenario: Admins can regenerate TOTP backup codes
+    Given the following admin exists
+      | login | password     | email             |
+      | admin | testpassword | admin@example.com |
+    And I am logged in as admin "admin" with password "testpassword"
+    And admin "admin" has TOTP 2FA enabled
+    When I follow "Hi, admin!"
+      And I follow "Regenerate backup codes"
+    Then I should see "Two-Step Verification Backup Codes"
+    When I follow "Finish"
+    Then I should see "Account Settings"
 
   Scenario: Admins with TOTP 2FA enabled can log in after providing their code
     Given the following admin exists

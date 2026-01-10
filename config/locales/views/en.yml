@@ -426,13 +426,18 @@ en:
     totp:
       confirm_disable:
         page_heading: Disable Two-Step Verification
-        page_title: Disable Two-Step Verification
         password_label: Admin password
         required_before_disabling: Before disabling two-step verification, you need to verify your password.
         submit: Disable Two-Step Verification
-      confirm_enable:
+      new:
+        page_heading: Confirm Password
+        page_title: Confirm Password
+        password_label: Admin password
+        required_before_enabling: Before enabling two-step verification, you need to verify your password.
+        submit: Continue
+      reauthenticate_create:
         about:
-          effects_of_enabling: When two-step verification is enabled, logging in to your AO3 admin account will require both your admin password and a verification code from your authenticator app.
+          effects_of_enabling: When two-step verification is enabled, logging in to your %{app_name} admin account will require both your admin password and a verification code from your authenticator app.
           general_info: Two-step verification, also called two-factor authentication, helps prevent other people from accessing your account even if they know your password. All you need to set it up is an authenticator app such as 1Password, Google Authenticator, or Twilio Authy.
           heading: About Two-Step Verification
         app_setup:
@@ -447,13 +452,6 @@ en:
           label: 6-digit code
           submit: Enable Two-Step Verification
         page_heading: Set Up Two-Step Verification
-      new:
-        page_heading: Confirm Password
-        page_title: Confirm Password
-        password_label: Admin password
-        required_before_enabling: Before enabling two-step verification, you need to verify your password.
-        submit: Continue
-      reauthenticate_create:
         page_title: Enable Two-Step Verification
       show_backup_codes:
         finish: Finish
