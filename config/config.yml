@@ -211,6 +211,10 @@ RATE_LIMIT_PER_NGINX_UPSTREAM_USER:
     period: 300
 RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
 
+# Used by Rails controller rate_limit, periods are measured in seconds
+RATE_LIMIT_USER_COMMENTING_NUMBER: 3
+RATE_LIMIT_USER_COMMENTING_PERIOD: 900
+
 # The number of tags to show on the search page:
 TAGS_PER_SEARCH_PAGE: 50
 
