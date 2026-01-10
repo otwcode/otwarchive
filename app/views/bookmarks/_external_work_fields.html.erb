@@ -74,13 +74,13 @@
   </p>
   <dl>
     <dt class="required">
-      <%= ew.label :fandom_string, "#{Fandom::NAME.pluralize}*" %> <%= link_to_help_modal(help_tags_fandoms_path, t(".fandoms.help_title")) %>
+      <%= ew.label :fandom_string, "#{Fandom::NAME.pluralize}*" %> <%= link_to_help_modal(help_tags_fandoms_path, t(".fandoms_help_title")) %>
     </dt>
     <dd class="required" title="fandom">
       <%= ew.text_field :fandom_string, autocomplete_options("fandom") %>
     </dd>
     <dt class="rating">
-      <%= ew.label :rating_string, Rating::NAME %> <%= link_to_help_modal(help_tags_ratings_path, t(".ratings.help_title")) %>
+      <%= ew.label :rating_string, Rating::NAME %> <%= link_to_help_modal(help_tags_ratings_path, t(".ratings_help_title")) %>
     </dt>
     <dd class="rating">
       <%= ew.collection_select :rating_string,
