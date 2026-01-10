@@ -1,18 +1,18 @@
 GIT
-  remote: https://github.com/marcus8448/rails-i18n
-  revision: 1d120cc3b2c02793e7cab4ff5951d3a9e0b316a4
-  ref: 1d120cc3b2c02793e7cab4ff5951d3a9e0b316a4
-  specs:
-    rails-i18n (8.1.0)
-      i18n (>= 0.7, < 2)
-      railties (>= 8.0.0, < 9)
-
-GIT
   remote: https://github.com/rails/rails-observers
   revision: 389b577322d8b17336730b2dc4e179060a23c8e7
   specs:
     rails-observers (0.2.0)
       activemodel (>= 4.2)
+
+GIT
+  remote: https://github.com/svenfuchs/rails-i18n
+  revision: 54c1c7c2fdcc311427ec6f1dadd298a60db1ddef
+  ref: 54c1c7c2fdcc311427ec6f1dadd298a60db1ddef
+  specs:
+    rails-i18n (8.1.0)
+      i18n (>= 0.7, < 2)
+      railties (>= 8.0.0, < 9)
 
 GIT
   remote: https://github.com/winston/google_visualr
