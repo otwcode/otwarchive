@@ -127,7 +127,8 @@ module SkinWizard
         .thread .even,
         .listbox .index,
         .nomination dt,
-        #tos_prompt {
+        #tos_prompt,
+        .annotation {
           background: #{color};
         }
 
@@ -310,12 +311,15 @@ module SkinWizard
         .work.navigation .download,
         .javascript .work.navigation .download .secondary,
         dl.meta,
+        dl.meta .wrapper,
         .bookmark .user,
         div.comment,
         li.comment,
         .comment div.icon,
         .splash .news li,
-        .userstuff blockquote {
+        .authentication fieldset,
+        .userstuff blockquote,
+        .annotation {
           border-color: #{color};
         }
 

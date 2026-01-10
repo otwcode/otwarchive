@@ -221,13 +221,41 @@ SUBSECTIONS:
   width: 48%;
 }
 
-.sessions-new #new_admin {
+.sessions-new form.login, .sessions-create form.totp {
   width: 75%;
   margin: auto;
 }
 
 .session dt {
   min-width: 0;
+}
+
+.authentication fieldset {
+  background: transparent;
+  border: 1px solid #ddd;
+    box-shadow: none;
+}
+
+.authentication legend {
+  height: auto;
+  width: auto;
+  font-size: inherit;
+  font-weight: normal;
+  padding: 0.5em 0.5em 0;
+    opacity: 1;
+}
+
+.authentication .note {
+  padding-top: 0;
+}
+
+.authentication label {
+  display: block;
+  font-weight: bold;
+}
+
+.authentication input[type="submit"] {
+  vertical-align: bottom;
 }
 
 /* 3. ZONE: SYSTEM: DOCS
