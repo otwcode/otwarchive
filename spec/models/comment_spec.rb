@@ -293,8 +293,10 @@ describe Comment do
           expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
         end
 
-        it "has comment_post_modified_gmt as the work's revision time" do
+        it "has comment_post_modified_gmt as the work's revision time and not the creation time" do
+          subject.ultimate_parent.set_revised_at(1.day.from_now)
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
         end
       end
 
@@ -318,8 +320,10 @@ describe Comment do
             expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
           end
 
-          it "has comment_post_modified_gmt as the work's revision time" do
+          it "has comment_post_modified_gmt as the work's revision time and not the creation time" do
+            subject.ultimate_parent.set_revised_at(1.day.from_now)
             expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
           end
         end
 
