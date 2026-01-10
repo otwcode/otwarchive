@@ -431,7 +431,6 @@ en:
         submit: Disable Two-Step Verification
       new:
         page_heading: Confirm Password
-        page_title: Confirm Password
         password_label: Admin password
         required_before_enabling: Before enabling two-step verification, you need to verify your password.
         submit: Continue
@@ -452,11 +451,9 @@ en:
           label: 6-digit code
           submit: Enable Two-Step Verification
         page_heading: Set Up Two-Step Verification
-        page_title: Enable Two-Step Verification
       show_backup_codes:
         finish: Finish
         page_heading: Two-Step Verification Backup Codes
-        page_title: Two-Step Verification Backup Codes
         write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
     user_creations:
       confirm_remove_pseud:

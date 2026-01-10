@@ -64,7 +64,7 @@ describe Admin::TotpController do
         fake_login_admin(admin)
         post :reauthenticate_create, params: { admin_id: admin.login, password_check: "correct_password" }
         expect(flash).to be_empty
-        expect(response).to render_template(:confirm_enable)
+        expect(response).to render_template(:reauthenticate_create)
       end
 
       it "denies access when password is wrong" do
