@@ -1203,6 +1203,9 @@ class Work < ApplicationRecord
   end
 
   def bookmarkable_json
+    # If the work is unrevealed, it should not have any information that can be searched on
+    return {} unless !unrevealed?
+
     methods = %i[collection_ids work_types]
     %w[general public].each do |visibility|
       methods << :"#{visibility}_tags"
