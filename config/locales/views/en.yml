@@ -688,9 +688,9 @@ en:
           posted: 'Posted:'
           unposted: 'Created:'
         status:
-          fulfilled: Complete!
+          fullfilled: Complete!
           header: 'Status:'
-          unapproved: Unapproved
+          unfullfilled: Unapproved
           unposted: Unposted
     to_default:
       button: Default
