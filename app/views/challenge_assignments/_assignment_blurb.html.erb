@@ -12,7 +12,7 @@
 <dd>
   <% # link to the work %>
    <% if assignment.creation %>
-    <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, :class => "work" %>
+    <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work" %>
      <% if !assignment.posted? %>
       <%= t(".draft_header") %>
     <% end %>
@@ -43,10 +43,10 @@
 
     <% if assignment.creation %>
       <% if assignment.posted? %>
-        <dt> <%= t(".stats.creation.posted")%> </dt>
+        <dt> <%= t(".stats.creation.posted") %> </dt>
         <dd class="datetime"><%= assignment.creation.published_at %></dd>
       <% else %>
-        <dt> <%= t(".stats.creation.unposted")%> </dt>
+        <dt> <%= t(".stats.creation.unposted") %> </dt>
         <dd class="datetime"><%= assignment.creation.created_at %></dd>
       <% end %>
 
