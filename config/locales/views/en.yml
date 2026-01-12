@@ -573,11 +573,11 @@ en:
       draft_header: " (draft)"
       stats:
         creation:
-          posted: "Posted:"
-          unposted: "Created:"
-        status: 
-          fullfilled: "Complete!"
-          header: "Status:"
+          posted: 'Posted:'
+          unposted: 'Created:'
+        status:
+          fullfilled: Complete!
+          header: 'Status:'
           unfullfilled: Unapproved
           unposted: Unposted
     to_default:
