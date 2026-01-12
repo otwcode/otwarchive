@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe BookmarkableQuery do
   describe "#escape_restrictable_fields" do
-    context "when restricted tags are shown" do
+    context "when restricted fields are shown" do
       let(:bookmark_query) { BookmarkQuery.new(show_restricted: true) }
       let(:query) { bookmark_query.bookmarkable_query }
 
@@ -31,9 +31,21 @@ describe BookmarkableQuery do
           expect(query.escape_restrictable_fields("#{tag_type}_ids:foo")).to eq("general_#{tag_type}_ids:foo")
         end
       end
+
+      it "replaces 'word_count' with 'general_word_count'" do
+        expect(query.escape_restrictable_fields("word_count:3")).to eq("general_word_count:3")
+      end
+
+      it "replaces 'public_word_count' with 'general_word_count'" do
+        expect(query.escape_restrictable_fields("public_word_count:4")).to eq("general_word_count:4")
+      end
+
+      it "does not change 'general_word_count'" do
+        expect(query.escape_restrictable_fields("general_word_count:5")).to eq("general_word_count:5")
+      end
     end
 
-    context "when restricted tags are not shown" do
+    context "when restricted fields are not shown" do
       let(:bookmark_query) { BookmarkQuery.new(show_restricted: false) }
       let(:query) { bookmark_query.bookmarkable_query }
 
@@ -61,6 +73,18 @@ describe BookmarkableQuery do
         it "replaces '#{tag_type}_ids' with 'public_#{tag_type}_ids'" do
           expect(query.escape_restrictable_fields("#{tag_type}_ids:foo")).to eq("public_#{tag_type}_ids:foo")
         end
+      end
+
+      it "replaces 'word_count' with 'public_word_count'" do
+        expect(query.escape_restrictable_fields("word_count:3")).to eq("public_word_count:3")
+      end
+
+      it "replaces 'general_word_count' with 'public_word_count'" do
+        expect(query.escape_restrictable_fields("general_word_count:4")).to eq("public_word_count:4")
+      end
+
+      it "does not change 'public_word_count'" do
+        expect(query.escape_restrictable_fields("public_word_count:5")).to eq("public_word_count:5")
       end
     end
   end
@@ -229,6 +253,20 @@ describe BookmarkableQuery do
           expect(filter_string).to eq("general_#{field}_ids:foo")
         end
       end
+
+      it "converts the 'word_count' field to 'general_word_count'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "word_count:>60")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("general_word_count:>60")
+      end
+
+      it "converts the 'public_word_count' field to 'general_word_count'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "public_word_count:<30")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("general_word_count:<30")
+      end
     end
 
     context "when querying as an admin" do
@@ -264,6 +302,20 @@ describe BookmarkableQuery do
           filter_string = q[:query][:bool][:filter][0][:query_string][:query]
           expect(filter_string).to eq("general_#{field}_ids:foo")
         end
+      end
+
+      it "converts the 'word_count' field to 'general_word_count'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "word_count:>60")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("general_word_count:>60")
+      end
+
+      it "converts the 'public_word_count' field to 'general_word_count'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "public_word_count:<30")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("general_word_count:<30")
       end
     end
 
@@ -315,6 +367,20 @@ describe BookmarkableQuery do
           filter_string = q[:query][:bool][:filter][0][:query_string][:query]
           expect(filter_string).to eq("public_#{field}_ids:foo")
         end
+      end
+
+      it "converts the 'word_count' field to 'public_word_count'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "word_count:7-10")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("public_word_count:7-10")
+      end
+
+      it "converts the 'general_word_count' field to 'public_word_count'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "general_word_count:7-10")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("public_word_count:7-10")
       end
     end
   end
