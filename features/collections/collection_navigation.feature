@@ -124,6 +124,7 @@ Feature: Basic collection navigation
       And I should see "Papyrus"
       And I should see "Secret Sans"
 
+  @disable_caching
   Scenario: Non-Canonical Fandoms are not double counted
     Given I have the collection "Canons" with name "canon"
       And I have a canonical "TV Shows" fandom tag named "TV"
