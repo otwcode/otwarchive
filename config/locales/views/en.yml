@@ -561,7 +561,7 @@ en:
       navigation:
         bookmarks: Bookmarks
         edit: Edit Bookmark
-        new: Boorkmark
+        new: Bookmark
         new_external_work: Bookmark External Work
         works: Works
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.

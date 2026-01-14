@@ -123,7 +123,7 @@ module NavigationHelpers
       chapter = work.chapters_in_order(include_content: false)[$1.to_i - 1]
       work_chapter_path(work, chapter)
     when /^the bookmarks page for the work "(.*)"$/i
-      work_bookmarks_path(Work.find_by(title: $1))
+      work_bookmarks_path(Work.find_by(title: Regexp.last_match(1)))
     when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
       step %{all indexing jobs have been run}
       user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)

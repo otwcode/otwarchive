@@ -481,7 +481,6 @@ Then "the bookmark form should be closed in the blurb for {word}'s bookmark of {
   user = User.find_by(login: login)
   work = Work.find_by(title: title)
   bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
-  #within(:xpath, "//li[@id=\"bookmark_#{bookmark_id}\" or @id=\"bookmark_#{work.id}\"]") do
   within("#bookmark_#{bookmark_id}") do
     step %{I should not see "save a bookmark!"}
     step %{I should see "Edit"}
