@@ -124,11 +124,11 @@ Feature: Basic collection navigation
       And I should see "Papyrus"
       And I should see "Secret Sans"
 
-  @disable_caching
   Scenario: Non-Canonical Fandoms are not double counted
     Given I have the collection "Canons" with name "canon"
       And I have a canonical "TV Shows" fandom tag named "TV"
       And a synonym "Television" of the tag "TV"
+      And the collection counts have expired
     When I am logged in as "Screen"
       And I post the work "Full name" with fandom "Television" in the collection "Canons"
       And I post the work "Small name" with fandom "TV" in the collection "Canons"

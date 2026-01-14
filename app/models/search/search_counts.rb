@@ -119,7 +119,7 @@ module SearchCounts
     list = []
     query.search_results.each do |work|
       list |= work.fandom_ids if work.fandom_ids.present?
-      work.tag_groups["Fandom"].each do |fandom|
+      work.fandoms.each do |fandom|
         list.push(fandom.id) if fandom.unwrangled?
       end
     end
