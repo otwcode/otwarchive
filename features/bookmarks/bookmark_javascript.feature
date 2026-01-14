@@ -5,37 +5,91 @@ Feature: Edit bookmarks with javascript enabled
   I want to be able to edit bookmarks with javascript enabled
   
   Background:
-    Given a canonical fandom "The Bookmarks"
-      And the work "Bookmark: The Beginnings" by "bookmarker" with fandom "The Bookmarks"
-      And the work "Bookmark: The Sequel" by "bookmarker" with fandom "The Bookmarks"
-      And all indexing jobs have been run
-      And the dashboard counts have expired
-      And I am logged in as "bookmarker"
-
-  @javascript
-  Scenario: Opening multiple edit forms lets you close all of them (AO3-7214)
     Given I am logged in as "recengine"
       And I bookmark the work "Bookmark: The Beginnings"
       And I bookmark the work "Bookmark: The Sequel"
-      And all indexing jobs have been run
-    When I follow "Bookmarks"
-      And I follow "Edit"
-      And I follow "Edit"
-    Then I should not see "Edit"
-    When I exit the bookmark edit form
-      And I exit the bookmark edit form
-    Then I should not see "save a bookmark!"
-  
+
   @javascript
-  Scenario: The edit form can be reopened after closing it with "X" on some pages (AO3-7215)
-    Given I am logged in as "recengine"
+  Scenario: The Bookmark button on a work's bookmark page correctly opens, closes, and reopens the form
+  When I am logged out
+    And I am logged in
+    And I am on the bookmarks page for the work "Bookmark: The Beginnings"
+    # Specify #main .navigation because the string and its plural form appear in a lot of places
+    And I follow "Bookmark" within "#main .navigation"
+  Then I should see "save a bookmark!"
+    And I should not see "Bookmark" within "#main .navigation"
+  # Close 
+  When I exit the bookmark form
+  Then I should see "Bookmark" within "#main .navigation"
+  When I follow "Bookmark"
+  Then I should not see "save a bookmark!"
+
+  @javascript
+  Scenario: The Edit Bookmark button on a work's bookmark page correctly opens, closes, and reopens the edit form
+  When I am on the bookmarks page for the work "Bookmark: The Beginnings"
+    And I follow "Edit Bookmark"
+  Then I should see "save a bookmark!"
+    And I should not see "Edit Bookmark"
+    # Specify .own .actions because the string has some text in common with Edit Bookmark
+    And I should not see "Edit" within ".own .actions"
+  When I exit the bookmark form
+  Then I should see "Edit Bookmark"
+    And I should see "Edit" within ".own .actions"
+  When I follow "Edit"
+  Then I should see "save a bookmark!"
+
+  @javascript
+  Scenario: The Edit button correctly opens, closes, and reopens edit forms when there are multiple bookmarks on a page
+    # Open
+    When I am on the bookmarks page
+      And I follow "Edit" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    Then the bookmark form should be open in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    When I follow "Edit" in the blurb for recengine's bookmark of "Bookmark: The Sequel"
+    Then the bookmark form should be open in the blurb for recengine's bookmark of "Bookmark: The Sequel"
+    # Close
+    When I exit the bookmark form for the bookmark of "Bookmark: The Beginnings"
+    Then the bookmark form should be closed in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    When I exit the bookmark form for the bookmark of "Bookmark: The Sequel"
+    Then the bookmark form should be closed in the blurb for recengine's bookmark of "Bookmark: The Sequel"
+    # Reopen
+    When I follow "Edit" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    Then the bookmark form should be open in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+
+  @javascript
+  Scenario: The Saved button correctly opens, closes, and reopens edit forms when there are multiple bookmark blurbs on a page
+    When I am logged out
+      And I am logged in as "bookmarker"
       And I bookmark the work "Bookmark: The Beginnings"
-    When I view the work "Bookmark: The Beginnings"
-      And I follow "1"
-      And I follow "Edit"
-    Then I should see "save a bookmark!"
-      And I should not see "Edit Bookmark"
-    When I exit the bookmark edit form
-    Then I should see "Edit Bookmark"
-    When I follow "Edit"
-    Then I should see "save a bookmark!"
+      And I bookmark the work "Bookmark: The Sequel"
+      And I go to the bookmarks page
+    # Open
+    When I follow "Saved" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    Then the bookmark form should be open in the blurb for bookmarker's bookmark of "Bookmark: The Beginnings"
+    When I follow "Saved" in the blurb for recengine's bookmark of "Bookmark: The Sequel"
+    Then the bookmark form should be open in the blurb for bookmarker's bookmark of "Bookmark: The Sequel"
+    # Close
+    When I exit the bookmark form for the bookmark of "Bookmark: The Beginnings"
+    Then the bookmark form should be closed in the blurb for bookmarker's bookmark of "Bookmark: The Beginnings"
+    When I exit the bookmark form for the bookmark of "Bookmark: The Sequel"
+    Then the bookmark form should be closed in the blurb for bookmarker's bookmark of "Bookmark: The Sequel"
+    # Reopen
+    When I follow "Saved" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    Then the bookmark form should be open in the blurb for bookmarker's bookmark of "Bookmark: The Beginnings"
+
+  @javascript
+  Scenario: The Saved button correctly opens, closes, and reopens edit forms when there are multiple bookmarkable blurbs on a page
+    When the tag "Testing" is canonized
+      And I go to the bookmarks tagged "Testing"
+    # Open
+    When I follow "Saved" in the bookmarkable blurb for "Bookmark: The Beginnings"
+    Then the bookmark form should be open in the bookmarkable blurb for "Bookmark: The Beginnings"
+    When I follow "Saved" in the bookmarkable blurb for "Bookmark: The Sequel"
+    Then the bookmark form should be open in the bookmarkable blurb for "Bookmark: The Sequel"
+    # Close
+    When I exit the bookmark form for the bookmark of "Bookmark: The Beginnings"
+    Then the bookmark form should be closed in the bookmarkable blurb for "Bookmark: The Beginnings"
+    When I exit the bookmark form for the bookmark of "Bookmark: The Sequel"
+    Then the bookmark form should be closed in the bookmarkable blurb for "Bookmark: The Sequel"
+    # Reopen
+    When I follow "Saved" in the bookmarkable blurb for "Bookmark: The Beginnings"
+    Then the bookmark form should be open in the bookmarkable blurb for "Bookmark: The Beginnings"

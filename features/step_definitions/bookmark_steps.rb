@@ -430,6 +430,64 @@ When "I exit the bookmark edit form" do
   find("a", text: "×").click
 end
 
+When "I exit the bookmark form for the bookmark of {string}" do |work_title|
+  work_id = Work.find_by(title: work_title).id
+  within(".bookmark .work-#{work_id}") do
+    step %{I exit the bookmark form}
+  end
+end
+
+When "I follow {string} in the bookmarkable blurb for {string}" do |link, title|
+  work_id = Work.find_by(title: title).id
+  find("#bookmark_#{work_id}").click_link(link)
+end
+
+When "I follow {string} in the blurb for {word}'s bookmark of {string}" do |link, login, title|
+  user = User.find_by(login: login)
+  work = Work.find_by(title: title)
+  bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
+  find("#bookmark_#{bookmark_id}").click_link(link)
+end
+
+Then "the bookmark form should be open in the bookmarkable blurb for {string}" do |title|
+  work_id = Work.find_by(title: title).id
+  within("#bookmark_#{work_id}") do
+    step %{I should see "save a bookmark!"}
+    step %{I should not see "Saved"}
+    step %{I should not see "Edit"}
+  end
+end
+
+Then "the bookmark form should be open in the blurb for {word}'s bookmark of {string}" do |login, title|
+  user = User.find_by(login: login)
+  work = Work.find_by(title: title)
+  bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
+  within("#bookmark_#{bookmark_id}") do
+    step %{I should see "save a bookmark!"}
+    step %{I should not see "Edit"}
+  end
+end
+
+Then "the bookmark form should be closed in the bookmarkable blurb for {string}" do |title|
+  work_id = Work.find_by(title: title).id
+  within("#bookmark_#{work_id}") do
+    step %{I should not see "save a bookmark!"}
+    step %{I should see "Saved"}
+    step %{I should see "Edit"}
+  end
+end
+
+Then "the bookmark form should be closed in the blurb for {word}'s bookmark of {string}" do |login, title|
+  user = User.find_by(login: login)
+  work = Work.find_by(title: title)
+  bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
+  #within(:xpath, "//li[@id=\"bookmark_#{bookmark_id}\" or @id=\"bookmark_#{work.id}\"]") do
+  within("#bookmark_#{bookmark_id}") do
+    step %{I should not see "save a bookmark!"}
+    step %{I should see "Edit"}
+  end
+end
+
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
   step %{I follow "Add To Collection"}
   fill_in("collection_names", with: collection_name)
