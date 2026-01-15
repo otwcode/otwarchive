@@ -91,6 +91,7 @@ Feature: Basic collection navigation
     Then I should not see "High School Musical"
       And I should see "Steven's Universe"
 
+  @disable_caching
   Scenario: Uncategorized Fandoms should appear in Collection's Fandoms
     Given I have the collection "Categoric" with name "categoric"
       And the tag "Unrelated Fandom" does not exist
