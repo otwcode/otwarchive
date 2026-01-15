@@ -426,7 +426,7 @@ When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
 end
 
 # Capybara will not find links without href with the click_link method (see issue #379 on the capybara repository)
-When "I exit the bookmark edit form" do
+When "I exit the bookmark form" do
   find("a", text: "×").click
 end
 
@@ -477,6 +477,14 @@ Then "the bookmark form should be closed in the bookmarkable blurb for {string}"
   end
 end
 
+Then "{word}'s bookmark form should be closed in the bookmarkable blurb for {string}" do |bookmarker, title|
+  work_id = Work.find_by(title: title).id
+  within("#bookmark_#{work_id}") do
+    step %{I should not see "save a bookmark!"}
+    step %{I should see "Save"}
+  end
+end
+
 Then "the bookmark form should be closed in the blurb for {word}'s bookmark of {string}" do |login, title|
   user = User.find_by(login: login)
   work = Work.find_by(title: title)
@@ -484,6 +492,21 @@ Then "the bookmark form should be closed in the blurb for {word}'s bookmark of {
   within("#bookmark_#{bookmark_id}") do
     step %{I should not see "save a bookmark!"}
     step %{I should see "Edit"}
+  end
+end
+
+Then "{word}'s bookmark form should be closed in the blurb for {word}'s bookmark of {string}" do |bookmarker, login, title|
+  bookmarker = User.find_by(login: bookmarker)
+  user = User.find_by(login: login)
+  work = Work.find_by(title: title)
+  if (user == bookmarker)
+    step %{the bookmark form should be closed in the blurb for #{login}'s bookmark of #{title}}
+  else
+    bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
+    within("#bookmark_#{bookmark_id}") do
+      step %{I should not see "save a bookmark!"}
+      step %{I should see "Save"}
+    end
   end
 end
 
