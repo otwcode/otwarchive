@@ -118,9 +118,12 @@ module SearchCounts
   def get_fandom_hash(query)
     list = []
     query.search_results.each do |work|
-      list |= work.fandom_ids if work.fandom_ids.present?
       work.fandoms.each do |fandom|
-        list.push(fandom.id) if fandom.unwrangled?
+        if fandom.unwrangled? || fandom.canonical?
+          list.push(fandom.id)
+        else
+          list.push(fandom.merger_id)
+        end
       end
     end
     list.tally
