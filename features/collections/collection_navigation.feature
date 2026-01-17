@@ -98,11 +98,13 @@ Feature: Basic collection navigation
     When I am logged in as "Screen"
       And I post the work "Full name" with fandom "Television" in the collection "Canons"
       And I post the work "Small name" with fandom "TV" in the collection "Canons"
+      And the periodic tag count task is run
       And the collection counts have expired
+      And I flush the wrangling sidebar caches
       And I go to "Canons" collection's page
-    # Then I should see "Fandoms (1)"
-    #  And I should see "Television"
-    When I follow "Fandoms ("
+     Then I should see "Fandoms (1)"
+      And I should see "Television"
+    When I follow "Fandoms (1)"
     Then I should not see "Television"
 
   @disable_caching
