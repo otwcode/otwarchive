@@ -357,6 +357,7 @@ class UserMailer < ApplicationMailer
   def admin_deleted_work_notification(user, work)
     @user = user
     @work = work
+    @pac_footer = true
     download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
     html = DownloadWriter.new(download).generate_html
     html = ::Mail::Encodings::Base64.encode(html)
