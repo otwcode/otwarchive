@@ -355,6 +355,20 @@ Given "{string} has a bookmark of a work titled {string}" do |user, title|
   step %{all indexing jobs have been run}
 end
 
+# The regular method of creating a bookmark is flaky with javascript. This is an alternate method of creating a bookmark
+Given "{string} has a bookmark of the work {string}" do |user, title|
+  step %{the user "#{user}" exists and is activated}
+
+  user_pseud = User.find_by(login: user).default_pseud
+  work = Work.find_by(title: title)
+  work ||= FactoryBot.create(:work, title: title)
+  FactoryBot.create(:bookmark,
+                    bookmarkable: work,
+                    pseud: user_pseud)
+
+  step %{all indexing jobs have been run}
+end
+
 Given "pseud {string} has a bookmark of a work titled {string} by {string}" do |pseud, title, creator|
   pseud = Pseud.find_by(name: pseud)
   work = FactoryBot.create(:work, title: title, authors: [ensure_user(creator).default_pseud])
@@ -449,63 +463,64 @@ When "I follow {string} in the blurb for {word}'s bookmark of {string}" do |link
   find("#bookmark_#{bookmark_id}").click_link(link)
 end
 
-Then "the bookmark form should be open in the bookmarkable blurb for {string}" do |title|
+Then "the {word} bookmark form should be open in the bookmarkable blurb for {string}" do |action, title|
   work_id = Work.find_by(title: title).id
   within("#bookmark_#{work_id}") do
     step %{I should see "save a bookmark!"}
-    step %{I should not see "Saved"}
-    step %{I should not see "Edit"}
+    if action == "edit"
+      step %{I should not see "Saved"}
+      step %{I should not see "Edit"}
+    elsif action == "new"
+      step %{I should not see "Save"}
+    end
   end
 end
 
-Then "the bookmark form should be open in the blurb for {word}'s bookmark of {string}" do |login, title|
+Then "the {word} bookmark form should be open in the blurb for {word}'s bookmark of {string}" do |action, login, title|
   user = User.find_by(login: login)
   work = Work.find_by(title: title)
   bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
   within("#bookmark_#{bookmark_id}") do
     step %{I should see "save a bookmark!"}
-    step %{I should not see "Edit"}
+    if action == "edit"
+      step %{I should not see "Saved"}
+      step %{I should not see "Edit"}
+    elsif action == "new"
+      step %{I should not see "Save"}
+    end
   end
 end
 
-Then "the bookmark form should be closed in the bookmarkable blurb for {string}" do |title|
+Then "the {word} bookmark form should be closed in the bookmarkable blurb for {string}" do |action, title|
   work_id = Work.find_by(title: title).id
   within("#bookmark_#{work_id}") do
     step %{I should not see "save a bookmark!"}
-    step %{I should see "Saved"}
-    step %{I should see "Edit"}
+    if action == "edit"
+      step %{I should see "Saved"}
+      step %{I should see "Edit"}
+    elsif action == "new"
+      step %{I should see "Save"}
+    end
   end
 end
 
-Then "{word}'s bookmark form should be closed in the bookmarkable blurb for {string}" do |bookmarker, title|
-  work_id = Work.find_by(title: title).id
-  within("#bookmark_#{work_id}") do
-    step %{I should not see "save a bookmark!"}
-    step %{I should see "Save"}
-  end
-end
-
-Then "the bookmark form should be closed in the blurb for {word}'s bookmark of {string}" do |login, title|
+Then "the {word} bookmark form should be closed in the blurb for {word}'s bookmark of {string}" do |action, login, title|
   user = User.find_by(login: login)
   work = Work.find_by(title: title)
   bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
-  within("#bookmark_#{bookmark_id}") do
-    step %{I should not see "save a bookmark!"}
-    step %{I should see "Edit"}
-  end
-end
-
-Then "{word}'s bookmark form should be closed in the blurb for {word}'s bookmark of {string}" do |bookmarker, login, title|
-  bookmarker = User.find_by(login: bookmarker)
-  user = User.find_by(login: login)
-  work = Work.find_by(title: title)
-  if (user == bookmarker)
-    step %{the bookmark form should be closed in the blurb for #{login}'s bookmark of #{title}}
+  blurb_id = "#bookmark_#{bookmark_id}"
+  if find(blurb_id).has_selector?(".own")
+    step %{I should see "Edit" within "#{blurb_id}"}
+    step %{I should not see "save a bookmark!" within "#{blurb_id}"}
   else
-    bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
     within("#bookmark_#{bookmark_id}") do
       step %{I should not see "save a bookmark!"}
-      step %{I should see "Save"}
+      if action == "edit"
+        step %{I should see "Saved"}
+        step %{I should see "Edit"}
+      elsif action == "new"
+        step %{I should see "Save"}
+      end
     end
   end
 end
