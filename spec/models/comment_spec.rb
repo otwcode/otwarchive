@@ -292,6 +292,10 @@ describe Comment do
         it "has comment_type \"fanwork-comment\"" do
           expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
         end
+
+        it "has comment_date_gmt as the comment's created date" do
+          expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
+        end
       end
 
       context "when the commentable is an admin post" do
@@ -299,6 +303,10 @@ describe Comment do
 
         it "has comment_type \"comment\"" do
           expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+        end
+
+        it "has comment_date_gmt as the comment's created date" do
+          expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
         end
       end
 
@@ -308,6 +316,10 @@ describe Comment do
 
           it "has comment_type \"fanwork-comment\"" do
             expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
+          end
+
+          it "has comment_date_gmt as the comment's created date" do
+            expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
           end
         end
 
