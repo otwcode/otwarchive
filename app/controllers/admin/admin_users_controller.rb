@@ -188,7 +188,6 @@ class Admin::AdminUsersController < Admin::BaseController
     @user.profile.about_me = nil
 
     @user.profile.save(validate: false)
-
     
     @user.pseuds.each do |pseud|
       pseud.description = nil

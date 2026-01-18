@@ -160,7 +160,6 @@ Feature: Admin Abuse actions
       And I post the comment "I like spam" on the work "Not Spam"
       And I want to edit my profile
       And I fill in the details of my profile
-      And show me the html
       And I fill in details of my default pseud
       And I am logged in as a "policy_and_abuse" admin
     When I go to the user administration page for "Spamster"
