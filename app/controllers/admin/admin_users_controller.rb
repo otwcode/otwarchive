@@ -184,6 +184,21 @@ class Admin::AdminUsersController < Admin::BaseController
       comment.destroy_or_mark_deleted # comments with replies cannot be destroyed, mark deleted instead
     end
 
+    @user.profile.title = nil
+    @user.profile.about_me = nil
+
+    @user.profile.save(validate: false)
+
+    
+    @user.pseuds.each do |pseud|
+      pseud.description = nil
+      pseud.icon_alt_text = nil
+      pseud.icon_comment_text = nil
+      pseud.icon.purge
+
+      pseud.save(validate: false)
+    end
+
     flash[:notice] = t(".success", login: @user.login)
     redirect_to(admin_users_path)
   end
