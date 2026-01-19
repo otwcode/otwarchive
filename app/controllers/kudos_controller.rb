@@ -41,7 +41,8 @@ class KudosController < ApplicationController
       respond_to do |format|
         format.html do
           flash[:kudos_notice] = t(".success")
-          redirect_back_or_to @kudo.commentable and return
+          redirect_path = request.referer || polymorphic_path(@kudo.commentable)
+          redirect_to redirect_path + "#kudos_message" and return
         end
 
         format.js do
@@ -58,7 +59,8 @@ class KudosController < ApplicationController
           return if check_user_status
 
           flash[:kudos_error] = error_message
-          redirect_back_or_to @kudo.commentable || root_path and return
+          redirect_path = request.referer || polymorphic_path(@kudo.commentable || root_path)
+          redirect_to redirect_path + "#kudos_message" and return
         end
 
         format.js do
@@ -76,7 +78,8 @@ class KudosController < ApplicationController
     respond_to do |format|
       format.html do
         flash[:kudos_error] = error_message
-        redirect_back_or_to @kudo&.commentable || root_path
+        redirect_path = request.referer || polymorphic_path(@kudo&.commentable || root_path)
+        redirect_to redirect_path + "#kudos_message"
       end
 
       format.js do
