@@ -358,7 +358,7 @@ Feature: Edit preferences
       And I am logged in as a "<role>" admin
     When I go to testuser's preferences page
     Then I should see "Set My Preferences"
-      And I should see "Preferred Language"
+      And I should see "Your locale"
       And I should not see "We're sorry, but something went wrong"
   
     Examples:
