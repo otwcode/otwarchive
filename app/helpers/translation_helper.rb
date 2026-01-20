@@ -1,6 +1,5 @@
 module TranslationHelper
-
-  def time_ago_in_words(from_time, include_seconds = false)
+  def time_ago_in_words(from_time, include_seconds: false)
     to_time = Time.current
 
     return unless from_time.respond_to?(:to_time)
