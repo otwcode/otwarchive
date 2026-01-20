@@ -119,11 +119,7 @@ module SearchCounts
     list = []
     query.search_results.each do |work|
       work.fandoms.each do |fandom|
-        if fandom.unwrangled? || fandom.canonical?
-          list.push(fandom.id)
-        else
-          list.push(fandom.merger_id)
-        end
+        list.push(fandom.merger_id || fandom.id)
       end
     end
     list.tally
