@@ -372,11 +372,15 @@ class Collection < ApplicationRecord
   end
 
   def reveal_collection_items
+    return if unrevealed?
+
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
     send_reveal_notifications
   end
 
   def reveal_collection_item_authors
+    return if anonymous?
+
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
   end
 
