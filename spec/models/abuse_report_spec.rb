@@ -250,8 +250,8 @@ describe AbuseReport do
       it_behaves_like "enough comment reports", "http://archiveofourown.org/comments/876/#timeline"
       it_behaves_like "enough comment reports", "http://archiveofourown.org/comments/876/?smut=yes#timeline"
 
-      # the same comment, under users
-      it_behaves_like "enough comment reports", "http://archiveofourown.org/users/author/comments/876"
+      # the same comment, under admin_posts
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/admin_posts/789/comments/876"
 
       # the same comment, under works
       it_behaves_like "enough comment reports", "http://archiveofourown.org/works/789/comments/876"
