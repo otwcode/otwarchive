@@ -138,7 +138,6 @@ class CollectionItemsController < ApplicationController
     unless new_collections.empty?
       flash[:notice] = ts("Added to collection(s): %{collections}.",
                             collections: new_collections.collect(&:title).join(", "))
-      flash[:notice] += t("bookmarks.create.warnings.private_bookmark_added_to_collection")
     end
     unless invited_collections.empty?
       invited_collections.each do |needs_user_approval|
@@ -153,7 +152,7 @@ class CollectionItemsController < ApplicationController
       flash[:notice] ||= ""
       flash[:notice] += ts(" You have submitted your work to #{unapproved_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
     end
-
+    flash[:notice] += t("collection_items.create.warnings.private_bookmark_added_to_collection") unless new_collections.empty? && unapproved_collections.empty?
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
