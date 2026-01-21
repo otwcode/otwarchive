@@ -2321,13 +2321,13 @@ en:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
     form:
+      css: CSS
       description: Description
       icon: Upload a preview (png, jpeg or gif)
       public: Apply to make public
       skin_type: Type
       skins_creating_help_title: Creating skins
       title: Title
-      css: CSS
     revert_skin_form:
       revert_to_default: Revert to Default Skin
     wizard_form:
