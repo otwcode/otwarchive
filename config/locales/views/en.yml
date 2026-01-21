@@ -2327,6 +2327,7 @@ en:
       skin_type: Type
       skins_creating_help_title: Creating skins
       title: Title
+      css: CSS
     revert_skin_form:
       revert_to_default: Revert to Default Skin
     wizard_form:
