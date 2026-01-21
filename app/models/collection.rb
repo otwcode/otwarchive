@@ -364,11 +364,11 @@ class Collection < ApplicationRecord
   @queue = :collection
 
   def reveal!
-    async(:reveal_collection_items)
+    async_after_commit(:reveal_collection_items)
   end
 
   def reveal_authors!
-    async(:reveal_collection_item_authors)
+    async_after_commit(:reveal_collection_item_authors)
   end
 
   def reveal_collection_items
