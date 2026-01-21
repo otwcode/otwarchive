@@ -1139,9 +1139,7 @@ en:
           various_units: various units
         header: Numeric Values
       one_declaration_per_ruleset:
-        description:
-          one_declaration_html: The CSS parser we use retains only one declaration for each property, meaning that rulesets like the following will have all but the last %{background_code} declaration removed (so your gradient would only show up in WebKit browsers).
-          split_rulesets: 'To avoid losing declarations with repeated properties, split each one into its own ruleset, like so:'
+        description_html: 'The CSS parser we use retains only one declaration for each property, meaning that rulesets like %{repeated_declarations_css_code} will have all but the last %{background_code} declaration removed (so your gradient would only show up in WebKit browsers). To avoid losing declarations with repeated properties, split each one into its own ruleset, like so:'
         header: Use only one declaration per property per ruleset
       scale:
         description_html: You can specify scale (for the %{transform_code} property) as %{scale_numeric_value_code} where the numeric value can be specified up to two decimal places.
