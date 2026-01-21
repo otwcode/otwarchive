@@ -636,12 +636,14 @@ Rails.application.routes.draw do
   %w[
     first_login
     preferences_locale
+    skins_creating
   ].each do |action|
     get "/help/#{action}", to: "help##{action}"
   end
 
   # Redirects for moved help files
   get "/first_login_help", to: redirect("/help/first_login")
+  get "/help/skins-creating.html", to: redirect("/help/skins_creating")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
