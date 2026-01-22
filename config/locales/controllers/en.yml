@@ -115,6 +115,8 @@ en:
       page_title: Comments on %{name}
     new:
       page_title: New Comment on %{name}
+    rate_limited:
+      error: You have made too many requests in a short time period. Please wait a while before trying again. If you are receiving this error repeatedly, try browsing more slowly or loading fewer pages at a time.
     show:
       page_title: Comment %{comment_id} on %{name}
     unfreeze:
