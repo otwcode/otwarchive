@@ -64,8 +64,8 @@ Feature: Edit bookmarks with javascript enabled
 
   @javascript 
   Scenario: The Saved button correctly opens, closes, and reopens edit forms when there are multiple bookmark blurbs on a page
-    Given "bookmarker" has a bookmark of the work "Bookmark: The Beginnings"
-      And "bookmarker" has a bookmark of the work "Bookmark: The Sequel"
+    Given "bookmarker" has a bookmark of a work titled "Bookmark: The Beginnings"
+      And "bookmarker" has a bookmark of a work titled "Bookmark: The Sequel"
       And I am logged out
       And I am logged in as "bookmarker"
       And I go to the bookmarks page

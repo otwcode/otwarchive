@@ -347,19 +347,6 @@ Given "{string} has a bookmark of a work titled {string}" do |user, title|
   step %{the user "#{user}" exists and is activated}
 
   user_pseud = User.find_by(login: user).default_pseud
-  work1 = FactoryBot.create(:work, title: title)
-  FactoryBot.create(:bookmark,
-                    bookmarkable: work1,
-                    pseud: user_pseud)
-
-  step %{all indexing jobs have been run}
-end
-
-# The regular method of creating a bookmark is flaky with javascript. This is an alternate method of creating a bookmark
-Given "{string} has a bookmark of the work {string}" do |user, title|
-  step %{the user "#{user}" exists and is activated}
-
-  user_pseud = User.find_by(login: user).default_pseud
   work = Work.find_by(title: title)
   work ||= FactoryBot.create(:work, title: title)
   FactoryBot.create(:bookmark,
@@ -467,10 +454,11 @@ Then "the {word} bookmark form should be open in the bookmarkable blurb for {str
   work_id = Work.find_by(title: title).id
   within("#bookmark_#{work_id}") do
     step %{I should see "save a bookmark!"}
-    if action == "edit"
+    case action 
+    when "edit"
       step %{I should not see "Saved"}
       step %{I should not see "Edit"}
-    elsif action == "new"
+    when "new"
       step %{I should not see "Save"}
     end
   end
@@ -482,10 +470,11 @@ Then "the {word} bookmark form should be open in the blurb for {word}'s bookmark
   bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
   within("#bookmark_#{bookmark_id}") do
     step %{I should see "save a bookmark!"}
-    if action == "edit"
+    case action 
+    when "edit"
       step %{I should not see "Saved"}
       step %{I should not see "Edit"}
-    elsif action == "new"
+    when "new"
       step %{I should not see "Save"}
     end
   end
@@ -495,10 +484,11 @@ Then "the {word} bookmark form should be closed in the bookmarkable blurb for {s
   work_id = Work.find_by(title: title).id
   within("#bookmark_#{work_id}") do
     step %{I should not see "save a bookmark!"}
-    if action == "edit"
+    case action 
+    when "edit"
       step %{I should see "Saved"}
       step %{I should see "Edit"}
-    elsif action == "new"
+    when "new"
       step %{I should see "Save"}
     end
   end
@@ -515,10 +505,11 @@ Then "the {word} bookmark form should be closed in the blurb for {word}'s bookma
   else
     within("#bookmark_#{bookmark_id}") do
       step %{I should not see "save a bookmark!"}
-      if action == "edit"
+      case action 
+      when "edit"
         step %{I should see "Saved"}
         step %{I should see "Edit"}
-      elsif action == "new"
+      when "new"
         step %{I should see "Save"}
       end
     end
