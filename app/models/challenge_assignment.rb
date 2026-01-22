@@ -496,4 +496,24 @@ class ChallengeAssignment < ApplicationRecord
       end
     end
   end
+
+  # create fresh new assignments for pinch hitters assigned alongside existing offer signups
+  def self.split_off_write_in_giver_assignments!(collection)
+    collection.assignments.each do |assignment|
+      assignment.split if assignment.double_assigned?
+    end
+  end
+
+  def double_assigned?
+    pinch_hitter && offer_signup && pinch_hitter.user != offering_user
+  end
+
+  def split
+    new_assignment = self.dup
+    new_assignment.offer_signup = nil
+    new_assignment.save!
+
+    self.pinch_hitter = nil
+    save!
+  end
 end

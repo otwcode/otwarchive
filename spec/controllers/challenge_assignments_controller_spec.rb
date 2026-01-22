@@ -146,6 +146,36 @@ describe ChallengeAssignmentsController do
         end
       end
 
+      context "when an assignment has both an offer and a pinch hitter" do
+        let(:params) do
+          {
+            collection_id: collection.name,
+            challenge_assignments: {
+              assignment.id => {
+                request_signup_pseud: signup1.pseud.byline,
+                offer_signup_pseud: signup2.pseud.byline,
+                pinch_hitter_byline: other_user.pseuds.first.byline
+              }
+            }
+          }
+        end
+
+        it "creates a new assignment for the pinch hitter" do
+          PotentialMatch.create(request_signup: signup1,
+                                offer_signup: signup2,
+                                collection: collection)
+
+          put :set, params: params
+
+          assignment.reload
+          expect(assignment.pinch_hitter).to be_nil
+
+          pinch_hitter_assignment = collection.assignments.find_by(pinch_hitter_id: other_user.pseuds.first.id)
+          expect(pinch_hitter_assignment).to be_present
+          expect(pinch_hitter_assignment.offer_signup).to be_nil
+        end
+      end
+
       context "when assignments have been sent" do
         let(:gift_exchange) { create(:gift_exchange, assignments_sent_at: Faker::Time.backward) }
 
