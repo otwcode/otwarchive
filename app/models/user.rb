@@ -518,18 +518,6 @@ class User < ApplicationRecord
     IndexQueue.enqueue(self, :users)
   end
 
-  # Function to make it easier to retrieve info from the audits table.
-  #
-  # Looks up all past values of the given field, excluding the current value of
-  # the field:
-  def historic_values(field)
-    field = field.to_s
-
-    audits.filter_map do |audit|
-      audit.audited_changes[field]
-    end.flatten.uniq.without(self[field])
-  end
-
   private
 
   # Override the default Justifiable enabled check, because we only need to justify
