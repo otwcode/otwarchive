@@ -296,6 +296,12 @@ describe Comment do
         it "has comment_date_gmt as the comment's created date" do
           expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
         end
+
+        it "has comment_post_modified_gmt as the work's revision time and not the creation time" do
+          subject.ultimate_parent.set_revised_at(1.day.from_now)
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
+        end
       end
 
       context "when the commentable is an admin post" do
@@ -307,6 +313,10 @@ describe Comment do
 
         it "has comment_date_gmt as the comment's created date" do
           expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
+        end
+
+        it "has comment_post_modified_gmt as the admin post's creation time" do
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
         end
       end
 
@@ -321,6 +331,12 @@ describe Comment do
           it "has comment_date_gmt as the comment's created date" do
             expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
           end
+
+          it "has comment_post_modified_gmt as the work's revision time and not the creation time" do
+            subject.ultimate_parent.set_revised_at(1.day.from_now)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
+          end
         end
 
         context "when the comment is on an admin post" do
@@ -332,6 +348,10 @@ describe Comment do
 
           it "has comment_date_gmt as the comment's created date" do
             expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
+          end
+
+          it "has comment_post_modified_gmt as the admin post's creation time" do
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
           end
         end
       end
