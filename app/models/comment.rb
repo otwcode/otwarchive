@@ -24,6 +24,8 @@ class Comment < ApplicationRecord
 
   delegate :user, to: :pseud, allow_nil: true
 
+  attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4
+
   # Whether the writer of the comment this is replying to allows guest replies
   validate :guest_can_reply, if: :reply_comment?, unless: :pseud_id, on: :create
   def guest_can_reply
@@ -131,6 +133,9 @@ class Comment < ApplicationRecord
       user_ip: ip_address,
       user_agent: user_agent,
       user_role: user_role,
+      cloudflare_bot_score: cloudflare_bot_score,
+      cloudflare_ja3_hash: cloudflare_ja3_hash,
+      cloudflare_ja4: cloudflare_ja4,
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
       comment_content: comment_content,

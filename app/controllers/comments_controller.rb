@@ -391,6 +391,9 @@ class CommentsController < ApplicationController
       @comment = Comment.new(comment_params)
       @comment.ip_address = request.remote_ip
       @comment.user_agent = request.env["HTTP_USER_AGENT"]&.to(499)
+      @comment.cloudflare_bot_score = headers['cf-bot-score']
+      @comment.cloudflare_ja3_hash = headers['cf-ja3-hash']
+      @comment.cloudflare_ja4 = headers['cf-ja4']
       @comment.commentable = Comment.commentable_object(@commentable)
       @controller_name = params[:controller_name]
 
