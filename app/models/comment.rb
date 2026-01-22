@@ -134,6 +134,7 @@ class Comment < ApplicationRecord
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
       comment_content: comment_content,
+      comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
       comment_post_modified_gmt: comment_post_modified_gmt
     }
 
