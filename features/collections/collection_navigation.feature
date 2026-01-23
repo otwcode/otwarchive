@@ -104,8 +104,8 @@ Feature: Basic collection navigation
       And I should see "Television"
     When I follow "Fandoms (1)"
     Then I should not see "Television"
+      And I should see "TV (2)"
 
-  @disable_caching
   Scenario: Uncategorized Fandoms should appear in Collection's Fandoms
     Given I have the collection "Categoric" with name "categoric"
       And the tag "Unrelated Fandom" does not exist
@@ -116,11 +116,12 @@ Feature: Basic collection navigation
       And I post the work "Uncategoric Sans" with fandom "Unrelated Fandom" in the collection "Categoric"
       And I post the work "Uncategoric Papyrus" with fandom "Unrelated Fandom"
       And I bookmark the work "Uncategoric Sans" with the note "Secret Sans" with the tags "Unrelated Fandom"
+      And the collection counts have expired
       And I go to "Categoric" collection's page
     Then I should see "Fandoms (2)"
     When I follow "Fandoms (2)"
     Then I should see "Unrelated Fandom"
-      And I should see "Undertale"
+      And I should see "Undertale (1)"
     When I select "Uncategorized Fandoms" from "media_id"
       And I press "Show"
     Then I should see "Unrelated Fandom"
