@@ -167,8 +167,12 @@ IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 
 # max number of abuse reports to accept for a given user profile URL
 ABUSE_REPORTS_PER_USER_MAX: 5
+# time period, in days, used to total number of reports for a given user URL
+ABUSE_REPORTS_PER_USER_PERIOD: 31
 # max number of abuse reports to accept for a given work URL
 ABUSE_REPORTS_PER_WORK_MAX: 5
+# time period, in days, used to total number of reports for a given work URL
+ABUSE_REPORTS_PER_WORK_PERIOD: 31
 # max number of abuse reports to accept from a given email
 ABUSE_REPORTS_PER_EMAIL_MAX: 5
 
@@ -207,6 +211,10 @@ RATE_LIMIT_PER_NGINX_UPSTREAM_USER:
     period: 300
 RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
 
+# Used by Rails controller rate_limit, periods are measured in seconds
+RATE_LIMIT_USER_COMMENTING_NUMBER: 3
+RATE_LIMIT_USER_COMMENTING_PERIOD: 900
+
 # The number of tags to show on the search page:
 TAGS_PER_SEARCH_PAGE: 50
 
@@ -221,6 +229,9 @@ TAGGINGS_COUNT_MIN_CACHE_COUNT: 1000
 
 # For tagging changes, we only reindex tags used less than a certain number of times
 TAGGINGS_COUNT_REINDEX_LIMIT: 1000
+
+# How many rows we should get from audits for historic email and login values for users
+USER_HISTORIC_VALUES_LIMIT: 10_000
 
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20

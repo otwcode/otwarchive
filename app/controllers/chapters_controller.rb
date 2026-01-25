@@ -1,4 +1,6 @@
 class ChaptersController < ApplicationController
+  include WorksHelper
+
   # only registered users and NOT admin should be able to create new chapters
   before_action :users_only, except: [:index, :show, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :update, :update_positions]
@@ -27,8 +29,6 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/:id
   # GET /work/:work_id/chapters/:id.xml
   def show
-    @tag_groups = @work.tag_groups
-
     redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return if params[:selected_id]
 
     @chapters = @work.chapters_in_order(
@@ -49,13 +49,9 @@ class ChaptersController < ApplicationController
     end
 
     if @work.unrevealed?
-      @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
+      @page_subtitle = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
     else
-      fandoms = @tag_groups["Fandom"]
-      fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
-      title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
-      author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
-      @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
+      @page_title = work_page_title(@work, @work.title + t(".chapter_position", position: @chapter.position.to_s))
     end
 
     if params[:view_adult]
@@ -116,11 +112,6 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
-    if params[:cancel_button]
-      redirect_back_or_default(root_path)
-      return
-    end
-
     @chapter = @work.chapters.build(chapter_params)
     @work.wip_length = params[:chapter][:wip_length]
 
@@ -146,12 +137,6 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
-    if params[:cancel_button]
-      # Not quite working yet - should send the user back to wherever they were before they hit edit
-      redirect_back_or_default(root_path)
-      return
-    end
-
     @chapter.attributes = chapter_params
     @work.wip_length = params[:chapter][:wip_length]
 
@@ -200,20 +185,15 @@ class ChaptersController < ApplicationController
   end
 
   # POST /chapters/1/post
+  # This is used only for "Post Chapter" in the chapter_management partial.
   def post
-    if params[:cancel_button]
-      redirect_to @work
-    elsif params[:edit_button]
-      redirect_to [:edit, @work, @chapter]
+    @chapter.posted = true
+    @work.set_revised_at_by_chapter(@chapter)
+    if @chapter.save && @work.save
+      post_chapter
+      redirect_to(@work)
     else
-      @chapter.posted = true
-      @work.set_revised_at_by_chapter(@chapter)
-      if @chapter.save && @work.save
-        post_chapter
-        redirect_to(@work)
-      else
-        render :preview
-      end
+      render :preview
     end
   end
 

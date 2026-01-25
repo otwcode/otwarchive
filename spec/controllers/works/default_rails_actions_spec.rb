@@ -32,8 +32,7 @@ describe WorksController, work_search: true do
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params: params
-        it_redirects_to_with_error(new_user_session_path,
-                                   "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -181,8 +180,7 @@ describe WorksController, work_search: true do
   describe "new" do
     it "doesn't return the form for anyone not logged in" do
       get :new
-      it_redirects_to_with_error(new_user_session_path,
-                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      it_redirects_to_user_login_with_error
     end
 
     it "renders the form if logged in" do
@@ -272,6 +270,14 @@ describe WorksController, work_search: true do
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
         include /Only canonical category tags are allowed./
+    end
+
+    it "renders new if the work has invalid comment permissions" do
+      work_attributes = attributes_for(:work).except(:posted, :comment_permissions).merge(comment_permissions: "Comment")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Comment permissions are invalid."
     end
 
     context "as a tag wrangler" do

@@ -73,14 +73,11 @@ class Skin < ApplicationRecord
     end
   end
 
-  validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
+  validates :icon_alt_text, length: { maximum: ArchiveConfig.ICON_ALT_MAX }
 
-  validates_length_of :description, allow_blank: true, maximum: ArchiveConfig.SUMMARY_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
+  validates :description, length: { maximum: ArchiveConfig.SUMMARY_MAX }
 
-  validates_length_of :css, allow_blank: true, maximum: ArchiveConfig.CONTENT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
+  validates :css, length: { maximum: ArchiveConfig.CONTENT_MAX }
 
   before_validation :clean_media
   def clean_media
@@ -111,7 +108,9 @@ class Skin < ApplicationRecord
     errors.add(:base, :no_public_preview)
   end
 
-  validates :title, presence: true, uniqueness: { case_sensitive: false }
+  validates :title, presence: true, uniqueness: { case_sensitive: false }, length: { 
+    maximum: ArchiveConfig.TITLE_MAX 
+  }
   validate :allowed_title
   def allowed_title
     return true unless self.title.match(/archive/i)
@@ -350,7 +349,7 @@ class Skin < ApplicationRecord
 
   # This is the main function that actually returns code to be embedded in a page
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
-    style = ""
+    style = +""
 
     if self.get_role != "override" && self.get_role != "site" &&
        self.id != AdminSetting.default_skin_id &&
@@ -377,7 +376,7 @@ class Skin < ApplicationRecord
 
   # This builds the stylesheet, so the order is important
   def get_wizard_settings
-    style = ""
+    style = +""
 
     style += font_size_styles(base_em) if base_em.present?
 
@@ -399,7 +398,7 @@ class Skin < ApplicationRecord
   end
 
   def get_style_block(roles_to_include)
-    block = ""
+    block = +""
     if self.cached?
       # cached skin in a directory
       block = get_cached_style(roles_to_include)
@@ -427,7 +426,7 @@ class Skin < ApplicationRecord
   end
 
   def get_cached_style(roles_to_include)
-    block = ""
+    block = +""
     self_skin_dir = Skin.skins_dir + self.skin_dirname
     Skin.skin_dir_entries(self_skin_dir, /^\d+_(.*)\.css$/).each do |sub_file|
       if sub_file.match(/^\d+_(.*)\.css$/)
@@ -554,7 +553,7 @@ class Skin < ApplicationRecord
   end
 
   def self.default
-    Skin.find_by(title: "Default", official: true) || Skin.create_default
+    Skin.find_by(title: "Default", official: true, public: true, role: "site") || Skin.create_default
   end
 
   def self.create_default

@@ -1,6 +1,17 @@
 require "spec_helper"
 
 describe User do
+  describe "audits" do
+    let(:user) { create(:user) }
+
+    it "can have an id larger than unsigned int" do
+      audit = Audited::Audit.new(id: 5_294_967_295, auditable: user)
+
+      expect(audit).to be_valid
+      expect(audit.save).to be_truthy
+    end
+  end
+
   describe "validations" do
     context "with a forbidden user name" do
       let(:forbidden_username) { Faker::Lorem.characters(number: 8) }
@@ -385,6 +396,26 @@ describe User do
       expect(not_found).to eq(["unknown@ao3.org", "nobody@example.com"])
       expect(found.size).to eq(emails.map(&:downcase).uniq.size - not_found.size)
       expect(duplicates).to eq(3)
+    end
+  end
+
+  describe "reindexing" do
+    let!(:user) { create(:user, login: "before") }
+
+    context "when username is changed" do
+      it "enqueues the user for reindex" do
+        expect do
+          user.update!(login: "changed")
+        end.to add_to_reindex_queue(user, :users)
+      end
+    end
+
+    context "when user is destroyed" do
+      it "enqueues the user for reindex" do
+        expect do
+          user.destroy!
+        end.to add_to_reindex_queue(user, :users)
+      end
     end
   end
 end

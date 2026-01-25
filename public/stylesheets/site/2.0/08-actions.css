@@ -24,6 +24,7 @@ ul.actions {
   background: #eee;
   color: #444;
   width: auto;
+  font-weight: 400;
   font-size: 100%;
   line-height: 1.286;
   height: 1.286em;
@@ -146,7 +147,7 @@ h2.landmark {
 .secondary {
   background: #fff;
   position: absolute;
-  z-index: 99;
+  z-index: 54; /* lower than the z-index of #header .menu */
   border: 2px solid #bbb;
   margin: auto;
   padding: 0 0.375em;
@@ -187,10 +188,6 @@ dl.stats + .landmark + .actions, .mystery .summary + .landmark + .actions {
   float: none;
 }
 
-.chapter .secondary, .download .secondary {
-  top: 3.5em;
-}
-
 .dashboard .landmark {
   clear: right;
 }
@@ -220,6 +217,79 @@ dd.any label.action {
 
 dl.index p.actions {
   margin: 0;
+}
+
+/* context: work navigation actions with secondary navigation */
+
+.work.navigation .download {
+  display: block;
+  margin-block-start: 0;
+  padding: 0.375em 0 0.643em;
+}
+
+.work.navigation .download .secondary {
+  position: static;
+}
+
+/* The next two rule sets move the default .secondary style to the secondary's
+parent when JavaScript is disabled and put it back when it's enabled. */
+.work.navigation .download, .javascript .work.navigation .download .secondary {
+  background: #fff;
+  border: 2px solid #bbb;
+    box-shadow: 2px 2px 5px #bbb;
+}
+
+.work.navigation .download .secondary, .javascript .work.navigation .download {
+  background: transparent;
+  border: none;
+    box-shadow: none;
+}
+
+.javascript .work.navigation li {
+  display: inline-block;
+  margin-block: 0;
+  position: relative;
+}
+
+.javascript .work.navigation .download {
+  padding: 0 0 0 0.25em;
+}
+
+/* The top position is part of a workaround for the behavior described here:
+https://otwarchive.atlassian.net/browse/AO3-4629?focusedCommentId=372231
+  0.375em for top margin
++ 1.286em for height
++ 0.25em * 2 for top and bottom padding (buttons use content-box)
++ 0.25em to compensate for borders */
+.javascript .work.navigation .secondary {
+  position: absolute;
+  right: 0;
+  top: 2.411em;
+    align-items: center;
+    gap: 0 0.643em;
+    justify-content: space-evenly;
+}
+
+/* If we use display without the .expanded qualifier, it will override .hidden's
+display: none and secondary will always be open. */
+.javascript .work.navigation .expanded + .secondary {
+    display: flex;
+}
+
+.javascript .work.navigation .download .secondary {
+  z-index: 53;
+    gap: 0.25em;
+}
+
+.javascript .work.navigation .secondary p {
+  padding: 0;
+    align-items: center;
+    display: flex;
+    gap: 0 0.25em;
+}
+
+.javascript .work.navigation .secondary .actions {
+  padding: 0;
 }
 
 /* END== */

@@ -15,7 +15,7 @@ describe TroubleshootingController do
     context "when logged out" do
       it "errors and redirects to the login page" do
         get :show, params: { tag_id: tag.to_param }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -69,7 +69,7 @@ describe TroubleshootingController do
     context "when logged out" do
       it "errors and redirects to the login page" do
         put :update, params: { tag_id: tag.to_param, actions: ["fix_counts"] }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 

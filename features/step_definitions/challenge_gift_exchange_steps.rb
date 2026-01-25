@@ -43,6 +43,13 @@ end
 
 Given /^I have created the tagless gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   step %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
+  # to be truly tagless we must explicitly allow 0 tags, because the form is prefilled with 1s
+  fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", with: "0")
+  fill_in("gift_exchange_request_restriction_attributes_character_num_allowed", with: "0")
+  fill_in("gift_exchange_request_restriction_attributes_relationship_num_allowed", with: "0")
+  fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", with: "0")
+  fill_in("gift_exchange_offer_restriction_attributes_character_num_allowed", with: "0")
+  fill_in("gift_exchange_offer_restriction_attributes_relationship_num_allowed", with: "0")
   step "I submit"
   step %{I should see "Challenge was successfully created"}
 end
@@ -227,7 +234,9 @@ end
 When /^I start to sign up for "([^\"]*)" tagless gift exchange$/ do |title|
   visit collection_path(Collection.find_by(title: title))
   step %{I follow "Sign Up"}
-  step %{I fill in "Description" with "random text"}
+  # we need both request and offer descriptions filled in or the signup is invalid
+  step %{I fill in "challenge_signup_requests_attributes_0_description" with "random text"}
+  step %{I fill in "challenge_signup_offers_attributes_0_description" with "random text"}
   step %{I press "Submit"}
   step %{I should see "Sign-up was successfully created"}
 end
@@ -402,4 +411,8 @@ Then /^no one should have an assignment for "([^\"]*)"$/ do |challenge_title|
     user.offer_assignments.in_collection(collection).should be_empty
     user.pinch_hit_assignments.in_collection(collection).should be_empty
   end
+end
+
+When "there are {int} assignments per page" do |amount|
+  allow_any_instance_of(ApplicationController).to receive(:pagy_get_limit).and_return(amount)
 end

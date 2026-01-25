@@ -28,17 +28,17 @@
   <!--subnav-->
   <% if logged_in? && current_user == @user %>
   <h3 class="landmark heading"><%= ts("Actions") %></h3>
-  <ul class="navigation actions" role="navigation">
-    <li><%= link_to ts("Edit My Works"), show_multiple_user_works_path(@user) %></li>
-    <li><%= link_to ts("Edit My Profile"), edit_user_path(@user) %></li>
-    <li><%= link_to ts("Set My Preferences"), user_preferences_path(@user) %></li>
-    <li><%= link_to ts("Manage My Pseuds"), user_pseuds_path(@user) %></li>
-    <li><%= link_to ts("Delete My Account"), @user, data: {confirm: ts('This will permanently delete your account and cannot be undone. Are you sure?')}, :method => :delete %></li>
+  <ul class="navigation actions">
+    <li><%= link_to t(".edit_my_works"), show_multiple_user_works_path(@user) %></li>
+    <li><%= link_to t(".edit_my_profile"), edit_user_profile_path(@user) %></li>
+    <li><%= link_to t(".edit_my_preferences"), user_preferences_path(@user) %></li>
+    <li><%= link_to t(".edit_my_pseuds"), user_pseuds_path(@user) %></li>
+    <li><%= link_to t(".delete_my_account"), @user, data: { confirm: t(".delete_account_confirmation") }, method: :delete %></li>
   </ul>
-  <% elsif policy(@user.profile).can_edit_profile? %>
+  <% elsif policy(@user.profile).full_access? %>
     <h3 class="landmark heading"><%= t("admin.admin_options.landmark") %></h3>
-    <ul class="navigation actions" role="navigation">
-      <li><%= link_to ts("Edit Profile"), edit_user_path(@user) %></li>
+    <ul class="navigation actions">
+      <li><%= link_to t(".edit_profile"), edit_user_profile_path(@user) %></li>
     </ul>
   <% end %>
   <!--/subnav-->

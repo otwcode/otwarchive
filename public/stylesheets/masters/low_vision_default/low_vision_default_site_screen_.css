@@ -150,8 +150,8 @@ pre {
 .actions a:focus,
 input[type="submit"]:hover,
 input[type="submit"]:focus,
-button:hover,
-button:focus {
+.actions button:hover,
+.actions button:focus {
   background: #900;
   color: #eee;
 }
@@ -190,4 +190,40 @@ button:focus {
 .bookmark .recent,
 .bookmark .recent .index {
   border: none;
+}
+
+.javascript .work.navigation .secondary {
+  width: 100%;
+    box-sizing: border-box;
+}
+
+.javascript .work.navigation .expanded + .secondary,
+.javascript .work.navigation .secondary li,
+.javascript .work.navigation .secondary p,
+.javascript .work.navigation .secondary a {
+  display: block;
+}
+
+.javascript .work.navigation .secondary p {
+  padding-block-start: 0.375em;
+}
+
+.javascript .work.navigation .secondary select {
+  max-width: 100%;
+  min-width: auto;
+}
+
+.javascript .work.navigation .secondary a {
+  height: 100%;
+  min-height: 1.286em;
+  padding-inline: 0.5em;
+  white-space: normal;
+}
+
+body .narrow-shown {
+  display: block;
+}
+
+.actions li.narrow-shown {
+  display: inline;
 }

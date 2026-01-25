@@ -18,10 +18,11 @@ describe CommentsController do
     end
 
     it "renders the :new template if commentable is a valid admin post" do
-        admin_post = create(:admin_post, comment_permissions: :enable_all)
-        get :new, params: { admin_post_id: admin_post.id }
-        expect(response).to render_template("new")
-        expect(assigns(:name)).to eq(admin_post.title)
+      admin_post = create(:admin_post, comment_permissions: :enable_all)
+      get :new, params: { admin_post_id: admin_post.id }
+      expect(response).to render_template("new")
+      expect(assigns(:name)).to eq(admin_post.title)
+      expect(assigns[:page_subtitle]).to eq("New Comment on #{admin_post.title}")
     end
 
     context "when the commentable is a valid tag" do
@@ -44,6 +45,11 @@ describe CommentsController do
           expect(response).to render_template("new")
           expect(assigns(:name)).to eq("Fandom")
         end
+
+        it "assigns page subtitle using tag name" do
+          get :new, params: { tag_id: fandom.name }
+          expect(assigns[:page_subtitle]).to eq("New Comment on #{fandom.name}")
+        end
       end
 
       context "when logged in as a random user" do
@@ -63,10 +69,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           get :new, params: { tag_id: fandom.name }
-          it_redirects_to_with_error(new_user_session_path,
-                                     "Sorry, you don't have permission to " \
-                                     "access the page you were trying to " \
-                                     "reach. Please log in.")
+          it_redirects_to_user_login_with_error
         end
       end
     end
@@ -91,6 +94,7 @@ describe CommentsController do
         get :new, params: { work_id: work_with_guest_comment_on.id }
 
         expect(response).to render_template(:new)
+        expect(assigns[:page_subtitle]).to eq("New Comment on #{work_with_guest_comment_on.title} - #{work_with_guest_comment_on.pseuds.first.byline} - #{work_with_guest_comment_on.fandoms.first.name}")
       end
     end
 
@@ -141,95 +145,96 @@ describe CommentsController do
     end
 
     context "when work comment permissions are enable_all" do
-        let(:work) { create(:work, :guest_comments_on) }
+      let(:work) { create(:work, :guest_comments_on) }
 
-        it "renders the :new template if commentable is a valid comment" do
-          comment = create(:comment, commentable: work)
-          get :new, params: { comment_id: comment.id }
-          expect(response).to render_template("new")
-          expect(assigns(:name)).to eq("Previous Comment")
-        end
+      it "renders the :new template if commentable is a valid comment" do
+        comment = create(:comment, commentable: work)
+        get :new, params: { comment_id: comment.id }
+        expect(response).to render_template("new")
+        expect(assigns(:name)).to eq("Previous Comment")
+        expect(assigns[:page_subtitle]).to eq("New Comment on #{work.title} - #{work.pseuds.first.byline} - #{work.fandoms.first.name}")
+      end
 
-        it "shows an error and redirects if commentable is a frozen comment" do
-          comment = create(:comment, iced: true, commentable: work)
-          get :new, params: { comment_id: comment.id }
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
-        end
+      it "shows an error and redirects if commentable is a frozen comment" do
+        comment = create(:comment, iced: true, commentable: work)
+        get :new, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
+      end
 
-        it "shows an error and redirects if commentable is a hidden comment" do
-          comment = create(:comment, hidden_by_admin: true, commentable: work)
-          get :new, params: { comment_id: comment.id }
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
-        end
+      it "shows an error and redirects if commentable is a hidden comment" do
+        comment = create(:comment, hidden_by_admin: true, commentable: work)
+        get :new, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
+      end
     end
 
     shared_examples "guest cannot reply to a user with guest replies disabled" do
-        it "redirects guest with an error" do
-          get :new, params: { comment_id: comment.id }
-          it_redirects_to_with_error("/where_i_came_from", "Sorry, this user doesn't allow non-Archive users to reply to their comments.")
-        end
+      it "redirects guest with an error" do
+        get :new, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, this user doesn't allow non-Archive users to reply to their comments.")
+      end
 
-        it "renders the :new template for logged in user" do
-          fake_login
-          get :new, params: { comment_id: comment.id }
-          expect(flash[:error]).to be_nil
-          expect(response).to render_template("new")
-        end
+      it "renders the :new template for logged in user" do
+        fake_login
+        get :new, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to render_template("new")
+      end
     end
 
     shared_examples "guest can reply to a user with guest replies disabled on user's work" do
-        it "renders the :new template for guest" do
-          get :new, params: { comment_id: comment.id }
-          expect(flash[:error]).to be_nil
-          expect(response).to render_template("new")
-        end
+      it "renders the :new template for guest" do
+        get :new, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to render_template("new")
+      end
 
-        it "renders the :new template for logged in user" do
-          fake_login
-          get :new, params: { comment_id: comment.id }
-          expect(flash[:error]).to be_nil
-          expect(response).to render_template("new")
-        end
+      it "renders the :new template for logged in user" do
+        fake_login
+        get :new, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to render_template("new")
+      end
     end
 
     context "user has guest comment replies disabled" do
-        let(:user) do
-          user = create(:user)
-          user.preference.update!(guest_replies_off: true)
-          user
-        end
+      let(:user) do
+        user = create(:user)
+        user.preference.update!(guest_replies_off: true)
+        user
+      end
 
-        context "when commentable is an admin post" do
-          let(:comment) { create(:comment, :on_admin_post, pseud: user.default_pseud) }
+      context "when commentable is an admin post" do
+        let(:comment) { create(:comment, :on_admin_post, pseud: user.default_pseud) }
 
-          it_behaves_like "guest cannot reply to a user with guest replies disabled"
-        end
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
 
-        context "when commentable is a tag" do
-          let(:comment) { create(:comment, :on_tag, pseud: user.default_pseud) }
+      context "when commentable is a tag" do
+        let(:comment) { create(:comment, :on_tag, pseud: user.default_pseud) }
 
-          it_behaves_like "guest cannot reply to a user with guest replies disabled"
-        end
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
 
-        context "when commentable is a work with guest comments enabled" do
-          let(:comment) { create(:comment, :on_work_with_guest_comments_on, pseud: user.default_pseud) }
+      context "when commentable is a work with guest comments enabled" do
+        let(:comment) { create(:comment, :on_work_with_guest_comments_on, pseud: user.default_pseud) }
 
-          it_behaves_like "guest cannot reply to a user with guest replies disabled"
-        end
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
 
-        context "when comment is on user's work with guest comments enabled" do
-          let(:work) { create(:work, :guest_comments_on, authors: [user.default_pseud]) }
-          let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+      context "when comment is on user's work with guest comments enabled" do
+        let(:work) { create(:work, :guest_comments_on, authors: [user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
-          it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
-        end
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
 
-        context "when commentable is user's co-creation" do
-          let(:work) { create(:work, :guest_comments_on, authors: [create(:user).default_pseud, user.default_pseud]) }
-          let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+      context "when commentable is user's co-creation" do
+        let(:work) { create(:work, :guest_comments_on, authors: [create(:user).default_pseud, user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
-          it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
-        end
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
     end
   end
 
@@ -305,10 +310,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
-          it_redirects_to_with_error(new_user_session_path,
-                                     "Sorry, you don't have permission to " \
-                                     "access the page you were trying to " \
-                                     "reach. Please log in.")
+          it_redirects_to_user_login_with_error
         end
       end
     end
@@ -319,7 +321,7 @@ describe CommentsController do
 
         it "redirects to the login page" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          it_redirects_to(new_user_session_path(restricted_commenting: true))
+          it_redirects_to(new_user_session_path(restricted_commenting: true, return_to: request.fullpath))
         end
       end
 
@@ -460,7 +462,10 @@ describe CommentsController do
         context "when the commentable is spam" do
           let(:spam_comment) { create(:comment, commentable: work_with_guest_comment_on) }
 
-          before { spam_comment.update_attribute(:approved, false) }
+          before do
+            spam_comment.update_attribute(:approved, false)
+            spam_comment.update_attribute(:spam, true)
+          end
 
           it "shows an error and redirects if commentable is a comment marked as spam" do
             post :create, params: { comment_id: spam_comment.id, comment: anon_comment_attributes }
@@ -776,7 +781,7 @@ describe CommentsController do
           it "doesn't destroy comment and redirects with error" do
             delete :destroy, params: { id: comment.id }
 
-            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+            it_redirects_to_user_login_with_error
             expect { comment.reload }.not_to raise_exception
           end
         end
@@ -894,7 +899,7 @@ describe CommentsController do
 
               it "redirects to the login page" do
                 delete :destroy, params: { id: comment.id }
-                it_redirects_to(new_user_session_path(restricted_commenting: true))
+                it_redirects_to(new_user_session_path(restricted_commenting: true, return_to: request.fullpath))
               end
             end
           end
@@ -986,6 +991,34 @@ describe CommentsController do
       get :show, params: { id: unreviewed_comment.id }
       it_redirects_to_with_error(root_path, "Sorry, that comment is currently in moderation.")
     end
+
+    it "assigns page subtitle using work title format" do
+      work = comment.ultimate_parent
+      get :show, params: { id: comment.id }
+      expect(assigns[:page_subtitle]).to eq("Comment #{comment.id} on #{work.title} - #{work.pseuds.first.byline} - #{work.fandoms.first.name}")
+    end
+
+    it "assigns page subtitle using work title format for reply comment" do
+      work = comment.ultimate_parent
+      reply = create(:comment, commentable: comment)
+      get :show, params: { id: reply.id }
+      expect(assigns[:page_subtitle]).to eq("Comment #{reply.id} on #{work.title} - #{work.pseuds.first.byline} - #{work.fandoms.first.name}")
+    end
+
+    it "assigns page subtitle using admin post title" do
+      admin_post = create(:admin_post)
+      comment = create(:comment, commentable: admin_post)
+      get :show, params: { id: comment.id }
+      expect(assigns[:page_subtitle]).to eq("Comment #{comment.id} on #{admin_post.title}")
+    end
+
+    it "assigns page subtitle using tag name" do
+      fake_login_admin(create(:admin))
+      tag = create(:canonical_fandom)
+      comment = create(:comment, commentable: tag)
+      get :show, params: { id: comment.id }
+      expect(assigns[:page_subtitle]).to eq("Comment #{comment.id} on #{tag.name}")
+    end
   end
 
   describe "GET #index" do
@@ -1016,8 +1049,34 @@ describe CommentsController do
 
       it "redirects with an error" do
         get :index, params: { work_id: work }
-        it_redirects_to(new_user_session_path(restricted_commenting: true))
+        it_redirects_to(new_user_session_path(restricted_commenting: true, return_to: request.fullpath))
       end
+    end
+
+    it "assigns page subtitle using work title format" do
+      work = create(:work)
+      get :index, params: { work_id: work }
+      expect(assigns[:page_subtitle]).to eq("Comments on #{work.title} - #{work.pseuds.first.byline} - #{work.fandoms.first.name}")
+    end
+
+    it "assigns page subtitle using work title format for comment replies on work" do
+      work = create(:work)
+      comment = create(:comment, commentable: work)
+      get :index, params: { comment_id: comment }
+      expect(assigns[:page_subtitle]).to eq("Comments on #{work.title} - #{work.pseuds.first.byline} - #{work.fandoms.first.name}")
+    end
+
+    it "assigns page subtitle using admin post title" do
+      admin_post = create(:admin_post)
+      get :index, params: { admin_post_id: admin_post }
+      expect(assigns[:page_subtitle]).to eq("Comments on #{admin_post.title}")
+    end
+
+    it "assigns page subtitle using tag name" do
+      fake_login_admin(create(:admin))
+      tag = create(:canonical_fandom)
+      get :index, params: { tag_id: tag }
+      expect(assigns[:page_subtitle]).to eq("Comments on #{tag.name}")
     end
   end
 end

@@ -88,7 +88,7 @@ module TagsHelper
 
   # Adds the "tag" classname to links (for tag links)
   def link_to_with_tag_class(path, text, options)
-    options[:class] ? options[:class] << " tag" : options[:class] = "tag"
+    options[:class] ? options[:class].dup << " tag" : options[:class] = "tag"
     link_to text, path, options
   end
 
@@ -173,7 +173,7 @@ module TagsHelper
 
   # Returns a nested list of sub tags
   def sub_tag_tree(tag)
-    sub_ul = ""
+    sub_ul = +""
     unless tag.direct_sub_tags.empty?
       sub_ul << "<ul class='tags tree index'>"
       tag.direct_sub_tags.order(:name).each do |sub|
@@ -191,7 +191,7 @@ module TagsHelper
   def blurb_tag_block(item, tag_groups=nil)
     tag_groups ||= item.tag_groups
     categories = ['ArchiveWarning', 'Relationship', 'Character', 'Freeform']
-    tag_block = ""
+    tag_block = +""
 
     categories.each do |category|
       if tags = tag_groups[category]

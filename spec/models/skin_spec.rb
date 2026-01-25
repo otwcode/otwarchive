@@ -212,6 +212,13 @@ describe Skin do
       expect(skin2.errors[:title]).not_to be_empty
     end
 
+    it "title has fewer characters than the maximum title length" do
+      expect(@skin.save).to be_truthy
+      skin2 = Skin.new(title: "a" * (ArchiveConfig.TITLE_MAX + 1))
+      expect(skin2.save).not_to be_truthy
+      expect(skin2.errors[:title]).not_to be_empty
+    end
+
     it "has a unique title ignoring case" do
       expect(@skin.save).to be_truthy
       skin2 = Skin.new(title: "test skin")
@@ -393,6 +400,81 @@ describe Skin do
 
       it "does not return unassociated private work skins" do
         expect(Skin.approved_or_owned_by_any(users).pluck(:title)).not_to include(["Unowned Private Skin"])
+      end
+    end
+  end
+
+  describe ".default" do
+    context "when there is a skin with the title Default" do
+      let!(:skin) { create(:skin, title: "Default") }
+
+      context "with official: true, public: true, role: \"site\"" do
+        before do
+          skin.update!(official: true, public: true, role: "site", css: ".test { display: none; }")
+        end
+
+        it "returns the skin without changes" do
+          expect do
+            Skin.default
+          end.to avoid_changing { skin.reload.official }
+            .and avoid_changing { skin.reload.public }
+            .and avoid_changing { skin.reload.role }
+            .and avoid_changing { skin.reload.css }
+          expect(Skin.default).to eq(skin)
+        end
+      end
+
+      context "without a role" do
+        it "adds the \"site\" role and returns the skin" do
+          expect do
+            Skin.default
+          end.to change { skin.reload.role }
+            .from(nil).to("site")
+          expect(Skin.default).to eq(skin)
+        end
+      end
+
+      context "with a role other than \"site\"" do
+        before { skin.update!(role: "user") }
+
+        it "updates the role to \"site\" and returns the skin" do
+          expect do
+            Skin.default
+          end.to change { skin.reload.role }
+            .from("user").to("site")
+          expect(Skin.default).to eq(skin)
+        end
+      end
+
+      context "with official set to false" do
+        it "updates official to true and returns the skin" do
+          expect do
+            Skin.default
+          end.to change { skin.reload.official }
+            .from(false).to(true)
+          expect(Skin.default).to eq(skin)
+        end
+      end
+
+      context "with public set to false" do
+        it "updates public to true and returns the skin" do
+          expect do
+            Skin.default
+          end.to change { skin.reload.public }
+            .from(false).to(true)
+          expect(Skin.default).to eq(skin)
+        end
+      end
+    end
+
+    context "when there is no skin with the title Default" do
+      before { Skin.where(title: "Default").delete_all }
+
+      it "creates a skin and returns it" do
+        expect do
+          Skin.default
+        end.to change(Skin, :count).by(1)
+        expect(Skin.default).to have_attributes(title: "Default", public: true, official: true, role: "site", css: "")
       end
     end
   end

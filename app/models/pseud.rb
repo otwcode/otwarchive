@@ -116,6 +116,13 @@ class Pseud < ApplicationRecord
       ).group('pseuds.id')
   }
 
+  scope :has_works_for, lambda { |pseud_ids|
+    joins(:works)
+      .where(pseuds: { id: pseud_ids })
+      .distinct
+      .pluck(:id)
+  }
+
   scope :public_rec_count_for, -> (pseud_ids) {
     select('pseuds.id, count(pseuds.id) AS rec_count')
     .joins(:bookmarks)
@@ -157,11 +164,15 @@ class Pseud < ApplicationRecord
   end
 
   # Produces a byline that indicates the user's name if pseud is not unique
+  # Do NOT internationalize this because
+  # This is also used as an input format that cannot be localised
   def byline
     (name != user_name) ? "#{name} (#{user_name})" : name
   end
 
   # get the former byline
+  # Do NOT internationalize this because
+  # This is also used as an input format that cannot be localised
   def byline_was
     past_name = name_was.blank? ? name : name_was
     # if we have a user and their login has changed get the old one

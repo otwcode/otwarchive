@@ -176,6 +176,66 @@ describe Comment do
       end
     end
 
+    context "spam flagging on creation" do
+      subject { build(:comment) }
+
+      context "when spamcheck is skipped and comment is spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(true)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+
+      context "when spamcheck is skipped and comment is not spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(true)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(false)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+
+      context "when spamcheck is not skipped and content is spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(false)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+        end
+
+        it "is flagged as spam" do
+          expect(subject.save).to be_falsey
+          expect(subject.errors[:base].first).to include "spam"
+          expect(subject.approved).to be_falsey
+          expect(subject.spam).to be_truthy
+        end
+      end
+
+      context "when spamcheck is not skipped and content is not spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(false)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(false)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+    end
+
     context "when submitting comment to Akismet" do
       subject { create(:comment) }
 
@@ -232,6 +292,12 @@ describe Comment do
         it "has comment_type \"fanwork-comment\"" do
           expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
         end
+
+        it "has comment_post_modified_gmt as the work's revision time and not the creation time" do
+          subject.ultimate_parent.set_revised_at(1.day.from_now)
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
+        end
       end
 
       context "when the commentable is an admin post" do
@@ -239,6 +305,10 @@ describe Comment do
 
         it "has comment_type \"comment\"" do
           expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+        end
+
+        it "has comment_post_modified_gmt as the admin post's creation time" do
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
         end
       end
 
@@ -249,6 +319,12 @@ describe Comment do
           it "has comment_type \"fanwork-comment\"" do
             expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
           end
+
+          it "has comment_post_modified_gmt as the work's revision time and not the creation time" do
+            subject.ultimate_parent.set_revised_at(1.day.from_now)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
+          end
         end
 
         context "when the comment is on an admin post" do
@@ -256,6 +332,10 @@ describe Comment do
 
           it "has comment_type \"comment\"" do
             expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+          end
+
+          it "has comment_post_modified_gmt as the admin post's creation time" do
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
           end
         end
       end
@@ -766,6 +846,28 @@ describe Comment do
       it "returns true" do
         expect(comment.use_image_safety_mode?).to be_truthy
       end
+    end
+  end
+
+  describe "#mark_as_spam!" do
+    let(:comment) { create(:comment, approved: true, spam: false) }
+
+    it "flags the comment as spam." do
+      comment.mark_as_spam!
+      comment.reload
+      expect(comment.approved).to be_falsey
+      expect(comment.spam).to be_truthy
+    end
+  end
+
+  describe "#mark_as_ham!" do
+    let(:comment) { create(:comment, approved: false, spam: true) }
+
+    it "flags the comment as legitimate." do
+      comment.mark_as_ham!
+      comment.reload
+      expect(comment.approved).to be_truthy
+      expect(comment.spam).to be_falsey
     end
   end
 end

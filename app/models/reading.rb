@@ -11,7 +11,7 @@ class Reading < ApplicationRecord
   def self.update_or_create(work, user)
     if user && user.preference.try(:history_enabled) && !user.is_author_of?(work)
       reading_json = [user.id, Time.now, work.id, work.major_version, work.minor_version, false].to_json
-      REDIS_GENERAL.sadd("Reading:new", reading_json)
+      REDIS_GENERAL.sadd?("Reading:new", reading_json)
     end
   end
 

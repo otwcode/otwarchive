@@ -5,14 +5,14 @@
 <%# i18n-tasks-use t("comment_mailer.comment_reply_notification.content.tag.text") %>
 <%= content_for_commentable_text(@comment) %>
 
-You wrote:
+<%= t(".you_wrote") %>
 <%= text_divider %>
 
 <%= to_plain_text(raw(@your_comment.sanitized_mailer_content)) %>
 
 <%= text_divider %>
-    
-<%= commenter_pseud_or_name_text(@comment) %> responded:
+
+<%= t(".commenter_responded.text", commenter: commenter_pseud_or_name_text(@comment)) %>
 <%= text_divider %>
 
 <%= to_plain_text(raw(@comment.sanitized_mailer_content)) %>

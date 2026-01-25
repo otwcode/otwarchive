@@ -1,5 +1,3 @@
-require "unicode_utils/casefold"
-
 class Tag < ApplicationRecord
   include Searchable
   include StringCleaner
@@ -60,7 +58,7 @@ class Tag < ApplicationRecord
 
     # If we've reached here, then the value has changed, and we need to make
     # sure that the new value is written to the database.
-    REDIS_GENERAL.sadd("tag_update", id)
+    REDIS_GENERAL.sadd?("tag_update", id)
     value
   end
 
@@ -1251,6 +1249,6 @@ class Tag < ApplicationRecord
   end
 
   def normalize_for_tag_comparison(string)
-    UnicodeUtils.casefold(string).mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/u, "")
+    string.downcase(:fold).mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/u, "")
   end
 end
