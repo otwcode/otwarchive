@@ -51,7 +51,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem "elasticsearch", "8.18.0"
+gem "elasticsearch", "8.19.0"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
