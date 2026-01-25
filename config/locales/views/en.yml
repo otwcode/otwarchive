@@ -718,6 +718,8 @@ en:
       tags: Tags
       works: Works (%{count})
   comments:
+    comment_actions:
+      thread: Thread
     comment_form:
       anonymous_creator: Anonymous Creator
       anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
