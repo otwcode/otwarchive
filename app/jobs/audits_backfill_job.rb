@@ -25,16 +25,17 @@ class AuditsBackfillJob < RedisSetJob
           { email: audit.audited_changes["email"].first, changed_at: audit.created_at }
         end
       end
-      past_data = past_data.uniq { |audit| audit[:username] }
-        .reject { |audit| audit[:username] == user.login }
-      past_data = past_data.uniq { |audit| audit[:email] }
-        .reject { |audit| audit[:email] == user.email }
+      past_data_usernames = past_data.reject { |audit| audit.key?(:email) || audit[:username] == user.login }
+        .uniq { |audit| audit[:username] }
+      past_data_emails = past_data.reject { |audit| audit.key?(:username) || audit[:email] == user.email }
+        .uniq { |audit| audit[:email] }
       # adds each type of past data to the appropriate database table
-      past_data.each do |audit|
+      past_data_usernames.each do |audit|
         window = audit[:changed_at] - 60.seconds..audit[:changed_at] + 60.seconds
         UserPastUsername.create!(user_id: user.id, username: audit[:username], changed_at: audit[:changed_at]) if audit.key?(:username) && !UserPastUsername.exists?(user_id: user.id, username: audit[:username], changed_at: window)
-        next unless audit.key?(:email)
-
+      end
+      past_data_emails.each do |audit|
+        window = audit[:changed_at] - 60.seconds..audit[:changed_at] + 60.seconds
         UserPastEmail.create!(user_id: user.id, email_address: audit[:email], changed_at: audit[:changed_at]) unless UserPastEmail.exists?(user_id: user.id, email_address: audit[:email], changed_at: window)
       end
     end

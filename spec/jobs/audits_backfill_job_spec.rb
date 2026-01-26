@@ -35,6 +35,18 @@ describe AuditsBackfillJob do
       expect(existing_user.past_usernames.last.username).to eq(old_username)
       expect(existing_user.past_usernames.first.username).to eq("old_login")
     end
+
+    it "handles multiple changes of the same type without filtering" do
+      existing_user.audits.create!(action: "update", auditable: existing_user, user: existing_user,
+                                   auditable_id: existing_user.id, audited_changes: { "login" => %w[very_old_login old_login] })
+      existing_user.audits.create!(action: "update", auditable: existing_user, user: existing_user,
+                                   auditable_id: existing_user.id, audited_changes: { "email" => %w[veryold@example.com old@example.com] })
+
+      user_ids = [existing_user.id]
+      AuditsBackfillJob.new.perform_on_batch(user_ids)
+      expect(existing_user.past_usernames.count).to eq(2)
+      expect(existing_user.past_emails.count).to eq(2)
+    end
   end
 
   it "doesn't create duplicate records" do
