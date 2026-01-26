@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   end
 
   def raise_not_found
-    redirect_to '/404'
+    redirect_to "/404"
   end
 
   rescue_from Rack::Timeout::RequestTimeoutException, with: :raise_timeout
@@ -88,11 +88,12 @@ class ApplicationController < ActionController::Base
   end
 
   def transform_sanitized_hash_to_ac_params(key, value)
-    if value.is_a?(Hash)
+    case value
+    when Hash
       ActionController::Parameters.new(value)
-    elsif value.is_a?(Array)
+    when Array
       value.map.with_index do |val, index|
-        value[index] = transform_sanitized_hash_to_ac_params(key,  val)
+        value[index] = transform_sanitized_hash_to_ac_params(key, val)
       end
     else
       value
@@ -148,7 +149,7 @@ class ApplicationController < ActionController::Base
     if logged_in? && cookies[:user_credentials].nil? && controller_name != "sessions"
       logger.error "Forcing logout"
       sign_out
-      redirect_to '/lost_cookie' and return
+      redirect_to "/lost_cookie" and return
     end
   end
 
@@ -164,7 +165,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-protected
+  protected
 
   def logged_in?
     user_signed_in?
@@ -179,15 +180,15 @@ protected
   end
 
   def process_title(string)
-  	string = string.humanize.titleize
+    string = string.humanize.titleize
 
-  	string = string.sub("Faq", "FAQ")
-  	string = string.sub("Tos", "TOS")
-  	string = string.sub("Dmca", "DMCA")
-  	return string
+    string = string.sub("Faq", "FAQ")
+    string = string.sub("Tos", "TOS")
+    string.sub("Dmca", "DMCA")
+     
   end
 
-public
+  public
 
   before_action :load_admin_banner
   def load_admin_banner
@@ -284,7 +285,7 @@ public
   # Filter method - prevents users from logging in as admin
   def user_logout_required
     if logged_in?
-      flash[:notice] = 'Please log out of your user account first!'
+      flash[:notice] = "Please log out of your user account first!"
       redirect_to root_path
     end
   end
@@ -292,7 +293,7 @@ public
   # Prevents admin from logging in as users
   def admin_logout_required
     if logged_in_as_admin?
-      flash[:notice] = 'Please log out of your admin account first!'
+      flash[:notice] = "Please log out of your admin account first!"
       redirect_to root_path
     end
   end
@@ -300,9 +301,7 @@ public
   # Hide admin banner via cookies
   before_action :hide_banner
   def hide_banner
-    if params[:hide_banner]
-      session[:hide_banner] = true
-    end
+    session[:hide_banner] = true if params[:hide_banner]
   end
 
   # Store the current user as a class variable in the User class,
@@ -312,10 +311,11 @@ public
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
     unless current_user.nil?
-      @current_user_subscriptions_count, @current_user_visible_work_count, @current_user_bookmarks_count, @current_user_owned_collections_count, @current_user_challenge_signups_count, @current_user_offer_assignments, @current_user_unposted_works_size=
-             Rails.cache.fetch("user_menu_counts_#{current_user.id}",
-                               expires_in: 2.hours,
-                               race_condition_ttl: 5) { "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}" }.split(",").map(&:to_i)
+      @current_user_subscriptions_count, @current_user_visible_work_count, @current_user_bookmarks_count, @current_user_owned_collections_count, @current_user_challenge_signups_count, @current_user_offer_assignments, @current_user_unposted_works_size =
+        Rails.cache.fetch("user_menu_counts_#{current_user.id}",
+                          expires_in: 2.hours,
+                          race_condition_ttl: 5) { "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}" }
+          .split(",").map(&:to_i)
     end
 
     yield
@@ -329,27 +329,31 @@ public
   end
 
   def collection_maintainers_only
-    logged_in? && @collection && @collection.user_is_maintainer?(current_user) || access_denied
+    (logged_in? && @collection && @collection.user_is_maintainer?(current_user)) || access_denied
   end
 
   def collection_owners_only
-    logged_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
+    (logged_in? && @collection && @collection.user_is_owner?(current_user)) || access_denied
   end
 
-  def not_allowed(fallback=nil)
+  def not_allowed(fallback = nil)
     flash[:error] = ts("Sorry, you're not allowed to do that.")
-    redirect_to (fallback || root_path) rescue redirect_to '/'
+    begin
+      redirect_to(fallback || root_path)
+    rescue StandardError
+      redirect_to "/"
+    end
   end
 
   def get_page_title(fandom, author, title, options = {})
     # truncate any piece that is over 15 chars long to the nearest word
     if options[:truncate]
-      fandom = fandom.gsub(/^(.{15}[\w.]*)(.*)/) {$2.empty? ? $1 : $1 + '...'}
-      author = author.gsub(/^(.{15}[\w.]*)(.*)/) {$2.empty? ? $1 : $1 + '...'}
-      title = title.gsub(/^(.{15}[\w.]*)(.*)/) {$2.empty? ? $1 : $1 + '...'}
+      fandom = fandom.gsub(/^(.{15}[\w.]*)(.*)/) { Regexp.last_match(2).empty? ? Regexp.last_match(1) : "#{Regexp.last_match(1)}..." }
+      author = author.gsub(/^(.{15}[\w.]*)(.*)/) { Regexp.last_match(2).empty? ? Regexp.last_match(1) : "#{Regexp.last_match(1)}..." }
+      title = title.gsub(/^(.{15}[\w.]*)(.*)/) { Regexp.last_match(2).empty? ? Regexp.last_match(1) : "#{Regexp.last_match(1)}..." }
     end
 
-    if logged_in? && !current_user.preference.try(:work_title_format).blank?
+    if logged_in? && current_user.preference.try(:work_title_format).present?
       page_title = current_user.preference.work_title_format.dup
       page_title.gsub!(/FANDOM/, fandom)
       page_title.gsub!(/AUTHOR/, author)
@@ -361,8 +365,6 @@ public
     page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
     page_title.html_safe
   end
-
-  public
 
   #### -- AUTHORIZATION -- ####
 
@@ -377,36 +379,50 @@ public
   end
 
   def see_adult?
-    params[:anchor] = "comments" if (params[:show_comments] && params[:anchor].blank?)
+    params[:anchor] = "comments" if params[:show_comments] && params[:anchor].blank?
     return true if cookies[:view_adult] || logged_in_as_admin?
     return false unless current_user
     return true if current_user.is_author_of?(@work)
     return true if current_user.preference && current_user.preference.adult
-    return false
+
+    false
   end
 
   def use_caching?
-    %w(staging production test).include?(Rails.env) && AdminSetting.current.enable_test_caching?
+    %w[staging production test].include?(Rails.env) && AdminSetting.current.enable_test_caching?
   end
 
   protected
+
+  # Calculates the effective suspension end date for display to users.
+  def effective_suspension_end_date(user)
+    suspension_end = user.suspended_until
+
+    # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+    unban_threshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00")
+
+    # If the stated suspension end date is after the unban threshold, we need to advance a day
+    suspension_end = suspension_end.next_day(1) if suspension_end > unban_threshold
+    view_context.date_in_zone(suspension_end)
+  end
 
   # Prevents banned and suspended users from adding/editing content
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended?
-        suspension_end = current_user.suspended_until
-
-        # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
-        unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
-
-        # If the stated suspension end date is after the unban threshold we need to advance a day 
-        suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
-        localized_suspension_end = view_context.date_in_zone(suspension_end)
-        flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
-        
+        suspension_end = effective_suspension_end_date(current_user)
+        flash[:error] = t("users.status.suspension_notice_html",
+                          suspended_until: suspension_end,
+                          contact_abuse_link: view_context.link_to(
+                            t("users.contact_abuse"),
+                            new_abuse_report_path
+                          ))
       else
-        flash[:error] = t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+        flash[:error] = t("users.status.ban_notice_html",
+                          contact_abuse_link: view_context.link_to(
+                            t("users.contact_abuse"),
+                            new_abuse_report_path
+                          ))
       end
       redirect_to current_user
     end
@@ -416,33 +432,32 @@ public
   def check_user_not_suspended
     return unless current_user.is_a?(User) && current_user.suspended?
 
-    suspension_end = current_user.suspended_until
-
-    # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
-    unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
-
-    # If the stated suspension end date is after the unban threshold we need to advance a day 
-    suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
-    localized_suspension_end = view_context.date_in_zone(suspension_end)
-    
-    flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+    suspension_end = effective_suspension_end_date(current_user)
+    flash[:error] = t("users.status.suspension_notice_html",
+                      suspended_until: suspension_end,
+                      contact_abuse_link: view_context.link_to(
+                        t("users.contact_abuse"),
+                        new_abuse_report_path
+                      ))
 
     redirect_to current_user
   end
 
   # Does the current user own a specific object?
   def current_user_owns?(item)
-  	!item.nil? && current_user.is_a?(User) && (item.is_a?(User) ? current_user == item : current_user.is_author_of?(item))
+    !item.nil? && current_user.is_a?(User) && (item.is_a?(User) ? current_user == item : current_user.is_author_of?(item))
   end
 
   # Make sure a specific object belongs to the current user and that they have permission
   # to view, edit or delete it
   def check_ownership
-  	access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+    access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
+
   def check_ownership_or_admin
-     return true if logged_in_as_admin?
-     access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+    return true if logged_in_as_admin?
+
+    access_denied(redirect: @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
 
   # Make sure the user is allowed to see a specific page
@@ -457,7 +472,7 @@ public
                   (@check_visibility_of.respond_to?(:visible?) && !@check_visibility_of.visible?) ||
                   (@check_visibility_of.respond_to?(:hidden_by_admin?) && @check_visibility_of.hidden_by_admin?)
       can_view_hidden = logged_in_as_admin? || current_user_owns?(@check_visibility_of)
-      access_denied if (is_hidden && !can_view_hidden)
+      access_denied if is_hidden && !can_view_hidden
     end
   end
 
@@ -493,16 +508,14 @@ public
 
   def set_sort_order
     # sorting
-    @sort_column = (valid_sort_column(params[:sort_column],"prompt") ? params[:sort_column] : 'id')
-    @sort_direction = (valid_sort_direction(params[:sort_direction]) ? params[:sort_direction] : 'DESC')
-    if !params[:sort_direction].blank? && !valid_sort_direction(params[:sort_direction])
-      params[:sort_direction] = 'DESC'
-    end
+    @sort_column = (valid_sort_column(params[:sort_column], "prompt") ? params[:sort_column] : "id")
+    @sort_direction = (valid_sort_direction(params[:sort_direction]) ? params[:sort_direction] : "DESC")
+    params[:sort_direction] = "DESC" if params[:sort_direction].present? && !valid_sort_direction(params[:sort_direction])
     @sort_order = @sort_column + " " + @sort_direction
   end
 
   def valid_sort_direction(param)
-    !param.blank? && %w(asc desc).include?(param.to_s.downcase)
+    param.present? && %w[asc desc].include?(param.to_s.downcase)
   end
 
   def flash_search_warnings(result)
@@ -516,6 +529,5 @@ public
   # Don't get unnecessary data for json requests
 
   skip_before_action  :load_admin_banner,
-                      if: proc { %w(js json).include?(request.format) }
-
+                      if: proc { %w[js json].include?(request.format) }
 end
