@@ -203,7 +203,7 @@ Feature: Edit chapters
 
   Scenario: Create a work and add a draft chapter, edit the draft chapter, and save changes to the draft chapter without previewing or posting
   Given basic tags
-    And I am logged in as "moose" with password "muffin"
+    And I am logged in as "moose" with password "muffin12"
   When I go to the new work page
   Then I should see "Post New Work"
     And I select "General Audiences" from "Rating"

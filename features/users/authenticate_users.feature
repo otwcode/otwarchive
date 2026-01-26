@@ -6,7 +6,7 @@ Feature: User Authentication
     Given I have no users
       And the following activated user exists
       | email           | login | password |
-      | sam@example.com | sam   | secret   |
+      | sam@example.com | sam   | secret12 |
       And all emails have been delivered
     When I am on the home page
       And I fill in "Username or email:" with "sam"
@@ -28,7 +28,7 @@ Feature: User Authentication
     # existing password should still work
     When I am on the homepage
       And I fill in "Username or email:" with "sam"
-      And I fill in "Password:" with "secret"
+      And I fill in "Password:" with "secret12"
       And I press "Log In"
     Then I should see "Hi, sam"
 
@@ -44,7 +44,7 @@ Feature: User Authentication
 
     # entering mismatched passwords should produce an error message
     When I fill in "New password" with "secret"
-      And I fill in "Confirm new password" with "newpass"
+      And I fill in "Confirm new password" with "newpass12"
       And I press "Change Password"
     Then I should see "We couldn't save this user because:"
       And I should see "The passwords you entered do not match. Please try again."
@@ -88,7 +88,7 @@ Feature: User Authentication
     Given I have no users
       And the following activated user exists
       | email           | login | password |
-      | sam@example.com | sam   | secret   |
+      | sam@example.com | sam   | secret12 |
       And all emails have been delivered
     When I request a password reset for "sam"
     Then I should see "You must enter your email address."
@@ -99,7 +99,7 @@ Feature: User Authentication
     Given I have no users
       And the following activated user exists
       | email           | login | password |
-      | sam@example.com | sam   | secret   |
+      | sam@example.com | sam   | secret12 |
       And all emails have been delivered
     When I request a password reset for "1@example.com"
     Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
@@ -127,8 +127,8 @@ Feature: User Authentication
       And 1 email should be delivered to "sam@example.com"
     When I follow "use this link to choose a new password" in the email
       And all emails have been delivered
-      And I fill in "New password" with "newpass"
-      And I fill in "Confirm new password" with "newpass"
+      And I fill in "New password" with "newpass12"
+      And I fill in "Confirm new password" with "newpass12"
       And I press "Change Password"
     Then I should see "Your password has been changed."
       And 1 email should be delivered to "sam"
@@ -146,8 +146,8 @@ Feature: User Authentication
       And 1 email should be delivered
     When I start a new session
       And I follow "use this link to choose a new password" in the email
-      And I fill in "New password" with "newpass"
-      And I fill in "Confirm new password" with "newpass"
+      And I fill in "New password" with "newpass12"
+      And I fill in "Confirm new password" with "newpass12"
       And I press "Change Password"
     Then I should see "Your password has been changed."
       And I should see "Hi, sam"
@@ -164,8 +164,8 @@ Feature: User Authentication
     When it is currently 2 weeks from now
       And I start a new session
       And I follow "use this link to choose a new password" in the email
-      And I fill in "New password" with "newpass"
-      And I fill in "Confirm new password" with "newpass"
+      And I fill in "New password" with "newpass12"
+      And I fill in "Confirm new password" with "newpass12"
       And I press "Change Password"
     Then I should see "We couldn't save this user because:"
       And I should see "Reset password token has expired, please request a new one"
@@ -208,8 +208,8 @@ Feature: User Authentication
     Then I should not see "Password Reset" within "#user_history"
     When I start a new session
       And I follow "use this link to choose a new password" in the email
-      And I fill in "New password" with "newpass"
-      And I fill in "Confirm new password" with "newpass"
+      And I fill in "New password" with "newpass12"
+      And I fill in "Confirm new password" with "newpass12"
       And I press "Change Password"
     Then I should see "Your password has been changed."
     When I am logged in as a super admin
@@ -252,7 +252,7 @@ Feature: User Authentication
     Given I have no users
       And the following activated user exists
       | login    | password |
-      | sam      | secret   |
+      | sam      | secret12 |
       And all emails have been delivered
     When I am on the home page
       And I fill in "Username or email:" with "sammy"
@@ -264,7 +264,7 @@ Feature: User Authentication
     Given I have no users
       And the following activated user exists
       | login    | password |
-      | sam      | secret   |
+      | sam      | secret12 |
       And all emails have been delivered
     When I am on the home page
       And I fill in "Username or email:" with "sam"
