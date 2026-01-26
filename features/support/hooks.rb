@@ -39,6 +39,7 @@ Before do
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
+  REDIS_RATELIMITS.flushall
 
   Indexer.all.map(&:prepare_for_testing)
 end

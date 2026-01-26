@@ -190,6 +190,7 @@ def clean_the_database
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
+  REDIS_RATELIMITS.flushall
 end
 
 def run_all_indexing_jobs

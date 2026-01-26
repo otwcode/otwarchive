@@ -1,0 +1,36 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".page_heading") %></h2>
+
+<section class="notes">
+  <h3 class="landmark heading"><%= t(".about.heading") %></h3>
+  <p><%= t(".about.general_info") %></p>
+  <p><%= t(".about.effects_of_enabling", app_name: ArchiveConfig.APP_SHORT_NAME) %></p>
+</section>
+<!--/descriptions-->
+
+<!--main content-->
+<section class="step group">
+  <h3 class="heading"><%= t(".app_setup.heading") %></h3>
+  <p><%= t(".app_setup.instructions") %></p>
+  <div class="annotation module">
+    <div class="image"><p class="qr"><%= qr_code_as_svg(current_admin.totp_qr_code_uri) %></p></div>
+    <div class="notes">
+      <h4 class="heading"><%= t(".app_setup.key.heading") %></h4>
+      <code><%= current_admin.otp_secret.scan(/.{1,4}/).join(" ") %></code>
+      <p class="footnote"><%= t(".app_setup.key.format_note") %></p>
+    </div>
+  </div>
+</section>
+
+<section class="step group">
+  <h3 class="heading"><%= t(".enter_code.heading") %></h3>
+  <p><%= t(".enter_code.instructions") %></p>
+  <%= form_with(url: admin_totp_path, method: :post, class: "totp simple confirm") do |form| %>
+    <p>
+      <%= form.label :totp_attempt, t(".enter_code.label") %>
+      <%= form.text_field :totp_attempt %>
+      <%= form.submit t(".enter_code.submit") %>
+    </p>
+  <% end %>
+</section>
+<!--/content-->

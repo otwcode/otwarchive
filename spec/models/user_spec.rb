@@ -1,6 +1,17 @@
 require "spec_helper"
 
 describe User do
+  describe "audits" do
+    let(:user) { create(:user) }
+
+    it "can have an id larger than unsigned int" do
+      audit = Audited::Audit.new(id: 5_294_967_295, auditable: user)
+
+      expect(audit).to be_valid
+      expect(audit.save).to be_truthy
+    end
+  end
+
   describe "validations" do
     context "with a forbidden user name" do
       let(:forbidden_username) { Faker::Lorem.characters(number: 8) }
