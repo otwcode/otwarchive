@@ -848,6 +848,11 @@ en:
       updated: 'Updated: %{date}'
       words: 'Words: %{count_with_delimiters}'
   errors:
+    '429':
+      browse_more_slowly: If you are receiving this error repeatedly, try browsing more slowly or loading fewer pages at a time.
+      made_too_many_requests: You have made too many requests in a short time period. Please wait a while before trying again.
+      page_heading: Error 429
+      subtitle: Too Many Requests
     timeout_error:
       contact_support: contact Support
       html: If you still get this error after a few tries, you can %{contact_support_link}.
