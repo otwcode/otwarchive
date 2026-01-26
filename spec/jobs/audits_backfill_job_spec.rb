@@ -36,7 +36,7 @@ describe AuditsBackfillJob do
       expect(existing_user.past_usernames.first.username).to eq("old_login")
     end
 
-    it "Handles multiple changes of the same type without filtering" do
+    it "handles multiple changes of the same type without filtering" do
       existing_user.audits.create!(action: "update", auditable: existing_user, user: existing_user,
                                    auditable_id: existing_user.id, audited_changes: { "login" => %w[very_old_login old_login] })
       existing_user.audits.create!(action: "update", auditable: existing_user, user: existing_user,
