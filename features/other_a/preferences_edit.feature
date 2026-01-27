@@ -371,7 +371,7 @@ Feature: Edit preferences
     Given a user exists with login: "scott"
       And I am logged in as a "<role>" admin
     When I go to scott's user page
-    Then I should not see "Preferences"
+    Then I should not see "Set My Preferences"
     When I go to scott's preferences page
     Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
   
