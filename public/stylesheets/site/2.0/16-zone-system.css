@@ -17,11 +17,7 @@ SUBSECTIONS:
   margin-top: 3em;
 }
 
-.system .support.banner {
-  margin: 0.643em;
-}
-
-.system .support.banner .userstuff {
+.system .notice .userstuff {
   max-width: initial;
 }
 
@@ -338,6 +334,10 @@ admin role is only admin facing, and changes normal views in role-admin.css
 }
 
 .feedbacks form .notice {
+  margin: 0.643em;
+}
+
+.feedbacks .banner {
   margin: 0.643em;
 }
 
