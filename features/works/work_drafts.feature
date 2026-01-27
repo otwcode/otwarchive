@@ -203,7 +203,7 @@ Feature: Work Drafts
     Then I should see "This chapter is a draft and hasn't been posted yet!"
       And I should see "Sorry, you can't comment on a draft."
 
-  Scenario: Creating a multichapter draft
+  Scenario: Multichapter drafts should have a draft deletion warning
     Given I am logged in as "Scott" with password "password"
       And I set up the draft "scotts draft"
       And I press "Preview"
