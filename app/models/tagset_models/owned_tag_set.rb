@@ -154,8 +154,28 @@ class OwnedTagSet < ApplicationRecord
 
   def owner_changes=(pseud_list)
     Pseud.parse_bylines(pseud_list)[:pseuds].each do |pseud|
-      if self.owners.include?(pseud)
-        self.owners -= [pseud] if self.owners.count > 1
+      # NOTE: We load the underlying TagSetOwnership record here
+      # as if we need to delete an owner later, we cannot do it via `self.owners`
+      # without potentially deleting all owners and leaving the tag set orphaned.
+      #
+      # See additional comment below.
+      #
+      # ref: https://otwarchive.atlassian.net/browse/AO3-6714
+      first_ownership_record = self.tag_set_ownerships.find_by(owner: true, pseud_id: pseud.id)
+
+      if first_ownership_record
+        # If this pseud is marked as an owner, delete the first ownership record
+        # linking the psued to this tag set, IF there is more than one ownership record.
+        #
+        # WARNING: Calling `Array#delete` or `array -= [pseud]` on self.owners would
+        # remove the pseud anywhere it appears, which could orphan the tag set and
+        # is not what we want.
+        #
+        # This edge case should only impact existing OwnedTagSets as newer ones will
+        # be properly de-duplicated on creation.
+        #
+        # ref: https://otwarchive.atlassian.net/browse/AO3-6714
+        self.tag_set_ownerships.delete(first_ownership_record) if self.owners.count > 1
       else
         self.moderators -= [pseud] if self.moderators.include?(pseud)
         add_owner(pseud)

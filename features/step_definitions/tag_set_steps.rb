@@ -32,7 +32,8 @@ end
 # ...with a visible tag list
 # ...with the fandom tags "x, y, z" and the character tags "a, b, c"
 # ...with an invisible tag list and the freeform tags "m, n, o"
-When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)? (.*)$/ do |title, visibility, tags|
+# ...with owners "a, b, c" and the freeform tags "x"
+When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)?(:? owners "([^\"]*)" and)? (.*)$/ do |title, visibility, owners, tags|
   unless OwnedTagSet.find_by(title: title).present?
     visit new_tag_set_path
     fill_in("owned_tag_set_title", with: title)
@@ -41,6 +42,7 @@ When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag 
     check("owned_tag_set_visible") if visibility == "visible"
     uncheck("owned_tag_set_visible") if visibility == "invisible"
     step %{I add #{tags} to the tag set}
+    step %{I toggle the owners "#{owners}"}
     step %{I submit}
     step %{I should see a create confirmation message}
   end
@@ -70,6 +72,12 @@ When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
   end
   step %{I submit}
   step %{I should see an update confirmation message}
+end
+
+# Takes things like When I toggle the owners "tagsetter"
+# Don't forget the extra s, even if it's singular.
+When "I toggle the owner(s) {string}" do |owners|
+  fill_in("owned_tag_set_owner_changes", with: owners) if owners.present?
 end
 
 When /^I set up the nominated tag ?set "([^\"]*)" with (\d*) fandom noms? and (\d*) (character|relationship) noms?$/ do |title, fandom_count, nested_count, nested_type|
@@ -238,4 +246,10 @@ end
 
 Then /^"([^\"]*)" should be an unassociated tag$/ do |tag|
   step %{I should see "#{tag}" within "ol#list_for_unassociated_char_and_rel"}
+end
+
+Then "the maintainers should be {string}" do |maintainers|
+  expected = maintainers.split(" ").sort
+  actual = all(".meta ul.mods li").map(&:text).sort
+  assert_equal actual, expected
 end
