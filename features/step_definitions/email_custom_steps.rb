@@ -9,6 +9,8 @@ Given "a locale with translated emails" do
   I18n.backend.store_translations(:new, { kudo_mailer: { batch_kudo_notification: { subject: "Translated subject" } } })
   I18n.backend.store_translations(:new, { users: { mailer: { reset_password_instructions: { subject: "Translated subject" } } } })
   I18n.backend.store_translations(:new, { activerecord: { models: { fandom: { other: "Fändom" } } } }) # for work_info partial in subscription email
+  # for HelpController#preferences_locale
+  I18n.backend.store_translations(:new, { help: { preferences_locale: { locale: { header: "Localised help page for test" } } } })
 end
 
 Given "the user {string} enables translated emails" do |user|

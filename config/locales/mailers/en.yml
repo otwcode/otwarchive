@@ -39,6 +39,10 @@ en:
       subject: "[%{app_name}] Your AO3 admin account"
       url: Admin login URL
       username: Admin username
+    totp_2fa_backup_codes:
+      created: 'A set of new backup codes has been requested for your account, and your old backup codes have been invalidated. Please use one of the following codes to log in:'
+      do_rely_on: We strongly recommend that you do not rely on the use of backup codes to access your account. Once you have logged in, please disable two-factor authentication and set it up again.
+      subject: "[%{app_name}] Your admin account backup codes"
   comment_mailer:
     comment_notification:
       chapter:
@@ -291,19 +295,21 @@ en:
       subject: "[%{app_name}] Abuse - %{summary}"
       thank_you: Thank you for your patience.
     admin_deleted_work_notification:
-      bye: Attached is a copy of your work for your reference.
-      contact_abuse: contact our Policy & Abuse team
+      check_email:
+        html: If you don't know why your work was deleted, and you have not received a separate email explaining why, please check your email (including your spam folder) or %{contact_abuse_link} directly.
+        text: 'If you don''t know why your work was deleted, and you have not received a separate email explaining why, please check your email (including your spam folder) or contact the Policy & Abuse committee directly: %{contact_abuse_url}.'
+      contact_abuse: contact the Policy & Abuse committee
+      content_policy: Content Policy
       deleted:
-        html: Your work %{title} was deleted from the Archive by a site admin.
-        text: Your work "%{title}" was deleted from the Archive by a site admin.
-      import_project:
-        html: If your work was part of an import project managed by our Open Doors team, please %{opendoors_link} with any further questions.
-        text: If your work was part of an import project managed by our Open Doors team, please contact Open Doors (%{opendoors_link}) with any further questions.
-      opendoors: contact Open Doors
-      subject: "[%{app_name}] Your work has been deleted by an admin"
+        html: Your work %{title} was deleted by an %{app_name} administrator. A copy of your work is attached to this email.
+        text: Your work "%{title}" was deleted by an %{app_name} administrator. A copy of your work is attached to this email.
+      may_not_repost: you may not repost the work without taking action to correct the violation
+      subject: "[%{app_name}] Your work has been deleted by an administrator"
+      tos: "%{app_name} Terms of Service"
+      tos_faq: Terms of Service FAQ
       tos_violation:
-        html: If it's possible your work violated the Archive's Terms of Service, please %{contact_abuse_link}.
-        text: If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url}).
+        html: If your work was deleted due to being in violation of the %{tos_link} (including the %{content_policy_link}), %{may_not_repost_bold}. For more information, please refer to the %{tos_faq_link}.
+        text: 'If your work was deleted due to being in violation of the %{app_name} Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you may not repost the work without taking action to correct the violation. For more information, please refer to the Terms of Service FAQ: %{tos_faq_url}.'
     admin_hidden_work_notification:
       access:
         one: While your work is hidden, you will still be able to access it through the link provided above, but it won't be available to other users or listed on your works page.
