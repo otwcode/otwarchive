@@ -1,5 +1,5 @@
 @bookmarks
-Feature: Edit bookmarks with javascript enabled
+Feature: Create and edit bookmarks with javascript enabled
   In order to have a good user experience
   As a humble user
   I want to be able to create and edit bookmarks with javascript enabled
