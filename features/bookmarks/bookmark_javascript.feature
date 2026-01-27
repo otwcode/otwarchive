@@ -2,7 +2,7 @@
 Feature: Edit bookmarks with javascript enabled
   In order to have a good user experience
   As a humble user
-  I want to be able to edit bookmarks with javascript enabled
+  I want to be able to create and edit bookmarks with javascript enabled
   
   Background:
     Given I am logged in as "recengine"
