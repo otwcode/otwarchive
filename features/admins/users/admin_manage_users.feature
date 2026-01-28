@@ -114,8 +114,16 @@ Feature: Admin Actions to manage users
       And I go to the user administration page for "lurker"
     Then the page should have a dashboard sidebar
       And I should not see "Creations"
+    When I go to lurker's user page
+    Then the page should have a dashboard sidebar
+      And I should not see "Creations"
     When I am logged in as a "policy_and_abuse" admin
       And I go to the user administration page for "lurker"
+      And I follow "Creations"
+    Then I should see "Works and Comments by lurker"
+      And I should see "This user has no works or comments."
+      And the page should have a dashboard sidebar
+    When I go to lurker's user page
       And I follow "Creations"
     Then I should see "Works and Comments by lurker"
       And I should see "This user has no works or comments."

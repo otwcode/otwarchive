@@ -65,6 +65,8 @@ gem "devise"
 gem "devise-async" # To mails through queues
 gem "bcrypt"
 gem "devise-pwned_password"
+gem "devise-two-factor"
+gem "rqrcode"
 
 # Needed for modern ssh
 gem "ed25519", ">= 1.2", "< 2.0"
@@ -115,7 +117,7 @@ gem "puma_worker_killer"
 group :test do
   gem "rspec-rails", "~> 6.0"
   gem 'pickle'
-  gem 'shoulda'
+  gem "shoulda-matchers"
   gem "capybara"
   gem "cucumber"
   gem 'database_cleaner'

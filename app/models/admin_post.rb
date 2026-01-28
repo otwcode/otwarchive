@@ -6,7 +6,7 @@ class AdminPost < ApplicationRecord
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, default: :disable_anon, suffix: :comments
+  }, default: :disable_anon, suffix: :comments, validate: { message: :invalid_permissions }
 
   belongs_to :language
   belongs_to :translated_post, class_name: "AdminPost"

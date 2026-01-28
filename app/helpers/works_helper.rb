@@ -30,6 +30,20 @@ module WorksHelper
     content_tag(:dl, list.to_s, class: 'stats').html_safe
   end
 
+  def work_page_title(work, title, options = {})
+    fandoms = work.fandoms
+    title_fandom = if fandoms.empty?
+                     t("works_helper.work_page_title.unspecified_fandom")
+                   elsif fandoms.size > 3
+                     t("works_helper.work_page_title.multifandom")
+                   else
+                     fandoms.first.name
+                   end
+    author = work.anonymous? ? t("works_helper.work_page_title.anonymous") : work.pseuds.sort.collect(&:byline).join(t("support.array.words_connector"))
+
+    get_page_title(title_fandom, author, title, options)
+  end
+
   def recipients_link(work)
     # join doesn't maintain html_safe, so mark the join safe
     work.gifts.not_rejected.includes(:pseud).map { |gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(recipient: gift.recipient_name)) }.join(", ").html_safe
@@ -157,12 +171,10 @@ module WorksHelper
   # Generates a list of a work's tags and details for use in feeds
   def feed_summary(work)
     tags = work.tags.group_by(&:type)
-    text = "<p>by #{byline(work, { visibility: 'public', full_path: true })}</p>"
+    text = +"<p>by #{byline(work, { visibility: 'public', full_path: true })}</p>"
     text << work.summary if work.summary
     text << "<p>Words: #{work.word_count}, Chapters: #{chapter_total_display(work)}, Language: #{work.language ? work.language.name : 'English'}</p>"
-    unless work.series.count == 0
-      text << "<p>Series: #{series_list_for_feeds(work)}</p>"
-    end
+    text << "<p>Series: #{series_list_with_work_position(work)}</p>" unless work.series.count.zero?
     # Create list of tags
     text << "<ul>"
     %w(Fandom Rating ArchiveWarning Category Character Relationship Freeform).each do |type|

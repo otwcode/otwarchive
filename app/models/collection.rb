@@ -176,20 +176,6 @@ class Collection < ApplicationRecord
     end
   end
 
-  # Get only collections with running challenges
-  def self.signup_open(challenge_type)
-    case challenge_type
-    when "PromptMeme"
-      not_closed.where(challenge_type: challenge_type)
-        .joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").where("prompt_memes.signup_open = 1")
-        .where("prompt_memes.signups_close_at > ?", Time.zone.now).order("prompt_memes.signups_close_at DESC")
-    when "GiftExchange"
-      not_closed.where(challenge_type: challenge_type)
-        .joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1")
-        .where("gift_exchanges.signups_close_at > ?", Time.zone.now).order("gift_exchanges.signups_close_at DESC")
-    end
-  end
-
   scope :with_name_like, lambda { |name|
     where("collections.name LIKE ?", "%#{name}%")
       .limit(10)
@@ -349,34 +335,26 @@ class Collection < ApplicationRecord
   end
 
   def notify_maintainers_assignments_sent
-    subject = I18n.t("user_mailer.collection_notification.assignments_sent.subject")
-    message = I18n.t("user_mailer.collection_notification.assignments_sent.complete")
     if self.collection_email.present?
-      UserMailer.collection_notification(self.id, subject, message, self.collection_email).deliver_later
+      UserMailer.assignments_sent_notification(self.id, self.collection_email).deliver_later
     else
       # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale_for_mails) do
-          translated_subject = I18n.t("user_mailer.collection_notification.assignments_sent.subject")
-          translated_message = I18n.t("user_mailer.collection_notification.assignments_sent.complete")
-          UserMailer.collection_notification(self.id, translated_subject, translated_message, user.email).deliver_later
+          UserMailer.assignments_sent_notification(self.id, user.email).deliver_later
         end
       end
     end
   end
 
-  def notify_maintainers_challenge_default(challenge_assignment, assignments_page_url)
+  def notify_maintainers_assignment_default(challenge_assignment)
     if self.collection_email.present?
-      subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: challenge_assignment.offer_byline)
-      message = I18n.t("user_mailer.collection_notification.challenge_default.complete", offer_byline: challenge_assignment.offer_byline, request_byline: challenge_assignment.request_byline, assignments_page_url: assignments_page_url)
-      UserMailer.collection_notification(self.id, subject, message, self.collection_email).deliver_later
+      UserMailer.assignment_default_notification(self.id, challenge_assignment.id, self.collection_email).deliver_later
     else
       # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale_for_mails) do
-          translated_subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: challenge_assignment.offer_byline)
-          translated_message = I18n.t("user_mailer.collection_notification.challenge_default.complete", offer_byline: challenge_assignment.offer_byline, request_byline: challenge_assignment.request_byline, assignments_page_url: assignments_page_url)
-          UserMailer.collection_notification(self.id, translated_subject, translated_message, user.email).deliver_later
+          UserMailer.assignment_default_notification(self.id, challenge_assignment.id, user.email).deliver_later
         end
       end
     end

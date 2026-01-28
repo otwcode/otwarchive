@@ -17,6 +17,30 @@ en:
         page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+    sessions:
+      invalid_totp: Incorrect two-step verification code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
+    totp:
+      access:
+        permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
+      already_disabled: TOTP two-step verification is already disabled.
+      already_enabled: TOTP two-step verification is already enabled.
+      confirm_disable:
+        page_title: Disable Two-Step Verification
+      create:
+        incorrect_code: Incorrect verification code. Your code may have expired, or you may need to set up your authenticator app again.
+        success: Successfully enabled two-step verification; please make note of your backup codes.
+      disable:
+        failure: Could not disable two-step verification.
+        incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
+        success: Successfully disabled two-step verification.
+      new:
+        page_title: Confirm Password
+      reauthenticate_create:
+        incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
+        page_title: Enable Two-Step Verification
+      show_backup_codes:
+        not_enabled: Please enable two-step verification first.
+        page_title: Two-Step Verification Backup Codes
     user_creations:
       confirm_remove_pseud:
         must_have_orphan_pseuds: Sorry, this action is only available for works by orphan_account pseuds.
@@ -43,6 +67,11 @@ en:
         blocked: You have blocked the user %{name}.
       destroy:
         unblocked: You have unblocked the user %{name}.
+  bookmarks:
+    create:
+      success: Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.
+      warnings:
+        private_bookmark_added_to_collection: " Please note: private bookmarks are not listed in collections."
   challenge_assignments:
     index:
       access_denied_user: You aren't allowed to see that user's assignments.
@@ -58,11 +87,8 @@ en:
       posted_work: This is a draft chapter in a posted work. It will be kept unless the work is deleted.
       unposted_work_html: This is a draft chapter in an unposted work. The work will be <strong>scheduled for deletion</strong> on %{deletion_date}.
     show:
-      anonymous: Anonymous
       chapter_position: " - Chapter %{position}"
-      multifandom: Multifandom
       unrevealed: Mystery Work
-      unspecified_fandom: No fandom specified
   collection_items:
     create:
       invited: invited
@@ -88,6 +114,8 @@ en:
       error: Sorry, this user doesn't allow non-Archive users to reply to their comments.
     check_hidden_by_admin:
       error: Sorry, you cannot reply to a hidden comment.
+    check_modify_parent:
+      draft: Sorry, you can't comment on a draft.
     check_not_replying_to_spam:
       error: Sorry, you can't reply to a comment that has been marked as spam.
     check_permission_to_edit:
@@ -107,6 +135,14 @@ en:
       error: Sorry, that comment could not be hidden.
       permission_denied: Sorry, you don't have permission to hide that comment.
       success: Comment successfully hidden!
+    index:
+      page_title: Comments on %{name}
+    new:
+      page_title: New Comment on %{name}
+    rate_limited:
+      error: You have made too many requests in a short time period. Please wait a while before trying again. If you are receiving this error repeatedly, try browsing more slowly or loading fewer pages at a time.
+    show:
+      page_title: Comment %{comment_id} on %{name}
     unfreeze:
       error: Sorry, that comment thread could not be unfrozen.
       permission_denied: Sorry, you don't have permission to unfreeze that comment thread.
@@ -115,6 +151,11 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
+    unreviewed:
+      page_title: Unreviewed Comments on %{name}
+  creatorships:
+    update:
+      must_select_request: Please select at least one co-creator request first.
   errors:
     auth_error:
       browser_title: Auth Error
@@ -176,6 +217,10 @@ en:
   people:
     index:
       collection_page_title: "%{collection_title} - People"
+  preferences:
+    update:
+      error: Sorry, something went wrong. Please try that again.
+      success: Your preferences were successfully updated.
   profile:
     show:
       page_title: "%{username} - Profile"
@@ -255,22 +300,14 @@ en:
     contact_abuse: contact our Policy & Abuse team
     passwords:
       create:
-        contact_abuse: contact our Policy & Abuse team
-        reset_blocked_html: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
-        reset_cooldown_html: You cannot reset your password at this time. Please try again after %{reset_available_time}.
-        send_cooldown_period:
-          one: After that, you will need to wait %{count} hour before requesting another reset.
-          other: After that, you will need to wait %{count} hours before requesting another reset.
-        send_instructions: Check your email for instructions on how to reset your password. %{send_times_remaining} %{send_cooldown_period}
-        send_times_remaining:
-          one: You may reset your password %{count} more time.
-          other: You may reset your password %{count} more times.
-        user_not_found: We couldn't find an account with that email address or username. Please try again.
+        invalid_email: You must enter your email address.
       edit:
         invalid_link:
           one: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hour, you can request a new password reset.
           other: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hours, you can request a new password reset.
         page_title: Change Password
+      new:
+        page_title: Reset Password
     reconfirm_email:
       access_denied:
         logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.

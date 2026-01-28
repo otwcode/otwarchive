@@ -39,6 +39,10 @@ en:
       subject: "[%{app_name}] Your AO3 admin account"
       url: Admin login URL
       username: Admin username
+    totp_2fa_backup_codes:
+      created: 'A set of new backup codes has been requested for your account, and your old backup codes have been invalidated. Please use one of the following codes to log in:'
+      do_rely_on: We strongly recommend that you do not rely on the use of backup codes to access your account. Once you have logged in, please disable two-factor authentication and set it up again.
+      subject: "[%{app_name}] Your admin account backup codes"
   comment_mailer:
     comment_notification:
       chapter:
@@ -92,6 +96,9 @@ en:
       chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
+      commenter_responded:
+        html: "%{commenter_link} responded:"
+        text: "%{commenter} responded:"
       content:
         chapter:
           html: "%{pseud_link} replied to your comment on %{chapter_link} of %{work_link}:"
@@ -107,10 +114,14 @@ en:
         chapter: "[%{app_name}] Reply to your comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Reply to your comment on %{title}"
         tag: "[%{app_name}] Reply to your comment on the tag %{name}"
+      you_wrote: 'You wrote:'
     comment_reply_sent_notification:
       chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
+      commenter_wrote:
+        html: "%{commenter_link} wrote:"
+        text: "%{commenter} wrote:"
       content:
         chapter:
           html: 'You replied to a comment on %{chapter_link} of %{work_link}:'
@@ -126,6 +137,7 @@ en:
         chapter: "[%{app_name}] Reply you left to a comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Reply you left to a comment on %{title}"
         tag: "[%{app_name}] Reply you left to a comment on the tag %{name}"
+      you_responded: 'You responded:'
     comment_sent_notification:
       chapter:
         titled: 'Chapter %{position}: %{title}'
@@ -168,6 +180,9 @@ en:
       chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
+      commenter_edited_response:
+        html: "%{commenter_link} edited their response to:"
+        text: "%{commenter} edited their response to:"
       content:
         chapter:
           html: "%{pseud_link} edited their reply to your comment on %{chapter_link} of %{work_link}:"
@@ -183,6 +198,7 @@ en:
         chapter: "[%{app_name}] Edited reply to your comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Edited reply to your comment on %{title}"
         tag: "[%{app_name}] Edited reply to your comment on the tag %{name}"
+      you_wrote: 'You wrote:'
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -213,6 +229,11 @@ en:
         formal: Sincerely,
         informal: Best,
       creation:
+        attribution:
+          anon: by Anonymous
+          named:
+            html: by %{creator_links}
+            text: by %{creators}
         link_with_word_count: "%{creation_link} (%{word_count})"
         title_with_chapter_number: Chapter %{position} of %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
@@ -274,19 +295,21 @@ en:
       subject: "[%{app_name}] Abuse - %{summary}"
       thank_you: Thank you for your patience.
     admin_deleted_work_notification:
-      bye: Attached is a copy of your work for your reference.
-      contact_abuse: contact our Policy & Abuse team
+      check_email:
+        html: If you don't know why your work was deleted, and you have not received a separate email explaining why, please check your email (including your spam folder) or %{contact_abuse_link} directly.
+        text: 'If you don''t know why your work was deleted, and you have not received a separate email explaining why, please check your email (including your spam folder) or contact the Policy & Abuse committee directly: %{contact_abuse_url}.'
+      contact_abuse: contact the Policy & Abuse committee
+      content_policy: Content Policy
       deleted:
-        html: Your work %{title} was deleted from the Archive by a site admin.
-        text: Your work "%{title}" was deleted from the Archive by a site admin.
-      import_project:
-        html: If your work was part of an import project managed by our Open Doors team, please %{opendoors_link} with any further questions.
-        text: If your work was part of an import project managed by our Open Doors team, please contact Open Doors (%{opendoors_link}) with any further questions.
-      opendoors: contact Open Doors
-      subject: "[%{app_name}] Your work has been deleted by an admin"
+        html: Your work %{title} was deleted by an %{app_name} administrator. A copy of your work is attached to this email.
+        text: Your work "%{title}" was deleted by an %{app_name} administrator. A copy of your work is attached to this email.
+      may_not_repost: you may not repost the work without taking action to correct the violation
+      subject: "[%{app_name}] Your work has been deleted by an administrator"
+      tos: "%{app_name} Terms of Service"
+      tos_faq: Terms of Service FAQ
       tos_violation:
-        html: If it's possible your work violated the Archive's Terms of Service, please %{contact_abuse_link}.
-        text: If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url}).
+        html: If your work was deleted due to being in violation of the %{tos_link} (including the %{content_policy_link}), %{may_not_repost_bold}. For more information, please refer to the %{tos_faq_link}.
+        text: 'If your work was deleted due to being in violation of the %{app_name} Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you may not repost the work without taking action to correct the violation. For more information, please refer to the Terms of Service FAQ: %{tos_faq_url}.'
     admin_hidden_work_notification:
       access:
         one: While your work is hidden, you will still be able to access it through the link provided above, but it won't be available to other users or listed on your works page.
@@ -373,6 +396,101 @@ en:
       work_added:
         html: The collection maintainers of %{collection_link} have added your work %{work_link} to their collection!
         text: The collection maintainers of "%{collection_title}" (%{collection_url}) have added your work "%{work_title}" (%{work_url}) to their collection!
+    assignment_default_notification:
+      assign_pinch_hitter:
+        collection_assignments_page: collection assignments page
+        html: You can assign a pinch hitter on the %{collection_assignments_page_link}.
+        text: 'You can assign a pinch hitter on the collection assignments page: %{collection_assignments_page_url}.'
+      defaulted_on_assignment:
+        html: "%{offer_byline} has defaulted on their assignment for %{request_byline} in your gift exchange %{collection_link}."
+        text: '%{offer_byline} has defaulted on their assignment for %{request_byline} in your gift exchange "%{collection_title}" (%{collection_url}).'
+      subject: "[%{app_name}][%{collection_title}] Assignment default by %{offer_byline}"
+    assignments_sent_notification:
+      all_sent_out:
+        html: All assignments have now been sent out for your gift exchange %{collection_link}.
+        text: All assignments have now been sent out for your gift exchange "%{collection_title}" (%{collection_url}).
+      subject: "[%{app_name}][%{collection_title}] Assignments sent"
+    batch_subscription_notification:
+      chapter_summary: Chapter Summary
+      footer_note:
+        html: You're receiving this email because you've subscribed to %{subscription_link}. Follow the link to unsubscribe if you no longer wish to receive updates.
+        text: 'You''re receiving this email because you''ve subscribed to %{subscription_name}. Follow the link to unsubscribe if you no longer wish to receive updates: %{unsubscribe_url}'
+      preface:
+        anon:
+          chapter:
+            html: 'Anonymous posted a new chapter of %{work_link_with_word_count}:'
+            text: 'Anonymous posted a new chapter of %{work_title_with_word_count}:'
+          work:
+            backdated: 'Anonymous posted a backdated work:'
+            new: 'Anonymous posted a new work:'
+        named:
+          chapter:
+            html:
+              one: "%{creator_links} posted a new chapter of %{work_link_with_word_count}:"
+              other: "%{creator_links} posted a new chapter of %{work_link_with_word_count}:"
+            text:
+              one: "%{creators} posted a new chapter of %{work_title_with_word_count}:"
+              other: "%{creators} posted a new chapter of %{work_title_with_word_count}:"
+          work:
+            backdated:
+              html:
+                one: "%{creator_links} posted a backdated work:"
+                other: "%{creator_links} posted a backdated work:"
+              text:
+                one: "%{creators} posted a backdated work:"
+                other: "%{creators} posted a backdated work:"
+            new:
+              html:
+                one: "%{creator_links} posted a new work:"
+                other: "%{creator_links} posted a new work:"
+              text:
+                one: "%{creators} posted a new work:"
+                other: "%{creators} posted a new work:"
+      subject:
+        anon:
+          chapter:
+            multiple_entries: "[%{app_name}] Anonymous posted Chapter %{chapter_position} of %{work_title} %{more}"
+            one_entry: "[%{app_name}] Anonymous posted Chapter %{chapter_position} of %{work_title}"
+          series:
+            chapter:
+              multiple_entries: "[%{app_name}] Anonymous posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series %{more}"
+              one_entry: "[%{app_name}] Anonymous posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series"
+            work:
+              multiple_entries: "[%{app_name}] Anonymous posted %{work_title} in the %{series_title} series %{more}"
+              one_entry: "[%{app_name}] Anonymous posted %{work_title} in the %{series_title} series"
+        more:
+          one: and %{count} more
+          other: and %{count} more
+        named:
+          chapter:
+            multiple_entries:
+              one: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} %{more}"
+              other: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} %{more}"
+            one_entry:
+              one: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title}"
+              other: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title}"
+          series:
+            chapter:
+              multiple_entries:
+                one: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series %{more}"
+                other: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series %{more}"
+              one_entry:
+                one: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series"
+                other: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series"
+            work:
+              multiple_entries:
+                one: "[%{app_name}] %{creators} posted %{work_title} in the %{series_title} series %{more}"
+                other: "[%{app_name}] %{creators} posted %{work_title} in the %{series_title} series %{more}"
+              one_entry:
+                one: "[%{app_name}] %{creators} posted %{work_title} in the %{series_title} series"
+                other: "[%{app_name}] %{creators} posted %{work_title} in the %{series_title} series"
+          work:
+            multiple_entries:
+              one: "[%{app_name}] %{creators} posted %{work_title} %{more}"
+              other: "[%{app_name}] %{creators} posted %{work_title} %{more}"
+            one_entry:
+              one: "[%{app_name}] %{creators} posted %{work_title}"
+              other: "[%{app_name}] %{creators} posted %{work_title}"
     challenge_assignment_notification:
       any: Any
       assignment:
@@ -472,17 +590,6 @@ en:
           no_fandom: '- "%{work_title}" (%{work_url})'
           with_fandom: '- "%{work_title}" (%{work_url}) (%{fandom})'
       works_by: 'These works were written under the email: %{email}'
-    collection_notification:
-      assignments_sent:
-        complete: All assignments have now been sent out.
-        subject: Assignments sent
-      challenge_default:
-        complete: 'Signed-up participant %{offer_byline} has defaulted on their assignment for %{request_byline}. You may want to assign a pinch hitter on the collection assignments page: %{assignments_page_url}'
-        subject: Challenge default by %{offer_byline}
-      html:
-        received_message: 'You have received a message about your collection %{collection_link}:'
-      text:
-        received_message: 'You have received a message about your collection "%{collection_title}" (%{collection_url}):'
     creatorship_notification:
       explanation: When you're a co-creator on a work, you can be added to new chapters regardless of your co-creation settings. You will also be added to any series the work is added to.
       html:
@@ -659,9 +766,6 @@ en:
           html: A response to your prompt has been posted in the %{collection_link} collection on the Archive of Our Own!
           text: A response to your prompt has been posted in the "%{collection_title}" collection (%{collection_url}) on the Archive of Our Own!
         no_collection: A response to your prompt has been posted on the Archive of Our Own!
-      byline:
-        html: by %{work_creator_links}
-        text: by %{work_creators}
       subject: "[%{app_name}] A response to your prompt"
     recipient_notification:
       collection:
@@ -739,9 +843,9 @@ en:
           text: 'If you have other reasons to believe that someone else currently has access to your %{app_name} account, please contact Policy & Abuse with all relevant information: %{contact_policy_abuse_url}.'
         contact_support: contact Support
         ignore_if_not_requested:
-          html: "%{safely_ignore_bold} Someone else may have entered your username or email address by mistake."
+          html: "%{safely_ignore_bold} Someone else may have entered your email address by mistake."
           safely_ignore: If you did not make this request, you can safely ignore and delete this email.
-          text: If you did not make this request, you can safely ignore and delete this email. Someone else may have entered your username or email address by mistake.
+          text: If you did not make this request, you can safely ignore and delete this email. Someone else may have entered your email address by mistake.
         instructions:
           html: "%{intro_bold} If the link in this email has expired, you will need to %{new_password_reset_link}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, %{contact_support_link} for further assistance."
           intro: If you made this request, please %{choose_new_password_link} within %{count} days.
