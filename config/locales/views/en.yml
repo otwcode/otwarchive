@@ -449,6 +449,7 @@ en:
           heading: 'Step 2: Enter your 6-digit code'
           instructions: Enter the 6-digit code from your app to enable two-step verification
           label: 6-digit code
+          please_wait: Please wait...
           submit: Enable Two-Step Verification
         page_heading: Set Up Two-Step Verification
       show_backup_codes:

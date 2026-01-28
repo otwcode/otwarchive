@@ -29,7 +29,7 @@
     <p>
       <%= form.label :totp_attempt, t(".enter_code.label") %>
       <%= form.text_field :totp_attempt %>
-      <%= form.submit t(".enter_code.submit") %>
+      <%= form.submit t(".enter_code.submit"), data: { disable_with: t(".enter_code.please_wait") } %>
     </p>
   <% end %>
 </section>
