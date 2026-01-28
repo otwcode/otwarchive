@@ -68,6 +68,36 @@ describe SkinsController do
     end
   end
 
+  describe "POST #create" do
+    let(:skin_creator) { create(:user) }
+
+    before do
+      fake_login_known_user(skin_creator)
+    end
+
+    context "when duplicate database inserts happen despite Rails validations" do
+      # https://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of-label-Concurrency+and+integrity
+      #
+      # We fake this scenario by skipping Rails validations.
+      before do
+        allow_any_instance_of(Skin).to receive(:save).and_call_original
+        allow_any_instance_of(Skin).to receive(:save).with(no_args) do |skin|
+          skin.save(validate: false)
+        end
+
+        create(:skin, title: "hello world")
+      end
+
+      it "shows the usual validation error" do
+        post :create, params: { skin: { title: "hello world" } }
+
+        expect(response).to render_template(:new)
+        expect(assigns[:skin]).not_to be_valid
+        expect(assigns[:skin].errors[:title]).to include("must be unique")
+      end
+    end
+  end
+
   describe "GET #edit" do
     subject { get :edit, params: { id: skin.id } }
     let(:success) { expect(response).to render_template(:edit) }
