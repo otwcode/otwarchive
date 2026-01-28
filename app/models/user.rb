@@ -523,10 +523,13 @@ class User < ApplicationRecord
   # Looks up all past values of the given field, excluding the current value of
   # the field:
   def historic_values(field)
-    if field == "login"
+    case field
+    when "login"
       past_usernames.pluck(:username).distinct
-    elsif field == "email"
+    when "email"
       past_emails.pluck(:email_address).distinct
+    else
+      # should never get here
     end
   end
 
