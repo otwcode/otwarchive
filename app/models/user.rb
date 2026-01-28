@@ -518,6 +518,18 @@ class User < ApplicationRecord
     IndexQueue.enqueue(self, :users)
   end
 
+  # Function to make it easier to retrieve info from the audits table.
+  #
+  # Looks up all past values of the given field, excluding the current value of
+  # the field:
+  def historic_values(field)
+    if field == "login"
+      past_usernames.pluck(:username).distinct
+    elsif field == "email"
+      past_emails.pluck(:email_address).distinct
+    end
+  end
+
   private
 
   # Override the default Justifiable enabled check, because we only need to justify
