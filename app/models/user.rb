@@ -528,8 +528,6 @@ class User < ApplicationRecord
       past_usernames.pluck(:username).distinct
     when "email"
       past_emails.pluck(:email_address).distinct
-    else
-      # should never get here
     end
   end
 
