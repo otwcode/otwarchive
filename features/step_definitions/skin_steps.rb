@@ -91,9 +91,15 @@ Given /^I have loaded site skins$/ do
 end
 
 Given "the approved public skin {string} with css {string}" do |skin_name, css|
-  step %{the unapproved public skin "#{skin_name}" with css "#{css}"}
+  step %{the user "skinner" exists and has the role "official"}
+  step %{I am logged in as "skinner"}
+  step %{I set up the skin "#{skin_name}" with css "#{css}"}
+  attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
+  check("skin_public")
+  step %{I submit}
+  step %{I should see "Skin was successfully created"}
   step %{I approve the skin "#{skin_name}"}
-  step "I am logged out"
+  step %{I am logged out}
 end
 
 Given /^the approved public skin "([^"]*)"$/ do |skin_name|
