@@ -65,6 +65,7 @@ class Comment < ApplicationRecord
   validate :check_for_spam, on: :create
 
   def check_for_spam
+    return unless %w(staging production).include?(Rails.env)
     self.spam = !skip_spamcheck? && spam?
     self.approved = !self.spam
 
