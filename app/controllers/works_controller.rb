@@ -243,6 +243,12 @@ class WorksController < ApplicationController
     @hide_dashboard = true
     @unposted = current_user.unposted_work
 
+    # Check if collection is closed and user doesn't have permission to post
+    if @collection&.closed? && !@collection&.user_is_maintainer?(current_user)
+      flash[:error] = t(".closed_collection", collection_title: @collection.title)
+      redirect_to collection_path(@collection) and return
+    end
+
     if params[:load_unposted] && @unposted
       @work = @unposted
       @chapter = @work.first_chapter
