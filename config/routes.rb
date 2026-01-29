@@ -644,12 +644,20 @@ Rails.application.routes.draw do
   %w[
     first_login
     preferences_locale
+    moderated_commenting
+    restricted_commenting
+    restricted_works
+    work_skins
   ].each do |action|
     get "/help/#{action}", to: "help##{action}"
   end
 
   # Redirects for moved help files
   get "/first_login_help", to: redirect("/help/first_login")
+  get "/help/comments-moderated.html", to: redirect("/help/moderated_commenting")
+  get "/help/registered-users.html", to: redirect("/help/restricted_works")
+  get "/help/who-can-comment-on-this-work.html", to: redirect("/help/restricted_commenting")
+  get "/help/work-skins.html", to: redirect("/help/work_skins")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'

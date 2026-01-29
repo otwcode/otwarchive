@@ -810,6 +810,7 @@ en:
           disable_all: No one can comment
           disable_anon: Only registered users can comment
           enable_all: Registered users and guests can comment
+          help_title: Who can comment on this work
           keep_current: Keep current comment settings
           label: Who can comment on this work
           multiple_works_label: Who can comment on these works
@@ -1131,11 +1132,42 @@ en:
         symbols_html: When browsing the Archive, warnings will be displayed in the blurb of each work. Official warning tags are displayed in bold. A four square grid in the top left corner of each work's blurb indicates the work's rating, completion status, pairing category, and any Archive warnings that apply to it. Refer to the %{symbols_key_chart_link} for more information.
         symbols_key_chart: Symbols Key Chart
       welcome_header: Welcome to the %{app_name}!
+    moderated_commenting:
+      description: With this feature enabled, you will have to approve all comments before they appear publicly on your work.
+      page_heading: Comments Moderated
     preferences_locale:
       locale:
         description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
         header: Set preferred locale
       page_heading: Locale Preferences
+    restricted_commenting:
+      default_option: This is the default option.
+      deleting_others_comments: Can I edit or delete a comment someone else left on one of my works?
+      disable_all: No one can comment
+      disable_all_description: This will disable all new comments on your work.
+      disable_anon: Only registered users can comment
+      disable_anon_description_html: "%{default_option_bold} With this enabled, only logged in users will be able to comment on your work."
+      enable_all: Registered users and guests can comment
+      enable_all_description: All users can comment on your work whether they are logged in or not.
+      existing_unaffected_html: Changing these settings will not affect any existing comments. If there are comments on the work that you would like to remove, check out %{deleting_others_comments_link} to learn how.
+      page_heading: Who can comment on this work?
+    restricted_works:
+      description: A registered user is a person with an Archive account. If you check this box your story can only be viewed by a person who is logged in.
+      page_heading: Registered Users
+    work_skins:
+      description_html: You can create custom stylesheets, or "skins", for your works just like you can create skins for the Archive. The main difference is that work skins will change the way your work appears to <strong>other</strong> users, not just you.
+      example:
+        code_snippet: I want <span class="bluetext">house</span> to be in blue
+        create_a_work_skin: Create a work skin
+        introduction: 'For example, let''s say that you want to make a single word in your text bright blue. Here is what you might do:'
+        make_skin_with_css_class_html: "%{create_a_work_skin_link} with the following content: <code>.bluetext {color: blue;}</code>"
+        select_skin: Select this skin when posting your work.
+        use_css_class_html: 'In the HTML of your text, you would then give the word this class: <code>%{code_snippet}</code>'
+      faq: Skins and Archive Interface FAQ
+      limitations_html: Work skins will <strong>only</strong> affect the body of the work they are applied to—you can't change the Archive navigation or background with them. What you can do, however, is create your own classes. For instance, you can change the color of some of your text, indent some paragraphs in a particular way, and so on.
+      page_heading: Work Skins
+      refer_tutorial_faq_html: Refer to %{tutorial_link} and %{faq_link} for more information.
+      tutorial: 'Tutorial: Creating a Work Skin'
   home:
     about:
       ao3:
@@ -2844,6 +2876,7 @@ en:
       draft: " (Draft)"
       no_works: You have no works or drafts to edit.
     skin:
+      help_title: Work skins
       select: Select work skin
     work_approved_children:
       inspired_by:

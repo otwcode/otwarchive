@@ -1,0 +1,23 @@
+<h4><%= t(".page_heading") %></h4>
+
+<p><%= t(".description_html") %></p>
+
+<p><%= t(".limitations_html") %></p>
+
+<p><%= t(".example.introduction") %></p>
+
+<ul>
+  <li>
+    <%= t(".example.make_skin_with_css_class_html", create_a_work_skin_link: link_to(t(".example.create_a_work_skin"), new_skin_path(skin_type: "WorkSkin"))) %>
+  </li>
+  <li>
+    <%= t(".example.select_skin") %>
+  </li>
+  <li>
+    <%= t(".example.use_css_class_html", code_snippet: t(".example.code_snippet")) %>
+  </li>
+</ul>
+
+<p>
+  <%= t(".refer_tutorial_faq_html", tutorial_link: link_to(t(".tutorial"), archive_faq_path("tutorial-creating-a-work-skin")), faq_link: link_to(t(".faq"), archive_faq_path("skins-and-archive-interface"))) %>
+</p>

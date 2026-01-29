@@ -7,4 +7,16 @@ class HelpController < ApplicationController
 
   def preferences_locale
   end
+
+  def moderated_commenting
+  end
+
+  def restricted_commenting
+  end
+
+  def restricted_works
+  end
+
+  def work_skins
+  end
 end
