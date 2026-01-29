@@ -48,6 +48,25 @@ describe PreferencesController do
       read_roles = %w[superadmin policy_and_abuse support]
 
       it_behaves_like "an action only authorized admins can access", authorized_roles: read_roles
+
+      context "when locale preferences are enabled for the viewed user" do
+        before do
+          allow($rollout).to receive(:active?).with(:set_locale_preference, user).and_return(true)
+        end
+
+        read_roles.each do |role|
+          it "allows #{role} to view preferences without errors" do
+            admin = create(:admin, roles: [role])
+            fake_login_admin(admin)
+            
+            get :index, params: { user_id: user.login }
+            
+            expect(assigns(:user)).to eq(user)
+            expect(assigns(:preference)).to eq(user.preference)
+            expect(response).to be_successful
+          end
+        end
+      end
     end
   end
 

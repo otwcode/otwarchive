@@ -73,7 +73,7 @@
       <dt><%= f.label :time_zone, t(".your_time_zone") %></dt>
       <dd><%= f.time_zone_select :time_zone, nil, default: Time.zone.name %></dd>
       <% if $rollout.active?(:set_locale_preference, @user) %>
-        <dt><%= f.label :preferred_locale, t(".your_locale") %> <%= link_to_help_modal(help_preferences_locale_path, t(".locale_help_title", locale: current_user.preference.locale_for_mails)) %></dt>
+        <dt><%= f.label :preferred_locale, t(".your_locale") %> <%= link_to_help_modal(help_preferences_locale_path, t(".locale_help_title", locale: current_user&.preference&.locale_for_mails)) %></dt>
         <dd><%= f.select :preferred_locale, locale_options_for_select(@available_locales, "id"),
                   default: @preference.preferred_locale %></dd>
       <% end %>
