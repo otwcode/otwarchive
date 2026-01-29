@@ -39,6 +39,10 @@ en:
       subject: "[%{app_name}] Your AO3 admin account"
       url: Admin login URL
       username: Admin username
+    totp_2fa_backup_codes:
+      created: 'A set of new backup codes has been requested for your account, and your old backup codes have been invalidated. Please use one of the following codes to log in:'
+      do_rely_on: We strongly recommend that you do not rely on the use of backup codes to access your account. Once you have logged in, please disable two-factor authentication and set it up again.
+      subject: "[%{app_name}] Your admin account backup codes"
   comment_mailer:
     comment_notification:
       chapter:
