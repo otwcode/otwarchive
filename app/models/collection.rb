@@ -364,19 +364,23 @@ class Collection < ApplicationRecord
   @queue = :collection
 
   def reveal!
-    async(:reveal_collection_items)
+    async_after_commit(:reveal_collection_items)
   end
 
   def reveal_authors!
-    async(:reveal_collection_item_authors)
+    async_after_commit(:reveal_collection_item_authors)
   end
 
   def reveal_collection_items
+    return if unrevealed?
+
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
     send_reveal_notifications
   end
 
   def reveal_collection_item_authors
+    return if anonymous?
+
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
   end
 
