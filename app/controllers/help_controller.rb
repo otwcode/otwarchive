@@ -7,4 +7,7 @@ class HelpController < ApplicationController
 
   def preferences_locale
   end
+
+  def skins_creating
+  end
 end
