@@ -182,6 +182,7 @@ Feature: Comment Moderation
     When I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
     Then I should see "A moderated reply"
+      And "Thread" should appear before "Parent Thread"
     When I press "Approve"
     Then I should see "Comment approved"
     When I view the work "Moderation"
