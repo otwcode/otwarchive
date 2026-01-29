@@ -1,4 +1,7 @@
 <!--page description, messages-->
+<% if !@work.posted? %>
+  <p class="notice"><%= t("works.show.unposted_deletion_notice_html", deletion_date: date_in_zone(@work.created_at + 29.days)) %></p>
+<% end %>
 <% if @work.unrevealed? %>
   <%= render "works/work_unrevealed_notice" %>
 <% end %>
