@@ -145,6 +145,14 @@ describe AbuseReport do
       end
     end
 
+    shared_examples "enough comment reports" do |url|
+      let(:report) { build(:abuse_report, url: url) }
+      it "can't be submitted" do
+        expect(report.save).to be_falsey
+        expect(report.errors[:base].first).to include("This comment has already been reported.")
+      end
+    end
+
     shared_examples "alright" do |url|
       let(:report) { build(:abuse_report, url: url) }
       it "can be submitted" do
@@ -195,6 +203,9 @@ describe AbuseReport do
       it_behaves_like "enough already", "http://archiveofourown.org/works/789/chapters/123?ending=1"
       it_behaves_like "enough already", "http://archiveofourown.org/works/789/chapters/123?ending=2#major-character-death"
 
+      # a comment on the work
+      it_behaves_like "alright", "http://archiveofourown.org/works/789/comments/876"
+
       # the same work: variations we don't cover
       it_behaves_like "alright", "http://archiveofourown.org/chapters/123"
       it_behaves_like "alright", "http://archiveofourown.org/comments/show_comments?work_id=789"
@@ -212,6 +223,59 @@ describe AbuseReport do
         before { travel(32.days) }
 
         it_behaves_like "alright", work_url
+      end
+    end
+
+    context "for a comment reported the maximum number of times" do
+      comment_url = "http://archiveofourown.org/comments/876"
+
+      before do
+        ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_MAX.times do
+          create(:abuse_report, url: comment_url)
+        end
+        expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_MAX)
+      end
+
+      # obviously
+      it_behaves_like "enough comment reports", comment_url
+
+      # the same comment, different protocol
+      it_behaves_like "enough comment reports", "https://archiveofourown.org/comments/876"
+
+      # the same comment, with parameters/anchors
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/comments/876?smut=yes"
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/comments/876#timeline"
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/comments/876?smut=yes#timeline"
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/comments/876/?smut=yes"
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/comments/876/#timeline"
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/comments/876/?smut=yes#timeline"
+
+      # the same comment, under admin_posts
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/admin_posts/789/comments/876"
+
+      # the same comment, under works
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/works/789/comments/876"
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/works/789/chapters/123/comments/876"
+
+      # the same comment, under chapters
+      it_behaves_like "enough comment reports", "http://archiveofourown.org/chapters/123/comments/876"
+
+      # the same comment: variations we don't cover
+      it_behaves_like "alright", "https://archiveofourown.org/comments/add_comment_reply?chapter_id=123&id=876"
+
+      # not the same comment
+      it_behaves_like "alright", "http://archiveofourown.org/comments/9009"
+      it_behaves_like "alright", "http://archiveofourown.org/comments/87"
+
+      # unrelated
+      it_behaves_like "alright", "http://archiveofourown.org/works/876"
+      it_behaves_like "alright", "http://archiveofourown.org/works/876/comments"
+      it_behaves_like "alright", "http://archiveofourown.org/users/someone"
+
+      context "after the over-reporting period" do
+        before { travel(ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD.days) }
+
+        it_behaves_like "alright", comment_url
       end
     end
 
