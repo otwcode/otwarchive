@@ -232,7 +232,7 @@ TAGGINGS_COUNT_MIN_CACHE_COUNT: 1000
 # For tagging changes, we only reindex tags used less than a certain number of times
 TAGGINGS_COUNT_REINDEX_LIMIT: 1000
 
-# How many rows we should get from audits for historic email and login values for users
+# How many rows we should get from audits for backfilling user history tables
 USER_HISTORIC_VALUES_LIMIT: 10_000
 
 # how many signups in a challenge before we move to static summaries generated hourly

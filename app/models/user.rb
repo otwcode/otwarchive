@@ -523,11 +523,12 @@ class User < ApplicationRecord
   # Looks up all past values of the given field, excluding the current value of
   # the field:
   def historic_values(field)
-    field = field.to_s
-
-    audits.order(id: :desc).limit(ArchiveConfig.USER_HISTORIC_VALUES_LIMIT).filter_map do |audit|
-      audit.audited_changes[field]
-    end.flatten.uniq.without(self[field])
+    case field
+    when "login"
+      past_usernames.pluck(:username).uniq
+    when "email"
+      past_emails.pluck(:email_address).uniq
+    end
   end
 
   private
