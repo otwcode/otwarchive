@@ -525,9 +525,9 @@ class User < ApplicationRecord
   def historic_values(field)
     case field
     when "login"
-      past_usernames.pluck(:username).distinct
+      past_usernames.pluck(:username).uniq
     when "email"
-      past_emails.pluck(:email_address).distinct
+      past_emails.pluck(:email_address).uniq
     end
   end
 
