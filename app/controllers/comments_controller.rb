@@ -406,7 +406,7 @@ class CommentsController < ApplicationController
         respond_to do |format|
           format.html do
             if request.referer&.match(/inbox/)
-              redirect_to user_inbox_path(current_user, filters: filter_params[:filters], page: params[:page])
+              redirect_to user_inbox_path(current_user, filters: filter_params, page: params[:page])
             elsif request.referer&.match(/new/) || (@comment.unreviewed? && current_user)
               # If the referer is the new comment page, go to the comment's page
               # instead of reloading the full work.
@@ -492,7 +492,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html do
         if params[:approved_from] == "inbox"
-          redirect_to user_inbox_path(current_user, page: params[:page], filters: filter_params[:filters])
+          redirect_to user_inbox_path(current_user, page: params[:page], filters: filter_params)
         elsif params[:approved_from] == "home"
           redirect_to root_path
         elsif @comment.ultimate_parent.is_a?(AdminPost)
@@ -756,6 +756,6 @@ class CommentsController < ApplicationController
   end
 
   def filter_params
-    params.permit!
+    params.slice(:filters).permit(filters: [:date, :read, :replied_to])[:filters]
   end
 end
