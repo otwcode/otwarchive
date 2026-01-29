@@ -639,6 +639,28 @@ Feature: Gift Exchange Challenge
     Then I should see "My Assignments"
       And I should not see "Awesome Gift Exchange"
 
+  Scenario: Information regarding the status of an assignment is not confusing (AO3-7140)
+    Given everyone has their assignments for "Non Confusing Exchange"
+    When I am logged in as "myname1"
+      And I go to the assignments page for "myname1"
+    Then I should see "My Assignments"
+      And I should see "Non Confusing Exchange"
+    When I follow "Fulfill"
+      And I fill in the basic work information for "InProgress"
+      And I press "Preview"
+      And I go to the assignments page for "myname1"
+    Then I should see "(draft)"
+      And I should see "Status: Unposted"
+      And I should see "Created"
+    When I post the work "InProgress"
+      And I go to the assignments page for "myname1"
+      And I follow "Completed Assignments"
+    Then I should see "InProgress"
+      And I should not see "Status: Unposted"
+      And I should not see "Created"
+      And I should not see "(draft)"
+      And I should see "Status: Complete"
+
   Scenario: A mod can purge assignments after they have been sent, but must
   first confirm the action
     Given everyone has their assignments for "Bad Gift Exchange"
