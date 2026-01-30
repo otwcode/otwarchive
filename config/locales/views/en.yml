@@ -351,6 +351,7 @@ en:
           rejected: Rejected Skins
           skins: Skins
         spam: Spam
+        support_notices: Support Notices
         users:
           email_search: Bulk Email Search
           manage: Manage Users
@@ -423,6 +424,49 @@ en:
         update: Update
       update:
         success: Archive settings were successfully updated.
+    support_notices:
+      confirm_delete:
+        delete: Delete Support Notice
+        submit: Yes, Delete Support Notice
+        warning_html: Are you sure you want to <strong><em>delete</em></strong> this support notice?
+      edit:
+        page_heading: Edit Support Notice
+      index:
+        page_heading: Support Notices
+      navigation:
+        confirm_delete: Are you sure you want to delete this support notice?
+        delete: Delete Support Notice
+        edit: Edit Support Notice
+        index: Support Notices
+        new: New Support Notice
+      new:
+        page_heading: New Support Notice
+      show:
+        page_heading: Support Notice
+      support_notice_blurb:
+        active: Active
+        confirm_delete: Are you sure you want to delete this support notice?
+        delete: Delete
+        edit: Edit
+        landmark: Support Notice Actions
+      support_notice_form:
+        actions:
+          create: Create Support Notice
+          update: Update Support Notice
+        active: Active
+        landmark:
+          actions: Actions
+          content: Support Notice
+        legend:
+          actions: Actions
+          content: Support Notice
+        required_information: Required information
+        text: Support notice text
+        type:
+          caution: Caution
+          error: Error
+          label: Support notice type
+          notice: Notice
     totp:
       confirm_disable:
         page_heading: Disable Two-Step Verification

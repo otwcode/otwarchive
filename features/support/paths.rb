@@ -301,6 +301,8 @@ module NavigationHelpers
       new_admin_password_path
     when /^the edit admin password page$/i
       edit_admin_password_path
+    when /^the support notices page$/i
+      admin_support_notices_path
 
     # Here is an example that pulls values out of the Regexp:
     #

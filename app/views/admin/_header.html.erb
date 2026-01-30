@@ -56,6 +56,10 @@
       <li><%= link_to t(".nav.banners"), admin_banners_path %></li>
     <% end %>
 
+    <% if policy(SupportNotice).index? %>
+      <li><%= link_to t(".nav.support_notices"), admin_support_notices_path %></li>
+    <% end %>
+
     <% if policy(Skin).index? %>
       <li class="dropdown">
         <%= link_to t(".nav.skins.skins"), admin_skins_path %>
