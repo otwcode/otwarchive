@@ -1,3 +1,9 @@
+### GIVEN
+
+Given "an active support notice" do
+  FactoryBot.create(:support_notice, :active, notice_content: "This is some support notice text")
+end
+
 ### WHEN
 
 When /^I create an?( active)?(?: "([^"]*)")? support notice$/ do |active, notice_type| # rubocop:disable Cucumber/RegexStepName

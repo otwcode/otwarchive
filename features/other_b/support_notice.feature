@@ -69,3 +69,11 @@ Feature: Notices on support page
     Then I should see the "caution" support notice
     When I follow "2"
     Then I should see the "error" support notice
+
+  Scenario: Support notices are still displayed after form submission is rejected
+    Given an active support notice
+    When I go to the support page
+    Then I should see the support notice
+    When I press "Send"
+    Then I should see "Sorry! We couldn't save this feedback"
+      And I should see the support notice
