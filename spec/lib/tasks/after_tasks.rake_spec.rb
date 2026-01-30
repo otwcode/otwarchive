@@ -466,10 +466,10 @@ describe "rake After:reindex_unrevealed_bookmarkable" do
     let(:work) { create(:work) }
     let(:bookmark) { create(:bookmark, bookmarkable: work) }
 
-    it "does not reindex the bookmarkable" do
+    it "does not reindex the bookmark" do
       expect do
         subject.invoke
-      end.not_to add_to_reindex_queue(bookmark.bookmarkable, :main)
+      end.not_to add_to_reindex_queue(bookmark, :background)
     end
   end
 
@@ -482,10 +482,10 @@ describe "rake After:reindex_unrevealed_bookmarkable" do
 
     let(:bookmark) { create(:bookmark, bookmarkable: work) }
 
-    it "reindexes the bookmarkable" do
+    it "reindexes the bookmark" do
       expect do
         subject.invoke
-      end.to add_to_reindex_queue(bookmark.bookmarkable, :main)
+      end.to add_to_reindex_queue(bookmark, :background)
     end
   end
 end
