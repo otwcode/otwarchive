@@ -133,15 +133,16 @@ class Comment < ApplicationRecord
       user_ip: ip_address,
       user_agent: user_agent,
       user_role: user_role,
-      cloudflare_bot_score: cloudflare_bot_score,
-      cloudflare_ja3_hash: cloudflare_ja3_hash,
-      cloudflare_ja4: cloudflare_ja4,
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
       comment_content: comment_content,
       comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
       comment_post_modified_gmt: comment_post_modified_gmt
     }
+
+    attributes[:cloudflare_bot_score] = cloudflare_bot_score if cloudflare_bot_score
+    attributes[:cloudflare_ja3_hash] = cloudflare_ja3_hash if cloudflare_ja3_hash
+    attributes[:cloudflare_ja4] = cloudflare_ja4 if cloudflare_ja4
 
     attributes[:recheck_reason] = "edit" if will_save_change_to_edited_at? && will_save_change_to_comment_content?
 
