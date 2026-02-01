@@ -92,8 +92,10 @@ class CommentsController < ApplicationController
 
   def check_pseud_ownership
     return unless params[:comment][:pseud_id]
+
     pseud = Pseud.find(params[:comment][:pseud_id])
     return if pseud && current_user && current_user.pseuds.include?(pseud)
+
     flash[:error] = ts("You can't comment with that pseud.")
     redirect_to root_path
   end
@@ -217,14 +219,17 @@ class CommentsController < ApplicationController
   def check_permission_to_review
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent)
+
     flash[:error] = ts("Sorry, you don't have permission to see those unreviewed comments.")
     redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
 
   def check_permission_to_access_single_unreviewed
     return unless @comment.unreviewed?
+
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
+
     flash[:error] = ts("Sorry, that comment is currently in moderation.")
     redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
@@ -421,7 +426,10 @@ class CommentsController < ApplicationController
             elsif @comment.unreviewed?
               redirect_to_all_comments(@commentable)
             else
-              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
+              # keep the user in chapter by chapter view if that was the view they were in when they commented
+              # An entire work view url would look like works/:id
+              user_chose_to_view_full_work = (current_user.try(:preference).try(:view_full_works) && request.referer&.match(/chapters/).nil?)
+              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true" || user_chose_to_view_full_work), page: params[:page] })
             end
           end
         end
@@ -726,8 +734,9 @@ class CommentsController < ApplicationController
                   page: options[:page],
                   anchor: options[:anchor])
     else
-      if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
-        commentable = commentable.work
+      if commentable.is_a?(Chapter)
+        user_chose_to_view_full_work = current_user.try(:preference).try(:view_full_works) && options[:view_full_work] != false 
+        commentable = commentable.work if options[:view_full_work] || user_chose_to_view_full_work
       end
       redirect_to polymorphic_path(commentable,
                                    options.slice(:show_comments,
