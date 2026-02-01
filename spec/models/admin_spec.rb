@@ -128,4 +128,15 @@ describe Admin, :ready do
       end
     end
   end
+
+  describe "#generate_otp_backup_codes!" do
+    let(:admin) { create(:admin) }
+
+    it "invalidates existing backup codes" do
+      admin.generate_otp_backup_codes!
+      original_codes = admin.otp_backup_codes
+      admin.generate_otp_backup_codes!
+      expect(admin.otp_backup_codes).not_to include(*original_codes)
+    end
+  end
 end

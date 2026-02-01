@@ -382,6 +382,11 @@ en:
         page_heading: Log In as Admin
         reset_link: Forgot admin password?
         submit: Log In as Admin
+      totp:
+        enter_totp: Enter the verification code from your authenticator app to finish logging in to your admin account.
+        page_heading: Two-Step Verification
+        submit: Log In as Admin
+        totp_label: 6-digit verification code
     settings:
       index:
         fields:
@@ -418,6 +423,39 @@ en:
         update: Update
       update:
         success: Archive settings were successfully updated.
+    totp:
+      confirm_disable:
+        page_heading: Disable Two-Step Verification
+        password_label: Admin password
+        required_before_disabling: Before disabling two-step verification, you need to verify your password.
+        submit: Disable Two-Step Verification
+      new:
+        page_heading: Confirm Password
+        password_label: Admin password
+        required_before_enabling: Before enabling two-step verification, you need to verify your password.
+        submit: Continue
+      reauthenticate_create:
+        about:
+          effects_of_enabling: When two-step verification is enabled, logging in to your %{app_name} admin account will require both your admin password and a verification code from your authenticator app.
+          general_info: Two-step verification, also called two-factor authentication, helps prevent other people from accessing your account even if they know your password. All you need to set it up is an authenticator app such as 1Password, Google Authenticator, or Twilio Authy.
+          heading: About Two-Step Verification
+        app_setup:
+          heading: 'Step 1: Set up your authenticator app'
+          instructions: Use your authenticator app to scan the QR code or enter the manual setup key. The app will give you a 6-digit code, which you'll use in the next step.
+          key:
+            format_note: Spaces and capitalization don't matter
+            heading: Setup Key
+        enter_code:
+          heading: 'Step 2: Enter your 6-digit code'
+          instructions: Enter the 6-digit code from your app to enable two-step verification
+          label: 6-digit code
+          please_wait: Please wait...
+          submit: Enable Two-Step Verification
+        page_heading: Set Up Two-Step Verification
+      show_backup_codes:
+        finish: Finish
+        page_heading: Two-Step Verification Backup Codes
+        write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
     user_creations:
       confirm_remove_pseud:
         caution: Are you sure you want to remove the creator's pseud from this work?
@@ -453,13 +491,21 @@ en:
       page_heading: AO3 News
   admins:
     index:
+      account:
+        heading: Account Settings
+        roles:
+          label: Admin roles
+          none: You currently have no admin roles assigned to you.
+        totp:
+          disable_totp: Disable two-step verification
+          disabled: Disabled
+          enable_totp: Set up two-step verification with an authenticator app
+          enabled: Enabled
+          label: Two-step verification
+          regenerate_backup_codes: Regenerate backup codes
       confidentiality_reminder: You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s).
       log_out_reminder: Please remember to log out before resuming your normal site activity!
       page_title: Hi, %{login}!
-      responsibility: With great power comes great responsibility.
-      roles:
-        heading: 'Your admin roles:'
-        none: You currently have no admin roles assigned to you.
   archive_faqs:
     admin_index:
       confirm_delete: Are you sure you want to delete this FAQ category?
@@ -848,6 +894,11 @@ en:
       updated: 'Updated: %{date}'
       words: 'Words: %{count_with_delimiters}'
   errors:
+    '429':
+      browse_more_slowly: If you are receiving this error repeatedly, try browsing more slowly or loading fewer pages at a time.
+      made_too_many_requests: You have made too many requests in a short time period. Please wait a while before trying again.
+      page_heading: Error 429
+      subtitle: Too Many Requests
     timeout_error:
       contact_support: contact Support
       html: If you still get this error after a few tries, you can %{contact_support_link}.

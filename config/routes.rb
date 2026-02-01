@@ -48,11 +48,12 @@ Rails.application.routes.draw do
 
   #### ERRORS ####
 
-  get '/403', to: 'errors#403'
-  get '/404', to: 'errors#404'
-  get '/422', to: 'errors#422'
-  get '/500', to: 'errors#500'
-  get '/auth_error', to: 'errors#auth_error'
+  get "/403", to: "errors#403"
+  get "/404", to: "errors#404"
+  get "/422", to: "errors#422"
+  get "/429", to: "errors#429"
+  get "/500", to: "errors#500"
+  get "/auth_error", to: "errors#auth_error"
   get "/timeout_error", to: "errors#timeout_error"
 
   #### DOWNLOADS ####
@@ -231,7 +232,14 @@ Rails.application.routes.draw do
     end
     resources :api
   end
-  resources :admins, only: [:index]
+  resources :admins, only: [:index] do
+    resource :totp, controller: "admin/totp", only: [:create, :new] do
+      get :show_backup_codes
+      get :confirm_disable
+      post :disable
+      post :reauthenticate_create
+    end
+  end
 
   post '/admin/api/new', to: 'admin/api#create'
 
