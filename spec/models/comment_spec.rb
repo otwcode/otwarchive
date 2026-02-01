@@ -251,6 +251,10 @@ describe Comment do
         expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.pseud.user.email)
       end
 
+      it "has cloudflare bot score" do
+        expect(subject.akismet_attributes[:cloudflare_bot_score]).to eq(subject.cloudflare_bot_score)
+      end
+
       context "when the comment is being created" do
         let(:new_comment) do
           Comment.new(commentable: subject,
