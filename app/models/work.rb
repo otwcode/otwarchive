@@ -1208,6 +1208,7 @@ class Work < ApplicationRecord
       return as_json(
         root: false,
         bookmarkable_type: "Work",
+        unrevealed: true,
         bookmarkable_join: { name: "bookmarkable" }
       ) 
     end
