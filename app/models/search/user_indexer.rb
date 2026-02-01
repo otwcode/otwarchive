@@ -4,7 +4,7 @@ class UserIndexer < Indexer
   end
 
   def self.klass_with_includes
-    User.includes(:pseuds, :roles, :audits)
+    User.includes(:pseuds, :roles, :user_past_emails, :user_past_usernames)
   end
 
   def self.index_all(options = {})
