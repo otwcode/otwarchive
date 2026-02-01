@@ -6,8 +6,8 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 7.2"
-gem "rails-i18n"
+gem "rails", "~> 8.0.0"
+gem "rails-i18n", "~> 8.0", git: "https://github.com/svenfuchs/rails-i18n", ref: "54c1c7c2fdcc311427ec6f1dadd298a60db1ddef"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
 
@@ -109,13 +109,13 @@ gem 'kgio', '2.10.0'
 gem "marcel", "1.0.2"
 
 # Library for helping run pt-online-schema-change commands:
-gem "departure", "~> 6.8"
+gem "departure", "~> 8.0"
 
 gem "rack-timeout"
 gem "puma_worker_killer"
 
 group :test do
-  gem "rspec-rails", "~> 6.0"
+  gem "rspec-rails", "~> 8.0"
   gem 'pickle'
   gem "shoulda-matchers"
   gem "capybara"
