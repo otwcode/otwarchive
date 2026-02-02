@@ -1109,6 +1109,7 @@ en:
           examples_header: 'Examples:'
           font_size_example_html: 'Inside the "body" tag, set the font size slightly larger than the baseline: %{font_size_css_code}'
           line_of_css_html: 'A line of CSS code looks pretty much like this: %{example_css_code}'
+          property: property
           selector: selector
           value: value
         header: 'If you are new to CSS, here are the basics:'
@@ -1126,7 +1127,7 @@ en:
           cannot: cannot
           font_names_html: In the %{font_family_code} property, we allow you to specify any font with an alphanumeric name. You can (but don't have to) specify the name with single or double quotes around it, just make sure the quotes match. (e.g., 'Gill Sans' and "Gill Sans" are both fine; 'Gill Sans" won't work.) Keep in mind that a font has to be installed on the user's operating system to work. It's a good idea when specifying fonts to use fallbacks in case your first-choice font isn't available. See %{web_safe_fonts_link}.
           no_font_face_html: We %{cannot_bold} allow the %{font_face_code} attribute. Sorry! If you have an uncommon font that you want to use in a skin you would like to share, we suggest adding a comment in the skin's "Description" field with a pointer to a place for users to download the font themselves, and using web-safe fonts as fallbacks.
-          separate_properties_html: Unfortunately, you cannot use the %{font_code} shorthand in your CSS. All font properties have to be specified separately, e.g.,
+          separate_properties_html: Unfortunately, you cannot use the %{font_code} shorthand in your CSS. All font properties have to be specified separately, e.g., %{font_properties_css_code}
           web_safe_fonts: a set of web-safe fonts with fallbacks
         header: Font and Font Family
       intro:
@@ -1135,7 +1136,8 @@ en:
       numeric_values:
         description:
           em_unit_html: 'PS: we highly encourage learning about and using %{em_code}, which lets you set things relative to the viewer''s current font size! It will make your layouts much more flexible and responsive to different browser/font settings.'
-          precision_html: 'You can specify numeric values up to two decimal places, either as percentages or in %{various_units_link}:'
+          precision_html: 'You can specify numeric values up to two decimal places, either as percentages or in %{various_units_link}: %{units_list_code}'
+          units_list: "%{cm_code}, %{em_code}, %{ex_code}, %{in_code}, %{mm_code}, %{pc_code}, %{pt_code}, %{px_code}"
           various_units: various units
         header: Numeric Values
       one_declaration_per_ruleset:
@@ -2324,7 +2326,7 @@ en:
       icon: Upload a preview (png, jpeg or gif)
       public: Apply to make public
       skin_type: Type
-      skins_creating_help_title: Creating skins
+      skins_creating_help_title: Skins creating
       title: Title
     revert_skin_form:
       revert_to_default: Revert to Default Skin
