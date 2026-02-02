@@ -203,7 +203,7 @@ public
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
-      @admin_banner = Rails.cache.fetch("admin_banner-v1") do
+      @admin_banner = Rails.cache.fetch("v1/admin_banner") do
         banner = AdminBanner.where(active: true).last
         banner.nil? ? "" : banner
       end

@@ -22,7 +22,7 @@ class AdminBanner < ApplicationRecord
 
   def expire_cached_admin_banner
     unless Rails.env.development?
-      Rails.cache.delete("admin_banner-v1")
+      Rails.cache.delete("v1/admin_banner")
     end
   end
 end

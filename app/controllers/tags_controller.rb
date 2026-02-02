@@ -80,7 +80,7 @@ class TagsController < ApplicationController
       @collections = @tag.collections.paginate(page: params[:page])
     end
     # cache the children, since it's a possibly massive query
-    @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children/v1" do
+    @tag_children = Rails.cache.fetch "v1/views/tags/#{@tag.cache_key}/children" do
       children = {}
       (@tag.child_types - %w(SubTag)).each do |child_type|
         tags = @tag.send(child_type.underscore.pluralize).order('taggings_count_cache DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
