@@ -48,7 +48,6 @@ describe PreferencesController do
       read_roles = %w[superadmin policy_and_abuse support]
 
       it_behaves_like "an action only authorized admins can access", authorized_roles: read_roles
-
     end
   end
 
