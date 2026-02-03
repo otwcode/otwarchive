@@ -195,6 +195,60 @@ describe WorksController, work_search: true do
       it_redirects_to_simple(user_path(banned_user))
       expect(flash[:error]).to include("Your account has been banned.")
     end
+
+    context "when collection is closed" do
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: true)) }
+      let(:user) { create(:user) }
+
+      before { fake_login_known_user(user) }
+
+      it "redirects to collection page with error for non-maintainers" do
+        get :new, params: { collection_id: collection.name }
+        it_redirects_to_with_error(collection_path(collection), "Sorry, the collection Excalibur is closed. New works cannot be added to it.")
+      end
+    end
+
+    context "when collection is closed but user is owner" do
+      let(:user) { create(:user) }
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: true)) }
+      let!(:participant) { collection.collection_participants.create(pseud: user.default_pseud, participant_role: CollectionParticipant::OWNER) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "allows access to new work form" do
+        get :new, params: { collection_id: collection.name }
+        expect(response).to render_template("new")
+      end
+    end
+
+    context "when collection is closed but user is maintainer" do
+      let(:user) { create(:user) }
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: true)) }
+      let!(:participant) { collection.collection_participants.create(pseud: user.default_pseud, participant_role: CollectionParticipant::MODERATOR) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "allows access to new work form" do
+        get :new, params: { collection_id: collection.name }
+        expect(response).to render_template("new")
+      end
+    end
+
+    context "when collection is open" do
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: false)) }
+      let(:user) { create(:user) }
+
+      before { fake_login_known_user(user) }
+
+      it "allows access to new work form" do
+        get :new, params: { collection_id: collection.name }
+        expect(response).to render_template("new")
+      end
+    end
   end
 
   describe "create" do
