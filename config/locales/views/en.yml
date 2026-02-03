@@ -2766,7 +2766,7 @@ en:
         confirm_password_validation: Please enter the same password in both fields.
         password: Password
         password_requirements: "%{minimum} to %{maximum} characters"
-        password_validation: Please enter a password! (At least %{minimum} letters long, please.)
+        password_validation: Please enter a password! (At least %{minimum} characters long, please.)
         username: Username
         username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
         username_validation: You need a username! (At least %{minimum} letters long, please.)
