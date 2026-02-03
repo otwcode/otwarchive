@@ -59,6 +59,7 @@ Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name,
   # creation dates, so that they will be listed in the right order:
   step "it is currently 1 second from now"
 
+  step %{the user "skinner" exists and has the role "official"}
   step %{I am logged in as "skinner"}
   step %{I set up the skin "#{skin_name}" with css "#{css}"}
   attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
@@ -90,16 +91,10 @@ Given /^I have loaded site skins$/ do
   Skin.load_site_css
 end
 
-Given "the approved public skin {string} with css {string}" do |skin_name, css|
-  step %{the user "skinner" exists and has the role "official"}
-  step %{I am logged in as "skinner"}
-  step %{I set up the skin "#{skin_name}" with css "#{css}"}
-  attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
-  check("skin_public")
-  step %{I submit}
-  step %{I should see "Skin was successfully created"}
+Given /^the approved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
+  step %{the unapproved public skin "#{skin_name}" with css "#{css}"}
   step %{I approve the skin "#{skin_name}"}
-  step %{I am logged out}
+  step "I am logged out"
 end
 
 Given /^the approved public skin "([^"]*)"$/ do |skin_name|

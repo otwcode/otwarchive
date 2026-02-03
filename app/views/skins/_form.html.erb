@@ -29,7 +29,7 @@
 
     <% if @current_user&.official || User.current_user.is_a?(Admin) %>
       <dt><%= f.label :public, t(".public") %></dt>
-      <dd><%= f.check_box :public %></dd>
+      <dd><%= f.check_box :public, disabled: User.current_user.is_a?(Admin) %></dd>
     <% end %>
   </dl>
 </fieldset>

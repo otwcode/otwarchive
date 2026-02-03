@@ -187,7 +187,8 @@ class SkinsController < ApplicationController
       media: [],
       skin_parents_attributes: [
         :id, :position, :parent_skin_id, :parent_skin_title, :_destroy
-      ]]
+      ]
+    ]
 
     allowed_attributes += [:public] if current_user.is_a?(User) && current_user.official
 
