@@ -551,17 +551,16 @@ class User < ApplicationRecord
     
     pseud_to_update = pseuds.where(name: login_before_last_save).first
     # If the new login is (case insensitive) different from the old login
-    if login != login_before_last_save.downcase
+    if login.downcase != login_before_last_save.downcase
       new_pseud = pseuds.where(name: login).first
-      # If the user does not have an existing pseud for the new login
-      if new_pseud.blank?
-        # If the pseud for the old login doesn't exist
-        if pseud_to_update.blank?
-          # shouldn't be able to get here, but just in case
-          Pseud.create!(name: login, user_id: id)
-        end
-      else
-        pseud_to_update = new_pseud
+      # If the user does have an existing pseud for the new login
+      if new_pseud.present?
+         pseud_to_update = new_pseud
+      # If the pseud for the old login doesn't exist
+      elsif pseud_to_update.blank?
+        # shouldn't be able to get here, but just in case
+        Pseud.create!(name: login, user_id: id)
+        return
       end
     end
     pseud_to_update.name = login
