@@ -555,7 +555,7 @@ class User < ApplicationRecord
       new_pseud = pseuds.where(name: login).first
       # If the user does have an existing pseud for the new login
       if new_pseud.present?
-         pseud_to_update = new_pseud
+        pseud_to_update = new_pseud
       # If the pseud for the old login doesn't exist
       elsif pseud_to_update.blank?
         # shouldn't be able to get here, but just in case

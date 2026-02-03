@@ -433,7 +433,7 @@ describe User do
       let(:new_pseud) { build(:pseud, name: "New_Usernamé") }
 
       before do
-        existing_user.pseuds = Array.new
+        existing_user.pseuds = []
         
         existing_user.update!(login: "new_UsernaMe")
         existing_user.reload
