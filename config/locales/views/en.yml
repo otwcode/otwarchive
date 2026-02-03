@@ -811,6 +811,14 @@ en:
       tags: Tags
       works: Works (%{count})
   comments:
+    comment_actions:
+      approve: Approve
+      comment: Comment
+      comment_actions: Comment Actions
+      parent: Parent
+      parent_thread: Parent Thread
+      reply_to_this: Reply to this comment
+      thread: Thread
     comment_form:
       anonymous_creator: Anonymous Creator
       anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
