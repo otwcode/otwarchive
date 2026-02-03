@@ -1,11 +1,24 @@
-# frozen_string_literal: true
-
 require "spec_helper"
 
 describe Comment do
   include ActiveJob::TestHelper
   def queue_adapter_for_test
     ActiveJob::QueueAdapters::TestAdapter.new
+  end
+
+  it "can have an id larger than unsigned int" do
+    comment = build(:comment, id: 5_294_967_295)
+    expect(comment).to be_valid
+    expect(comment.save).to be_truthy
+  end
+
+  it "can be created as a thread on a comment whose ID is larger than unsigned it" do
+    commentable = create(:comment, id: 5_294_967_295)
+    comment = build(:comment, commentable: commentable)
+    expect(comment).to be_valid
+    expect(comment.save).to be_truthy
+    expect(comment.commentable).to eq(commentable)
+    expect(comment.thread).to eq(commentable.id)
   end
 
   describe "validations" do

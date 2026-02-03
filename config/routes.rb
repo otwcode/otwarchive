@@ -199,6 +199,13 @@ Rails.application.routes.draw do
         post :bulk_update
       end
     end
+    scope :notices do
+      resources :support_notices, path: "support" do
+        member do
+          get :confirm_delete
+        end
+      end
+    end
     resources :user_creations, only: [:destroy] do
       member do
         put :hide
@@ -232,7 +239,14 @@ Rails.application.routes.draw do
     end
     resources :api
   end
-  resources :admins, only: [:index]
+  resources :admins, only: [:index] do
+    resource :totp, controller: "admin/totp", only: [:create, :new] do
+      get :show_backup_codes
+      get :confirm_disable
+      post :disable
+      post :reauthenticate_create
+    end
+  end
 
   post '/admin/api/new', to: 'admin/api#create'
 
@@ -637,12 +651,18 @@ Rails.application.routes.draw do
   %w[
     first_login
     preferences_locale
+    tags_fandoms
+    tags_ratings
+    tags_warnings
   ].each do |action|
     get "/help/#{action}", to: "help##{action}"
   end
 
   # Redirects for moved help files
   get "/first_login_help", to: redirect("/help/first_login")
+  get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
+  get "/help/rating-help.html", to: redirect("/help/tags_ratings")
+  get "/help/warning-help.html", to: redirect("/help/tags_warnings")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
