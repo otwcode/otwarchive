@@ -107,7 +107,14 @@ class Comment < ApplicationRecord
     # While we do have tag comments, those are from logged-in users with special
     # access granted by admins, so we never spam check them, unlike comments on
     # works or admin posts.
-    comment_type = ultimate_parent.is_a?(Work) ? "fanwork-comment" : "comment"
+    case ultimate_parent
+    when Work
+      comment_type = "fanwork-comment"
+      comment_post_modified_gmt = ultimate_parent.revised_at.iso8601
+    when AdminPost
+      comment_type = "comment"
+      comment_post_modified_gmt = ultimate_parent.created_at.iso8601
+    end
 
     if pseud_id.nil?
       user_role = "guest"
@@ -126,7 +133,9 @@ class Comment < ApplicationRecord
       user_role: user_role,
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
-      comment_content: comment_content
+      comment_content: comment_content,
+      comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
+      comment_post_modified_gmt: comment_post_modified_gmt
     }
 
     attributes[:recheck_reason] = "edit" if will_save_change_to_edited_at? && will_save_change_to_comment_content?

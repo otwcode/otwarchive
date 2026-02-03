@@ -103,7 +103,7 @@ class WorksController < ApplicationController
         # the subtag is for eg collections/COLL/tags/TAG
         subtag = @tag.present? && @tag != @owner ? @tag : nil
         user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
-        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
+        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_v1", expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
           results = @search.search_results.scope(:for_blurb)
           # calling this here to avoid frozen object errors
           results.items
@@ -125,7 +125,7 @@ class WorksController < ApplicationController
         end
       end
     elsif use_caching?
-      @works = Rails.cache.fetch('works/index/latest/v1', expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
+      @works = Rails.cache.fetch("works/index/latest/v2", expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
         Work.latest.for_blurb.to_a
       end
     else
@@ -242,6 +242,12 @@ class WorksController < ApplicationController
   def new
     @hide_dashboard = true
     @unposted = current_user.unposted_work
+
+    # Check if collection is closed and user doesn't have permission to post
+    if @collection&.closed? && !@collection&.user_is_maintainer?(current_user)
+      flash[:error] = t(".closed_collection", collection_title: @collection.title)
+      redirect_to collection_path(@collection) and return
+    end
 
     if params[:load_unposted] && @unposted
       @work = @unposted

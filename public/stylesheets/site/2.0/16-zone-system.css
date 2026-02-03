@@ -17,6 +17,10 @@ SUBSECTIONS:
   margin-top: 3em;
 }
 
+.system .notice .userstuff {
+  max-width: initial;
+}
+
 /* 1. ZONE: SYSTEM: SPLASH PAGE */
 
 .splash {
@@ -221,13 +225,41 @@ SUBSECTIONS:
   width: 48%;
 }
 
-.sessions-new #new_admin {
+.sessions-new form.login, .sessions-create form.totp {
   width: 75%;
   margin: auto;
 }
 
 .session dt {
   min-width: 0;
+}
+
+.authentication fieldset {
+  background: transparent;
+  border: 1px solid #ddd;
+    box-shadow: none;
+}
+
+.authentication legend {
+  height: auto;
+  width: auto;
+  font-size: inherit;
+  font-weight: normal;
+  padding: 0.5em 0.5em 0;
+    opacity: 1;
+}
+
+.authentication .note {
+  padding-top: 0;
+}
+
+.authentication label {
+  display: block;
+  font-weight: bold;
+}
+
+.authentication input[type="submit"] {
+  vertical-align: bottom;
 }
 
 /* 3. ZONE: SYSTEM: DOCS
@@ -301,7 +333,7 @@ admin role is only admin facing, and changes normal views in role-admin.css
   margin-top: 1.929em;
 }
 
-.feedbacks form .notice {
+.feedbacks form .notice, .feedbacks .banner {
   margin: 0.643em;
 }
 

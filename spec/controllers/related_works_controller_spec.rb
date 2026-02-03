@@ -10,22 +10,16 @@ describe RelatedWorksController do
 
   describe "GET #index" do
     context "for a blank user" do
-      before(:each) do
-        get :index, params: { user_id: "" }
-      end
-
-      it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(search_people_path, "Whose related works were you looking for?")
+      it "raises a RecordNotFound error" do
+        expect { get :index, params: { user_id: "" } }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
     context "for a nonexistent user" do
-      before(:each) do
-        get :index, params: { user_id: "user" }
-      end
-
-      it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(search_people_path, "Sorry, we couldn't find that user")
+      it "raises a RecordNotFound error" do
+        expect { get :index, params: { user_id: "user" } }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 

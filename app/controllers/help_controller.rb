@@ -7,4 +7,13 @@ class HelpController < ApplicationController
 
   def preferences_locale
   end
+
+  def tags_fandoms
+  end
+
+  def tags_ratings
+  end
+
+  def tags_warnings
+  end
 end

@@ -629,5 +629,17 @@ namespace :After do
     end
     puts "Job complete."
   end
+
+  desc "Run backfill for user_past_emails and user_past_usernames"
+  task(backfill: :environment) do
+    User.find_in_batches.with_index do |batch, index|
+      REDIS_GENERAL.sadd?("audits_backfill", batch.map(&:id))
+      
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    AuditsBackfillJob.spawn_jobs
+    puts "Backfill started and running on resque in background"
+  end
   # This is the end that you have to put new tasks above.
 end

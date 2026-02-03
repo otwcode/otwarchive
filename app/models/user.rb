@@ -89,6 +89,10 @@ class User < ApplicationRecord
   has_many :skins, foreign_key: "author_id", dependent: :nullify
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
 
+  # the user's past credentials
+  has_many :user_past_emails, dependent: :destroy
+  has_many :user_past_usernames, dependent: :destroy
+
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :send_wrangler_username_change_notification, if: :is_tag_wrangler?
@@ -96,7 +100,6 @@ class User < ApplicationRecord
   after_update :log_email_change, if: :saved_change_to_email?
   after_update :expire_caches
   before_destroy :remove_user_from_kudos
-
   # Extra callback to make sure readings are deleted in an order consistent
   # with the ReadingsJob.
   #
@@ -195,6 +198,14 @@ class User < ApplicationRecord
 
   def unread_inbox_comments_count
     unread_inbox_comments.with_bad_comments_removed.count
+  end
+
+  def past_emails
+    self.user_past_emails
+  end
+
+  def past_usernames
+    self.user_past_usernames
   end
 
   scope :alphabetical, -> { order(:login) }
@@ -512,11 +523,12 @@ class User < ApplicationRecord
   # Looks up all past values of the given field, excluding the current value of
   # the field:
   def historic_values(field)
-    field = field.to_s
-
-    audits.order(id: :desc).limit(ArchiveConfig.USER_HISTORIC_VALUES_LIMIT).filter_map do |audit|
-      audit.audited_changes[field]
-    end.flatten.uniq.without(self[field])
+    case field
+    when "login"
+      past_usernames.pluck(:username).uniq
+    when "email"
+      past_emails.pluck(:email_address).uniq
+    end
   end
 
   private
@@ -584,6 +596,7 @@ class User < ApplicationRecord
                      else
                        "Old Username: #{login_before_last_save}; New Username: #{login}"
                      end
+    user_past_usernames.create!(username: login_before_last_save, changed_at: self.updated_at)
     create_log_item(options)
   end
 
@@ -600,6 +613,7 @@ class User < ApplicationRecord
       admin_id: current_admin&.id
     }
     options[:note] = "Change made by #{current_admin&.login}" if current_admin
+    user_past_emails.create!(email_address: email_before_last_save, changed_at: self.updated_at)
     create_log_item(options)
   end
 
