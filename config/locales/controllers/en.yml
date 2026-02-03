@@ -348,6 +348,8 @@ en:
       page_title: "%{username} - Drafts"
     edit_tags:
       page_title: Edit Work Tags
+    new:
+      closed_collection: Sorry, the collection %{collection_title} is closed. New works cannot be added to it.
     show:
       page_title:
         unrevealed: Mystery Work
