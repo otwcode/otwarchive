@@ -259,10 +259,11 @@ GEM
     elastic-transport (8.4.1)
       faraday (< 3)
       multi_json
-    elasticsearch (9.2.0)
+    elasticsearch (9.3.0)
       elastic-transport (~> 8.3)
-      elasticsearch-api (= 9.2.0)
-    elasticsearch-api (9.2.0)
+      elasticsearch-api (= 9.3.0)
+    elasticsearch-api (9.3.0)
+      base64
       multi_json
     email_spec (1.6.0)
       launchy (~> 2.1)
@@ -721,7 +722,7 @@ DEPENDENCIES
   devise-pwned_password
   devise-two-factor
   ed25519 (>= 1.2, < 2.0)
-  elasticsearch (= 9.2.0)
+  elasticsearch (= 9.3.0)
   email_spec (= 1.6.0)
   erb_lint (= 0.4.0)
   escape_utils (= 1.2.1)
