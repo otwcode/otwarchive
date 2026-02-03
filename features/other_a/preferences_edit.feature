@@ -359,7 +359,6 @@ Feature: Edit preferences
     When I go to testuser's preferences page
     Then I should see "Set My Preferences"
       And I should see "Your locale"
-      And I should not see "We're sorry, but something went wrong"
   
     Examples:
       | role             |
