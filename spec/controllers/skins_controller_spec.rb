@@ -134,10 +134,6 @@ describe SkinsController do
   end
 
   describe "PUT #update" do
-    let(:basic_allowed_attributes) do
-
-    end
-
     shared_examples "an action guests and random logged-in users can't access" do |attribute:, value:|
       context "when logged in as a user who is not the skin author" do
         before do

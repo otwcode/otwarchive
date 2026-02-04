@@ -153,7 +153,7 @@ class SkinsController < ApplicationController
       current_user.preference.save
     end
     flash[:notice] = ts("You are now using the default Archive skin again!")
-    redirect_back_or_to @skin
+    redirect_back_or_to root_path
   end
 
   # GET /skins/1/confirm_delete
@@ -181,8 +181,7 @@ class SkinsController < ApplicationController
 
   def skin_params
     allowed_attributes = [:title, :description, :css, :role, :ie_condition,
-      :unusable,
-      :font, :base_em, :margin, :paragraph_margin, :background_color,
+      :unusable, :font, :base_em, :margin, :paragraph_margin, :background_color,
       :foreground_color, :headercolor, :accent_color, :icon,
       media: [],
       skin_parents_attributes: [
