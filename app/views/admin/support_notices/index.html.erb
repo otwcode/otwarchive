@@ -1,0 +1,20 @@
+<div class="admin">
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= t(".page_heading") %></h2>
+  <!--/descriptions-->
+
+  <!--subnav-->
+  <%= render "navigation" %>
+  <!--/subnav-->
+
+  <%== pagy_nav(@pagy) %>
+
+  <!--main content-->
+  <ul class="support banner index group">
+    <%= render partial: "support_notice_blurb", collection: @support_notices, as: :support_notice %>
+  </ul>
+  <!--/content-->
+
+  <%== pagy_nav(@pagy) %>
+
+</div>

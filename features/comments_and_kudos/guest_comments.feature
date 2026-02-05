@@ -37,7 +37,8 @@ Scenario: Guest comments with embedded images are rendered as plain text
     And I post the work "foobar" with guest comments enabled
     And I am logged out
   When I view the work "foobar"
-    And I post a guest comment "Hello <img src='https://example.com/image.jpg' alt='baz'>"
+  Then I should see "Embedded images (<img> tags) will be displayed as HTML" within ".new_comment"
+  When I post a guest comment "Hello <img src='https://example.com/image.jpg' alt='baz'>"
   Then I should see "Hello img src="
     And I should see "https://example.com/image.jpg"
     And I should see "alt="

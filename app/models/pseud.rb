@@ -116,6 +116,13 @@ class Pseud < ApplicationRecord
       ).group('pseuds.id')
   }
 
+  scope :has_works_for, lambda { |pseud_ids|
+    joins(:works)
+      .where(pseuds: { id: pseud_ids })
+      .distinct
+      .pluck(:id)
+  }
+
   scope :public_rec_count_for, -> (pseud_ids) {
     select('pseuds.id, count(pseuds.id) AS rec_count')
     .joins(:bookmarks)

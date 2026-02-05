@@ -127,7 +127,7 @@
 
 <h4 class="heading" id="II.F"><span id="identities"><%= t(".personal_information.heading") %></span></h4>
 <p><%= t(".personal_information.not_allowed") %></p>
-<ol>
+<ol style="list-style-type:decimal;">
   <li>
     <%= t(".personal_information.revealing_orphaned_creator_html",
           orphaned_link: link_to(t(".personal_information.orphaned"), archive_faq_path("glossary", anchor: "orphandef"))) %>
@@ -137,7 +137,7 @@
   <li>
     <%= t(".personal_information.disclosing_personal_data_html",
           special_categories_of_personal_data_link: link_to(t(".personal_information.special_categories_of_personal_data"), "https://gdpr-info.eu/art-9-gdpr/")) %>
-    <ol>
+    <ol style="list-style-type:lower-alpha;">
       <li><%= t(".personal_information.rpf_exception") %></li>
     </ol>
   </li>

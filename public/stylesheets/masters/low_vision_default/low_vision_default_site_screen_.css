@@ -64,7 +64,8 @@ fieldset fieldset fieldset,
 fieldset fieldset dl dl,
 form.single fieldset,
 dd.hideme,
-form blockquote.userstuff {
+form blockquote.userstuff,
+.authentication fieldset {
   border: 2px solid;
 }
 
@@ -150,8 +151,8 @@ pre {
 .actions a:focus,
 input[type="submit"]:hover,
 input[type="submit"]:focus,
-button:hover,
-button:focus {
+.actions button:hover,
+.actions button:focus {
   background: #900;
   color: #eee;
 }
@@ -218,6 +219,11 @@ button:focus {
   min-height: 1.286em;
   padding-inline: 0.5em;
   white-space: normal;
+}
+
+.annotation {
+  border: 2px solid;
+    flex-flow: column wrap;
 }
 
 body .narrow-shown {
