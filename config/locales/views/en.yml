@@ -351,6 +351,7 @@ en:
           rejected: Rejected Skins
           skins: Skins
         spam: Spam
+        support_notices: Support Notices
         users:
           email_search: Bulk Email Search
           manage: Manage Users
@@ -382,6 +383,11 @@ en:
         page_heading: Log In as Admin
         reset_link: Forgot admin password?
         submit: Log In as Admin
+      totp:
+        enter_totp: Enter the verification code from your authenticator app to finish logging in to your admin account.
+        page_heading: Two-Step Verification
+        submit: Log In as Admin
+        totp_label: 6-digit verification code
     settings:
       index:
         fields:
@@ -418,6 +424,82 @@ en:
         update: Update
       update:
         success: Archive settings were successfully updated.
+    support_notices:
+      confirm_delete:
+        delete: Delete Support Notice
+        submit: Yes, Delete Support Notice
+        warning_html: Are you sure you want to <strong><em>delete</em></strong> this support notice?
+      edit:
+        page_heading: Edit Support Notice
+      index:
+        page_heading: Support Notices
+      navigation:
+        confirm_delete: Are you sure you want to delete this support notice?
+        delete: Delete Support Notice
+        edit: Edit Support Notice
+        index: Support Notices
+        new: New Support Notice
+      new:
+        page_heading: New Support Notice
+      show:
+        page_heading: Support Notice
+      support_notice_blurb:
+        active: Active
+        confirm_delete: Are you sure you want to delete this support notice?
+        delete: Delete
+        edit: Edit
+        landmark: Support Notice Actions
+      support_notice_form:
+        actions:
+          create: Create Support Notice
+          update: Update Support Notice
+        active: Active
+        landmark:
+          actions: Actions
+          content: Support Notice
+        legend:
+          actions: Actions
+          content: Support Notice
+        required_information: Required information
+        text: Support notice text
+        type:
+          caution: Caution
+          error: Error
+          label: Support notice type
+          notice: Notice
+    totp:
+      confirm_disable:
+        page_heading: Disable Two-Step Verification
+        password_label: Admin password
+        required_before_disabling: Before disabling two-step verification, you need to verify your password.
+        submit: Disable Two-Step Verification
+      new:
+        page_heading: Confirm Password
+        password_label: Admin password
+        required_before_enabling: Before enabling two-step verification, you need to verify your password.
+        submit: Continue
+      reauthenticate_create:
+        about:
+          effects_of_enabling: When two-step verification is enabled, logging in to your %{app_name} admin account will require both your admin password and a verification code from your authenticator app.
+          general_info: Two-step verification, also called two-factor authentication, helps prevent other people from accessing your account even if they know your password. All you need to set it up is an authenticator app such as 1Password, Google Authenticator, or Twilio Authy.
+          heading: About Two-Step Verification
+        app_setup:
+          heading: 'Step 1: Set up your authenticator app'
+          instructions: Use your authenticator app to scan the QR code or enter the manual setup key. The app will give you a 6-digit code, which you'll use in the next step.
+          key:
+            format_note: Spaces and capitalization don't matter
+            heading: Setup Key
+        enter_code:
+          heading: 'Step 2: Enter your 6-digit code'
+          instructions: Enter the 6-digit code from your app to enable two-step verification
+          label: 6-digit code
+          please_wait: Please wait...
+          submit: Enable Two-Step Verification
+        page_heading: Set Up Two-Step Verification
+      show_backup_codes:
+        finish: Finish
+        page_heading: Two-Step Verification Backup Codes
+        write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
     user_creations:
       confirm_remove_pseud:
         caution: Are you sure you want to remove the creator's pseud from this work?
@@ -453,13 +535,21 @@ en:
       page_heading: AO3 News
   admins:
     index:
+      account:
+        heading: Account Settings
+        roles:
+          label: Admin roles
+          none: You currently have no admin roles assigned to you.
+        totp:
+          disable_totp: Disable two-step verification
+          disabled: Disabled
+          enable_totp: Set up two-step verification with an authenticator app
+          enabled: Enabled
+          label: Two-step verification
+          regenerate_backup_codes: Regenerate backup codes
       confidentiality_reminder: You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s).
       log_out_reminder: Please remember to log out before resuming your normal site activity!
       page_title: Hi, %{login}!
-      responsibility: With great power comes great responsibility.
-      roles:
-        heading: 'Your admin roles:'
-        none: You currently have no admin roles assigned to you.
   archive_faqs:
     admin_index:
       confirm_delete: Are you sure you want to delete this FAQ category?
@@ -538,6 +628,9 @@ en:
   bookmarks:
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    external_work_fields:
+      fandoms_help_title: Fandom help
+      ratings_help_title: Rating help
     filters:
       from: From
       to: To
@@ -718,6 +811,14 @@ en:
       tags: Tags
       works: Works (%{count})
   comments:
+    comment_actions:
+      approve: Approve
+      comment: Comment
+      comment_actions: Comment Actions
+      parent: Parent
+      parent_thread: Parent Thread
+      reply_to_this: Reply to this comment
+      thread: Thread
     comment_form:
       anonymous_creator: Anonymous Creator
       anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
@@ -848,6 +949,11 @@ en:
       updated: 'Updated: %{date}'
       words: 'Words: %{count_with_delimiters}'
   errors:
+    '429':
+      browse_more_slowly: If you are receiving this error repeatedly, try browsing more slowly or loading fewer pages at a time.
+      made_too_many_requests: You have made too many requests in a short time period. Please wait a while before trying again.
+      page_heading: Error 429
+      subtitle: Too Many Requests
     timeout_error:
       contact_support: contact Support
       html: If you still get this error after a few tries, you can %{contact_support_link}.
@@ -1175,6 +1281,56 @@ en:
         no_fandom: Don't include the fandom.
         reverse_underscore: Start with fandom, then with author, then title, with underscores instead of dashes.
       page_heading: Work Title Format
+    tags_fandoms:
+      description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
+      more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
+      page_heading: Fandom Tags
+      tags_faq: Tags FAQ
+    tags_ratings:
+      explicit:
+        description: This is for porn, graphic violence, etc.
+        header: Explicit (Adult!)
+      general_audiences:
+        description: This content is suitable for anyone.
+        header: General Audiences
+      mature:
+        description: This is for content with adult themes (sex, violence, etc.) that isn't as graphic as explicit-rated content.
+        header: Mature (Adult!)
+      more_info:
+        html: "(For more information, see the %{ratings_and_warnings_tos_section_link}.)"
+        ratings_and_warnings_tos_section: Ratings and Warnings section of the %{app_name} Terms of Service
+      not_rated:
+        description: For searching, screening, and other Archive functions, this may get treated the same way as explicit-rated content.  In reality, it could be anything from porn to completely family-friendly stuff.  Choose this rating if you prefer not to rate your content (because you don't like ratings, because you're trying to avoid spoilers, etc.).
+        header: Not Rated (Adult!)
+      page_heading: Rating Tags
+      teen_and_up_audiences:
+        description: The content may be inappropriate for audiences under 13.
+        header: Teen And Up Audiences
+    tags_warnings:
+      choose_not_to_use:
+        description: Use this if you don't want to warn for anything. You may also choose this option if you don't know what you should warn for; if you don't like warning for certain topics or warnings in general; if you want to avoid some spoilers, but not others; etc.
+        header: 'Choose Not To Use Archive Warnings:'
+      description: 'The %{app_name} has chosen, for legal and other reasons, to mandate that users either warn for—or explicitly choose not to warn for—a short list of common warnings: Graphic Depictions of Violence, Major Character Death, Rape/Non-Con, and Underage Sex. We understand that creators may wish to not warn for some of these things, or to warn for additional content, and have provided options for them to do so within this framework.'
+      graphic_depictions_of_violence:
+        description: This is for gory, graphic, explicitly described violence. Exactly where to draw the line is your call.
+        header: 'Graphic Depictions Of Violence:'
+      major_character_death:
+        description: Please use your best judgment about who counts as a major character.
+        header: 'Major Character Death:'
+      no_archive_warnings_apply:
+        description: Use this if the Archive warnings don't apply to your content. (In other words, if it contains no graphic depictions of violence, major character death, rape/non-con, or underage sexual activity.)
+        header: 'No Archive Warnings Apply:'
+      other_warnings:
+        html: You can also use the "Additional Tags" field to give other or more detailed warnings. Our policies regarding warnings can be found in the %{tos_link} and %{tos_faq_link}.
+        tos: Terms of Service
+        tos_faq: Terms of Service FAQ
+      page_heading: Warning Tags
+      rape_non_con:
+        description: This is your call. If you think your content may be seen as containing non-consensual sexual activity, but you don't feel like using this warning or you're not sure if you should, you always have the option of using "Choose Not to Use Archive Warnings" instead.
+        header: 'Rape/Non-Con:'
+      underage_sex:
+        description: This is for descriptions or depictions of sexual activity involving characters under the age of eighteen. (This doesn't include dating activity like kissing or vague references with no actual description or depiction.) This warning generally applies to humans; if you are creating a pornographic work about space aliens who only live for a month or thousand-year-old vampires with twelve-year-old bodies, please just use your best judgment. You are always free to specify characters' ages or to use "Choose Not to Use Archive Warnings".
+        header: 'Underage Sex:'
   home:
     about:
       ao3:
@@ -2706,7 +2862,7 @@ en:
         confirm_password_validation: Please enter the same password in both fields.
         password: Password
         password_requirements: "%{minimum} to %{maximum} characters"
-        password_validation: Please enter a password! (At least %{minimum} letters long, please.)
+        password_validation: Please enter a password! (At least %{minimum} characters long, please.)
         username: Username
         username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
         username_validation: You need a username! (At least %{minimum} letters long, please.)
@@ -2896,6 +3052,10 @@ en:
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
+    work_form_tags:
+      fandoms_help_title: Fandom help
+      ratings_help_title: Rating help
+      warnings_help_title: Warning help
     work_header_navigation:
       chapter_index:
         button: Chapter Index

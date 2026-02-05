@@ -52,7 +52,8 @@ div.error {
     box-shadow: 1px 1px 2px;
 }
 
-p.notes {
+/* p.notes should be deprecated in favor of p.note and the .notes class reserved for containers that could hold multiple notes, e.g., div, ul, section */
+p.notes, p.note {
   clear: right;
 }
 
@@ -82,6 +83,44 @@ p span.error, dt span.error, dd span.error {
 
 dd.complex span.error {
   display: inline-block;
+}
+
+/* annotation module:
+Similar to native figure element, this groups an image or text with additional
+textual information. Unlike the figure element, the content cannot be removed
+from the main flow. */
+
+.annotation {
+  background: #eee;
+  border: 1px solid #ccc;
+  float: none;
+  line-height: 1;
+  margin: 0.643em auto;
+  padding: 1.286em;
+  width: fit-content;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.286em;
+}
+
+.annotation .image {
+  width: auto;
+  float: none;
+  line-height: 1;
+}
+
+.annotation .notes {
+  text-align: center;
+}
+
+.annotation .notes code {
+  font-size: 1.286em;
+}
+
+.annotation .notes .footnote {
+  float: none;
 }
 
 /* contexts */
