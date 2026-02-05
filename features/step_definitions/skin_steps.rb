@@ -91,7 +91,7 @@ Given /^I have loaded site skins$/ do
   Skin.load_site_css
 end
 
-Given /^the approved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
+Given "the approved public skin {string} with css {string}" do |skin_name, css|
   step %{the unapproved public skin "#{skin_name}" with css "#{css}"}
   step %{I approve the skin "#{skin_name}"}
   step "I am logged out"
