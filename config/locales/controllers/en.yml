@@ -17,6 +17,48 @@ en:
         page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+    sessions:
+      invalid_totp: Incorrect two-step verification code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
+    support_notices:
+      cannot_delete_active: Active support notices cannot be deleted.
+      confirm_delete:
+        page_title: Confirm Delete Support Notice
+      create:
+        success: Support notice successfully created.
+      destroy:
+        success: Support notice successfully deleted.
+      edit:
+        page_title: Edit Support Notice
+      index:
+        page_title: Support Notices
+      new:
+        page_title: New Support Notice
+      show:
+        page_title: Support Notice
+      update:
+        success: Support notice successfully updated.
+    totp:
+      access:
+        permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
+      already_disabled: TOTP two-step verification is already disabled.
+      already_enabled: TOTP two-step verification is already enabled.
+      confirm_disable:
+        page_title: Disable Two-Step Verification
+      create:
+        incorrect_code: Incorrect verification code. Your code may have expired, or you may need to set up your authenticator app again.
+        success: Successfully enabled two-step verification; please make note of your backup codes.
+      disable:
+        failure: Could not disable two-step verification.
+        incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
+        success: Successfully disabled two-step verification.
+      new:
+        page_title: Confirm Password
+      reauthenticate_create:
+        incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
+        page_title: Enable Two-Step Verification
+      show_backup_codes:
+        not_enabled: Please enable two-step verification first.
+        page_title: Two-Step Verification Backup Codes
     user_creations:
       confirm_remove_pseud:
         must_have_orphan_pseuds: Sorry, this action is only available for works by orphan_account pseuds.
@@ -306,6 +348,8 @@ en:
       page_title: "%{username} - Drafts"
     edit_tags:
       page_title: Edit Work Tags
+    new:
+      closed_collection: Sorry, the collection %{collection_title} is closed. New works cannot be added to it.
     show:
       page_title:
         unrevealed: Mystery Work

@@ -41,14 +41,14 @@
       <dt><%= t(".info.role", count: @user.roles.size) %></dt>
       <dd><%= @user.roles.any? ? @user.roles.map { |role| t("activerecord.attributes.role.#{role.name}") }.to_sentence : t(".info.no_role") %></dd>
       <% if policy(User).can_view_past? %>
-        <% past_logins = @user.historic_values("login").compact %>
+        <% past_logins = @user.historic_values("login") %>
         <% if past_logins.present? %>
           <dt><%= t(".info.past_logins", count: past_logins.size) %></dt>
           <dd>
             <%= past_logins.to_sentence %>
           </dd>
         <% end %>
-        <% past_emails = @user.historic_values("email").compact %>
+        <% past_emails = @user.historic_values("email") %>
         <% if past_emails.present? %>
           <dt><%= t(".info.past_emails", count: past_emails.size) %></dt>
           <dd>

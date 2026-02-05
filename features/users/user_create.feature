@@ -19,8 +19,8 @@ Feature: Sign Up for a new account
       | field                                   | value          | error                                           |
       | user_registration_login                 | xx             | Username is too short (minimum is 3 characters)|
       | user_registration_login                 | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Username is too long (maximum is 40 characters)    |
-      | user_registration_password              | pass           | Password is too short (minimum is 6 characters) |
-      | user_registration_password              | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Password is too long (maximum is 40 characters)    |
+      | user_registration_password              | pass           | Password is too short (minimum is 8 characters) |
+      | user_registration_password              | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2eJKL9012 | Password is too long (maximum is 72 characters)    |
       | user_registration_password_confirmation | password2      | The passwords you entered do not match. Please try again.|
       | user_registration_email                 |                | Email should look like an email address         |
       | user_registration_email                 | fake@fake@fake | Email should look like an email address         |

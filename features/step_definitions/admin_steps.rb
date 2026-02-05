@@ -39,6 +39,21 @@ Given "I am logged in as an admin" do
   step %{I should see "Successfully logged in"}
 end
 
+Given "I am logged in as admin {string} with password {string}" do |login, password|
+  step "I start a new session"
+  visit new_admin_session_path
+  fill_in "Admin username", with: login
+  fill_in "Admin password", with: password
+  click_button "Log In as Admin"
+  step %{I should see "Successfully logged in"}
+end
+
+Given "admin {string} has TOTP 2FA enabled" do |login|
+  admin = Admin.find_by(login: login) || FactoryBot.create(:admin, login: login)
+  admin.generate_totp_secret_if_missing!
+  admin.enable_totp!
+end
+
 Given /^basic languages$/ do
   Language.default
   german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
@@ -377,6 +392,23 @@ When "I follow the first invitation token url" do
   first('//td/a[href*="/invitations/"]').click
 end
 
+When "I fill in a valid TOTP two-step verification code for admin {string}" do |login|
+  admin = Admin.find_by(login: login)
+  fill_in "totp_attempt", with: admin.current_otp
+end
+
+When "I fill in a valid TOTP recovery code for admin {string}" do |login|
+  admin = Admin.find_by(login: login)
+  codes = admin.generate_otp_backup_codes!
+  admin.save!
+  fill_in "totp_attempt", with: codes.first
+  @used_totp_recovery_code = codes.first
+end
+
+When "I fill in a used TOTP recovery code" do
+  fill_in "totp_attempt", with: @used_totp_recovery_code
+end
+
 ### THEN
 
 Then (/^the translation information should still be filled in$/) do
@@ -449,7 +481,7 @@ Then /^I should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, use
   step %{I should see "Sorry, you don't have permission to access the page you were trying to reach."}
 end
 
-Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
+Then "{string} should see their work {string} is hidden" do |user, work|
   step %{I am logged in as "#{user}"}
   step %{I am on #{user}'s works page}
   step %{I should not see "#{work}"}

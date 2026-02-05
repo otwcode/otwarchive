@@ -39,6 +39,19 @@ module ApplicationHelper
                     end
     when "errors"
       class_names = "system #{controller.controller_name} error-#{controller.action_name}"
+    # If you edit these classes, you may need to edit the main div's classes in layouts/session
+    when "sessions"
+      class_names = if controller.action_name == "create"
+                      "#{class_names} system session authentication"
+                    else
+                      class_names
+                    end
+    when "totp"
+      class_names = if %w(confirm_disable create disable new).include?(controller.action_name)
+                      "#{class_names} system session authentication reauthentication"
+                    else
+                      class_names
+                    end
     end
 
     class_names

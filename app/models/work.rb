@@ -406,7 +406,7 @@ class Work < ApplicationRecord
 
   def self.find_by_url_cache_key(url)
     url = UrlFormatter.new(url)
-    "/v1/find_by_url/#{Work.find_by_url_generation}/#{url.encoded}"
+    "/v2/find_by_url/#{Work.find_by_url_generation}/#{url.encoded}"
   end
 
   # Match `url` to a work's imported_from_url field using progressively fuzzier matching:

@@ -127,8 +127,8 @@ Scenario: Development & Membership admin can see edit options but not delete or 
     And I go to the admin_banners page
   Then I should see "Banners" within "#header .admin.navigation"
     And I should see "Banners" within "#main .navigation.actions"
-    And I should see "Edit" within "#main ul.banners.index.group"
-    But I should not see "Delete" within "#main ul.banners.index.group"
+    And I should see "Edit" within "#main ul.banner.index.group"
+    But I should not see "Delete" within "#main ul.banner.index.group"
     And I should not see "New Banner" within "#main .navigation.actions"
   When I follow "Edit"
   Then I should not see "New Banner" within "#main .navigation.actions"
