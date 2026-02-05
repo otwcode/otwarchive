@@ -16,6 +16,7 @@ class HelpController < ApplicationController
 
   def preferences_locale
   end
+
   def preferences_misc
   end
 
