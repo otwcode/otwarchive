@@ -27,9 +27,9 @@
     <dt><%= f.label :icon, t(".icon") %></dt>
     <dd><%= f.file_field :icon %></dd>
 
-    <% if @current_user&.official || User.current_user.is_a?(Admin) %>
+    <% if @current_user&.official %>
       <dt><%= f.label :public, t(".public") %></dt>
-      <dd><%= f.check_box :public, disabled: User.current_user.is_a?(Admin) %></dd>
+      <dd><%= f.check_box :public %></dd>
     <% end %>
   </dl>
 </fieldset>

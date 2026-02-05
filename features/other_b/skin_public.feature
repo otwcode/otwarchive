@@ -144,8 +144,8 @@ Feature: Public skins
     And I submit
   Then I should see "Skin was successfully created"
 
-  Scenario: Admins can see but not change "Apply to make public"
+  Scenario: Admins can't see the "Apply to make public" checkbox
   Given the approved public skin "Usable Skin"
     And I am logged in as a "superadmin" admin
   When I edit the skin "Usable Skin"
-  Then the "Apply to make public" checkbox should be disabled
+  Then I should not see "Apply to make public"
