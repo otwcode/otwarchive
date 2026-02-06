@@ -18,6 +18,7 @@ When /^I fill in the basic work information for "([^"]*)"$/ do |title|
   select("English", from: "work_language_id")
   fill_in("content", with: DEFAULT_CONTENT)
 end
+
 # Here we set up a draft and can then post it as a draft, preview and post, post,
 # or fill in additional information on the work form.
 # Example: I set up the draft "Foo"
@@ -39,29 +40,27 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with cha
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
-  select(rating.blank? ? DEFAULT_RATING : rating, from: "Rating")
-  check(category.blank? ? DEFAULT_CATEGORY : category)
-  fill_in("Fandoms", with: (fandom.blank? ? DEFAULT_FANDOM : fandom))
-  fill_in("Additional Tags", with: (freeform.blank? ? DEFAULT_FREEFORM : freeform)+(freeform2.blank? ? '' : ','+freeform2))
-  unless character.blank?
-    fill_in("work[character_string]", with: character + ( character2.blank? ? '' : ','+character2 ) )
+  select(rating.presence || DEFAULT_RATING, from: "Rating")
+  check(category.presence || DEFAULT_CATEGORY)
+  fill_in("Fandoms", with: (fandom.presence || DEFAULT_FANDOM))
+  fill_in("Additional Tags", with: (freeform.presence || DEFAULT_FREEFORM) + (freeform2.blank? ? "" : ",#{freeform2}"))
+  if character.present?
+    fill_in("work[character_string]", with: character + (character2.blank? ? "" : ",#{character2}"))
   end
-  unless collection.blank?
+  if collection.present?
     c = Collection.find_by(title: collection)
     fill_in("Collections", with: c.name)
   end
-  unless series.blank?
+  if series.present?
     if page.has_select?("work[series_attributes][id]", with_options: [series])
       select(series, from: "work[series_attributes][id]")
     else
       fill_in("work[series_attributes][title]", with: series)
     end
   end
-  unless relationship.blank?
-    fill_in("work[relationship_string]", with: relationship)
-  end
-  select(pseud, from: "work[author_attributes][ids][]") unless pseud.blank?
-  fill_in("work_recipients", with: "#{recipient}") unless recipient.blank?
+  fill_in("work[relationship_string]", with: relationship) if relationship.present?
+  select(pseud, from: "work[author_attributes][ids][]") if pseud.present?
+  fill_in("work_recipients", with: recipient.to_s) if recipient.present?
 end
 
 # This is the same regexp as above
@@ -70,15 +69,14 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
   work = Work.find_by(title: title)
   if work
     visit preview_work_path(work)
-    click_button("Post")
   else
-    # Note: this will match the above regexp and work just fine even if all the options are blank!
+    # NOTE: this will match the above regexp and work just fine even if all the options are blank!
     step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" with rating "#{rating}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
-    click_button("Post")
   end
+  click_button("Post")
   # Now add the chapters
   if number_of_chapters.present? && number_of_chapters.to_i > 1
-    work = Work.find_by_title(title)
+    work = Work.find_by(title: title)
     visit work_path(work)
     (number_of_chapters.to_i - 1).times do
       step %{I follow "Add Chapter"}
@@ -109,17 +107,6 @@ When /^I post the works "([^"]*)"$/ do |worklist|
 end
 
 ### GIVEN
-
-Given(/^I have the Battle set loaded$/) do
-  step %{I have loaded the fixtures}
-  step %{I have Battle 12 prompt meme fully set up}
-  step %{everyone has signed up for Battle 12}
-  step %{mod fulfills claim}
-  step %{I reveal the "Battle 12" challenge}
-  step %{I am logged in as "myname4"}
-  step %{the statistics for all works are updated}
-  step %{all indexing jobs have been run}
-end
 
 Given /^I have no works or comments$/ do
   Work.delete_all
@@ -373,11 +360,12 @@ When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
 end
 
 # Posts a chapter for the current user
-When /^I post a chapter for the work "([^"]*)"$/ do |work_title|
+When /^I post a chapter for the work "([^"]*)"(?: as "(.*?)")?$/ do |work_title, pseud|
   work = Work.find_by(title: work_title)
   visit work_url(work)
   step %{I follow "Add Chapter"}
   step %{I fill in "content" with "la la la la la la la la la la la"}
+  select(pseud, from: "chapter_author_attributes_ids") if pseud.present?
   step %{I post the chapter}
 end
 
@@ -531,7 +519,7 @@ end
 When /^I lock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I lock the work}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I unlock the work$/ do
@@ -541,7 +529,7 @@ end
 When /^I unlock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I unlock the work}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I list the work "([^"]*)" as inspiration$/ do |title|
@@ -654,7 +642,7 @@ end
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
   step %{I edit the work "#{work}"}
   step %{I invite the co-author "#{coauthor}"}
-  step %{I post the work without preview}
+  step %{I update the work}
   step %{the user "#{coauthor}" accepts the creator invite for the work "#{work}"}
 end
 
@@ -703,20 +691,20 @@ When "I add the beginning notes {string} to the work {string}" do |notes, work|
   step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the beginning notes "#{notes}"}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When "I add the end notes {string} to the work {string}" do |notes, work|
   step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the end notes "#{notes}"}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I mark the work "([^"]*)" for later$/ do |work|
   work = Work.find_by(title: work)
   visit work_url(work)
-  step %{I follow "Mark for Later"}
+  step %{I press "Mark for Later"}
   step "the readings are saved to the database"
 end
 
@@ -812,4 +800,40 @@ end
 Then "I should not see {string} within the work blurb of {string}" do |content, work|
   work = Work.find_by(title: work)
   step %{I should not see "#{content}" within "li#work_#{work.id}"}
+end
+
+Then "I should see an HTML comment containing the number {int} within {string}" do |expected_number, selector|
+  html = page.find(selector).native.inner_html
+  comment_match = html.match(/.*<!--[^\d]*(\d+)[^\d]*-->.*/)
+  expect(comment_match).not_to be_nil
+  number = comment_match[1].to_i
+  expect(number).to eq(expected_number)
+end
+
+Then "I should see the work header navigation" do
+  expect(page).to have_css("ul.work.navigation.actions")
+end
+
+Then "I should not see the work header navigation" do
+  expect(page).not_to have_css("ul.work.navigation.actions")
+end
+
+Then "I should see the work meta" do
+  expect(page).to have_css("dl.work.meta.group")
+end
+
+Then "I should not see the work meta" do
+  expect(page).not_to have_css("dl.work.meta.group")
+end
+
+Then "I should see the work styles" do
+  expect(page).to have_css("#main style[type=\"text/css\"]")
+end
+
+Then "I should see the work preface" do
+  expect(page).to have_css("div.preface.group h2.title.heading")
+end
+
+Then "I should not see the work preface" do
+  expect(page).not_to have_css("div.preface.group h2.title.heading")
 end

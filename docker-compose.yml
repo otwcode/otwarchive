@@ -40,13 +40,13 @@ services:
     volumes:
       - my-datavolume:/var/lib/mysql:rw
   redis:
-    image: redis:5
+    image: redis:7
     ports:
       - "6379:6379"
     volumes:
       - redis-data:/var/lib/redis:rw
   es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.18.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.19.10
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -71,11 +71,15 @@ services:
     build:
       context: .
       dockerfile: ./config/docker/Dockerfile
-    environment:
-      - RAILS_ENV=development
-      - RACK_TIMEOUT_SERVICE_TIMEOUT=0
-      - GITPOD_WORKSPACE_ID=${GITPOD_WORKSPACE_ID:-}
-      - GITPOD_WORKSPACE_CLUSTER_HOST=${GITPOD_WORKSPACE_CLUSTER_HOST:-}
+    environment: &environment
+      RAILS_ENV: development
+      # Disable rack-timeout
+      RACK_TIMEOUT_SERVICE_TIMEOUT: 0
+      GITPOD_WORKSPACE_ID: ${GITPOD_WORKSPACE_ID:-}
+      GITPOD_WORKSPACE_CLUSTER_HOST: ${GITPOD_WORKSPACE_CLUSTER_HOST:-}
+      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: bEZjYLY9tCYGh6WlcMtEJpIi7GO2plZC
+      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: PpLWizzsQHIWnIihtECw8nDHZQd0amzf
+      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: 3S99KdpdEWLnCYudBgUfdCFDBWePWCud
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/otwa
@@ -86,9 +90,25 @@ services:
       - redis
       - es
       - mc
+      - resque
     # Make `docker compose attach web` work for debugging
     stdin_open: true
     tty: true
+  resque:
+    profiles:
+      - dev
+    build:
+      context: .
+      dockerfile: ./config/docker/Dockerfile
+    command: bash -c "bundle exec rake environment resque:scheduler & bundle exec rake environment resque:work"
+    volumes:
+      - .:/otwa
+    environment:
+      <<: *environment
+      QUEUE: '*'
+    depends_on:
+      - db
+      - redis
   chrome:
     profiles:
       - test
@@ -103,10 +123,15 @@ services:
       dockerfile: ./config/docker/Dockerfile
     environment:
       - RAILS_ENV=test
+      - ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=bEZjYLY9tCYGh6WlcMtEJpIi7GO2plZC
+      - ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=PpLWizzsQHIWnIihtECw8nDHZQd0amzf
+      - ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=3S99KdpdEWLnCYudBgUfdCFDBWePWCud
       - CHROME_URL=http://chrome:4444
       - DOCKER=true
       - CAPYBARA_PORT=5100
       - CUCUMBER_PUBLISH_QUIET=true
+      # Silence ebook-convert warning about running as root
+      - QTWEBENGINE_CHROMIUM_FLAGS=--no-sandbox
     command: bundle exec cucumber
     volumes:
       - .:/otwa

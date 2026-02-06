@@ -3,10 +3,9 @@
 <% if work.unrevealed? && !is_author_of?(work) %>
   <%= render "works/mystery_blurb", item: work %>
 <% else %>
-
   <!--title, author, fandom-->
   <div class="header module">
-
+    <!-- updated_at=<%= work.updated_at.to_i.to_s %> -->
     <h4 class="heading">
       <% if (work.unrevealed? || work.anonymous?) && is_author_of?(work) %>
         <span class="status">
@@ -24,7 +23,7 @@
       <%= byline(work, visibility: "public") %>
 
 <% #### CACHE show/hide ####, if you update the key edit lib/tasks/memcached.rake %>
-<% cache("#{work.cache_key}-#{Work.work_blurb_version(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v10", skip_digest: true) do %>
+<% cache("#{work.cache_key}-#{Work.work_blurb_version(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v11", skip_digest: true) do %>
 
       <% tag_groups = work.tag_groups %>
 

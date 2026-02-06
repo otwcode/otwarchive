@@ -1,4 +1,4 @@
-/* ==USERSTUFF: displaying content inputted by a user into a textarea.*/
+/* == USERSTUFF: displaying content inputted by a user into a textarea. */
 
 .userstuff {
     word-wrap: break-word;
@@ -10,7 +10,7 @@
   padding: 0;
 }
 
-/*lists */
+/* lists */
 
 .userstuff dl {
   margin: 1.5em 0;
@@ -117,7 +117,7 @@
   text-decoration: none;
 }
 
-/*tables */
+/* tables */
 
 .userstuff caption {
   font-size: 1em;
@@ -162,7 +162,7 @@
   max-width: 100%;
 }
 
-/*expected behaviours, exceptioning*/
+/* expected behaviours, exceptioning */
 
 /* WORK MARGINS */
 
@@ -182,6 +182,10 @@
 
 /* contexts */
 
+.comment .userstuff li {
+  list-style-position: inside;
+}
+
 .bookmark .user .userstuff {
   line-height: 1.5;
 }
@@ -200,4 +204,4 @@
   margin: 0.75em 0;
 }
 
-/*END== */
+/* END == */

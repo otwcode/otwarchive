@@ -40,6 +40,8 @@ class Chapter < ApplicationRecord
     end
   end
 
+  delegate :anonymous?, to: :work
+
   before_save :strip_title
   before_save :set_word_count
   before_save :validate_published_at
@@ -52,28 +54,34 @@ class Chapter < ApplicationRecord
 
   after_save :fix_positions
   def fix_positions
-    if work&.persisted?
-      positions_changed = false
-      self.position ||= 1
-      chapters = work.chapters.order(:position)
-      if chapters && chapters.length > 1
-        chapters = chapters - [self]
-        chapters.insert(self.position-1, self)
-        chapters.compact.each_with_index do |chapter, i|
-          if chapter.position != i+1
-            Chapter.where(["id = ?", chapter.id]).update_all(["position = ?", i + 1])
-            positions_changed = true
-          end
-        end
-      end
-      # We're caching the chapter positions in the comment blurbs and the last
-      # chapter link in the work blurbs so we need to expire the blurbs and the
-      # work indexes.
-      if positions_changed
-        work.comments.each{ |c| c.touch }
-        work.expire_caches
+    return unless work&.persisted?
+
+    chapters = work.chapters.order(:position).to_a
+    return if chapters.empty?
+
+    chapters.delete(self)
+    insert_at = (self.position.to_i - 1).clamp(0, chapters.length)
+    chapters.insert(insert_at, self)
+
+    positions_changed = false
+
+    chapters.each_with_index do |chapter, index|
+      correct_position = index + 1
+      if chapter.position != correct_position
+        Chapter.where(id: chapter.id).update_all(position: correct_position)
+        positions_changed = true
       end
     end
+   
+    return unless positions_changed
+
+    # Clear ActiveRecord cache so when work.chapters is queried next, the positions are correct
+    work.association(:chapters).reset
+    # We're caching the chapter positions in the comment blurbs and the last
+    # chapter link in the work blurbs so we need to expire the blurbs and the
+    # work indexes.
+    work.comments.each(&:touch)
+    work.expire_caches
   end
 
   after_save :invalidate_chapter_count,
@@ -116,7 +124,7 @@ class Chapter < ApplicationRecord
   end
 
   def chapter_header
-    "#{ts("Chapter")} #{position}"
+    I18n.t("activerecord.attributes.chapters.chapter_header", position: position)
   end
 
   def chapter_title
@@ -199,5 +207,9 @@ class Chapter < ApplicationRecord
   def expire_comments_count
     super
     work&.expire_comments_count
+  end
+
+  def expire_byline_cache
+    Rails.cache.delete(["byline_data", cache_key])
   end
 end

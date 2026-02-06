@@ -1,13 +1,15 @@
 class ChaptersController < ApplicationController
+  include WorksHelper
+
   # only registered users and NOT admin should be able to create new chapters
   before_action :users_only, except: [:index, :show, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :update, :update_positions]
-  before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy]
+  before_action :check_user_not_suspended, only: [:edit, :remove_user_creatorship, :confirm_delete, :destroy]
   before_action :load_work
   # only authors of a work should be able to edit its chapters
   before_action :check_ownership, except: [:index, :show]
   before_action :check_visibility, only: [:show]
-  before_action :load_chapter, only: [:show, :edit, :update, :preview, :post, :confirm_delete, :destroy]
+  before_action :load_chapter, only: [:show, :edit, :remove_user_creatorship, :update, :preview, :post, :confirm_delete, :destroy]
 
   cache_sweeper :feed_sweeper
 
@@ -27,8 +29,6 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/:id
   # GET /work/:work_id/chapters/:id.xml
   def show
-    @tag_groups = @work.tag_groups
-
     redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return if params[:selected_id]
 
     @chapters = @work.chapters_in_order(
@@ -41,7 +41,7 @@ class ChaptersController < ApplicationController
       access_denied
       return
     end
- 
+
     chapter_position = @chapters.index(@chapter)
     if @chapters.length > 1
       @previous_chapter = @chapters[chapter_position - 1] unless chapter_position.zero?
@@ -49,13 +49,9 @@ class ChaptersController < ApplicationController
     end
 
     if @work.unrevealed?
-      @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
+      @page_subtitle = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
     else
-      fandoms = @tag_groups["Fandom"]
-      fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
-      title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
-      author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
-      @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
+      @page_title = work_page_title(@work, @work.title + t(".chapter_position", position: @chapter.position.to_s))
     end
 
     if params[:view_adult]
@@ -88,14 +84,24 @@ class ChaptersController < ApplicationController
 
   # GET /work/:work_id/chapters/1/edit
   def edit
-    return unless params["remove"] == "me"
+  end
 
+  def remove_user_creatorship
     @chapter.creatorships.for_user(current_user).destroy_all
     if @work.chapters.any? { |c| current_user.is_author_of?(c) }
       flash[:notice] = ts("You have been removed as a creator from the chapter.")
-      redirect_to @work
-    else # remove from work if no longer co-creator on any chapter
-      redirect_to edit_work_path(@work, remove: "me")
+      redirect_to @work and return
+    end
+
+    # remove from work if no longer co-creator on any chapter
+    pseuds_with_author_removed = @work.pseuds - current_user.pseuds
+
+    if pseuds_with_author_removed.empty?
+      redirect_to controller: "orphans", action: "new", work_id: @work.id
+    else
+      @work.remove_author(current_user)
+      flash[:notice] = ts("You have been removed as a creator from the work.")
+      redirect_to current_user
     end
   end
 
@@ -106,11 +112,6 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
-    if params[:cancel_button]
-      redirect_back_or_default(root_path)
-      return
-    end
-
     @chapter = @work.chapters.build(chapter_params)
     @work.wip_length = params[:chapter][:wip_length]
 
@@ -136,12 +137,6 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
-    if params[:cancel_button]
-      # Not quite working yet - should send the user back to wherever they were before they hit edit
-      redirect_back_or_default(root_path)
-      return
-    end
-
     @chapter.attributes = chapter_params
     @work.wip_length = params[:chapter][:wip_length]
 
@@ -190,20 +185,15 @@ class ChaptersController < ApplicationController
   end
 
   # POST /chapters/1/post
+  # This is used only for "Post Chapter" in the chapter_management partial.
   def post
-    if params[:cancel_button]
-      redirect_to @work
-    elsif params[:edit_button]
-      redirect_to [:edit, @work, @chapter]
+    @chapter.posted = true
+    @work.set_revised_at_by_chapter(@chapter)
+    if @chapter.save && @work.save
+      post_chapter
+      redirect_to(@work)
     else
-      @chapter.posted = true
-      @work.set_revised_at_by_chapter(@chapter)
-      if @chapter.save && @work.save
-        post_chapter
-        redirect_to(@work)
-      else
-        render :preview
-      end
+      render :preview
     end
   end
 

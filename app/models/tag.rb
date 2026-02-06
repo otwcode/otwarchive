@@ -1,5 +1,3 @@
-require "unicode_utils/casefold"
-
 class Tag < ApplicationRecord
   include Searchable
   include StringCleaner
@@ -60,7 +58,7 @@ class Tag < ApplicationRecord
 
     # If we've reached here, then the value has changed, and we need to make
     # sure that the new value is written to the database.
-    REDIS_GENERAL.sadd("tag_update", id)
+    REDIS_GENERAL.sadd?("tag_update", id)
     value
   end
 
@@ -681,8 +679,10 @@ class Tag < ApplicationRecord
   def reindex_associated(reindex_pseuds = false)
     works.reindex_all
     external_works.reindex_all
+    collections.reindex_all
     bookmarks.reindex_all
 
+    filtered_collections.reindex_all
     filtered_works.reindex_all
     filtered_external_works.reindex_all
 
@@ -1170,7 +1170,7 @@ class Tag < ApplicationRecord
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)
     if tag.saved_change_to_type?
       tag.parents.each do |parent_tag|
-        ActionController::Base.new.expire_fragment("views/tags/#{parent_tag.id}/children")
+        ActionController::Base.new.expire_fragment("v1/views/tags/#{parent_tag.id}/children")
       end
     end
 
@@ -1249,6 +1249,6 @@ class Tag < ApplicationRecord
   end
 
   def normalize_for_tag_comparison(string)
-    UnicodeUtils.casefold(string).mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/u, "")
+    string.downcase(:fold).mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/u, "")
   end
 end

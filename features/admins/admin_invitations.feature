@@ -263,13 +263,22 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "An invitation was sent to fred@bedrock.com"
       And 1 email should be delivered
 
+  Scenario: An admin can't create an invite with invalid email
+    Given I am logged in as an admin
+      And all emails have been delivered
+    When I follow "Invite New Users"
+      And I fill in "invitation[invitee_email]" with "abcdefgh"
+      And I press "Invite user"
+    Then I should see "Invitee email should look like an email address. Please use a different address or leave blank."
+      And 0 emails should be delivered
+
   Scenario: An admin can't create an invite without an email address.
     Given I am logged in as an admin
       And all emails have been delivered
     When I follow "Invite New Users"
       And I press "Invite user"
     Then I should see "Please enter an email address"
-      And 0 email should be delivered
+      And 0 emails should be delivered
 
   Scenario: An admin can send an invitation to all existing users
     Given the following activated users exist
@@ -278,7 +287,7 @@ Feature: Admin Actions to Manage Invitations
       | odo   | mybucket9  |
       And "dax" has "0" invitations
       And "odo" has "3" invitations
-      And I am logged in as an admin
+      And I am logged in as a super admin
     When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "All" from "Users"
@@ -293,7 +302,7 @@ Feature: Admin Actions to Manage Invitations
       | bashir | heytheredoc |
       And "dax" has "5" invitations
       And "bashir" has "0" invitations
-      And I am logged in as an admin
+      And I am logged in as a super admin
     When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "With no unused invitations" from "Users"
@@ -304,7 +313,7 @@ Feature: Admin Actions to Manage Invitations
   Scenario: An admin can see the invitation of an existing user via name or token
     Given the user "dax" exists and is activated
       And "dax" has "2" invitations
-      And I am logged in as an admin
+      And I am logged in as a super admin
     When I follow "Invite New Users"
       And I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"
@@ -313,12 +322,9 @@ Feature: Admin Actions to Manage Invitations
     When I follow "Invite New Users"
       And I fill in "Invite token" with "dax's" invite code
       And I press "Search" within "form.invitation.simple.search"
-    # Only certain admin roles have access to this page; other admins will see the following error message
-    When I follow the first invitation token url
-    Then I should see "Please log out of your admin account first!"
 
   Scenario: An admin can find all invitations via email partial match
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And an invitation request for "fred@bedrock.com"
       And an invitation request for "barney@bedrock.com"
       And all emails have been delivered
@@ -333,7 +339,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "barney@bedrock.com"
 
   Scenario: An admin can't find a invitation for a nonexistent user
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I follow "Invite New Users"
     When I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"
@@ -344,7 +350,7 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "No results were found. Try another search"
 
   Scenario: An admin can invite people from the queue
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And an invitation request for "fred@bedrock.com"
       And an invitation request for "barney@bedrock.com"
       And all emails have been delivered
@@ -357,7 +363,7 @@ Feature: Admin Actions to Manage Invitations
       And 1 email should be delivered to "fred@bedrock.com"
 
   Scenario: When an admin invites from the queue, the invite is marked as being from the admin
-    Given I am logged in as a "support" admin
+    Given I am logged in as a "policy_and_abuse" admin
       And an invitation request for "test@example.com"
       And I follow "Invite New Users"
     When I fill in "Number of people to invite" with "1"
@@ -369,7 +375,7 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "Copy and use"
       And I should see "Delete"
     When I follow the first invitation token url
-    Then I should see "Sender testadmin-support"
+    Then I should see "Sender testadmin-policy_and_abuse"
 
   Scenario: An admin can edit an invitation
     Given the user "dax" exists and is activated
@@ -391,6 +397,19 @@ Feature: Admin Actions to Manage Invitations
       And I press "Update Invitation"
     Then I should see "oldman@ds9.com"
       And I should see "Invitation was successfully sent."
+
+  Scenario: Sent to field is a link for redeemed invitations
+    Given the user "creator" exists and is activated
+      And the user "invitee" exists and is activated
+      And an invitation created by "creator" and used by "invitee"
+      And I am logged in as a super admin
+    When I go to creator's manage invitations page
+    When I follow the first invitation token url
+    Then I should see "Sent to"
+      And I should see a link "default@email.com" within "dl"
+    When I follow "default@email.com"
+    Then I should see "All or part of an email address"
+      And I should see "default@email.com" within "table"
 
   Scenario: An admin can search the invitation queue, and search parameters are
   kept even if deleting without JavaScript

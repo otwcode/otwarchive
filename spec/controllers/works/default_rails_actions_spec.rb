@@ -32,8 +32,7 @@ describe WorksController, work_search: true do
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params: params
-        it_redirects_to_with_error(new_user_session_path,
-                                   "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -95,7 +94,7 @@ describe WorksController, work_search: true do
           { query: "sort by: word count", expected: "word_count" },
           { query: "sort by: words", expected: "word_count" },
           { query: "sort by: word", expected: "word_count" },
-          { query: "sort by: author", expected: "authors_to_sort_on" },
+          { query: "sort by: creator", expected: "authors_to_sort_on" },
           { query: "sort by: title", expected: "title_to_sort_on" },
           { query: "sort by: date", expected: "created_at" },
           { query: "sort by: date posted", expected: "created_at" },
@@ -181,8 +180,7 @@ describe WorksController, work_search: true do
   describe "new" do
     it "doesn't return the form for anyone not logged in" do
       get :new
-      it_redirects_to_with_error(new_user_session_path,
-                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      it_redirects_to_user_login_with_error
     end
 
     it "renders the form if logged in" do
@@ -196,6 +194,60 @@ describe WorksController, work_search: true do
       get :new
       it_redirects_to_simple(user_path(banned_user))
       expect(flash[:error]).to include("Your account has been banned.")
+    end
+
+    context "when collection is closed" do
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: true)) }
+      let(:user) { create(:user) }
+
+      before { fake_login_known_user(user) }
+
+      it "redirects to collection page with error for non-maintainers" do
+        get :new, params: { collection_id: collection.name }
+        it_redirects_to_with_error(collection_path(collection), "Sorry, the collection Excalibur is closed. New works cannot be added to it.")
+      end
+    end
+
+    context "when collection is closed but user is owner" do
+      let(:user) { create(:user) }
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: true)) }
+      let!(:participant) { collection.collection_participants.create(pseud: user.default_pseud, participant_role: CollectionParticipant::OWNER) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "allows access to new work form" do
+        get :new, params: { collection_id: collection.name }
+        expect(response).to render_template("new")
+      end
+    end
+
+    context "when collection is closed but user is maintainer" do
+      let(:user) { create(:user) }
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: true)) }
+      let!(:participant) { collection.collection_participants.create(pseud: user.default_pseud, participant_role: CollectionParticipant::MODERATOR) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "allows access to new work form" do
+        get :new, params: { collection_id: collection.name }
+        expect(response).to render_template("new")
+      end
+    end
+
+    context "when collection is open" do
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: false)) }
+      let(:user) { create(:user) }
+
+      before { fake_login_known_user(user) }
+
+      it "allows access to new work form" do
+        get :new, params: { collection_id: collection.name }
+        expect(response).to render_template("new")
+      end
     end
   end
 
@@ -272,6 +324,14 @@ describe WorksController, work_search: true do
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
         include /Only canonical category tags are allowed./
+    end
+
+    it "renders new if the work has invalid comment permissions" do
+      work_attributes = attributes_for(:work).except(:posted, :comment_permissions).merge(comment_permissions: "Comment")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Comment permissions are invalid."
     end
 
     context "as a tag wrangler" do

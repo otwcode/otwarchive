@@ -6,8 +6,8 @@
 
 <!--subnav-->
 <h3 class="landmark heading"><%= t(".navigation.landmark") %></h3>
-<ul class="navigation actions" role="navigation">
-  <li><%= link_to t(".navigation.edit_my_profile"), edit_user_path(@user) %></li>
+<ul class="navigation actions">
+  <li><%= link_to t(".navigation.edit_my_profile"), edit_user_profile_path(@user) %></li>
   <li><%= link_to t(".navigation.manage_my_pseuds"), user_pseuds_path(@user) %></li>
   <li><%= link_to t(".navigation.blocked_users"), user_blocked_users_path %></li>
   <li><%= link_to t(".navigation.muted_users"), user_muted_users_path %></li>
@@ -23,14 +23,6 @@
     <legend><%= t(".privacy.legend") %></legend>
     <h4 class="heading"><%= t(".privacy.heading") %> <%= link_to_help "privacy-preferences" %></h4>
     <ul>
-      <li>
-        <%= f.check_box :email_visible %>
-        <%= f.label :email_visible, t(".privacy.show_email_address") %>
-      </li>
-      <li>
-        <%= f.check_box :date_of_birth_visible %>
-        <%= f.label :date_of_birth_visible, t(".privacy.show_date_of_birth") %>
-      </li>
       <li>
         <%= f.check_box :minimize_search_engines %>
         <%= f.label :minimize_search_engines, t(".privacy.hide_work_from_search_engines") %>
@@ -81,7 +73,7 @@
       <dt><%= f.label :time_zone, t(".your_time_zone") %></dt>
       <dd><%= f.time_zone_select :time_zone, nil, default: Time.zone.name %></dd>
       <% if $rollout.active?(:set_locale_preference, @user) %>
-        <dt><%= f.label :preferred_locale, t(".your_locale") %> <%= link_to_help "locale-preferences" %></dt>
+        <dt><%= f.label :preferred_locale, t(".your_locale") %> <%= link_to_help_modal(help_preferences_locale_path, t(".locale_help_title", locale: current_user.preference.locale_for_mails)) %></dt>
         <dd><%= f.select :preferred_locale, locale_options_for_select(@available_locales, "id"),
                   default: @preference.preferred_locale %></dd>
       <% end %>

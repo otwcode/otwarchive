@@ -425,54 +425,6 @@ describe "rake After:rename_underage_warning" do
   end
 end
 
-describe "rake After:migrate_pinch_request_signup" do
-  context "for an assignment with a request_signup_id" do
-    let(:assignment) { create(:challenge_assignment) }
-
-    it "does nothing" do
-      expect do
-        subject.invoke
-      end.to avoid_changing { assignment.reload.request_signup_id }
-        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
-    end
-  end
-
-  context "for an assignment with a request_signup_id and a pinch_request_signup_id" do
-    let(:collection) { create(:collection) }
-    let(:assignment) do
-      create(:challenge_assignment,
-             collection: collection,
-             pinch_request_signup_id: create(:challenge_signup, collection: collection).id)
-    end
-
-    it "does nothing" do
-      expect do
-        subject.invoke
-      end.to avoid_changing { assignment.reload.request_signup_id }
-        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
-    end
-  end
-
-  context "for an assignment with a pinch_request_signup_id but no request_signup_id" do
-    let(:collection) { create(:collection) }
-    let(:signup) { create(:challenge_signup, collection: collection) }
-    let(:assignment) do
-      assignment = create(:challenge_assignment, collection: collection)
-      assignment.update_columns(request_signup_id: nil, pinch_request_signup_id: signup.id)
-      assignment
-    end
-
-    it "sets the request_signup_id to the pinch_request_signup_id" do
-      expect do
-        subject.invoke
-      end.to change { assignment.reload.request_signup_id }
-        .from(nil)
-        .to(signup.id)
-        .and output("Migrated pinch_request_signup for 1 challenge assignments.\n").to_stdout
-    end
-  end
-end
-
 describe "rake After:reindex_hidden_unrevealed_tags" do
   context "with a posted work" do
     let!(:work) { create(:work) }
@@ -566,6 +518,63 @@ describe "rake After:convert_official_kudos" do
   end
 end
 
+describe "rake After:convert_archivist_kudos" do
+  context "when there is no archivist role" do
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("No archivist users found\n").to_stdout
+    end
+  end
+
+  context "when there are no archivist users" do
+    let!(:role) { Role.find_or_create_by(name: "archivist") }
+
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("No archivist users found\n").to_stdout
+    end
+  end
+
+  context "when there are archivist users but none have left kudos" do
+    let!(:archivist_user) { create(:archivist) }
+
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("Finished converting kudos from archivist users to guest kudos\n").to_stdout
+    end
+  end
+
+  context "when an archivist user and a regular user both have kudos" do
+    let!(:archivist_user1) { create(:user) }
+    let!(:archivist_kudos1) { create(:kudo, user: archivist_user1) }
+    let!(:regular_user) { create(:user) }
+    let!(:regular_kudos) { create(:kudo, user: regular_user) }
+
+    before do
+      archivist_user1.roles = [Role.find_or_create_by(name: "archivist")]
+    end
+
+    it "removes the user_id from the archivist user's kudos and outputs completion message" do
+      expect do
+        subject.invoke
+      end.to change { archivist_kudos1.reload.user_id }
+        .from(archivist_user1.id)
+        .to(nil)
+        .and output("Updating 1 kudos from #{archivist_user1.login}\nFinished converting kudos from archivist users to guest kudos\n").to_stdout
+    end
+
+    it "leaves the user_id on the regular user's kudos and outputs completion message" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { regular_kudos.reload.user_id }
+        .and output("Updating 1 kudos from #{archivist_user1.login}\nFinished converting kudos from archivist users to guest kudos\n").to_stdout
+    end
+  end
+end
+
 describe "rake After:create_non_canonical_tagset_associations" do
   shared_examples "no TagSetAssociation is created" do
     it "does not create a TagSetAssociation" do
@@ -627,5 +636,187 @@ describe "rake After:create_non_canonical_tagset_associations" do
 
       it_behaves_like "no TagSetAssociation is created"
     end
+  end
+end
+
+describe "rake After:add_collection_tags" do
+  let(:collection) { create(:collection) }
+  let(:items) { [] }
+
+  before do
+    items.each do |item|
+      item.collections << collection
+      item.collection_items.update_all(
+        user_approval_status: "approved",
+        collection_approval_status: "approved"
+      )
+    end
+  end
+
+  context "when a collection has works" do
+    let(:items) { create_list(:work, 2) }
+
+    it "tags the collection with the work's fandoms" do
+      subject.invoke
+      expect(collection.tags).to include(*items.flat_map(&:fandoms))
+    end
+
+    shared_examples "does not tag the collection" do
+      it "does not tag the collection with the work's fandoms" do
+        subject.invoke
+        expect(collection.tags).not_to include(*items.flat_map(&:fandoms))
+      end
+    end
+
+    context "when the work is hidden" do
+      let(:items) { [create(:work, hidden_by_admin: true)] }
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the work is restricted" do
+      let(:items) { [create(:work, restricted: true)] }
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the work is unrevealed" do
+      let(:items) { [create(:work)] }
+
+      before do
+        items.each do |work|
+          work.update!(in_unrevealed_collection: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+  end
+
+  context "when a collection has work bookmarks" do
+    let(:fandom) { create(:canonical_fandom) }
+    let(:items) { [create(:bookmark, tag_string: fandom.name)] }
+
+    it "tags the collection with the bookmark's AND bookmarked item's fandoms" do
+      subject.invoke
+      expect(collection.tags).to include(*items.flat_map(&:fandoms))
+      expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
+    end
+
+    shared_examples "does not tag the collection" do
+      it "does not tag the collection with the bookmark's or bookmarked item's fandoms" do
+        subject.invoke
+        expect(collection.tags).not_to include(*items.flat_map(&:fandoms))
+        expect(collection.tags).not_to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
+      end
+    end
+
+    context "when the bookmarked item is a hidden work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(hidden_by_admin: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the bookmarked item is a restricted work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(restricted: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the bookmarked item is an unrevealed work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(in_unrevealed_collection: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+  end
+
+  context "when a collection has a series bookmark" do
+    let(:fandom) { create(:canonical_fandom) }
+    let(:bookmark) { create(:series_bookmark, tag_string: fandom.name) }
+    let(:items) { [bookmark] }
+
+    it "includes the bookmark's and series's fandoms" do
+      subject.invoke
+      expect(collection.tags).to include(*bookmark.fandoms)
+      expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map { |s| s.work_tags.where(type: "Fandom") })
+    end
+  end
+
+  context "when a collection has a subcollection" do
+    let(:subcollection) { create(:collection) }
+    let(:fandom) { create(:canonical_fandom) }
+    let(:bookmark) { create(:series_bookmark, fandom_string: fandom.name) }
+
+    before do
+      subcollection.parent = collection
+      subcollection.save!(validate: false)
+      bookmark.collections << subcollection
+      bookmark.collection_items.update_all(
+        user_approval_status: "approved",
+        collection_approval_status: "approved"
+      )
+    end
+
+    it "includes tags from the items in the subcollection" do
+      subject.invoke
+      expect(collection.reload.tags).to include(*bookmark.fandoms)
+    end
+  end
+end
+
+describe "rake After:sync_approved_to_spam" do
+  let(:synced_ham_comment) { create(:comment) }
+  let(:synced_spam_comment) { create(:comment) }
+  let(:unsynced_ham_comment) { create(:comment) }
+  let(:unsynced_spam_comment) { create(:comment) }
+  # Adding a second unsynced spam to ensure more than a single approved: false, spam: false is processed correctly.
+  let(:unsynced_spam_comment_two) { create(:comment) }
+
+  before do
+    # Setup comment states. This is required because approved is set on comment creation via lifecycle hook.
+    synced_ham_comment.update_columns(approved: true, spam: false)
+    synced_spam_comment.update_columns(approved: false, spam: true)
+    unsynced_ham_comment.update_columns(approved: true, spam: true)
+    unsynced_spam_comment.update_columns(approved: false, spam: false)
+    unsynced_spam_comment_two.update_columns(approved: false, spam: false)
+  end
+
+  it "updates spam attribute for all unsynced comments" do
+    subject.invoke
+
+    [unsynced_ham_comment, unsynced_spam_comment, unsynced_spam_comment_two].map(&:reload)
+
+    expect(unsynced_ham_comment.approved).to be_truthy
+    expect(unsynced_ham_comment.spam).to be_falsey
+
+    expect(unsynced_spam_comment.approved).to be_falsey
+    expect(unsynced_spam_comment.spam).to be_truthy
+
+    expect(unsynced_spam_comment_two.approved).to be_falsey
+    expect(unsynced_spam_comment_two.spam).to be_truthy
+  end
+
+  it "does not update synced comments" do
+    subject.invoke
+
+    [synced_ham_comment, synced_spam_comment].map(&:reload)
+
+    expect(synced_ham_comment.approved).to be_truthy
+    expect(synced_ham_comment.spam).to be_falsey
+
+    expect(synced_spam_comment.approved).to be_falsey
+    expect(synced_spam_comment.spam).to be_truthy
   end
 end

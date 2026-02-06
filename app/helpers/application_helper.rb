@@ -39,6 +39,19 @@ module ApplicationHelper
                     end
     when "errors"
       class_names = "system #{controller.controller_name} error-#{controller.action_name}"
+    # If you edit these classes, you may need to edit the main div's classes in layouts/session
+    when "sessions"
+      class_names = if controller.action_name == "create"
+                      "#{class_names} system session authentication"
+                    else
+                      class_names
+                    end
+    when "totp"
+      class_names = if %w(confirm_disable create disable new).include?(controller.action_name)
+                      "#{class_names} system session authentication reauthentication"
+                    else
+                      class_names
+                    end
     end
 
     class_names
@@ -60,87 +73,109 @@ module ApplicationHelper
     link_to content_tag(:span, ts("RSS Feed")), link_to_feed, title: ts("RSS Feed"), class: "rss"
   end
 
-  # 1: default shows just the link to help
-  # 2: show_text = true: shows "plain text with limited html" and link to help
-  def allowed_html_instructions(show_text = true)
-    (show_text ? h(ts("Plain text with limited HTML")) : "".html_safe) +
-      link_to_help("html-help")
+  def allowed_html_instructions(strip_images: false)
+    # i18n-tasks-use t("application_helper.text_limited_html")
+    # i18n-tasks-use t("application_helper.text_limited_html_strip_images_html")
+    t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help("html-help"))
   end
 
   # Byline helpers
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous").html_safe
+      anon_byline = t("application_helper.anonymous_byline")
       if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
-        anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
+        anon_byline = t("application_helper.anonymous_with_name_byline_html", pseud_byline: non_anonymous_byline(creation, options[:only_path]))
       end
       return anon_byline
     end
     non_anonymous_byline(creation, options[:only_path])
   end
 
+  private
+
   def non_anonymous_byline(creation, url_path = nil)
     only_path = url_path.nil? ? true : url_path
 
-    if @preview_mode
-      # Skip cache in preview mode
-      return byline_text(creation, only_path)
-    end
+    # Skip cache in preview mode
+    return byline_text_uncached(creation, only_path) if @preview_mode # rubocop:disable Rails/HelperInstanceVariable
 
-    Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
-      byline_text(creation, only_path)
-    end
+    byline_text(creation, only_path)
   end
 
-  def byline_text(creation, only_path, text_only = false)
-    if creation.respond_to?(:author)
-      creation.author
-    else
-      pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a
-      pseuds = pseuds.flatten.uniq.sort
+  def byline_text(creation, only_path, text_only: false)
+    # Update Series#expire_byline_cache and Chapter#expire_byline_cache when changing cache key here
+    creators = Rails.cache.fetch(["byline_data", creation.cache_key]) { byline_data(creation) }
+    byline_text_internal(creators, only_path, text_only)
+  end
 
-      archivists = Hash.new []
-      if creation.is_a?(Work)
-        external_creatorships = creation.external_creatorships.select { |ec| !ec.claimed? }
-        external_creatorships.each do |ec|
-          archivist_pseud = pseuds.select { |p| ec.archivist.pseuds.include?(p) }.first
-          archivists[archivist_pseud] += [ec.author_name]
-        end
+  def byline_text_uncached(creation, only_path, text_only: false)
+    creators = byline_data(creation)
+    byline_text_internal(creators, only_path, text_only)
+  end
+
+  def byline_text_internal(creators, only_path, text_only)
+    return creators if creators.is_a?(String)
+
+    safe_join(creators.map do |creator|
+      pseud_byline = if text_only
+                       creator[:byline]
+                     else
+                       url_options = { controller: "pseuds", action: "show", user_id: creator[:user], id: creator[:pseud], only_path: only_path }
+                       link_to(creator[:byline], url_options, rel: "author")
+                     end
+
+      if creator[:external_creators].empty?
+        pseud_byline
+      else
+        safe_join(creator[:external_creators].map do |ext_creator|
+          t("application_helper.archivist_byline_html", external_creator: ext_creator, pseud_byline: pseud_byline)
+        end, t("support.array.words_connector"))
       end
+    end, t("support.array.words_connector"))
+  end
 
-      pseuds.map { |pseud|
-        pseud_byline = text_only ? pseud.byline : pseud_link(pseud, only_path)
-        if archivists[pseud].empty?
-          pseud_byline
-        else
-          archivists[pseud].map { |ext_author|
-            ts("%{ext_author} [archived by %{name}]", ext_author: ext_author, name: pseud_byline)
-          }.join(', ')
-        end
-      }.join(', ').html_safe
+  def byline_data(creation)
+    return creation.author if creation.respond_to?(:author)
+
+    pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a # rubocop:disable Rails/HelperInstanceVariable
+    pseuds = pseuds.flatten.uniq.sort
+
+    external_creators = Hash.new []
+    if creation.is_a?(Work)
+      external_creatorships = creation.external_creatorships.reject(&:claimed?)
+      external_creatorships.each do |ec|
+        archivist_pseud = pseuds.find { |p| ec.archivist.pseuds.include?(p) }
+        external_creators[archivist_pseud] += [ec.author_name]
+      end
+    end
+
+    pseuds.map do |pseud|
+      {
+        # Cache the plain-text pseud (username)
+        byline: pseud.byline,
+        # Cache the parameters that we need for generating the pseud URL later
+        # We can't cache the record itself (for later URL generation) since it could change or be deleted
+        pseud: pseud.to_param,
+        user: pseud.user.to_param,
+        # Cache the array of plain-text names of the unclaimed external creators
+        external_creators: external_creators[pseud]
+      }
     end
   end
 
-  def pseud_link(pseud, only_path = true)
-    if only_path
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
-    else
-      link_to(pseud.byline, user_pseud_url(pseud.user, pseud), rel: "author")
-    end
-  end
+  public
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.
   def text_byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous")
+      anon_byline = t("application_helper.anonymous_byline")
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline += " [#{non_anonymous_byline(creation)}]".html_safe
+        anon_byline = t("application_helper.anonymous_with_name_byline_html", pseud_byline: non_anonymous_byline(creation))
       end
       anon_byline
     else
       only_path = false
-      text_only = true
-      byline_text(creation, only_path, text_only)
+      byline_text(creation, only_path, text_only: true)
     end
   end
 
@@ -153,18 +188,20 @@ module ApplicationHelper
     link_to content, options[:for], html_options
   end
 
-  # Currently, help files are static. We may eventually want to make these dynamic?
+  # TODO: AO3-7208 Make help modals dynamic and translatable and use link_to_help_modal instead of this method
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
     help_file = ""
-    #if Locale.active && Locale.active.language
-    #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
-    #end
 
     unless !help_file.blank? && File.exists?("#{Rails.root}/public/#{help_file}")
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
 
     " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
+  end
+
+  def link_to_help_modal(help_path, title)
+    link = tag.span(tag.span(t("application_helper.help_modal.help_symbol")), class: %w[symbol question])
+    " ".html_safe + link_to_modal(link, for: help_path, title: title, class: "help symbol question")
   end
 
   # Inserts the flash alert messages for flash[:key] wherever
@@ -509,7 +546,7 @@ module ApplicationHelper
 
   def first_paragraph(full_text, placeholder_text = 'No preview available.')
     # is there a paragraph that does not have a child image?
-    paragraph = Nokogiri::HTML.parse(full_text).at_xpath('//p[not(img)]')
+    paragraph = Nokogiri::HTML5.parse(full_text).at_xpath("//p[not(img)]")
     if paragraph.present?
       # if so, get its text and put it in a fresh p tag
       paragraph_text = paragraph.text
@@ -557,7 +594,7 @@ module ApplicationHelper
     # series.
     return [] if creation.is_a?(Work) && creation.unrevealed?
 
-    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
+    creation.pseuds.pluck(:user_id).uniq.map { |id| "user-#{id}" }
   end
 
   def css_classes_for_creation_blurb(creation)
