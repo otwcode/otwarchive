@@ -197,5 +197,4 @@ namespace :skins do
     puts "Finished clearing unofficial public skins."
     $stdout.flush
   end
-
 end
