@@ -145,15 +145,7 @@
             various_units_link:
               link_to(t(".numeric_values.description.various_units"),
                 "https://w3schools.com/css/css_units.asp"),
-            units_list_code: tag.br + tag.code(t(".numeric_values.description.units_list",
-              cm_code: "cm",
-              em_code: "em",
-              ex_code: "ex",
-              in_code: "in",
-              mm_code: "mm",
-              pc_code: "pc",
-              pt_code: "pt",
-              px_code: "px"))) %>
+            units_list_code: tag.br + tag.code(t(".numeric_values.description.units_list"))) %>
     </p>
     <p><%= t(".numeric_values.description.em_unit_html", em_code: tag.code("em")) %></p>
   </dd>
@@ -188,7 +180,7 @@
   <dd>
     <p>
       <%= t(".css_basics.description.line_of_css_html",
-            example_css_code: tag.code("#{t('.css_basics.description.selector')} {#{t('.css_basics.description.property')}: #{t('.css_basics.description.value')};}")) %>
+            example_css_code: tag.code(t(".css_basics.description.example_css"))) %>
     </p>
     <p>
       <%= t(".css_basics.description.css_selectors_and_rules_html",

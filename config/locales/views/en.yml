@@ -1106,6 +1106,7 @@ en:
           css_intro_tutorial: CSS introduction tutorial
           css_selectors_and_rules_html: The %{selector_bold} is either the name of an HTML tag (like %{body_tag_code} or %{h1_tag_code}), or it can be an id or class that has been set on a tag. The %{property_bold} is what you want to change in the contents of that tag (for instance the font size), and the %{value_bold} is what you want to set it to.
           css_tutorials: 'Some useful CSS tutorials for more information:'
+          example_css: 'selector {property: value;}'
           examples_header: 'Examples:'
           font_size_example_html: 'Inside the "body" tag, set the font size slightly larger than the baseline: %{font_size_css_code}'
           line_of_css_html: 'A line of CSS code looks pretty much like this: %{example_css_code}'
@@ -1137,7 +1138,7 @@ en:
         description:
           em_unit_html: 'PS: we highly encourage learning about and using %{em_code}, which lets you set things relative to the viewer''s current font size! It will make your layouts much more flexible and responsive to different browser/font settings.'
           precision_html: 'You can specify numeric values up to two decimal places, either as percentages or in %{various_units_link}: %{units_list_code}'
-          units_list: "%{cm_code}, %{em_code}, %{ex_code}, %{in_code}, %{mm_code}, %{pc_code}, %{pt_code}, %{px_code}"
+          units_list: cm, em, ex, in, mm, pc, pt, px
           various_units: various units
         header: Numeric Values
       one_declaration_per_ruleset:
