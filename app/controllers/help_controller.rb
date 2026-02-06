@@ -10,4 +10,13 @@ class HelpController < ApplicationController
 
   def skins_creating
   end
+
+  def tags_fandoms
+  end
+
+  def tags_ratings
+  end
+
+  def tags_warnings
+  end
 end

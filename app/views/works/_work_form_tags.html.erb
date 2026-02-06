@@ -11,7 +11,7 @@
   <dl>
     <dt class="rating required">
       <label for="work_rating_string"><%= Rating::NAME %>*</label>
-      <%= link_to_help "rating-help" %>
+      <%= link_to_help_modal(help_tags_ratings_path, t(".ratings_help_title")) %>
     </dt>
     <dd class="rating required">
       <%= collection_select :work,
@@ -26,7 +26,7 @@
 
     <dt class="warning required">
       <label><%= ArchiveWarning::NAME.pluralize %>*</label>
-      <%= link_to_help "warning-help" %>
+      <%= link_to_help_modal(help_tags_warnings_path, t(".warnings_help_title")) %>
     </dt>
     <dd class="warning required">
       <fieldset class="warnings">
@@ -49,7 +49,7 @@
 
     <dt class="fandom required">
       <label for="work_fandom" title="<%= ts('fandoms') %>"><%= Fandom::NAME.pluralize %>*</label>
-      <%= link_to_help "fandom-help" %>
+      <%= link_to_help_modal(help_tags_fandoms_path, t(".fandoms_help_title")) %>
     </dt>
     <dd class="fandom required" title="<%= ts('fandoms') %>">
       <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, 

@@ -46,7 +46,7 @@ class Reading < ApplicationRecord
 
   def expire_cached_home_marked_for_later
     unless Rails.env.development?
-      Rails.cache.delete("home/index/#{user_id}/home_marked_for_later")
+      Rails.cache.delete("v1/home/index/#{user_id}/home_marked_for_later")
     end
   end
 end
