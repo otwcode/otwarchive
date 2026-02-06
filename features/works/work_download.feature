@@ -130,15 +130,20 @@ Feature: Download a work
 
   Scenario: Download of chaptered work without posted chapters does not include chapters
 
-  Given the work "Bazinga"
-    And a draft chapter is added to "Bazinga"
-    And I delete chapter 1 of "Bazinga"
-  When I view the work "Bazinga"
+  Given I am logged in
+    And I set up the draft "Allons-sy"
+    And I fill in "content" with "Run! Rose, run!"
+    And I press "Post"
+    And I follow "Add Chapter"
+    And I fill in "content" with "Remember, remember the 5th of November"
+    And I follow "Save Draft"
+    And I force delete chapter 1 of "Allons-sy"
+  When I view the work "Allons-sy"
     And I follow "HTML"
-  Then I should not see "Chapter 1"
-    And I should not see "Chapter 2"
-    And I should be able to download all versions of "Bazinga"
-
+  Then I should not see "Run! Rose, run!"
+    And I should not see "Remember, remember the 5th of November"
+    And I should be able to download all versions of "Allons-sy"
+    
   Scenario: Download chaptered works
 
   Given I am logged in as "author"
