@@ -15,6 +15,9 @@ class UserPolicy < ApplicationPolicy
   # Roles that allow deleting all of a spammer's creations.
   SPAM_CLEANUP_ROLES = %w[superadmin policy_and_abuse].freeze
 
+  # Roles that allow viewing of past user emails and logins.
+  VIEW_PAST_USER_INFO_ROLES = %w[superadmin policy_and_abuse open_doors support tag_wrangling].freeze
+
   # Roles that allow accessing a summary of a user's works and comments.
   REVIEW_CREATIONS_ROLES = %w[superadmin policy_and_abuse].freeze
 
@@ -46,6 +49,10 @@ class UserPolicy < ApplicationPolicy
 
   def can_destroy_spam_creations?
     user_has_roles?(SPAM_CLEANUP_ROLES)
+  end
+
+  def can_view_past?
+    user_has_roles?(VIEW_PAST_USER_INFO_ROLES)
   end
 
   def can_access_creation_summary?

@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
   create_table "abuse_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "email"
-    t.string "url", null: false
+    t.string "url", limit: 2080, null: false
     t.text "comment", null: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
@@ -55,7 +55,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
 
   create_table "admin_activities", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "admin_id"
-    t.integer "target_id"
+    t.bigint "target_id"
     t.string "target_type"
     t.string "action"
     t.text "summary"
@@ -132,6 +132,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.text "disabled_support_form_text"
     t.integer "disabled_support_form_text_sanitizer_version", limit: 2, default: 0, null: false
     t.boolean "guest_comments_off", default: false, null: false
+    t.integer "account_age_threshold_for_comment_spam_check", default: 0, null: false
     t.index ["last_updated_by"], name: "index_admin_settings_on_last_updated_by"
   end
 
@@ -215,7 +216,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.index ["blocker_id"], name: "index_blocks_on_blocker_id"
   end
 
-  create_table "bookmarks", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "bookmarks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.string "bookmarkable_type", limit: 15, null: false
     t.integer "bookmarkable_id", null: false
@@ -246,7 +247,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.datetime "defaulted_at", precision: nil
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
-    t.integer "pinch_request_signup_id"
     t.datetime "covered_at", precision: nil
     t.index ["collection_id"], name: "index_challenge_assignments_on_collection_id"
     t.index ["creation_id"], name: "assignments_on_creation_id"
@@ -310,7 +310,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
 
   create_table "collection_items", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "collection_id"
-    t.integer "item_id"
+    t.bigint "item_id"
     t.string "item_type", default: "Work"
     t.integer "user_approval_status", limit: 1, default: 0, null: false
     t.integer "collection_approval_status", limit: 1, default: 0, null: false
@@ -348,6 +348,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.boolean "show_random", default: false, null: false
     t.boolean "prompt_meme", default: false, null: false
     t.boolean "email_notify", default: false, null: false
+    t.datetime "unrevealed_updated_at"
+    t.datetime "anonymous_updated_at"
     t.index ["collection_id"], name: "index_collection_preferences_on_collection_id"
   end
 
@@ -384,8 +386,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.integer "description_sanitizer_version", limit: 2, default: 0, null: false
     t.string "icon_alt_text", default: ""
     t.string "icon_comment_text", default: ""
-    t.boolean "multifandom"
-    t.boolean "open_doors"
+    t.boolean "multifandom", default: false, null: false
+    t.boolean "open_doors", default: false, null: false
     t.index ["name"], name: "index_collections_on_name"
     t.index ["parent_id"], name: "index_collections_on_parent_id"
   end
@@ -405,7 +407,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.integer "thread"
-    t.string "user_agent"
+    t.string "user_agent", limit: 500
     t.boolean "approved", default: false, null: false
     t.boolean "hidden_by_admin", default: false, null: false
     t.datetime "edited_at", precision: nil
@@ -418,6 +420,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.index ["commentable_id", "commentable_type"], name: "index_comments_commentable"
     t.index ["email"], name: "index_comments_on_email"
     t.index ["ip_address"], name: "index_comments_on_ip_address"
+    t.index ["name"], name: "index_comments_on_name"
     t.index ["parent_id", "parent_type"], name: "index_comments_parent"
     t.index ["pseud_id"], name: "index_comments_on_pseud_id"
     t.index ["thread"], name: "comments_by_thread"
@@ -442,23 +445,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.boolean "approved", default: false, null: false
     t.index ["creation_id", "creation_type", "pseud_id"], name: "creation_id_creation_type_pseud_id", unique: true
     t.index ["pseud_id"], name: "index_creatorships_pseud"
-  end
-
-  create_table "delayed_jobs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "priority", default: 0
-    t.integer "attempts", default: 0
-    t.text "handler"
-    t.text "last_error"
-    t.datetime "run_at", precision: nil
-    t.datetime "locked_at", precision: nil
-    t.datetime "failed_at", precision: nil
-    t.string "locked_by"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.index ["failed_at"], name: "delayed_jobs_failed_at"
-    t.index ["locked_at"], name: "delayed_jobs_locked_at"
-    t.index ["locked_by"], name: "delayed_jobs_locked_by"
-    t.index ["run_at"], name: "delayed_jobs_run_at"
   end
 
   create_table "external_author_names", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -524,7 +510,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.datetime "updated_at", precision: nil
     t.string "email"
     t.string "summary"
-    t.string "user_agent"
+    t.string "user_agent", limit: 500
     t.string "category"
     t.integer "comment_sanitizer_version", limit: 2, default: 0, null: false
     t.integer "summary_sanitizer_version", limit: 2, default: 0, null: false
@@ -544,7 +530,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.index ["unhidden_works_count"], name: "index_unhidden_works_count"
   end
 
-  create_table "filter_taggings", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "filter_taggings", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "filter_id", null: false
     t.bigint "filterable_id", null: false
     t.string "filterable_type", limit: 100
@@ -627,6 +613,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.datetime "resent_at", precision: nil
     t.index ["creator_id", "creator_type"], name: "index_invitations_on_creator_id_and_creator_type"
     t.index ["external_author_id"], name: "index_invitations_on_external_author_id"
+    t.index ["invitee_email"], name: "index_invitations_on_invitee_email"
     t.index ["invitee_id", "invitee_type"], name: "index_invitations_on_invitee_id_and_invitee_type"
     t.index ["token"], name: "index_invitations_on_token"
   end
@@ -669,7 +656,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.boolean "support_available", default: false, null: false
     t.boolean "abuse_support_available", default: false, null: false
     t.string "sortable_name", default: "", null: false
-    t.index ["short"], name: "index_languages_on_short"
+    t.index ["name"], name: "index_languages_on_name", unique: true
+    t.index ["short"], name: "index_languages_on_short", unique: true
     t.index ["sortable_name"], name: "index_languages_on_sortable_name"
   end
 
@@ -803,10 +791,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
   create_table "preferences", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
     t.boolean "history_enabled", default: true
-    t.boolean "email_visible", default: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
-    t.boolean "date_of_birth_visible", default: false
     t.boolean "comment_emails_off", default: false, null: false
     t.boolean "adult", default: false
     t.boolean "hide_warnings", default: false, null: false
@@ -837,9 +823,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
 
   create_table "profiles", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
-    t.string "location"
     t.text "about_me"
-    t.date "date_of_birth"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.string "title"
@@ -1034,15 +1018,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.index ["user_id", "role_id"], name: "index_roles_users_on_user_id_and_role_id"
   end
 
-  create_table "searches", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "user_id"
-    t.string "name"
-    t.text "options"
-    t.string "type"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-  end
-
   create_table "serial_works", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "series_id"
     t.integer "work_id"
@@ -1122,7 +1097,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.index ["author_id"], name: "index_skins_on_author_id"
     t.index ["in_chooser"], name: "index_skins_on_in_chooser"
     t.index ["public", "official"], name: "index_skins_on_public_and_official"
-    t.index ["title"], name: "index_skins_on_title"
+    t.index ["title"], name: "index_skins_on_title", unique: true
     t.index ["type"], name: "index_skins_on_type"
   end
 
@@ -1137,7 +1112,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.index ["work_id"], name: "index_hit_counters_on_work_id", unique: true
   end
 
-  create_table "subscriptions", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "subscriptions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
     t.integer "subscribable_id"
     t.string "subscribable_type"
@@ -1202,9 +1177,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.datetime "updated_at", precision: nil
   end
 
-  create_table "taggings", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "taggings", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "tagger_id"
-    t.integer "taggable_id", null: false
+    t.bigint "taggable_id", null: false
     t.string "taggable_type", limit: 100, default: ""
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
@@ -1214,7 +1189,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
   end
 
   create_table "tags", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.string "name", limit: 100, default: ""
+    t.string "name", limit: 150, default: ""
     t.boolean "canonical", default: false, null: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
@@ -1275,24 +1250,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.string "last_sign_in_ip"
     t.string "unlock_token"
     t.datetime "locked_at", precision: nil
-    t.boolean "recently_reset"
     t.datetime "renamed_at", precision: nil
     t.integer "resets_requested", default: 0, null: false
+    t.datetime "admin_renamed_at"
+    t.string "unconfirmed_email"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["login"], name: "index_users_on_login", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["resets_requested"], name: "index_users_on_resets_requested"
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
-  end
-
-  create_table "work_links", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "work_id"
-    t.string "url"
-    t.integer "count"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.index ["work_id", "url"], name: "work_links_work_id_url", unique: true
   end
 
   create_table "work_original_creators", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1364,6 +1331,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_04_183910) do
     t.integer "content_sanitizer_version", limit: 2, default: 0, null: false
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id", name: "_fk_rails_c3b3935057"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id", name: "_fk_rails_993965df05"
 end

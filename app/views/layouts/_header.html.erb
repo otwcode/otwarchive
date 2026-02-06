@@ -25,7 +25,7 @@
   <% else %>
     <div id="login" class="dropdown">
       <p class="user actions">
-        <%= link_to t(".login"), new_user_session_path, id: "login-dropdown" %>
+        <%= link_to t(".login"), new_user_session_path(return_to: request.fullpath.start_with?(new_user_session_path) ? params[:return_to] : request.fullpath), id: "login-dropdown" %>
       </p>
       <%= render "users/sessions/login" %>
     </div>

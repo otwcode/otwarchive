@@ -1,42 +1,42 @@
-<%= form_for(@wrangling_guideline, html: { class: 'post' }) do |f| %>
+<%= form_for(@wrangling_guideline, html: { class: "post" }) do |f| %>
 
   <%= error_messages_for @wrangling_guideline %>
 
-  <p class="required notice"><%= ts('* Required information') %></p>
+  <p class="required notice"><%= "* #{t('.required_information')}" %></p>
   <dl>
 
-    <dt class="required"><%= f.label :title, ts('Title') + '*' %></dt>
+    <dt class="required"><%= f.label :title, "#{t('.title')}*" %></dt>
     <dd>
       <%= f.text_field :title %>
-      <%= live_validation_for_field('wrangling_guideline_title', :failureMessage => ts('Please enter a title.')) %>
+      <%= live_validation_for_field("wrangling_guideline_title", failureMessage: t(".title_failure")) %>
     </dd>
 
-    <dt class="required"><%= f.label :content, ts('Guideline text') + '*' %></dt>
+    <dt class="required"><%= f.label :content, "#{t('.guideline_text')}*", for: "content" %></dt>
     <dd class="required">
       <ul class="hidden rtf-html-switch actions" role="menu">
-        <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
-        <li><a class="html-link" href="#"><%= ts('HTML') %></a></li>
+        <li><a class="rtf-link" href="#"><%= t(".rich_text_editor") %></a></li>
+        <li><a class="html-link" href="#"><%= t(".html_editor") %></a></li>
       </ul>
       <p class="rtf-html-instructions note">
         <span class="html-notes"><%= allowed_html_instructions %></span>
-        <span class="hidden rtf-notes"><%= ts('Type or paste formatted text.') %><%= link_to_help "rte-help" %></span>
+        <span class="hidden rtf-notes"><%= t(".rich_text_notes_html") %><%= link_to_help("rte-help") %></span>
       </p>
       <% use_tinymce %>
       <div class="rtf-html-field">
-        <%= f.text_area :content, :class => "mce-editor observe_textlength" %>
-        <%= live_validation_for_field('wrangling_guideline_content',
-              :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN,
-              :tooLongMessage => ts('We salute your ambition! But sadly the content must be less than %{max} letters long.', :max => ArchiveConfig.CONTENT_MAX.to_s),
-              :tooShortMessage => ts('Brevity is the soul of wit, but your content does have to be at least %{min} letters long.', :min => ArchiveConfig.CONTENT_MIN.to_s),
-              :failureMessage => ts('You need to post some content here.'))
-        %>
+        <%= f.text_area :content, class: "mce-editor observe_textlength", id: "content" %>
+        <%= live_validation_for_field("content",
+              maximum_length: ArchiveConfig.CONTENT_MAX,
+              minimum_length: ArchiveConfig.CONTENT_MIN,
+              tooLongMessage: t(".content_too_long", count: ArchiveConfig.CONTENT_MAX),
+              tooShortMessage: t(".content_too_short", count: ArchiveConfig.CONTENT_MIN),
+              failureMessage: t(".content_required")) %>
         <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
       </div>
     </dd>
 
-    <dt class="landmark"><%= ts('Post') %></dt>
+    <dt class="landmark"><%= t(".landmark.post") %></dt>
     <dd class="submit actions">
-      <%= submit_tag ts('Post'), :name => 'post_button' %>
+      <%= submit_tag t(".post"), name: "post_button" %>
     </dd>
 
   </dl>

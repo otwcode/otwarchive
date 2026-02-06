@@ -1,23 +1,88 @@
 <div class="tag wrangling home">
   <!--Descriptive page name, messages and instructions-->
-  <h2 class="heading"><%= ts('Tag Wrangling') %></h2>
+  <h2 class="heading"><%= t(".page_heading") %></h2>
   <% unless params[:show] %>
-    <h4 class="landmark heading"><%= ts('Notes') %></h4>
+    <h4 class="landmark heading"><%= t(".notes.landmark") %></h4>
     <ul class="notes">
-      <li>Make tags canonical according to the <%= link_to 'wrangling guidelines', wrangling_guidelines_path %>.</li>
-      <li>If you have trouble accessing the wiki, please <a href="mailto:tagwranglers-personnel@transformativeworks.org">email tag wranglers personnel</a>. For any other questions relating to tag wrangling, please <a href="mailto:tagwranglers-staff@transformativeworks.org">email wrangling staff</a>, or for confidential issues please <a href="mailto:tagwranglers-chair@transformativeworks.org">email tag wrangling chairs</a>.</li>
+      <li>
+        <%= t(".notes.wrangle_to_guidelines_html",
+              wrangling_guidelines_link: link_to(t(".notes.wrangling_guidelines"), wrangling_guidelines_path)) %>
+      </li>
+      <li>
+        <%= t(".notes.contact_supervisor_html",
+              question_for_supervisor_bold: tag.strong(t(".notes.question_for_supervisor")),
+              tw_wranglers_slack_link: link_to(t(".notes.tw_wranglers_slack"), "https://transformativeworks.slack.com/archives/C0BD05W83"),
+              tw_wranglers_quietroom_slack_link: link_to(t(".notes.tw_wranglers_quietroom_slack"), "https://transformativeworks.slack.com/archives/C08LKQFN5E3")) %>
+      </li>
+      <li>
+        <%= t(".notes.contact_chair_html",
+              question_for_chair_bold: tag.strong(t(".notes.question_for_chair")),
+              tag_wranglers_chair_email_link: mail_to("tagwranglers-chair@transformativeworks.org"),
+              tw_wranglers_slack_link: link_to(t(".notes.tw_wranglers_slack"), "https://transformativeworks.slack.com/archives/C0BD05W83"),
+              tw_wranglers_quietroom_slack_link: link_to(t(".notes.tw_wranglers_quietroom_slack"), "https://transformativeworks.slack.com/archives/C08LKQFN5E3")) %>
+      </li>
     </ul>
-    <h3 class="heading">Additional Resources:</h3>
+
+    <h3 class="heading"><%= t(".general_resources.heading") %></h3>
     <ul>
-      <li><a href="http://wiki.transformativeworks.org/mediawiki/Category:Tag_Wrangling_Committee">Tag Wrangling Committee</a> - Full collection of wiki links &amp; policies</li>
-      <li><a href="http://wiki.transformativeworks.org/mediawiki/Category:Tag_Wrangler_Training">Tag Wrangling Training</a> - New wranglers, start here!</li>
-      <li><a href="http://wiki.transformativeworks.org/mediawiki/Tag_Wrangling_FAQ">Tag Wrangling FAQ</a> - Please check here before emailing Staff</li>
-      <li><a href="https://otwarchive.atlassian.net/issues/?jql=project%20%3D%20AO3%20AND%20component%20%3D%20%22Tag%20Wrangling%22%20AND%20status%20%3D%20%22To%20Do%22">Tag Wrangling Issue Tracker</a> - Known bugs</li>
-      <li><a href="https://secure.transformativeworks.org/mailman/private/tagwranglers/">Tag Wrangler Mailing List Archives</a> (For more information please see <a href="http://wiki.transformativeworks.org/mediawiki/Tag_Wrangler_Mailing_List">Tag Wrangler Mailing List</a>)</li>
-      <li><a href="https://fanarchive.campfirenow.com/">Campfire Chat</a> (For more information please see <a href="http://wiki.transformativeworks.org/mediawiki/How_to_Use_Campfire_-_An_Interactive_Tutorial">Chat Instructions</a>)</li>
-      <li><a href="http://wiki.transformativeworks.org/mediawiki/Fandoms_in_need_of_Cowranglers">Fandoms in need of Cowranglers and fandoms up for grabs</a></li>
-      <li><%= link_to "Unassigned Fandoms", unassigned_fandoms_path(sort: "count") %></li>
-      <li><a href="http://wiki.transformativeworks.org/mediawiki/Category:Fandoms_%26_Megafandoms">Fandom &amp; Megafandom notes</a></li>
+      <li>
+        <%= t(".general_resources.tag_wrangling_committee_html",
+              tag_wrangling_committee_link: link_to(t(".general_resources.tag_wrangling_committee"), "http://wiki.transformativeworks.org/mediawiki/Category:Tag_Wrangling_Committee")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.tag_wrangling_training_html",
+              tag_wrangling_training_link: link_to(t(".general_resources.tag_wrangling_training"), "https://wiki.transformativeworks.org/mediawiki/Category:Tag_Wrangler_Training")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.tag_wrangling_moodle_html",
+              tag_wrangling_moodle_link: link_to(t(".general_resources.tag_wrangling_moodle"), "https://moodle.transformativeworks.org/login/index.php")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.current_wrangling_limitations_html",
+              current_wrangling_limitations_link: link_to(t(".general_resources.current_wrangling_limitations"), "https://wiki.transformativeworks.org/mediawiki/Current_Wrangling_Limitations")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.tag_wrangling_faq_html",
+              tag_wrangling_faq_link: link_to(t(".general_resources.tag_wrangling_faq"), "https://wiki.transformativeworks.org/mediawiki/Tag_Wrangling_FAQ")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.tag_wrangling_communication_policy_html",
+              tag_wrangling_communication_policy_link: link_to(t(".general_resources.tag_wrangling_communication_policy"), "https://wiki.transformativeworks.org/mediawiki/Wrangling_Communication_Policy")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.tag_wranglers_mailing_list_html",
+              tag_wranglers_mailing_list_link: link_to(t(".general_resources.tag_wranglers_mailing_list"), "https://groups.google.com/a/transformativeworks.org/g/tagwranglers")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.vacations_and_retiring_html",
+              vacations_and_retiring_link: link_to(t(".general_resources.vacations_and_retiring"), "https://wiki.transformativeworks.org/mediawiki/Vacations_and_Retiring_from_Wrangling")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.tag_wrangling_bugs_html",
+              tag_wrangling_bugs_link: link_to(t(".general_resources.tag_wrangling_bugs"), "https://wiki.transformativeworks.org/mediawiki/Tag_Wrangling_Bugs_and_Feature_Wishlist")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.otw_slack_chat_html",
+              otw_slack_chat_link: link_to(t(".general_resources.otw_slack_chat"), "https://transformativeworks.slack.com/"),
+              tag_wrangling_slack_tutorial_link: link_to(t(".general_resources.tag_wrangling_slack_tutorial"), "https://wiki.transformativeworks.org/mediawiki/Tag_Wrangling_Slack_Tutorial")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.fandoms_in_need_of_cowranglers_html",
+              fandoms_in_need_of_cowranglers_link: link_to(t(".general_resources.fandoms_in_need_of_cowranglers"), "https://wiki.transformativeworks.org/mediawiki/Fandoms_in_need_of_Cowranglers")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.unassigned_fandoms_html",
+              unassigned_fandoms_link: link_to(t(".general_resources.unassigned_fandoms"), unassigned_fandoms_path(sort: "count"))) %>
+      </li>
+      <li>
+        <%= t(".general_resources.ao3_catch_and_release_html",
+              ao3_catch_and_release_link: link_to(t(".general_resources.ao3_catch_and_release"), tag_wrangler_path("Ao3_Catch_and_Release")),
+              ao3_wrangling_project_faq_link: link_to(t(".general_resources.ao3_wrangling_project_faq"), "https://wiki.transformativeworks.org/mediawiki/AO3_Wrangling_Project_FAQ")) %>
+      </li>
+      <li>
+        <%= t(".general_resources.fandom_and_megafandom_directory_html",
+              fandom_and_megafandom_directory_link: link_to(t(".general_resources.fandom_and_megafandom_directory"), "https://wiki.transformativeworks.org/mediawiki/Category:Fandoms_%26_Megafandoms")) %>
+      </li>
     </ul>
   <% end %>
 
@@ -124,10 +189,11 @@
                     <td title="<%= ts("taggings") %>"><%= tag.taggings_count_cache %></td>
 
                     <td>
-                      <ul class="actions" role="navigation">
-                        <li><%= link_to ts("Edit"), { controller: :tags, action: :edit, id: tag } %></li>
-                        <li><%= link_to ts("Wrangle"), { controller: :tags, action: :wrangle, id: tag } %></li>
-                        <li><%= link_to ts("Works"), { controller: :works, action: :index, tag_id: tag } %></li>
+                      <ul class="actions">
+                        <li><%= link_to t(".manage.edit"), edit_tag_path(tag) %></li>
+                        <li><%= link_to t(".manage.wrangle"), wrangle_tag_path(tag) %></li>
+                        <li><%= link_to t(".manage.works"), tag_works_path(tag) %></li>
+                        <li><%= link_to t(".manage.comments", count: tag.count_visible_comments), tag_comments_path(tag) %></li>
                       </ul>
                     </td>
                   </tr>

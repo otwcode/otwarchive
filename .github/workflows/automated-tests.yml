@@ -18,6 +18,9 @@ jobs:
     env:
       CI: true
       RAILS_ENV: test
+      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: bEZjYLY9tCYGh6WlcMtEJpIi7GO2plZC
+      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: PpLWizzsQHIWnIihtECw8nDHZQd0amzf
+      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: 3S99KdpdEWLnCYudBgUfdCFDBWePWCud
       TEST_GROUP: ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
       CUCUMBER_RETRY: 1
       CUCUMBER_FORMAT: Ao3Cucumber::Formatter
@@ -34,7 +37,7 @@ jobs:
           - 3306:3306
 
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:8.18.2
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.19.10
         ports:
           - 9200:9200
         options: >-
@@ -100,10 +103,10 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install redis
-        uses: awalsh128/cache-apt-pkgs-action@7ca5f46d061ad9aa95863cd9b214dd48edef361d
+        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05
         with:
           packages: redis-server
           version: "1.0"
@@ -113,18 +116,18 @@ jobs:
 
       - name: Install ebook converters
         if: ${{ matrix.tests.ebook }}
-        uses: awalsh128/cache-apt-pkgs-action@7ca5f46d061ad9aa95863cd9b214dd48edef361d
+        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05
         with:
           packages: calibre zip
           version: "1.0"
 
       - name: Cache VCR cassettes
         if: ${{ matrix.tests.vcr }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: features/cassette_library
 
-          # Unfortunately, the actions/cache@v4 version doesn't allow the cache
+          # Unfortunately, the actions/cache@v5 version doesn't allow the cache
           # key to be overwritten if there's an exact match. So instead we add
           # a unique identifier to the key to always force a "cache miss", and
           # restore from related keys to make sure that we still get to load a
@@ -140,7 +143,7 @@ jobs:
 
       - name: Install libvips for image processing
         if: ${{ matrix.tests.libvips }}
-        uses: awalsh128/cache-apt-pkgs-action@7ca5f46d061ad9aa95863cd9b214dd48edef361d
+        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05
         with:
           packages: libvips-dev
           version: "1.0"
@@ -177,7 +180,7 @@ jobs:
 
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.command == 'cucumber' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test failures ${{ hashFiles('tmp/capybara/*') }}
           path: tmp/capybara

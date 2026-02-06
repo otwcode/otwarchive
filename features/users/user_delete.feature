@@ -19,7 +19,7 @@ Scenario: If I delete a user with no works, the user should be deleted without a
     And I should be logged out
 
 Scenario: If a user chooses "Delete Completely" when removing their account,  delete the works associated with that user
-  Given I am logged in as "otheruser" with password "secret"
+  Given I am logged in as "otheruser" with password "secret12"
     And all emails have been delivered
     And I post the work "To be deleted"
   When I try to delete my account as otheruser
@@ -36,7 +36,7 @@ Scenario: If a user chooses "Delete Completely" when removing their account,  de
 
 Scenario: Allow a user to orphan their works when deleting their account
   Given I have an orphan account
-  When I am logged in as "orphaner" with password "secret"
+  When I am logged in as "orphaner" with password "secret12"
     And all emails have been delivered
     And I post the work "To be orphaned"
     And I go to the works page
@@ -117,3 +117,15 @@ Scenario: Delete a user who has coauthored a work
       And a user account should not exist for "testuser"
     When I go to orphan_account's series page
     Then I should see "Epic"
+
+  Scenario: Login after deleting a user does not return to the delete confirmation page
+    Given the following activated users exist
+      | login     | password |
+      | otheruser | password |
+      And I am logged in as "testuser"
+    When I try to delete my account
+    Then I should see "You have successfully deleted your account."
+    When I fill in "Username or email:" with "otheruser" within "#small_login"
+      And I fill in "Password:" with "password" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should not see "You have successfully deleted your account"

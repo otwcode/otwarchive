@@ -24,7 +24,7 @@ end
 
 When /^I have removed the recipients/ do
   fill_in("work_recipients", with: "")
-  step %{I post the work without preview}
+  step %{I update the work}
 end
 
 Then /^"(.*?)" should be listed as a recipient in the form/ do |recipient|

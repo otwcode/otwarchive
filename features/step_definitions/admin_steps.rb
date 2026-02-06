@@ -20,7 +20,8 @@ end
 Given "I am logged in as a(n) {string} admin" do |role|
   step "I start a new session"
   login = "testadmin-#{role}"
-  FactoryBot.create(:admin, login: login, roles: [role]) if Admin.find_by(login: login).nil?
+  email = "#{login}@example.org"
+  FactoryBot.create(:admin, login: login, email: email, roles: [role], password: "adminpassword") if Admin.find_by(login: login, email: email).nil?
   visit new_admin_session_path
   fill_in "Admin username", with: login
   fill_in "Admin password", with: "adminpassword"
@@ -30,12 +31,27 @@ end
 
 Given "I am logged in as an admin" do
   step "I start a new session"
-  FactoryBot.create(:admin, login: "testadmin", email: "testadmin@example.org") if Admin.find_by(login: "testadmin").nil?
+  FactoryBot.create(:admin, login: "testadmin", email: "testadmin@example.org", password: "adminpassword") if Admin.find_by(login: "testadmin").nil?
   visit new_admin_session_path
   fill_in "Admin username", with: "testadmin"
   fill_in "Admin password", with: "adminpassword"
   click_button "Log In as Admin"
   step %{I should see "Successfully logged in"}
+end
+
+Given "I am logged in as admin {string} with password {string}" do |login, password|
+  step "I start a new session"
+  visit new_admin_session_path
+  fill_in "Admin username", with: login
+  fill_in "Admin password", with: password
+  click_button "Log In as Admin"
+  step %{I should see "Successfully logged in"}
+end
+
+Given "admin {string} has TOTP 2FA enabled" do |login|
+  admin = Admin.find_by(login: login) || FactoryBot.create(:admin, login: login)
+  admin.generate_totp_secret_if_missing!
+  admin.enable_totp!
 end
 
 Given /^basic languages$/ do
@@ -126,7 +142,7 @@ Given /^I have posted an admin post$/ do
 end
 
 Given "the admin post {string}" do |title|
-  FactoryBot.create(:admin_post, title: title)
+  FactoryBot.create(:admin_post, title: title, comment_permissions: :enable_all)
 end
 
 Given "the fannish next of kin {string} for the user {string}" do |kin, user|
@@ -323,9 +339,13 @@ When "I delete known issues" do
   step %{I follow "Delete"}
 end
 
-When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
-  role_name = role.parameterize.underscore
-  role_id = Role.find_by(name: role_name).id
+When "I check the {string} role checkbox" do |role|
+  role_id = Role.find_by(name: role).id
+  check("user_roles_#{role_id}")
+end
+
+When "I uncheck the {string} role checkbox" do |role|
+  role_id = Role.find_by(name: role).id
   uncheck("user_roles_#{role_id}")
 end
 
@@ -348,6 +368,12 @@ When /^I hide the work "(.*?)"$/ do |title|
   step %{I follow "Hide Work"}
 end
 
+When "I unhide the work {string}" do |title|
+  work = Work.find_by(title: title)
+  visit work_path(work)
+  step %{I follow "Make Work Visible"}
+end
+
 When "the search criteria contains the ID for {string}" do |login|
   user_id = User.find_by(login: login).id
   fill_in("user_id", with: user_id)
@@ -364,6 +390,23 @@ end
 
 When "I follow the first invitation token url" do
   first('//td/a[href*="/invitations/"]').click
+end
+
+When "I fill in a valid TOTP two-step verification code for admin {string}" do |login|
+  admin = Admin.find_by(login: login)
+  fill_in "totp_attempt", with: admin.current_otp
+end
+
+When "I fill in a valid TOTP recovery code for admin {string}" do |login|
+  admin = Admin.find_by(login: login)
+  codes = admin.generate_otp_backup_codes!
+  admin.save!
+  fill_in "totp_attempt", with: codes.first
+  @used_totp_recovery_code = codes.first
+end
+
+When "I fill in a used TOTP recovery code" do
+  fill_in "totp_attempt", with: @used_totp_recovery_code
 end
 
 ### THEN
@@ -397,6 +440,16 @@ Then (/^I should not see a translated admin post$/) do
   step %{I should not see "Translations: Deutsch"}
 end
 
+Then "the {string} role checkbox should be checked" do |role|
+  role_id = Role.find_by(name: role).id
+  assert has_checked_field?("user_roles_#{role_id}")
+end
+
+Then "the {string} role checkbox should not be checked" do |role|
+  role_id = Role.find_by(name: role).id
+  assert has_unchecked_field?("user_roles_#{role_id}")
+end
+
 Then /^the work "([^\"]*)" should be hidden$/ do |work|
   w = Work.find_by_title(work)
   user = w.pseuds.first.user.login
@@ -428,7 +481,7 @@ Then /^I should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, use
   step %{I should see "Sorry, you don't have permission to access the page you were trying to reach."}
 end
 
-Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
+Then "{string} should see their work {string} is hidden" do |user, work|
   step %{I am logged in as "#{user}"}
   step %{I am on #{user}'s works page}
   step %{I should not see "#{work}"}
@@ -498,6 +551,15 @@ Then "the address {string} should not be banned" do |email|
   fill_in("Email to find", with: email)
   click_button("Search Banned Emails")
   step %{I should see "0 emails found"}
+end
+
+Then "I should not be able to add the email {string} to the invite queue" do |email|
+  step %{I am on the homepage}
+  click_link "Get an Invitation"
+  fill_in "Email", with: email
+  click_button "Add me to the list"
+  expect(page).to have_content("Sorry! We couldn't save this invite request because:")
+  expect(page).to have_content("Email has been blocked at the owner's request. That means it can't be used for invitations. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions.")
 end
 
 Then(/^I should not be able to comment with the address "([^"]*)"$/) do |email|

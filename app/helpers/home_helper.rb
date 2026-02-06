@@ -1,15 +1,4 @@
 module HomeHelper
-  def html_to_text(string)
-    string.gsub!(/<br\s*\/?>/, "\n")
-    string.gsub!(/<\/?p>/, "\n\n")
-    string = strip_tags(string)
-    string.gsub!(/^[ \t]*/, "")
-    while !string.gsub!(/\n\s*\n\s*\n/, "\n\n").nil?
-      # keep going
-    end
-    return string
-  end
-
   # A TOC section has an h4 header, p with intro link, and ol of subsections.
   def tos_table_of_contents_section(action)
     return unless %w[content privacy tos].include?(action)

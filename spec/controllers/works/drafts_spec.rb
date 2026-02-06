@@ -31,8 +31,7 @@ describe WorksController do
 
       it "redirects to the login page and displays a error message" do
         get :drafts, params: { user_id: drafts_user.login }
-        it_redirects_to_with_error(new_user_session_path,
-                                   "You can only see your own drafts, sorry!")
+        it_redirects_to_with_error(new_user_session_path(return_to: drafts_user_works_path(drafts_user)), "You can only see your own drafts, sorry!")
       end
     end
 
@@ -122,6 +121,32 @@ describe WorksController do
       it_redirects_to_with_notice(work_path(drafts_user_work),
                                   "Work was submitted to a moderated collection."\
                                   " It will show up in the collection once approved.")
+    end
+
+    it "should post the draft if there is none of the aforementioned issues" do
+      draft = create(:draft, authors: [drafts_user.default_pseud])
+      put :post_draft, params: { id: draft.id }
+      it_redirects_to_with_notice(
+        work_path(draft),
+        "Your work was successfully posted."
+      )
+    end
+
+    it "should only count the words of the first, published, chapter after posting the draft" do
+      draft = create(:draft, authors: [drafts_user.default_pseud])
+      create(:chapter, :draft, work: draft)
+      draft.set_word_count
+
+      expect(draft.word_count).to eq(draft.chapters[0].word_count + draft.chapters[1].word_count)
+
+      put :post_draft, params: { id: draft.id }
+      it_redirects_to_with_notice(
+        work_path(draft),
+        "Your work was successfully posted."
+      )
+
+      expect(draft.reload.first_chapter.posted).to be true
+      expect(draft.word_count).to eq(draft.first_chapter.word_count)
     end
   end
 end

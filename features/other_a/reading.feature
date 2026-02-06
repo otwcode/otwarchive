@@ -3,15 +3,17 @@ Feature: Reading count
 
   Scenario: A user can only see their own reading history
 
-    Given the following activated user exists
-      | login        |
-      | first_reader |
-    When I am logged in as "second_reader"
-      And I go to first_reader's reading page
-    Then I should see "Sorry, you don't have permission"
-      And I should not see "History" within "div#dashboard"
-    When I go to second_reader's reading page
-    Then I should see "History" within "div#dashboard"
+  Given the following activated user exists
+    | login        |
+    | first_reader |
+  When I am logged in as "second_reader"
+    And I go to first_reader's reading page
+  Then I should see "Sorry, you don't have permission"
+    And I should not see "History" within "div#dashboard"
+  When I go to second_reader's reading page
+  Then I should see the page title "History"
+    And I should see "History" within "h2.heading"
+    And I should see "History" within "div#dashboard"
 
   Scenario: A user can read a work several times, updating the count and date in their history
 
@@ -73,7 +75,11 @@ Feature: Reading count
 
   Scenario: Clear entire reading history
 
-    Given I have loaded the fixtures
+    Given the work "First work" by "testuser"
+      And the work "second work" by "testuser"
+      And the work "fourth" by "testuser2"
+      And I am logged in as "testuser2"
+      And I post the work "fifth" with rating "Mature"
     When I am logged in as "fandomer"
       And I am on testuser's works page
       And I follow "First work"
@@ -102,25 +108,28 @@ Feature: Reading count
 
   Scenario: Mark a story to read later
 
-    Given I am logged in as "writer"
-    When I post the work "Testy"
-    Then I should see "Work was successfully posted"
-    When I am logged out
-      And I am logged in as "reader"
-      And I view the work "Testy"
-    Then I should see "Mark for Later"
-    When I follow "Mark for Later"
-    Then I should see "This work was added to your Marked for Later list."
-      And I go to reader's reading page
-    Then I should see "Testy"
-      And I should see "(Marked for Later.)"
-    When I view the work "Testy"
-    Then I should see "Mark as Read"
-    When I follow "Mark as Read"
-    Then I should see "This work was removed from your Marked for Later list."
-      And I go to reader's reading page
-    Then I should see "Testy"
-      And I should not see "(Marked for Later.)"
+  Given I am logged in as "writer"
+  When I post the work "Testy"
+  Then I should see "Work was successfully posted"
+  When I am logged out
+    And I am logged in as "reader"
+    And I view the work "Testy"
+  Then I should see "Mark for Later"
+  When I press "Mark for Later"
+  Then I should see "This work was added to your Marked for Later list."
+  When I go to reader's reading page
+    And I follow "Marked for Later"
+  Then I should see the page title "Marked for Later"
+    And I should see "Marked for Later" within "h2.heading"
+    And I should see "Testy"
+    And I should see "(Marked for Later.)"
+  When I view the work "Testy"
+  Then I should see "Mark as Read"
+  When I press "Mark as Read"
+  Then I should see "This work was removed from your Marked for Later list."
+    And I go to reader's reading page
+  Then I should see "Testy"
+    And I should not see "(Marked for Later.)"
 
   Scenario: You can't mark a story to read later if you're not logged in or the author
 
@@ -137,39 +146,39 @@ Feature: Reading count
 
   Scenario: Multi-chapter works are added to history, can be deleted from history, are updated every time the user accesses a chapter, and can be marked for later
 
-    Given I am logged in as "writer"
-      And I post the work "multichapter work"
-      And a chapter is added to "multichapter work"
-    Then I should see "multichapter work"
-    When I am logged out
-      And I am logged in as "fandomer"
-      And I view the work "multichapter work"
-    When the readings are saved to the database
-      And I go to fandomer's reading page
-    Then I should see "multichapter work"
-      And I should see "Visited once"
-    When I press "Delete from History"
-    Then I should see "Work successfully deleted from your history."
-    When I view the work "multichapter work"
-      And the readings are saved to the database
-    When I go to fandomer's reading page
-    Then I should see "multichapter work"
-      And I should see "Visited once"
-    When I view the work "multichapter work"
-      And I follow "Next Chapter"
-      And the readings are saved to the database
-    When I go to fandomer's reading page
-    Then I should see "multichapter work"
-      And I should see "Visited 3 times"
-    When I view the work "multichapter work"
-      And I follow "Next Chapter"
-    When I follow "Mark for Later"
-    Then I should see "This work was added to your Marked for Later list."
-      And the readings are saved to the database
-      And I go to fandomer's reading page
-    Then I should see "multichapter work"
-      And I should see "Visited 6 times"
-      And I should see "(Marked for Later.)"
+  Given I am logged in as "writer"
+    And I post the work "multichapter work"
+    And a chapter is added to "multichapter work"
+  Then I should see "multichapter work"
+  When I am logged out
+    And I am logged in as "fandomer"
+    And I view the work "multichapter work"
+  When the readings are saved to the database
+    And I go to fandomer's reading page
+  Then I should see "multichapter work"
+    And I should see "Visited once"
+  When I press "Delete from History"
+  Then I should see "Work successfully deleted from your history."
+  When I view the work "multichapter work"
+    And the readings are saved to the database
+  When I go to fandomer's reading page
+  Then I should see "multichapter work"
+    And I should see "Visited once"
+  When I view the work "multichapter work"
+    And I follow "Next Chapter"
+    And the readings are saved to the database
+  When I go to fandomer's reading page
+  Then I should see "multichapter work"
+    And I should see "Visited 3 times"
+  When I view the work "multichapter work"
+    And I follow "Next Chapter"
+  When I press "Mark for Later"
+  Then I should see "This work was added to your Marked for Later list."
+    And the readings are saved to the database
+    And I go to fandomer's reading page
+  Then I should see "multichapter work"
+    And I should see "Visited 6 times"
+    And I should see "(Marked for Later.)"
 
   Scenario: A user can see some of their works marked for later on the homepage
 
@@ -242,7 +251,7 @@ Feature: Reading count
   When I am logged in as "editor" with password "password"
     And I edit the work "Some Work V1"
     And I fill in "Work Title" with "Some Work V2"
-    And I press "Post"
+    And I press "Update"
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I go to the homepage
@@ -257,7 +266,7 @@ Feature: Reading count
   When I am logged in as "reader"
     And I view the work "Testy"
   Then I should see "Mark for Later"
-  When I follow "Mark for Later"
+  When I press "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
   When I am logged in as a "policy_and_abuse" admin
     And I view the work "Testy"
@@ -285,3 +294,13 @@ Feature: Reading count
     When I am logged in as "reader"
       And I go to reader's reading page
     Then I should see "(Update available.)"
+
+  Scenario: Reading history blurb includes an HTML comment containing the unix epoch of the updated time
+
+    Given time is frozen at 2025-04-12 17:00 UTC
+      And I am logged in as "ethel"
+      And the work "Test"
+      And I view the work "Test"
+      And the readings are saved to the database
+    When I go to ethel's reading page
+    Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"

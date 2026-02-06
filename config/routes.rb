@@ -48,11 +48,12 @@ Rails.application.routes.draw do
 
   #### ERRORS ####
 
-  get '/403', to: 'errors#403'
-  get '/404', to: 'errors#404'
-  get '/422', to: 'errors#422'
-  get '/500', to: 'errors#500'
-  get '/auth_error', to: 'errors#auth_error'
+  get "/403", to: "errors#403"
+  get "/404", to: "errors#404"
+  get "/422", to: "errors#422"
+  get "/429", to: "errors#429"
+  get "/500", to: "errors#500"
+  get "/auth_error", to: "errors#auth_error"
   get "/timeout_error", to: "errors#timeout_error"
 
   #### DOWNLOADS ####
@@ -76,7 +77,11 @@ Rails.application.routes.draw do
   #### INVITATIONS ####
 
   resources :invitations
-  resources :user_invite_requests
+  resources :user_invite_requests do
+    collection do
+      patch :update
+    end
+  end
   resources :invite_requests, only: [:index, :create, :destroy] do
     collection do
       get :manage
@@ -194,6 +199,13 @@ Rails.application.routes.draw do
         post :bulk_update
       end
     end
+    scope :notices do
+      resources :support_notices, path: "support" do
+        member do
+          get :confirm_delete
+        end
+      end
+    end
     resources :user_creations, only: [:destroy] do
       member do
         put :hide
@@ -227,7 +239,14 @@ Rails.application.routes.draw do
     end
     resources :api
   end
-  resources :admins, only: [:index]
+  resources :admins, only: [:index] do
+    resource :totp, controller: "admin/totp", only: [:create, :new] do
+      get :show_backup_codes
+      get :confirm_disable
+      post :disable
+      post :reauthenticate_create
+    end
+  end
 
   post '/admin/api/new', to: 'admin/api#create'
 
@@ -240,7 +259,7 @@ Rails.application.routes.draw do
   end
 
   # When adding new nested resources, please keep them in alphabetical order
-  resources :users, except: [:new, :create] do
+  resources :users, except: [:new, :create, :edit, :update] do
     member do
       get :change_email
       put :confirm_change_email
@@ -291,7 +310,7 @@ Rails.application.routes.draw do
     end
     resources :nominations, controller: "tag_set_nominations", only: [:index]
     resources :preferences, only: [:index, :update]
-    resource :profile, only: [:show], controller: "profile" do
+    resource :profile, only: [:show, :edit, :update], controller: "profile" do
       collection do
         get :pseuds
       end
@@ -368,11 +387,12 @@ Rails.application.routes.draw do
       post :post
       put :post_draft
       get :navigate
+      patch :remove_user_creatorship
       get :edit_tags
       get :preview_tags
       patch :update_tags
-      get :mark_for_later
-      get :mark_as_read
+      patch :mark_for_later
+      patch :mark_as_read
       get :confirm_delete
       get :share
     end
@@ -410,6 +430,7 @@ Rails.application.routes.draw do
     member do
       get :preview
       post :post
+      patch :remove_user_creatorship
     end
     resources :comments
   end
@@ -429,6 +450,7 @@ Rails.application.routes.draw do
       get :confirm_delete
       get :manage
       post :update_positions
+      patch :remove_user_creatorship
     end
     resources :bookmarks
   end
@@ -464,8 +486,8 @@ Rails.application.routes.draw do
     end
     resources :participants, controller: "collection_participants", only: [:index, :update, :destroy] do
       collection do
-        get :add
-        get :join
+        post :add
+        post :join
       end
     end
     resources :items, controller: "collection_items" do
@@ -484,15 +506,15 @@ Rails.application.routes.draw do
     resources :assignments, controller: "challenge_assignments", only: [:index, :show] do
       collection do
         get :confirm_purge
-        get :generate
+        post :generate
         put :set
         post :purge
-        get :send_out
+        post :send_out
         put :update_multiple
-        get :default_all
+        patch :default_all
       end
       member do
-        get :default
+        patch :default
       end
     end
     resources :claims, controller: "challenge_claims" do
@@ -503,9 +525,9 @@ Rails.application.routes.draw do
     end
     resources :potential_matches do
       collection do
-        get :generate
-        get :cancel_generate
-        get :regenerate_for_signup
+        post :generate
+        post :cancel_generate
+        post :regenerate_for_signup
       end
     end
     resources :requests, controller: "challenge_requests"
@@ -582,11 +604,11 @@ Rails.application.routes.draw do
   resources :skins do
     member do
       get :preview
-      get :set
+      post :set
       get :confirm_delete
     end
     collection do
-      get :unset
+      post :unset
     end
   end
   resources :known_issues
@@ -627,6 +649,22 @@ Rails.application.routes.draw do
   end
   resources :orphans, only: [:index, :new, :create]
 
+  %w[
+    first_login
+    preferences_locale
+    tags_fandoms
+    tags_ratings
+    tags_warnings
+  ].each do |action|
+    get "/help/#{action}", to: "help##{action}"
+  end
+
+  # Redirects for moved help files
+  get "/first_login_help", to: redirect("/help/first_login")
+  get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
+  get "/help/rating-help.html", to: redirect("/help/tags_ratings")
+  get "/help/warning-help.html", to: redirect("/help/tags_warnings")
+
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
   get 'support' => 'feedbacks#new', as: 'new_feedback_report'
@@ -639,7 +677,6 @@ Rails.application.routes.draw do
   get 'diversity' => 'home#diversity'
   get 'site_map' => 'home#site_map'
   get 'site_pages' => 'home#site_pages'
-  get 'first_login_help' => 'home#first_login_help'
   get 'token_dispenser' => 'home#token_dispenser'
   get 'delete_confirmation' => 'users#delete_confirmation'
   get 'activate/:id' => 'users#activate', as: 'activate'
@@ -669,7 +706,6 @@ Rails.application.routes.draw do
   #
   # Note written on August 1, 2017 during upgrade to Rails 5.1.
   get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
-  get '/user_invite_requests/update' => 'user_invite_requests#update'
 
   patch '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
 
@@ -689,7 +725,7 @@ Rails.application.routes.draw do
     tags_in_sets
     associated_tags
     noncanonical_tag
-    collection_fullname
+    collection_title
     open_collection_names
     collection_parent_name
     external_work

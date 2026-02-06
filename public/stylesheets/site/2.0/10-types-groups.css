@@ -1,8 +1,9 @@
-/*==TYPES OF DATA, GROUPS OF DATA 
-http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
+/* == TYPES OF DATA, GROUPS OF DATA
+https://otwcode.github.io/docs/stylesheets-views.html#types
+https://otwcode.github.io/docs/classes-taxonomy.html#types
 */
 
-/*TYPE: TAGS */
+/* TYPE: TAGS */
 
 a.tag {
   color: #111;
@@ -23,6 +24,8 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
   padding-right: 0.25em;
 }
 
+/* context: filters, tag sets */
+
 .filters .tags li, .review .tags, .tagset .listbox .tags li {
   display: block;
 }
@@ -31,7 +34,9 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
   padding-right: 0;
 }
 
-/*GROUP CLOUD */
+/* GROUP CLOUD
+https://otwcode.github.io/docs/classes-taxonomy.html#travellers
+*/
 
 ul.cloud {
   margin: 2em auto;
@@ -87,7 +92,9 @@ a.cloud8 {
   font-weight: 800;
 }
 
-/* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)*/
+/* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)
+https://otwcode.github.io/docs/classes-taxonomy.html#grouping-and-spacing
+*/
 
 .wrapper {
     box-shadow: 1px 1px 5px #aaa;
@@ -112,7 +119,9 @@ a.cloud8 {
   width: 100%;
 }
 
-/*http://otwcode.github.com/docs/front_end_coding/patterns/pattern-index*/
+/*
+https://otwcode.github.io/docs/patterns/indexes.html
+*/
 
 dl.index {
   margin: 0.643em 0;
@@ -149,7 +158,7 @@ dl.index dd .userstuff p {
   display: block;
 }
 
-/*TYPES*/
+/* TYPES */
 
 a.rss span {
   background: url("/images/imageset.png") no-repeat -150px -275px;
@@ -201,10 +210,20 @@ p.kudos {
     word-wrap: break-word;
 }
 
+.icon, p.qr {
+  margin: 0;
+}
+
+/* QR codes should always be displayed as black on white to ensure contrast and compatibility, even in dark mode. They also need a quiet zone. */
+/* TODO: Check that this is okay in Reversi/Dark Mode. */
+p.qr svg {
+  background: #fff;
+  border: 1em solid #fff;
+}
+
 .icon {
   height: 100px;
   width: 100px;
-  margin: 0;
 }
 
 .icon a {
@@ -219,6 +238,10 @@ p.kudos {
   clear: none;
   float: none;
   margin: auto;
+}
+
+dl.language {
+  clear: right;
 }
 
 dl.stats {
@@ -248,4 +271,8 @@ dl.stats dd {
   margin-right: 1.5em
 }
 
-/*END== */
+section.step {
+  margin-block: 2.572em;
+}
+
+/* END == */

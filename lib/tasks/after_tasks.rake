@@ -491,12 +491,6 @@ namespace :After do
     end
   end
 
-  desc "Migrate pinch_request_signup to request_signup"
-  task(migrate_pinch_request_signup: :environment) do
-    count = ChallengeAssignment.where("pinch_request_signup_id IS NOT NULL AND request_signup_id IS NULL").update_all("request_signup_id = pinch_request_signup_id")
-    puts("Migrated pinch_request_signup for #{count} challenge assignments.")
-  end
-
   desc "Reindex tags associated with works that are hidden or unrevealed"
   task(reindex_hidden_unrevealed_tags: :environment) do
     hidden_count = Work.hidden.count
@@ -536,6 +530,24 @@ namespace :After do
     end
   end
 
+  desc "Convert user kudos from users with the archivist role to guest kudos"
+  task(convert_archivist_kudos: :environment) do
+    archivist_users = Role.find_by(name: "archivist")&.users
+    if archivist_users.blank?
+      puts "No archivist users found"
+    else
+      archivist_users.each do |user|
+        kudos = user.kudos
+        next if kudos.blank?
+
+        puts "Updating #{kudos.size} kudos from #{user.login}"
+        user.remove_user_from_kudos
+      end
+
+      puts "Finished converting kudos from archivist users to guest kudos"
+    end
+  end
+
   desc "Create TagSetAssociations for non-canonical tags belonging to canonical fandoms in TagSets"
   task(create_non_canonical_tagset_associations: :environment) do
     # We want to get all set taggings where the tag is not canonical, but has a parent fandom that _is_ canonical.
@@ -560,6 +572,74 @@ namespace :After do
         end
       end
     end
+  end
+
+  desc "tags existing collections with the fandoms of the collected works and bookmarks"
+  task(add_collection_tags: :environment) do
+    collections = Collection.all
+    total_batches = (collections.count + 999) / 1000
+
+    def approved_taggables(collection)
+      bookmark_visible_revealed = Bookmark.is_public.join_bookmarkable.where(
+        "(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0 AND works.in_unrevealed_collection = 0) OR
+        (series.restricted = 0 AND series.hidden_by_admin = 0) OR
+        (external_works.hidden_by_admin = 0)"
+      )
+      Work.visible_to_all.revealed.in_collection(collection).includes(:fandoms) + \
+        bookmark_visible_revealed.in_collection(collection).includes(:fandoms) + \
+        bookmark_visible_revealed.in_collection(collection).includes(bookmarkable: :fandoms).filter_map { |bookmark| bookmark.bookmarkable unless bookmark.bookmarkable.respond_to?(:unrevealed?) && bookmark.bookmarkable.unrevealed? }
+    end
+
+    Collection.no_touching do
+      collections.find_in_batches.with_index do |batch, index|
+        batch.each do |collection|
+          tags = approved_taggables(collection)
+            .flat_map { |taggable| taggable.try(:fandoms) || taggable.try(:work_tags)&.where(type: "Fandom") || [] }
+            .uniq
+
+          next if tags.empty?
+
+          crossover = FandomCrossover.check_for_crossover(tags)
+          collection.update_attribute(:multifandom, crossover) if crossover
+
+          if tags.length > ArchiveConfig.COLLECTION_TAGS_MAX
+            collection.update(multifandom: crossover)
+          else
+            collection.tags << tags
+          end
+        end
+
+        puts "Collection batch #{index + 1} of #{total_batches} tagged"
+      end
+    end
+  end
+
+  desc "Syncs the Comments.approved column to the new Comments.spam column"
+  task(sync_approved_to_spam: :environment) do
+    # Due to the size of the Comment table, this task doesn't print the typical
+    # "Updating <total> in <total_batches> batches", as getting the total Comment count
+    # could kill the db.
+    Comment.find_in_batches.with_index do |batch, index|
+      batch.each do |comment|
+        comment.update_attribute(:spam, !comment.approved)
+      end
+
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    puts "Job complete."
+  end
+
+  desc "Run backfill for user_past_emails and user_past_usernames"
+  task(backfill: :environment) do
+    User.find_in_batches.with_index do |batch, index|
+      REDIS_GENERAL.sadd?("audits_backfill", batch.map(&:id))
+      
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    AuditsBackfillJob.spawn_jobs
+    puts "Backfill started and running on resque in background"
   end
   # This is the end that you have to put new tasks above.
 end

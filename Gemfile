@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-ruby "~> 3.2.7"
+ruby "~> 3.4.6"
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 7.1"
-gem "rails-i18n"
+gem "rails", "~> 8.0.0"
+gem "rails-i18n", "~> 8.0", git: "https://github.com/svenfuchs/rails-i18n", ref: "54c1c7c2fdcc311427ec6f1dadd298a60db1ddef"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
 
@@ -16,14 +16,13 @@ gem 'actionpack-page_caching'
 gem 'rails-controller-testing'
 
 # Database
-# gem 'sqlite3-ruby', require: 'sqlite3'
 gem "mysql2"
 
 gem 'rack-attack'
 
-# Version of redis-rb gem
-# We are currently running Redis 3.2.1 (7/2018)
-gem "redis", "~> 3.3.5"
+# We are currently running Redis server 7.0.15 (10/2025)
+# Version of redis-rb gem (Redis client)
+gem "redis", "< 5.0"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
@@ -31,7 +30,6 @@ gem 'redis-namespace'
 # Used to convert strings to ascii
 gem 'unicode'
 gem 'unidecoder'
-gem 'unicode_utils', '>=1.4.0'
 
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
@@ -42,6 +40,7 @@ gem 'acts_as_list', '~> 0.9.7'
 gem 'akismetor'
 
 gem 'httparty'
+gem "csv", "~> 3.3.5"
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', require: false
 gem 'nokogiri', '>= 1.8.5'
@@ -52,7 +51,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem "elasticsearch", "8.18.0"
+gem "elasticsearch", "8.19.2"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
@@ -62,9 +61,12 @@ gem "terrapin"
 gem 'fastimage'
 
 # Gems for authentication
-gem 'devise'
-gem 'devise-async'       # To mails through queues
-gem 'bcrypt'
+gem "devise"
+gem "devise-async" # To mails through queues
+gem "bcrypt"
+gem "devise-pwned_password"
+gem "devise-two-factor"
+gem "rqrcode"
 
 # Needed for modern ssh
 gem "ed25519", ">= 1.2", "< 2.0"
@@ -107,15 +109,15 @@ gem 'kgio', '2.10.0'
 gem "marcel", "1.0.2"
 
 # Library for helping run pt-online-schema-change commands:
-gem "departure", "~> 6.7"
+gem "departure", "~> 8.0"
 
 gem "rack-timeout"
 gem "puma_worker_killer"
 
 group :test do
-  gem "rspec-rails", "~> 6.0"
+  gem "rspec-rails", "~> 8.0"
   gem 'pickle'
-  gem 'shoulda'
+  gem "shoulda-matchers"
   gem "capybara"
   gem "cucumber"
   gem 'database_cleaner'
@@ -183,3 +185,4 @@ group :staging, :production do
 end
 
 gem "image_processing", "~> 1.12"
+gem "ostruct"

@@ -1,6 +1,38 @@
 <%= text_divider %>
-Posted: <%= @comment.created_at %><% unless @comment.edited_at.blank? %>
-Last edited: <%= @comment.edited_at %><% end %>
-<% if @comment.ultimate_parent.is_a?(Tag) %>
-<%= render 'comment_mailer/comment_notification_footer_for_tag', formats: [:text] %><% else %>
-<%= render 'comment_mailer/comment_notification_footer_for_other', formats: [:text] %><% end %>
+<%= t(".posted", datetime: l(@comment.created_at)) %>
+<% unless @comment.edited_at.blank? %>
+<%= t(".last_edited", datetime: l(@comment.edited_at)) %>
+<% end %>
+
+<%# erb_lint:disable ExtraNewline %>
+
+<% if @comment.unreviewed? %>
+  <% if @owner && @comment.ultimate_parent.is_a?(Work) %>
+<%= t(".unreviewed.work_owner") %>
+  <% elsif @comment.ultimate_parent.is_a?(AdminPost) %>
+<%= t(".unreviewed.admin_post") %>
+  <% else %>
+<%= t(".unreviewed.work") %>
+  <% end %>
+
+<% end %>
+<% if @comment.unreviewed? && @owner %>
+<%= t(".review.text", title: @comment.ultimate_parent.commentable_name, url: polymorphic_url([:unreviewed, @comment.ultimate_parent, :comments])) %>
+<% end %>
+<% unless @noreply || @comment.unreviewed? %>
+<%= t(".reply.text", url: comment_url(@comment, add_comment_reply_id: @comment.id)) %>
+<% end %>
+<%= t(".comment_thread.text", url: comment_url(@comment)) %>
+<% unless @comment.id == @comment.thread %>
+<%= t(".parent_thread.text", url: comment_url(id: @comment.thread)) %>
+<% end %>
+<% if @comment.parent.kind_of?(Chapter) && @comment.parent.work.chaptered? %>
+<%= t(".read_all_comments.chapter.text", position: @comment.parent.position, title: @comment.ultimate_parent.commentable_name,
+      url: work_chapter_url(@comment.parent.work, @comment.parent, show_comments: true, anchor: :comments)) %>
+<% elsif @comment.ultimate_parent.kind_of?(Tag) %>
+<%= t(".read_all_comments.tag.text", tag: @comment.ultimate_parent.commentable_name,
+      url: tag_comments_url(@comment.ultimate_parent)) %>
+<% else %>
+<%= t(".read_all_comments.other.text", title: @comment.ultimate_parent.commentable_name,
+      url: polymorphic_url(@comment.ultimate_parent, view_full_work: true, show_comments: true, anchor: :comments)) %>
+<% end %>

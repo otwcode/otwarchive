@@ -1,5 +1,8 @@
-/*==ELEMENTS/*
-/*MEYERS RESET.***********************************************do not edit */
+/* == ELEMENTS
+https://otwcode.github.io/docs/stylesheets-views.html#elements
+*/
+
+/* MEYERS RESET. *********************************************** do not edit */
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
   border: 0;
@@ -14,7 +17,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   padding: 0;
 }
 
-/************************************************end of uneditable rules */
+/* *********************************************** end of uneditable rules */
 
 /* The global rules for normal elements */
 
@@ -69,7 +72,7 @@ h2 {
   display: inline;
 }
 
-/*24px skipped: font-size: 1.714em; line-height: 1; margin: 0.429em 0*/
+/* 24px skipped: font-size: 1.714em; line-height: 1; margin: 0.429em 0 */
 
 h3 {
   font-size: 1.286em;
@@ -129,6 +132,7 @@ blockquote p:last-child {
 
 kbd, tt, code, var, pre, samp {
   font: normal 0.857em 'Monaco', 'Consolas', Courier, monospace;
+  font-variant-ligatures: none;
   margin: auto;
 }
 
@@ -182,7 +186,9 @@ sup {
   line-height: 0;
 }
 
-/*http://otwcode.github.com/docs/front_end_coding/accessible-tables*/
+/*
+https://otwcode.github.io/docs/patterns/tables.html
+*/
 
 table {
   background: #ddd;
@@ -248,4 +254,4 @@ tbody tr th {
   text-align: start;
 }
 
-/*END== */
+/* END == */

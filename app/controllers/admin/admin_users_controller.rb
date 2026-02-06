@@ -28,12 +28,14 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def index
     authorize User
-    @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
-    @role = Role.find_by(name: params[:role]) if params[:role]
-    @users = User.search_by_role(
-      @role, params[:name], params[:email], params[:user_id],
-      inactive: params[:inactive], exact: params[:exact], page: params[:page]
-    )
+
+    # Values for the role dropdown:
+    @role_values = @roles.map { |role| [role.name.humanize.titlecase, role.id] }
+
+    return if search_params.empty?
+
+    @query = UserQuery.new(search_params)
+    @users = @query.search_results.scope(:with_includes_for_admin_index)
   end
 
   def bulk_search
@@ -101,7 +103,7 @@ class Admin::AdminUsersController < Admin::BaseController
     else
       flash[:error] = ts("The user %{name} could not be updated: %{errors}", name: params[:id], errors: @user.errors.full_messages.join(" "))
     end
-    redirect_to request.referer || root_path
+    redirect_back_or_to admin_users_path(user_id: @user.id)
   end
 
   def update_next_of_kin
@@ -195,7 +197,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @user.update_works_index_timestamp!
     @user.create_log_item(options = { action: ArchiveConfig.ACTION_TROUBLESHOOT, admin_id: current_admin.id })
     flash[:notice] = ts("User account troubleshooting complete.")
-    redirect_to(request.env["HTTP_REFERER"] || root_path) && return
+    redirect_to admin_user_path(@user)
   end
 
   def activate
@@ -215,6 +217,18 @@ class Admin::AdminUsersController < Admin::BaseController
   def creations
     authorize @user
     @page_subtitle = t(".page_title", login: @user.login)
+  end
+
+  private
+
+  def search_params
+    allowed_params = if policy(User).can_view_past?
+                       %i[name email role_id user_id inactive page commit search_past]
+                     else
+                       %i[name email role_id user_id inactive page commit]
+                     end
+
+    params.permit(*allowed_params)
   end
 
   def log_items
