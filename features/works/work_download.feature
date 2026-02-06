@@ -128,6 +128,13 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "Chapter 2"
 
+  Scenario: Download of single-chapter work does not include chapters
+
+  Given the work "Single Chapter Work"
+  When I view the work "Single Chapter Work"
+    And I follow "HTML"
+  Then I should not see "Chapter 1"
+
   Scenario: Download of chaptered work without posted chapters does not include chapters
 
   Given I am logged in
@@ -140,8 +147,11 @@ Feature: Download a work
     And I force delete chapter 1 of "Allons-sy"
   When I view the work "Allons-sy"
     And I follow "HTML"
+  # Content of the deleted chapter and the drafted chapter shouldn't appear
   Then I should not see "Run! Rose, run!"
     And I should not see "Remember, remember the 5th of November"
+    # Confrim that the skeleton of the work is still downloaded 
+    And I should see "Allons-sy" 
     And I should be able to download all versions of "Allons-sy"
 
   Scenario: Download chaptered works
