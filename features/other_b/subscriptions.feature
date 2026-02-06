@@ -6,9 +6,9 @@
   Background:
   Given the following activated users exist
     | login          | password   | email           |
-    | first_user     | password   | first_user@foo.com |
-    | second_user    | password   | second_user@foo.com |
-    | third_user     | password   | third_user@foo.com |
+    | first_user     | password   | first_user@example.com |
+    | second_user    | password   | second_user@example.com |
+    | third_user     | password   | third_user@example.com |
   And all emails have been delivered
 
   Scenario: subscribe to an author
@@ -19,20 +19,20 @@
   # make sure no emails go out until notifications are sent
   Then 0 emails should be delivered
   When subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     And the email should contain "first_user"
     And the email should contain "Awesome"
   When all emails have been delivered
     And I post the work "Yet Another Awesome Story" without preview
     And subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
   When all emails have been delivered
     And a draft chapter is added to "Yet Another Awesome Story"
   Then 0 emails should be delivered
   When I post the draft chapter
   Then 0 emails should be delivered
   When subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     # This feels hackish to me (scott s), but I'm going with it for now. I'll investigate reworking our email steps for multipart emails once all our gems are up to date.
     And the email should contain "first_user"
     And the email should contain "posted"
@@ -79,7 +79,7 @@
   When I post the draft chapter
   Then 0 emails should be delivered
   When subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     And the email should contain "wip_author"
     And the email should contain "posted"
     And the email should contain "Chapter 2"
@@ -94,7 +94,7 @@
     And I fill in "content" with "meltiiiinnngg"
     And I press "Post"
     And subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     And the email should contain "wip_author"
     And the email should contain "posted"
     And the email should not contain "Chapter ICE CREAM CAKE"
@@ -110,7 +110,7 @@
     And I press "Post"
   Then 0 emails should be delivered
   When subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     And the email should contain "posted a"
     And the email should contain "new work"
 
@@ -126,7 +126,7 @@
     And I post the work "A FOURTH Awesome Story"
   Then 0 emails should be delivered
   When subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     And the email should contain "The First"
     And the email should contain "Another"
     And the email should contain "A Third"
@@ -239,12 +239,84 @@
     And the email should contain "Anonymous"
     And the email should not contain "creator"
 
+    Scenario: When new chapter for a hidden work is posted, no subscription notifications are sent
+
+      Given I am logged in as "violator"
+        And I post the work "TOS Violation" as part of a series "Dont Be So Series"
+        And "author_subscriber" subscribes to author "violator"
+        And "work_subscriber" subscribes to work "TOS Violation"
+        And "series_subscriber" subscribes to series "Dont Be So Series"
+      When I am logged in as a "policy_and_abuse" admin
+        And I hide the work "TOS Violation"
+        And a chapter is added to "TOS Violation"
+        And subscription notifications are sent
+      Then "author_subscriber" should not be emailed
+        And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
+      When I am logged in as a "policy_and_abuse" admin
+        And I unhide the work "TOS Violation"
+        And subscription notifications are sent
+      Then "author_subscriber" should not be emailed
+        And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
+      When a chapter is added to "TOS Violation"
+        And subscription notifications are sent
+      Then "author_subscriber" should be emailed
+        And "work_subscriber" should be emailed
+        And "series_subscriber" should be emailed
+
+    Scenario: When a hidden work is unrevealed, no subscription notifications are sent
+
+      Given I am logged in as "violator"
+        And I post the work "TOS Violation" as part of a series "Dont Be So Series"
+        And "author_subscriber" subscribes to author "violator"
+        And "work_subscriber" subscribes to work "TOS Violation"
+        And "series_subscriber" subscribes to series "Dont Be So Series"
+        And I have the hidden collection "Secret"
+        And I am logged in as "violator"
+        And I edit the work "TOS Violation" to be in the collection "Secret"
+        And I am logged in as a "policy_and_abuse" admin
+        And I hide the work "TOS Violation"
+      When I am logged in as "moderator"
+        And I go to "Secret" collection's page
+        And I follow "Collection Settings"
+        And I uncheck "This collection is unrevealed"
+        And I press "Update"
+        And subscription notifications are sent
+      Then "author_subscriber" should not be emailed
+        And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
+      When I am logged in as a "policy_and_abuse" admin
+        And I unhide the work "TOS Violation"
+        And subscription notifications are sent
+      Then "author_subscriber" should not be emailed
+        And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
+
+    Scenario: Translated subscription email
+
+      Given a locale with translated emails
+        And the user "anna" exists and is activated
+        And the user "anna" enables translated emails
+        And "anna" subscribes to author "creator"
+        And "arthur" subscribes to author "creator"
+      When I am logged in as "creator"
+        And I post the work "great thing"
+        And subscription notifications are sent
+      Then 1 email should be delivered to "anna"
+        And the email should have "creator posted great thing" in the subject
+        And the email to "anna" should be translated
+        And the email to "anna" should contain "Fändom"
+        And the email to "anna" should not contain "Fandom"
+        And 1 email should be delivered to "arthur"
+        And the email should have "creator posted great thing" in the subject
+        And the email to "arthur" should be non-translated
+        And the email to "arthur" should not contain "Fändom"
+        And the email to "arthur" should contain "Fandom"
+
   Scenario: subscribe to an individual work with an the & and < and > characters in the title
 
-  Given I have loaded the fixtures
-    And the following activated users exist
-    | login          | password   | email           |
-    | subscriber     | password   | subscriber@foo.com |
+  Given the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies" by "testuser2"
   When I am logged in as "subscriber" with password "password"
     And I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When I press "Subscribe"
@@ -253,7 +325,7 @@
     And a chapter is added to "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When subscription notifications are sent
-  Then 1 email should be delivered to "subscriber@foo.com"
+  Then 1 email should be delivered to "subscriber"
   When "The problem with ampersands and angle brackets in email bodies and subjects" is fixed
     #And the email should have "I am <strong>er Than Yesterday & Other Lies" in the subject
     #And the email should contain "I am <strong>er Than Yesterday & Other Lies"
@@ -317,3 +389,22 @@ Scenario: subscriptions are not deleted without confirmation
   When I go to the subscriptions page for "second_user"
   Then I should see "My Subscriptions"
     And I should see "Awesome Story (Work)"
+
+  # NOTE: currently, posting a second chapter to a draft work will post both chapters
+  Scenario: Posting a second chapter to a draft work should notify subscribers about both the work being posted and chapter 1
+    Given I am logged in as "first_user"
+      And "second_user" subscribes to author "first_user"
+      And all emails have been delivered
+    When I am logged in as "first_user"
+      And I set up the draft "Half and Half"
+      And I press "Save Draft"
+      And I view the work "Half and Half"
+      And I follow "Add Chapter"
+      And I fill in "chapter_title" with "2nd chapter"
+      And I fill in "content" with "to be posted!"
+      And I press "Post"
+      And subscription notifications are sent
+    Then 1 email should be delivered to "second_user@example.com"
+      And the email should have "first_user posted Half and Half and 1 more" in the subject
+      And the email should contain "posted a new work"
+      And the email should contain "Chapter 1"

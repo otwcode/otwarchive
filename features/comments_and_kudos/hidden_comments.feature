@@ -82,7 +82,15 @@ Feature: Comment hiding
     Then I should not see the image "src" text "https://example.com/image.jpg"
       And I should see "OMG! img src="
       And I should see "https://example.com/image.jpg"
-    Then I press "Make Comment Visible"
-      And I should see "Comment successfully unhidden!"
-    Then I should see the image "src" text "https://example.com/image.jpg"
+    
+    When I am logged in as "commenter"
+      And I view the work "Popular Fic" with comments
+      And I follow "Edit"
+    Then I should see "Embedded images (<img> tags) will be displayed as HTML"
+
+    When I am logged in as a super admin
+      And I view the work "Popular Fic" with comments
+      And I press "Make Comment Visible"
+    Then I should see "Comment successfully unhidden!"
+      And I should see the image "src" text "https://example.com/image.jpg"
       And I should not see "OMG! img src="

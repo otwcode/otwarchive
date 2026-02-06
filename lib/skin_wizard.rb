@@ -115,6 +115,8 @@ module SkinWizard
         form.verbose legend,
         .verbose form legend,
         #modal,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         .own,
         .draft,
         .draft .wrapper,
@@ -125,7 +127,8 @@ module SkinWizard
         .thread .even,
         .listbox .index,
         .nomination dt,
-        #tos_prompt {
+        #tos_prompt,
+        .annotation {
           background: #{color};
         }
 
@@ -150,6 +153,8 @@ module SkinWizard
         .toggled form,
         .dynamic form,
         .secondary,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         .wrapper {
           box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5)
         }
@@ -303,13 +308,18 @@ module SkinWizard
         form.verbose legend,
         .verbose form legend,
         .secondary,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         dl.meta,
+        dl.meta .wrapper,
         .bookmark .user,
         div.comment,
         li.comment,
         .comment div.icon,
         .splash .news li,
-        .userstuff blockquote {
+        .authentication fieldset,
+        .userstuff blockquote,
+        .annotation {
           border-color: #{color};
         }
 

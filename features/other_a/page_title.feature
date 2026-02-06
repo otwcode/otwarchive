@@ -43,7 +43,7 @@ Scenario: Work page title should change when tags are edited
   Then the page title should include "Stargate"
   When I edit the work "New Story"
     And I fill in "Fandoms" with "Harry Potter"
-    And I press "Post"
+    And I press "Update"
   When I view the work "New Story"
   Then the page title should include "Harry Potter"
     And the page title should not include "Stargate"

@@ -10,7 +10,7 @@
   <%= will_paginate @admin_banners %>
 
   <!--main content-->
-  <ul class="banners index group">
+  <ul class="banner index group">
     <% for admin_banner in @admin_banners %>
       <li class="blurb">
         <%= render "banner", admin_banner: admin_banner %>
@@ -20,7 +20,6 @@
               <span class="active current"><%= t(".actions.active") %></span>
             </li>
           <% end %>
-          </li>
           <li>
             <%= link_to t(".actions.edit"), edit_admin_banner_path(admin_banner) %>
           </li>

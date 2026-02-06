@@ -43,7 +43,7 @@ describe ApplicationHelper do
     end
 
     context "when creation is Series" do
-      let(:series) { create(:series_with_a_work) }
+      let(:series) { create(:series) }
       let(:user1) { series.users.first }
       let(:work) { series.works.first }
 
@@ -70,6 +70,7 @@ describe ApplicationHelper do
 
         before do
           series.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+          series.pseuds.reload # load pseuds
         end
 
         it "returns array of strings with all users" do
@@ -128,6 +129,7 @@ describe ApplicationHelper do
 
         before do
           work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+          work.pseuds.reload # load pseuds
         end
 
         it "returns array of strings with all users" do
@@ -168,7 +170,10 @@ describe ApplicationHelper do
       end
 
       context "when work has no user" do
-        before { work.creatorships.delete_all }
+        before do
+          work.creatorships.delete_all
+          work.pseuds.reload
+        end
 
         it "returns empty array" do
           result = helper.creator_ids_for_css_classes(work)
@@ -191,7 +196,7 @@ describe ApplicationHelper do
     end
 
     context "when creation is Series" do
-      let(:series) { create(:series_with_a_work) }
+      let(:series) { create(:series) }
       let(:work) { series.works.first }
       let(:user1) { series.users.first }
       let(:user2) { create(:user) }
@@ -209,6 +214,7 @@ describe ApplicationHelper do
 
             travel(1.day)
             series.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+
             expect(helper.css_classes_for_creation_blurb(series.reload)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id}")
             expect(original_cache_key).not_to eq("#{series.cache_key_with_version}/blurb_css_classes-v2")
             travel_back
@@ -216,7 +222,10 @@ describe ApplicationHelper do
         end
 
         context "when user is removed from series" do
-          before { series.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id) }
+          before do
+            series.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+            series.pseuds.reload
+          end
 
           it "returns updated string" do
             original_cache_key = "#{series.cache_key_with_version}/blurb_css_classes-v2"
@@ -224,6 +233,7 @@ describe ApplicationHelper do
 
             travel(1.day)
             series.creatorships.find_by(pseud_id: user2.default_pseud_id).destroy
+
             expect(helper.css_classes_for_creation_blurb(series.reload)).to eq("#{default_classes} series-#{series.id} user-#{user1.id}")
             expect(original_cache_key).not_to eq("#{series.cache_key_with_version}/blurb_css_classes-v2")
             travel_back
@@ -314,6 +324,8 @@ describe ApplicationHelper do
 
           travel_back
           work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+          work.pseuds.reload
+
           expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id} user-#{user2.id}")
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes-v2")
         end
@@ -323,12 +335,15 @@ describe ApplicationHelper do
         it "returns updated string" do
           travel_to(1.day.ago)
           work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+          work.pseuds.reload
+
           original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes-v2"
           expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id} user-#{user2.id}")
 
           travel_back
           work.creatorships.find_by(pseud_id: user2.default_pseud_id).destroy
-          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
+
+          expect(helper.css_classes_for_creation_blurb(work.reload)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes-v2")
         end
       end
@@ -362,6 +377,33 @@ describe ApplicationHelper do
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes-v2")
         end
       end
+    end
+  end
+
+  describe "#byline" do
+    let(:user1) { create(:user, login: "Beetle") }
+    let(:user2) { create(:user, login: "Muppet") }
+    let(:work) { create(:work, authors: [user1.default_pseud, user2.default_pseud]) }
+
+    before do
+      create(:locale, iso: "new")
+      I18n.backend.store_translations(:new, { support: { array: { words_connector: "|" } } })
+    end
+
+    it "results in different bylines per locale" do
+      I18n.with_locale(I18n.default_locale) do
+        expect(helper.byline(work, visibility: "public")).to include("Beetle</a>, <a")
+      end
+
+      I18n.with_locale(:new) do
+        expect(helper.byline(work, visibility: "public")).to include("Beetle</a>|<a")
+      end
+    end
+  end
+
+  describe "#first_paragraph" do
+    it "extracts first paragraph" do
+      expect(first_paragraph("<p>first</p><p>second</p>")).to eq("<p>first</p>")
     end
   end
 end
