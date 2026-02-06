@@ -136,14 +136,14 @@ Feature: Download a work
     And I press "Post"
     And I follow "Add Chapter"
     And I fill in "content" with "Remember, remember the 5th of November"
-    And I follow "Save Draft"
+    And I press "Save Draft"
     And I force delete chapter 1 of "Allons-sy"
   When I view the work "Allons-sy"
     And I follow "HTML"
   Then I should not see "Run! Rose, run!"
     And I should not see "Remember, remember the 5th of November"
     And I should be able to download all versions of "Allons-sy"
-    
+
   Scenario: Download chaptered works
 
   Given I am logged in as "author"
