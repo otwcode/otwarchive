@@ -1,13 +1,13 @@
 <%= render "downloads/download_preface" %>
 
 <div id="chapters" class="userstuff">
-  <%# if chaptered and one chapter (this include notes and title) OR more than one chap %>
-  <% if (@work.chaptered? && @chapters.size == 1) || @chapters.size > 1 %>
+  <%# if chaptered and one chapter OR more than one chap should display chapter title/notes%>
+  <% if (@work.chaptered? && @work.number_of_posted_chapters == 1) || @work.number_of_posted_chapters > 1 %>
     <% for chapter in @chapters %>
       <%= render "downloads/download_chapter", chapter: chapter %>
     <% end %>
   <%# Use elsif so we don't error when there are no chapters. %>
-  <% elsif @chapters.size == 1 %>
+  <% elsif @work.number_of_posted_chapters == 1 %>
     <h2 class="toc-heading"><%= @work.title %></h2>
     <div class="userstuff">
       <%= raw sanitize_field(@chapters.first, :content) %>

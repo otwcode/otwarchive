@@ -128,7 +128,7 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "Chapter 2"
 
-  Scenario: Download of single-chapter work does not include chapters
+  Scenario: Download of single-chapter work does not include chapter title or notes
 
   Given the work "Single Chapter Work"
   When I view the work "Single Chapter Work"
