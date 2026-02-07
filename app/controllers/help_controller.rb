@@ -8,6 +8,9 @@ class HelpController < ApplicationController
   def preferences_locale
   end
 
+  def skins_creating
+  end
+
   def tags_fandoms
   end
 

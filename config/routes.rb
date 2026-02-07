@@ -651,6 +651,7 @@ Rails.application.routes.draw do
   %w[
     first_login
     preferences_locale
+    skins_creating
     tags_fandoms
     tags_ratings
     tags_warnings
@@ -660,6 +661,7 @@ Rails.application.routes.draw do
 
   # Redirects for moved help files
   get "/first_login_help", to: redirect("/help/first_login")
+  get "/help/skins-creating.html", to: redirect("/help/skins_creating")
   get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
   get "/help/rating-help.html", to: redirect("/help/tags_ratings")
   get "/help/warning-help.html", to: redirect("/help/tags_warnings")
