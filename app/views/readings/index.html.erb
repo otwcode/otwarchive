@@ -10,13 +10,13 @@
 <% if logged_in? && !current_user.readings.empty? %>
 <ul class="navigation actions" role="navigation">
   <li>
-    <%= span_if_current t(".full_history"), user_readings_path(@user), params[:show].blank? %>
+    <%= span_if_current t(".history.page_heading"), user_readings_path(@user), params[:show].blank? %>
   </li>
   <li>
-    <%= span_if_current t(".marked_for_later"), user_readings_path(@user, show: "to-read"), params[:show] == "to-read" %>
+    <%= span_if_current t(".marked_for_later.page_heading"), user_readings_path(@user, show: "to-read"), params[:show] == "to-read" %>
   </li>
   <li>
-    <%= link_to t(".clear_entire_history"), confirm_clear_user_readings_path(current_user) %>
+    <%= link_to t(".clear_entire_history.page_heading"), confirm_clear_user_readings_path(current_user) %>
   </li>
 </ul>
 <% end %>

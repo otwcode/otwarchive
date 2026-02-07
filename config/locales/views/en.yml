@@ -2390,9 +2390,10 @@ en:
       page_heading: Clear Entire History
       submit: Yes, Clear Entire History
     index:
+      clear_entire_history:
+        page_heading: Clear Entire History
+        landmark: Clear Entire History
       history:
-        clear_entire_history: Clear Entire History
-        full_history: Full History
         landmark: List of History Items
         page_heading: History
       marked_for_later:
