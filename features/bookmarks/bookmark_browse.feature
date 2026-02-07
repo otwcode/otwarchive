@@ -2,7 +2,6 @@
 Feature: Browse Bookmarks
 
   Scenario: Bookmarks appear on both the user's bookmark page and on the bookmark page for the pseud they used create the bookmark
-
     Given I am logged in as "ethel"
       And "ethel" creates the pseud "aka"
       And I bookmark the work "Bookmarked with Default Pseud"
@@ -17,6 +16,13 @@ Feature: Browse Bookmarks
     Then I should see "Bookmarked with Other Pseud"
       And I should not see "Bookmarked with Default Pseud"
 
+  Scenario: When logged out, the "save" button on bookmarks does not show
+    Given I am logged in as "bookmarker"
+      And I bookmark the work "Test" with the tags "testing"
+    When I log out
+      And I go to the bookmarks page for the tag "testing"
+    Then I should see "Test"
+      And I should not see a link "Save"
   Scenario: Bookmark blurb includes an HTML comment containing the unix epoch of the updated time
     Given time is frozen at 2025-04-12 17:00 UTC
       And I am logged in as "ethel"
