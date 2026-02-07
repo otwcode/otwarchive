@@ -2,7 +2,7 @@
 
 <div id="chapters" class="userstuff">
   <%# if chaptered and one chapter OR more than one chap should display chapter title/notes%>
-  <% if (@work.chaptered? && @work.number_of_posted_chapters == 1) || @work.number_of_posted_chapters > 1 %>
+  <% if (@work.chaptered? && @chapters.size == 1) || @chapters.size > 1 %>
     <% for chapter in @chapters %>
       <%= render "downloads/download_chapter", chapter: chapter %>
     <% end %>
