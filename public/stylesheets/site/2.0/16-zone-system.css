@@ -13,7 +13,7 @@ SUBSECTIONS:
   margin: auto;
 }
 
-.system .userstuff h3 {
+.system:not(.feedbacks) .userstuff h3 {
   margin-top: 3em;
 }
 
