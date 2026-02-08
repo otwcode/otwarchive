@@ -186,6 +186,50 @@ module WorksHelper
     text
   end
 
+  # Returns an Open Graph title for a work.
+  #
+  # Twitter/X seems to have the lowest character limit, with 70 characters listed on
+  # https://developer.x.com/en/docs/x-for-websites/cards/overview/markup.
+  def og_title_meta(work)
+    full_byline = "#{work.title} by #{text_byline(work, visibility: 'public')}"
+
+    # Avoid truncation of creator names.
+    return full_byline if full_byline.length <= 70
+
+    "#{text_byline(work, visibility: 'public')}: #{work.title}"
+  end
+
+  # Returns an Open Graph description for a work.
+  def og_description_meta(work)
+    return strip_tags(work.summary) if work.summary.present?
+
+    description = work.fandom_string
+    description << ", #{work.relationship_string}" if work.relationship_string.present?
+    description << ", #{work.character_string}" if work.character_string.present?
+    description
+  end
+
+  # Returns an Open Graph image URL for a work.
+  #
+  # Only image/jpeg, image/gif or image/png are accepted by Facebook.
+  # https://developers.facebook.com/docs/sharing/webmasters/#images
+  def og_image_url_meta(work)
+    tag_groups = work.tag_groups
+
+    symbol_block = []
+    ratings = tag_groups["Rating"]
+    symbol_block << get_rating_type(ratings)
+    warnings = tag_groups["ArchiveWarning"]
+    symbol_block << get_warning_type(warnings)
+    categories = tag_groups["Category"]
+    symbol_block << get_category_type(categories)
+    completion_status = work.complete? ? "complete" : "incomplete"
+    symbol_block << completion_status
+
+    # TODO: Add remaining images
+    "#{root_url}images/work_symbols/#{symbol_block.join('-')}.png"
+  end
+
   # Returns true or false to determine whether the work notes module should display
   def show_work_notes?(work)
     work.notes.present? ||
@@ -240,5 +284,69 @@ module WorksHelper
     pinch_hits = user.pinch_hit_assignments.undefaulted.unstarted.sent
 
     (offer_signups + pinch_hits)
+  end
+
+  private
+
+  def get_rating_type(rating_tags = [])
+    if rating_tags.blank?
+      "notrated"
+    else
+      names = rating_tags.collect(&:name)
+      if names.include?(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
+        "explicit"
+      elsif names.include?(ArchiveConfig.RATING_MATURE_TAG_NAME)
+        "mature"
+      elsif names.include?(ArchiveConfig.RATING_TEEN_TAG_NAME)
+        "teen"
+      elsif names.include?(ArchiveConfig.RATING_GENERAL_TAG_NAME)
+        "generalaudience"
+      else
+        "notrated"
+      end
+    end
+  end
+
+  def get_warning_type(warning_tags = [])
+    return "choosenottowarn" if warning_tags.blank?
+
+    warning_tag_names = warning_tags.map(&:name)
+    if warning_tag_names == [ArchiveConfig.WARNING_NONE_TAG_NAME]
+      # only one tag and it says "no"
+      "nowarning"
+    elsif warning_tag_names == [ArchiveConfig.WARNING_DEFAULT_TAG_NAME]
+      # only one tag and it says choose not to warn
+      "choosenottowarn"
+    elsif warning_tag_names.sort == [ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME].sort
+      # two tags and they are "choose not to warn" and "no archive warnings apply" in either order
+      "choosenottowarn"
+    else
+      "warning"
+    end
+  end
+
+  def get_category_type(category_tags)
+    return "nocategory" if category_tags.blank?
+
+    if category_tags.length > 1
+      "multi"
+    else
+      case category_tags.first.name
+      when ArchiveConfig.CATEGORY_GEN_TAG_NAME
+        "gen"
+      when ArchiveConfig.CATEGORY_SLASH_TAG_NAME
+        "slash"
+      when ArchiveConfig.CATEGORY_HET_TAG_NAME
+        "het"
+      when ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME
+        "femslash"
+      when ArchiveConfig.CATEGORY_MULTI_TAG_NAME
+        "multi"
+      when ArchiveConfig.CATEGORY_OTHER_TAG_NAME
+        "other"
+      else
+        "nocategory"
+      end
+    end
   end
 end
