@@ -8,9 +8,9 @@ Feature: Orphan work
   Background:
     Given I have an orphan account
       And the following activated users exists
-      | login             | password   | email                     |
-      | orphaneer         | password   | orphaneer@foo.com         |
-      | author_subscriber | password   | author_subscriber@foo.com |
+      | login             | password | email                     |
+      | orphaneer         | password | orphaneer@foo.com         |
+      | author_subscriber | password | author_subscriber@foo.com |
       And "author_subscriber" subscribes to author "orphaneer"
       And all emails have been delivered
       And I am logged in as "orphaneer"
@@ -53,7 +53,7 @@ Feature: Orphan work
     When I follow "Orphan Work"
     Then I should see "Read More About The Orphaning Process"
     When I choose "Leave a copy of my pseud on"
-    And I press "Yes, I'm sure"
+      And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
     When I go to orphaneer's works page
     Then I should not see "Shenanigans2"
@@ -84,68 +84,72 @@ Feature: Orphan work
     Then 0 emails should be delivered
 
 
-  Scenario: Orphan a work (leave pseud) and don't notify subscribers to the work
+  Scenario: Orphan a work (leave pseud) but do notify subscribers to the work
 
     Given the following activated user exists
-      | login             | password   | email                    |
-      | work_subscriber   | password   | work_subscriber@foo.com  |
+      | login           | password | email                   |
+      | work_subscriber | password | work_subscriber@foo.com |
       And I post the work "Torrid Idfic"
       And I am logged in as "work_subscriber"
       And I view the work "Torrid Idfic"
       And I press "Subscribe"
+      And I am logged in as "orphaneer"
       And a chapter is added to "Torrid Idfic"
       And I follow "Edit"
       And I follow "Orphan Work"
       And I choose "Leave a copy of my pseud on"
       And I press "Yes, I'm sure"
     When subscription notifications are sent
-    Then 0 emails should be delivered
+    Then 1 email should be delivered
 
-
-  Scenario: Orphan a work (leave pseud) and don't notify subscribers to the work's series
+  Scenario: Orphan a work (leave pseud) but do notify subscribers to the work's series
 
     Given the following activated user exists
-      | login             | password   | email                     |
-      | series_subscriber | password   | series_subscriber@foo.com |
-      And I add the work "Lazy Purple Sausage" to series "Shame Series"
+      | login             | password | email                     |
+      | series_subscriber | password | series_subscriber@foo.com |
+      # Create the series, so we can subscribe to it before we add a work-to-be-orphaned
+      And I add the work "Work to create the series" to series "Shame Series"
+      # Subscribe
       And I am logged in as "series_subscriber"
       And I view the series "Shame Series"
       And I press "Subscribe"
+      # Add a new work to the series, which we then immediately orphan
       And I am logged in as "orphaneer"
+      And I add the work "Lazy Purple Sausage" to series "Shame Series"
       And I view the work "Lazy Purple Sausage"
       And I follow "Edit"
       And I follow "Orphan Work"
       And I choose "Leave a copy of my pseud on"
       And I press "Yes, I'm sure"
     When subscription notifications are sent
-    Then 0 emails should be delivered
+    Then 1 email should be delivered
 
   Scenario: I can orphan multiple works at once
-  Given I am logged in as "author"
-    And I post the work "Glorious" with fandom "SGA"
-    And I post the work "Excellent" with fandom "Star Trek"
-    And I post the work "Lovely" with fandom "Steven Universe"
-    And I go to author's works page
-  When I follow "Edit Works"
-  Then I should see "Edit Multiple Works"
-  When I select "Glorious" for editing
-    And I select "Excellent" for editing
-    And I press "Delete"
-  Then I should see "Are you sure you want to delete these works PERMANENTLY?"
-    And I should see "Glorious"
-    And I should see "Excellent"
-    And I should not see "Lovely"
-    # Delay before orphaning to make sure the cache is expired
-    And it is currently 1 second from now
-  When I follow "Orphan Works Instead"
-  Then I should see "Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account."
-  When I press "Yes, I'm sure"
-    And all indexing jobs have been run
-  Then I should see "Orphaning was successful."
-  When I go to author's works page
-  Then I should not see "Glorious"
-    And I should not see "Excellent"
-    And I should see "Lovely"
+    Given I am logged in as "author"
+      And I post the work "Glorious" with fandom "SGA"
+      And I post the work "Excellent" with fandom "Star Trek"
+      And I post the work "Lovely" with fandom "Steven Universe"
+      And I go to author's works page
+    When I follow "Edit Works"
+    Then I should see "Edit Multiple Works"
+    When I select "Glorious" for editing
+      And I select "Excellent" for editing
+      And I press "Delete"
+    Then I should see "Are you sure you want to delete these works PERMANENTLY?"
+      And I should see "Glorious"
+      And I should see "Excellent"
+      And I should not see "Lovely"
+      # Delay before orphaning to make sure the cache is expired
+      And it is currently 1 second from now
+    When I follow "Orphan Works Instead"
+    Then I should see "Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account."
+    When I press "Yes, I'm sure"
+      And all indexing jobs have been run
+    Then I should see "Orphaning was successful."
+    When I go to author's works page
+    Then I should not see "Glorious"
+      And I should not see "Excellent"
+      And I should see "Lovely"
 
   Scenario: Orphaning a shared work should not affect chapters created solely by the other creator
 
