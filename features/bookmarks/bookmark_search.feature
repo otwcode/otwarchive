@@ -170,6 +170,26 @@ Feature: Search Bookmarks
       And I should see "H/C Series"
       And I should see "External Whump"
 
+  Scenario: Search bookmarks on information on unrevealed works
+    Given I am logged in as "recengine"
+      And I have the hidden collection "secret"
+      And I post the work "SeeMeNot" with fandom "Secret" to the collection "secret"
+      And I bookmark the work "SeeMeNot" with the note "FoundMe" with the tags "Fluff"
+      And all indexing jobs have been run
+      And I log out
+    When I am on the search Bookmarks page
+      And I fill in "Any field on work" with "SeeMeNot"
+      And I press "Search Bookmarks"
+    Then I should not see "1 Found"
+      And I should not see "Fluff"
+      And I should not see "Secret"
+    When I am on the search Bookmarks page
+      And I fill in "Any field on bookmark" with "FoundMe"
+      And I press "Search Bookmarks"
+    Then I should see "1 Found"
+      And I should see "Fluff"
+      And I should not see "Secret"
+
   Scenario: Search bookmarks by type
     Given I have bookmarks to search
     When I select "External Work" from "Type"
