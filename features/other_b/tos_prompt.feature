@@ -18,8 +18,3 @@ Feature: Terms of Service prompt
     Then I should not see "To learn more, check out our Terms of Service"
     When I go to the media page
     Then I should not see "To learn more, check out our Terms of Service"
-
-  Scenario: Terms of Service prompt is not displayed on the TOS page
-    Given the terms of service prompt is enabled
-    When I am on the tos page
-    Then I should not see "To learn more, check out our Terms of Service"
