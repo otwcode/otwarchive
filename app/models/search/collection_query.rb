@@ -126,6 +126,7 @@ class CollectionQuery < Query
   end
 
   def sort
+    options[:sort_column] = sort_column.sub("public", "general") if (@user.present? || options[:admin_logged_in]) && sort_column.include?("public")
     direction = options[:sort_direction].presence
     direction ||= if sort_column.include?("title") || sort_column.include?("signups_close_at")
                     "asc"

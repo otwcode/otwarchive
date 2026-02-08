@@ -19,6 +19,26 @@ describe CollectionQuery do
     expect(q.generated_query[:sort]).to eq([{ "title.keyword" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
+  it "sorts by bookmarked items" do
+    q = CollectionQuery.new(sort_column: "public_bookmarked_items_count", sort_direction: "desc")
+    expect(q.generated_query[:sort]).to eq([{ "public_bookmarked_items_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
+  end
+
+  it "sorts by works" do
+    q = CollectionQuery.new(sort_column: "public_works_count", sort_direction: "desc")
+    expect(q.generated_query[:sort]).to eq([{ "public_works_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
+  end
+
+  it "sorts by general bookmarked items when logged in" do
+    q = CollectionQuery.new(sort_column: "public_bookmarked_items_count", sort_direction: "desc", admin_logged_in: true)
+    expect(q.generated_query[:sort]).to eq([{ "general_bookmarked_items_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
+  end
+
+  it "sorts by general works when logged in" do
+    q = CollectionQuery.new(sort_column: "public_works_count", sort_direction: "desc", admin_logged_in: true)
+    expect(q.generated_query[:sort]).to eq([{ "general_works_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
+  end
+
   describe "filtering", collection_search: true do
     let!(:gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.current - 2.days, signups_close_at: Time.current + 1.week) }
     let!(:gift_exchange_collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
