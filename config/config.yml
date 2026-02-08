@@ -601,8 +601,8 @@ SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 SUPPORTED_EXTERNAL_URLS: ["jpg", "jpeg", "png", "gif"]
 
 # variables for Askimet http://akismet.com/
-AKISMET_KEY: '6833ee7298cf'
-AKISMET_NAME: 'http://transformativeworks.org'
+AKISMET_KEY: ''
+AKISMET_NAME: ''
 
 # Abuse and Support ticket trackers; you may need to change
 # feedbacks_controller.rb and abuse_reports_controller.rb

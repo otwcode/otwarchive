@@ -14,6 +14,7 @@ class Feedback < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
+    return unless %w(staging production).include?(Rails.env)
     approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
     errors.add(:base, ts("This report looks like spam to our system!")) unless approved
   end
