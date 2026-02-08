@@ -5,7 +5,25 @@ class HelpController < ApplicationController
   def first_login
   end
 
+  def preferences_collection
+  end
+
+  def preferences_comment
+  end
+
+  def preferences_display
+  end
+
   def preferences_locale
+  end
+
+  def preferences_misc
+  end
+
+  def preferences_privacy
+  end
+
+  def preferences_work_title_format
   end
 
   def tags_fandoms
