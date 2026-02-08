@@ -899,4 +899,16 @@ describe Comment do
       expect(comment.spam).to be_falsey
     end
   end
+  
+  describe ".not_spam" do
+    it "includes comments not marked as spam" do
+      ham_comment = create(:comment, spam: false)
+      expect(Comment.not_spam).to include(ham_comment)
+    end
+
+    it "excludes comments marked as spam" do
+      spam_comment = create(:comment, spam: true)
+      expect(Comment.not_spam).not_to include(spam_comment)
+    end
+  end
 end
