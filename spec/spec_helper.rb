@@ -69,7 +69,7 @@ RSpec.configure do |config|
     allow(Akismetor).to receive(:spam?).and_return(false)
 
     # Don't display TOS prompts.
-    allow(ApplicationHelper).to receive(:tos_exempt_page?).and_return(true)
+    allow_any_instance_of(ApplicationHelper).to receive(:tos_exempt_page?).and_return(true)
 
     # Stub all requests to example.org, the default external work URL:
     WebMock.stub_request(:any, /example/)

@@ -26,7 +26,7 @@ Before do
   allow_any_instance_of(ZohoAuthClient).to receive(:access_token)
   
   # Don't display TOS prompts.
-  allow(ApplicationHelper).to receive(:tos_exempt_page?).and_return(true)
+  allow_any_instance_of(ApplicationHelper).to receive(:tos_exempt_page?).and_return(true)
 
   # Clear Memcached
   Rails.cache.clear
