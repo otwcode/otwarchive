@@ -6,11 +6,14 @@
     <meta name="keywords" content="fanfiction, transformative works, otw, fair use, archive" />
     <meta name="language" content="en-US" />
     <meta name="subject" content="fandom" />
-    <meta name="description" content="An Archive of Our Own, a project of the Organization for Transformative Works" />
+    <meta name="title" content="<%= browser_page_title(@page_title, @page_subtitle) %>" />
+    <% item = @user || @work || @series %>
+    <% is_existing_work = item.is_a?(Work) && item.persisted? %>
+    <% description = is_existing_work && item.summary.present? ? strip_tags(item.summary) : "An Archive of Our Own, a project of the Organization for Transformative Works" %>
+    <meta name="description" content="<%= description %>" />
     <meta name="distribution" content="GLOBAL" />
     <meta name="classification" content="transformative works" />
     <meta name="author" content="Organization for Transformative Works" />
-    <% item = @user || @work || @series %>
     <% if disallow_robots?(item) %>
       <meta name="robots" content="noindex" />
       <meta name="googlebot" content="noindex" />
@@ -19,26 +22,42 @@
     <meta name="chrome" content="nointentdetection" />
     <meta name="format-detection" content="telephone=no" />
     <title><%= browser_page_title(@page_title, @page_subtitle) %></title>
+    <%# Open Graph/Facebook %>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="<%= request.original_url %>" />
+    <% if is_existing_work %>
+      <meta property="og:title" content="<%= og_title_meta(item) %>" />
+      <meta property="og:description" content="<%= og_description_meta(item) %>" />
+      <meta property="og:image" content="<%= og_image_url_meta(item) %>" />
+    <% end %>
+    <%# Twitter %>
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="<%= request.original_url %>" />
+    <% if is_existing_work %>
+      <meta property="twitter:title" content="<%= og_title_meta(item) %>" />
+      <meta property="twitter:description" content="<%= og_description_meta(item) %>" />
+      <meta property="twitter:image" content="<%= og_image_url_meta(item) %>" />
+    <% end %>
 
-    <%= render :partial => 'layouts/includes' %>
+    <%= render partial: "layouts/includes" %>
     <%= phraseapp_in_context_editor_js %>
   </head>
 
-  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
+  <body class="<%= logged_in? ? "logged-in" : "logged-out" %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
-      <% # layouts/proxy_notice is rendered here by JavaScript found in layouts/javascripts. %>
-      <%= render :partial => 'layouts/header' %>
+       <%# layouts/proxy_notice is rendered here by JavaScript found in layouts/javascripts. %>
+      <%= render partial: "layouts/header" %>
       <div id="inner" class="wrapper">
         <!-- BEGIN sidebar -->
         <% if @admin_posts && !@hide_dashboard %>
-          <%= render :partial => 'admin_posts/sidebar' %>
+          <%= render partial: "admin_posts/sidebar" %>
         <% elsif @user && !@hide_dashboard %>
-          <%= render :partial => 'users/sidebar' %>
+          <%= render partial: "users/sidebar" %>
         <% elsif @collection && !@hide_dashboard %>
-          <%= render :partial => 'collections/sidebar' %>
+          <%= render partial: "collections/sidebar" %>
         <% elsif show_wrangling_dashboard %>
-          <%= render :partial => 'tag_wranglings/wrangler_dashboard' %>
+          <%= render partial: "tag_wranglings/wrangler_dashboard" %>
         <% end %>
         <!-- END sidebar -->
 
@@ -51,8 +70,8 @@
         </div>
         <!-- END main -->
       </div>
-      <%= render :partial => 'layouts/footer' %>
+      <%= render partial: "layouts/footer" %>
     </div>
-    <%= render :partial => 'layouts/javascripts' %>
+    <%= render partial: "layouts/javascripts" %>
   </body>
 </html>
