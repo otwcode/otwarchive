@@ -111,6 +111,8 @@ en:
     create:
       invited: invited
       invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
+      warnings:
+        private_bookmark_added_to_collection: " Please note: private bookmarks are not listed in collections."
   collection_participants:
     update:
       failure: Couldn't update %{participant}.
