@@ -299,6 +299,9 @@ en:
       pinch_hitter: "%{pinch_hitter_byline}* (pinch hitter)"
     request_byline:
       none: "- None -"
+  chapter:
+    chapter_header: Chapter %{position}
+    full_chapter_title: 'Chapter %{position}: %{title}'
   errors:
     attributes:
       icon:
