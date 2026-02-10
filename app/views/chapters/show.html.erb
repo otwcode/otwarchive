@@ -1,4 +1,7 @@
 <!--page description, messages-->
+<% if !@work.posted? %>
+  <p class="notice"><%= t("works.show.unposted_deletion_notice_html", deletion_date: date_in_zone(@work.created_at + 29.days)) %></p>
+<% end %>
 <% if @work.unrevealed? %>
   <%= render "works/work_unrevealed_notice" %>
 <% end %>
@@ -16,32 +19,45 @@
 <% end %>
 <!--/subnav-->
 
+<!-- BEGIN revealed -->
 <% if !@work.unrevealed? || logged_in_as_admin? || can_access_unrevealed_work(@work, current_user) %>
   <!-- BEGIN work -->
-  <div class="work"><p class="landmark"><a name="top">&nbsp;</a></p>
-    <%= render :partial => 'works/work_header' %>
+  <div class="work">
+    <p class="landmark"><a name="top">&nbsp;</a></p>
 
-    <div id="chapters">
-      <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
-    </div>
+    <!--work description, metadata, notes and messages-->
+    <%= render "works/work_header_navigation" %>
 
-    <% inspired_by = get_inspired_by(@work) %>
-    <% last_chapter = @work.posted? ? @work.last_posted_chapter : @work.last_chapter %>
-    <% if @chapter == last_chapter && (@work.endnotes.present? || @work.series.present? || inspired_by.present?) %>
-      <!--afterword-->
-      <div class="afterword preface group">
-        <% if !@work.endnotes.blank? %>
-          <%= render :partial => 'works/work_endnotes' %>
-        <% end %>
-        <% unless @preview_mode || @work.series.blank? %>
-          <%= render :partial => 'works/work_series_links' %>
-        <% end %>
-        <% unless inspired_by.empty? %>
-          <%= render :partial => 'works/work_approved_children', :locals => {:inspired_by => inspired_by} %>
-        <% end %>
+    <%= render "works/meta", work: @work %>
+
+    <%= render "works/work_skin" %>
+
+    <!-- BEGIN section where work skin applies -->
+    <div id="workskin">
+      <%= render "works/preface" %>
+    <!--/descriptions-->
+
+      <div id="chapters">
+        <%= render "chapters/chapter", chapter: @chapter %>
       </div>
-      <!--/afterword-->
-    <% end %>
+
+      <% inspired_by = get_inspired_by(@work) %>
+      <% last_chapter = @work.posted? ? @work.last_posted_chapter : @work.last_chapter %>
+      <% if @chapter == last_chapter && (@work.endnotes.present? || @work.series.present? || inspired_by.present?) %>
+        <!--afterword-->
+        <div class="afterword preface group">
+          <% if !@work.endnotes.blank? %>
+            <%= render "works/work_endnotes" %>
+          <% end %>
+          <% unless @preview_mode || @work.series.blank? %>
+            <%= render "works/work_series_links" %>
+          <% end %>
+          <% unless inspired_by.empty? %>
+            <%= render "works/work_approved_children", inspired_by: inspired_by %>
+          <% end %>
+        </div>
+        <!--/afterword-->
+      <% end %>
 
     </div>
     <!-- END work skin -->
@@ -49,7 +65,7 @@
   <!-- END work -->
 
   <!-- BEGIN comment section -->
-  <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
+  <%= render "comments/commentable", commentable: @chapter %>
   <!-- END comment section -->
 
   <% if @next_chapter %>
@@ -65,5 +81,6 @@
     </script>
   <% end %>
 <% end %>
+<!-- END revealed -->
 
 <%= render "hit_count/include" %>

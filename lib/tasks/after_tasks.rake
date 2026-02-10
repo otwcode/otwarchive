@@ -491,12 +491,6 @@ namespace :After do
     end
   end
 
-  desc "Migrate pinch_request_signup to request_signup"
-  task(migrate_pinch_request_signup: :environment) do
-    count = ChallengeAssignment.where("pinch_request_signup_id IS NOT NULL AND request_signup_id IS NULL").update_all("request_signup_id = pinch_request_signup_id")
-    puts("Migrated pinch_request_signup for #{count} challenge assignments.")
-  end
-
   desc "Reindex tags associated with works that are hidden or unrevealed"
   task(reindex_hidden_unrevealed_tags: :environment) do
     hidden_count = Work.hidden.count
@@ -516,6 +510,19 @@ namespace :After do
     end
 
     puts "Finished reindexing tags on hidden and unrevealed works"
+  end
+
+  desc "Reindex unrevealed bookmarks of unrevealed works"
+  task(reindex_unrevealed_bookmarkable: :environment) do
+    unrevealed_count = Work.unrevealed.count
+    unrevealed_batches = (unrevealed_count + 999) / 1_000
+    puts "Inspecting #{unrevealed_count} unrevealed works in #{unrevealed_batches} batches"
+    Work.unrevealed.find_in_batches.with_index do |batch, index|
+      batch.each(&:update_bookmarks_index)
+      puts "Finished batch #{index + 1} of #{unrevealed_count}"
+    end
+
+    puts "Finished reindexing bookmarks of unrevealed works"
   end
 
   desc "Convert user kudos from users with the official role to guest kudos"
@@ -634,6 +641,18 @@ namespace :After do
       puts "Batch #{batch_number} complete."
     end
     puts "Job complete."
+  end
+
+  desc "Run backfill for user_past_emails and user_past_usernames"
+  task(backfill: :environment) do
+    User.find_in_batches.with_index do |batch, index|
+      REDIS_GENERAL.sadd?("audits_backfill", batch.map(&:id))
+      
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    AuditsBackfillJob.spawn_jobs
+    puts "Backfill started and running on resque in background"
   end
   # This is the end that you have to put new tasks above.
 end
