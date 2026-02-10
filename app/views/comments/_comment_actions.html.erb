@@ -15,9 +15,7 @@
     <li><%= link_to t(".parent"), comment_path(id: comment.commentable_id) %></li>
     <li><%= link_to t(".parent_thread"), comment_path(id: comment.thread) %></li>
   <% end %>
-  <% unless comment.unreviewed? %>
-    <li><%= link_to t(".thread"), comment %></li>
-  <% end %>
+  <li><%= link_to t(".thread"), comment %></li>
   <% if can_freeze_comment?(comment) %>
     <li><%= freeze_comment_button(comment) %></li>
   <% end %>
