@@ -12,7 +12,10 @@
 <dd>
   <% # link to the work %>
    <% if assignment.creation %>
-     <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, :class => "work" %>
+    <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work" %>
+     <% if !assignment.posted? %>
+      <%= t(".draft_header") %>
+    <% end %>
    <% end %>
 
   <% if @collection && @collection.user_is_maintainer?(current_user) %>
@@ -26,21 +29,26 @@
 
 <!--stats-->
   <dl class="stats">
-    <dt><%= ts("Status:") %></dt>
+    <dt><%= t(".stats.status.header") %></dt>
     <dd>
       <% # status can be: unposted (no creation), unapproved (creation but it hasn't been approved), complete %>
       <% if !assignment.posted? %>
-        <%= ts("Unposted") %>
+        <%= t(".stats.status.unposted") %>
       <% elsif !assignment.fulfilled? %>
-        <strong><%= ts("Unapproved") %><!-- BACK END add approve button for mod --></strong>
+        <strong><%= t(".stats.status.unfullfilled") %><!-- BACK END add approve button for mod --></strong>
       <% else %>
-        <%= ts("Complete!") %>
+        <%= t(".stats.status.fullfilled") %>
       <% end %>
     </dd>
 
     <% if assignment.creation %>
-      <dt><%= ts("Posted:") %></dt>
-      <dd class="datetime"><%= assignment.creation.published_at %></dd>
+      <% if assignment.posted? %>
+        <dt> <%= t(".stats.creation.posted") %> </dt>
+        <dd class="datetime"><%= assignment.creation.published_at %></dd>
+      <% else %>
+        <dt> <%= t(".stats.creation.unposted") %> </dt>
+        <dd class="datetime"><%= assignment.creation.created_at %></dd>
+      <% end %>
 
       <% if assignment.creation.respond_to?(:word_count) %>
         <dt><%= ts("Words:") %></dt>
