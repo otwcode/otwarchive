@@ -1191,6 +1191,73 @@ en:
         description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
         header: Set preferred locale
       page_heading: Locale Preferences
+    skins_creating:
+      allowed_keywords:
+        description_html: We allow all standard CSS keyword values (e.g., %{absolute_code}, %{bottom_code}, %{center_code}, %{underline_code}, etc.).
+        header: Keywords
+      allowed_properties: We allow the following properties including all their variations (and shorthand values)
+      allowed_specific_properties: We also allow the following specific properties
+      colors:
+        common_color_names: the set of commonly-supported color names
+        description_html: You can specify colors using hex values (eg, %{black_hex_code} is black in hex) or with RGB or RGBA values (e.g., %{black_rgb_code} and %{black_rgba_code} both give you black). This may be safer since not all browsers will necessarily support all color names. However, color names are more readable and easier to remember, so we also allow color names. (We suggest you stick to %{common_color_names_link}.)
+        header: Colors
+      comments:
+        description: Comments are stripped from CSS.
+        header: Comments
+      css_basics:
+        description:
+          background_color_example_html: 'Inside any tags with the id "header", set the background color to purple: %{background_color_css_code}'
+          blink_example_html: 'Inside any tags with the class "meta", make the text blink: (we do not advise this) %{blink_css_code}'
+          css_getting_started_tutorial: Getting Started (CSS Tutorial) from MDN
+          css_intro_tutorial: CSS introduction tutorial
+          css_selectors_and_rules_html: The %{selector_bold} is either the name of an HTML tag (like %{body_tag_code} or %{h1_tag_code}), or it can be an id or class that has been set on a tag. The %{property_bold} is what you want to change in the contents of that tag (for instance the font size), and the %{value_bold} is what you want to set it to.
+          css_tutorials: 'Some useful CSS tutorials for more information:'
+          example_css: 'selector {property: value;}'
+          examples_header: 'Examples:'
+          font_size_example_html: 'Inside the "body" tag, set the font size slightly larger than the baseline: %{font_size_css_code}'
+          line_of_css_html: 'A line of CSS code looks pretty much like this: %{example_css_code}'
+          property: property
+          selector: selector
+          value: value
+        header: 'If you are new to CSS, here are the basics:'
+      custom_properties:
+        description:
+          accepting_properties_html: All properties except %{font_family_code} and %{content_code} accept the %{var_code} function as a value. We don't allow fallbacks.
+          availability_html: Custom properties and the %{var_code} function are only available for site skins, and won't work on work skins.
+          names: Custom property names can contain any combination of lowercase letters (a-z) in the English alphabet, numerals zero to nine (0-9), dashes (-), and underscores (_). They can't contain single (') or double (") quotation marks, or URLs. Any uppercase letters (A-Z) will be converted to lowercase.
+        header: Custom Properties (Variables)
+      external_urls:
+        description_html: We allow external image URLs (specified as %{example_url_code}) in JPG, GIF, and PNG formats. Please note, however, that skins using external images will not be approved for public use.
+        header: URLs
+      font_family:
+        description:
+          cannot: cannot
+          font_names_html: In the %{font_family_code} property, we allow you to specify any font with an alphanumeric name. You can (but don't have to) specify the name with single or double quotes around it, just make sure the quotes match. (e.g., 'Gill Sans' and "Gill Sans" are both fine; 'Gill Sans" won't work.) Keep in mind that a font has to be installed on the user's operating system to work. It's a good idea when specifying fonts to use fallbacks in case your first-choice font isn't available. See %{web_safe_fonts_link}.
+          no_font_face_html: We %{cannot_bold} allow the %{font_face_code} attribute. Sorry! If you have an uncommon font that you want to use in a skin you would like to share, we suggest adding a comment in the skin's "Description" field with a pointer to a place for users to download the font themselves, and using web-safe fonts as fallbacks.
+          separate_properties_html: Unfortunately, you cannot use the %{font_code} shorthand in your CSS. All font properties have to be specified separately, e.g., %{font_properties_css_code}
+          web_safe_fonts: a set of web-safe fonts with fallbacks
+        header: Font and Font Family
+      intro:
+        description: 'Note that for security reasons, you can only use a limited set of CSS code: all other declarations and comments will be removed!'
+        header: You can create new skins for the Archive using our wizard, or by writing your own CSS (cascading style sheets) code
+      numeric_values:
+        description:
+          em_unit_html: 'PS: we highly encourage learning about and using %{em_code}, which lets you set things relative to the viewer''s current font size! It will make your layouts much more flexible and responsive to different browser/font settings.'
+          precision_html: 'You can specify numeric values up to two decimal places, either as percentages or in %{various_units_link}: %{units_list_code}'
+          units_list: cm, em, ex, in, mm, pc, pt, px
+          various_units: various units
+        header: Numeric Values
+      one_declaration_per_ruleset:
+        description_html: 'The CSS parser we use retains only one declaration for each property, meaning that rulesets like %{repeated_declarations_css_code} will have all but the last %{background_code} declaration removed (so your gradient would only show up in WebKit browsers). To avoid losing declarations with repeated properties, split each one into its own ruleset, like so:'
+        header: Use only one declaration per property per ruleset
+      scale:
+        description_html: You can specify scale (for the %{transform_code} property) as %{scale_numeric_value_code} where the numeric value can be specified up to two decimal places.
+        header: Scale
+        numeric_value: numeric value
+      skin_examples:
+        description_html: "%{public_skins_link} are visible and you can read their code and copy them to edit for your own use."
+        header: Look at other public skins for examples
+        public_skins: All approved public skins
     tags_fandoms:
       description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
       more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
@@ -2411,10 +2478,12 @@ en:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
     form:
+      css: CSS
       description: Description
       icon: Upload a preview (png, jpeg or gif)
       public: Apply to make public
       skin_type: Type
+      skins_creating_help_title: Skins creating
       title: Title
     revert_skin_form:
       revert_to_default: Revert to Default Skin

@@ -367,7 +367,7 @@ BANNED_MULTIMEDIA_SRCS: []
 # Allowed CSS
 #
 # *** IMPORTANT: if you edit these values please also update the
-# skins-creating.html file in public/help ***
+# skins_creating.html.erb file in app/views/help ***
 #
 # the following properties and keywords will be ADDED to the default set allowed
 # in user-submitted CSS code, along with:
