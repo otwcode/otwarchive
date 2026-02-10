@@ -202,3 +202,13 @@ Feature: Work Drafts
       And I press "Save Draft"
     Then I should see "This chapter is a draft and hasn't been posted yet!"
       And I should see "Sorry, you can't comment on a draft."
+
+  Scenario: Multichapter drafts should have a draft deletion warning
+    Given I am logged in as "Scott" with password "password"
+      And I set up the draft "scotts draft"
+      And I press "Preview"
+      And I press "Save Draft"
+    When a chapter is set up for "scotts draft"
+      And I press "Preview"
+      And I press "Save Draft"
+    Then I should see "This work is a draft and has not been posted. The draft will be scheduled for deletion on"
