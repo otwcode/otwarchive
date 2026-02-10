@@ -479,7 +479,7 @@ Rails.application.routes.draw do
     resources :media
     resources :fandoms
     resources :people
-    resources :prompts
+    resources :prompts, except: [:index]
     resources :tags do
       resources :works
     end
