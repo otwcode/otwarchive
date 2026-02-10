@@ -512,6 +512,19 @@ namespace :After do
     puts "Finished reindexing tags on hidden and unrevealed works"
   end
 
+  desc "Reindex unrevealed bookmarks of unrevealed works"
+  task(reindex_unrevealed_bookmarkable: :environment) do
+    unrevealed_count = Work.unrevealed.count
+    unrevealed_batches = (unrevealed_count + 999) / 1_000
+    puts "Inspecting #{unrevealed_count} unrevealed works in #{unrevealed_batches} batches"
+    Work.unrevealed.find_in_batches.with_index do |batch, index|
+      batch.each(&:update_bookmarks_index)
+      puts "Finished batch #{index + 1} of #{unrevealed_count}"
+    end
+
+    puts "Finished reindexing bookmarks of unrevealed works"
+  end
+
   desc "Convert user kudos from users with the official role to guest kudos"
   task(convert_official_kudos: :environment) do
     official_users = Role.find_by(name: "official")&.users
