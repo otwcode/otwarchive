@@ -2140,6 +2140,7 @@ en:
       title: Invitation Status for %{email}
     no_invitation:
       email_not_found: Sorry, we can't find the email address you entered.
+      no_email: Please enter a valid email.
     show:
       instructions_html: To check on the status of your invitation, go to the %{status_link} and enter your email in the space provided.
     status:
