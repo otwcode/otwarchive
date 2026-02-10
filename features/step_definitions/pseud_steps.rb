@@ -37,3 +37,31 @@ When /^"([^"]*)" creates the pseud "([^"]*)"$/ do |username, newpseud|
   fill_in "Name", with: newpseud
   click_button "Create"
 end
+
+When "I fill in details of my default pseud" do
+  step("I want to edit my profile")
+  click_link("Edit Default Pseud and Icon")
+  fill_in("Description", with: "Description thingy")
+  fill_in("Icon alt text", with: "Icon alt text thingy")
+  fill_in("Icon comment text", with: "Icon comment text thingy")
+  step("I attach an icon with the extension 'png'")
+  click_button("Update")
+end
+
+Then "the icon of pseud {string} should not be set" do |pseud_name|
+  pseud = Pseud.find_by(name: pseud_name)
+
+  assert !pseud.icon.attached?
+end
+
+Then "the icon alt text of pseud {string} should be blank" do |pseud_name|
+  pseud = Pseud.find_by(name: pseud_name)
+
+  assert pseud.icon_alt_text.blank?
+end
+
+Then "the icon comment text of pseud {string} should be blank" do |pseud_name|
+  pseud = Pseud.find_by(name: pseud_name)
+
+  assert pseud.icon_comment_text.blank?
+end
