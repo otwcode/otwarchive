@@ -508,7 +508,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | legal            |
       | policy_and_abuse |
 
-  Scenario: Admins can see when a work has too many tags
+  Scenario: Admins can see when a work has too many tags and still edit the work
     Given the user-defined tag limit is 7
       And the work "Under the Limit"
       And the work "Over the Limit"
@@ -516,11 +516,16 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the work "Over the Limit" has 2 character tags
       And the work "Over the Limit" has 2 relationship tags
       And the work "Over the Limit" has 2 freeform tags
-    When I am logged in as an admin
+    When I am logged in as a "superadmin" admin
       And I view the work "Under the Limit"
     Then I should see "Over Tag Limit: No"
     When I view the work "Over the Limit"
     Then I should see "Over Tag Limit: Yes"
+    When I follow "Edit Tags and Language"
+      And I select "Mature" from "Rating"
+      And I press "Update"
+    Then I should see "Work was successfully updated."
+      And I should see "Mature"
 
   Scenario Outline: Certain admins can see original work creators
     Given a work "Orphaned" with the original creator "orphaneer"
