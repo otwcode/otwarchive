@@ -40,7 +40,7 @@ Feature:
     Given I have no users
       And the following activated user exists
       | login     | password |
-      | otheruser | secret   |
+      | otheruser | secret12 |
       And I am logged in as "downthemall" with password "password"
     When I visit the change username page for downthemall
       And I fill in "New username" with "otheruser"
@@ -52,7 +52,7 @@ Feature:
     Given I have no users
       And the following activated user exists
       | login     | password |
-      | otheruser | secret   |
+      | otheruser | secret12 |
       And I am logged in as "downthemall" with password "password"
     When I visit the change username page for downthemall
       And I fill in "New username" with "OtherUser"
@@ -124,12 +124,12 @@ Feature:
     Given I have no users
       And the following activated user exists
       | login         | password | id |
-      | oldusername   | secret   | 1  |
+      | oldusername   | secret12 | 1  |
       And a pseud exists with name: "newusername", user_id: 1
-      And I am logged in as "oldusername" with password "secret"
+      And I am logged in as "oldusername" with password "secret12"
     When I visit the change username page for oldusername
       And I fill in "New username" with "newusername"
-      And I fill in "Password" with "secret"
+      And I fill in "Password" with "secret12"
       And I press "Change Username"
     Then I should get confirmation that I changed my username
       And I should see "Hi, newusername"
@@ -247,12 +247,12 @@ Feature:
       Given I have no users
         And the following activated user exists
           | login     | password |
-          | forbidden | secret   |
+          | forbidden | secret12 |
         And the username "forbidden" is on the forbidden list
-      When I am logged in as "forbidden" with password "secret"
+      When I am logged in as "forbidden" with password "secret12"
         And I visit the change username page for forbidden
         And I fill in "New username" with "notforbidden"
-        And I fill in "Password" with "secret"
+        And I fill in "Password" with "secret12"
         And I press "Change Username"
       Then I should get confirmation that I changed my username
         And I should see "Hi, notforbidden"
@@ -419,7 +419,7 @@ Feature:
       And I am logged in as "editname"
     When I am logged out
       And I follow "Forgot password?"
-      And I fill in "Email address or username" with "editname"
+      And I fill in "Email address" with "bar@ao3.org"
       And I press "Reset Password"
     Then 1 email should be delivered to "bar@ao3.org"
     When all emails have been delivered

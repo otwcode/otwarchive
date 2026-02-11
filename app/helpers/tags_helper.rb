@@ -88,7 +88,7 @@ module TagsHelper
 
   # Adds the "tag" classname to links (for tag links)
   def link_to_with_tag_class(path, text, options)
-    options[:class] ? options[:class] << " tag" : options[:class] = "tag"
+    options[:class] ? options[:class].dup << " tag" : options[:class] = "tag"
     link_to text, path, options
   end
 

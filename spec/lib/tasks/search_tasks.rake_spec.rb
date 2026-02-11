@@ -101,6 +101,14 @@ describe "rake search:run_world_index_queue" do
 
     subject.invoke
   end
+
+  it "reindexes users" do
+    user = create(:user)
+    IndexQueue.enqueue(user, :world)
+    expect(UserIndexer).to receive(:new).with([user.id.to_s]).and_call_original
+
+    subject.invoke
+  end
 end
 
 describe "rake search:index_tags" do

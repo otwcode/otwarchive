@@ -107,7 +107,14 @@ class Comment < ApplicationRecord
     # While we do have tag comments, those are from logged-in users with special
     # access granted by admins, so we never spam check them, unlike comments on
     # works or admin posts.
-    comment_type = ultimate_parent.is_a?(Work) ? "fanwork-comment" : "comment"
+    case ultimate_parent
+    when Work
+      comment_type = "fanwork-comment"
+      comment_post_modified_gmt = ultimate_parent.revised_at.iso8601
+    when AdminPost
+      comment_type = "comment"
+      comment_post_modified_gmt = ultimate_parent.created_at.iso8601
+    end
 
     if pseud_id.nil?
       user_role = "guest"
@@ -126,7 +133,9 @@ class Comment < ApplicationRecord
       user_role: user_role,
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
-      comment_content: comment_content
+      comment_content: comment_content,
+      comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
+      comment_post_modified_gmt: comment_post_modified_gmt
     }
 
     attributes[:recheck_reason] = "edit" if will_save_change_to_edited_at? && will_save_change_to_comment_content?
@@ -187,12 +196,12 @@ class Comment < ApplicationRecord
         users << self.comment_owner
       end
       if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
-        if self.reply_comment?
-          I18n.with_locale(self.comment_owner.preference.locale_for_mails) do
+        I18n.with_locale(self.comment_owner.preference.locale_for_mails) do
+          if self.reply_comment?
             CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+          else
+            CommentMailer.comment_sent_notification(self).deliver_after_commit
           end
-        else
-          CommentMailer.comment_sent_notification(self).deliver_after_commit
         end
       end
 
@@ -229,12 +238,12 @@ class Comment < ApplicationRecord
       users << self.comment_owner
     end
     if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
-      if self.reply_comment?
-        I18n.with_locale(self.comment_owner.preference.locale_for_mails) do
+      I18n.with_locale(self.comment_owner.preference.locale_for_mails) do
+        if self.reply_comment?
           CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+        else
+          CommentMailer.comment_sent_notification(self).deliver_after_commit
         end
-      else
-        CommentMailer.comment_sent_notification(self).deliver_after_commit
       end
     end
 
@@ -376,10 +385,12 @@ class Comment < ApplicationRecord
 
     # send notification to the owner of the original comment if they're not the same as the commenter
     if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
-      if self.saved_change_to_edited_at?
-        CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
-      else
-        CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
+      I18n.with_locale(parent_comment_owner&.preference&.locale_for_mails) do
+        if self.saved_change_to_edited_at?
+          CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
+        else
+          CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
+        end
       end
     end
 

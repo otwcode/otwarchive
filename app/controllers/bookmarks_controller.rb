@@ -137,7 +137,7 @@ class BookmarksController < ApplicationController
           end
         end
       elsif use_caching?
-        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: ArchiveConfig.SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE.seconds) do
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v3", expires_in: ArchiveConfig.SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE.seconds) do
           search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           results = search.search_results.scope(:for_blurb)
           flash_search_warnings(results)
@@ -197,7 +197,8 @@ class BookmarksController < ApplicationController
     @bookmarkable ||= ExternalWork.new(external_work_params)
     @bookmark = Bookmark.new(bookmark_params.merge(bookmarkable: @bookmarkable))
     if @bookmark.errors.empty? && @bookmark.save
-      flash[:notice] = ts("Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.")
+      flash[:notice] = t("bookmarks.create.success")
+      flash[:notice] += t("bookmarks.create.warnings.private_bookmark_added_to_collection") if bookmark_params[:collection_names].present?
       redirect_to(bookmark_path(@bookmark))
     else
       render :new
@@ -255,6 +256,7 @@ class BookmarksController < ApplicationController
     if @bookmark.update(bookmark_params) && errors.empty?
       flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
       flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
+      flash[:notice] += t("bookmarks.create.warnings.private_bookmark_added_to_collection") if new_collections.any? || unapproved_collections.any?
       flash[:notice] = flash[:notice].html_safe
       redirect_to(@bookmark)
     else
@@ -376,6 +378,9 @@ class BookmarksController < ApplicationController
       :language_id,
       :date,
       :bookmarkable_date,
+      :word_count,
+      :words_from,
+      :words_to,
       :sort_column,
       :other_tag_names,
       :excluded_tag_names,

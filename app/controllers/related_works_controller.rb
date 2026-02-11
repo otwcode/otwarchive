@@ -15,10 +15,10 @@ class RelatedWorksController < ApplicationController
 
     # Extra constraints on what we display if someone else is viewing @user's
     # related works page:
-    @translations_of_user = @translations_of_user.merge(Work.revealed.non_anon)
-    @remixes_of_user = @remixes_of_user.merge(Work.revealed.non_anon)
-    @translations_by_user = @translations_by_user.merge(Work.revealed.non_anon)
-    @remixes_by_user = @remixes_by_user.merge(Work.revealed.non_anon)
+    @translations_of_user = @translations_of_user.merge(Work.revealed.non_anon).where(reciprocal: true)
+    @remixes_of_user = @remixes_of_user.merge(Work.revealed.non_anon).where(reciprocal: true)
+    @translations_by_user = @translations_by_user.merge(Work.revealed.non_anon).where(reciprocal: true)
+    @remixes_by_user = @remixes_by_user.merge(Work.revealed.non_anon).where(reciprocal: true)
   end
 
   # GET /related_works/1
@@ -70,16 +70,7 @@ class RelatedWorksController < ApplicationController
   private
 
   def load_user
-    if params[:user_id].blank?
-      flash[:error] = ts("Whose related works were you looking for?")
-      redirect_to search_people_path
-    else
-      @user = User.find_by(login: params[:user_id])
-      if @user.blank?
-        flash[:error] = ts("Sorry, we couldn't find that user")
-        redirect_to search_people_path
-      end
-    end
+    @user = User.find_by!(login: params[:user_id])
   end
 
   def get_instance_variables

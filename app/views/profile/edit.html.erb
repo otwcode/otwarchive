@@ -32,9 +32,9 @@
       </dd>
 
       <% if policy(@user.profile).update? %>
-        <dt><%= f.label :ticket_number, class: "required" %></dt>
-        <dd>
-          <%= f.text_field :ticket_number, class: "required" %>
+        <dt class="required"><%= f.label :ticket_number %></dt>
+        <dd class="required">
+          <%= f.text_field :ticket_number %>
         </dd>
       <% end %>
 

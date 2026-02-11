@@ -164,7 +164,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-protected
+  # Allow totp_attempt parameter in the :sign_in controller for admin two-factor authentication
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:totp_attempt])
+  end
 
   def logged_in?
     user_signed_in?
@@ -196,7 +203,7 @@ public
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
-      @admin_banner = Rails.cache.fetch("admin_banner") do
+      @admin_banner = Rails.cache.fetch("v1/admin_banner") do
         banner = AdminBanner.where(active: true).last
         banner.nil? ? "" : banner
       end
@@ -341,7 +348,6 @@ public
     redirect_to (fallback || root_path) rescue redirect_to '/'
   end
 
-
   def get_page_title(fandom, author, title, options = {})
     # truncate any piece that is over 15 chars long to the nearest word
     if options[:truncate]
@@ -350,18 +356,17 @@ public
       title = title.gsub(/^(.{15}[\w.]*)(.*)/) {$2.empty? ? $1 : $1 + '...'}
     end
 
-    @page_title = ""
     if logged_in? && !current_user.preference.try(:work_title_format).blank?
-      @page_title = current_user.preference.work_title_format.dup
-      @page_title.gsub!(/FANDOM/, fandom)
-      @page_title.gsub!(/AUTHOR/, author)
-      @page_title.gsub!(/TITLE/, title)
+      page_title = current_user.preference.work_title_format.dup
+      page_title.gsub!(/FANDOM/, fandom)
+      page_title.gsub!(/AUTHOR/, author)
+      page_title.gsub!(/TITLE/, title)
     else
-      @page_title = title + " - " + author + " - " + fandom
+      page_title = "#{title} - #{author} - #{fandom}"
     end
 
-    @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
-    @page_title.html_safe
+    page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
+    page_title.html_safe
   end
 
   public

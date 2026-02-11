@@ -20,7 +20,7 @@ jobs:
       COMMIT_ID: ${{ github.sha }}
 
     steps:
-      - uses: appleboy/ssh-action@3ca8a7c5359ac6ad91aa47f1946ece1c3b025004
+      - uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2
         with:
           host: ${{ secrets.SSH_GATEWAY }}
           username: ${{ secrets.SSH_USER }}

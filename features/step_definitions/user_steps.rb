@@ -289,10 +289,10 @@ When "I change my email to {string}" do |email|
   step %{I should see "Your email has been successfully updated."}
 end
 
-When "I request a password reset for {string}" do |login|
+When "I request a password reset for {string}" do |email|
   step(%{I am on the login page})
-  step(%{I follow "Reset password"})
-  step(%{I fill in "Email address or username" with "#{login}"})
+  step(%{I follow "Reset your password"})
+  step(%{I fill in "Email address" with "#{email}"})
   step(%{I press "Reset Password"})
 end
 

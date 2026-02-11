@@ -18,6 +18,8 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def invite_from_queue
+    authorize Invitation
+
     count = invitation_params[:invite_from_queue].to_i
     InviteFromQueueJob.perform_later(count: count, creator: current_admin)
 

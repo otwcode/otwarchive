@@ -1,6 +1,8 @@
 # encoding=utf-8
 
 class WorksController < ApplicationController
+  include WorksHelper
+
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
@@ -101,7 +103,7 @@ class WorksController < ApplicationController
         # the subtag is for eg collections/COLL/tags/TAG
         subtag = @tag.present? && @tag != @owner ? @tag : nil
         user = logged_in? || logged_in_as_admin? ? 'logged_in' : 'logged_out'
-        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_true", expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
+        @works = Rails.cache.fetch("#{@owner.works_index_cache_key(subtag)}_#{user}_page#{params[:page]}_v1", expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
           results = @search.search_results.scope(:for_blurb)
           # calling this here to avoid frozen object errors
           results.items
@@ -123,7 +125,7 @@ class WorksController < ApplicationController
         end
       end
     elsif use_caching?
-      @works = Rails.cache.fetch('works/index/latest/v1', expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
+      @works = Rails.cache.fetch("works/index/latest/v2", expires_in: ArchiveConfig.SECONDS_UNTIL_WORK_INDEX_EXPIRE.seconds) do
         Work.latest.for_blurb.to_a
       end
     else
@@ -174,22 +176,10 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
-    @tag_groups = @work.tag_groups
     if @work.unrevealed?
       @page_subtitle = t(".page_title.unrevealed")
     else
-      page_creator = if @work.anonymous?
-                       ts("Anonymous")
-                     else
-                       @work.pseuds.map(&:byline).sort.join(", ")
-                     end
-      fandoms = @tag_groups["Fandom"]
-      page_title_inner = if fandoms.size > 3
-                           ts("Multifandom")
-                         else
-                           fandoms.empty? ? ts("No fandom specified") : fandoms[0].name
-                         end
-      @page_title = get_page_title(page_title_inner, page_creator, @work.title)
+      @page_title = work_page_title(@work, @work.title)
     end
 
     # Users must explicitly okay viewing of adult content
@@ -252,6 +242,12 @@ class WorksController < ApplicationController
   def new
     @hide_dashboard = true
     @unposted = current_user.unposted_work
+
+    # Check if collection is closed and user doesn't have permission to post
+    if @collection&.closed? && !@collection&.user_is_maintainer?(current_user)
+      flash[:error] = t(".closed_collection", collection_title: @collection.title)
+      redirect_to collection_path(@collection) and return
+    end
 
     if params[:load_unposted] && @unposted
       @work = @unposted
