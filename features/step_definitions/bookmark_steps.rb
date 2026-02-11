@@ -347,9 +347,10 @@ Given "{string} has a bookmark of a work titled {string}" do |user, title|
   step %{the user "#{user}" exists and is activated}
 
   user_pseud = User.find_by(login: user).default_pseud
-  work1 = FactoryBot.create(:work, title: title)
+  work = Work.find_by(title: title)
+  work ||= FactoryBot.create(:work, title: title)
   FactoryBot.create(:bookmark,
-                    bookmarkable: work1,
+                    bookmarkable: work,
                     pseud: user_pseud)
 
   step %{all indexing jobs have been run}
@@ -423,6 +424,96 @@ When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
   work = Work.find_by(title: title)
   work ||= FactoryBot.create(:work, title: title)
   visit work_path(work)
+end
+
+# Capybara will not find links without href with the click_link method (see issue #379 on the capybara repository)
+When "I exit the bookmark form" do
+  find("a", text: "×").click
+end
+
+When "I exit the bookmark form for the bookmark of {string}" do |work_title|
+  work_id = Work.find_by(title: work_title).id
+  within(".bookmark .work-#{work_id}") do
+    step %{I exit the bookmark form}
+  end
+end
+
+When "I follow {string} in the bookmarkable blurb for {string}" do |link, title|
+  work_id = Work.find_by(title: title).id
+  find("#bookmark_#{work_id}").click_link(link)
+end
+
+When "I follow {string} in the blurb for {word}'s bookmark of {string}" do |link, login, title|
+  user = User.find_by(login: login)
+  work = Work.find_by(title: title)
+  bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
+  find("#bookmark_#{bookmark_id}").click_link(link)
+end
+
+Then "the {word} bookmark form should be open in the bookmarkable blurb for {string}" do |action, title|
+  work_id = Work.find_by(title: title).id
+  within("#bookmark_#{work_id}") do
+    step %{I should see "save a bookmark!"}
+    case action 
+    when "edit"
+      step %{I should not see "Saved"}
+      step %{I should not see "Edit"}
+    when "new"
+      step %{I should not see "Save"}
+    end
+  end
+end
+
+Then "the {word} bookmark form should be open in the blurb for {word}'s bookmark of {string}" do |action, login, title|
+  user = User.find_by(login: login)
+  work = Work.find_by(title: title)
+  bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
+  within("#bookmark_#{bookmark_id}") do
+    step %{I should see "save a bookmark!"}
+    case action 
+    when "edit"
+      step %{I should not see "Saved"}
+      step %{I should not see "Edit"}
+    when "new"
+      step %{I should not see "Save"}
+    end
+  end
+end
+
+Then "the {word} bookmark form should be closed in the bookmarkable blurb for {string}" do |action, title|
+  work_id = Work.find_by(title: title).id
+  within("#bookmark_#{work_id}") do
+    step %{I should not see "save a bookmark!"}
+    case action 
+    when "edit"
+      step %{I should see "Saved"}
+      step %{I should see "Edit"}
+    when "new"
+      step %{I should see "Save"}
+    end
+  end
+end
+
+Then "the {word} bookmark form should be closed in the blurb for {word}'s bookmark of {string}" do |action, login, title|
+  user = User.find_by(login: login)
+  work = Work.find_by(title: title)
+  bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
+  blurb_id = "#bookmark_#{bookmark_id}"
+  if find(blurb_id).has_selector?(".own")
+    step %{I should see "Edit" within "#{blurb_id}"}
+    step %{I should not see "save a bookmark!" within "#{blurb_id}"}
+  else
+    within("#bookmark_#{bookmark_id}") do
+      step %{I should not see "save a bookmark!"}
+      case action 
+      when "edit"
+        step %{I should see "Saved"}
+        step %{I should see "Edit"}
+      when "new"
+        step %{I should see "Save"}
+      end
+    end
+  end
 end
 
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
