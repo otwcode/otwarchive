@@ -191,6 +191,12 @@ describe CssCleaner do
         expect(skin.save).to be_truthy
         expect(skin.css).to eq("div {\n  color: #ddd !important;\n}\n\n")
       end
+
+      it "strips long invalid property values" do
+        skin = build(:skin, css: "div { color: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah!; }")
+        expect(skin.save).to be_falsy
+        expect(skin.css).to eq("")
+      end
     end
 
     context "when cleaning WorkSkin CSS" do

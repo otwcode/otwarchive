@@ -461,6 +461,35 @@ describe "rake After:reindex_hidden_unrevealed_tags" do
   end
 end
 
+describe "rake After:reindex_unrevealed_bookmarkable" do
+  context "with a regular bookmark" do
+    let(:work) { create(:work) }
+    let(:bookmark) { create(:bookmark, bookmarkable: work) }
+
+    it "does not reindex the bookmark" do
+      expect do
+        subject.invoke
+      end.not_to add_to_reindex_queue(bookmark, :background)
+    end
+  end
+
+  context "with a bookmark of an unrevealed work" do
+    let(:work) { create(:work) }
+
+    before do
+      work.update!(in_unrevealed_collection: true)
+    end
+
+    let(:bookmark) { create(:bookmark, bookmarkable: work) }
+
+    it "reindexes the bookmark" do
+      expect do
+        subject.invoke
+      end.to add_to_reindex_queue(bookmark, :background)
+    end
+  end
+end
+
 describe "rake After:convert_official_kudos" do
   context "when there is no official role" do
     it "outputs completion message" do

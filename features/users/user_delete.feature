@@ -19,7 +19,7 @@ Scenario: If I delete a user with no works, the user should be deleted without a
     And I should be logged out
 
 Scenario: If a user chooses "Delete Completely" when removing their account,  delete the works associated with that user
-  Given I am logged in as "otheruser" with password "secret"
+  Given I am logged in as "otheruser" with password "secret12"
     And all emails have been delivered
     And I post the work "To be deleted"
   When I try to delete my account as otheruser
@@ -36,7 +36,7 @@ Scenario: If a user chooses "Delete Completely" when removing their account,  de
 
 Scenario: Allow a user to orphan their works when deleting their account
   Given I have an orphan account
-  When I am logged in as "orphaner" with password "secret"
+  When I am logged in as "orphaner" with password "secret12"
     And all emails have been delivered
     And I post the work "To be orphaned"
     And I go to the works page

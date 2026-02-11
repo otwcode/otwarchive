@@ -10,3 +10,5 @@ redis_resque:
   test: localhost:6383
 redis_rollout:
   test: localhost:6384
+redis_ratelimits:
+  test: localhost:6385
