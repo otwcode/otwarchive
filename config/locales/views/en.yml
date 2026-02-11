@@ -2215,6 +2215,10 @@ en:
         one: "%{formatted_count} work"
         other: "%{formatted_count} works"
   layouts:
+    application:
+      scroll_history_dialog_prompt: Do you want to have your read position saved locally on your device? Your location will not be stored centrally, and this can be changed in your user preferences.
+      scroll_history_dialog_yes: "Yes"
+      scroll_history_dialog_no: "No"
     banner:
       hide: hide banner
     footer:

@@ -22,9 +22,14 @@
 
     <%= render :partial => 'layouts/includes' %>
     <%= phraseapp_in_context_editor_js %>
+    <script type="text/javascript">
+      const SCROLL_HISTORY_DIALOG_PROMPT = '<%= j t(".scroll_history_dialog_prompt") %>';
+      const SCROLL_HISTORY_DIALOG_YES = '<%= j t(".scroll_history_dialog_yes") %>';
+      const SCROLL_HISTORY_DIALOG_NO = '<%= j t(".scroll_history_dialog_no") %>';
+    </script>
   </head>
 
-  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
+  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %> data-scroll-history-enabled>
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
       <% # layouts/proxy_notice is rendered here by JavaScript found in layouts/javascripts. %>
