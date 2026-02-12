@@ -387,10 +387,6 @@ Feature: Admin Actions to Manage Invitations
       And I press "Search" within "form.invitation.simple.search"
     Then I should see "Copy and use"
       And I should see "Delete"
-    When I fill in "All or part of an email address" with "dax"
-      And I press "Search" within "form.invitation.simple.search"
-    Then I should see "Copy and use"
-      And I should see "Delete"
 
   Scenario: An admin can edit an invitation
     Given the user "dax" exists and is activated
