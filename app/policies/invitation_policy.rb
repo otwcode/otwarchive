@@ -1,6 +1,6 @@
 class InvitationPolicy < ApplicationPolicy
   EXTRA_INFO_ROLES = %w[superadmin open_doors policy_and_abuse support tag_wrangling].freeze
-  FIND_ROLES = %w[superadmin policy_and_abuse support].freeze
+  FIND_ROLES = %w[superadmin open_doors policy_and_abuse support].freeze
   INVITE_FROM_QUEUE_ROLES = %w[superadmin policy_and_abuse].freeze
   INVITE_ALL_ROLES = %w[superadmin].freeze
 
