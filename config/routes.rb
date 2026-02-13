@@ -111,6 +111,7 @@ Rails.application.routes.draw do
   end
   resources :tag_wranglers do
     member do
+      delete :destroy_multiple
       get :report_csv
     end
   end
