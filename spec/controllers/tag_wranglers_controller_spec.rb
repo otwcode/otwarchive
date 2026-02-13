@@ -307,15 +307,15 @@ describe TagWranglersController do
 
   describe "#destroy_multiple" do
     let(:wrangler) { create(:tag_wrangler) }
-    let(:fandom_1) { create(:fandom, name: "A Fandom", canonical: true) }
-    let(:fandom_2) { create(:fandom, name: "B Fandom", canonical: true) }
-    let!(:assignment_1) { create(:wrangling_assignment, user: wrangler, fandom: fandom_1) }
-    let!(:assignment_2) { create(:wrangling_assignment, user: wrangler, fandom: fandom_2) }
+    let(:fandom_one) { create(:fandom, name: "A Fandom", canonical: true) }
+    let(:fandom_two) { create(:fandom, name: "B Fandom", canonical: true) }
+    let!(:assignment_one) { create(:wrangling_assignment, user: wrangler, fandom: fandom_one) }
+    let!(:assignment_two) { create(:wrangling_assignment, user: wrangler, fandom: fandom_two) }
 
     it_behaves_like "denies access to unauthorized admins" do
       before do
         fake_login_admin(admin)
-        delete :destroy_multiple, params: { id: wrangler.login, fandom_ids: [fandom_1.id] }
+        delete :destroy_multiple, params: { id: wrangler.login, fandom_ids: [fandom_one.id] }
       end
     end
 
@@ -329,11 +329,14 @@ describe TagWranglersController do
 
         it "removes the selected wrangling assignments" do
           expect do
-            delete :destroy_multiple, params: { id: wrangler.login, fandom_ids: [fandom_1.id] }
-          end.to change { WranglingAssignment.where(user_id: wrangler.id).count }.from(2).to(1)
+            delete :destroy_multiple, params: { id: wrangler.login, fandom_ids: [fandom_one.id] }
+          end.to(
+            change { WranglingAssignment.where(user_id: wrangler.id).count }
+              .from(2).to(1)
+          )
           it_redirects_to_with_notice(tag_wrangler_path(wrangler), "Wranglers were successfully unassigned!")
-          expect(WranglingAssignment.exists?(user_id: wrangler.id, fandom_id: fandom_1.id)).to be_falsey
-          expect(WranglingAssignment.exists?(user_id: wrangler.id, fandom_id: fandom_2.id)).to be_truthy
+          expect(WranglingAssignment.exists?(user_id: wrangler.id, fandom_id: fandom_one.id)).to be_falsey
+          expect(WranglingAssignment.exists?(user_id: wrangler.id, fandom_id: fandom_two.id)).to be_truthy
         end
       end
     end
@@ -345,8 +348,11 @@ describe TagWranglersController do
 
       it "allows bulk unassignment" do
         expect do
-          delete :destroy_multiple, params: { id: wrangler.login, fandom_ids: [fandom_1.id, fandom_2.id] }
-        end.to change { WranglingAssignment.where(user_id: wrangler.id).count }.from(2).to(0)
+          delete :destroy_multiple, params: { id: wrangler.login, fandom_ids: [fandom_one.id, fandom_two.id] }
+        end.to(
+          change { WranglingAssignment.where(user_id: wrangler.id).count }
+            .from(2).to(0)
+        )
         it_redirects_to_with_notice(tag_wrangler_path(wrangler), "Wranglers were successfully unassigned!")
       end
     end
@@ -357,7 +363,7 @@ describe TagWranglersController do
       end
 
       it "does not allow bulk unassignment from another wrangler's page" do
-        delete :destroy_multiple, params: { id: wrangler.login, fandom_ids: [fandom_1.id] }
+        delete :destroy_multiple, params: { id: wrangler.login, fandom_ids: [fandom_one.id] }
         it_redirects_to_with_error(tag_wrangler_path(wrangler), "Sorry, you can only unassign fandoms from your own wrangling page.")
         expect(WranglingAssignment.where(user_id: wrangler.id).count).to eq(2)
       end

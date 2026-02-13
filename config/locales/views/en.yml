@@ -2531,8 +2531,31 @@ en:
       work: "(Work)"
   tag_wranglers:
     show:
+      assigned_fandoms_heading: Assigned Fandoms
+      assigned_fandoms_info_html: "Fandoms assigned to you via the %{tag_wranglers_page_link}. The unwrangled count is the number of unwrangled tags which were used on works in the given fandom."
+      characters_column: Characters
+      fandom_column: Fandom
+      freeforms_column: Freeforms
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
+      no_fandoms_html: "Your lack of fandoms makes the wrangulator sad. Fandoms can be assigned via the %{tag_wranglers_page_link}."
+      relationships_column: Relationships
+      table_caption: Unfilterable and Unwrangled Tag Counts for Your Assigned Fandoms
+      table_summary: Overview of your assigned fandoms and how many unfilterable and unwrangled tags belong to each assigned fandom.
+      tag_wranglers_page: tag wranglers page
       tags_wrangled_csv: Tags Wrangled (CSV)
+      title_fandom: fandom
+      title_unassign: unassign
+      title_unfilterable_characters: unfilterable characters
+      title_unfilterable_freeforms: unfilterable freeforms
+      title_unfilterable_relationships: unfilterable relationships
+      title_unwrangled_characters: unwrangled characters
+      title_unwrangled_freeforms: unwrangled freeforms
+      title_unwrangled_relationships: unwrangled relationships
+      unassign_selected_fandoms: Unassign Selected Fandoms
+      unassign_column: Unassign
+      unfilterable_column: Unfilterable
+      unwrangled_column: Unwrangled
+      wrangling_page_title: "%{wrangler_login}'s Wrangling Page"
   tag_wranglings:
     index:
       general_resources:

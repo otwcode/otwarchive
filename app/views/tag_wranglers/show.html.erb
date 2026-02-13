@@ -1,7 +1,7 @@
 <div id="user-page" class="tag wrangler home profile">
   <div class="primary header module">
     <!--Descriptive page name, messages and instructions-->
-    <h2 class="heading"><%= ts("%{wrangler_login}'s Wrangling Page", :wrangler_login => @wrangler.login) %></h2>
+    <h2 class="heading"><%= t(".wrangling_page_title", wrangler_login: @wrangler.login) %></h2>
     <p class="icon"><%= icon_display(@wrangler) %></p>
     <!--/descriptions-->
     <!--subnav-->
@@ -17,11 +17,11 @@
   <!--TEST NOTE: these tds are titled to expose headings to Chromevox, which doesn't read scope
     feedback needed from real use (is it annoying having the announcement on every cell, and is it doubling up, basically?)-->
   <div class="assigned module">
-    <h3 class="heading"><%= ts('Assigned Fandoms') %></h3>
+    <h3 class="heading"><%= t(".assigned_fandoms_heading") %></h3>
     <% if @fandoms.empty? %>
-      <p><%= ts("Your lack of fandoms makes the wrangulator sad. Fandoms can be assigned via the") %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %>.</p>
+      <p><%= t(".no_fandoms_html", tag_wranglers_page_link: link_to(t(".tag_wranglers_page"), tag_wranglers_path)) %></p>
     <% else %>
-      <p><%= ts('Fandoms assigned to you via the ') %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %>. <%= ts('The unwrangled count is the number of unwrangled tags which were used on works in the given fandom.') %></p>
+      <p><%= t(".assigned_fandoms_info_html", tag_wranglers_page_link: link_to(t(".tag_wranglers_page"), tag_wranglers_path)) %></p>
     <% end %>
     <% if (@wrangler == @current_user || logged_in_as_admin?) && @wrangler.last_wrangling_activity %>
       <% wrangled_time_html = tag.span(time_in_zone(@wrangler.last_wrangling_activity.updated_at), class: "datetime") %>
@@ -29,47 +29,59 @@
     <% end %>
     <% if @fandoms.any? %>
       <%= form_tag destroy_multiple_tag_wrangler_path(@wrangler), method: :delete do %>
-        <table summary="<%= ts('Overview of your assigned fandoms and how many unfilterable and unwrangled tags belong to each assigned fandom.') %>">
-          <caption><%= ts('Unfilterable and Unwrangled Tag Counts for Your Assigned Fandoms') %></caption>
+        <table summary="<%= t(".table_summary") %>">
+          <caption><%= t(".table_caption") %></caption>
           <thead>
             <tr>
               <% if @can_mass_unassign %>
-                <th rowspan="2" scope="col"><%= ts('Unassign') %></th>
+                <th rowspan="2" scope="col"><%= t(".unassign_column") %></th>
               <% end %>
-              <th rowspan="2" scope="col"><%= ts('Fandom') %></th>
-              <th colspan="3" scope="col"><%= ts('Unfilterable') %></th>
-              <th colspan="3" scope="col"><%= ts('Unwrangled') %></th>
+              <th rowspan="2" scope="col"><%= t(".fandom_column") %></th>
+              <th colspan="3" scope="col"><%= t(".unfilterable_column") %></th>
+              <th colspan="3" scope="col"><%= t(".unwrangled_column") %></th>
             </tr>
             <tr>
-              <th scope="col"><%= ts('Characters') %></th>
-              <th scope="col"><%= ts('Relationships') %></th>
-              <th scope="col"><%= ts('Freeforms') %></th>
-              <th scope="col"><%= ts('Characters') %></th>
-              <th scope="col"><%= ts('Relationships') %></th>
-              <th scope="col"><%= ts('Freeforms') %></th>
+              <th scope="col"><%= t(".characters_column") %></th>
+              <th scope="col"><%= t(".relationships_column") %></th>
+              <th scope="col"><%= t(".freeforms_column") %></th>
+              <th scope="col"><%= t(".characters_column") %></th>
+              <th scope="col"><%= t(".relationships_column") %></th>
+              <th scope="col"><%= t(".freeforms_column") %></th>
             </tr>
           </thead>
           <tbody>
             <% @fandoms.each do |fandom| %>
               <tr>
                 <% if @can_mass_unassign %>
-                  <td title="<%= ts('unassign') %>">
-                    <%= check_box_tag 'fandom_ids[]', fandom.id, false, id: "fandom_ids_#{fandom.id}" %>
+                  <td title="<%= t(".title_unassign") %>">
+                    <%= check_box_tag "fandom_ids[]", fandom.id, false, id: "fandom_ids_#{fandom.id}" %>
                   </td>
                 <% end %>
-                <th scope="row" title="<%= ts('fandom') %>"><%= link_to fandom.name, {:controller => :tags, :action => :wrangle, :id => fandom} %></th>
-                <td title="<%= ts('unfilterable characters') %>"><%= (tag_count = fandom.characters.unfilterable.size) > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :characters, :status => :unfilterable}) : " " %></td>
-                <td title="<%= ts('unfilterable relationships') %>"><%= (tag_count = fandom.relationships.unfilterable.size) > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :relationships, :status => :unfilterable}) : " " %></td>
-                <td title="<%= ts('unfilterable freeforms') %>"><%= (tag_count = fandom.freeforms.unfilterable.size) > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :freeforms, :status => :unfilterable}) : " " %></td>
-                <td title="<%= ts('unwrangled characters') %>"><%= (tag_count = fandom.unwrangled_tag_count("Character")) > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :characters, :status => :unwrangled}) : " " %></td>
-                <td title="<%= ts('unwrangled relationships') %>"><%= (tag_count = fandom.unwrangled_tag_count("Relationship")) > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :relationships, :status => :unwrangled}) : " " %></td>
-                <td title="<%= ts('unwrangled freeforms') %>"><%= (tag_count = fandom.unwrangled_tag_count("Freeform")) > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :freeforms, :status => :unwrangled}) : " " %></td>
+                <th scope="row" title="<%= t(".title_fandom") %>"><%= link_to fandom.name, wrangle_tag_path(fandom) %></th>
+                <td title="<%= t(".title_unfilterable_characters") %>">
+                  <%= (tag_count = fandom.characters.unfilterable.size).positive? ? link_to(tag_count, wrangle_tag_path(fandom, show: :characters, status: :unfilterable)) : " " %>
+                </td>
+                <td title="<%= t(".title_unfilterable_relationships") %>">
+                  <%= (tag_count = fandom.relationships.unfilterable.size).positive? ? link_to(tag_count, wrangle_tag_path(fandom, show: :relationships, status: :unfilterable)) : " " %>
+                </td>
+                <td title="<%= t(".title_unfilterable_freeforms") %>">
+                  <%= (tag_count = fandom.freeforms.unfilterable.size).positive? ? link_to(tag_count, wrangle_tag_path(fandom, show: :freeforms, status: :unfilterable)) : " " %>
+                </td>
+                <td title="<%= t(".title_unwrangled_characters") %>">
+                  <%= (tag_count = fandom.unwrangled_tag_count("Character")).positive? ? link_to(tag_count, wrangle_tag_path(fandom, show: :characters, status: :unwrangled)) : " " %>
+                </td>
+                <td title="<%= t(".title_unwrangled_relationships") %>">
+                  <%= (tag_count = fandom.unwrangled_tag_count("Relationship")).positive? ? link_to(tag_count, wrangle_tag_path(fandom, show: :relationships, status: :unwrangled)) : " " %>
+                </td>
+                <td title="<%= t(".title_unwrangled_freeforms") %>">
+                  <%= (tag_count = fandom.unwrangled_tag_count("Freeform")).positive? ? link_to(tag_count, wrangle_tag_path(fandom, show: :freeforms, status: :unwrangled)) : " " %>
+                </td>
               </tr>
             <% end %>
           </tbody>
         </table>
         <% if @can_mass_unassign %>
-          <p class="submit actions"><%= submit_tag ts("Unassign Selected Fandoms") %></p>
+          <p class="submit actions"><%= submit_tag t(".unassign_selected_fandoms") %></p>
         <% end %>
       <% end %>
     <% end %>
