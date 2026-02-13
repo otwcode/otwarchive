@@ -63,3 +63,8 @@ end
 every 10.minutes do
   rake "resque:run_failures"
 end
+
+# AO3-7294: Reset bookmark-only tags to unsorted quarterly
+every 3.months do
+  rake "tags:reset_bookmark_only"
+end
