@@ -38,6 +38,7 @@ class TagWranglersController < ApplicationController
     @wrangler = User.find_by!(login: params[:id])
     @page_subtitle = @wrangler.login
     @fandoms = @wrangler.fandoms.by_name
+    @can_mass_unassign = @wrangler == @current_user || logged_in_as_admin?
     @counts = tag_counts_per_category
   end
 
@@ -100,5 +101,23 @@ class TagWranglersController < ApplicationController
     assignment.destroy
     flash[:notice] = "Wranglers were successfully unassigned!"
     redirect_to tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])
+  end
+
+  def destroy_multiple
+    authorize :wrangling if logged_in_as_admin?
+
+    wrangler = User.find_by!(login: params[:id])
+
+    unless wrangler == @current_user || logged_in_as_admin?
+      flash[:error] = "Sorry, you can only unassign fandoms from your own wrangling page."
+      redirect_to(tag_wrangler_path(wrangler)) && return
+    end
+
+    if params[:fandom_ids].present?
+      WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_ids]).destroy_all
+      flash[:notice] = "Wranglers were successfully unassigned!"
+    end
+
+    redirect_to tag_wrangler_path(wrangler)
   end
 end

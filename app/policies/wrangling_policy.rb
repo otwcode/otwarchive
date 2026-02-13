@@ -15,6 +15,7 @@ class WranglingPolicy < ApplicationPolicy
   alias create? full_access?
   alias destroy? full_access?
   alias mass_update? full_access?
+  alias destroy_multiple? full_access?
   alias show? full_access?
   alias report_csv? full_access?
   alias new? full_access?

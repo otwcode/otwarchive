@@ -78,6 +78,29 @@ Feature: Tag wrangling
     When I edit the tag "Testing"
     Then I should see "Sign Up"
 
+  Scenario: Tag wrangler can bulk unassign fandoms from their own wrangling page
+
+    Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "A Fandom"
+      And the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "B Fandom"
+      And the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "C Fandom"
+      And I am logged in as "tangler" with password "wr@ngl3r"
+    When I go to the wrangling page for "tangler"
+      And I check the 1st checkbox with id matching "fandom_ids_"
+      And I check the 2nd checkbox with id matching "fandom_ids_"
+      And I check the 3rd checkbox with id matching "fandom_ids_"
+      And I press "Unassign Selected Fandoms"
+    Then I should see "Wranglers were successfully unassigned!"
+      And "A Fandom" should not be assigned to the wrangler "tangler"
+      And "B Fandom" should not be assigned to the wrangler "tangler"
+      And "C Fandom" should not be assigned to the wrangler "tangler"
+
+  Scenario: Tag wrangler cannot bulk unassign fandoms from another wrangler's page
+
+    Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
+      And I am logged in as a tag wrangler
+    When I go to the wrangling page for "tangler"
+    Then I should not see "Unassign Selected Fandoms"
+
   Scenario: Tag wrangling admins can download a wrangler's wrangled tags report CSV
 
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
