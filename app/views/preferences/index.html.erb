@@ -59,13 +59,13 @@
       </li>
       <li>
         <%= f.check_box :disable_work_skins %>
-        <%= f.label :disable_work_skins, t(".display.hide_work_skins") %> <%= link_to_help "skins-basics" %>
+        <%= f.label :disable_work_skins, t(".display.hide_work_skins") %> <%= link_to_help_modal(help_skins_basics_path, t(".skins_basics_help_title")) %>
       </li>
     </ul>
   </fieldset>
   <fieldset>
     <dl>
-      <dt><%= f.label :skin_id, t(".your_site_skin") %> <%= link_to_help "skins-basics" %></dt>
+      <dt><%= f.label :skin_id, t(".your_site_skin") %> <%= link_to_help_modal(help_skins_basics_path, t(".skins_basics_help_title")) %></dt>
       <dd>
         <span class="actions"><%= link_to t(".public_site_skins"), skins_path %></span>
         <%= f.select :skin_id, (@available_skins.collect { |s| [s.title, s.id] }) %>
