@@ -1191,11 +1191,6 @@ en:
         description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
         header: Set preferred locale
       page_heading: Locale Preferences
-    skins_approval:
-      public_site_skins: Public Site Skins
-      public_skin_applications_not_allowed_html: "%{app_short_name_abbr} is no longer adding new user-created skins to the list of public skins, so you can't apply to make your skin public at this time. This checkbox can only be used by site admins to add new public site skins to our list. However, you can still make use of the user-created skins in %{public_site_skins_link} and %{public_work_skins_link} and you can still create skins for your own personal use."
-      public_skins: Public Skins
-      public_work_skins: Public Work Skins
     skins_basics:
       only: only
       site_skins_basics: A site skin lets you customize your browsing experience when you are logged in to your account. Don't like the Archive fonts? You can change them! Don't like the red header? Swap it out for blue! When you make a site skin, keep in mind that you are only changing the Archive for yourself -- other Archive users will see the Archive in whatever skin they are using. In other words, site skins are useful for creating your own ideal browsing experience, not for changing the way a work appears for others.
