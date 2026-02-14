@@ -1,6 +1,6 @@
 <% # expects "work" %>
 
-<% if work.unrevealed? && !is_author_of?(work) %>
+<% if work.unrevealed? && !is_author_of?(work) && !User.current_user.is_a?(Admin)%>
   <%= render "works/mystery_blurb", item: work %>
 <% else %>
   <!--title, author, fandom-->
