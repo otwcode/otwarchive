@@ -3,7 +3,7 @@ namespace :tags do
   task reset_bookmark_only: :environment do
     # We search for tags that are not official, are not synonyms, and do not have related works, but have associations (parents) or categorized types.
     scope = Tag.nonsynonymous.where(taggings_count_cache: 0)
-               .where("type != 'Tag' OR id IN (SELECT common_tag_id FROM common_taggings)")
+      .where("type != 'Tag' OR id IN (SELECT common_tag_id FROM common_taggings)")
 
     puts "Tags found for cleaning: #{scope.count}"
 
@@ -12,7 +12,7 @@ namespace :tags do
       tag.common_taggings.delete_all 
       
       # Return the type to 'Tag' (status 'Unsorted')
-      tag.update_column(:type, 'Tag')
+      tag.update_column(:type, "Tag")
     end
 
     puts "Cleaning complete."

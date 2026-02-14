@@ -1,5 +1,5 @@
-require 'spec_helper'
-require 'rake'
+require "spec_helper"
+require "rake"
 
 describe "Reset bookmark tags task" do
   before(:all) do
@@ -28,7 +28,7 @@ describe "Reset bookmark tags task" do
     work_tag = create(:character,
                       name: "Work Tag",
                       canonical: false,
-                      taggings_count_cache: 5)   # has work, not within scope
+                      taggings_count_cache: 5) # has work, not within scope
 
     CommonTagging.create!(common_tag: work_tag, filterable: fandom)
 
@@ -38,13 +38,13 @@ describe "Reset bookmark tags task" do
                            canonical: true)
 
     # Executing the Rake Task
-    rake_task.reenable   # allow running more than once in the same test
+    rake_task.reenable # allow running more than once in the same test
     rake_task.invoke
 
     # Checks
     # Incorrect tag: should revert to generic tag and lose associations
     dirty_tag = Tag.find(dirty_tag.id)
-    expect(dirty_tag.type).to eq('Tag')
+    expect(dirty_tag.type).to eq("Tag")
     expect(dirty_tag.common_taggings.count).to eq(0)
 
     # Tag with works: nothing changes
