@@ -788,6 +788,12 @@ describe WorksController, work_search: true do
         get :collected, params: { user_id: collected_user.login }
         expect(assigns(:works)).to include(work, anonymous_work)
       end
+
+      it "returns anonymous works in collections for admins" do
+        fake_login_admin(create(:admin))
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work, anonymous_work)
+      end
     end
 
     context "with restricted works" do
@@ -886,6 +892,12 @@ describe WorksController, work_search: true do
 
       it "returns unrevealed works in collections for the author" do
         fake_login_known_user(collected_user)
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work, unrevealed_work)
+      end
+
+      it "returns unrevealed works in collections for admins" do
+        fake_login_admin(create(:admin))
         get :collected, params: { user_id: collected_user.login }
         expect(assigns(:works)).to include(work, unrevealed_work)
       end
