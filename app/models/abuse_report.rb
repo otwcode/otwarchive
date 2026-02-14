@@ -53,15 +53,16 @@ class AbuseReport < ApplicationRecord
 
   scope :by_date, -> { order('created_at DESC') }
 
-  # Standardize the format of work, chapter, comment, and profile URLs
+  # Standardize the format of work, chapter, comment, series and profile URLs
   # to get it ready for the url_is_not_over_reported validation.
   # Work URLs: "works/123"
   # Chapter URLs: "chapters/123"
   # Comment URLs: "comments/123"
   # Profile URLs: "users/username"
+  # Series URLs: "series/123"
   before_validation :standardize_url, on: :create
   def standardize_url
-    return unless url =~ %r{((chapters|works|comments)/\d+)} || url =~ %r{(users/\w+)}
+    return unless url =~ %r{((chapters|works|comments|series)/\d+)} || url =~ %r{(users/\w+)}
 
     self.url = add_scheme_to_url(url)
     self.url = clean_url(url)
@@ -239,6 +240,14 @@ class AbuseReport < ApplicationRecord
                                                  user_report_period,
                                                  "%#{user_params_only}%").count
       errors.add(:base, :over_reported) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
+    when %r{/series/\d+}
+      series_params_only = url.match(%r{/series/\d+/}).to_s
+      series_report_period = ArchiveConfig.ABUSE_REPORTS_PER_SERIES_PERIOD.days.ago
+      existing_reports_total = AbuseReport.where('created_at > ? AND
+                                                 url LIKE ?',
+                                                 series_report_period,
+                                                 "%#{series_params_only}%").count
+      errors.add(:base, :over_reported_series) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_SERIES_MAX
     end
   end
 

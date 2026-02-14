@@ -153,6 +153,14 @@ describe AbuseReport do
       end
     end
 
+    shared_examples "enough series reports" do |url|
+      let(:report) { build(:abuse_report, url: url) }
+      it "can't be submitted" do
+        expect(report.save).to be_falsey
+        expect(report.errors[:base].first).to include("This series has already been reported")
+      end
+    end
+
     shared_examples "alright" do |url|
       let(:report) { build(:abuse_report, url: url) }
       it "can be submitted" do
@@ -276,6 +284,47 @@ describe AbuseReport do
         before { travel(ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD.days) }
 
         it_behaves_like "alright", comment_url
+      end
+    end
+
+    context "for a series reported the maximum number of times" do
+      series_url = "http://archiveofourown.org/series/567"
+
+      before do
+        ArchiveConfig.ABUSE_REPORTS_PER_SERIES_MAX.times do
+          create(:abuse_report, url: series_url)
+        end
+        expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_SERIES_MAX)
+      end
+
+      # obviously
+      it_behaves_like "enough series reports", series_url
+
+      # the same series, different protocol
+      it_behaves_like "enough series reports", "https://archiveofourown.org/series/567"
+
+      # the same series, with parameters/anchors
+      it_behaves_like "enough series reports", "http://archiveofourown.org/series/567?smut=yes"
+      it_behaves_like "enough series reports", "http://archiveofourown.org/series/567#timeline"
+      it_behaves_like "enough series reports", "http://archiveofourown.org/series/567?smut=yes#timeline"
+      it_behaves_like "enough series reports", "http://archiveofourown.org/series/567/?smut=yes"
+      it_behaves_like "enough series reports", "http://archiveofourown.org/series/567/#timeline"
+      it_behaves_like "enough series reports", "http://archiveofourown.org/series/567/?smut=yes#timeline"
+
+      # not the same series
+      it_behaves_like "alright", "http://archiveofourown.org/series/67"
+      it_behaves_like "alright", "http://archiveofourown.org/series/1"
+
+      # unrelated
+      it_behaves_like "alright", "http://archiveofourown.org/someone/series"
+      it_behaves_like "alright", "http://archiveofourown.org/works/876"
+      it_behaves_like "alright", "http://archiveofourown.org/works/876/comments"
+      it_behaves_like "alright", "http://archiveofourown.org/users/someone"
+
+      context "after the over-reporting period" do
+        before { travel(ArchiveConfig.ABUSE_REPORTS_PER_SERIES_PERIOD.days) }
+
+        it_behaves_like "alright", series_url
       end
     end
 
