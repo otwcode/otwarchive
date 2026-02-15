@@ -314,6 +314,11 @@ class Tag < ApplicationRecord
     joins(:common_taggings).where("filterable_id in (?)", parents.first.is_a?(Integer) ? parents : (parents.respond_to?(:pluck) ? parents.pluck(:id) : parents.collect(&:id)))
   }
 
+  # This will return all tags that have one of the given tags as a child
+  scope :with_children, lambda { |children|
+    joins(:child_taggings).where(child_taggings: { common_tag_id: children })
+  }
+
   scope :with_no_parents, -> {
     joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
     where("filterable_id IS NULL")
@@ -705,12 +710,12 @@ class Tag < ApplicationRecord
   end
 
   def self.successful_reindex(ids)
-    Tag.select(:id, :updated_at).distinct
-      .joins("INNER JOIN common_taggings ON tags.id = common_taggings.filterable_id AND common_taggings.filterable_type = 'Tag'")
-      .where(common_taggings: { common_tag_id: ids }).each do
+    # Drop caches for any tags with a child that was successfully reindexed.
+    Tag.select(:id, :updated_at).distinct.with_children(ids).each do
       ActionController::Base.new.expire_fragment("tag-#{it.cache_key}-children-v4")
     end
 
+    # Drop caches for any canonical tags with a merger that was successfully reindexed.
     Tag.select(:id, :updated_at).distinct.joins(:mergers).where(mergers: { id: ids }).each do
       ActionController::Base.new.expire_fragment("tag-#{it.cache_key}-mergers-v1")
     end
