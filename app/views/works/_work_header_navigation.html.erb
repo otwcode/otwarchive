@@ -77,7 +77,7 @@
   <% if (logged_in_as_admin? || (current_user && current_user.is_author_of?(@work))) && @work.find_all_comments.unreviewed_only.exists? %>
     <li class="comments" id="review_comments">
       <% unreviewed_count = logged_in_as_admin? ? @work.find_all_comments.unreviewed.count : @work.find_all_comments.unreviewed.not_spam.count %>
-      <%= link_to t('.unreviewed_comments', default: "Unreviewed Comments (%{count})", count: unreviewed_count), unreviewed_comments_work_path(@work) %>
+      <%= link_to t(".unreviewed_comments", default: "Unreviewed Comments (%{count})", count: unreviewed_count), unreviewed_comments_work_path(@work) %>
     </li>
   <% end %>
 
