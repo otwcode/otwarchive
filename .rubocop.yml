@@ -1,8 +1,9 @@
 # Options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
-require:
+plugins:
   - rubocop-rails
   - rubocop-rspec
+require:
   - ./rubocop/rubocop
 
 inherit_mode:
@@ -11,7 +12,7 @@ inherit_mode:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 3.4
 
 Bundler/OrderedGems:
   Enabled: false
@@ -225,7 +226,15 @@ RSpec/ExampleLength:
 RSpec/ExpectChange:
   EnforcedStyle: block
 
-RSpec/FilePath:
+# RSpec/FilePath has been split into two cops in newer versions
+RSpec/SpecFilePathFormat:
+  Exclude:
+    # Exception for WorksController, whose many specs need multiple files
+    - 'spec/controllers/works/*.rb'
+    # Exception for concern specs, which may test multiple classes
+    - 'spec/models/concerns/**/*.rb'
+
+RSpec/SpecFilePathSuffix:
   Exclude:
     # Exception for WorksController, whose many specs need multiple files
     - 'spec/controllers/works/*.rb'
@@ -311,3 +320,51 @@ Style/SymbolArray:
 
 Style/TernaryParentheses:
   EnforcedStyle: require_parentheses_when_complex
+
+# New cops enabled/disabled per team review (AO3-7013)
+
+Layout/LineContinuationLeadingSpace:
+  Enabled: true
+
+Layout/LineContinuationSpacing:
+  Enabled: true
+
+Metrics/CollectionLiteralLength:
+  Enabled: false
+
+Security/CompoundHash:
+  Enabled: true
+
+Security/IoMethods:
+  Enabled: true
+
+Style/ArgumentsForwarding:
+  Enabled: true
+
+Style/CombinableDefined:
+  Enabled: true
+
+Style/DataInheritance:
+  Enabled: true
+
+Style/EndlessMethod:
+  Enabled: true
+
+Style/MapCompactWithConditionalBlock:
+  Enabled: true
+
+Style/NumberedParameters:
+  Enabled: true
+  EnforcedStyle: disallow
+
+Style/OpenStructUse:
+  Enabled: false
+
+Style/RedundantEach:
+  Enabled: true
+
+Style/RedundantFilterChain:
+  Enabled: true
+
+Style/TopLevelMethodDefinition:
+  Enabled: true
