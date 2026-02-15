@@ -349,6 +349,23 @@ Feature: Edit preferences
       | policy_and_abuse |
       | support          |
 
+  Scenario Outline: Authorized admins can view user preferences when locale preferences are enabled
+    Given the following activated user exists
+      | login    | password |
+      | testuser | password |
+      And a locale with translated emails
+      And the user "testuser" enables translated emails
+      And I am logged in as a "<role>" admin
+    When I go to testuser's preferences page
+    Then I should see "Set My Preferences"
+      And I should see "Your locale"
+  
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
+
   Scenario Outline: Unauthorized admins cannot see the user's preferences page or the link to it
     Given a user exists with login: "scott"
       And I am logged in as a "<role>" admin

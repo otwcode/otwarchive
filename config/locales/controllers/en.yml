@@ -19,6 +19,24 @@ en:
         success: All creations by user %{login} have been deleted.
     sessions:
       invalid_totp: Incorrect two-step verification code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
+    support_notices:
+      cannot_delete_active: Active support notices cannot be deleted.
+      confirm_delete:
+        page_title: Confirm Delete Support Notice
+      create:
+        success: Support notice successfully created.
+      destroy:
+        success: Support notice successfully deleted.
+      edit:
+        page_title: Edit Support Notice
+      index:
+        page_title: Support Notices
+      new:
+        page_title: New Support Notice
+      show:
+        page_title: Support Notice
+      update:
+        success: Support notice successfully updated.
     totp:
       access:
         permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
@@ -330,6 +348,8 @@ en:
       page_title: "%{username} - Drafts"
     edit_tags:
       page_title: Edit Work Tags
+    new:
+      closed_collection: Sorry, the collection %{collection_title} is closed. New works cannot be added to it.
     show:
       page_title:
         unrevealed: Mystery Work

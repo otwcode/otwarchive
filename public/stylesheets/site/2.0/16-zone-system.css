@@ -13,8 +13,12 @@ SUBSECTIONS:
   margin: auto;
 }
 
-.system .userstuff h3 {
+.system:not(.feedbacks) .userstuff h3 {
   margin-top: 3em;
+}
+
+.system .notice .userstuff {
+  max-width: initial;
 }
 
 /* 1. ZONE: SYSTEM: SPLASH PAGE */
@@ -329,7 +333,7 @@ admin role is only admin facing, and changes normal views in role-admin.css
   margin-top: 1.929em;
 }
 
-.feedbacks form .notice {
+.feedbacks form .notice, .feedbacks .banner {
   margin: 0.643em;
 }
 
