@@ -564,7 +564,7 @@ class User < ApplicationRecord
       end
     end
     pseud_to_update.name = login
-    pseud_to_update.save!(validate: justification_enabled?)
+    pseud_to_update.save!(validate: false)
   end
 
   def reindex_user_creations_after_rename
