@@ -713,9 +713,7 @@ class Tag < ApplicationRecord
     # Drop caches for any tags with a child that was successfully reindexed.
     Tag.distinct.with_children(ids).pluck(:id).each do |id|
       ActionController::Base.new.expire_fragment([:v1, :tag, :children, id])
-      %w[Fandom Character Relationship Freeform SubTag Merger].each { |child_type|
-        Rails.cache.delete([:v1, :tag, :children, child_type, id])
-      }
+      Rails.cache.delete([:v1, :tag, :children, id])
     end
 
     # Drop caches for any canonical tags with a merger that was successfully reindexed.
@@ -1121,35 +1119,6 @@ class Tag < ApplicationRecord
     key = "unwrangled_#{tag_type}_#{self.id}_#{self.updated_at}"
     Rails.cache.fetch(key, expires_in: 4.hours) do
       unwrangled_query(tag_type).count
-    end
-  end
-
-  def child_data(child_types)
-    return {} if child_types.blank? || !self.canonical?
-
-    (self.child_types & child_types).filter_map do |child_type|
-      Rails.cache.fetch([:v1, :tag, :children, child_type, self.id], version: self.updated_at) do
-        tags = TagQuery.new(type: child_type,
-                            "#{self.class.name.downcase}_ids": [self.id],
-                            sort_column: "uses",
-                            page: 1,
-                            per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
-
-        [child_type, tags] if tags.total_entries.positive?
-      end
-    end.to_h
-  end
-
-  def child_merger_data
-    return nil unless self.canonical?
-
-    Rails.cache.fetch([:v1, :tag, :mergers, self.id], version: self.updated_at) do
-      results = TagQuery.new(type: self.type,
-                             merger_id: self.id,
-                             sort_column: "uses",
-                             page: 1,
-                             per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
-      results if results.total_entries.positive?
     end
   end
 
