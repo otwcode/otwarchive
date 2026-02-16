@@ -78,7 +78,7 @@ class TagsController < ApplicationController
                               "#{@tag.class.name.downcase}_ids": [@tag.id],
                               sort_column: "uses",
                               page: 1,
-                              per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
+                              per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results.scope(:es_only)
 
           [child_type, tags] if tags.total_entries.positive?
         end.to_h
@@ -90,7 +90,7 @@ class TagsController < ApplicationController
                              merger_id: @tag.id,
                              sort_column: "uses",
                              page: 1,
-                             per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
+                             per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results.scope(:es_only)
       results if results.total_entries.positive?
     end
   end
