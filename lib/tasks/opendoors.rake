@@ -1,11 +1,11 @@
 class UrlUpdater
   def update_work(row)
-    work = Work.find(row['AO3 id'])
-    if work.imported_from_url.blank? || work.imported_from_url == row['URL Imported From']
+    work = Work.find(row["AO3 id"])
+    if work.imported_from_url.blank? || work.imported_from_url == row["URL Imported From"]
       if work.work_import_url
-        work.work_import_url.update!(url: row['Original URL'])
+        work.work_import_url.update!(url: row["Original URL"])
       else
-        work.create_work_import_url!(url: row['Original URL'])
+        work.create_work_import_url!(url: row["Original URL"])
       end
       "#{work.id}\twas updated: its import url is now #{work.imported_from_url}"
     else
