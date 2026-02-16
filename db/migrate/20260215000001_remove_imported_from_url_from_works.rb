@@ -1,5 +1,5 @@
 class RemoveImportedFromUrlFromWorks < ActiveRecord::Migration[7.2]
-  uses_departure!
+  uses_departure! if Rails.env.staging? || Rails.env.production?
 
   def up
     remove_index :works, :imported_from_url
