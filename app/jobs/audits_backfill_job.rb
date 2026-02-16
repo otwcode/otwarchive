@@ -1,0 +1,43 @@
+# Job to fill the user_past_usernames and user_past_emails tables using information from the audits table 
+class AuditsBackfillJob < RedisSetJob
+  queue_as :utilities
+
+  def self.base_key
+    "audits_backfill"
+  end
+
+  def self.job_size
+    1000
+  end
+
+  def self.batch_size
+    100
+  end
+
+  def perform_on_batch(user_ids)
+    # scans by users so audits can be taken from users and limited appropriately
+    User.where(id: user_ids).find_each do |user|
+      # gets past data audits within limits
+      past_data = user.audits.order(id: :desc).where(action: "update").limit(ArchiveConfig.USER_HISTORIC_VALUES_LIMIT).filter_map do |audit|
+        if audit.audited_changes.key?("login") && audit.audited_changes["login"].first.present?
+          { username: audit.audited_changes["login"].first, changed_at: audit.created_at }
+        elsif audit.audited_changes.key?("email") && audit.audited_changes["email"].first.present?
+          { email: audit.audited_changes["email"].first, changed_at: audit.created_at }
+        end
+      end
+      past_data_usernames = past_data.reject { |audit| audit.key?(:email) || audit[:username] == user.login }
+        .uniq { |audit| audit[:username] }
+      past_data_emails = past_data.reject { |audit| audit.key?(:username) || audit[:email] == user.email }
+        .uniq { |audit| audit[:email] }
+      # adds each type of past data to the appropriate database table
+      past_data_usernames.each do |audit|
+        window = audit[:changed_at] - 60.seconds..audit[:changed_at] + 60.seconds
+        UserPastUsername.create!(user_id: user.id, username: audit[:username], changed_at: audit[:changed_at]) if audit.key?(:username) && !UserPastUsername.exists?(user_id: user.id, username: audit[:username], changed_at: window)
+      end
+      past_data_emails.each do |audit|
+        window = audit[:changed_at] - 60.seconds..audit[:changed_at] + 60.seconds
+        UserPastEmail.create!(user_id: user.id, email_address: audit[:email], changed_at: audit[:changed_at]) unless UserPastEmail.exists?(user_id: user.id, email_address: audit[:email], changed_at: window)
+      end
+    end
+  end
+end

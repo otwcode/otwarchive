@@ -100,7 +100,7 @@ class AdminPost < ApplicationRecord
 
   def expire_cached_home_admin_posts
     unless Rails.env.development?
-      Rails.cache.delete("home/index/home_admin_posts")
+      Rails.cache.delete("v1/home/index/home_admin_posts")
     end
   end
 

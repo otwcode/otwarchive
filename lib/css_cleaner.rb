@@ -234,13 +234,17 @@ module CssCleaner
   def sanitize_css_value(value)
     value_stripped = strip_value(value)
 
-    # If it's a comma-separated set of valid values, it's fine. However, we need
-    # to downcase any var() functions to match the css_parser gem's downcasing
-    # of property names.
-    if value_stripped.match?(/^(#{VALUE_REGEX},?\s*)+$/i)
-      return value unless value.match?(/#{VAR_FUNCTION_REGEX}/)
+    begin
+      # If it's a comma-separated set of valid values, it's fine. However, we need
+      # to downcase any var() functions to match the css_parser gem's downcasing
+      # of property names.
+      if value_stripped.match?(/^(#{VALUE_REGEX},?\s*)+$/i)
+        return value unless value.match?(/#{VAR_FUNCTION_REGEX}/)
 
-      return value.gsub(/#{VAR_FUNCTION_REGEX}/, &:downcase)
+        return value.gsub(/#{VAR_FUNCTION_REGEX}/, &:downcase)
+      end
+    rescue Regexp::TimeoutError
+      # If we fail to match within the timeframe, it is likely that the value is invalid.
     end
 
     # If the value is explicitly in our list of supported keywords, it's fine.
