@@ -46,8 +46,8 @@ class Opendoors::ToolsController < ApplicationController
       flash[:error] = ts("The imported-from url you are trying to set doesn't seem valid.")
     else
       # check for any other works
-      existing = WorkImportUrl.find_by(url: @imported_from_url)
-      if existing
+      works = WorkImportUrl.where(url: @imported_from_url)
+      if works.count > 0
         flash[:error] = ts("There is already a work imported from the url %{url}.", url: @imported_from_url)
       else
         # ok let's try to update
