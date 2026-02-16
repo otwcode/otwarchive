@@ -717,7 +717,7 @@ class Tag < ApplicationRecord
     end
 
     # Drop caches for any canonical tags with a merger that was successfully reindexed.
-    Tag.distinct.joins(:mergers).where(mergers: { id: ids }).pluck(:id).each do |id|
+    Tag.joins(:mergers).where(mergers: { id: ids }).pluck(:id).each do |id|
       ActionController::Base.new.expire_fragment([:v1, :tag, :mergers, id])
       Rails.cache.delete([:v1, :tag, :mergers, id])
     end
