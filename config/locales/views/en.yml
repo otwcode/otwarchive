@@ -2573,12 +2573,8 @@ en:
       canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
       canonical_tag: canonical tag
       children:
-        characters: 'Characters:'
-        fandoms: 'Fandoms:'
-        freeforms: 'Additional Tags:'
         heading: 'Child tags (displaying the first %{count} of each type):'
         more: and more
-        relationships: 'Relationships:'
       fandom_relationship_tags: Relationship tags in this fandom
       filter_bookmarks: filter bookmarks
       filter_works: filter works
