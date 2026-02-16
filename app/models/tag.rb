@@ -711,13 +711,17 @@ class Tag < ApplicationRecord
 
   def self.successful_reindex(ids)
     # Drop caches for any tags with a child that was successfully reindexed.
-    Tag.select(:id, :updated_at).distinct.with_children(ids).each do
-      ActionController::Base.new.expire_fragment("tag-#{it.cache_key}-children-v4")
+    Tag.distinct.with_children(ids).pluck(:id).each do |id|
+      ActionController::Base.new.expire_fragment([:v1, :tag, :children, id])
+      %w[Fandom Character Relationship Freeform SubTag Merger].each { |child_type|
+        Rails.cache.delete([:v1, :tag, :children, child_type, id])
+      }
     end
 
     # Drop caches for any canonical tags with a merger that was successfully reindexed.
-    Tag.select(:id, :updated_at).distinct.joins(:mergers).where(mergers: { id: ids }).each do
-      ActionController::Base.new.expire_fragment("tag-#{it.cache_key}-mergers-v1")
+    Tag.distinct.joins(:mergers).where(mergers: { id: ids }).pluck(:id).each do |id|
+      ActionController::Base.new.expire_fragment([:v1, :tag, :mergers, id])
+      Rails.cache.delete([:v1, :tag, :mergers, id])
     end
   end
 
@@ -1121,30 +1125,32 @@ class Tag < ApplicationRecord
   end
 
   def child_data(child_types)
-    child_types.filter_map do |child_type|
-      tags = TagQuery.new(type: child_type,
-                          "#{self.class.name.downcase}_ids": [self.id],
-                          sort_column: "uses",
-                          page: 1,
-                          per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
+    return {} if child_types.blank? || !self.canonical?
 
-      [child_type, { tags: tags.scope(:es_only).to_a, total: tags.total_entries }] if tags.total_entries.positive?
+    (self.child_types & child_types).filter_map do |child_type|
+      Rails.cache.fetch([:v1, :tag, :children, child_type, self.id], version: self.updated_at) do
+        tags = TagQuery.new(type: child_type,
+                            "#{self.class.name.downcase}_ids": [self.id],
+                            sort_column: "uses",
+                            page: 1,
+                            per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
+
+        [child_type, tags] if tags.total_entries.positive?
+      end
     end.to_h
   end
 
   def child_merger_data
-    return {} if self.merger_id.present?
+    return nil unless self.canonical?
 
-    tags = TagQuery.new(type: self.type,
-                        merger_id: self.id,
-                        sort_column: "uses",
-                        page: 1,
-                        per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
-
-    {
-      tags: tags.scope(:es_only).to_a,
-      total: tags.total_entries
-    }
+    Rails.cache.fetch([:v1, :tag, :mergers, self.id], version: self.updated_at) do
+      results = TagQuery.new(type: self.type,
+                             merger_id: self.id,
+                             sort_column: "uses",
+                             page: 1,
+                             per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
+      results if results.total_entries.positive?
+    end
   end
 
   def suggested_parent_tags(parent_type, options = {})

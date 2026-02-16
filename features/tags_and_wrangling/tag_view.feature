@@ -11,7 +11,7 @@ Feature: View Tags
       And all indexing jobs have been run
       And I view the tag "Canonical Fandom"
     Then I should not see "Child tags"
-    # Delay to ensure the cache key changes when the tag is updated
+    # Ensure the cache key changes when the tag is updated
     When it is currently 1 second from now
       And I add the fandom "Canonical Fandom" to the character "My Character"
       And I add the fandom "Canonical Fandom" to the tag "My Freeform"

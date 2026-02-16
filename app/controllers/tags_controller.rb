@@ -67,6 +67,8 @@ class TagsController < ApplicationController
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
       @collections = @tag.collections.paginate(page: params[:page])
     end
+    @tag_children = @tag.child_data(%w[Character Relationship Freeform Fandom])
+    @tag_mergers = @tag.child_merger_data
   end
 
   def feed
