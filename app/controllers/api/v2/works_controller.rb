@@ -127,7 +127,8 @@ class Api::V2::WorksController < Api::V2::BaseController
       message = "Please provide the original URL for the work."
     else
       # We know the url will be identical no need for a call to find_by_url
-      works = Work.where(imported_from_url: original_url)
+      work_ids = WorkImportUrl.where(url: original_url).pluck(:work_id)
+      works = Work.where(id: work_ids)
       message = if works.empty?
                   "No work has been imported from \"" + original_url + "\"."
                 else
