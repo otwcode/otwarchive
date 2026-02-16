@@ -14,6 +14,7 @@ class WorkIndexer < Indexer
       :tags,
       :users,
       :relationships,
+      :work_import_url,
       fandoms: { meta_tags: :meta_tags, merger: { meta_tags: :meta_tags } },
       pseuds: :user,
       serial_works: :series
