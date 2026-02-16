@@ -47,7 +47,7 @@ class Opendoors::ToolsController < ApplicationController
     else
       # check for any other works
       works = WorkImportUrl.where(url: @imported_from_url)
-      if works.count > 0
+      if works.count.positive?
         flash[:error] = ts("There is already a work imported from the url %{url}.", url: @imported_from_url)
       else
         # ok let's try to update

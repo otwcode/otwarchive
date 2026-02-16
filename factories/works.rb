@@ -20,9 +20,7 @@ FactoryBot.define do
       evaluator.authors.each do |pseud|
         work.creatorships.build(pseud: pseud)
       end
-      if evaluator.imported_from_url.present?
-        work.build_work_import_url(url: evaluator.imported_from_url)
-      end
+      work.build_work_import_url(url: evaluator.imported_from_url) if evaluator.imported_from_url.present?
     end
 
     factory :no_authors do

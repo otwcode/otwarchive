@@ -7,7 +7,7 @@ class WorkImportUrl < ApplicationRecord
   before_validation :compute_variants
 
   # Cache key management
-  FIND_BY_URL_GENERATION_KEY = "/v1/work_import_url/find_by_url_generation_key"
+  FIND_BY_URL_GENERATION_KEY = "/v1/work_import_url/find_by_url_generation_key".freeze
 
   def self.find_by_url_generation
     Rails.cache.fetch(FIND_BY_URL_GENERATION_KEY, raw: true) { rand(1..1000) }
