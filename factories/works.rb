@@ -13,12 +13,14 @@ FactoryBot.define do
 
     transient do
       authors { [build(:pseud)] }
+      imported_from_url { nil }
     end
 
     after(:build) do |work, evaluator|
       evaluator.authors.each do |pseud|
         work.creatorships.build(pseud: pseud)
       end
+      work.build_work_import_url(url: evaluator.imported_from_url) if evaluator.imported_from_url.present?
     end
 
     factory :no_authors do

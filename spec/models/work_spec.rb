@@ -399,9 +399,9 @@ describe Work do
     it "gets the work from cache when searching for an imported work by URL" do
       url = "http://lj-site.com/thing2"
       work = create(:work, imported_from_url: url)
-      expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to be_nil
+      expect(Rails.cache.read(WorkImportUrl.find_by_url_cache_key(url))).to be_nil
       expect(Work.find_by_url(url)).to eq(work)
-      expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to eq(work)
+      expect(Rails.cache.read(WorkImportUrl.find_by_url_cache_key(url))).to eq(work)
       work.destroy
     end
   end

@@ -1,22 +1,22 @@
-namespace :opendoors do
-  
-  class UrlUpdater
-    def update_work(row)
-      begin
-        work = Work.find(row["AO3 id"])
-        if work&.imported_from_url.blank? || work&.imported_from_url == row["URL Imported From"]
-          work.imported_from_url = row["Original URL"]
-          work.save!
-          "#{work.id}\twas updated: its import url is now #{work.imported_from_url}"
-        else
-          "#{work.id}\twas not changed: its import url is #{work.imported_from_url}"
-        end
-      rescue StandardError => e
-        "#{row["AO3 id"]}\twas not changed: #{e}"
+class UrlUpdater
+  def update_work(row)
+    work = Work.find(row["AO3 id"])
+    if work.imported_from_url.blank? || work.imported_from_url == row["URL Imported From"]
+      if work.work_import_url
+        work.work_import_url.update!(url: row["Original URL"])
+      else
+        work.create_work_import_url!(url: row["Original URL"])
       end
+      "#{work.id}\twas updated: its import url is now #{work.imported_from_url}"
+    else
+      "#{work.id}\twas not changed: its import url is #{work.imported_from_url}"
     end
+  rescue StandardError => e
+    "#{row['AO3 id']}\twas not changed: #{e}"
   end
-  
+end
+
+namespace :opendoors do
   desc "Map import urls based on spreadsheet data - required fields: 'AO3 id', 'URL Imported From', 'Original URL'"
   task :import_url_mapping, [:csv] => :environment do |_t, args|
     loc = if args[:csv].nil?
@@ -29,7 +29,7 @@ namespace :opendoors do
     begin
       f = File.open("opendoors_result.txt", "w")
       url_updater = UrlUpdater.new
-      
+
       CSV.foreach(loc, headers: true) do |row|
         result = url_updater.update_work(row)
         puts result

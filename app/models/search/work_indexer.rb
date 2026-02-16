@@ -14,6 +14,7 @@ class WorkIndexer < Indexer
       :tags,
       :users,
       :relationships,
+      :work_import_url,
       fandoms: { meta_tags: :meta_tags, merger: { meta_tags: :meta_tags } },
       pseuds: :user,
       serial_works: :series
@@ -79,10 +80,11 @@ class WorkIndexer < Indexer
         :major_version, :minor_version, :posted, :restricted,
         :title, :summary, :notes, :word_count, :hidden_by_admin, :revised_at,
         :title_to_sort_on, :backdate, :endnotes,
-        :imported_from_url, :complete, :work_skin_id, :in_anon_collection,
+        :complete, :work_skin_id, :in_anon_collection,
         :in_unrevealed_collection,
       ],
       methods: [
+        :imported_from_url,
         :authors_to_sort_on,
         :collection_ids,
         :hits,

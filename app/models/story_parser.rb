@@ -300,7 +300,7 @@ class StoryParser
     raise Error, "Work could not be downloaded" if work.nil?
 
     @options = options
-    work.imported_from_url = location
+    work.build_work_import_url(url: location)
     work.ip_address = options[:ip_address]
     work.expected_number_of_chapters = work.chapters.length
     work.revised_at = work.chapters.last.published_at
