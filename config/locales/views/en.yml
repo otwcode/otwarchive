@@ -1263,14 +1263,12 @@ en:
         header: Look at other public skins for examples
         public_skins: All approved public skins
     skins_parents:
-      load_archive_skin_components:
-        description: If you create a replacement skin, you might want to load up all the skins that make up the current default Archive site as parents. This option is only available when you select "replace archive skin entirely" from the "What it does" menu. After that, you can edit your skin and delete just the ones you don't want. This will be easier if you are using nearly all of them, since there are a lot!
-        header: Load Archive Skin Components
-      skins_parents:
-        header: Skin Parents
-        inheriting_default: By default, skins will be loaded after the Archive default style. If you don't want this, you can specify in the "What it does" menu that you want your skin to replace rather than add to the Archive default style.
-        layering_html: You can combine and layer multiple site skins by making one the parent of another. Parent skins are loaded in order so that the style of all the skins can be displayed in that order. For more information on skins, please refer to %{skins_interface_faq_link}.
-        skins_interface_faq: the Skins and Interface FAQ
+      header: Skin Parents
+      inheriting_default: By default, skins will be loaded after the Archive default style. If you don't want this, you can specify in the "What it does" menu that you want your skin to replace rather than add to the Archive default style.
+      layering_html: You can combine and layer multiple site skins by making one the parent of another. Parent skins are loaded in order so that the style of all the skins can be displayed in that order. For more information on skins, please refer to %{skins_interface_faq_link}.
+      load_archive_skin_components: If you create a replacement skin, you might want to load up all the skins that make up the current default Archive site as parents. This option is only available when you select "replace archive skin entirely" from the "What it does" menu. After that, you can edit your skin and delete just the ones you don't want. This will be easier if you are using nearly all of them, since there are a lot!
+      load_archive_skin_components_header: Load Archive Skin Components
+      skins_interface_faq: the Skins and Interface FAQ
     tags_fandoms:
       description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
       more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
