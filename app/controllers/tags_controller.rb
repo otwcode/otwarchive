@@ -70,7 +70,7 @@ class TagsController < ApplicationController
 
     return unless @tag.canonical
     
-    child_types = @tag.child_types & %w[Character Relationship Freeform Fandom]
+    child_types = Tag::USER_DEFINED & @tag.child_types
     unless child_types.empty?
       @tag_children = Rails.cache.fetch([:v1, :tag, :children, @tag.id], version: @tag.updated_at) do
         child_types.filter_map do |child_type|
