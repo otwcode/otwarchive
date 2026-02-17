@@ -150,6 +150,7 @@ Feature: Search Tags
   Scenario: Search by wrangling status
     Given a fandom exists with name: "Not Canon Fandom", canonical: false
       And a character exists with name: "Canon Character", canonical: true
+      And a freeform exists with name: "Not Canon Unwrangleable Tag", unwrangleable: true
       And a synonym "Same Canon Character" of the tag "Canon Character"
       And all indexing jobs have been run
     When I am on the search tags page
@@ -160,14 +161,16 @@ Feature: Search Tags
       And I should not see the tag search result "Fandom: Not Canon Fandom (0)"
       And I should see the tag search result "Character: Canon Character (0)"
       And I should not see the tag search result "Character: Same Canon Character (0)"
+      And I should not see the tag search result "Freeform: Not Canon Unwrangleable Tag (0)"
     When I am on the search tags page
       And I fill in "Tag name" with "Canon"
       And I choose "Non-canonical"
       And I press "Search Tags"
-    Then I should see "2 Found"
+    Then I should see "3 Found"
       And I should see the tag search result "Fandom: Not Canon Fandom (0)"
       And I should not see the tag search result "Character: Canon Character (0)"
       And I should see the tag search result "Character: Same Canon Character (0)"
+      And I should see the tag search result "Freeform: Not Canon Unwrangleable Tag (0)"
     When I am on the search tags page
       And I fill in "Tag name" with "Canon"
       And I choose "Synonymous"
@@ -176,6 +179,7 @@ Feature: Search Tags
       And I should not see the tag search result "Fandom: Not Canon Fandom (0)"
       And I should not see the tag search result "Character: Canon Character (0)"
       And I should see the tag search result "Character: Same Canon Character (0)"
+      And I should not see the tag search result "Freeform: Not Canon Unwrangleable Tag (0)"
     When I am on the search tags page
       And I fill in "Tag name" with "Canon"
       And I choose "Canonical or synonymous"
@@ -184,22 +188,43 @@ Feature: Search Tags
       And I should not see the tag search result "Fandom: Not Canon Fandom (0)"
       And I should see the tag search result "Character: Canon Character (0)"
       And I should see the tag search result "Character: Same Canon Character (0)"
+      And I should not see the tag search result "Freeform: Not Canon Unwrangleable Tag (0)"
     When I am on the search tags page
       And I fill in "Tag name" with "Canon"
       And I choose "Non-canonical and non-synonymous"
+      And I press "Search Tags"
+    Then I should see "2 Found"
+      And I should see the tag search result "Fandom: Not Canon Fandom (0)"
+      And I should not see the tag search result "Character: Canon Character (0)"
+      And I should not see the tag search result "Character: Same Canon Character (0)"
+      And I should see the tag search result "Freeform: Not Canon Unwrangleable Tag (0)"
+    When I am on the search tags page
+      And I fill in "Tag name" with "Canon"
+      And I choose "Unwrangleable"
+      And I press "Search Tags"
+    Then I should see "1 Found"
+      And I should not see the tag search result "Fandom: Not Canon Fandom (0)"
+      And I should not see the tag search result "Character: Canon Character (0)"
+      And I should not see the tag search result "Character: Same Canon Character (0)"
+      And I should see the tag search result "Freeform: Not Canon Unwrangleable Tag (0)"
+    When I am on the search tags page
+      And I fill in "Tag name" with "Canon"
+      And I choose "Non-canonical and non-synonymous and not marked unwrangleable"
       And I press "Search Tags"
     Then I should see "1 Found"
       And I should see the tag search result "Fandom: Not Canon Fandom (0)"
       And I should not see the tag search result "Character: Canon Character (0)"
       And I should not see the tag search result "Character: Same Canon Character (0)"
+      And I should not see the tag search result "Freeform: Not Canon Unwrangleable Tag (0)"
     When I am on the search tags page
       And I fill in "Tag name" with "Canon"
       And I choose "Any status"
       And I press "Search Tags"
-    Then I should see "3 Found"
+    Then I should see "4 Found"
       And I should see the tag search result "Fandom: Not Canon Fandom (0)"
       And I should see the tag search result "Character: Canon Character (0)"
       And I should see the tag search result "Character: Same Canon Character (0)"
+      And I should see the tag search result "Freeform: Not Canon Unwrangleable Tag (0)"
 
   Scenario: Search and sort by Date Created in descending and ascending order
     Given a freeform exists with name: "created first", created_at: "2008-01-01 20:00:00 Z"

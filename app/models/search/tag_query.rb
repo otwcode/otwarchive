@@ -89,6 +89,10 @@ class TagQuery < Query
       { bool: { should: [exists_filter("merger_id"), term_filter(:canonical, true)] } }
     when "noncanonical_nonsynonymous"
       [{ bool: { must_not: exists_filter("merger_id") } }, term_filter(:canonical, false)]
+    when "unwrangleable"
+      term_filter(:unwrangleable, true)
+    when "noncanonical_nonsynonymous_not_unwrangleable"
+      [term_filter(:canonical, false), { bool: { must_not: exists_filter("merger_id") } }, term_filter(:unwrangleable, false)]
     end
   end
 
