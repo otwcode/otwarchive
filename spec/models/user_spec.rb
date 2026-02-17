@@ -395,7 +395,7 @@ describe User do
       end
     end
     
-    context "username was changed to match an existing pseud's name. New login has capitalization and diacretics existing is all downcased" do
+    context "username was changed to match an existing pseud's name. Existing login has capitalization and diacretics new is all downcased" do
       let(:new_pseud) { build(:pseud, name: "New_Usernamé") }
 
       before do
@@ -412,7 +412,7 @@ describe User do
       end
     end
 
-    context "username was changed to match an existing pseud's name.  existing login have capitalization and diacretics, new only has capitalization" do
+    context "username was changed to match an existing pseud's name. Existing login have capitalization and diacretics, new only has capitalization" do
       let(:new_pseud) { build(:pseud, name: "New_Usernamé") }
 
       before do
