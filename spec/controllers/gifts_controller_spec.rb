@@ -46,6 +46,12 @@ describe GiftsController do
         let!(:accepted_gift) { create(:gift, pseud: gift_user.default_pseud, work: accepted_work) }
         let!(:refused_gift) { create(:gift, pseud: gift_user.default_pseud, work: refused_work, rejected: true) }
 
+        before do
+          allow(SearchCounts).to receive(:work_count_for_user).and_return(0)
+          allow(SearchCounts).to receive(:bookmark_count_for_user).and_return(0)
+          allow(SearchCounts).to receive(:collection_count_for_user).and_return(0)
+        end
+
         %w[policy_and_abuse superadmin].each do |role|
           context "when admin has #{role} role" do
             before { fake_login_admin(create(:admin, roles: [role])) }
