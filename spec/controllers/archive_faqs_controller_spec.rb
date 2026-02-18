@@ -253,6 +253,98 @@ describe ArchiveFaqsController do
       let(:locale) { non_standard_locale.iso }
       it_behaves_like "an action translation authorized admins can access"
     end
+
+    describe "FAQ menu fields" do
+      let(:locale) { "en" }
+
+      context "when logged in as a docs admin" do
+        before { fake_login_admin(create(:admin, roles: ["docs"])) }
+
+        it "allows updating FAQ menu fields" do
+          patch :update, params: {
+            id: faq,
+            language_id: locale,
+            archive_faq: {
+              title: faq.title,
+              include_in_faq_menu: true,
+              faq_menu_display_name: "Account Help"
+            }
+          }
+
+          expect(faq.reload.include_in_faq_menu).to be_truthy
+          expect(faq.faq_menu_display_name).to eq("Account Help")
+          expect(faq.faq_menu_position).to eq(1)
+        end
+      end
+
+      context "when logged in as a support admin" do
+        before { fake_login_admin(create(:admin, roles: ["support"])) }
+
+        it "does not permit FAQ menu fields" do
+          patch :update, params: {
+            id: faq,
+            language_id: locale,
+            archive_faq: {
+              title: faq.title,
+              include_in_faq_menu: true,
+              faq_menu_display_name: "Support Rename"
+            }
+          }
+
+          expect(faq.reload.include_in_faq_menu).to be_falsey
+          expect(faq.faq_menu_display_name).to be_nil
+        end
+      end
+
+      context "when the menu selection limit has been reached" do
+        before do
+          fake_login_admin(create(:admin, roles: ["superadmin"]))
+          allow(ArchiveConfig).to receive(:FAQ_MENU_SELECTION_LIMIT).and_return(1)
+          create(:archive_faq, include_in_faq_menu: true)
+        end
+
+        it "shows an error and does not save the FAQ" do
+          patch :update, params: {
+            id: faq,
+            language_id: locale,
+            archive_faq: {
+              title: faq.title,
+              include_in_faq_menu: true
+            }
+          }
+
+          expect(response).to render_template(:edit)
+          expect(faq.reload.include_in_faq_menu).to be_falsey
+          expect(assigns[:archive_faq].errors.full_messages)
+            .to include("Include in faq menu can't be selected because the maximum of 1 FAQ categories is already in the menu.")
+        end
+      end
+    end
+
+    describe "question reordering" do
+      let(:locale) { "en" }
+      let!(:question1) { create(:question, archive_faq: faq, position: 1, question: "Q1", content: "Answer one text", anchor: "q1") }
+      let!(:question2) { create(:question, archive_faq: faq, position: 2, question: "Q2", content: "Answer two text", anchor: "q2") }
+
+      before { fake_login_admin(create(:admin, roles: ["docs"])) }
+
+      it "updates question positions when submitted through FAQ edit" do
+        patch :update, params: {
+          id: faq,
+          language_id: locale,
+          archive_faq: {
+            title: faq.title,
+            questions_attributes: [
+              { id: question1.id, position: 2, question: question1.question, content: question1.content, anchor: question1.anchor },
+              { id: question2.id, position: 1, question: question2.question, content: question2.content, anchor: question2.anchor }
+            ]
+          }
+        }
+
+        expect(question1.reload.position).to eq(2)
+        expect(question2.reload.position).to eq(1)
+      end
+    end
   end
 
   describe "GET #edit" do
@@ -345,6 +437,37 @@ describe ArchiveFaqsController do
     context "for a non-default locale" do
       let(:locale) { non_standard_locale.iso }
       it_behaves_like "a non-English action that nobody can access"
+    end
+  end
+
+  describe "POST #update_faq_menu_positions" do
+    let!(:faq1) { create(:archive_faq, include_in_faq_menu: true) }
+    let!(:faq2) { create(:archive_faq, include_in_faq_menu: true) }
+    subject { post :update_faq_menu_positions, params: { id: faq2, direction: "up", language_id: locale } }
+
+    context "for the default locale" do
+      let(:locale) { I18n.default_locale }
+
+      context "with docs role" do
+        before { fake_login_admin(create(:admin, roles: ["docs"])) }
+
+        it "reorders FAQ dropdown items" do
+          subject
+          expect(faq2.reload.faq_menu_position).to eq(1)
+          expect(faq1.reload.faq_menu_position).to eq(2)
+          it_redirects_to_with_notice(manage_archive_faqs_path(language_id: locale),
+                                      "FAQ dropdown order was successfully updated.")
+        end
+      end
+
+      context "with support role" do
+        before { fake_login_admin(create(:admin, roles: ["support"])) }
+
+        it "denies access" do
+          subject
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
+      end
     end
   end
 

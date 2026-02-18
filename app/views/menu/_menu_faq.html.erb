@@ -1,0 +1,6 @@
+<ul class="menu">
+  <li><%= link_to t(".all_faq_categories"), archive_faqs_path %></li>
+  <% ArchiveFaq.faq_menu_items.each do |faq| %>
+    <li><%= link_to faq[:menu_name], archive_faq_path(id: faq[:slug]) %></li>
+  <% end %>
+</ul>

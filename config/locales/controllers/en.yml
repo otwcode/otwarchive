@@ -75,6 +75,8 @@ en:
     create:
       success: Archive FAQ was successfully created.
     default_locale_only: Sorry, this action is only available for English FAQs.
+    update_faq_menu_positions:
+      success: FAQ dropdown order was successfully updated.
     update:
       success: Archive FAQ was successfully updated.
     update_positions:

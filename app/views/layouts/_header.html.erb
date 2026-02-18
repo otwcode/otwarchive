@@ -49,6 +49,10 @@
         <%= link_to t(".nav.about"), menu_about_path %>
         <%= render "menu/menu_about" %>
       </li>
+      <li class="dropdown">
+        <%= link_to t(".nav.faq"), archive_faqs_path %>
+        <%= render "menu/menu_faq" %>
+      </li>
       <li class="search"><%= render "works/search_box" %></li>
     </ul>
   </nav>

@@ -4,6 +4,7 @@ class ArchiveFaqPolicy < ApplicationPolicy
   TRANSLATION_ACCESS_ROLES = %w[superadmin docs support translation].freeze
   # a subset of TRANSLATION_ACCESS_ROLES
   FULL_ACCESS_ROLES = %w[superadmin docs support].freeze
+  FAQ_MENU_ACCESS_ROLES = %w[superadmin docs].freeze
 
   def translation_access?
     user_has_roles?(TRANSLATION_ACCESS_ROLES)
@@ -11,6 +12,10 @@ class ArchiveFaqPolicy < ApplicationPolicy
 
   def full_access?
     user_has_roles?(FULL_ACCESS_ROLES)
+  end
+
+  def faq_menu_access?
+    user_has_roles?(FAQ_MENU_ACCESS_ROLES)
   end
 
   alias edit? translation_access?

@@ -29,6 +29,10 @@
         <% if Globalize.locale.to_s == "en" && policy(ArchiveFaq).full_access? %>
           <li><%= link_to t(".delete"), confirm_delete_archive_faq_path(archive_faq), data: { confirm: t(".confirm_delete") } %></li>
         <% end %>
+        <% if Globalize.locale.to_s == "en" && policy(ArchiveFaq).faq_menu_access? && archive_faq.include_in_faq_menu? %>
+          <li><%= button_to("↑", update_faq_menu_positions_archive_faq_path(id: archive_faq, direction: "up", language_id: params[:language_id]), method: :post, form_class: "inline", class: "button", title: "Move FAQ menu item up") %></li>
+          <li><%= button_to("↓", update_faq_menu_positions_archive_faq_path(id: archive_faq, direction: "down", language_id: params[:language_id]), method: :post, form_class: "inline", class: "button", title: "Move FAQ menu item down") %></li>
+        <% end %>
       </ul>
     </dd>
   <% end %>

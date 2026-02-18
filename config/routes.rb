@@ -614,6 +614,7 @@ Rails.application.routes.draw do
   resources :archive_faqs, path: "faq" do
     member do
       get :confirm_delete
+      post :update_faq_menu_positions
     end
     collection do
       get :manage

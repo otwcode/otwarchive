@@ -3,7 +3,7 @@ class ArchiveFaqsController < ApplicationController
   before_action :set_locale
   before_action :validate_locale, if: :logged_in_as_admin?
   before_action :require_language_id
-  before_action :default_locale_only, only: [:new, :create, :manage, :update_positions, :confirm_delete, :destroy]
+  before_action :default_locale_only, only: [:new, :create, :manage, :update_positions, :update_faq_menu_positions, :confirm_delete, :destroy]
   around_action :with_locale
 
   # GET /archive_faqs
@@ -123,6 +123,13 @@ class ArchiveFaqsController < ApplicationController
     end
   end
 
+  def update_faq_menu_positions
+    authorize :archive_faq, :faq_menu_access?
+    @archive_faq = ArchiveFaq.find_by!(slug: params[:id])
+    @archive_faq.move_in_faq_menu!(params[:direction])
+    redirect_to manage_archive_faqs_path(language_id: set_locale), notice: t(".success")
+  end
+
   # The ?language_id=somelanguage needs to persist throughout URL changes
   # Get the value from set_locale to make sure there's no problem with order
   def default_url_options
@@ -184,11 +191,26 @@ class ArchiveFaqsController < ApplicationController
   end
 
   def archive_faq_params
-    params.require(:archive_faq).permit(
+    permitted_params = [
       :title,
-      questions_attributes: [
-        :id, :question, :anchor, :content, :screencast, :_destroy, :is_translated
-      ]
-    )
+      {
+        questions_attributes: [
+        :id, :question, :anchor, :content, :screencast, :position, :_destroy, :is_translated
+        ]
+      }
+    ]
+
+    can_manage_faq_menu = default_locale? && policy(:archive_faq).faq_menu_access?
+    if can_manage_faq_menu
+      permitted_params << :include_in_faq_menu
+      permitted_params << :faq_menu_display_name
+    end
+
+    archive_faq_attributes = params.require(:archive_faq)
+    unless can_manage_faq_menu
+      archive_faq_attributes = archive_faq_attributes.except(:include_in_faq_menu, :faq_menu_display_name)
+    end
+
+    archive_faq_attributes.permit(*permitted_params)
   end
 end

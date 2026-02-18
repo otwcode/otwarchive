@@ -96,6 +96,10 @@ en:
             comment_permissions:
               format: "%{message}"
               invalid_permissions: Comment permissions are invalid.
+        archive_faq:
+          attributes:
+            include_in_faq_menu:
+              too_many_selected: can't be selected because the maximum of %{count} FAQ categories is already in the menu.
         block:
           attributes:
             blocked:

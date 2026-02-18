@@ -1,4 +1,4 @@
-<div class="removeme">
+<div class="removeme question-orderable">
   <% index ||= 0 %>
   <fieldset>
     <% if index.is_a? String %>
@@ -6,8 +6,8 @@
     <% else %>
       <% question_label = ts("Question #{(index + 1)}") %>
     <% end %>
-    <legend><%= question_label %></legend>
-    <h3 class="heading"><%= question_label %></h3>
+    <legend class="question-order-label"><%= question_label %></legend>
+    <h3 class="heading question-order-label"><%= question_label %></h3>
 
     <dl>
       <dt class="required">
@@ -47,7 +47,12 @@
         <dd><%= form.label :is_translated, ts("Question translated") %></dd>
       <% end %>
     </dl>
+    <%= form.hidden_field :position, class: "question-position-input" %>
     <% if Globalize.locale.to_s == "en" %>
+      <p class="actions question-order-actions">
+        <%= button_tag "↑", type: "button", class: "question-move-up", title: "Move question up" %>
+        <%= button_tag "↓", type: "button", class: "question-move-down", title: "Move question down" %>
+      </p>
       <% # TODO: DELETE A QUESTION %>
       <p class="actions" role="button">
         <% removetext = ts("Remove Question") %>

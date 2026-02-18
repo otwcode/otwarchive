@@ -2223,6 +2223,7 @@ en:
       nav:
         about: About
         browse: Browse
+        faq: FAQ
         fandoms: Fandoms
         label: Site
         search: Search
@@ -2250,9 +2251,10 @@ en:
     menu_about:
       about_us: About Us
       donate: Donate or Volunteer
-      faq: FAQ
       news: News
       wrangling_guidelines: Wrangling Guidelines
+    menu_faq:
+      all_faq_categories: All FAQ Categories
     menu_browse:
       bookmarks: Bookmarks
       collections: Collections
