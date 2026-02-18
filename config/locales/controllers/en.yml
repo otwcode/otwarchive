@@ -95,9 +95,77 @@ en:
       access_denied_user: You aren't allowed to see that user's assignments.
     validation:
       not_owner: You aren't the owner of that assignment.
+  challenge_claims:
+    no_challenge: What challenge did you want to work with?
+    no_claim: What claim did you want to work on?
+    no_user: What user were you trying to work with?
+    owner_only: You aren't the claimer of that prompt.
+    index:
+      challenge_closed: This challenge is currently closed to new posts.
+      access_denied_user_claims: You aren't allowed to see that user's claims.
+    destroy:
+      claim_deleted: The claim was deleted.
+      your_claim_deleted: Your claim was deleted.
+      delete_failed: We couldn't delete that right now, sorry! Please try again later.
+  challenge_requests:
+    check_visibility:
+      collection_not_found: Collection could not be found
+      access_denied: You are not allowed to view the requests summary!
   challenge_signups:
+    no_challenge: What challenge did you want to sign up for?
+    signup_closed: Sign-up is currently closed: please contact a moderator for help.
+    not_signup_owner: You can't edit someone else's sign-up!
+    check_pseud_ownership:
+      invalid_pseud: You can't sign up with that pseud.
+    check_signup_in_collection:
+      signup_not_in_collection: Sorry, that sign-up isn't associated with that collection.
+    index:
+      access_denied_user_signups: You aren't allowed to see that user's sign-ups.
+      access_denied_csv: You aren't allowed to see the CSV summary.
+    summary:
+      minimum_signups: Summary does not appear until at least %{count} sign-ups have been made!
+    show:
+      invalid_signup: This sign-up is invalid. Please check your sign-ups for a duplicate or edit to fix any other problems.
+    build_prompts:
+      must_submit_at_least: You must submit at least %{required} %{prompt_type}.
+      can_only_submit_up_to: You can only submit up to %{allowed} %{prompt_type}.
+      set_up_num: Set up %{num} %{prompt_type}.
+    request_to_array:
+      any_type: Any %{type}
     new:
       page_title: New Challenge Sign-up
+      already_signed_up: You are already signed up for this challenge. You can edit your sign-up below.
+    create:
+      success: Sign-up was successfully created.
+    update:
+      success: Sign-up was successfully updated.
+    destroy:
+      success: Challenge sign-up was deleted.
+      signups_closed: You cannot delete your sign-up after sign-ups are closed. Please contact a moderator for help.
+  challenge:
+    gift_exchange:
+      already_set_up: There is already a challenge set up for this collection.
+      create:
+        success: Challenge was successfully created.
+      update:
+        success: Challenge was successfully updated.
+  potential_matches:
+    no_challenge: What challenge did you want to sign up for?
+    no_assignment: What potential match did you want to work on?
+    signup_open: Sign-up is still open, you cannot determine potential matches now.
+    assignments_sent: Assignments have already been sent! If necessary, you can purge them.
+    index:
+      matching_error: There has been an error in the potential matching. Please first try regenerating assignments, and if that doesn't work, all potential matches. If the problem persists, please contact Support.
+    generate:
+      already_in_progress: Potential matches are already being generated for this collection!
+      started: Beginning generation of potential matches. This may take some time, especially if your challenge is large.
+    regenerate_for_signup:
+      no_signup: What sign-up did you want to regenerate matches for?
+      started: "Matches are being regenerated for %{pseud}. Please allow at least 5 minutes for this process to complete before refreshing the page."
+    cancel_generate:
+      not_in_progress: Potential matches are not currently being generated for this challenge.
+      already_canceled: Potential match generation has already been canceled, please refresh again shortly.
+      requested: Potential match generation cancellation requested. This may take a while, please refresh shortly.
   chapters:
     destroy:
       only_chapter: You can't delete the only chapter in your work. If you want to delete the work, choose "Delete Work".

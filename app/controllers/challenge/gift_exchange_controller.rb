@@ -1,5 +1,4 @@
 class Challenge::GiftExchangeController < ChallengesController
-
   before_action :users_only, except: [:edit]
   before_action :users_or_privileged_collection_admin_only, only: [:edit]
   before_action :load_collection
@@ -13,9 +12,9 @@ class Challenge::GiftExchangeController < ChallengesController
   end
 
   def new
-    if (@collection.challenge)
-      flash[:notice] = ts("There is already a challenge set up for this collection.")
-      # TODO this will break if the challenge isn't a gift exchange
+    if @collection.challenge
+      flash[:notice] = t("challenge.gift_exchange.already_set_up")
+      # TODO: this will break if the challenge isn't a gift exchange
       redirect_to edit_collection_gift_exchange_path(@collection)
     else
       @challenge = GiftExchange.new
@@ -30,7 +29,7 @@ class Challenge::GiftExchangeController < ChallengesController
     if @challenge.save
       @collection.challenge = @challenge
       @collection.save
-      flash[:notice] = ts('Challenge was successfully created.')
+      flash[:notice] = t("challenge.gift_exchange.create.success")
       redirect_to collection_profile_path(@collection)
     else
       render action: :new
@@ -39,10 +38,10 @@ class Challenge::GiftExchangeController < ChallengesController
 
   def update
     if @challenge.update(gift_exchange_params)
-      flash[:notice] = ts('Challenge was successfully updated.')
+      flash[:notice] = t("challenge.gift_exchange.update.success")
 
       # expire the cache on the signup form
-      ActionController::Base.new.expire_fragment('challenge_signups/new')
+      ActionController::Base.new.expire_fragment("challenge_signups/new")
 
       # see if we initialized the tag set
       redirect_to collection_profile_path(@collection)
@@ -53,7 +52,7 @@ class Challenge::GiftExchangeController < ChallengesController
 
   def destroy
     @challenge.destroy
-    flash[:notice] = 'Challenge settings were deleted.'
+    flash[:notice] = "Challenge settings were deleted."
     redirect_to @collection
   end
 
@@ -96,7 +95,7 @@ class Challenge::GiftExchangeController < ChallengesController
         :tag_sets_to_add, :character_restrict_to_fandom,
         :character_restrict_to_tag_set, :relationship_restrict_to_fandom,
         :relationship_restrict_to_tag_set,
-        tag_sets_to_remove: []
+        { tag_sets_to_remove: [] }
       ],
       potential_match_settings_attributes: [
         :id, :num_required_prompts, :num_required_fandoms, :num_required_characters,

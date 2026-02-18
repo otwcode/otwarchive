@@ -4,12 +4,12 @@ class ChallengeRequestsController < ApplicationController
 
   def check_visibility
     unless @collection
-      flash.now[:notice] = ts("Collection could not be found")
+      flash.now[:notice] = t("challenge_requests.check_visibility.collection_not_found")
       redirect_to "/" and return
     end
     return if @collection.challenge_type == "PromptMeme" || privileged_collection_admin? || (@collection.challenge_type == "GiftExchange" && @collection.challenge.user_allowed_to_see_requests_summary?(current_user))
 
-    flash.now[:notice] = ts("You are not allowed to view the requests summary!")
+    flash.now[:notice] = t("challenge_requests.check_visibility.access_denied")
     redirect_to collection_path(@collection) and return
   end
 
@@ -23,9 +23,10 @@ class ChallengeRequestsController < ApplicationController
     # actual content, do the efficient method unless we need the full query
 
     if @sort_column == "fandom"
-      query = "SELECT prompts.*, GROUP_CONCAT(tags.name) AS tagnames FROM prompts INNER JOIN set_taggings ON prompts.tag_set_id = set_taggings.tag_set_id 
-      INNER JOIN tags ON tags.id = set_taggings.tag_id 
-      WHERE prompts.type = 'Request' AND tags.type = 'Fandom' AND prompts.collection_id = " + @collection.id.to_s + " GROUP BY prompts.id ORDER BY tagnames " + @sort_direction
+      query = "SELECT prompts.*, GROUP_CONCAT(tags.name) AS tagnames FROM prompts INNER JOIN set_taggings ON prompts.tag_set_id = set_taggings.tag_set_id " \
+              "INNER JOIN tags ON tags.id = set_taggings.tag_id " \
+              "WHERE prompts.type = 'Request' AND tags.type = 'Fandom' AND prompts.collection_id = #{@collection.id} " \
+              "GROUP BY prompts.id ORDER BY tagnames #{@sort_direction}"
       @requests = Prompt.paginate_by_sql(query, page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     elsif @sort_column == "prompter" && !@collection.prompts.exists?(anonymous: true)
       @requests = @collection.prompts.where(type: "Request")
