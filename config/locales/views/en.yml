@@ -561,6 +561,11 @@ en:
       page_heading: Archive FAQ
       reorder_faqs: Reorder FAQs
       show: Show
+    archive_faq_form:
+      faq_dropdown_display_name: Display name for FAQ dropdown menu
+      faq_dropdown_display_name_description: Alternate name for dropdown menu; if left blank, uses category name.
+      faq_dropdown_inclusion_description: If this box is checked, the category will be included in the FAQs dropdown menu in the main navigation. Up to %{count} categories can be included.
+      included_in_faq_dropdown_menu: Included in FAQ dropdown menu
     show:
       edit: Edit
       elasticsearch_news: news post announcing the search and filter updates

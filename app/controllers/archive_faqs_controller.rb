@@ -195,7 +195,7 @@ class ArchiveFaqsController < ApplicationController
       :title,
       {
         questions_attributes: [
-        :id, :question, :anchor, :content, :screencast, :position, :_destroy, :is_translated
+          :id, :question, :anchor, :content, :screencast, :position, :_destroy, :is_translated
         ]
       }
     ]
@@ -207,9 +207,7 @@ class ArchiveFaqsController < ApplicationController
     end
 
     archive_faq_attributes = params.require(:archive_faq)
-    unless can_manage_faq_menu
-      archive_faq_attributes = archive_faq_attributes.except(:include_in_faq_menu, :faq_menu_display_name)
-    end
+    archive_faq_attributes = archive_faq_attributes.except(:include_in_faq_menu, :faq_menu_display_name) unless can_manage_faq_menu
 
     archive_faq_attributes.permit(*permitted_params)
   end

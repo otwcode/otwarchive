@@ -60,7 +60,7 @@ describe ArchiveFaq do
           { slug: faq3.slug, menu_name: faq3.title }
         ]
       )
-      expect(ArchiveFaq.faq_menu_items.map { |item| item[:slug] }).not_to include(faq2.slug)
+      expect(ArchiveFaq.in_faq_menu_order.pluck(:slug)).not_to include(faq2.slug)
     end
 
     it "assigns faq menu positions for newly included categories" do

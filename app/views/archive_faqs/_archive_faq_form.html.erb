@@ -34,18 +34,18 @@
       </dd>
       <% if Globalize.locale.to_s == "en" %>
         <dt>
-          <%= form.label :include_in_faq_menu, ts("Included in FAQ dropdown menu") %>
+          <%= form.label :include_in_faq_menu, t(".included_in_faq_dropdown_menu") %>
         </dt>
         <dd>
           <%= form.check_box :include_in_faq_menu, disabled: !faq_menu_access %>
-          <p><%= ts("If this box is checked, the category will be included in the FAQs dropdown menu in the main navigation. Up to %{count} categories can be included.", count: ArchiveFaq.faq_menu_selection_limit) %></p>
+          <p><%= t(".faq_dropdown_inclusion_description", count: ArchiveFaq.faq_menu_selection_limit) %></p>
         </dd>
         <dt>
-          <%= form.label :faq_menu_display_name, ts("Display name for FAQ dropdown menu") %>
+          <%= form.label :faq_menu_display_name, t(".faq_dropdown_display_name") %>
         </dt>
         <dd>
           <%= form.text_field :faq_menu_display_name, disabled: !faq_menu_access %>
-          <p><%= ts("Alternate name for dropdown menu; if left blank, uses category name.") %></p>
+          <p><%= t(".faq_dropdown_display_name_description") %></p>
         </dd>
       <% end %>
     </dl>
