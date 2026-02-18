@@ -289,4 +289,33 @@ describe CollectionsController, collection_search: true do
       end
     end
   end
+
+  describe "admin access to owner pages" do
+    let(:collection) { create(:collection) }
+
+    it "allows support admins to view edit" do
+      fake_login_admin(create(:support_admin))
+
+      get :edit, params: { id: collection.name }
+
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:edit)
+    end
+
+    it "does not allow admins with other roles to view edit" do
+      fake_login_admin(create(:tag_wrangling_admin))
+
+      get :edit, params: { id: collection.name }
+
+      it_redirects_to_user_login_with_error
+    end
+
+    it "does not allow support admins to update" do
+      fake_login_admin(create(:support_admin))
+
+      put :update, params: { id: collection.name, collection: { title: "Changed title" } }
+
+      it_redirects_to_user_login_with_error
+    end
+  end
 end

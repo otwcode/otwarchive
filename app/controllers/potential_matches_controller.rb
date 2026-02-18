@@ -1,8 +1,10 @@
 class PotentialMatchesController < ApplicationController
 
-  before_action :users_only
+  before_action :users_only, except: [:index, :show]
+  before_action :users_or_privileged_collection_admin_only, only: [:index, :show]
   before_action :load_collection
-  before_action :collection_maintainers_only
+  before_action :collection_maintainers_or_privileged_admins_only, only: [:index, :show]
+  before_action :collection_maintainers_only, except: [:index, :show]
   before_action :load_challenge
   before_action :check_assignments_not_sent
   before_action :check_signup_closed, only: [:generate]

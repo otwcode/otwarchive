@@ -452,4 +452,31 @@ describe ChallengeAssignmentsController do
       end
     end
   end
+
+  describe "admin access to assignments pages" do
+    let(:gift_exchange) { create(:gift_exchange, assignments_sent_at: Faker::Time.backward) }
+    let(:user) { other_user }
+
+    it "allows support admins to view assignments index and individual assignment pages" do
+      fake_logout
+      fake_login_admin(create(:support_admin))
+
+      get :index, params: { collection_id: collection.name }
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:index)
+
+      get :show, params: { id: assignment.id, collection_id: collection.name }
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:show)
+    end
+
+    it "does not allow admins with other roles to view assignments index" do
+      fake_logout
+      fake_login_admin(create(:tag_wrangling_admin))
+
+      get :index, params: { collection_id: collection.name }
+
+      it_redirects_to_user_login_with_error
+    end
+  end
 end

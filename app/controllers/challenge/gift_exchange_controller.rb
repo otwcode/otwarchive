@@ -1,9 +1,11 @@
 class Challenge::GiftExchangeController < ChallengesController
 
-  before_action :users_only
+  before_action :users_only, except: [:edit]
+  before_action :users_or_privileged_collection_admin_only, only: [:edit]
   before_action :load_collection
   before_action :load_challenge, except: [:new, :create]
-  before_action :collection_owners_only, only: [:new, :create, :edit, :update, :destroy]
+  before_action :collection_owners_or_privileged_admins_only, only: [:edit]
+  before_action :collection_owners_only, only: [:new, :create, :update, :destroy]
 
   # ACTIONS
 

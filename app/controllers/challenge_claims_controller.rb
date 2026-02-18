@@ -1,6 +1,7 @@
 class ChallengeClaimsController < ApplicationController
 
-  before_action :users_only
+  before_action :users_only, except: [:index]
+  before_action :users_or_privileged_collection_admin_only, only: [:index]
   before_action :load_collection, except: [:index]
   before_action :collection_owners_only, except: [:index, :show, :create, :destroy]
   before_action :load_claim_from_id, only: [:show, :destroy]
@@ -68,14 +69,14 @@ class ChallengeClaimsController < ApplicationController
   # ACTIONS
 
   def index
-    if !(@collection = Collection.find_by(name: params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user)
+    if !(@collection = Collection.find_by(name: params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user) && !privileged_collection_admin?
       flash[:notice] = ts("This challenge is currently closed to new posts.")
     end
     if params[:collection_id]
       return unless load_collection
 
       @challenge = @collection.challenge
-      not_allowed(@collection) unless user_scoped? || @challenge.user_allowed_to_see_assignments?(current_user)
+      not_allowed(@collection) unless user_scoped? || @challenge.user_allowed_to_see_assignments?(current_user) || privileged_collection_admin?
 
       @claims = ChallengeClaim.unposted_in_collection(@collection)
       @claims = @claims.where(claiming_user_id: current_user.id) if user_scoped?
