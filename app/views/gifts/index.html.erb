@@ -1,6 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-  <% if @user && @user == current_user && params[:refused] %>
+  <% if @can_view_refused_gifts && params[:refused] %>
     <%= ts("Refused Gifts for %{recipient}", recipient: @user ? @user.login : h(@recipient_name)) %>
   <% else %>
     <%= ts("Gifts for %{recipient}", recipient: @user ? @user.login : h(@recipient_name)) %>
@@ -10,7 +10,7 @@
 <!--/descriptions-->
 
 <!--subnavigation, sorting and actions-->
-<% if @user && @user == current_user %>
+<% if @can_view_refused_gifts %>
   <h3 class="landmark heading"><%= ts("Navigation") %></h3>
   <ul class="navigation actions" role="navigation">
     <li>

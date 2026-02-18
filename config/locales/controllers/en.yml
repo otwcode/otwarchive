@@ -186,6 +186,13 @@ en:
     index:
       choose_media: Please choose a media category to start browsing fandoms.
       collection_page_title: "%{collection_title} - Fandoms"
+  gifts:
+    index:
+      page_subtitle: Gifts for %{name}
+      whose_gifts_error: Whose gifts did you want to see?
+    toggle_rejected:
+      now_hidden_notice: This work will no longer be listed among your gifts.
+      now_visible_notice: This work will now be listed among your gifts.
   home:
     content:
       page_title: Content Policy
