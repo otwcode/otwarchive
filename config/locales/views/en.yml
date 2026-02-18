@@ -2228,8 +2228,8 @@ en:
       nav:
         about: About
         browse: Browse
-        faq: FAQ
         fandoms: Fandoms
+        faq: FAQ
         label: Site
         search: Search
     proxy_notice:
@@ -2258,8 +2258,6 @@ en:
       donate: Donate or Volunteer
       news: News
       wrangling_guidelines: Wrangling Guidelines
-    menu_faq:
-      all_faq_categories: All FAQ Categories
     menu_browse:
       bookmarks: Bookmarks
       collections: Collections
@@ -2267,6 +2265,8 @@ en:
       works: Works
     menu_fandoms:
       all: All Fandoms
+    menu_faq:
+      all_faq_categories: All FAQ Categories
     menu_search:
       bookmarks: Bookmarks
       people: People
