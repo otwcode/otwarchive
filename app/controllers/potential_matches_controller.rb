@@ -1,5 +1,4 @@
 class PotentialMatchesController < ApplicationController
-
   before_action :users_only, except: [:index, :show]
   before_action :users_or_privileged_collection_admin_only, only: [:index, :show]
   before_action :load_collection
@@ -123,7 +122,7 @@ class PotentialMatchesController < ApplicationController
     else
       PotentialMatch.regenerate_for_signup(@signup)
       flash[:notice] = ts("Matches are being regenerated for ") + @signup.pseud.byline +
-        ts(". Please allow at least 5 minutes for this process to complete before refreshing the page.")
+                       ts(". Please allow at least 5 minutes for this process to complete before refreshing the page.")
     end
     # redirect to index
     redirect_to collection_potential_matches_path(@collection)
@@ -144,5 +143,4 @@ class PotentialMatchesController < ApplicationController
 
   def show
   end
-
 end

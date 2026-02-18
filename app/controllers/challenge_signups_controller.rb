@@ -28,7 +28,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def check_signup_open
-    signup_closed and return unless (@challenge.signup_open || @collection.user_is_maintainer?(current_user))
+    signup_closed and return unless @challenge.signup_open || @collection.user_is_maintainer?(current_user)
   end
 
   def signup_closed
@@ -46,7 +46,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def maintainer_or_signup_owner_only
-    not_allowed(@collection) and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user) || privileged_collection_admin?)
+    not_allowed(@collection) and return unless @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user) || privileged_collection_admin?
   end
 
   def not_signup_owner
@@ -64,20 +64,20 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def check_pseud_ownership
-    if params[:challenge_signup][:pseud_id] && (pseud = Pseud.find(params[:challenge_signup][:pseud_id]))
-      # either you have to own the pseud, OR you have to be a mod editing after signups are closed and NOT changing the pseud
-      unless current_user.pseuds.include?(pseud) || (@challenge_signup && @challenge_signup.pseud == pseud && signup_closed_owner?)
-        flash[:error] = ts("You can't sign up with that pseud.")
-        redirect_to root_path and return
-      end
-    end
+    return unless params[:challenge_signup][:pseud_id] && (pseud = Pseud.find(params[:challenge_signup][:pseud_id]))
+
+    # either you have to own the pseud, OR you have to be a mod editing after signups are closed and NOT changing the pseud
+    return if current_user.pseuds.include?(pseud) || (@challenge_signup && @challenge_signup.pseud == pseud && signup_closed_owner?)
+
+    flash[:error] = ts("You can't sign up with that pseud.")
+    redirect_to root_path and return
   end
 
   def check_signup_in_collection
-    unless @challenge_signup.collection_id == @collection.id
-      flash[:error] = ts("Sorry, that sign-up isn't associated with that collection.")
-      redirect_to @collection
-    end
+    return if @challenge_signup.collection_id == @collection.id
+
+    flash[:error] = ts("Sorry, that sign-up isn't associated with that collection.")
+    redirect_to @collection
   end
 
   #### ACTIONS
@@ -101,23 +101,23 @@ class ChallengeSignupsController < ApplicationController
     # see ExportsHelper for export_csv method
     respond_to do |format|
       format.html {
-          if @challenge.user_allowed_to_see_signups?(current_user) || privileged_collection_admin?
-            @challenge_signups = @collection.signups.joins(:pseud)
-            if params[:query]
-              @query = params[:query]
-              @challenge_signups = @challenge_signups.where("pseuds.name LIKE ?", '%' + params[:query] + '%')
-            end
-            @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-          elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-            @challenge_signups = @collection.signups.by_user(current_user)
-          else
-            not_allowed(@collection)
+        if @challenge.user_allowed_to_see_signups?(current_user) || privileged_collection_admin?
+          @challenge_signups = @collection.signups.joins(:pseud)
+          if params[:query]
+            @query = params[:query]
+            @challenge_signups = @challenge_signups.where("pseuds.name LIKE ?", '%' + params[:query] + '%')
           end
+          @challenge_signups = @challenge_signups.order("pseuds.name").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+        elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
+          @challenge_signups = @collection.signups.by_user(current_user)
+        else
+          not_allowed(@collection)
+        end
       }
       format.csv {
         if privileged_collection_admin? ||
-        (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) ||
-        (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
+           (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) ||
+           (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
           csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
           filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
           send_csv_data(csv_data, filename)
@@ -163,9 +163,9 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def show
-    unless @challenge_signup.valid?
-      flash[:error] = ts("This sign-up is invalid. Please check your sign-ups for a duplicate or edit to fix any other problems.")
-    end
+    return if @challenge_signup.valid?
+
+    flash[:error] = ts("This sign-up is invalid. Please check your sign-ups for a duplicate or edit to fix any other problems.")
   end
 
   protected
@@ -187,9 +187,9 @@ class ChallengeSignupsController < ApplicationController
         @challenge_signup.send(prompt_type).build
       end
     end
-    unless notice.blank?
-      flash[:notice] = notice
-    end
+    return if notice.blank?
+
+    flash[:notice] = notice
   end
 
   public

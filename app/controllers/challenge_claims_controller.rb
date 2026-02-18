@@ -1,5 +1,4 @@
 class ChallengeClaimsController < ApplicationController
-
   before_action :users_only, except: [:index]
   before_action :users_or_privileged_collection_admin_only, only: [:index]
   before_action :load_collection, except: [:index]
@@ -55,10 +54,10 @@ class ChallengeClaimsController < ApplicationController
   end
 
   def owner_only
-    unless @user == @challenge_claim.claiming_user
-      flash[:error] = ts("You aren't the claimer of that prompt.")
-      redirect_to "/" and return false
-    end
+    return if @user == @challenge_claim.claiming_user
+
+    flash[:error] = ts("You aren't the claimer of that prompt.")
+    redirect_to "/" and return false
   end
 
   def allowed_to_destroy
@@ -69,9 +68,7 @@ class ChallengeClaimsController < ApplicationController
   # ACTIONS
 
   def index
-    if !(@collection = Collection.find_by(name: params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user) && !privileged_collection_admin?
-      flash[:notice] = ts("This challenge is currently closed to new posts.")
-    end
+    flash[:notice] = ts("This challenge is currently closed to new posts.") if !(@collection = Collection.find_by(name: params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user) && !privileged_collection_admin?
     if params[:collection_id]
       return unless load_collection
 
@@ -92,12 +89,8 @@ class ChallengeClaimsController < ApplicationController
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
         @claims = @user.request_claims.order_by_date.unposted
-				if params[:posted]
-					@claims = @user.request_claims.order_by_date.posted
-				end
-        if params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
-          @claims = @claims.in_collection(@collection)
-        end
+        @claims = @user.request_claims.order_by_date.posted if params[:posted]
+        @claims = @claims.in_collection(@collection) if params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
       else
         flash[:error] = ts("You aren't allowed to see that user's claims.")
         redirect_to '/' and return

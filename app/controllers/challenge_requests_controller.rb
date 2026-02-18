@@ -7,10 +7,10 @@ class ChallengeRequestsController < ApplicationController
       flash.now[:notice] = ts("Collection could not be found")
       redirect_to "/" and return
     end
-    unless @collection.challenge_type == "PromptMeme" || privileged_collection_admin? || (@collection.challenge_type == "GiftExchange" && @collection.challenge.user_allowed_to_see_requests_summary?(current_user))
-      flash.now[:notice] = ts("You are not allowed to view the requests summary!")
-      redirect_to collection_path(@collection) and return
-    end
+    return if @collection.challenge_type == "PromptMeme" || privileged_collection_admin? || (@collection.challenge_type == "GiftExchange" && @collection.challenge.user_allowed_to_see_requests_summary?(current_user))
+
+    flash.now[:notice] = ts("You are not allowed to view the requests summary!")
+    redirect_to collection_path(@collection) and return
   end
 
   def index
