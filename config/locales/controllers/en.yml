@@ -113,7 +113,7 @@ en:
       access_denied: You are not allowed to view the requests summary!
   challenge_signups:
     no_challenge: What challenge did you want to sign up for?
-    signup_closed: Sign-up is currently closed: please contact a moderator for help.
+    signup_closed: "Sign-up is currently closed: please contact a moderator for help."
     not_signup_owner: You can't edit someone else's sign-up!
     check_pseud_ownership:
       invalid_pseud: You can't sign up with that pseud.
