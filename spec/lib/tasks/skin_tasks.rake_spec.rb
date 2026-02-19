@@ -9,12 +9,16 @@ describe "rake skins:cache_chooser_skins", default_skin: true do
   it "calls cache! on in_chooser skins" do
     expect do
       subject.invoke
-    end.to change { chooser_skin.reload.public }.from(false).to(true)
-      .and change { chooser_skin.official }.from(false).to(true)
-      .and change { chooser_skin.cached }.from(false).to(true)
+    end.to change { chooser_skin.reload.public }
+      .from(false).to(true)
+      .and change { chooser_skin.official }
+      .from(false).to(true)
+      .and change { chooser_skin.cached }
+      .from(false).to(true)
       .and avoid_changing { default_skin.reload.public }
       .and avoid_changing { default_skin.official }
-      .and change { default_skin.cached }.from(false).to(true)
+      .and change { default_skin.cached }
+      .from(false).to(true)
       .and avoid_changing { user_skin.reload.public }
       .and avoid_changing { user_skin.official }
       .and avoid_changing { user_skin.cached }
@@ -54,18 +58,24 @@ describe "rake skins:clear_unofficial_public_skins" do
   it "sets public to false on unapproved skins" do
     expect do
       subject.invoke
-    end.to change { unapproved_site_skin.reload.public }.from(true).to(false)
-      .and change { unapproved_work_skin.reload.public }.from(true).to(false)
+    end.to change { unapproved_site_skin.reload.public }
+      .from(true).to(false)
+      .and change { unapproved_work_skin.reload.public }
+      .from(true).to(false)
       .and output("Finished clearing unofficial public skins.\n").to_stdout
   end
 
   it "sets public and rejected to false on rejected skins" do
     expect do
       subject.invoke
-    end.to change { rejected_site_skin.reload.public }.from(true).to(false)
-      .and change { rejected_site_skin.rejected }.from(true).to(false)
-      .and change { rejected_work_skin.reload.public }.from(true).to(false)
-      .and change { rejected_work_skin.rejected }.from(true).to(false)
+    end.to change { rejected_site_skin.reload.public }
+      .from(true).to(false)
+      .and change { rejected_site_skin.rejected }
+      .from(true).to(false)
+      .and change { rejected_work_skin.reload.public }
+      .from(true).to(false)
+      .and change { rejected_work_skin.rejected }
+      .from(true).to(false)
       .and output("Finished clearing unofficial public skins.\n").to_stdout
   end
 
