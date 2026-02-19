@@ -285,7 +285,7 @@ describe SkinsController do
       end
 
       authorized_roles.each do |role|
-        context "with role #{role}" do
+        context "when logged in as an admin with role #{role}" do
           let(:admin) { create(:admin, roles: [role]) }
 
           it "raises an exception" do
@@ -326,7 +326,7 @@ describe SkinsController do
       end
 
       authorized_roles.each do |role|
-        context "with role #{role}" do
+        context "when logged in as an admin with role #{role}" do
           let(:admin) { create(:admin, roles: [role]) }
 
           it "updates #{attribute}" do
@@ -356,21 +356,21 @@ describe SkinsController do
           background_color: "white",
           foreground_color: "black",
           headercolor: "#900",
-          accent_color: "#EEEEEE",
+          accent_color: "#EEEEEE"
         }.each_pair do |attribute, value|
           context "with the #{attribute} param" do
             it_behaves_like "an attribute authorized admins can update",
-              authorized_roles: manage_site_skin_roles,
-              attribute: attribute,
-              value: value
+                            authorized_roles: manage_site_skin_roles,
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "a skin that skin authors can no longer update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "an action guests and random logged-in users can't access",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
           end
         end
 
@@ -381,17 +381,17 @@ describe SkinsController do
             end
 
             it_behaves_like "a skin that skin authors can no longer update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "an attribute authorized admins can't update",
-              authorized_roles: manage_site_skin_roles,
-              attribute: attribute,
-              value: value
+                            authorized_roles: manage_site_skin_roles,
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "an action guests and random logged-in users can't access",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
           end
         end
       end
@@ -413,20 +413,20 @@ describe SkinsController do
           background_color: "white",
           foreground_color: "black",
           headercolor: "#900",
-          accent_color: "#EEEEEE",
+          accent_color: "#EEEEEE"
         }.each_pair do |attribute, value|
           context "with the #{attribute} param" do
             it_behaves_like "an attribute skin authors can update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "a skin admins can't update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "an action guests and random logged-in users can't access",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
           end
         end
 
@@ -437,16 +437,16 @@ describe SkinsController do
             end
 
             it_behaves_like "an attribute skin authors with the official role can update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "a skin admins can't update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "an action guests and random logged-in users can't access",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
           end
         end
       end
@@ -470,21 +470,21 @@ describe SkinsController do
           background_color: "white",
           foreground_color: "black",
           headercolor: "#900",
-          accent_color: "#EEEEEE",
+          accent_color: "#EEEEEE"
         }.each_pair do |attribute, value|
           context "with the #{attribute} param" do
             it_behaves_like "an attribute authorized admins can update",
-              authorized_roles: manage_work_skin_roles,
-              attribute: attribute,
-              value: value
+                            authorized_roles: manage_work_skin_roles,
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "a skin that skin authors can no longer update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "an action guests and random logged-in users can't access",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
           end
         end
 
@@ -495,17 +495,17 @@ describe SkinsController do
             end
 
             it_behaves_like "a skin that skin authors can no longer update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "an attribute authorized admins can't update",
-              authorized_roles: manage_work_skin_roles,
-              attribute: attribute,
-              value: value
+                            authorized_roles: manage_work_skin_roles,
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "an action guests and random logged-in users can't access",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
           end
         end
       end
@@ -527,20 +527,20 @@ describe SkinsController do
           background_color: "white",
           foreground_color: "black",
           headercolor: "#900",
-          accent_color: "#EEEEEE",
+          accent_color: "#EEEEEE"
         }.each_pair do |attribute, value|
           context "with the #{attribute} param" do
             it_behaves_like "an attribute skin authors can update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "a skin admins can't update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "an action guests and random logged-in users can't access",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
           end
         end
 
@@ -549,16 +549,16 @@ describe SkinsController do
             before { allow_any_instance_of(Skin).to receive(:valid_public_preview).and_return(true)}
 
             it_behaves_like "an attribute skin authors with the official role can update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "a skin admins can't update",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
 
             it_behaves_like "an action guests and random logged-in users can't access",
-              attribute: attribute,
-              value: value
+                            attribute: attribute,
+                            value: value
           end
         end
       end
