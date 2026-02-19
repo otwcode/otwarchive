@@ -546,7 +546,7 @@ describe SkinsController do
 
         { public: 1 }.each_pair do |attribute, value|
           context "with the #{attribute} param" do
-            before { allow_any_instance_of(Skin).to receive(:valid_public_preview).and_return(true)}
+            before { allow_any_instance_of(Skin).to receive(:valid_public_preview).and_return(true) }
 
             it_behaves_like "an attribute skin authors with the official role can update",
                             attribute: attribute,
