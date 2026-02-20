@@ -164,7 +164,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-protected
+  # Allow totp_attempt parameter in the :sign_in controller for admin two-factor authentication
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:totp_attempt])
+  end
 
   def logged_in?
     user_signed_in?
@@ -196,7 +203,7 @@ public
     else
       # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
       # Basically we need to store a nil separately.
-      @admin_banner = Rails.cache.fetch("admin_banner") do
+      @admin_banner = Rails.cache.fetch("v1/admin_banner") do
         banner = AdminBanner.where(active: true).last
         banner.nil? ? "" : banner
       end

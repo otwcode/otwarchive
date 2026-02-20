@@ -8,8 +8,8 @@ Bundler.require(*Rails.groups)
 
 module Otwarchive
   class Application < Rails::Application
-    app_config = YAML.load_file(Rails.root.join("config/config.yml"))
-    app_config.merge!(YAML.load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
+    app_config = YAML.safe_load_file(Rails.root.join("config/config.yml"))
+    app_config.merge!(YAML.safe_load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
     ::ArchiveConfig = OpenStruct.new(app_config)
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
@@ -22,7 +22,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 7.2
+    config.load_defaults 8.0
 
     %w[
       app/models/challenge_models
@@ -86,6 +86,11 @@ module Otwarchive
       BCrypt::Password
     ]
 
+    # Set admin two-factor authentication keys
+    config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]
+    config.active_record.encryption.deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"]
+    config.active_record.encryption.key_derivation_salt = ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"]
+
     # handle errors with custom error pages:
     config.exceptions_app = self.routes
 
@@ -104,9 +109,6 @@ module Otwarchive
 
     # Use Resque to run ActiveJobs (including sending delayed mail):
     config.active_job.queue_adapter = :resque
-
-    # TODO: Remove with Rails 8.0 where this option will be deprecated
-    config.active_job.enqueue_after_transaction_commit = :always
 
     config.active_model.i18n_customize_full_message = true
 

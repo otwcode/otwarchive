@@ -186,6 +186,20 @@ Scenario: Comment threading, comment editing
     Then I should see "must be less than"
       And I should see "Now, we can devour the gods, together!"
 
+Scenario: I can see "Parent" and "Parent Thread" links on reply comments but not on top-level comments
+
+  Given the work "Random Work"
+  When I am logged in as "commenter"
+    And I post the comment "This is the top-level comment" on the work "Random Work"
+  Then I should not see "Parent"
+    And I should not see "Parent Thread"
+
+  When I reply to a comment with "This is the reply comment"
+  Then I should not see "Parent" within ".odd"
+    And I should not see "Parent Thread" within ".odd"
+    And I should see "Parent" within ".even"
+    And I should see "Parent Thread" within ".even"
+
 Scenario: Don't receive comment notifications of your own comments by default
 
   When I am logged in as "author"
