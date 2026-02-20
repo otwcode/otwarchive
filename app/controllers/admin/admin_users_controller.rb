@@ -187,14 +187,14 @@ class Admin::AdminUsersController < Admin::BaseController
     @user.profile.title = nil
     @user.profile.about_me = nil
 
+    # Override validations because there is no ticket number available
     @user.profile.save(validate: false)
     
     @user.pseuds.each do |pseud|
       pseud.description = nil
-      pseud.icon_alt_text = nil
-      pseud.icon_comment_text = nil
-      pseud.icon.purge
+      pseud.delete_icon
 
+      # Override validations because there is no ticket number available
       pseud.save(validate: false)
     end
 

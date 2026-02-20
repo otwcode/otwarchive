@@ -193,9 +193,7 @@ Feature: Admin Abuse actions
       And I should not see "This is some text about me."
     When I go to Spamster's pseuds page
     Then I should not see "Description thingy"
-      And the icon of pseud "Spamster" should not be set
-      And the icon alt text of pseud "Spamster" should be blank
-      And the icon comment text of pseud "Spamster" should be blank
+      And the pseud "Spamster" should not have an icon, alt text and comment text
   
   Scenario: A permabanned spammer's comments' replies from others should stay visible
     Given I have a work "Generic Work"

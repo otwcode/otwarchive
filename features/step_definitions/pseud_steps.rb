@@ -48,20 +48,10 @@ When "I fill in details of my default pseud" do
   click_button("Update")
 end
 
-Then "the icon of pseud {string} should not be set" do |pseud_name|
+Then "the pseud {string} should not have an icon, alt text and comment text" do |pseud_name|
   pseud = Pseud.find_by(name: pseud_name)
 
-  assert !pseud.icon.attached?
-end
-
-Then "the icon alt text of pseud {string} should be blank" do |pseud_name|
-  pseud = Pseud.find_by(name: pseud_name)
-
-  assert pseud.icon_alt_text.blank?
-end
-
-Then "the icon comment text of pseud {string} should be blank" do |pseud_name|
-  pseud = Pseud.find_by(name: pseud_name)
-
-  assert pseud.icon_comment_text.blank?
+  expect !pseud.icon.attached?
+  expect pseud.icon_alt_text.blank?
+  expect pseud.icon_comment_text.blank?
 end
