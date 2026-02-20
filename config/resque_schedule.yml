@@ -128,4 +128,4 @@ reset_bookmark_tags_job:
   class: "ResetBookmarkTagsJob"
   queue: low
   description: "Reset bookmark-only tags to unsorted quarterly (AO3-7294)"
-  
+
