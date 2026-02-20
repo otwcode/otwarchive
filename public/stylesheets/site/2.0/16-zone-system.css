@@ -404,12 +404,12 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   bottom: 0;
   margin: 0;
   overflow-y: scroll;
-  overscroll-behavior: contain;
   /* put it on top of the other content so it fades in nicely */
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 999
+  z-index: 999;
+    overscroll-behavior: contain;
 }
 
 #tos_prompt .heading {
