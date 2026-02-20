@@ -2464,7 +2464,14 @@ en:
       name: Name (required)
       submit: Submit
   readings:
+    confirm_clear:
+      notice_html: Are you sure you want to <strong><em>clear</em></strong> your entire history? This <strong>cannot be undone</strong>.
+      page_heading: Clear Entire History
+      submit: Yes, Clear Entire History
     index:
+      clear_entire_history:
+        landmark: Clear Entire History
+        page_heading: Clear Entire History
       history:
         landmark: List of History Items
         page_heading: History
