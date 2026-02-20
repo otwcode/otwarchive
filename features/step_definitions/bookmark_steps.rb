@@ -495,3 +495,7 @@ Then /^the cache of the bookmark on "([^\"]*)" should not expire if I have not e
   bookmark.reload
   assert orig_cache_key == bookmark.cache_key, "Cache key #{orig_cache_key} does not match #{bookmark.cache_key}."
 end
+
+When "I go to the bookmarks for the tag {string}" do |tag|
+  visit tag_bookmarks_path(tag)
+end

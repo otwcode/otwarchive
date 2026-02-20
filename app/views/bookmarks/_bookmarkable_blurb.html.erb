@@ -1,5 +1,5 @@
-<% # expects "bookmarkable" (a BookmarkableDecorator object) %>
-<% # Unwrap the bookmarkable to avoid type mis-identification. %>
+<%# expects "bookmarkable" (a BookmarkableDecorator object) %>
+<%# Unwrap the bookmarkable to avoid type mis-identification. %>
 <% unwrapped = bookmarkable.__getobj__ %>
 <li id="bookmark_<%= bookmarkable.id %>" class="<%= css_classes_for_bookmarkable_blurb(unwrapped) %>" role="article">
 
@@ -13,27 +13,29 @@
   <%= render "bookmarks/bookmark_item_module", bookmarkable: unwrapped %>
 
   <!--actions-->
-  <ul class="actions" role="navigation">
-    <li>
-      <% if current_user_bookmark ||= bookmark_if_exists(unwrapped) %>
-        <%= link_to ts("Saved"),
-                    edit_bookmark_path(current_user_bookmark),
-                    id: "bookmark_form_trigger_for_#{bookmarkable.id}",
-                    remote: true %>
-      <% else %>
-        <%= link_to ts("Save"),
-                    new_polymorphic_path([bookmarkable, Bookmark]),
-                    id: "bookmark_form_trigger_for_#{bookmarkable.id}",
-                    remote: true %>
-      <% end %>
-    </li>
-  </ul>
+  <% if logged_in? %>
+    <ul class="actions" role="navigation">
+      <li>
+        <% if current_user_bookmark ||= bookmark_if_exists(unwrapped) %>
+          <%= link_to t(".saved_link"),
+                edit_bookmark_path(current_user_bookmark),
+                id: "bookmark_form_trigger_for_#{bookmarkable.id}",
+                remote: true %>
+        <% else %>
+          <%= link_to t(".save_link"),
+                new_polymorphic_path([bookmarkable, Bookmark]),
+                id: "bookmark_form_trigger_for_#{bookmarkable.id}",
+                remote: true %>
+        <% end %>
+      </li>
+    </ul>
+  <% end %>
 
   <% if logged_in_as_admin? && bookmarkable.class == ExternalWork %>
     <%= render "admin/admin_options", item: bookmarkable %>
   <% end %>
 
-  <% # bookmark form loaded here if requested %>
+  <%# bookmark form loaded here if requested %>
   <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmarkable.id %>"></div>
 
   <div class="recent module group">
@@ -47,8 +49,8 @@
   <ul class="actions" role="navigation">
     <li id="recent_link_<%= bookmarkable.id %>" class="showme">
       <%= link_to ts("All Bookmarks"),
-                  polymorphic_path([bookmarkable, Bookmark]),
-                  class: "actions" %>
+            polymorphic_path([bookmarkable, Bookmark]),
+            class: "actions" %>
     </li>
   </ul>
 </li>

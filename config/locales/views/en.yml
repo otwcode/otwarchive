@@ -6,7 +6,7 @@ en:
     new:
       do_not_spam:
         delay: it may take several months for us to get to your report
-        paragraph_html: "%{split_bold} Our volunteer team is small, so %{delay_link}."
+        paragraph_html: '%{split_bold} Our volunteer team is small, so %{delay_link}.'
         split: Please only report one user at a time, and do not submit multiple reports about the same user.
       form:
         comment:
@@ -185,7 +185,7 @@ en:
           creations: Creations
         no_creations: This user has no works or comments.
         page_heading: Works and Comments by %{user}
-        page_title: "%{login} - User Creations"
+        page_title: '%{login} - User Creations'
       history:
         heading: User History
         table:
@@ -244,7 +244,7 @@ en:
           troubleshoot: Troubleshoot
         note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
         page_heading: 'User: %{login} (%{id})'
-        page_title: "%{login} - User Administration"
+        page_title: '%{login} - User Administration'
         status:
           form:
             admin_action:
@@ -303,7 +303,7 @@ en:
     blacklist:
       emails_found:
         one: one email found
-        other: "%{count} emails found"
+        other: '%{count} emails found'
     blacklisted_emails:
       create:
         browser_title: Create Banned Email
@@ -360,7 +360,7 @@ en:
     passwords:
       edit:
         describedby:
-          password_length: "%{minimum} to %{maximum} characters"
+          password_length: '%{minimum} to %{maximum} characters'
         label:
           confirmation: Confirm new password
           password: New password
@@ -418,8 +418,8 @@ en:
           disable_support_form: Turn Off Support Form
           performance_and_misc: Performance and Misc
         queue_status:
-          one: "%{count} person is scheduled to be sent an invitation at %{time}."
-          other: "%{count} people are scheduled to be sent invitations at %{time}."
+          one: '%{count} person is scheduled to be sent an invitation at %{time}.'
+          other: '%{count} people are scheduled to be sent invitations at %{time}.'
         queue_status_help: "(The automatic task that invites people from the queue runs at most every hour. Don't be alarmed if the time you see is within the last hour. Do be alarmed if the time you see is more than one hour in the past and the queue is supposed to be active.)"
         update: Update
       update:
@@ -626,8 +626,15 @@ en:
           hide_works: hide their works or bookmarks from you
           intro: 'Blocking a user will not:'
   bookmarks:
+    bookmark_blurb:
+      bookmark_deleted_notice: This has been deleted, sorry!
+      save_link: Save
+      saved_link: Saved
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    bookmarkable_blurb:
+      save_link: Save
+      saved_link: Saved
     external_work_fields:
       fandoms_help_title: Fandom help
       ratings_help_title: Rating help
@@ -875,7 +882,7 @@ en:
           draft: Sorry, you can't comment on a draft.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
-      previous_chapter_html: "%{back_arrow_html} Previous Chapter"
+      previous_chapter_html: '%{back_arrow_html} Previous Chapter'
     confirm_delete:
       confirm_button: Yes, delete!
       delete_confirmation: Are you sure you want to delete this comment?
@@ -901,8 +908,8 @@ en:
       comment: drop by the Archive and comment
       end_notes: End Notes
       inspired_by:
-        restricted_html: "[Restricted Work] by %{creator_link}"
-        revealed_html: "%{work_link} by %{creator_link}"
+        restricted_html: '[Restricted Work] by %{creator_link}'
+        revealed_html: '%{work_link} by %{creator_link}'
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
       please_comment_html: Please %{comment_link} to let the creator know if you enjoyed their work!
@@ -937,7 +944,7 @@ en:
       series_list_html: Part %{position} of %{series_link}
       stats: 'Stats:'
       summary: Summary
-      tag_type: "%{tag_type}:"
+      tag_type: '%{tag_type}:'
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
@@ -1047,7 +1054,7 @@ en:
       abuse:
         contact: contact our Policy and Abuse team
         reports_html: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
-      do_not_spam_html: "<strong>We respond to every report we receive, but we are a small volunteer team.</strong> For this reason, we ask you to not submit multiple reports regarding any one issue, or encourage other people to report the same issue, unless there is additional information to offer."
+      do_not_spam_html: '<strong>We respond to every report we receive, but we are a small volunteer team.</strong> For this reason, we ask you to not submit multiple reports regarding any one issue, or encourage other people to report the same issue, unless there is additional information to offer.'
       form:
         comment:
           description: Please be as specific as possible, including error messages and/or links
@@ -1074,7 +1081,7 @@ en:
         landmark:
           reference: Reference Links
         page_title: Support and Feedback
-      languages_html: "<strong>We can answer Support inquiries in %{list_html}.</strong> Please allow for additional delay for responses in any language other than English."
+      languages_html: '<strong>We can answer Support inquiries in %{list_html}.</strong> Please allow for additional delay for responses in any language other than English.'
       navigation:
         faqs: FAQs & Tutorials
         known_issues: Known Issues
@@ -1094,7 +1101,7 @@ en:
         tag_changes: Requests to canonize or change tags
         work_problems: Works labeled with the wrong language or duplicate works
       status:
-        bluesky: "@status.archiveofourown.org"
+        bluesky: '@status.archiveofourown.org'
         current_html: For current updates on AO3 performance or downtime, please check our %{status_page_link} and follow %{bluesky_link} on Bluesky or %{tumblr_link} on Tumblr.
         status_page: status page
         tumblr: ao3org
@@ -1285,7 +1292,7 @@ en:
         description: This is for content with adult themes (sex, violence, etc.) that isn't as graphic as explicit-rated content.
         header: Mature (Adult!)
       more_info:
-        html: "(For more information, see the %{ratings_and_warnings_tos_section_link}.)"
+        html: '(For more information, see the %{ratings_and_warnings_tos_section_link}.)'
         ratings_and_warnings_tos_section: Ratings and Warnings section of the %{app_name} Terms of Service
       not_rated:
         description: For searching, screening, and other Archive functions, this may get treated the same way as explicit-rated content.  In reality, it could be anything from porn to completely family-friendly stuff.  Choose this rating if you prefer not to rate your content (because you don't like ratings, because you're trying to avoid spoilers, etc.).
@@ -1333,14 +1340,14 @@ en:
         otw_long: Organization for Transformative Works
       major_projects:
         fanlore: Fanlore
-        fanlore_details_html: "%{fanlore_link}, a fandom wiki devoted to preserving the history of transformative fanworks and the fandoms from which they have arisen."
+        fanlore_details_html: '%{fanlore_link}, a fandom wiki devoted to preserving the history of transformative fanworks and the fandoms from which they have arisen.'
         legal_advocacy: Legal Advocacy
-        legal_details_html: "%{legal_advocacy_link} committed to protecting and defending fanworks from commercial exploitation and legal challenge."
+        legal_details_html: '%{legal_advocacy_link} committed to protecting and defending fanworks from commercial exploitation and legal challenge.'
         open_doors: Open Doors
-        open_doors_details_html: "%{open_doors_link}, which offers shelter to at-risk fannish projects."
+        open_doors_details_html: '%{open_doors_link}, which offers shelter to at-risk fannish projects.'
         title: 'Our other major projects include:'
         twc: Transformative Works and Cultures
-        twc_details_html: "%{twc_link}, a peer-reviewed academic journal that seeks to promote scholarship on fanworks and practices."
+        twc_details_html: '%{twc_link}, a peer-reviewed academic journal that seeks to promote scholarship on fanworks and practices.'
       more_info:
         communications_team: Communications team
         faq_page: FAQ page
@@ -1353,7 +1360,7 @@ en:
         heading: II.C. Commercial Promotion
         not_allowed: Promotion, solicitation, and advertisement of commercial products or activities are not allowed.
         tos_faq: FAQ for Section II.C
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Commercial Promotion FAQ
       content_policy: Content Policy
       content_policy_heading: II. Content Policy
@@ -1362,20 +1369,20 @@ en:
         heading: II.D. Copyright Infringement
         not_allowed: Reproductions of large excerpts of copyrighted works are not allowed without the consent of the copyright owner. This includes stories, artwork, songs, poems, transcripts, and other copyrighted material. Crediting the original creator does not give you the right to upload, podfic, or translate someone else's work without permission, regardless of whether the source is a fanwork or a professionally published work.
         tos_faq: FAQ for Section II.D
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Copyright Infringement and Plagiarism FAQ
         transformative_fanworks: transformative fanworks
         transformative_works_legal_html: We believe that %{transformative_fanworks_link} are legal. Complaints about the mere existence of fanworks that mention trademarks or are based on copyrighted material will not be pursued.
       effective: 'Effective: November 19, 2024'
       fanworks:
         bookmarks: Bookmarks
-        bookmarks_only_fanworks_html: "%{bookmarks_link} must only be created for fanworks. You may create %{external_bookmarks_link} for fanworks hosted on third-party sites."
+        bookmarks_only_fanworks_html: '%{bookmarks_link} must only be created for fanworks. You may create %{external_bookmarks_link} for fanworks hosted on third-party sites.'
         external_bookmarks: external bookmarks
         heading: II.B. Fanworks
         must_be_fanworks_html: Works must be fanworks. Posting a Work that primarily consists of %{non_fanwork_content_link} is not allowed.
         non_fanwork_content: non-fanwork Content
         tos_faq: FAQ for Section II.B
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Fanworks and Non-Fanwork Content FAQ
       harassment:
         advocating_harm:
@@ -1397,7 +1404,7 @@ en:
           text: Creating RPF never constitutes harassment in and of itself. Posting works where someone dies, is subjected to slurs, or is otherwise harmed as part of the plot is usually not a violation of the Harassment Policy. However, deliberately posting such Content in a manner designed to be seen by the subject of the work, such as by gifting them the work, may result in a judgment of harassment.
         threatening_versus_annoying_html: In general, threatening Content will be considered harassment, while Content that is merely rude or annoying will be allowed. Not everyone agrees about what is offensive and unacceptable. Users are encouraged to use tools such as %{blocking_link}, %{muting_link}, and %{filtering_link} to control their own environment on AO3.
         tos_faq: FAQ for Section II.H
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Harassment FAQ
       illegal_inappropriate_content:
         automated_spam_check_html: We may use automated means to filter out spam. If you submit Content that is erroneously caught in a spam filter, please %{contact_ao3_administrators_link}.
@@ -1410,7 +1417,7 @@ en:
         spamming_behavior: Spamming behavior is prohibited. Repeated identical or nearly identical posts in multiple places may be considered spam regardless of commercial content.
         technical_integrity: technical integrity
         tos_faq: FAQ for Section II.K
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Offensive Content vs Illegal Content FAQ
         violates_us_law_html: If you encounter Content that you believe violates a specific law of the United States, you can %{report_it_to_us_link}.
       impersonation:
@@ -1418,7 +1425,7 @@ en:
         heading: II.G. Impersonation
         html: You may not impersonate or misrepresent your affiliation with any person, entity, or %{function_link}. Fiction clearly marked as such is not considered impersonation.
         tos_faq: FAQ for Section II.G
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Fannish Identities and Impersonation FAQ
       intro:
         all_content_must_comply_html: All %{content_link} on AO3 must comply with our Content Policy.
@@ -1427,7 +1434,7 @@ en:
         maximum_inclusiveness: maximum inclusiveness of fanwork content
         our_goal_html: Our goal is %{maximum_inclusiveness_link}. We want to provide a safe and permanent home for fanworks, including works that might be at risk on other sites due to being deemed immoral, explicit, or otherwise objectionable. Users should always observe and heed the ratings and warnings provided before accessing works on AO3.
         report_it_to_us: report it to us
-        review_before_posting_html: "%{all_content_must_comply_bold} Please review this page carefully before you begin posting. Answers to common questions about the Content Policy can be found in the %{tos_faq_link}."
+        review_before_posting_html: '%{all_content_must_comply_bold} Please review this page carefully before you begin posting. Answers to common questions about the Content Policy can be found in the %{tos_faq_link}.'
         tos_faq: TOS FAQ
         we_do_not_prescreen: We do not prescreen content on AO3.
         you_can_report_html: If you encounter content that you believe violates our Content Policy, you can %{report_it_to_us_link}. %{we_do_not_prescreen_bold}
@@ -1446,13 +1453,13 @@ en:
         tags_applied_automatically_html: Some tags may be automatically applied to Works. In addition, AO3 administrators may determine that tags in a mandatory tag field on a Work are inaccurate or insufficient. In such cases, AO3 administrators may remove inaccurate tags; add non-specific tags to the Work; add specific tags to the Work in fields where non-specific tags are %{not_available_link}; require the creator to appropriately adjust the Work's tags; hide the Work; or take other appropriate action to address the matter. Refer to the %{tos_faq_link} for details about when AO3 administrators may enforce the presence or removal of tags in mandatory fields.
         tos_faq: TOS FAQ
         tos_faq_endnote: FAQ for Section II.J
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Ratings and Archive Warnings FAQ
       offensive_content:
         heading: II.A. Offensive Content
         removal_not_just_offensiveness: Unless it violates some other policy, we will not remove Content for offensiveness.
         tos_faq: FAQ for Section II.A
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Offensive Content vs Illegal Content FAQ
       page_content_landmark: Main Text
       page_heading: Content Policy
@@ -1468,14 +1475,14 @@ en:
         sharing_sufficient_information: sharing information sufficient to identify someone else's legal or professional identity or their physical location (e.g. phone numbers, email addresses, residential addresses, or hotel room numbers); and
         special_categories_of_personal_data: Special Categories of Personal Data
         tos_faq: FAQ for Section II.F
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Fannish Identities and Impersonation FAQ
       plagiarism:
         heading: II.E. Plagiarism
         html: Plagiarism is the use of someone else's words, or %{their_expressions_of_their_ideas_link}, without attribution. Minor alterations (such as replacing names, substituting synonyms, or rearranging a few words) are insufficient to make a work your own. Plagiarism is not allowed. Deliberately creating a work using the same general idea as another work is not plagiarism, but citation may be appropriate.
         their_expressions_of_their_ideas: their expressions of their ideas
         tos_faq: FAQ for Section II.E
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Copyright Infringement and Plagiarism FAQ
       privacy_policy: Privacy Policy
       terms_of_service: Terms of Service
@@ -1486,7 +1493,7 @@ en:
         heading: II.I. User Icons
         text: User icons must be appropriate for general audiences. They must not depict genital nudity, explicit sexual activity, hate symbols, or imagery that promotes, advocates, or causes harm.
         tos_faq: FAQ for Section II.I
-        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_in_parens_html: '(%{tos_faq_link})'
         tos_faq_link_label: Usernames, Icons, and Profiles FAQ
     diversity_statement:
       archive_description_html: This archive is a permanent, panfandom place for fanworks, built by fans for fans. Whichever way you use the Archive, you're part of this, powering it, shaping it through your use and %{your_feedback_link}.
@@ -1501,7 +1508,7 @@ en:
         html: This work is licensed under a %{creative_commons_by_sa_link}.
         image_alt: Creative Commons License
       some_essential_parts: some essential parts
-      still_missing_html: 'We know that there are %{some_essential_parts_link} that are still missing to make the Archive truly panfandom: the ability to host fanworks other than text, an interface in languages other than English, and more ways for you to connect with each other, to name just a few. But with your support, we''ll get there.'
+      still_missing_html: "We know that there are %{some_essential_parts_link} that are still missing to make the Archive truly panfandom: the ability to host fanworks other than text, an interface in languages other than English, and more ways for you to connect with each other, to name just a few. But with your support, we'll get there."
       terms_of_service: Terms of Service
       we_build_for: We are building this archive for you. Come be a part of it.
       welcome_header: You are welcome at the Archive of Our Own.
@@ -1523,7 +1530,7 @@ en:
         suspend: suspend your account
         tos: Terms of Service
         tos_faq: Terms of Service FAQ
-        violations_html: "%{copyright_link} and %{plagiarism_link} are violations of Sections II.D and II.E of our %{tos_link}, respectively. For more information, please refer to our %{tos_faq_link}."
+        violations_html: '%{copyright_link} and %{plagiarism_link} are violations of Sections II.D and II.E of our %{tos_link}, respectively. For more information, please refer to our %{tos_faq_link}.'
       counternotice_instructions:
         address_attn: 'Attention: Legal'
         address_org: Organization for Transformative Works
@@ -1534,7 +1541,7 @@ en:
         defend: you are willing to defend your use of the original copyrighted material in court
         dispute_html: If you believe that your content does not infringe on the copyright owner's rights, you can file a DMCA counternotice to dispute the takedown. By filing a counternotice, you are indicating that %{defend_bold} if the party who submitted the original takedown notice chooses to pursue legal action against you.
         heading: Filing a DMCA counternotice
-        initiate_html: 'To initiate a formal DMCA counter-notification request, contact the OTW''s designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:'
+        initiate_html: "To initiate a formal DMCA counter-notification request, contact the OTW's designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:"
         lumen_faq: Lumen DMCA Explanation and FAQ
         prefer: We prefer to receive DMCA requests through the contact form or by email.
         time_limit: You can file a DMCA counternotice at any point after your content has been removed; there is no time limit.
@@ -1570,19 +1577,19 @@ en:
         credit_html: AO3's DMCA policy is licensed under the %{cc_license_link}. Material in this policy has been drawn from Dreamwidth, the Electronic Frontier Foundation, and Wikipedia.
       page_heading: DMCA Policy
       removal:
-        abuse_report_html: "%{submit_abuse_bold} Abuse reports are evaluated by the Policy & Abuse committee for violations of the %{tos_link}, and held to a very high %{confidentiality_link}. When submitting an Abuse report about copyright infringement, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq_link}."
+        abuse_report_html: '%{submit_abuse_bold} Abuse reports are evaluated by the Policy & Abuse committee for violations of the %{tos_link}, and held to a very high %{confidentiality_link}. When submitting an Abuse report about copyright infringement, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq_link}.'
         confidentiality: standard of confidentiality
         dmca_html: "%{file_dmca_bold} DMCA takedown notices can only be filed by the copyright owner or someone legally authorized to act on their behalf. DMCA notices must be sent to the OTW's designated agent and comply with all %{requirements_link}. DMCA notices are %{not_confidential_link}. The OTW reserves the right to make public all DMCA notices that we receive, though some information may be redacted for privacy."
         do_not: do not
         do_not_spam_html: Please %{do_not_bold} submit an Abuse report if you intend to file a DMCA notice. Submitting both an Abuse report and a DMCA notice about the same content may delay the processing of both requests.
         file_dmca: File a DMCA takedown notice
-        file_dmca_html: "%{file_dmca_link}:"
+        file_dmca_html: '%{file_dmca_link}:'
         heading: My work was posted on AO3 without my permission. What can I do?
         intro: 'If you encounter content on AO3 that you believe infringes on your copyright, you have the following options:'
         not_confidential: not subject to confidentiality
         requirements: legal requirements
         submit_abuse: Submit an Abuse report
-        submit_abuse_html: "%{submit_abuse_link}:"
+        submit_abuse_html: '%{submit_abuse_link}:'
         tos: AO3 Terms of Service
         tos_faq: Terms of Service FAQ
       repeat:
@@ -1596,7 +1603,7 @@ en:
         address_street: '228 Park Ave S #18156'
         contact_legal: the Legal committee's contact form
         heading: Filing a DMCA takedown notice
-        initiate_html: 'To initiate a formal DMCA takedown request, contact the OTW''s designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:'
+        initiate_html: "To initiate a formal DMCA takedown request, contact the OTW's designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:"
         prefer: We prefer to receive DMCA requests through the contact form or by email.
       takedown_process:
         counternotify: If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify you. You will have 10 business days to file a lawsuit to prevent the restoration of the content. If you do not notify us within 10 business days that you have filed a lawsuit, we will allow the content to be restored in accordance with 17 U.S.C. § 512(g)(2)(B)-(C).
@@ -1662,7 +1669,7 @@ en:
           title: Is it later already?
         note: Some works you've marked for later.
       social:
-        bluesky: "@status.archiveofourown.org on Bluesky"
+        bluesky: '@status.archiveofourown.org on Bluesky'
         heading: Follow us
         note_html: Follow AO3 on Bluesky or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
         other_outlets: Organization for Transformative Works' news outlets
@@ -1918,17 +1925,17 @@ en:
           privacy_policy: Privacy Policy
         entirety_of_agreement:
           entirety_of_agreement: 'Entirety of agreement:'
-          html: "%{entirety_of_agreement} These Terms of Service constitute the entire agreement between you and the Organization for Transformative Works (OTW) and govern your use of AO3. They replace all prior agreements between you and the OTW concerning your use of AO3. They do not govern your use of any other OTW sites and/or projects, all of which are covered under separate agreements."
+          html: '%{entirety_of_agreement} These Terms of Service constitute the entire agreement between you and the Organization for Transformative Works (OTW) and govern your use of AO3. They replace all prior agreements between you and the OTW concerning your use of AO3. They do not govern your use of any other OTW sites and/or projects, all of which are covered under separate agreements.'
         heading: I.A. General terms
         jurisdiction:
-          html: "%{jurisdiction} The AO3 TOS, the relationship between you and the OTW, and all disputes arising out of or related to them shall be governed by the laws of the United States and specifically %{the_state_of_new_york_link}, without regard to any conflict-of-law provisions. You and the OTW agree to submit to the personal and exclusive jurisdiction of the courts located within New York County (Manhattan), New York, and to waive any objection to the laying of venue there."
+          html: '%{jurisdiction} The AO3 TOS, the relationship between you and the OTW, and all disputes arising out of or related to them shall be governed by the laws of the United States and specifically %{the_state_of_new_york_link}, without regard to any conflict-of-law provisions. You and the OTW agree to submit to the personal and exclusive jurisdiction of the courts located within New York County (Manhattan), New York, and to waive any objection to the laying of venue there.'
           jurisdiction: 'Jurisdiction:'
           the_state_of_new_york: the State of New York
         limitation_on_claims:
-          html: "%{limitation_on_claims} You agree that, regardless of any statute or law to the contrary, any claim or cause of action arising out of or related to any use of AO3 or its TOS must be filed within one (1) year after such claim or cause of action arose or be forever barred."
+          html: '%{limitation_on_claims} You agree that, regardless of any statute or law to the contrary, any claim or cause of action arising out of or related to any use of AO3 or its TOS must be filed within one (1) year after such claim or cause of action arose or be forever barred.'
           limitation_on_claims: 'Limitation on claims:'
         no_assignment:
-          html: "%{no_assignment} These TOS are personal to you. You may not assign or transfer your rights or obligations under these TOS to any other person or entity, and any attempted assignment or transfer is void."
+          html: '%{no_assignment} These TOS are personal to you. You may not assign or transfer your rights or obligations under these TOS to any other person or entity, and any attempted assignment or transfer is void.'
           no_assignment: 'No assignment:'
         non_severability:
           html: "%{non_severability} The OTW's failure to enforce any part of the TOS will not waive the OTW's ability to enforce it. Any waiver with regard to a specific instance shall not constitute a waiver of any other breaches of the TOS, even with regard to the same user. If any provision of the TOS is found by a court of competent jurisdiction to be invalid, you agree that the court should give effect to the party's intentions as reflected in the provision, and that all other provisions of the TOS remain in full force and effect."
@@ -2021,7 +2028,7 @@ en:
     tos_navigation:
       content: Content Policy
       privacy: Privacy Policy
-      top: "%{arrow} Top"
+      top: '%{arrow} Top'
       tos: Terms of Service
       tos_faq: TOS FAQ
     tos_toc:
@@ -2103,7 +2110,7 @@ en:
       page_heading: Invitation Requests
       queue_disabled:
         closed: New invitation requests are currently closed.
-        html: "%{closed_bold} For more information, please check the %{news_link}."
+        html: '%{closed_bold} For more information, please check the %{news_link}.'
         news: '"Invitations" tag on AO3 News'
       waiting_list_count:
         one: There is %{count} person remaining on the waiting list.
@@ -2116,10 +2123,10 @@ en:
       details_html: To get a free Archive of Our Own account, you need an Invitation. By submitting your email address to our invitation queue, you confirm that you are at least 13 years old, and if you're in a country whose residents/citizens have to be of an age older than 13 to consent, you are old enough to consent to the processing of your personal data without our obtaining written permission from a parent or legal guardian. We will use the email address you submit only to send you an Invitation and to process/manage your account activation. Please don't request an Invitation unless you've read our %{tos_link}, including the %{content_policy_link} and %{privacy_policy_link}, and agree to abide by those Terms.
       frequency:
         one: hour
-        other: "%{count} hours"
+        other: '%{count} hours'
       invitation_number:
-        one: "%{count} invitation"
-        other: "%{count} invitations"
+        one: '%{count} invitation'
+        other: '%{count} invitations'
       invitation_send_rate: We are sending out %{queue_invitation_number} every %{queue_frequency}.
       page_heading: Invitation Requests
       privacy_policy: Privacy Policy
@@ -2156,11 +2163,11 @@ en:
     status:
       frequency:
         one: hour
-        other: "%{count} hours"
+        other: '%{count} hours'
       heading: Invitation Request Status
       invitation_number:
-        one: "%{count} invitation"
-        other: "%{count} invitations"
+        one: '%{count} invitation'
+        other: '%{count} invitations'
       invitation_send_rate: We are sending out %{queue_invitation_number} every %{queue_frequency}.
       search: Look me up
       waiting_list:
@@ -2168,12 +2175,12 @@ en:
         other: There are currently %{count} people on the waiting list.
   kudos:
     guest_header:
-      one: "%{count} guest has also left kudos"
-      other: "%{count} guests have also left kudos"
+      one: '%{count} guest has also left kudos'
+      other: '%{count} guests have also left kudos'
     user_links:
       more_link:
-        one: "%{count} more user"
-        other: "%{count} more users"
+        one: '%{count} more user'
+        other: '%{count} more users'
   languages:
     form:
       abuse_support_available: Abuse support available
@@ -2186,15 +2193,15 @@ en:
         update: Update Language
       support_available: Support available
     index:
-      language_code_format_html: "(%{code})"
+      language_code_format_html: '(%{code})'
       navigation:
         add: Add a Language
         edit: Edit
         suggest: Suggest a Language
       page_heading: Work Languages
       works_count:
-        one: "%{formatted_count} work"
-        other: "%{formatted_count} works"
+        one: '%{formatted_count} work'
+        other: '%{formatted_count} works'
   layouts:
     banner:
       hide: hide banner
@@ -2220,7 +2227,7 @@ en:
         gpl_2_0_or_later: GPL-2.0-or-later
         header: Development
         known_issues: Known Issues
-        license_details_html: "%{license_link} by the %{otw_link}"
+        license_details_html: '%{license_link} by the %{otw_link}'
         view_license: View License
       landmark: Footer
       otw:
@@ -2339,7 +2346,7 @@ en:
     aria_label:
       nav: Pagination
     next: Next →
-    prev: "← Previous"
+    prev: '← Previous'
   preferences:
     index:
       browser_page_title_format: Browser page title format
@@ -2407,8 +2414,8 @@ en:
       update: Update
     pseud_list:
       more_pseuds:
-        one: "%{count} more pseud"
-        other: "%{count} more pseuds"
+        one: '%{count} more pseud'
+        other: '%{count} more pseuds'
     show:
       delete_account_confirmation: This will permanently delete your account and cannot be undone. Are you sure?
       delete_my_account: Delete My Account
@@ -2440,11 +2447,11 @@ en:
       confirm_delete: Are you sure?
       default_pseud: Default Pseud
       delete_html: Delete%{landmark_span}
-      delete_landmark_text: " %{pseud}"
+      delete_landmark_text: ' %{pseud}'
       edit_html: Edit%{landmark_span}
-      edit_landmark_text: " %{pseud}"
+      edit_landmark_text: ' %{pseud}'
       orphan_html: Orphan Works%{landmark_span}
-      orphan_landmark_text: " by %{pseud}"
+      orphan_landmark_text: ' by %{pseud}'
       user_actions: User Actions
     pseuds_form:
       cannot_change_matching_pseud_html: You cannot change the pseud that matches your username. However, you can %{change_username_link} instead.
@@ -2476,16 +2483,16 @@ en:
       page_heading: "%{login}'s Related Works"
   series:
     series_module:
-      hidden_by_admin_alt: "(Hidden by Admin)"
+      hidden_by_admin_alt: '(Hidden by Admin)'
       hidden_by_administrator: Hidden by Administrator
       landmark:
         fandom: Fandom
         summary: Summary
       restricted: Restricted
-      restricted_alt: "(Restricted)"
-      series_by_html: "%{series_title_link} by %{byline}"
+      restricted_alt: '(Restricted)'
+      series_by_html: '%{series_title_link} by %{byline}'
     series_order:
-      draft_work_title: "%{title} (DRAFT)"
+      draft_work_title: '%{title} (DRAFT)'
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
@@ -2550,46 +2557,46 @@ en:
         series: My Series Subscriptions
         users: My User Subscriptions
         works: My Work Subscriptions
-      series: "(Series)"
-      work: "(Work)"
+      series: '(Series)'
+      work: '(Work)'
   tag_wranglers:
     show:
-      last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
+      last_wrangled_html: '%{wrangler_login} last wrangled at %{time}.'
       tags_wrangled_csv: Tags Wrangled (CSV)
   tag_wranglings:
     index:
       general_resources:
         ao3_catch_and_release: AO3_Catch_and_Release
-        ao3_catch_and_release_html: "%{ao3_catch_and_release_link} - For more information, please see the %{ao3_wrangling_project_faq_link}"
+        ao3_catch_and_release_html: '%{ao3_catch_and_release_link} - For more information, please see the %{ao3_wrangling_project_faq_link}'
         ao3_wrangling_project_faq: Tag Wrangling AO3 Project FAQ
         current_wrangling_limitations: Current Wrangling Limitations
-        current_wrangling_limitations_html: "%{current_wrangling_limitations_link} - Details about current wrangling limitations and policies"
+        current_wrangling_limitations_html: '%{current_wrangling_limitations_link} - Details about current wrangling limitations and policies'
         fandom_and_megafandom_directory: Directory of Fandom & Megafandom Wiki Pages
-        fandom_and_megafandom_directory_html: "%{fandom_and_megafandom_directory_link} - All currently available fandom & megafandom wiki pages"
+        fandom_and_megafandom_directory_html: '%{fandom_and_megafandom_directory_link} - All currently available fandom & megafandom wiki pages'
         fandoms_in_need_of_cowranglers: Fandoms in need of Cowranglers
-        fandoms_in_need_of_cowranglers_html: "%{fandoms_in_need_of_cowranglers_link} - Interested in helping out a fandom in need?"
+        fandoms_in_need_of_cowranglers_html: '%{fandoms_in_need_of_cowranglers_link} - Interested in helping out a fandom in need?'
         heading: 'General Wrangling Resources:'
         otw_slack_chat: OTW Slack Chat
-        otw_slack_chat_html: "%{otw_slack_chat_link} - For more information please see the %{tag_wrangling_slack_tutorial_link}"
+        otw_slack_chat_html: '%{otw_slack_chat_link} - For more information please see the %{tag_wrangling_slack_tutorial_link}'
         tag_wranglers_mailing_list: Tag Wranglers Mailing List Conversations
-        tag_wranglers_mailing_list_html: "%{tag_wranglers_mailing_list_link} - Message Archive for the Tagwranglers Mailing List"
+        tag_wranglers_mailing_list_html: '%{tag_wranglers_mailing_list_link} - Message Archive for the Tagwranglers Mailing List'
         tag_wrangling_bugs: Tag Wrangling Bugs & Troubleshooting
-        tag_wrangling_bugs_html: "%{tag_wrangling_bugs_link} - Having technical issues while wrangling? Check here for solutions!"
+        tag_wrangling_bugs_html: '%{tag_wrangling_bugs_link} - Having technical issues while wrangling? Check here for solutions!'
         tag_wrangling_committee: Tag Wrangling Committee
-        tag_wrangling_committee_html: "%{tag_wrangling_committee_link} - Full collection of wiki links & policies"
+        tag_wrangling_committee_html: '%{tag_wrangling_committee_link} - Full collection of wiki links & policies'
         tag_wrangling_communication_policy: Tag Wrangling Communication Policy
-        tag_wrangling_communication_policy_html: "%{tag_wrangling_communication_policy_link} - Includes instructions for leaving tag comments and chat rules"
+        tag_wrangling_communication_policy_html: '%{tag_wrangling_communication_policy_link} - Includes instructions for leaving tag comments and chat rules'
         tag_wrangling_faq: Tag Wrangling FAQ
-        tag_wrangling_faq_html: "%{tag_wrangling_faq_link} - Check here to find answers to frequently asked questions"
+        tag_wrangling_faq_html: '%{tag_wrangling_faq_link} - Check here to find answers to frequently asked questions'
         tag_wrangling_moodle: Tag Wrangling Moodle
-        tag_wrangling_moodle_html: "%{tag_wrangling_moodle_link} - Additional modular training and support for all wranglers"
+        tag_wrangling_moodle_html: '%{tag_wrangling_moodle_link} - Additional modular training and support for all wranglers'
         tag_wrangling_slack_tutorial: Tag Wrangling Slack Tutorial
         tag_wrangling_training: Tag Wrangling Training
-        tag_wrangling_training_html: "%{tag_wrangling_training_link} - New wranglers, start here!"
+        tag_wrangling_training_html: '%{tag_wrangling_training_link} - New wranglers, start here!'
         unassigned_fandoms: Unassigned Fandoms
-        unassigned_fandoms_html: "%{unassigned_fandoms_link} - A list of all current unassigned fandoms"
+        unassigned_fandoms_html: '%{unassigned_fandoms_link} - A list of all current unassigned fandoms'
         vacations_and_retiring: Vacation and Retiring from Wrangling
-        vacations_and_retiring_html: "%{vacations_and_retiring_link} - Unable to wrangle for more than 2 weeks? Read about options for taking a break from wrangling!"
+        vacations_and_retiring_html: '%{vacations_and_retiring_link} - Unable to wrangle for more than 2 weeks? Read about options for taking a break from wrangling!'
       manage:
         comments: Comments (%{count})
         edit: Edit
@@ -2601,8 +2608,8 @@ en:
         landmark: Notes
         question_for_chair: Question for a Chair!
         question_for_supervisor: Question for a Supervisor!
-        tw_wranglers_quietroom_slack: "#tw-wranglers-quietroom"
-        tw_wranglers_slack: "#tw-wranglers"
+        tw_wranglers_quietroom_slack: '#tw-wranglers-quietroom'
+        tw_wranglers_slack: '#tw-wranglers'
         wrangle_to_guidelines_html: Wrangle tags in accordance with the %{wrangling_guidelines_link}.
         wrangling_guidelines: wrangling guidelines
       page_heading: Tag Wrangling
@@ -2620,7 +2627,7 @@ en:
         merger: Mergers
         relationship: Relationships
         subtag: SubTags
-      tag_type_and_count: "%{tag_type} (%{count})"
+      tag_type_and_count: '%{tag_type} (%{count})'
       unsorted_tags: Unsorted Tags (%{count})
       use_type:
         bookmarks: Bookmarks
@@ -2630,7 +2637,7 @@ en:
         private_bookmarks: Private Bookmarks
         taggings_count: Taggings Count
         works: Works
-      use_type_and_count: "%{use_type} (%{count})"
+      use_type_and_count: '%{use_type} (%{count})'
       wranglers: Wranglers
       wrangling_home: Wrangling Home
       wrangling_tools: Wrangling Tools
@@ -2716,7 +2723,7 @@ en:
       ticket_id: Ticket ID
     change_email:
       caution:
-        check_spam_html: "%{must_confirm_bold} Please check your spam folder or %{contact_support_link} if you do not receive the confirmation email."
+        check_spam_html: '%{must_confirm_bold} Please check your spam folder or %{contact_support_link} if you do not receive the confirmation email.'
         confirm_by: If you don't confirm your request by %{date}, your email address will not be changed.
         contact_support: contact Support
         must_confirm: You must use the link in the confirmation email in order to finish confirming your email change.
@@ -2742,8 +2749,8 @@ en:
       old_password: Old password
       page_heading: Change Password
       password_length:
-        one: "%{minimum} to %{count} character"
-        other: "%{minimum} to %{count} characters"
+        one: '%{minimum} to %{count} character'
+        other: '%{minimum} to %{count} characters'
       submit: Submit
     change_username:
       account_faq: Account FAQ
@@ -2765,7 +2772,7 @@ en:
       password: Password
       submit: Change Username
       submit_landmark: Submit
-      username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
+      username_requirements: '%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)'
     confirm_change_email:
       are_you_sure_html: Are you sure you want to change your email address to %{unconfirmed_email}? A confirmation email will be sent to this address.
       cancel: Cancel
@@ -2826,8 +2833,8 @@ en:
         new_password: New password
         page_heading: Change Password
         password_length:
-          one: "%{minimum} to %{count} character"
-          other: "%{minimum} to %{count} characters"
+          one: '%{minimum} to %{count} character'
+          other: '%{minimum} to %{count} characters'
         submit: Submit
       new:
         email_html: Email address
@@ -2857,10 +2864,10 @@ en:
         confirm_password: Confirm password
         confirm_password_validation: Please enter the same password in both fields.
         password: Password
-        password_requirements: "%{minimum} to %{maximum} characters"
+        password_requirements: '%{minimum} to %{maximum} characters'
         password_validation: Please enter a password! (At least %{minimum} characters long, please.)
         username: Username
-        username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
+        username_requirements: '%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)'
         username_validation: You need a username! (At least %{minimum} letters long, please.)
         valid_email: Valid email
     sessions:
@@ -2981,7 +2988,7 @@ en:
         edit_tags_and_language_html: Edit Work Tags and Language for %{title}
         edit_tags_html: Edit Work Tags for %{title}
     import:
-      draft_work_title_html: "%{work_link} (Draft)"
+      draft_work_title_html: '%{work_link} (Draft)'
       page_heading: Imported Works
       success: We were able to successfully upload the following works.
     index:
@@ -3038,14 +3045,14 @@ en:
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
     show_multiple:
-      draft: " (Draft)"
+      draft: ' (Draft)'
       no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
     work_approved_children:
       inspired_by:
-        restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
-        revealed_html: "%{work_link} by %{creator_link}"
+        restricted_html: '[Restricted Work] by %{creator_link} (Log in to access.)'
+        revealed_html: '%{work_link} by %{creator_link}'
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
     work_form_tags:
@@ -3068,11 +3075,11 @@ en:
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
       jump:
-        endnotes_and_related_works_html: "(See the end of the work for %{endnotes_link} and %{related_works_link}.)"
-        endnotes_html: "(See the end of the work for %{endnotes_link}.)"
+        endnotes_and_related_works_html: '(See the end of the work for %{endnotes_link} and %{related_works_link}.)'
+        endnotes_html: '(See the end of the work for %{endnotes_link}.)'
         more_notes: more notes
         notes: notes
-        related_works_html: "(See the end of the work for %{related_works_link}.)"
+        related_works_html: '(See the end of the work for %{related_works_link}.)'
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link} (Log in to access.)'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
