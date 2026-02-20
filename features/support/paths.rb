@@ -30,12 +30,12 @@ module NavigationHelpers
     when /^the bookmarks page$/i
       # This cached page only expires by time, not by any user action;
       # just clear it every time.
-      Rails.cache.delete "bookmarks/index/latest/v2_true"
+      Rails.cache.delete "bookmarks/index/latest/v3"
       bookmarks_path
     when /^the works page$/i
       # This cached page only expires by time, not by any user action;
       # just clear it every time.
-      Rails.cache.delete "works/index/latest/v1"
+      Rails.cache.delete "works/index/latest/v2"
       works_path
     when /^the admin login page$/i
       new_admin_session_path
@@ -301,6 +301,8 @@ module NavigationHelpers
       new_admin_password_path
     when /^the edit admin password page$/i
       edit_admin_password_path
+    when /^the support notices page$/i
+      admin_support_notices_path
 
     # Here is an example that pulls values out of the Regexp:
     #

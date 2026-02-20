@@ -3,7 +3,7 @@
   <legend><%= ts('About') %></legend>
   <h3 class="landmark heading"><%= ts('About') %></h3>
   <dl>      
-    <dt class="required"><%= label_tag "skin_type", "#{t('.skin_type')}*" %> <%= link_to_help "skins-basics" %></dt>
+    <dt class="required"><%= label_tag "skin_type", "#{t('.skin_type')}*" %> <%= link_to_help_modal(help_skins_basics_path, t(".skins_basics_help_title")) %></dt>
     <dd class="required">
       <% if @skin.id %>
         <% # don't let user change the type of an already-created skin %>
@@ -34,7 +34,7 @@
 
 <fieldset>
   <legend><%= ts('CSS') %></legend>
-  <h3 class="heading"><%= f.label :css, ts('CSS') %> <%= link_to_help 'skins-creating' %></h3>
+  <h3 class="heading"><%= f.label :css, t(".css") %> <%= link_to_help_modal(help_skins_creating_path, t(".skins_creating_help_title")) %></h3>
   <p>
     <%= f.text_area :css, :cols => 70, :class => 'large observe_textlength' %>
     <%= live_validation_for_field("skin_css", maximum_length: ArchiveConfig.CONTENT_MAX_DISPLAYED) %>
@@ -75,7 +75,7 @@
     </fieldset>
   
     <fieldset class="listbox group">
-      <legend><%= ts('Parent Skins') %> <%= link_to_help 'skins-parents' %></legend>
+      <legend><%= t(".parent_skins") %> <%= link_to_help_modal(help_skins_parents_path, t(".skins_parents_help_title")) %></legend>
       <h4 class="heading landmark"><%= ts('Parent Skins') %></h4>
       <ul class="index group">
         <% f.object.skin_parents.each_with_index do |parent, index| %>
@@ -90,7 +90,7 @@
         <li class="archive_parents<%= (f.object.role == 'override') ? '' : ' hideme' %>">
           <p>
             <label for="add_site_parents">
-              <%= ts('Load Archive Skin Components: ') %><%= link_to_help 'skins-parents' %>
+              <%= t(".load_archive_skin_components") %><%= link_to_help_modal(help_skins_parents_path, t(".skins_parents_help_title")) %>
               <%= check_box_tag 'add_site_parents' %>
             </label>
           </p>

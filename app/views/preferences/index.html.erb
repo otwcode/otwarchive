@@ -59,13 +59,13 @@
       </li>
       <li>
         <%= f.check_box :disable_work_skins %>
-        <%= f.label :disable_work_skins, t(".display.hide_work_skins") %> <%= link_to_help "skins-basics" %>
+        <%= f.label :disable_work_skins, t(".display.hide_work_skins") %> <%= link_to_help_modal(help_skins_basics_path, t(".skins_basics_help_title")) %>
       </li>
     </ul>
   </fieldset>
   <fieldset>
     <dl>
-      <dt><%= f.label :skin_id, t(".your_site_skin") %> <%= link_to_help "skins-basics" %></dt>
+      <dt><%= f.label :skin_id, t(".your_site_skin") %> <%= link_to_help_modal(help_skins_basics_path, t(".skins_basics_help_title")) %></dt>
       <dd>
         <span class="actions"><%= link_to t(".public_site_skins"), skins_path %></span>
         <%= f.select :skin_id, (@available_skins.collect { |s| [s.title, s.id] }) %>
@@ -73,7 +73,7 @@
       <dt><%= f.label :time_zone, t(".your_time_zone") %></dt>
       <dd><%= f.time_zone_select :time_zone, nil, default: Time.zone.name %></dd>
       <% if $rollout.active?(:set_locale_preference, @user) %>
-        <dt><%= f.label :preferred_locale, t(".your_locale") %> <%= link_to_help_modal(help_preferences_locale_path, t(".locale_help_title", locale: current_user.preference.locale_for_mails)) %></dt>
+        <dt><%= f.label :preferred_locale, t(".your_locale") %> <%= link_to_help_modal(help_preferences_locale_path, t(".locale_help_title", locale: current_user&.preference&.locale_for_mails)) %></dt>
         <dd><%= f.select :preferred_locale, locale_options_for_select(@available_locales, "id"),
                   default: @preference.preferred_locale %></dd>
       <% end %>
