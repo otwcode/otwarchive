@@ -44,9 +44,9 @@
 <%# content_for footer renders this when we don't want it %>
 <%= javascript_tag do %>
   $j(document).ready(function() {
-    var body = $j("body");
+    var body = document.body;
     var container = $j("#tos_prompt");
-    var outer = $j("#outer");
+    var outer = document.getElementById("outer");
     var button = document.getElementById("accept_tos");
     var tosCheckbox = document.getElementById("tos_agree");
     var dataProcessingCheckbox = document.getElementById("data_processing_agree");
@@ -58,9 +58,10 @@
     setTimeout(showTOSPrompt, 1500);
 
     function showTOSPrompt() {
-      body.css("overflow", "hidden");
+      body.style.overflow = "hidden";
       $j.when(container.fadeIn(500)).done(function() {
-        outer.css("visibility", "hidden").attr("aria-hidden", "true");
+        outer.style.visibility = "hidden";
+        outer.setAttribute("aria-hidden", "true");
       });
     }
 
@@ -70,8 +71,9 @@
 
     function acceptTOSPrompt() {
       acceptTOS();
-      body.css("overflow", "");
-      outer.css("visibility", "").removeAttr("aria-hidden");
+      body.style.overflow = "";
+      outer.style.visibility = "";
+      outer.removeAttribute("aria-hidden");
       $j.when(container.fadeOut(500)).done(function() {
         container.remove();
       });
