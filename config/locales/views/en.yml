@@ -1191,6 +1191,10 @@ en:
         description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
         header: Set preferred locale
       page_heading: Locale Preferences
+    skins_basics:
+      only: only
+      site_skins_basics: A site skin lets you customize your browsing experience when you are logged in to your account. Don't like the Archive fonts? You can change them! Don't like the red header? Swap it out for blue! When you make a site skin, keep in mind that you are only changing the Archive for yourself -- other Archive users will see the Archive in whatever skin they are using. In other words, site skins are useful for creating your own ideal browsing experience, not for changing the way a work appears for others.
+      work_skins_basics_html: A work skin lets you change the way one or more of your works appears to others. Work skins will %{only_bold} affect the body of the work -- that is, you can't change what the Archive navigation or background look like for someone else. What you can do, however, is create your own classes. For instance, you can change the color of some of your text, or indent some paragraphs in a particular way, and so on.
     skins_creating:
       allowed_keywords:
         description_html: We allow all standard CSS keyword values (e.g., %{absolute_code}, %{bottom_code}, %{center_code}, %{underline_code}, etc.).
@@ -1258,6 +1262,13 @@ en:
         description_html: "%{public_skins_link} are visible and you can read their code and copy them to edit for your own use."
         header: Look at other public skins for examples
         public_skins: All approved public skins
+    skins_parents:
+      header: Skin Parents
+      inheriting_default: By default, skins will be loaded after the Archive default style. If you don't want this, you can specify in the "What it does" menu that you want your skin to replace rather than add to the Archive default style.
+      layering_html: You can combine and layer multiple site skins by making one the parent of another. Parent skins are loaded in order so that the style of all the skins can be displayed in that order. For more information on skins, please refer to %{skins_interface_faq_link}.
+      load_archive_skin_components: If you create a replacement skin, you might want to load up all the skins that make up the current default Archive site as parents. This option is only available when you select "replace archive skin entirely" from the "What it does" menu. After that, you can edit your skin and delete just the ones you don't want. This will be easier if you are using nearly all of them, since there are a lot!
+      load_archive_skin_components_header: Load Archive Skin Components
+      skins_interface_faq: the Skins and Interface FAQ
     tags_fandoms:
       description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
       more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
@@ -2380,6 +2391,7 @@ en:
         hide_work_from_search_engines: Hide my work from search engines when possible.
         legend: Privacy
       public_site_skins: Public Site Skins
+      skins_basics_help_title: Skins basics
       your_locale: Your locale
       your_site_skin: Your site skin
       your_time_zone: Your time zone
@@ -2481,14 +2493,25 @@ en:
       css: CSS
       description: Description
       icon: Upload a preview (png, jpeg or gif)
+      load_archive_skin_components: 'Load Archive Skin Components:'
+      parent_skins: Parent Skins
       public: Apply to make public
       skin_type: Type
+      skins_basics_help_title: Skins basics
       skins_creating_help_title: Skins creating
+      skins_parents_help_title: Skins parents
       title: Title
+    index:
+      skins_basics_help_title: Skins basics
+    new:
+      skins_basics_help_title: Skins basics
+    new_wizard:
+      skins_basics_help_title: Skins basics
     revert_skin_form:
       revert_to_default: Revert to Default Skin
     wizard_form:
       description: Description
+      skins_parents_help_title: Skins parents
       title: Title
   stats:
     index:
