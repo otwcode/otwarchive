@@ -30,6 +30,15 @@ class PseudIndexer < Indexer
     }
   end
 
+  def self.index_all(options = {})
+    unless options[:skip_delete]
+      delete_index
+      create_index(shards: ArchiveConfig.PSEUDS_SHARDS)
+    end
+    options[:skip_delete] = true
+    super(options)
+  end
+
   def document(object)
     object.as_json(
       root: false,
