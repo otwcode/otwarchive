@@ -122,3 +122,10 @@ disable_admin_post_comments:
   description: >-
     Disables all comments on admin (news) posts older than the
     configured window.
+
+reset_bookmark_tags_job:
+  cron: "0 0 1 */3 *"
+  class: "ResetBookmarkTagsJob"
+  queue: low
+  description: "Reset bookmark-only tags to unsorted quarterly (AO3-7294)"
+
