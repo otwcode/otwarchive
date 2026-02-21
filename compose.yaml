@@ -96,7 +96,7 @@ services:
       dockerfile: ./config/docker/Dockerfile
     command: bash -c "bundle exec rake environment resque:scheduler & bundle exec rake environment resque:work"
     volumes:
-      - .:/otwa
+      - .:/otwarchive
     environment:
       <<: *environment
       QUEUE: '*'
@@ -104,14 +104,10 @@ services:
       - db
       - redis
   chrome:
-    profiles:
-      - test
     image: selenium/standalone-chromium
     ports:
       - "4444:4444"
   test:
-    profiles:
-      - test
     build:
       context: .
       dockerfile: ./config/docker/Dockerfile
@@ -126,7 +122,7 @@ services:
       - CUCUMBER_PUBLISH_QUIET=true
       # Silence ebook-convert warning about running as root
       - QTWEBENGINE_CHROMIUM_FLAGS=--no-sandbox
-    command: bundle exec cucumber
+    command: sleep infinity
     volumes:
       - .:/otwarchive
     ports:

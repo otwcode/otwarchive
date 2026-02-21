@@ -13,3 +13,7 @@ do
 done
 
 script/reset_database.sh
+
+# The development database reset will do everything except run migrations for
+# the test environment:
+# RAILS_ENV=test rails db:migrate
