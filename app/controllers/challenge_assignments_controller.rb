@@ -1,5 +1,6 @@
 class ChallengeAssignmentsController < ApplicationController
-  before_action :users_only
+  before_action :users_only, except: [:index, :show]
+  before_action :users_or_privileged_collection_admin_only, only: [:index, :show]
 
   before_action :load_collection, except: [:index]
   before_action :load_challenge, except: [:index]
@@ -89,7 +90,7 @@ class ChallengeAssignmentsController < ApplicationController
       return unless load_collection
       @challenge = @collection.challenge if @collection
       signup_open and return unless !@challenge.signup_open
-      access_denied and return unless @challenge.user_allowed_to_see_assignments?(current_user)
+      access_denied and return unless @challenge.user_allowed_to_see_assignments?(current_user) || privileged_collection_admin?
 
       # we temporarily are ordering by requesting pseud to avoid left join
       @assignments = case
@@ -108,7 +109,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def show
-    unless @challenge.user_allowed_to_see_assignments?(current_user) || @challenge_assignment.offering_pseud.user == current_user
+    unless @challenge.user_allowed_to_see_assignments?(current_user) || @challenge_assignment.offering_pseud.user == current_user || privileged_collection_admin?
       flash[:error] = ts("You aren't allowed to see that assignment!")
       redirect_to "/" and return
     end

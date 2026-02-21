@@ -1,11 +1,13 @@
 class CollectionParticipantsController < ApplicationController
-  before_action :users_only
+  before_action :users_only, except: [:index]
+  before_action :users_or_privileged_collection_admin_only, only: [:index]
   before_action :load_collection
   before_action :load_participant, only: [:update, :destroy]
   before_action :allowed_to_promote, only: [:update]
   before_action :allowed_to_destroy, only: [:destroy]
   before_action :has_other_owners, only: [:update, :destroy]
-  before_action :collection_maintainers_only, only: [:index, :add, :update]
+  before_action :collection_maintainers_or_privileged_admins_only, only: [:index]
+  before_action :collection_maintainers_only, only: [:add, :update]
 
   cache_sweeper :collection_sweeper
 

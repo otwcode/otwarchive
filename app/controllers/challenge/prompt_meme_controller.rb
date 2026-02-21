@@ -1,9 +1,10 @@
 class Challenge::PromptMemeController < ChallengesController
-
-  before_action :users_only
+  before_action :users_only, except: [:edit]
+  before_action :users_or_privileged_collection_admin_only, only: [:edit]
   before_action :load_collection
   before_action :load_challenge, except: [:new, :create]
-  before_action :collection_owners_only, only: [:new, :create, :edit, :update, :destroy]
+  before_action :collection_owners_or_privileged_admins_only, only: [:edit]
+  before_action :collection_owners_only, only: [:new, :create, :update, :destroy]
 
   # ACTIONS
 
@@ -13,7 +14,7 @@ class Challenge::PromptMemeController < ChallengesController
 
   # The new form for prompt memes is actually the challenge settings page because challenges are always created in the context of a collection.
   def new
-    if (@collection.challenge)
+    if @collection.challenge
       flash[:notice] = ts("There is already a challenge set up for this collection.")
       redirect_to edit_collection_prompt_meme_path(@collection)
     else
@@ -76,5 +77,4 @@ class Challenge::PromptMemeController < ChallengesController
       ]
     )
   end
-
 end
