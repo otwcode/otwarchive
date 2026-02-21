@@ -90,9 +90,8 @@ Rails.application.configure do
   # GitHub codespaces support
   if ENV["CODESPACE_NAME"]
     # Unfortunately, the environment variables we need to set a specific codespace prefix are not available soon enough.
-    # Instead, we target the GitHub preview domain. Accessing the URL requires logging in with the right GitHub account
-    # anyways, so this should be OK.
-    config.hosts << /.+\.app\.github\.dev/
+    # Accessing the URL requires logging in with the right GitHub account anyways, so this should be OK.
+    config.hosts.clear
     # GitHub also messes with Origin header value(s), which does not play nicely with Rails' CSRF safety :(
     # Just disable it for now as a workaround.
     config.action_controller.forgery_protection_origin_check = false
