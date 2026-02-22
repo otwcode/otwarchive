@@ -158,6 +158,9 @@ Feature: Admin Abuse actions
       And I bookmark the work "Not Spam"
       And I add the work "Loads of Spam" to series "One Spam After Another"
       And I post the comment "I like spam" on the work "Not Spam"
+      And I want to edit my profile
+      And I fill in the details of my profile
+      And I fill in details of my default pseud
       And I am logged in as a "policy_and_abuse" admin
     When I go to the user administration page for "Spamster"
       And I choose "Spammer: ban and delete all creations"
@@ -184,7 +187,14 @@ Feature: Admin Abuse actions
       And the work "Not Spam" should not be deleted
       And there should be no bookmarks on the work "Not Spam"
       And there should be no comments on the work "Not Spam"
-
+    When I am logged in as "Spamster"
+      And I view my profile
+    Then I should not see "Test title thingy"
+      And I should not see "This is some text about me."
+    When I go to Spamster's pseuds page
+    Then I should not see "Description thingy"
+      And the pseud "Spamster" should not have an icon, alt text and comment text
+  
   Scenario: A permabanned spammer's comments' replies from others should stay visible
     Given I have a work "Generic Work"
       And a comment "I like spam" by "Spamster" on the work "Generic Work"
