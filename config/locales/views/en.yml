@@ -662,6 +662,17 @@ en:
       challenge_requests:
         fandom: Fandom %{allowed_fandom_count}
   challenge_assignments:
+    assignment_blurb:
+      draft_header: " (draft)"
+      stats:
+        creation:
+          posted: 'Posted:'
+          unposted: 'Created:'
+        status:
+          fullfilled: Complete!
+          header: 'Status:'
+          unfullfilled: Unapproved
+          unposted: Unposted
     to_default:
       button: Default
       confirmation: Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone.
