@@ -7,9 +7,9 @@ class PseudSearchForm
   ATTRIBUTES = [
     :query,
     :name,
-    :collection_ids,
+    :collection_id,
     :fandom
-  ]
+  ].freeze
 
   attr_accessor :options
 
