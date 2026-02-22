@@ -75,8 +75,9 @@ services:
       RAILS_ENV: development
       # Disable rack-timeout
       RACK_TIMEOUT_SERVICE_TIMEOUT: 0
-      GITPOD_WORKSPACE_ID: ${GITPOD_WORKSPACE_ID:-}
-      GITPOD_WORKSPACE_CLUSTER_HOST: ${GITPOD_WORKSPACE_CLUSTER_HOST:-}
+      CODESPACES: ${CODESPACES:-}
+      CODESPACE_NAME: ${CODESPACE_NAME:-}
+      GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN: ${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-}
       ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: bEZjYLY9tCYGh6WlcMtEJpIi7GO2plZC
       ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: PpLWizzsQHIWnIihtECw8nDHZQd0amzf
       ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: 3S99KdpdEWLnCYudBgUfdCFDBWePWCud
@@ -132,7 +133,7 @@ services:
       - CUCUMBER_PUBLISH_QUIET=true
       # Silence ebook-convert warning about running as root
       - QTWEBENGINE_CHROMIUM_FLAGS=--no-sandbox
-    command: bundle exec cucumber
+    command: sleep infinity
     volumes:
       - .:/otwa
     ports:

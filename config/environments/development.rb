@@ -87,11 +87,14 @@ Rails.application.configure do
     Bullet.counter_cache_enable = false
   end
 
-  # GitPod preview support; the preview URL begins with `port#-`, then details about the individual workspace.
-  # For more information about this, refer to https://www.gitpod.io/docs/configure/workspaces/ports#accessing-port-urls.
-  # Example:
-  # GITPOD_WORKSPACE_ID=brianjaustin-otwarchive-w2lj9jd79gm (username-repo-uuid)
-  # GITPOD_WORKSPACE_CLUSTER_HOST=ws-us114.gitpod.io
-  # results in 3000-brianjaustin-otwarchive-w2lj9jd79gm.ws-us114.gitpod.io
-  config.hosts << "3000-#{ENV['GITPOD_WORKSPACE_ID']}.#{ENV['GITPOD_WORKSPACE_CLUSTER_HOST']}" if ENV["GITPOD_WORKSPACE_ID"]
+  # GitHub codespaces support
+  if ENV["CODESPACES"]
+    # Unfortunately, the environment variables we need to set a specific codespace prefix are not available soon enough.
+    # Instead, we target the GitHub preview domain. Accessing the URL requires logging in with the right GitHub account
+    # anyways, so this should be OK.
+    config.hosts << "#{ENV['CODESPACE_NAME']}-3000.#{ENV['GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN']}"
+    # GitHub also messes with Origin header value(s), which does not play nicely with Rails' CSRF safety :(
+    # Just disable it for now as a workaround.
+    config.action_controller.forgery_protection_origin_check = false
+  end
 end
