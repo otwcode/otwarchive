@@ -89,6 +89,7 @@ class Comment < ApplicationRecord
   scope :top_level,       -> { where.not(commentable_type: "Comment") }
   scope :include_pseud,   -> { includes(:pseud) }
   scope :not_deleted,     -> { where(is_deleted: false) }
+  scope :not_spam,        -> { where(spam: false) }
   scope :reviewed,        -> { where(unreviewed: false) }
   scope :unreviewed_only, -> { where(unreviewed: true) }
 

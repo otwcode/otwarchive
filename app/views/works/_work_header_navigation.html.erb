@@ -12,7 +12,7 @@
   <% end %>
 
 
-  <% # chapter navigation %>
+  <%# chapter navigation %>
   <% if @previous_chapter || @next_chapter %>
     <li class="chapter entire"><%= link_to ts("Entire Work"), work_path(@work, :view_full_work => 'true') %></li>
 
@@ -44,7 +44,7 @@
   <% end %>
 
 
-  <% # for users, bookmark and mark to read later %>
+  <%# for users, bookmark and mark to read later %>
   <% if current_user.is_a?(User) %>
     <% @bookmark ||= bookmark_if_exists(@work) %>
     <li class="bookmark">
@@ -64,7 +64,7 @@
   <% end %>
 
   <li class="comments" id="show_comments_link_top">
-    <% # If in single chapter view, show comments for the chapter; otherwise, show the comments for the entire work %>
+    <%# If in single chapter view, show comments for the chapter; otherwise, show the comments for the entire work %>
     <% @previous_chapter || @next_chapter ? commentable = @chapter : commentable = @work %>
     <% if commentable.count_visible_comments > 0 %>
       <%= show_hide_comments_link(commentable) %>
@@ -73,14 +73,18 @@
     <% end %>
   </li>
 
-  <% # for author or admin, review comments if moderating them %>
+<%# for author or admin, review comments if moderating them %>
   <% if (logged_in_as_admin? || (current_user && current_user.is_author_of?(@work))) && @work.find_all_comments.unreviewed_only.exists? %>
     <li class="comments" id="review_comments">
-      <%= link_to ts("Unreviewed Comments") + " (" + @work.find_all_comments.unreviewed_only.count.to_s + ")" , unreviewed_work_comments_path(@work) %>
+      <% unreviewed_count = if logged_in_as_admin?
+                               @work.find_all_comments.unreviewed.count
+                             else
+                               @work.find_all_comments.unreviewed.not_spam.count
+                             end %>
+      <%= link_to t(".unreviewed_comments", count: unreviewed_count), unreviewed_comments_work_path(@work) %>
     </li>
   <% end %>
-
-  <% # allow user to disable style on work if it has been customized %>
+  <%# allow user to disable style on work if it has been customized %>
   <% if @work.work_skin %>
     <li class="style">
       <% if Preference.disable_work_skin?(params[:style]) %>
