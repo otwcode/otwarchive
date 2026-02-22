@@ -118,6 +118,17 @@ Given /^the gift exchange "([^\"]*)" is ready for signups$/ do |title|
   step %{I open signups for "#{title}"}
 end
 
+Given "the open gift exchange {string} with overlapping tags" do |challengename|
+  step %{I am logged in as "mod1"}
+  step %{I have overlapping challenge tags setup}
+  step %{I set up the collection "#{challengename}"}
+  step %{I select "Gift Exchange" from "challenge_type"}
+  step %{I submit}
+  step %{I check "Sign-up open?"}
+  fill_in("Tag Sets To Use:", with: "Standard Challenge Tags")
+  step %{I submit}
+end
+
 # This is going to make broken assignments a la AO3-5748
 Given /^"(.*?)" has two pinchhit assignments in the gift exchange "(.*?)"$/ do |user, collection_title|
   collection = Collection.find_by(title: collection_title)
@@ -217,6 +228,12 @@ When /^I sign up for "([^\"]*)" with combination SG-1$/ do |title|
     step %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate SG-1"}
     fill_in("challenge_signup_requests_attributes_0_title", with: "SG1 love")
     click_button "Submit"
+end
+
+When "I sign up for {string} with combination E" do |title|
+  step %{I start signing up for "#{title}"}
+  step %{I check the 1st checkbox with the value "Sam Carter/Daniel Jackson/Jack O'Neill"}
+  click_button "Submit"
 end
 
 When /^I sign up for "([^\"]*)" with missing prompts$/ do |title|

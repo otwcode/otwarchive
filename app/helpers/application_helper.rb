@@ -470,14 +470,22 @@ module ApplicationHelper
     base_id = options[:field_id] || field_id(form, attribute)
     checkboxes_id = "#{base_id}_checkboxes"
     opts = options[:disabled] ? {disabled: "true"} : {}
-    already_checked = case
-      when options[:checked_method].is_a?(Array)
-        options[:checked_method]
-      when options[:checked_method].nil?
-        []
-      else
-        form.object.send(options[:checked_method]) || []
-      end
+    already_checked = if options[:checked_method].is_a?(Array)
+                        options[:checked_method]
+                      elsif options[:checked_method].nil?
+                        []
+                      elsif attribute.is_a?(String) && attribute.include?("tagnames")
+                        tagnames = form.object.send(options[:checked_method])
+                        if tagnames.empty?
+                          []
+                        elsif tagnames.is_a?(String)
+                          tagnames.split(", ") 
+                        else 
+                          tagnames
+                        end
+                      else
+                        form.object.send(options[:checked_method]) || []
+                      end
 
     checkboxes = choices.map do |choice|
       is_checked = !options[:checked_method] || already_checked.empty? ? false : already_checked.include?(choice)

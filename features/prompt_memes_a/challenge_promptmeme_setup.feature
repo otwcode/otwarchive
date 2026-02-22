@@ -488,3 +488,11 @@ Feature: Prompt Meme Challenge
     And I view prompts for "Battle 12"
     # TODO: Refactor this test once we have a new Capybara version so that we look for .exact(Claim)
   Then I should see "Drop Claim"
+
+  Scenario: Editing Prompt Meme sign up does not automatically check every overlapping tag
+    Given I have prompt meme "Overlap Prompt Meme" fully set up with overlapping tags
+    When I sign up for "Overlap Prompt Meme" with combination F
+      And I follow "Edit Sign-up"
+    Then the "Sam Carter/Daniel Jackson/Jack O'Neill" checkbox should be checked
+      And the "Sam Carter/Daniel Jackson" checkbox should not be checked
+      And the "Daniel Jackson/Jack O'Neill" checkbox should not be checked

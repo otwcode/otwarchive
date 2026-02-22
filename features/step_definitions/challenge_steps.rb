@@ -68,6 +68,14 @@ Given /^I have Yuletide challenge tags set ?up$/ do
     step %{a canonical fandom "Unrequested"}
 end
 
+Given "I have overlapping challenge tags setup" do
+  step "I have standard challenge tags setup"
+  step %{I add the relationship tags "Sam Carter/Daniel Jackson, Daniel Jackson/Jack O'Neill, Sam Carter/Daniel Jackson/Jack O'Neill" to the tag set "Standard Challenge Tags"}
+  step %{a canonical relationship "Daniel Jackson/Jack O'Neill"}
+  step %{a canonical relationship "Sam Carter/Daniel Jackson"}
+  step %{a canonical relationship "Sam Carter/Daniel Jackson/Jack O'Neill"}
+end
+
 ### General Challenge Settings
 
 When /^I edit settings for "([^\"]*)" challenge$/ do |title|

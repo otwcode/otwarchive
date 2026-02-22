@@ -749,3 +749,11 @@ Feature: Gift Exchange Challenge
     Then I should see "collection_1"
     When I follow "2" within ".pagination"
     Then I should see "collection_2"
+
+  Scenario: Editing Gift Exchange sign up does not automatically check every overlapping tag.
+    Given the open gift exchange "Overlap Gift Exchange" with overlapping tags
+    When I sign up for "Overlap Gift Exchange" with combination E
+      And I follow "Edit Sign-up"
+    Then the "Sam Carter/Daniel Jackson/Jack O'Neill" checkbox should be checked
+      And the "Sam Carter/Daniel Jackson" checkbox should not be checked
+      And the "Daniel Jackson/Jack O'Neill" checkbox should not be checked
