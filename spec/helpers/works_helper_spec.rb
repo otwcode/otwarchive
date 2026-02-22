@@ -96,4 +96,49 @@ describe WorksHelper do
       end
     end
   end
+
+  describe "#og_title_meta" do
+    let(:user) { create(:user) }
+    let(:work) { create(:work, title: "My Epic", authors: [user.default_pseud]) }
+
+    context "work title and byline are within character limit" do
+      it "returns the work title first" do
+        expect(helper.og_title_meta(work)).to eq("#{work.title} by #{user.default_pseud.byline}")
+      end
+    end
+
+    context "work title exceeds character limit" do
+      it "returns the byline first" do
+        work.title = Faker::Lorem.characters(number: 71)
+        expect(helper.og_title_meta(work)).to eq("#{user.default_pseud.byline}: #{work.title}")
+      end
+    end
+  end
+
+  describe "#og_description_meta" do
+    let(:work) { create(:work, summary: "This is my first fic! I'm going to show the world!", fandom_string: "Fandom,Original Work", relationship_string: "abc/def", character_string: "abc,def,xyz") }
+
+    context "work summary is present" do
+      it "returns the work summary" do
+        expect(helper.og_description_meta(work)).to eq(work.summary)
+      end
+    end
+
+    context "work summary is absent" do
+      before do
+        work.summary = ""
+      end
+
+      it "returns fandom, relationship and character tags" do
+        expect(helper.og_description_meta(work)).to eq("Fandom, Original Work, abc/def, abc, def, xyz")
+      end
+
+      context "relationship tags are absent" do
+        it "gracefully returns fandom and character tags only" do
+          work.relationship_string = ""
+          expect(helper.og_description_meta(work)).to eq("Fandom, Original Work, abc, def, xyz")
+        end
+      end
+    end
+  end
 end
