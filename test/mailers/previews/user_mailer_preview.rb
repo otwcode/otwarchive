@@ -316,6 +316,21 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.potential_match_generation_notification(collection.id, email)
   end
 
+  # URL: /rails/mailers/user_mailer/no_potential_matches_notification_collection_email
+  def no_potential_matches_notification_collection_email
+    collection = create(:collection, email: "collection@example.com")
+    email = collection.collection_email
+    UserMailer.no_potential_matches_notification(collection.id, email)
+  end
+
+  # URL: /rails/mailers/user_mailer/no_potential_matches_notification_maintainer
+  def no_potential_matches_notification_notification_maintainer
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection, owners: [user.default_pseud])
+    email = user.email
+    UserMailer.no_potential_matches_notification(collection.id, email)
+  end
+
   # URL: /rails/mailers/user_mailer/invalid_signup_notification_collection_email?signup_count=2
   def invalid_signup_notification_collection_email
     signup_count = params[:signup_count] ? params[:signup_count].to_i : 1

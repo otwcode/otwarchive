@@ -2340,6 +2340,27 @@ en:
       nav: Pagination
     next: Next →
     prev: "← Previous"
+  potential_matches:
+    in_progress:
+      cancel: Cancel Potential Match Generation
+      generating_matches: The archive is generating potential matches for this challenge. This can take a long time, especially for a large challenge! We'll send an email to the collection maintainers when all potential matches have been generated.
+      generation_progress: 'Potential match generation progress:'
+      if_progress_doesnt_change: If the progress value below doesn't change when you reload the page after about 10 minutes, there may have been a problem. Please check again after an hour, and then contact archive support.
+    index:
+      assignments_generating:
+        heading: Assignments Generating
+        in_the_process: We're now in the process of generating assignments. This should take less time than potential matching.
+      cant_generate_matches: You can't generate matches while sign-up is still open. After you have closed sign-ups in Challenge Settings, you will be able to generate potential matches here.
+      need_two_people: You need at least two people to sign up before you can make assignments.
+      no_matches_yet:
+        heading: Potential Match Generation
+        no_matches_yet: No potential matches yet!
+      no_potential_matches:
+        heading: No Potential Matches
+        match_settings: Minimum Number to Match settings
+        no_matches_found: No potential matches were found.
+        please_try_again_html: Please update your challenge's %{match_settings_link} and try generating potential matches again.
+      page_heading: Matching for %{collection_title}
   preferences:
     index:
       browser_page_title_format: Browser page title format

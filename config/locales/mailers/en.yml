@@ -751,6 +751,15 @@ en:
       would_like_to_include:
         html: The collection maintainers of %{collection_link} would like to include your work %{work_link} in their collection!
         text: The collection maintainers of "%{collection_title}" (%{collection_url}) would like to include your work "%{work_title}" (%{work_url}) in their collection!
+    no_potential_matches_notification:
+      generation_finished:
+        html: Potential match generation for %{collection_link} has finished. Unfortunately, there were no potential matches found.
+        text: Potential match generation for "%{collection_title}" (%{collection_url}) has finished. Unfortunately, there were no potential matches found.
+      please_try_again:
+        html: Please update your gift exchange's %{match_settings_link} and try generating potential matches again.
+        match_settings: Minimum Number to Match settings
+        text: Please update your gift exchange's Minimum Number to Match settings (%{match_settings_url}) and try generating potential matches again.
+      subject: "[%{app_name}][%{collection_title}] No potential matches found"
     potential_match_generation_notification:
       finished_generating:
         html: We have finished generating potential assignments for your gift exchange %{collection_link}.

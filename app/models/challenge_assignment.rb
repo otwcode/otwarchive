@@ -369,6 +369,23 @@ class ChallengeAssignment < ApplicationRecord
     end
     REDIS_GENERAL.del(progress_key(collection))
 
+    no_potential_matches_found = collection.potential_matches.empty?
+    collection.challenge.no_potential_matches_found = no_potential_matches_found
+    collection.challenge.save!
+
+    if no_potential_matches_found
+      if collection.collection_email.present?
+        UserMailer.no_potential_matches_notification(collection.id, collection.collection_email).deliver_later
+      else
+        collection.maintainers_list.each do |user|
+          I18n.with_locale(user.preference.locale_for_mails) do
+            UserMailer.no_potential_matches_notification(collection.id, user.email).deliver_later
+          end
+        end
+      end
+      return
+    end
+
     if collection.collection_email.present?
       UserMailer.potential_match_generation_notification(collection.id, collection.collection_email).deliver_later
     else
@@ -376,8 +393,8 @@ class ChallengeAssignment < ApplicationRecord
         I18n.with_locale(user.preference.locale_for_mails) do
           UserMailer.potential_match_generation_notification(collection.id, user.email).deliver_later
         end
-      end 
-    end 
+      end
+    end
   end
 
   # go through the request's potential matches in order from best to worst and try and assign
