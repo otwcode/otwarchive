@@ -706,6 +706,9 @@ MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE: 120
 # Job size used for the HitCountUpdateJob class:
 HIT_COUNT_JOB_SIZE: 1000
 
+# Batch size used by Search::Indexer when reading records from the database:
+SEARCH_INDEXER_BATCH_SIZE: 1000
+
 # Batch size used for the HitCountUpdateJob class:
 HIT_COUNT_BATCH_SIZE: 100
 
