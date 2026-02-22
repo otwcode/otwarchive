@@ -740,6 +740,7 @@ describe UserMailer do
         let(:creator2) { create(:user).default_pseud }
         let(:work) { create(:work, authors: [creator1, creator2]) }
         let(:chapter) { create(:chapter, work: work, authors: [creator1]) }
+        let(:subscription) { create(:subscription, subscribable: creator1.user) }
 
         it "has the correct subject line" do
           subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{creator1.byline} posted #{chapter.chapter_header} of #{work.title}"
