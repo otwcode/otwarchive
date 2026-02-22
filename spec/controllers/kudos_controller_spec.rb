@@ -9,8 +9,8 @@ describe KudosController do
   describe "POST #create" do
     context "when work is public" do
       let(:work) { create(:work) }
-      let(:referer) { work_path(work) }
-      before { request.headers["HTTP_REFERER"] = referer }
+      let(:referer) { work_path(work, anchor: "kudos_message") }
+      before { request.headers["HTTP_REFERER"] = work_path(work) }
 
       context "when kudos giver is a guest" do
         context "when kudos are given from work" do
@@ -28,8 +28,9 @@ describe KudosController do
 
         context "when kudos are given from chapter" do
           it "redirects to referer with an error" do
+            request.headers["HTTP_REFERER"] = chapter_path(work.first_chapter)
             post :create, params: { kudo: { commentable_id: work.first_chapter.id, commentable_type: "Chapter" } }
-            it_redirects_to_with_kudos_error(referer, "What did you want to leave kudos on?")
+            it_redirects_to_with_kudos_error(chapter_path(work.first_chapter, anchor: "kudos_message"), "What did you want to leave kudos on?")
           end
 
           it "does not save kudos" do
@@ -137,8 +138,8 @@ describe KudosController do
 
     context "when work does not exist" do
       it "redirects to referer with an error" do
-        referer = root_path
-        request.headers["HTTP_REFERER"] = referer
+        referer = root_path(anchor: "kudos_message")
+        request.headers["HTTP_REFERER"] = root_path
         post :create, params: { kudo: { commentable_id: "333", commentable_type: "Work" } }
         it_redirects_to_with_kudos_error(referer, "What did you want to leave kudos on?")
       end
@@ -155,8 +156,8 @@ describe KudosController do
       let(:work) { create(:work, restricted: true) }
 
       it "redirects to referer with an error" do
-        referer = work_path(work)
-        request.headers["HTTP_REFERER"] = referer
+        referer = work_path(work, anchor: "kudos_message")
+        request.headers["HTTP_REFERER"] = work_path(work)
         post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
         it_redirects_to_with_kudos_error(referer, "You can't leave guest kudos on a restricted work.")
       end
