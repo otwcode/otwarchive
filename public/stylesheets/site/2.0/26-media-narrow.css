@@ -127,6 +127,7 @@ body .narrow-shown {
 
 .dashboard .index {
   float: none;
+  clear: both
 }
 
 .dashboard .landmark {
