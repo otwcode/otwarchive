@@ -66,6 +66,8 @@ services:
     ports:
       - "11211:11211"
   web:
+    profiles:
+      - dev
     build:
       context: .
       dockerfile: ./config/docker/Dockerfile
@@ -73,12 +75,13 @@ services:
       RAILS_ENV: development
       # Disable rack-timeout
       RACK_TIMEOUT_SERVICE_TIMEOUT: 0
+      CODESPACES: ${CODESPACES:-}
       ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: bEZjYLY9tCYGh6WlcMtEJpIi7GO2plZC
       ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: PpLWizzsQHIWnIihtECw8nDHZQd0amzf
       ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: 3S99KdpdEWLnCYudBgUfdCFDBWePWCud
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
-      - .:/otwarchive
+      - .:/otwa
     ports:
       - "3000:3000"
     depends_on:
@@ -91,12 +94,14 @@ services:
     stdin_open: true
     tty: true
   resque:
+    profiles:
+      - dev
     build:
       context: .
       dockerfile: ./config/docker/Dockerfile
     command: bash -c "bundle exec rake environment resque:scheduler & bundle exec rake environment resque:work"
     volumes:
-      - .:/otwarchive
+      - .:/otwa
     environment:
       <<: *environment
       QUEUE: '*'
@@ -104,10 +109,14 @@ services:
       - db
       - redis
   chrome:
+    profiles:
+      - test
     image: selenium/standalone-chromium
     ports:
       - "4444:4444"
   test:
+    profiles:
+      - test
     build:
       context: .
       dockerfile: ./config/docker/Dockerfile
@@ -124,7 +133,7 @@ services:
       - QTWEBENGINE_CHROMIUM_FLAGS=--no-sandbox
     command: sleep infinity
     volumes:
-      - .:/otwarchive
+      - .:/otwa
     ports:
       - "5100:5100"
     depends_on:

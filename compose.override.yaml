@@ -1,8 +1,0 @@
-services:
-  chrome:
-    profiles:
-      - test
-  test:
-    profiles:
-      - test
-    command: bundle exec cucumber

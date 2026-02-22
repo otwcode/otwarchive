@@ -9,10 +9,10 @@ RUN apt-get update             && \
         shared-mime-info          \
         zip
 
-# Clean and mount repository at /otwarchive
-RUN rm -rf /otwarchive && mkdir -p /otwarchive
-WORKDIR /otwarchive
-VOLUME /otwarchive
+# Clean and mount repository at /otwa
+RUN rm -rf /otwa && mkdir -p /otwa
+WORKDIR /otwa
+VOLUME /otwa
 
 # Install ruby packages
 COPY Gemfile .
