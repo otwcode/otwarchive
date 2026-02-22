@@ -184,7 +184,7 @@ en:
           admin_user: User Administration
           creations: Creations
         no_creations: This user has no works or comments.
-        page_heading: Works and Comments by %{user}
+        page_heading: Works and Comments by %{user} (%{id})
         page_title: "%{login} - User Creations"
       history:
         heading: User History
