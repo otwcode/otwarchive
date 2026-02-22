@@ -2657,7 +2657,9 @@ en:
         canonical_or_synonymous: Canonical or synonymous
         noncanonical: Non-canonical
         noncanonical_and_nonsynonymous: Non-canonical and non-synonymous
+        noncanonical_nonsynonymous_and_not_unwrangleable: Non-canonical and non-synonymous and not marked unwrangleable
         synonymous: Synonymous
+        unwrangleable: Unwrangleable
       tag_name: Tag name
       type: Type
       wrangling_status: Wrangling status

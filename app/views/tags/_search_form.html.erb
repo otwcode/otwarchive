@@ -60,6 +60,14 @@
               <%= f.label :wrangling_status, t(".status_option.noncanonical_and_nonsynonymous"), value: "noncanonical_nonsynonymous" %>
             </li>
             <li>
+              <%= f.radio_button :wrangling_status, "noncanonical_nonsynonymous_not_unwrangleable" %>
+              <%= f.label :wrangling_status, t(".status_option.noncanonical_nonsynonymous_and_not_unwrangleable"), value: "noncanonical_nonsynonymous_not_unwrangleable" %>
+            </li>
+            <li>
+              <%= f.radio_button :wrangling_status, "unwrangleable" %>
+              <%= f.label :wrangling_status, t(".status_option.unwrangleable"), value: "unwrangleable" %>
+            </li>
+            <li>
               <%= f.radio_button :wrangling_status, "" %>
               <%= f.label :wrangling_status, t(".status_option.any_status"), value: "" %>
             </li>
