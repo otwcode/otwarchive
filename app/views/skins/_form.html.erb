@@ -27,8 +27,10 @@
     <dt><%= f.label :icon, t(".icon") %></dt>
     <dd><%= f.file_field :icon %></dd>
 
-    <dt><%= f.label :public, t(".public") %> <%= link_to_help "skins-approval" %></dt>
-    <dd><%= f.check_box :public %></dd>
+    <% if @current_user&.official %>
+      <dt><%= f.label :public, t(".public") %></dt>
+      <dd><%= f.check_box :public %></dd>
+    <% end %>
   </dl>
 </fieldset>
 

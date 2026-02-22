@@ -129,3 +129,23 @@ Feature: Public skins
       And I press "unique skin"
     Then the page should have the cached skin "unique skin"
       And I should be on the works page
+
+  Scenario: A regular user can't apply to make a skin public
+  Given I am logged in
+  When I go to the new skin page
+  Then I should not see "Apply to make public"
+
+  Scenario: A user with the official role can apply to make a skin public
+  Given the user "SkinTeam" exists and has the role "official"
+    And I am logged in as "SkinTeam"
+  When I set up the skin "Skin We're Gonna Add"
+    And I attach a preview for the skin
+    And I check "Apply to make public"
+    And I submit
+  Then I should see "Skin was successfully created"
+
+  Scenario: Admins can't see the "Apply to make public" checkbox
+  Given the approved public skin "Usable Skin"
+    And I am logged in as a "superadmin" admin
+  When I edit the skin "Usable Skin"
+  Then I should not see "Apply to make public"

@@ -12,8 +12,8 @@ Feature: Admin manage skins
     And I am logged in as a "superadmin" admin
   When I follow "Approved Skins"
     And I check "Cache"
-  Then I press "Update"
-    And I should see "The following skins were updated: public skin"
+    And I press "Update"
+  Then I should see "The following skins were updated: public skin"
   When I follow "Approved Skins"
     And I check "Uncache"
     And I press "Update"
