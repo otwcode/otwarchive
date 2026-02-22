@@ -9,7 +9,7 @@ Feature: Help
     Given I am logged in as "first_user"
     When I go to the collections page
     When I follow "New Collection"
-    And I follow "Collection moderated"
+    And I open help modal "Collection moderated"
     Then I should see "By default, collections are not moderated"
 
   Scenario: view the help popup for chapter title
@@ -29,7 +29,7 @@ Feature: Help
     And I fill in "content" with "Well, maybe not so epic."
     And I press "Post"
     And I follow "Add Chapter"
-    And I follow "Chapter title"
+    And I open help modal "Chapter title"
     Then I should see "You can add a chapter title"
 
   Scenario: Asked to log in if trying to access the first login page as guest
