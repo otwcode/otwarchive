@@ -828,10 +828,11 @@ en:
       comment_field_title: Enter Comment
       comment_too_long: must be less than %{count} characters long.
       comment_too_short: Brevity is the soul of wit, but we need your comment to have text in it.
-      guest_email: Guest email
+      guest_edit_warning: You will not be able to edit or delete your comment after it is posted.
+      guest_email: Guest email (required)
       guest_email_failure: Please enter your email address.
-      guest_instructions: All fields are required. Your email address will not be published.
-      guest_name: Guest name
+      guest_instructions: All fields are required. Your name and comment text will both be publicly displayed. Your email address will not be made public, but it will be used to send you notifications of any replies to your comment.
+      guest_name: Guest name (required)
       guest_name_failure: Please enter your name.
       inbox_reference_html: to %{commentable_creator} on %{commentable_link}
       landmark:

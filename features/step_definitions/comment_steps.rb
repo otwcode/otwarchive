@@ -404,3 +404,18 @@ end
 When "I reply on a new page" do
   visit find(:link, "Reply")["href"]
 end
+
+When "I try to submit a comment without filling required fields" do
+  click_button("Comment")
+end
+
+# error for the server-side validation. The error shown to user on the client side will be "Please enter your name.", "Please enter your email address."
+Then "I should see validation messages for guest name and email" do
+  expect(page).to have_content("Name can't be blank")
+  expect(page).to have_content("Email should look like an email address.")
+end
+
+Then "I should see a required field for {string}" do |field_name|
+  expect(page).to have_selector("dt.required", text: field_name)
+  expect(page).to have_selector("dd.required")
+end
