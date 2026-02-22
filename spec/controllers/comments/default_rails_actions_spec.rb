@@ -661,6 +661,32 @@ describe CommentsController do
         end
       end
     end
+
+    context "when cloudflare headers are available" do
+      let!(:comment) { create(:comment) }
+      before { fake_login }
+
+      it "sets the bot score" do
+        request.env["HTTP_CF_BOT_SCORE"] = "42"
+        expect_any_instance_of(Comment).to receive(:cloudflare_bot_score=).with("42")
+
+        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+      end
+
+      it "sets the ja3 hash" do
+        request.env["HTTP_CF_JA3_HASH"] = "a_hash"
+        expect_any_instance_of(Comment).to receive(:cloudflare_ja3_hash=).with("a_hash")
+
+        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+      end
+
+      it "sets the ja3 hash" do
+        request.env["HTTP_CF_JA4"] = "another_hash"
+        expect_any_instance_of(Comment).to receive(:cloudflare_ja4=).with("another_hash")
+
+        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+      end
+    end
   end
 
   describe "DELETE #destroy" do
