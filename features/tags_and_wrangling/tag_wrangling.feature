@@ -112,6 +112,7 @@ Feature: Tag wrangling
     When I go to the "Jack O'Neil" tag edit page
       And I fill in "Synonym of" with "Jack O'Neill"
       And I press "Save changes"
+      And all indexing jobs have been run
       And I follow "Jack O'Neill"
     Then I should see "Stargate SG-1"
     When I view the tag "Stargate SG-1"

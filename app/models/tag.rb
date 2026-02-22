@@ -314,6 +314,11 @@ class Tag < ApplicationRecord
     joins(:common_taggings).where("filterable_id in (?)", parents.first.is_a?(Integer) ? parents : (parents.respond_to?(:pluck) ? parents.pluck(:id) : parents.collect(&:id)))
   }
 
+  # This will return all tags that have one of the given tags as a child
+  scope :with_children, lambda { |children|
+    joins(:child_taggings).where(child_taggings: { common_tag_id: children })
+  }
+
   scope :with_no_parents, -> {
     joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
     where("filterable_id IS NULL")
@@ -468,11 +473,14 @@ class Tag < ApplicationRecord
     all.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
 
+  def self.to_param(string)
+    string.gsub("/", "*s*").gsub("&", "*a*").gsub(".", "*d*").gsub("?", "*q*").gsub("#", "*h*")
+  end
+
   # Use the tag name in urls and escape url-unfriendly characters
   def to_param
     # can't find a tag with a name that hasn't been saved yet
-    saved_name = self.name_changed? ? self.name_was : self.name
-    saved_name.gsub('/', '*s*').gsub('&', '*a*').gsub('.', '*d*').gsub('?', '*q*').gsub('#', '*h*')
+    Tag.to_param(self.name_changed? ? self.name_was : self.name)
   end
 
   def display_name
@@ -698,6 +706,20 @@ class Tag < ApplicationRecord
     if reindex_pseuds
       Pseud.joins(works: :filter_taggings)
         .merge(self.direct_filter_taggings).reindex_all
+    end
+  end
+
+  def self.successful_reindex(ids)
+    # Drop caches for any tags with a child that was successfully reindexed.
+    Tag.distinct.with_children(ids).pluck(:id).each do |id|
+      ActionController::Base.new.expire_fragment([:v1, :tag, :children, id])
+      Rails.cache.delete([:v1, :tag, :children, id])
+    end
+
+    # Drop caches for any canonical tags with a merger that was successfully reindexed.
+    Tag.joins(:mergers).where(mergers: { id: ids }).pluck(:id).each do |id|
+      ActionController::Base.new.expire_fragment([:v1, :tag, :mergers, id])
+      Rails.cache.delete([:v1, :tag, :mergers, id])
     end
   end
 
@@ -1165,13 +1187,6 @@ class Tag < ApplicationRecord
         tag.merger.update_works_index_timestamp!
       end
       async_after_commit(:queue_child_tags_for_reindex)
-    end
-
-    # if type has changed, expire the tag's parents' children cache (it stores the children's type)
-    if tag.saved_change_to_type?
-      tag.parents.each do |parent_tag|
-        ActionController::Base.new.expire_fragment("v1/views/tags/#{parent_tag.id}/children")
-      end
     end
 
     # Reindex immediately to update the unwrangled bin.

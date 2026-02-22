@@ -2664,10 +2664,14 @@ en:
     show:
       canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
       canonical_tag: canonical tag
+      children:
+        heading: 'Child tags (displaying the first %{count} of each type):'
+        more: and more
       fandom_relationship_tags: Relationship tags in this fandom
       filter_bookmarks: filter bookmarks
       filter_works: filter works
       list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
+      synonyms: 'Tags with the same meaning:'
     wrangle:
       manage:
         comments: Comments (%{count})
