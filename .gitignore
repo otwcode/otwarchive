@@ -51,6 +51,7 @@ public/system/development
 public/system/test
 /public/system/work_skins
 /public/tags
+/public/test_cache
 
 # /public/images/
 /public/images/Thumbs.db
