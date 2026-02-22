@@ -13,46 +13,48 @@
 
 <h3 class="heading">
   <% if @collections.empty? %>
-    <%= ts("Sorry, there were no collections found.") %>
+    <%= t(".page_heading.no_results") %>
   <% else %>
-    <%= search_header @collections, @query, ts("Collection") %>
+    <%= search_header @collections, @query, t(".page_heading.search_header") %>
   <% end %>
 </h3>
 <!--/descriptions-->
 
 <!--Subnavigation, sorting and actions-->
-<h3 class="landmark heading"><%= ts("Navigation") %></h3>
-<ul class="navigation actions" role="navigation">
-  <% # Collections and Open Challenges links unless a logged in user viewing own collections page %>
-  <% unless logged_in? && @user && @user == current_user %>
-    <li><%= span_if_current ts("Collections"), collections_path %></li>
-    <li><%= link_to ts("Open Challenges"), list_challenges_collections_path %></li>
-  <% end %>
-  <% if logged_in? %>
-    <% # Logged in user on own collections index gets links for user Collections and Manage Collection Items %>
-    <% if @user && @user == current_user %>
-      <li><%= span_if_current ts("Collections"), user_collections_path(@user) %></li>
-      <li><%= link_to ts("Manage Collection Items"), user_collection_items_path(@user) %></li>
+<div class="navigation actions module">
+  <h3 class="landmark heading"><%= t(".navigation.landmark_heading") %></h3>
+  <ul class="navigation actions" role="navigation">
+    <%# Collections and Open Challenges links unless a logged in user viewing own collections page %>
+    <% unless logged_in? && @user && @user == current_user %>
+      <li><%= span_if_current t(".navigation.actions.collections"), collections_path %></li>
+      <li><%= link_to t(".navigation.actions.open_challenges"), list_challenges_collections_path %></li>
     <% end %>
-    <% # Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
-    <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
-      <li><%= link_to ts("New Subcollection"), new_collection_collection_path(@collection) %></li>
-    <% else %>
-      <li><%= link_to ts("New Collection"), new_collection_path %></li>
+    <% if logged_in? %>
+      <%# Logged in user on own collections index gets links for user Collections and Manage Collection Items %>
+      <% if @user && @user == current_user %>
+        <li><%= span_if_current t(".navigation.actions.collections"), user_collections_path(@user) %></li>
+        <li><%= link_to t(".navigation.actions.manage_items"), user_collection_items_path(@user) %></li>
+      <% end %>
+      <%# Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
+      <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
+        <li><%= link_to t(".navigation.actions.new_subcollection"), new_collection_collection_path(@collection) %></li>
+      <% else %>
+        <li><%= link_to t(".navigation.actions.new_collection"), new_collection_path %></li>
+      <% end %>
     <% end %>
-  <% end %>
-  <% if @sort_and_filter %>
-    <% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
-    <li class="narrow-shown hidden"><a href="#collection-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
-  <% end %>
-</ul>
+    <% if @sort_and_filter %>
+      <%# Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+      <li class="narrow-shown hidden"><a href="#collection-filters" id="go_to_filters"><%= t(".navigation.actions.filters") %></a></li>
+    <% end %>
+  </ul>
+</div>
 
 <% unless @collections.blank? %>
   <!--pagination here-->
   <%= will_paginate @collections %>
 
   <!--main content-->
-  <h3 class="landmark heading"><%= ts("List of Collections") %></h3>
+  <h3 class="landmark heading"><%= t(".main_content.landmark_heading") %></h3>
   <ul class="collection picture index group">
     <% @collections.each do |collection| %>
       <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>

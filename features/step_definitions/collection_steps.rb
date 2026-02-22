@@ -82,6 +82,11 @@ Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?
   collection.collection_preference.update_attribute(:closed, true) if closed.present?
 end
 
+Given "{string} owns the collection {string} with name {string}" do |owner, title, name|
+  user = ensure_user(owner)
+  FactoryBot.create(:collection, title: title, name: (name.presence || title.gsub(/[^\w]/, "_")), owner: user.default_pseud)
+end
+
 Given /^I open the collection with the title "([^\"]*)"$/ do |title|
   step %{I am logged in as "moderator"}
   visit collection_path(Collection.find_by(title: title))
@@ -107,7 +112,7 @@ Given "I have added a/the co-moderator {string} to collection {string}" do |name
   visit collection_path(Collection.find_by(title: title))
   click_link("Membership")
   step %{I fill in "participants_to_invite" with "#{name}"}
-    step %{I press "Submit"}
+  step %{I press "Submit"}
 
   step %{I select "Moderator" from "#{name}_role"}
   # TODO: fix the form, it is malformed right now
@@ -178,21 +183,19 @@ end
 
 When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
   visit new_collection_path
-  fill_in("collection_name", with: (name.blank? ? title.gsub(/[^\w]/, '_') : name))
+  fill_in("collection_name", with: (name.presence || title.gsub(/[^\w]/, "_")))
   fill_in("collection_title", with: title)
 end
 
 When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
-  name = title.gsub(/[^\w]/, '_') if name.blank?
+  name = title.gsub(/[^\w]/, "_") if name.blank?
   step %{I set up the collection "#{title}" with name "#{name}"}
   step %{I submit}
 end
 
 When /^I add (?:a|the) subcollection "([^"]*)"(?: with name "([^"]*)")? to (?:a|the) parent collection named "([^"]*)"$/ do |title, name, parent_name|
-  if Collection.find_by_name(parent_name).nil?
-    step %{I create the collection "#{parent_name}" with name "#{parent_name}"}
-  end
-  name = title.gsub(/[^\w]/, '_') if name.blank?
+  step %{I create the collection "#{parent_name}" with name "#{parent_name}"} if Collection.find_by_name(parent_name).nil?
+  name = title.gsub(/[^\w]/, "_") if name.blank?
   step %{I set up the collection "#{title}" with name "#{name}"}
   fill_in("collection_parent_name", with: parent_name)
   step %{I submit}

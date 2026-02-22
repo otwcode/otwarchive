@@ -785,10 +785,23 @@ en:
         footnote: Use this if your collection is not fandom-specific.
         label: Multifandom
     index:
+      main_content:
+        landmark_heading: List of Collections
+      navigation:
+        actions:
+          collections: Collections
+          filters: Filters
+          manage_items: Manage Collection Items
+          new_collection: New Collection
+          new_subcollection: New Subcollection
+          open_challenges: Open Challenges
+        landmark_heading: Navigation
       page_heading:
         challenges_subcollections_in: Challenges/Subcollections in %{collection}
         collections_in_the: Collections in the %{archive}
         collections_including: Collections including %{work}
+        no_results: Sorry, there were no collections found.
+        search_header: Collection
         users_collections: "%{user}'s Collections"
     sidebar:
       bookmarks: Bookmarked Items (%{count})

@@ -43,8 +43,9 @@ class CollectionsController < ApplicationController
       flash_search_warnings(@collections)
       @page_subtitle = t(".subcollections_page_title", collection_title: @collection.title)
     elsif params[:user_id]
+      @sort_and_filter = true
       @user = User.find_by!(login: params[:user_id])
-      @search = CollectionSearchForm.new({ maintainer_id: @user.id, sort_column: "title.keyword" }.merge(page: params[:page]))
+      @search = CollectionSearchForm.new(collection_filter_params.merge({ maintainer_id: @user.id, sort_column: "title.keyword" }.merge(page: params[:page])))
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
@@ -194,7 +195,7 @@ class CollectionsController < ApplicationController
   private
 
   def collection_filter_params
-    params.permit(:commit, collection_search: [
+    params.permit(:commit, :user_id, collection_search: [
       :title, :challenge_type, :moderated, :multifandom, :closed, :tag,
       :sort_column, :sort_direction
     ])[:collection_search] || {}

@@ -1,5 +1,4 @@
 class PseudDecorator < SimpleDelegator
-
   attr_reader :data
 
   # Pseuds need to be decorated with various stats from the "_source" when
@@ -14,7 +13,7 @@ class PseudDecorator < SimpleDelegator
   def self.decorate_from_search(results, search_hits)
     search_data = search_hits.group_by { |doc| doc["_id"] }
     results.map do |result|
-      data = search_data[result.id.to_s].first&.dig('_source') || {}
+      data = search_data[result.id.to_s].first&.dig("_source") || {}
       new_with_data(result, data)
     end
   end
@@ -76,8 +75,18 @@ class PseudDecorator < SimpleDelegator
 
   def works_link
     return unless works_count > 0
+
     text = ActionController::Base.helpers.pluralize(works_count, "works")
     "<a href='#{works_path}'>#{text}</a>"
+  end
+
+  def collections_path
+    "#{pseud_path}/collections"
+  end
+
+  def collections_link
+    text = ActionController::Base.helpers.pluralize(collections_count, "collections")
+    "<a href='#{collections_path}'>#{text}</a>"
   end
 
   def bookmarks_path
@@ -86,18 +95,21 @@ class PseudDecorator < SimpleDelegator
 
   def bookmarks_link
     return unless bookmarks_count > 0
+
     text = ActionController::Base.helpers.pluralize(bookmarks_count, "bookmarks")
     "<a href='#{bookmarks_path}'>#{text}</a>"
   end
 
   def fandom_path(id)
     return unless id
+
     "#{works_path}?fandom_id=#{id}"
   end
 
   def fandom_link(fandom_id)
     fandom = fandom_stats(fandom_id)
     return unless fandom.present?
+
     text = ActionController::Base.helpers.pluralize(fandom[:count], "work") + " in #{fandom[:name]}"
     "<a href='#{fandom_path(fandom_id)}'>#{text}</a>"    
   end
