@@ -548,25 +548,23 @@ class User < ApplicationRecord
 
   def update_pseud_name
     return unless saved_change_to_login? && login_before_last_save.present?
-
-    old_pseud = pseuds.where(name: login_before_last_save).first
-    if login.downcase == login_before_last_save.downcase
-      old_pseud.name = login
-      old_pseud.save!
-    else
+    
+    pseud_to_update = pseuds.where(name: login_before_last_save).first
+    # If the new login is (case insensitive) different from the old login
+    if login.downcase != login_before_last_save.downcase
       new_pseud = pseuds.where(name: login).first
-      # do nothing if they already have the matching pseud
-      if new_pseud.blank?
-        if old_pseud.present?
-          # change the old pseud to match
-          old_pseud.name = login
-          old_pseud.save!(validate: false)
-        else
-          # shouldn't be able to get here, but just in case
-          Pseud.create!(name: login, user_id: id)
-        end
+      # If the user does have an existing pseud for the new login
+      if new_pseud.present?
+        pseud_to_update = new_pseud
+      # If the pseud for the old login doesn't exist
+      elsif pseud_to_update.blank?
+        # shouldn't be able to get here, but just in case
+        Pseud.create!(name: login, user_id: id)
+        return
       end
     end
+    pseud_to_update.name = login
+    pseud_to_update.save!(validate: false)
   end
 
   def reindex_user_creations_after_rename
