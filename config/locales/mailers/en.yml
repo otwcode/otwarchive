@@ -665,24 +665,28 @@ en:
       signups_here: 'Here are the invalid sign-ups:'
       subject: "[%{app_name}][%{collection_title}] Invalid sign-ups found"
     invitation:
-      been_invited: You've been invited to join the Archive of Our Own!
-      features: With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!
-      has_invited: "%{user_name} has invited you to join the Archive of Our Own!"
-      html:
-        about: The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the %{otw_link}, which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom.
-        activation_support: After you sign up, you'll receive an account activation email. If you do not receive this email after 48 hours, please %{support_link}.
-        faq: For more information, please check %{faq_link}.
-        faq_link_text: our FAQ
-        invitation_link_text: follow this link to sign up
-        join: If you'd like to join us, please %{invitation_link}.
+      about:
+        html: The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the %{otw_link}, which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom.
         otw_link_text: Organization for Transformative Works
+        text: The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the Organization for Transformative Works (%{otw_url}), which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom.
+      activation_support:
+        html: After you sign up, you'll receive an account activation email. If you do not receive this email after 48 hours, please %{support_link}.
         support_link_text: contact Support
+        text: After you sign up, you'll receive an account activation email. If you do not receive this email after 48 hours, please %{support_url}.
+      been_invited: You've been invited to join the Archive of Our Own!
+      faq:
+        faq_link_text: our FAQ
+        html: For more information, please check %{faq_link}.
+        text: For more information, please check %{faq_url}.
+      features: With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!
+      has_invited:
+        html: "%{user_name} has invited you to join the Archive of Our Own!"
+        text: "%{user_name} has invited you to join the Archive of Our Own!"
+      join:
+        html: If you'd like to join us, please %{invitation_link}.
+        invitation_link_text: follow this link to sign up
+        text: If you'd like to join us, please follow this link to sign up %{invitation_url}.
       subject: "[%{app_name}] Invitation"
-      text:
-        about: The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the Organization for Transformative Works (%{otw_url}), which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom.
-        activation_support: 'After you sign up, you''ll receive an account activation email. If you do not receive this email after 48 hours, please contact Support: %{support_url}.'
-        faq: 'For more information, please check our FAQ: %{faq_url}.'
-        join: 'If you''d like to join us, please follow this link to sign up: %{invitation_url}.'
     invitation_to_claim:
       access:
         html: Depending on the archive, your works may have been imported as restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{contact_support_link}.
