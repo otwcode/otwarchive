@@ -584,6 +584,14 @@ module ApplicationHelper
     "#{creation.class.name.underscore.dasherize}-#{creation.id}"
   end
 
+  # Array of series ids, formatted series-123
+  # returns empty array for works with no series, or non-work creations
+  def creation_series_ids_for_css_classes(creation)
+    return [] unless %w[Work].include?(creation.class.name)
+    
+    creation.series.map { |series| "series-#{series.id}" }
+  end
+
   # Array of creator ids, formatted user-123, user-126.
   # External works are not created by users, so we can skip this.
   def creator_ids_for_css_classes(creation)
@@ -602,8 +610,9 @@ module ApplicationHelper
 
     Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v2") do
       creation_id = creation_id_for_css_classes(creation)
+      series_ids = creation_series_ids_for_css_classes(creation).join(" ")
       creator_ids = creator_ids_for_css_classes(creation).join(" ")
-      "blurb group #{creation_id} #{creator_ids}".strip
+      "blurb group #{creation_id} #{series_ids} #{creator_ids}".strip.squish
     end
   end
 
