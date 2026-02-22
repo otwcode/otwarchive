@@ -20,7 +20,7 @@ describe WorksController, work_search: true do
     suspended_user.update!(suspended: true, suspended_until: 1.week.from_now)
     work
   end
-  
+
   describe "before_action #clean_work_search_params" do
     let(:params) { {} }
 
@@ -943,6 +943,8 @@ describe WorksController, work_search: true do
 
     context "when a work has consecutive deleted comments in a thread" do
       before do
+        work.kudos.create(user: create(:user)) # Add a kudo to the work
+
         thread_depth = 4
         chapter = work.first_chapter
 
@@ -960,12 +962,35 @@ describe WorksController, work_search: true do
         fake_login_known_user(work.users.first)
       end
 
-      it "deletes the work and redirects to the user's works with a notice" do
+      it "deletes the work and its associations, and redirects to the user's works with a notice" do
         delete :destroy, params: { id: work.id }
 
         it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{work_title} was deleted.")
         expect { work.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect(Kudo.count).to eq(0)
         expect(Comment.count).to eq(0)
+        expect(InboxComment.count).to eq(0)
+      end
+    end
+
+    context "when a work has multiple chapters" do
+      before do
+        first_chapter = work.first_chapter
+        second_chapter = create(:chapter, work: work, position: 2)
+
+        create(:comment, commentable: first_chapter, parent: first_chapter)
+        create(:comment, commentable: second_chapter, parent: second_chapter)
+        fake_login_known_user(work.users.first)
+      end
+
+      it "deletes the work and its associations, and redirects to the user's works with a notice" do
+        delete :destroy, params: { id: work.id }
+
+        it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{work_title} was deleted.")
+        expect { work.reload }
+          .to raise_exception(ActiveRecord::RecordNotFound)
+        expect(Comment.count).to eq(0)
+        expect(InboxComment.count).to eq(0)
       end
     end
 
@@ -977,7 +1002,7 @@ describe WorksController, work_search: true do
       it "errors and redirects to user page" do
         fake_login_known_user(suspended_user)
         delete :destroy, params: { id: suspended_users_work.id }
-        
+
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
       end
