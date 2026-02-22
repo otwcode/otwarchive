@@ -162,7 +162,7 @@ class WorkQuery < Query
   def user_filter
     return if user_ids.blank?
 
-    if viewing_own_collected_works_page?
+    if viewing_own_collected_works_page? || User.current_user.is_a?(Admin)
       {
         has_child: {
           type: "creator",
@@ -348,9 +348,11 @@ class WorkQuery < Query
 
   # Include anonymous works if we're not on a user/pseud page
   # OR if the user is viewing their own collected works
+  # OR if the user is an admin
   def include_anon?
     (user_ids.blank? && pseud_ids.blank?) ||
-      viewing_own_collected_works_page?
+      viewing_own_collected_works_page? ||
+      User.current_user.is_a?(Admin)
   end
 
   def user_ids

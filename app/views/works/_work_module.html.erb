@@ -1,13 +1,13 @@
 <% # expects "work" %>
 
-<% if work.unrevealed? && !is_author_of?(work) %>
+<% if work.unrevealed? && !is_author_of?(work) && !(User.current_user.is_a?(Admin) && request.fullpath =~ %r{/users/\w+/works}) %>
   <%= render "works/mystery_blurb", item: work %>
 <% else %>
   <!--title, author, fandom-->
   <div class="header module">
     <!-- updated_at=<%= work.updated_at.to_i.to_s %> -->
     <h4 class="heading">
-      <% if (work.unrevealed? || work.anonymous?) && is_author_of?(work) %>
+      <% if (work.unrevealed? || work.anonymous?) && (is_author_of?(work) || User.current_user.is_a?(Admin)) %>
         <span class="status">
           <% if work.unrevealed? %>
             <%= ts("Unrevealed:") %>
