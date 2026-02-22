@@ -49,8 +49,7 @@ Scenario: Posting top level comment on a chaptered work, with view full work in 
     And I post a comment "Woohoo"
   Then I should see "Woohoo"
     And I should see "Chapter 2" within "div#chapters"
-    # Once you've commented, it defaults back to your preference
-    And I should see "Chapter 1" within "div#chapters"
+    And I should not see "Chapter 1" within "div#chapters"
 
 # REPLY COMMENTS
 
