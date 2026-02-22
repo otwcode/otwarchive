@@ -52,7 +52,7 @@
   <%= yield :tinymce_init %>
 <% end %>
 
-<% unless Rails.env.test? || current_user.try(:accepted_tos_version) == @current_tos_version || tos_exempt_page? %>
+<% unless current_user.try(:accepted_tos_version) == @current_tos_version || tos_exempt_page? %>
   <%= javascript_tag do %>
     // We can't rely on !window.localStorage to test localStorage support in
     // browsers like Safari 9, which technically support it, but which have a

@@ -44,34 +44,39 @@
 <%# content_for footer renders this when we don't want it %>
 <%= javascript_tag do %>
   $j(document).ready(function() {
+    var body = document.body;
     var container = $j("#tos_prompt");
-    var outer = $j("#outer");
-    var button = $j("#accept_tos");
+    var outer = document.getElementById("outer");
+    var button = document.getElementById("accept_tos");
     var tosCheckbox = document.getElementById("tos_agree");
     var dataProcessingCheckbox = document.getElementById("data_processing_agree");
 
-    var checkboxClicked = function() {
-      button.attr("disabled", !tosCheckbox.checked || !dataProcessingCheckbox.checked);
-      if (this.checked) {
-        button.on("click", function() {
-          acceptTOS();
-          outer.removeClass("hidden").removeAttr("aria-hidden");
-          $j.when(container.fadeOut(500)).done(function() {
-            container.remove();
-          });
-        });
-      };
-    };
+    dataProcessingCheckbox.onclick = checkboxClicked;
+    tosCheckbox.onclick = checkboxClicked;
+    button.onclick = acceptTOSPrompt;
 
     setTimeout(showTOSPrompt, 1500);
 
     function showTOSPrompt() {
+      body.style.overflow = "hidden";
       $j.when(container.fadeIn(500)).done(function() {
-        outer.addClass("hidden").attr("aria-hidden", "true");
+        outer.style.visibility = "hidden";
+        outer.setAttribute("aria-hidden", "true");
       });
+    }
 
-      $j("#tos_agree").on("click", checkboxClicked).change();
-      $j("#data_processing_agree").on("click", checkboxClicked).change();
-    };
+    function checkboxClicked() {
+      button.disabled = !tosCheckbox.checked || !dataProcessingCheckbox.checked;
+    }
+
+    function acceptTOSPrompt() {
+      acceptTOS();
+      body.style.overflow = "";
+      outer.style.visibility = "";
+      outer.removeAttribute("aria-hidden");
+      $j.when(container.fadeOut(500)).done(function() {
+        container.remove();
+      });
+    }
   });
 <% end %>
