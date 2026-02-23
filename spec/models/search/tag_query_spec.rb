@@ -234,7 +234,7 @@ describe TagQuery do
     end
 
     it "does not return unwrangleable tags" do
-      expect(results).not_to include(tags[:unwrangeable])
+      expect(results).not_to include(tags[:unwrangleable])
     end
 
     it "does not return wrangled tags" do
