@@ -425,6 +425,11 @@ When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
   visit work_path(work)
 end
 
+When "I follow {string} in the bookmarkable blurb for {string}" do |link, title|
+  work_id = Work.find_by(title: title).id
+  find("#bookmark_#{work_id}").click_link(link)
+end
+
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
   step %{I follow "Add To Collection"}
   fill_in("collection_names", with: collection_name)

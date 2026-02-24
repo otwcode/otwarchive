@@ -95,6 +95,14 @@ When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
   end
 end
 
+When "I confirm the popup" do
+  page.driver.browser.switch_to.alert.accept
+end
+
+When "I dismiss the popup" do
+  page.driver.brower.switch_to.alert.dismiss
+end
+
 When /^(?:|I )choose "(.*)"$/ do |field|
   choose(field)
 end
