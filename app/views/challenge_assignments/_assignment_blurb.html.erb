@@ -11,12 +11,13 @@
 </dt>
 <dd>
   <% # link to the work %>
-   <% if assignment.creation %>
-    <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work" %>
-     <% if !assignment.posted? %>
-      <%= t(".draft_header") %>
+    <% if assignment.creation %>
+      <% if !assignment.posted? %>
+        <%= t(".header_draft", link: (link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work")) %>
+      <% else %>
+        <%= t(".header_posted", link: (link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work")) %>
+      <% end %>
     <% end %>
-   <% end %>
 
   <% if @collection && @collection.user_is_maintainer?(current_user) %>
     <% # for a mod: list recipient (and check in case there are some people without recipients) %>
