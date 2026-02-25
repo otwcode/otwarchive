@@ -72,7 +72,7 @@
     function acceptTOSPrompt() {
       acceptTOS();
       body.style.overflow = "";
-      outer.style.visibility = "";
+      outer.removeAttribute("style");
       outer.removeAttribute("aria-hidden");
       $j.when(container.fadeOut(500)).done(function() {
         container.remove();
