@@ -713,13 +713,11 @@ class Tag < ApplicationRecord
     # Drop caches for any tags with a child that was successfully reindexed.
     Tag.distinct.with_children(ids).pluck(:id).each do |id|
       ActionController::Base.new.expire_fragment([:v1, :tag, :children, id])
-      Rails.cache.delete([:v1, :tag, :children, id])
     end
 
     # Drop caches for any canonical tags with a merger that was successfully reindexed.
     Tag.distinct.joins(:mergers).where(mergers: { id: ids }).pluck(:id).each do |id|
       ActionController::Base.new.expire_fragment([:v1, :tag, :mergers, id])
-      Rails.cache.delete([:v1, :tag, :mergers, id])
     end
   end
 
@@ -1120,6 +1118,30 @@ class Tag < ApplicationRecord
     Rails.cache.fetch(key, expires_in: 4.hours) do
       unwrangled_query(tag_type).count
     end
+  end
+
+  def child_data(child_types)
+    child_types &= self.child_types
+
+    return nil if child_types.empty?
+
+    child_types.filter_map do |child_type|
+      tags = TagQuery.new(type: child_type,
+                          "#{self.class.name.downcase}_ids": [self.id],
+                          sort_column: "uses",
+                          page: 1,
+                          per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results.scope(:es_only)
+
+      [child_type, tags] if tags.total_entries.positive?
+    end.to_h
+  end
+
+  def merger_data
+    TagQuery.new(type: self.type,
+                 merger_id: self.id,
+                 sort_column: "uses",
+                 page: 1,
+                 per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results.scope(:es_only)
   end
 
   def suggested_parent_tags(parent_type, options = {})

@@ -68,31 +68,7 @@ class TagsController < ApplicationController
       @collections = @tag.collections.paginate(page: params[:page])
     end
 
-    return unless @tag.canonical
-    
-    child_types = Tag::USER_DEFINED & @tag.child_types
-    unless child_types.empty?
-      @tag_children = Rails.cache.fetch([:v1, :tag, :children, @tag.id], version: @tag.updated_at) do
-        child_types.filter_map do |child_type|
-          tags = TagQuery.new(type: child_type,
-                              "#{@tag.class.name.downcase}_ids": [@tag.id],
-                              sort_column: "uses",
-                              page: 1,
-                              per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results.scope(:es_only)
-
-          [child_type, tags] if tags.total_entries.positive?
-        end.to_h
-      end
-    end
-
-    @tag_mergers = Rails.cache.fetch([:v1, :tag, :mergers, @tag.id], version: @tag.updated_at) do
-      results = TagQuery.new(type: @tag.type,
-                             merger_id: @tag.id,
-                             sort_column: "uses",
-                             page: 1,
-                             per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results.scope(:es_only)
-      results if results.total_entries.positive?
-    end
+    @has_mergers = @tag.canonical && @tag.mergers.exists?
   end
 
   def feed
