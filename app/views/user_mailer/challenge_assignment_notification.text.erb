@@ -3,7 +3,7 @@
 
 <%= metadata_label(t(".recipient")) %><%= @request.nil? ? t(".recipient_missing") : text_pseud(@request.pseud) %>
 
-<%= t(".prompts") %>
+<%= metadata_label(t(".prompts")) %>
 <% @request.requests.each_with_index do |prompt, index| %>
 <% tag_groups = prompt.tag_groups %>
 <% def tag_list(tags) %>
