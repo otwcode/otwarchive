@@ -127,5 +127,5 @@ reset_bookmark_tags_job:
   cron: "0 0 1 */3 *"
   class: "ResetBookmarkTagsJob"
   queue: low
-  description: "Reset bookmark-only tags to unsorted quarterly (AO3-7294)"
-  
+  description: Reset bookmark-only tags to unsorted quarterly
+
