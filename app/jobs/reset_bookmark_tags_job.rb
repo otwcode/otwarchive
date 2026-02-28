@@ -1,18 +1,22 @@
 class ResetBookmarkTagsJob < ApplicationJob
   queue_as :low
 
-  def perform
-    # Searches for non-canonical tags with zero usage count (only bookmarks or nothing)
-    Tag.where(canonical: false, taggings_count_cache: 0).find_each(batch_size: 1000) do |tag|
-      # Check if have associations (parents) or categorized types
-      has_type = tag.type.present? && tag.type != "Tag"
-      has_parents = tag.common_taggings.exists?
+  def perform(tag_ids = nil)
+    base_scope = Tag.nonsynonymous.where(taggings_count_cache: 0)
 
-      if has_type || has_parents
-        # Removes data from the association table (Wrangling)
-        tag.common_taggings.delete_all
-        # Return the type to 'Tag' (status 'Unsorted')
-        tag.update_column(:type, "Tag")
+    if tag_ids.nil?
+      base_scope.find_in_batches(batch_size: 1000) do |tags|
+        ResetBookmarkTagsJob.perform_later(tags.map(&:id))
+      end
+    else
+      base_scope.where(id: tag_ids).each do |tag|
+        has_type = tag.type.present? && tag.type != "Tag"
+        has_parents = tag.common_taggings.exists?
+
+        next unless has_type || has_parents
+        
+        tag.common_taggings.destroy_all
+        tag.update(type: "Tag")
       end
     end
   end
