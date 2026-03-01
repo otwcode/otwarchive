@@ -21,7 +21,9 @@
   "forwardPorts": [],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "sh script/docker/init.sh && docker compose up -d web",
+  "postCreateCommand": "sh script/docker/init.sh",
+
+  "postStartCommand": "docker compose up -d --build web",
 
   "remoteUser": "root"
 }
