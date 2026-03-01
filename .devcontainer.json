@@ -1,7 +1,7 @@
 // For format details, see https://containers.dev/implementors/json_reference/.
 {
   "name": "otwarchive",
-  "image": "mcr.microsoft.com/devcontainers/base:debian",
+  "image": "mcr.microsoft.com/devcontainers/ruby:3.4",
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
@@ -9,6 +9,12 @@
       "moby": false
     },
     "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["Shopify.ruby-lsp"]
+    }
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
