@@ -13,6 +13,9 @@
 
   "customizations": {
     "vscode": {
+      "settings": {
+        "rubyLsp.rubyExecutablePath": "/usr/local/bin/ruby"
+      },
       "extensions": ["Shopify.ruby-lsp"]
     }
   },
