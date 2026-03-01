@@ -152,6 +152,7 @@ class ChaptersController < ApplicationController
       render :preview
     else
       @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]
+      @work.posted = true if @chapter.posted?
       posted_changed = @chapter.posted_changed?
       @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
