@@ -250,7 +250,117 @@ describe TagQuery do
     end
 
     def results
-      TagQuery.new(in_use: true, unwrangleable: false, unwrangled: true).search_results
+      TagQuery.new(in_use: true, wrangling_status: "wrangleable", unwrangled: true).search_results
+    end
+  end
+
+  describe "wrangling_status_filter", tag_search: true do
+    let!(:canonical_fandom) { create(:canonical_fandom) }
+    let!(:synonymous_fandom) { create(:fandom, merger: canonical_fandom) }
+    let!(:unwrangleable) { create(:freeform, unwrangleable: true) }
+    let!(:unactioned) { create(:freeform) }
+
+    before do
+      run_all_indexing_jobs
+    end
+
+    describe "when set to canonical" do
+      let(:results) { TagQuery.new(wrangling_status: "canonical").search_results.to_a }
+
+      it "only includes canonical tags" do
+        expect(results).to include(canonical_fandom)
+        expect(results).not_to include(synonymous_fandom)
+        expect(results).not_to include(unwrangleable)
+        expect(results).not_to include(unactioned)
+      end
+    end
+
+    describe "when set to noncanonical" do
+      let(:results) { TagQuery.new(wrangling_status: "noncanonical").search_results.to_a }
+
+      it "only includes noncanonical tags" do
+        expect(results).not_to include(canonical_fandom)
+        expect(results).to include(synonymous_fandom)
+        expect(results).to include(unwrangleable)
+        expect(results).to include(unactioned)
+      end
+    end
+
+    describe "when set to synonymous" do
+      let(:results) { TagQuery.new(wrangling_status: "synonymous").search_results.to_a }
+
+      it "only includes synonymous tags" do
+        expect(results).not_to include(canonical_fandom)
+        expect(results).to include(synonymous_fandom)
+        expect(results).not_to include(unwrangleable)
+        expect(results).not_to include(unactioned)
+      end
+    end
+
+    describe "when set to canonical_synonymous" do
+      let(:results) { TagQuery.new(wrangling_status: "canonical_synonymous").search_results.to_a }
+
+      it "only includes tags that are canonical or synonymous" do
+        expect(results).to include(canonical_fandom)
+        expect(results).to include(synonymous_fandom)
+        expect(results).not_to include(unwrangleable)
+        expect(results).not_to include(unactioned)
+      end
+    end
+
+    describe "when set to noncanonical_nonsynonymous" do
+      let(:results) { TagQuery.new(wrangling_status: "noncanonical_nonsynonymous").search_results.to_a }
+
+      it "only includes tags that are non-canonical and non-synonymous" do
+        expect(results).not_to include(canonical_fandom)
+        expect(results).not_to include(synonymous_fandom)
+        expect(results).to include(unwrangleable)
+        expect(results).to include(unactioned)
+      end
+    end
+
+    describe "when set to unwrangleable" do
+      let(:results) { TagQuery.new(wrangling_status: "unwrangleable").search_results.to_a }
+
+      it "only includes tags that are unwrangleable" do
+        expect(results).not_to include(canonical_fandom)
+        expect(results).not_to include(synonymous_fandom)
+        expect(results).to include(unwrangleable)
+        expect(results).not_to include(unactioned)
+      end
+    end
+
+    describe "when set to noncanonical_nonsynonymous_not_unwrangleable" do
+      let(:results) { TagQuery.new(wrangling_status: "noncanonical_nonsynonymous_not_unwrangleable").search_results.to_a }
+
+      it "only includes tags that are non-canonical, non-synonymous, and not marked unwrangleable" do
+        expect(results).not_to include(canonical_fandom)
+        expect(results).not_to include(synonymous_fandom)
+        expect(results).not_to include(unwrangleable)
+        expect(results).to include(unactioned)
+      end
+    end
+
+    describe "when set to wrangleable" do
+      let(:results) { TagQuery.new(wrangling_status: "wrangleable").search_results.to_a }
+
+      it "only includes tags that are unwrangled and not marked unwrangleable" do
+        expect(results).to include(canonical_fandom)
+        expect(results).to include(synonymous_fandom)
+        expect(results).not_to include(unwrangleable)
+        expect(results).to include(unactioned)
+      end
+    end
+
+    describe "when unset" do
+      let(:results) { TagQuery.new.search_results.to_a }
+
+      it "includes all tags" do
+        expect(results).to include(canonical_fandom)
+        expect(results).to include(synonymous_fandom)
+        expect(results).to include(unwrangleable)
+        expect(results).to include(unactioned)
+      end
     end
   end
 end

@@ -16,7 +16,6 @@ class TagQuery < Query
     [
       type_filter,
       wrangling_status_filter,
-      unwrangleable_filter,
       posted_works_filter,
       media_filter,
       fandom_filter,
@@ -93,11 +92,9 @@ class TagQuery < Query
       term_filter(:unwrangleable, true)
     when "noncanonical_nonsynonymous_not_unwrangleable"
       [term_filter(:canonical, false), { bool: { must_not: exists_filter("merger_id") } }, term_filter(:unwrangleable, false)]
+    when "wrangleable"
+      [term_filter(:unwrangleable, false)]
     end
-  end
-
-  def unwrangleable_filter
-    term_filter(:unwrangleable, bool_value(options[:unwrangleable])) unless options[:unwrangleable].nil?
   end
 
   def posted_works_filter
