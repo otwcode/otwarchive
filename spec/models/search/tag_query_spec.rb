@@ -344,7 +344,7 @@ describe TagQuery do
     describe "when set to wrangleable" do
       let(:results) { TagQuery.new(wrangling_status: "wrangleable").search_results.to_a }
 
-      it "only includes tags that are unwrangled and not marked unwrangleable" do
+      it "only includes tags that are not marked unwrangleable" do
         expect(results).to include(canonical_fandom)
         expect(results).to include(synonymous_fandom)
         expect(results).not_to include(unwrangleable)
