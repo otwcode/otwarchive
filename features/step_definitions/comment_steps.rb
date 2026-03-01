@@ -315,6 +315,12 @@ When /^I visit the thread for the comment on "([^\"]*?)"/ do |work|
   visit comment_path(w.comments.first)
 end
 
+When /^I visit the reply page to the comment on "([^\"]*?)"/ do |work|
+  w = Work.find_by(title: work)
+  comment_id = w.comments.first
+  visit comment_path(comment_id, add_comment_reply_id: comment_id, anchor: 'comment_' + comment_id.to_s)
+end
+
 Then /^there should be (\d+) comments on "([^\"]*?)"/ do |num, work|
   w = Work.find_by(title: work)
   assert w.find_all_comments.count == num.to_i
