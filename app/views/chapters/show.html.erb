@@ -1,50 +1,26 @@
-<!--page description, messages-->
-<% if !@work.posted? %>
-  <p class="notice"><%= t("works.show.unposted_deletion_notice_html", deletion_date: date_in_zone(@work.created_at + 29.days)) %></p>
-<% end %>
-<% if @work.unrevealed? %>
-  <%= render "works/work_unrevealed_notice" %>
-<% end %>
-<% if @work.user_has_creator_invite?(current_user) %>
-  <p class="notice">
-    <%= ts("You've been invited to become a co-creator of this work. To accept or reject the request, visit your %{creator_requests_page}.",
-           creator_requests_page: link_to(ts("Co-Creator Requests page"), user_creatorships_path(current_user))).html_safe %>
-  </p>
-<% end %>
-<!--/descriptions-->
-
-<!--subnav-->
+<%= render "works/work_notices" %>
 <% if policy(@work).show_admin_options? %>
   <%= render "admin/admin_options", item: @work %>
 <% end %>
-<!--/subnav-->
-
-<!-- BEGIN revealed -->
 <% if !@work.unrevealed? || logged_in_as_admin? || can_access_unrevealed_work(@work, current_user) %>
-  <!-- BEGIN work -->
   <div class="work">
     <p class="landmark"><a name="top">&nbsp;</a></p>
 
-    <!--work description, metadata, notes and messages-->
     <%= render "works/work_header_navigation" %>
 
     <%= render "works/meta", work: @work %>
 
     <%= render "works/work_skin" %>
 
-    <!-- BEGIN section where work skin applies -->
     <div id="workskin">
       <%= render "works/preface" %>
-    <!--/descriptions-->
-
-      <div id="chapters">
+    <div id="chapters">
         <%= render "chapters/chapter", chapter: @chapter %>
       </div>
 
       <% inspired_by = get_inspired_by(@work) %>
       <% last_chapter = @work.posted? ? @work.last_posted_chapter : @work.last_chapter %>
       <% if @chapter == last_chapter && (@work.endnotes.present? || @work.series.present? || inspired_by.present?) %>
-        <!--afterword-->
         <div class="afterword preface group">
           <% if !@work.endnotes.blank? %>
             <%= render "works/work_endnotes" %>
@@ -56,18 +32,11 @@
             <%= render "works/work_approved_children", inspired_by: inspired_by %>
           <% end %>
         </div>
-        <!--/afterword-->
-      <% end %>
+        <% end %>
 
     </div>
-    <!-- END work skin -->
-  </div>
-  <!-- END work -->
-
-  <!-- BEGIN comment section -->
+    </div>
   <%= render "comments/commentable", commentable: @chapter %>
-  <!-- END comment section -->
-
   <% if @next_chapter %>
     <script type="speculationrules">
       {
@@ -81,6 +50,4 @@
     </script>
   <% end %>
 <% end %>
-<!-- END revealed -->
-
 <%= render "hit_count/include" %>

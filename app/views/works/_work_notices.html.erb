@@ -1,0 +1,30 @@
+<% # 1. Draft Deletion Notice %>
+<% if !@work.posted? %>
+  <p class="notice">
+    <%= t("works.show.unposted_deletion_notice_html", deletion_date: date_in_zone(@work.created_at + 29.days)) %>
+  </p>
+<% end %>
+
+<% # 2. Unrevealed Work Notice %>
+<% if @work.unrevealed? %>
+  <p class="notice">
+    <%= ts("This work is part of an ongoing challenge and will be revealed soon!") %>
+    <% if @work.user_is_owner_or_invited?(current_user) %>
+      <%= ts("You can find details here: ") %>
+      <%= show_collections_data(@work.collections.unrevealed) %>
+    <% else %>
+      <% if @work.approved_collections.unrevealed.present? %>
+        <%= ts("You can find details here: ") %>
+        <%= show_collections_data(@work.approved_collections.unrevealed) %>
+      <% end %>
+    <% end %>
+  </p>
+<% end %>
+
+<% # 3. Co-creator Invite Notice %>
+<% if @work.user_has_creator_invite?(current_user) %>
+  <p class="notice">
+    <%= ts("You've been invited to become a co-creator of this work. To accept or reject the request, visit your %{creator_requests_page}.",
+           creator_requests_page: link_to(ts("Co-Creator Requests page"), user_creatorships_path(current_user))).html_safe %>
+  </p>
+<% end %>
