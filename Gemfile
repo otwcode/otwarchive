@@ -61,7 +61,7 @@ gem "terrapin"
 gem 'fastimage'
 
 # Gems for authentication
-gem "devise"
+gem "devise", git: "https://github.com/otwcode/devise", ref: "fade89f"
 gem "devise-async" # To mails through queues
 gem "bcrypt"
 gem "devise-pwned_password"

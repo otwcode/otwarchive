@@ -1,4 +1,16 @@
 GIT
+  remote: https://github.com/otwcode/devise
+  revision: fade89f61c64e766d87f24cfcb980ee533a5d5f2
+  ref: fade89f
+  specs:
+    devise (5.0.2)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 7.0)
+      responders
+      warden (~> 1.2.3)
+
+GIT
   remote: https://github.com/rails/rails-observers
   revision: 389b577322d8b17336730b2dc4e179060a23c8e7
   specs:
@@ -234,12 +246,6 @@ GEM
       activerecord (>= 7.2.0)
       mysql2 (>= 0.4.0, < 0.6.0)
       railties (>= 7.2.0)
-    devise (5.0.2)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 7.0)
-      responders
-      warden (~> 1.2.3)
     devise-async (1.0.0)
       activejob (>= 5.0)
       devise (>= 4.0)
@@ -719,7 +725,7 @@ DEPENDENCIES
   dalli
   database_cleaner
   departure (~> 8.0)
-  devise
+  devise!
   devise-async
   devise-pwned_password
   devise-two-factor
