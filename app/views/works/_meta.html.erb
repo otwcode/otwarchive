@@ -1,10 +1,10 @@
-<% cache_unless(@preview_mode, "/v4/#{work.cache_key}-#{Work.work_blurb_version(work.id)}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}", skip_digest: true) do %>
+<% cache_unless(@preview_mode, "/v4/#{@work.cache_key}-#{Work.work_blurb_version(@work.id)}-meta-#{hide_warnings?(@work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(@work)  ? 'nofreeform' : 'showfreeform'}", skip_digest: true) do %>
 <h3 class="landmark heading"><%= ts("Work Header") %></h3>
 
 <div class="wrapper">
 
   <dl class="work meta group">
-    <% tag_group = work.tag_groups
+    <% tag_group = @work.tag_groups
        Tag::VISIBLE.each do |type| %>
       <% tags = tag_group[type] %>
         <% unless tags.blank? %>
@@ -21,8 +21,8 @@
 
           <dd class="<%= tag_type_css_class(type) %> tags">
             <ul class="commas">
-              <% if (type == "ArchiveWarning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) %>
-                <%= show_hidden_tag_link_list_item(work, type, { suppress_toggle_class: true }) %>
+              <% if (type == "ArchiveWarning" && hide_warnings?(@work)) || (type == "Freeform" && hide_freeform?(@work)) %>
+                <%= show_hidden_tag_link_list_item(@work, type, { suppress_toggle_class: true }) %>
              <% else %>
                <%= tag_link_list(tags, link_to_works=true) %>
              <% end %>
