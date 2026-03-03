@@ -60,7 +60,7 @@ Feature: Gift Exchange Challenge
     When I view open challenges
     Then I should see "My Gift Exchange"
 
-  Scenario: Gift exchange blurb cache is expired on when the collection changes
+  Scenario: Gift exchange blurb cache is expired when the collection changes
     Given I am logged in as "mod1"
       And I have created the gift exchange "My Gift Exchange"
     When I go to the collections page
