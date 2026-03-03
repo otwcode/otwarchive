@@ -60,6 +60,22 @@ Feature: Gift Exchange Challenge
     When I view open challenges
     Then I should see "My Gift Exchange"
 
+  Scenario: Gift exchange blurb cache is expired on when the collection changes
+    Given I am logged in as "mod1"
+      And I have created the gift exchange "My Gift Exchange"
+    When I go to the collections page
+      Then I should see "My Gift Exchange"
+    When I am on "My Gift Exchange" collection edit page
+      And I check "This collection is anonymous"
+      And I submit
+    When I follow "Collections"
+    # Change not visible yet because not reindexed
+    Then I should not see "Anonymous" within ".blurb"
+    When all indexing jobs have been run
+      And I reload the page
+    # Reindexed and cache busted
+    Then I should see "Anonymous" within ".blurb"
+
   Scenario: Change timezone for a gift exchange
     Given time is frozen at 1/1/2019
       And the gift exchange "My Gift Exchange" is ready for signups
