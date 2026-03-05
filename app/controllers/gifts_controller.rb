@@ -4,6 +4,7 @@ class GiftsController < ApplicationController
   def index
     @user = User.find_by!(login: params[:user_id]) if params[:user_id]
     @recipient_name = params[:recipient]
+    authorize_refused_gifts_access
     @can_view_refused_gifts = can_view_refused_gifts?
     @page_subtitle = t("gifts.index.page_subtitle", name: (@user ? @user.login : @recipient_name))
     unless @user || @recipient_name
@@ -57,8 +58,16 @@ class GiftsController < ApplicationController
   end
 
   def admin_can_view_refused_gifts?
-    return false unless logged_in_as_admin? && current_admin
+    logged_in_as_admin? && policy(:gift).view_refused?
+  end
 
-    (current_admin.roles & %w[policy_and_abuse superadmin]).present?
+  def authorize_refused_gifts_access
+    return unless viewing_another_users_refused_gifts? && logged_in_as_admin?
+
+    authorize :gift, :view_refused?
+  end
+
+  def viewing_another_users_refused_gifts?
+    params[:refused].present? && @user && @user != current_user
   end
 end
