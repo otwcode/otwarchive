@@ -133,7 +133,7 @@ class Indexer
   end
 
   def self.batch_size
-    ArchiveConfig.SEARCH_INDEXER_BATCH_SIZE || 1000
+    ArchiveConfig.SEARCH_INDEXER_BATCH_SIZE
   end
 
   # Add conditions here
