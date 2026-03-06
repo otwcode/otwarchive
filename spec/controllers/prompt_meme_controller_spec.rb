@@ -114,4 +114,34 @@ describe Challenge::PromptMemeController do
       expect(response).to redirect_to(collection)
     end
   end
+
+  describe "admin access to challenge settings" do
+    it "allows support admins to view edit" do
+      fake_logout
+      fake_login_admin(create(:support_admin))
+
+      get :edit, params: { collection_id: collection.name }
+
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:edit)
+    end
+
+    it "does not allow support admins to update settings" do
+      fake_logout
+      fake_login_admin(create(:support_admin))
+
+      put :update, params: { collection_id: collection.name, prompt_meme: { requests_num_required: 3 } }
+
+      it_redirects_to_user_login_with_error
+    end
+
+    it "does not allow admins with other roles to view edit" do
+      fake_logout
+      fake_login_admin(create(:tag_wrangling_admin))
+
+      get :edit, params: { collection_id: collection.name }
+
+      it_redirects_to_user_login_with_error
+    end
+  end
 end

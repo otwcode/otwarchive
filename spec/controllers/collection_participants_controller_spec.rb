@@ -444,4 +444,23 @@ describe CollectionParticipantsController do
       end
     end
   end
+
+  describe "admin access to membership index" do
+    it "allows support admins to view membership" do
+      fake_login_admin(create(:support_admin))
+
+      get :index, params: { collection_id: collection.name }
+
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:index)
+    end
+
+    it "does not allow admins with other roles to view membership" do
+      fake_login_admin(create(:tag_wrangling_admin))
+
+      get :index, params: { collection_id: collection.name }
+
+      it_redirects_to_user_login_with_error
+    end
+  end
 end

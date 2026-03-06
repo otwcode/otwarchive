@@ -626,4 +626,23 @@ describe CollectionItemsController do
       end
     end
   end
+
+  describe "admin access to manage items" do
+    it "allows support admins to view the collection items index" do
+      fake_login_admin(create(:support_admin))
+
+      get :index, params: { collection_id: collection.name }
+
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:index)
+    end
+
+    it "does not allow admins with other roles to view the collection items index" do
+      fake_login_admin(create(:tag_wrangling_admin))
+
+      get :index, params: { collection_id: collection.name }
+
+      it_redirects_to_with_error(collections_path, "You don't have permission to see that, sorry!")
+    end
+  end
 end
