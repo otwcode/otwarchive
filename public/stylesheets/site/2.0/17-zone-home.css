@@ -63,11 +63,6 @@ user home, collections and challenges home, tag home, admin comms home
   float: none;
 }
 
-/* (no filters) */
-
-.dashboard.collections-index .index {
-  width: 100%;
-}
 
 .dashboard.works-index h4.landmark, .dashboard.works-index ol.pagination {
 	float: right;
