@@ -29,6 +29,7 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
   before_action :check_permission_to_modify_hidden_status, only: [:hide, :unhide]
+  before_action :check_guest_email_is_from_suspended_or_banned_user, only: [:create]
   before_action :admin_logout_required, only: [:new, :create, :add_comment_reply]
   before_action :set_page_subtitle, only: [:index, :new, :show, :unreviewed]
 
@@ -278,6 +279,19 @@ class CommentsController < ApplicationController
     # i18n-tasks-use t('comments.hide.permission_denied')
     # i18n-tasks-use t('comments.unhide.permission_denied')
     flash[:error] = t("comments.#{action_name}.permission_denied")
+    redirect_back_or_to @comment
+  end
+
+  def check_guest_email_is_from_suspended_or_banned_user
+    return unless guest?
+
+    canonical_email = EmailCanonicalizer.canonicalize(params[:comment][:email])
+
+    user = User.find_by(canonical_email: canonical_email)
+
+    return unless user&.suspended? || user&.banned?
+
+    flash[:error] = t("comments.check_guest_email_is_from_suspended_or_banned_user.error")
     redirect_back_or_to @comment
   end
 

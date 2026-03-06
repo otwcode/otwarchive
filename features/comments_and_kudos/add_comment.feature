@@ -395,6 +395,36 @@ Scenario: Cannot reply to comments (no button) while logged as admin
       And the email to "commenter" should contain "Go to the thread starting from this comment"
       And the email to "commenter" should be translated
 
+Scenario: Guest comments with an email from a banned or suspended user should be blocked
+  Given the work "Generic Work" by "creator" with guest comments enabled
+    And the following users exist
+      | login          | email                 |
+      | suspended_user | suspended@example.com |
+      | banned_user    | banned@example.com    |
+    And the user "suspended_user" is suspended
+    And the user "banned_user" is banned
+  When I post the comment "I loved this" on the work "Generic Work" as a guest with email "suspended@example.com"
+  Then I should see "Sorry, you have been blocked from commenting."
+    And I should not see "Comment created!"
+  When I post the comment "I loved this" on the work "Generic Work" as a guest with email "banned@example.com"
+  Then I should see "Sorry, you have been blocked from commenting."
+    And I should not see "Comment created!"
+
+Scenario: Guest comments with special GMail addresses from a banned or suspended user should be blocked
+  Given the work "Generic Work" by "creator" with guest comments enabled
+    And the following users exist
+      | login          | email                            |
+      | suspended_user | suspended.user+label@gmail.com   |
+      | banned_user    | banned.user+label@googlemail.com |
+    And the user "suspended_user" is suspended
+    And the user "banned_user" is banned
+  When I post the comment "I loved this" on the work "Generic Work" as a guest with email "suspe.ndeduser+stuff@googlemail.com"
+  Then I should see "Sorry, you have been blocked from commenting."
+    And I should not see "Comment created!"
+  When I post the comment "I loved this" on the work "Generic Work" as a guest with email "ban.neduser+stuff@gmail.com"
+  Then I should see "Sorry, you have been blocked from commenting."
+    And I should not see "Comment created!"
+  
   Scenario: Translated comment reply notification email
     Given the work "Generic Work" by "creator"
       And a comment "Hello" by "creator" on the work "Generic Work"

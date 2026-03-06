@@ -24,6 +24,8 @@ class User < ApplicationRecord
   # Allows other models to get the current user with User.current_user
   thread_cattr_accessor :current_user
 
+  before_validation :canonicalize_email, if: :will_save_change_to_email?
+
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
@@ -171,6 +173,10 @@ class User < ApplicationRecord
 
   has_many :log_items, dependent: :destroy
   validates_associated :log_items
+
+  def canonicalize_email
+    self.canonical_email = EmailCanonicalizer.canonicalize(self.email) if self.email
+  end
 
   def expire_caches
     return unless saved_change_to_login?
