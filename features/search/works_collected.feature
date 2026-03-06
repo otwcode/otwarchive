@@ -46,3 +46,37 @@ Feature: Search collected works
       And I should not see "New Title"
       And I should see "Revised Title"
       And I should see "Old Title"
+
+  Scenario: Works that are collected in an unrevealed or anonymous collection
+  has correct blurbs in the creator's collected works page for admins and the
+  creator, and the collections exist on filters on that page
+    Given I have the anonymous collection "Johnlock"
+    And I have the hidden collection "Adlock"
+    And I am logged in as "author"
+      And I post the work "Normal"
+      And I post the work "Scarlet" in the collection "Johnlock"
+      And I post the work "Hound" in the collection "Adlock"
+    When I go to author's user page
+      And I follow "Works (1)"
+      And I follow "Works in Collections"
+    Then I should see "Anonymous: Scarlet by Anonymous"
+      And I should see "Unrevealed: Hound by author"
+      And I should see "Johnlock (1)"
+      And I should see "Adlock (1)"
+    When I am logged in as an admin
+      And I go to author's user page
+      And I follow "Works (1)"
+      And I follow "Works in Collections"
+    Then I should see "Anonymous: Scarlet by Anonymous"
+      And I should see "Unrevealed: Hound by author"
+      And I should see "Johnlock (1)"
+      And I should see "Adlock (1)"
+    When I am logged in as a random user
+      And I go to author's user page
+      And I follow "Works (1)"
+      And I follow "Works in Collections"
+    Then I should not see "Anonymous: Scarlet by Anonymous"
+      And I should not see "Unrevealed: Hound by author"
+      And I should not see "Johnlock (1)"
+      And I should not see "Adlock (1)"
+
