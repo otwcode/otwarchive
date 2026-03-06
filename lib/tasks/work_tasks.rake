@@ -1,8 +1,8 @@
 namespace :work do
-  desc "Purge drafts created more than a month ago"
+  desc "Purge drafts created more than 30 days ago"
   task(:purge_old_drafts => :environment) do
     count = 0
-    Work.unposted.where('works.created_at < ?', 1.month.ago).find_each do |work|
+    Work.unposted.where('works.created_at < ?', 30.days.ago).find_each do |work|
       begin
         work.destroy!
         count += 1
@@ -12,7 +12,7 @@ namespace :work do
         puts e.backtrace
       end
     end
-    puts "Unposted works (#{count}) created more than one month ago have been purged"
+    puts "Unposted works (#{count}) created more than 30 days ago have been purged"
   end
 
   desc "create missing hit counters"

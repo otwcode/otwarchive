@@ -2976,6 +2976,10 @@ en:
     byline:
       add_co-creators: Add co-creators
       show_co-creator_options: Add co-creators?
+    drafts:
+      page_heading: Unposted Draft
+      please_note: 'Please note:'
+      unposted_drafts_get_deleted: Unposted drafts are only saved for 30 days from the day they are first created, and then deleted from %{app_name}.
     edit_tags:
       page_heading:
         edit_tags_and_language_html: Edit Work Tags and Language for %{title}
