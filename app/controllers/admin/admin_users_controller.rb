@@ -195,6 +195,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @user.set_user_work_dates
     @user.reindex_user_creations
     @user.update_works_index_timestamp!
+    @user.reindex_document
     @user.create_log_item(options = { action: ArchiveConfig.ACTION_TROUBLESHOOT, admin_id: current_admin.id })
     flash[:notice] = ts("User account troubleshooting complete.")
     redirect_to admin_user_path(@user)
