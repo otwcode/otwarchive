@@ -54,6 +54,23 @@ Feature: Work Drafts
       And I reload the page
     Then I should see "Drafts (1)"
 
+  Scenario: Old drafts created in February are only be purged after 30 days, not 28
+    Given I am logged in as "drafter" with password "something"
+      And time is frozen at 2025-03-12 17:00 UTC
+    When the work "old draft work" was created 31 days ago
+      And the work "less old draft work" was created 29 days ago
+      And the work "even less old work" was created 28 days ago
+      And the work "new draft work" was created 26 days ago
+    When I am on drafter's works page
+    Then I should see "Drafts (4)"
+    When the purge_old_drafts rake task is run
+      And I reload the page
+    Then I should see "Drafts (3)"
+    When it is currently 3 days from now
+    When the purge_old_drafts rake task is run
+      And I reload the page
+    Then I should see "Drafts (1)"
+
   Scenario: Drafts cannot be found by search
   Given I am logged in as "drafter" with password "something"
     And the draft "draft to post"
