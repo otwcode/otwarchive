@@ -59,9 +59,10 @@ class AbuseReport < ApplicationRecord
   # Chapter URLs: "chapters/123"
   # Comment URLs: "comments/123"
   # Profile URLs: "users/username"
+  # Bookmark URLs: "bookmarks/123"
   before_validation :standardize_url, on: :create
   def standardize_url
-    return unless url =~ %r{((chapters|works|comments)/\d+)} || url =~ %r{(users/\w+)}
+    return unless url =~ %r{((chapters|works|comments|bookmarks)/\d+)} || url =~ %r{(users/\w+)}
 
     self.url = add_scheme_to_url(url)
     self.url = clean_url(url)
@@ -173,6 +174,9 @@ class AbuseReport < ApplicationRecord
       ids = series.pseuds.pluck(:user_id).uniq.sort
       ids.prepend("orphanedseries") if ids.delete(User.orphan_account.id)
       ids.join(", ")
+    elsif (bookmark_id = reported_bookmark_id)
+      bookmark = Bookmark.find_by(id: bookmark_id)
+      return "deletedbookmark" unless bookmark
     elsif (user_login = reported_user_login)
       user = User.find_by(login: user_login)
 
@@ -180,10 +184,11 @@ class AbuseReport < ApplicationRecord
     end
   end
 
-  # ID of the reported work, unless the report is about comment(s) on the work
+  # ID of the reported work, unless the report is about comment(s) or bookmark(s) on the work
   def reported_work_id
     comments = url[%r{/comments/}, 0]
-    url[%r{/works/(\d+)}, 1] if comments.nil?
+    bookmarks = url[%r{/bookmarks/}, 0]
+    url[%r{/works/(\d+)}, 1] if comments.nil? && bookmarks.nil?
   end
 
   # ID of the reported comment
@@ -201,6 +206,10 @@ class AbuseReport < ApplicationRecord
     url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
   end
 
+  def reported_bookmark_id
+    url[%r{/bookmarks/(\d+)}, 1]
+  end
+
   def attach_work_download(ticket_id)
     work_id = reported_work_id
     return unless work_id
@@ -214,6 +223,15 @@ class AbuseReport < ApplicationRecord
   # times within the configured time period
   def url_is_not_over_reported
     case url
+    when %r{/bookmarks/\d+}
+      bookmarks_params_only = url.match(%r{/bookmarks/\d+/}).to_s
+      bookmark_report_period = ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD.days.ago
+      existing_reports_total = AbuseReport.where('created_at > ? AND
+                                                 url LIKE ?',
+                                                 bookmark_report_period,
+                                                 "%#{bookmarks_params_only}%").count
+      errors.add(:base, :over_reported_bookmark) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX
+      
     when %r{/comments/\d+}
       comment_params_only = url.match(%r{/comments/\d+/}).to_s
       comment_report_period = ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD.days.ago
