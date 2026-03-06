@@ -2,7 +2,7 @@ namespace :work do
   desc "Purge drafts created more than 30 days ago"
   task(:purge_old_drafts => :environment) do
     count = 0
-    Work.unposted.where('works.created_at < ?', 30.days.ago).find_each do |work|
+    Work.unposted.where("works.created_at < ?", 30.days.ago).find_each do |work|
       begin
         work.destroy!
         count += 1
