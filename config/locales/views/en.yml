@@ -626,8 +626,21 @@ en:
           hide_works: hide their works or bookmarks from you
           intro: 'Blocking a user will not:'
   bookmarks:
+    bookmark_blurb:
+      deleted: This has been deleted, sorry!
+      save: Save
+      saved: Saved
+    bookmark_owner_navigation:
+      delete: Delete
+      delete_confirmation: Are you sure you want to delete this bookmark?
+      edit: Edit
+      share: Share
+      share_bookmark: Share Bookmark
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    bookmarkable_blurb:
+      save: Save
+      saved: Saved
     external_work_fields:
       fandoms_help_title: Fandom help
       ratings_help_title: Rating help
@@ -638,6 +651,12 @@ en:
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
+      navigation:
+        bookmarks: Bookmarks
+        edit: Edit Bookmark
+        new: Bookmark
+        new_external_work: Bookmark External Work
+        works: Works
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
     search_form:
       word_count: Word count
