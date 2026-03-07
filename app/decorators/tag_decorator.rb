@@ -30,6 +30,6 @@ class TagDecorator < SimpleDelegator
   def self.load_from_elasticsearch(hits, **options)
     return Tag.load_from_elasticsearch(hits, **options) unless options[:scopes]&.include?(:es_only)
 
-    hits.map { TagDecorator.new(it["_source"].transform_keys(&:to_sym)) }
+    hits.map { |doc| TagDecorator.new(doc["_source"].transform_keys(&:to_sym)) }
   end
 end

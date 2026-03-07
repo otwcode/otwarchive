@@ -67,7 +67,7 @@
   <% if @has_mergers %>
     <div class="synonym listbox group">
       <h3 class="heading"><%= t(".synonyms") %></h3>
-      <% cache([:v1, :tag, :mergers, @tag.id], version: @tag.updated_at, skip_digest: true) do %>
+      <% cache([:v1, :tag, :mergers, @tag.id], version: @tag.updated_at.to_fs(:usec), skip_digest: true) do %>
         <ul class="tags commas index group"><%= tag_link_list(@tag.merger_data.sort) %></ul>
       <% end %>
     </div>
@@ -91,9 +91,9 @@
   </div>
   <% end %>
 
-  <% cache([:v1, :tag, :children, @tag.id], version: @tag.updated_at, skip_digest: true) do %>
+  <% cache([:v1, :tag, :children, @tag.id], version: @tag.updated_at.to_fs(:usec), skip_digest: true) do %>
     <% children = @tag.child_data(Tag::USER_DEFINED) %>
-    <% unless children.blank? %>
+    <% if children.present? %>
       <div class="child listbox group">
         <h3 class="heading"><%= t(".children.heading", count: ArchiveConfig.TAG_LIST_LIMIT) %></h3>
         <% children.each do |type, tags| %>
