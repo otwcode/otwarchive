@@ -96,8 +96,10 @@ Feature: Reading count
       And I should see "second work"
       And I should see "fifth"
       But I should not see "fourth"
-    When I follow "Clear History"
-      Then I should see "Your history is now cleared"
+    When I follow "Clear Entire History"
+    Then I should see "Are you sure you want to clear your entire history?"
+    When I press "Yes, Clear Entire History"
+    Then I should see "Your history is now cleared"
       And I should see "History" within "div#dashboard"
       But I should not see "First work"
       And I should not see "second work"
@@ -130,16 +132,16 @@ Feature: Reading count
 
   Scenario: You can't mark a story to read later if you're not logged in or the author
 
-  Given I am logged in as "writer"
-  When I post the work "Testy"
-  Then I should see "Work was successfully posted"
-  When I view the work "Testy"
-  Then I should not see "Mark for Later"
-    And I should not see "Mark as Read"
-  When I am logged out
-    And I view the work "Testy"
-  Then I should not see "Mark for Later"
-    And I should not see "Mark as Read"
+    Given I am logged in as "writer"
+    When I post the work "Testy"
+    Then I should see "Work was successfully posted"
+    When I view the work "Testy"
+    Then I should not see "Mark for Later"
+      And I should not see "Mark as Read"
+    When I am logged out
+      And I view the work "Testy"
+    Then I should not see "Mark for Later"
+      And I should not see "Mark as Read"
 
   Scenario: Multi-chapter works are added to history, can be deleted from history, are updated every time the user accesses a chapter, and can be marked for later
 
@@ -179,62 +181,62 @@ Feature: Reading count
 
   Scenario: A user can see some of their works marked for later on the homepage
 
-  Given the work "Maybe Tomorrow"
-    And I am logged in as "testy"
-  When I mark the work "Maybe Tomorrow" for later
-    And I go to the homepage
-  Then I should see "Is it later already?"
-    And I should see "Some works you've marked for later."
-    And I should see "Maybe Tomorrow"
+    Given the work "Maybe Tomorrow"
+      And I am logged in as "testy"
+    When I mark the work "Maybe Tomorrow" for later
+      And I go to the homepage
+    Then I should see "Is it later already?"
+      And I should see "Some works you've marked for later."
+      And I should see "Maybe Tomorrow"
 
   Scenario: A user cannot see works marked for later on the homepage if they have their reading history disabled
 
-  Given the work "Maybe Tomorrow"
-    And I am logged in as "testy"
-  When I mark the work "Maybe Tomorrow" for later
-    And I set my preferences to turn off history
-  When I go to the homepage
-  Then I should not see "Is it later already?"
-    And I should not see "Some works you've marked for later."
-    And I should not see "Maybe Tomorrow"
+    Given the work "Maybe Tomorrow"
+      And I am logged in as "testy"
+    When I mark the work "Maybe Tomorrow" for later
+      And I set my preferences to turn off history
+    When I go to the homepage
+    Then I should not see "Is it later already?"
+      And I should not see "Some works you've marked for later."
+      And I should not see "Maybe Tomorrow"
 
   Scenario: A user can delete a work marked for later from their history on the homepage
 
-  Given the work "Not Ever"
-    And I am logged in as "testy"
-  When I mark the work "Not Ever" for later
-    And I go to the homepage
-  Then I should see "Not Ever"
-    And I should see a "Delete from History" button
-  When I press "Delete from History"
-  Then I should see "Work successfully deleted from your history."
-    And I should be on the homepage
-    And I should not see "Is it later already?"
-    And I should not see "Some works you've marked for later."
-    And I should not see "Not Ever"
+    Given the work "Not Ever"
+      And I am logged in as "testy"
+    When I mark the work "Not Ever" for later
+      And I go to the homepage
+    Then I should see "Not Ever"
+      And I should see a "Delete from History" button
+    When I press "Delete from History"
+    Then I should see "Work successfully deleted from your history."
+      And I should be on the homepage
+      And I should not see "Is it later already?"
+      And I should not see "Some works you've marked for later."
+      And I should not see "Not Ever"
 
   Scenario: When a user marks a work for later and the creator deletes that work, the marked for later blurb on their homepage should be replaced with a "Deleted work" placeholder
 
-  Given I am logged in as "golucky" with password "password"
-    And I post the work "Gone Gone Gone"
-    And I am logged out
-  When I am logged in as "reader" with password "password"
-    And I mark the work "Gone Gone Gone" for later
-    And the readings are saved to the database
-    And I am logged out
-  When I am logged in as "golucky" with password "password"
-    And I delete the work "Gone Gone Gone"
-    And I am logged out
-  When I am logged in as "reader" with password "password"
-    And I go to the homepage
-  Then I should see "Deleted work"
-    And I should not see "Gone Gone Gone"
-  When I go to reader's reading page
-  Then I should see "Deleted work"
-    And I should not see "Gone Gone Gone"
-  When I follow "Marked for Later"
-  Then I should see "Deleted work"
-    And I should not see "Gone Gone Gone"
+    Given I am logged in as "golucky" with password "password"
+      And I post the work "Gone Gone Gone"
+      And I am logged out
+    When I am logged in as "reader" with password "password"
+      And I mark the work "Gone Gone Gone" for later
+      And the readings are saved to the database
+      And I am logged out
+    When I am logged in as "golucky" with password "password"
+      And I delete the work "Gone Gone Gone"
+      And I am logged out
+    When I am logged in as "reader" with password "password"
+      And I go to the homepage
+    Then I should see "Deleted work"
+      And I should not see "Gone Gone Gone"
+    When I go to reader's reading page
+    Then I should see "Deleted work"
+      And I should not see "Gone Gone Gone"
+    When I follow "Marked for Later"
+    Then I should see "Deleted work"
+      And I should not see "Gone Gone Gone"
 
   Scenario: When a user marks a work for later and the creator updates that work, the marked for later blurb on their homepage should update
 
