@@ -54,7 +54,7 @@ Feature: Work Drafts
       And I reload the page
     Then I should see "Drafts (1)"
 
-  Scenario: Old drafts created in February are only be purged after 30 days, not 28
+  Scenario: Old drafts created are purged after 30 days, independent of creation month
     Given I am logged in as "drafter" with password "something"
       And time is frozen at 2025-03-12 17:00 UTC
     When the work "old draft work" was created 31 days ago
@@ -67,7 +67,7 @@ Feature: Work Drafts
       And I reload the page
     Then I should see "Drafts (3)"
     When it is currently 3 days from now
-    When the purge_old_drafts rake task is run
+      And the purge_old_drafts rake task is run
       And I reload the page
     Then I should see "Drafts (1)"
 
