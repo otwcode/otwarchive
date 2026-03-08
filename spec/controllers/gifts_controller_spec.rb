@@ -5,6 +5,7 @@ require "spec_helper"
 describe GiftsController do
   include LoginMacros
   include RedirectExpectationHelper
+  render_views
 
   describe "toggle_rejected" do
     let(:gift) { create(:gift) }
@@ -35,6 +36,49 @@ describe GiftsController do
           expect do
             get :index, params: { user_id: "nobody" }
           end.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when viewing a user's gifts as an admin" do
+        let(:gift_user) { create(:user) }
+        let!(:accepted_work) { create(:work, title: "Accepted Gift Story") }
+        let!(:refused_work) { create(:work, title: "Refused Gift Story") }
+        let!(:accepted_gift) { create(:gift, pseud: gift_user.default_pseud, work: accepted_work) }
+        let!(:refused_gift) { create(:gift, pseud: gift_user.default_pseud, work: refused_work, rejected: true) }
+
+        before do
+          allow(SearchCounts).to receive(:work_count_for_user).and_return(0)
+          allow(SearchCounts).to receive(:bookmark_count_for_user).and_return(0)
+          allow(SearchCounts).to receive(:collection_count_for_user).and_return(0)
+        end
+
+        context "when requesting refused gifts" do
+          subject { get :index, params: { user_id: gift_user.login, refused: true } }
+
+          let(:success) do
+            expect(assigns(:works)).to include(refused_work)
+            expect(assigns(:works)).not_to include(accepted_work)
+            expect(response.body).to include("Accepted Gifts")
+            expect(response.body).to include("Refused Gifts")
+            expect(response.body).to include("Refused Gifts for #{gift_user.login}")
+            expect(response.body).not_to include("Refuse Gift")
+            expect(response.body).not_to include("Accept Gift")
+          end
+
+          it_behaves_like "an action only authorized admins can access", authorized_roles: %w[policy_and_abuse superadmin]
+        end
+
+        context "when admin does not have policy_and_abuse or superadmin role and requests accepted gifts" do
+          before { fake_login_admin(create(:support_admin)) }
+
+          it "does not show refused gifts or navigation" do
+            get :index, params: { user_id: gift_user.login }
+
+            expect(assigns(:works)).to include(accepted_work)
+            expect(assigns(:works)).not_to include(refused_work)
+            expect(response.body).not_to include("Accepted Gifts")
+            expect(response.body).not_to include("Refused Gifts for #{gift_user.login}")
+          end
         end
       end
     end
