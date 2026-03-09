@@ -199,7 +199,7 @@ class Admin::AdminUsersController < Admin::BaseController
     end
 
     flash[:notice] = t(".success", login: @user.login)
-    redirect_to(admin_users_path)
+    redirect_to(admin_users_path(user_id: @user.id))
   end
 
   def troubleshoot
