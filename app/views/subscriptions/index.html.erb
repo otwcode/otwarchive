@@ -63,20 +63,20 @@
           <% end %>
         </dt>
         <dd>
-          <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
+          <%= form_for [current_user, subscription], :html => { :method => :delete } do |f| %>
             <%= f.submit t(".button_html", name: subscription.name) %>
           <% end %>
         </dd>
       <% elsif subscription.subscribable && subscription.subscribable.try(:unrevealed?) %>
         <dt>
           <div class="mystery header module">
-            <h4 class="heading"><%= ts("Mystery Work") %></h4>
+            <h4 class="heading"><%= t(".mystery_work") %></h4>
           </div>
-          <h6 class="landmark heading"><%= ts("Summary") %></h6>
+          <h6 class="landmark heading"><%= t(".summary") %></h6>
         </dt>
         <dd>
-          <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
-            <%= f.submit t(".button_html", name: ts("Mystery Work")) %>
+          <%= form_for [current_user, subscription], :html => { :method => :delete } do |f| %>
+            <%= f.submit t(".button_html", name: t(".mystery_work")) %>
           <% end %>
         </dd>
       <% else %>
@@ -84,7 +84,7 @@
           <%= subscription.name %>
         </dt>
         <dd>
-          <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
+          <%= form_for [current_user, subscription], :html => { :method => :delete } do |f| %>
             <%= f.submit t(".button_html", name: subscription.name) %>
           <% end %>
         </dd>
