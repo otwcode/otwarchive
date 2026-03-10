@@ -49,26 +49,47 @@
 <h3 class="landmark heading"><%= t(".heading.landmark.list") %></h3>
 <dl class="subscription index group">
   <% @subscriptions.each do |subscription| %>
-    <dt>
-      <% if subscription.subscribable %>
-        <%= link_to(subscription.name, subscription.subscribable) %>
-        <% case subscription.subscribable_type %>
-        <% when "Work" %>
-          <%= t(".work") if @subscribable_type.blank? %>
-          <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
-        <% when "Series" %>
-          <%= t(".series") if @subscribable_type.blank? %>
-          <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
-        <% end %>
+    <div class="subscription">
+      <% if subscription.subscribable && !subscription.subscribable.try(:unrevealed?) %>
+        <dt>
+          <%= link_to(subscription.name, subscription.subscribable) %>
+          <% case subscription.subscribable_type %>
+          <% when "Work" %>
+            <%= t(".work") if @subscribable_type.blank? %>
+            <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
+          <% when "Series" %>
+            <%= t(".series") if @subscribable_type.blank? %>
+            <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
+          <% end %>
+        </dt>
+        <dd>
+          <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
+            <%= f.submit t(".button_html", name: subscription.name) %>
+          <% end %>
+        </dd>
+      <% elsif subscription.subscribable && subscription.subscribable.try(:unrevealed?) %>
+        <dt>
+          <div class="mystery header module">
+            <h4 class="heading"><%= ts("Mystery Work") %></h4>
+          </div>
+          <h6 class="landmark heading"><%= ts("Summary") %></h6>
+        </dt>
+        <dd>
+          <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
+            <%= f.submit t(".button_html", name: ts("Mystery Work")) %>
+          <% end %>
+        </dd>
       <% else %>
-        <%= subscription.name %>
+        <dt>
+          <%= subscription.name %>
+        </dt>
+        <dd>
+          <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
+            <%= f.submit t(".button_html", name: subscription.name) %>
+          <% end %>
+        </dd>
       <% end %>
-    </dt>
-    <dd>
-      <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
-        <%= f.submit t(".button_html", name: subscription.name) %>
-      <% end %>
-    </dd>
+    </div>
   <% end %>
 </dl>
 
