@@ -63,7 +63,7 @@
           <% end %>
         </dt>
         <dd>
-          <%= form_for [current_user, subscription], :html => { :method => :delete } do |f| %>
+          <%= form_for [current_user, subscription], html: { method: :delete } do |f| %>
             <%= f.submit t(".button_html", name: subscription.name) %>
           <% end %>
         </dd>
@@ -75,7 +75,7 @@
           <h6 class="landmark heading"><%= t(".summary") %></h6>
         </dt>
         <dd>
-          <%= form_for [current_user, subscription], :html => { :method => :delete } do |f| %>
+          <%= form_for [current_user, subscription], html: { method: :delete } do |f| %>
             <%= f.submit t(".button_html", name: t(".mystery_work")) %>
           <% end %>
         </dd>
@@ -84,7 +84,7 @@
           <%= subscription.name %>
         </dt>
         <dd>
-          <%= form_for [current_user, subscription], :html => { :method => :delete } do |f| %>
+          <%= form_for [current_user, subscription], html: { method: :delete } do |f| %>
             <%= f.submit t(".button_html", name: subscription.name) %>
           <% end %>
         </dd>
