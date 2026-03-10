@@ -69,10 +69,7 @@
         </dd>
       <% elsif subscription.subscribable && subscription.subscribable.try(:unrevealed?) %>
         <dt>
-          <div class="mystery header module">
-            <h4 class="heading"><%= t(".mystery_work") %></h4>
-          </div>
-          <h6 class="landmark heading"><%= t(".summary") %></h6>
+          <%= t(".mystery_work") %>
         </dt>
         <dd>
           <%= form_for [current_user, subscription], html: { method: :delete } do |f| %>

@@ -2657,6 +2657,7 @@ en:
         works: My Work Subscriptions
       series: "(Series)"
       work: "(Work)"
+      mystery_work: Mystery Work
   tag_wranglers:
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
