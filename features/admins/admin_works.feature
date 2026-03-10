@@ -516,7 +516,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the work "Over the Limit" has 2 character tags
       And the work "Over the Limit" has 2 relationship tags
       And the work "Over the Limit" has 2 freeform tags
-    When I am logged in as a "superadmin" admin
+    When I am logged in as an admin
       And I view the work "Under the Limit"
     Then I should see "Over Tag Limit: No"
     When I view the work "Over the Limit"
