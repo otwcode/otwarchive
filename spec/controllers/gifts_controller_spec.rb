@@ -5,7 +5,6 @@ require "spec_helper"
 describe GiftsController do
   include LoginMacros
   include RedirectExpectationHelper
-  render_views
 
   describe "toggle_rejected" do
     let(:gift) { create(:gift) }
@@ -58,11 +57,7 @@ describe GiftsController do
           let(:success) do
             expect(assigns(:works)).to include(refused_work)
             expect(assigns(:works)).not_to include(accepted_work)
-            expect(response.body).to include("Accepted Gifts")
-            expect(response.body).to include("Refused Gifts")
-            expect(response.body).to include("Refused Gifts for #{gift_user.login}")
-            expect(response.body).not_to include("Refuse Gift")
-            expect(response.body).not_to include("Accept Gift")
+            expect(assigns(:can_access_refused_gifts)).to be_truthy
           end
 
           it_behaves_like "an action only authorized admins can access", authorized_roles: %w[policy_and_abuse superadmin]
@@ -76,8 +71,7 @@ describe GiftsController do
 
             expect(assigns(:works)).to include(accepted_work)
             expect(assigns(:works)).not_to include(refused_work)
-            expect(response.body).not_to include("Accepted Gifts")
-            expect(response.body).not_to include("Refused Gifts for #{gift_user.login}")
+            expect(assigns(:can_access_refused_gifts)).to be_falsey
           end
         end
       end

@@ -1,7 +1,7 @@
 class GiftPolicy < ApplicationPolicy
-  VIEW_REFUSED_ROLES = %w[superadmin policy_and_abuse].freeze
+  ACCESS_REFUSED_ROLES = %w[superadmin policy_and_abuse].freeze
 
-  def view_refused?
-    user_has_roles?(VIEW_REFUSED_ROLES)
+  def access_refused?
+    user_has_roles?(ACCESS_REFUSED_ROLES)
   end
 end

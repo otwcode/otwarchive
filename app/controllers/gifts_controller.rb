@@ -4,29 +4,26 @@ class GiftsController < ApplicationController
   def index
     @user = User.find_by!(login: params[:user_id]) if params[:user_id]
     @recipient_name = params[:recipient]
-    authorize_refused_gifts_access
-    @can_view_refused_gifts = can_view_refused_gifts?
-    @page_subtitle = t("gifts.index.page_subtitle", name: (@user ? @user.login : @recipient_name))
+    authorize :gift, :access_refused? if params[:refused].present? && @user && logged_in_as_admin?
+    @can_access_refused_gifts = @user && (@user == current_user || (logged_in_as_admin? && policy(:gift).access_refused?))
+    @page_subtitle = t(".page_subtitle", name: (@user ? @user.login : @recipient_name))
     unless @user || @recipient_name
-      flash[:error] = t("gifts.index.whose_gifts_error")
+      flash[:error] = t(".whose_gifts_error")
       redirect_to(@collection || root_path) and return
     end
 
     if @user
-      @works = if guest?
-                 @user.gift_works.visible_to_all
-               elsif @can_view_refused_gifts && params[:refused]
+      @works = if @can_access_refused_gifts && params[:refused]
                  @user.rejected_gift_works.visible_to_registered_user
+               elsif current_user.nil?
+                 @user.gift_works.visible_to_all
                else
                  @user.gift_works.visible_to_registered_user
                end
     else
       pseud = Pseud.parse_byline(@recipient_name)
-      @works = if pseud
-                 guest? ? pseud.gift_works.visible_to_all : pseud.gift_works.visible_to_registered_user
-               else
-                 guest? ? Work.giftworks_for_recipient_name(@recipient_name).visible_to_all : Work.giftworks_for_recipient_name(@recipient_name).visible_to_registered_user
-               end
+      @works = pseud ? pseud.gift_works : Work.giftworks_for_recipient_name(@recipient_name)
+      @works = current_user.nil? ? @works.visible_to_all : @works.visible_to_registered_user
     end
     @works = @works.in_collection(@collection) if @collection
     @works = @works.order("revised_at DESC").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
@@ -39,9 +36,9 @@ class GiftsController < ApplicationController
       @gift.rejected = !@gift.rejected?
       @gift.save!
       flash[:notice] = if @gift.rejected?
-                         t("gifts.toggle_rejected.now_hidden_notice")
+                         t(".now_hidden_notice")
                        else
-                         t("gifts.toggle_rejected.now_visible_notice")
+                         t(".now_visible_notice")
                        end
     else
       # user doesn't have permission
@@ -49,25 +46,5 @@ class GiftsController < ApplicationController
       return
     end
     redirect_to user_gifts_path(current_user) and return
-  end
-
-  private
-
-  def can_view_refused_gifts?
-    @user && (@user == current_user || admin_can_view_refused_gifts?)
-  end
-
-  def admin_can_view_refused_gifts?
-    logged_in_as_admin? && policy(:gift).view_refused?
-  end
-
-  def authorize_refused_gifts_access
-    return unless viewing_another_users_refused_gifts? && logged_in_as_admin?
-
-    authorize :gift, :view_refused?
-  end
-
-  def viewing_another_users_refused_gifts?
-    params[:refused].present? && @user && @user != current_user
   end
 end
