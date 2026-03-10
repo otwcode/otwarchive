@@ -66,7 +66,7 @@ describe GiftsController do
         context "when admin does not have policy_and_abuse or superadmin role and requests accepted gifts" do
           before { fake_login_admin(create(:support_admin)) }
 
-          it "does not show refused gifts or navigation" do
+          it "does not show refused gifts" do
             get :index, params: { user_id: gift_user.login }
 
             expect(assigns(:works)).to include(accepted_work)
