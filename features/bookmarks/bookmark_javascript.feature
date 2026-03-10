@@ -1,8 +1,8 @@
 @bookmarks
-Feature: Create and edit bookmarks with javascript enabled
+Feature: Create, edit and delete bookmarks with javascript enabled
   In order to have a good user experience
   As a humble user
-  I want to be able to create and edit bookmarks with javascript enabled
+  I want to be able to create, edit and delete bookmarks with javascript enabled
   
   Background:
     Given I am logged in as "recengine"
