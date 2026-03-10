@@ -2640,6 +2640,7 @@ en:
       heading:
         landmark:
           list: List of Subscriptions
+      mystery_work: Mystery Work
       navigation:
         all: All Subscriptions
         delete_all:
@@ -2657,7 +2658,6 @@ en:
         works: My Work Subscriptions
       series: "(Series)"
       work: "(Work)"
-      mystery_work: Mystery Work
   tag_wranglers:
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
