@@ -76,11 +76,11 @@ class Pseud < ApplicationRecord
 
   after_create :add_to_autocomplete
   after_create :reindex_user
-  before_update :cleanup_autocomplete, if: :name_changed?
-  after_update :add_to_autocomplete, if: :name_changed?
+  before_update :cleanup_autocomplete, if: :will_save_change_to_name?
+  after_update :add_to_autocomplete, if: :saved_change_to_name?
   after_update :check_default_pseud
   after_update :expire_caches
-  after_update :reindex_user, if: :name_changed?
+  after_update :reindex_user, if: :saved_change_to_name?
   before_destroy :remove_from_autocomplete
   after_destroy :reindex_user
   after_commit :reindex_creations, :touch_comments
