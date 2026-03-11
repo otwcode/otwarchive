@@ -53,7 +53,7 @@ class AbuseReport < ApplicationRecord
 
   scope :by_date, -> { order('created_at DESC') }
 
-  # Standardize the format of work, chapter, comment, and profile URLs
+  # Standardize the format of work, chapter, comment, profile and bookmark URLs
   # to get it ready for the url_is_not_over_reported validation.
   # Work URLs: "works/123"
   # Chapter URLs: "chapters/123"
@@ -174,9 +174,6 @@ class AbuseReport < ApplicationRecord
       ids = series.pseuds.pluck(:user_id).uniq.sort
       ids.prepend("orphanedseries") if ids.delete(User.orphan_account.id)
       ids.join(", ")
-    elsif (bookmark_id = reported_bookmark_id)
-      bookmark = Bookmark.find_by(id: bookmark_id)
-      return "deletedbookmark" unless bookmark
     elsif (user_login = reported_user_login)
       user = User.find_by(login: user_login)
 
@@ -184,11 +181,10 @@ class AbuseReport < ApplicationRecord
     end
   end
 
-  # ID of the reported work, unless the report is about comment(s) or bookmark(s) on the work
+  # ID of the reported work, unless the report is about comment(s) on the work
   def reported_work_id
     comments = url[%r{/comments/}, 0]
-    bookmarks = url[%r{/bookmarks/}, 0]
-    url[%r{/works/(\d+)}, 1] if comments.nil? && bookmarks.nil?
+    url[%r{/works/(\d+)}, 1] if comments.nil?
   end
 
   # ID of the reported comment
@@ -231,7 +227,6 @@ class AbuseReport < ApplicationRecord
                                                  bookmark_report_period,
                                                  "%#{bookmarks_params_only}%").count
       errors.add(:base, :over_reported_bookmark) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX
-      
     when %r{/comments/\d+}
       comment_params_only = url.match(%r{/comments/\d+/}).to_s
       comment_report_period = ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD.days.ago
