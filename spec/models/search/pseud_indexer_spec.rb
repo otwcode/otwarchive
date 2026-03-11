@@ -4,12 +4,10 @@ describe PseudIndexer, pseud_search: true do
   describe ".index_all" do
     it "uses configured shard count when creating the index" do
       allow(PseudIndexer).to receive(:delete_index)
-      allow(PseudIndexer).to receive(:create_index)
       allow(PseudIndexer).to receive(:index_from_db)
+      expect(PseudIndexer).to receive(:create_index).with(shards: ArchiveConfig.PSEUD_SHARDS)
 
       PseudIndexer.index_all
-
-      expect(PseudIndexer).to have_received(:create_index).with(shards: ArchiveConfig.PSEUDS_SHARDS)
     end
   end
 

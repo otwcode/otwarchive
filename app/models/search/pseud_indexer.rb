@@ -33,7 +33,7 @@ class PseudIndexer < Indexer
   def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
-      create_index(shards: ArchiveConfig.PSEUDS_SHARDS)
+      create_index(shards: ArchiveConfig.PSEUD_SHARDS)
     end
     options[:skip_delete] = true
     super(options)

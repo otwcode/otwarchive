@@ -32,7 +32,7 @@ class TagIndexer < Indexer
   def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
-      create_index(shards: ArchiveConfig.TAGS_SHARDS)
+      create_index(shards: ArchiveConfig.TAG_SHARDS)
     end
     options[:skip_delete] = true
     super(options)
