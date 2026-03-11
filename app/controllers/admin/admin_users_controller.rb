@@ -192,7 +192,8 @@ class Admin::AdminUsersController < Admin::BaseController
     
     @user.pseuds.each do |pseud|
       pseud.description = nil
-      pseud.delete_icon
+      # pseud.delete_icon = 1
+      # pseud.clear_icon
 
       # Override validations because there is no ticket number available
       pseud.save(validate: false)
