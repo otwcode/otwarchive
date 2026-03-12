@@ -42,7 +42,7 @@ Please check out our development wiki for more information on:
 
 ### Workflow
 
-1. If this is your first contribution, we recommend starting with an [issue reserved for first timers](https://otwarchive.atlassian.net/issues/?filter=13119). Otherwise, or if you're up for a challenge, choose any [open and unassigned issue](https://otwarchive.atlassian.net/issues/?filter=10800) available. (If you're a new contributor, don't worry about claiming the issue for now. If you make a Jira account, you'll get permissions for claiming issues in step 5.)
+1. If this is your first contribution, we recommend starting with an [issue reserved for first timers](https://otwarchive.atlassian.net/issues/?filter=13119). After your first pull request, or if you're up for a challenge, choose any [open and unassigned issue](https://otwarchive.atlassian.net/issues/?filter=10800) available. (If you're a new contributor, don't worry about claiming the issue for now. If you make a Jira account, you'll get permissions for claiming issues in step 5.)
 2. Write code to address the issue. If you already have Jira permissions, be sure to set the issue status to ["In Progress"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira#status-guide).
 3. Optional: Create a Jira account if you'd like the ability to comment on, assign, and transition issues. Please make sure the Full Name on your Jira account either closely matches the name you'd like us to credit in the release notes or includes it in parentheses, e.g. "Nickname (CREDIT NAME)."
 4. Submit the code with a pull request following the checklist on [our template](https://github.com/otwcode/otwarchive/blob/master/.github/PULL_REQUEST_TEMPLATE.md).
