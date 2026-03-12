@@ -51,7 +51,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem "elasticsearch", "8.19.2"
+gem "elasticsearch", "9.3.0"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
@@ -61,7 +61,7 @@ gem "terrapin"
 gem 'fastimage'
 
 # Gems for authentication
-gem "devise"
+gem "devise", git: "https://github.com/otwcode/devise", ref: "fade89f"
 gem "devise-async" # To mails through queues
 gem "bcrypt"
 gem "devise-pwned_password"
