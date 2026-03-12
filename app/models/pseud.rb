@@ -286,7 +286,7 @@ class Pseud < ApplicationRecord
     end
   end
 
-  # This method is for removing stale autocomplete records in a before_*
+  # This method is for removing stale autocomplete records in a before_* callback.
   #
   # This is a particular case for the Pseud model
   def remove_stale_from_autocomplete_before_save
