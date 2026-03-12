@@ -46,12 +46,13 @@ When "I fill in details of my default pseud" do
   fill_in("Icon comment text", with: "Icon comment text thingy")
   step("I attach an icon with the extension 'png'")
   click_button("Update")
+  step("I should see 'Pseud was successfully updated.'")
 end
 
 Then "the pseud {string} should not have an icon, alt text and comment text" do |pseud_name|
   pseud = Pseud.find_by(name: pseud_name)
 
-  expect !pseud.icon.attached?
-  expect pseud.icon_alt_text.blank?
-  expect pseud.icon_comment_text.blank?
+  expect(pseud.icon.attached?).to be_falsey
+  expect(pseud.icon_alt_text).to be_blank
+  expect(pseud.icon_comment_text).to be_blank
 end
