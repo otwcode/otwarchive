@@ -711,9 +711,10 @@ describe Admin::AdminUsersController do
           end
 
           it "reindexes account" do
-            fake_login_admin(admin)
-            subject.call
-            expect(user).to receive(:reindex_document).once
+            expect do
+              fake_login_admin(admin)
+              subject.call
+            end.to add_to_reindex_queue(user, :users)
           end
         end
       end
