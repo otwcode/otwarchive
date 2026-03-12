@@ -202,10 +202,6 @@ class AbuseReport < ApplicationRecord
     url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
   end
 
-  def reported_bookmark_id
-    url[%r{/bookmarks/(\d+)}, 1]
-  end
-
   def attach_work_download(ticket_id)
     work_id = reported_work_id
     return unless work_id
