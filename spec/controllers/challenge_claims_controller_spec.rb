@@ -156,25 +156,17 @@ describe ChallengeClaimsController do
   end
 
   describe "admin access to claims index" do
-    let(:claiming_user) { create(:user) }
-    let!(:claim_one) { create(:challenge_claim, collection: collection, claiming_user: claiming_user) }
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
+    let!(:claim_one) { create(:challenge_claim, collection: collection, claiming_user: create(:user)) }
     let!(:claim_two) { create(:challenge_claim, collection: collection, claiming_user: create(:user)) }
 
-    it "allows support admins to view all claims in a collection" do
-      fake_login_admin(create(:support_admin))
+    subject { get :index, params: { collection_id: collection.name } }
 
-      get :index, params: { collection_id: collection.name }
-
+    let(:success) do
       expect(response).to have_http_status(:success)
       expect(assigns(:claims)).to include(claim_one, claim_two)
     end
 
-    it "does not allow admins with other roles to view claims index" do
-      fake_login_admin(create(:tag_wrangling_admin))
-
-      get :index, params: { collection_id: collection.name }
-
-      it_redirects_to_user_login_with_error
-    end
+    it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
   end
 end

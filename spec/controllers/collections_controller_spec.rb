@@ -291,23 +291,18 @@ describe CollectionsController, collection_search: true do
   end
 
   describe "admin access to owner pages" do
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
     let(:collection) { create(:collection) }
 
-    it "allows support admins to view edit" do
-      fake_login_admin(create(:support_admin))
+    describe "GET #edit" do
+      subject { get :edit, params: { id: collection.name } }
 
-      get :edit, params: { id: collection.name }
+      let(:success) do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:edit)
+      end
 
-      expect(response).to have_http_status(:success)
-      expect(response).to render_template(:edit)
-    end
-
-    it "does not allow admins with other roles to view edit" do
-      fake_login_admin(create(:tag_wrangling_admin))
-
-      get :edit, params: { id: collection.name }
-
-      it_redirects_to_user_login_with_error
+      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
     end
 
     it "does not allow support admins to update" do

@@ -7,23 +7,15 @@ describe PotentialMatchesController do
   let(:collection) { create(:collection, challenge: create(:gift_exchange)) }
 
   describe "index" do
-    %i[support_admin policy_and_abuse_admin superadmin].each do |admin_factory|
-      it "allows #{admin_factory} to view potential matches" do
-        fake_login_admin(create(admin_factory))
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
 
-        get :index, params: { collection_id: collection.name }
+    subject { get :index, params: { collection_id: collection.name } }
 
-        expect(response).to have_http_status(:success)
-        expect(response).to render_template(:index)
-      end
+    let(:success) do
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:index)
     end
 
-    it "does not allow admins with other roles to view potential matches" do
-      fake_login_admin(create(:tag_wrangling_admin))
-
-      get :index, params: { collection_id: collection.name }
-
-      it_redirects_to_user_login_with_error
-    end
+    it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
   end
 end

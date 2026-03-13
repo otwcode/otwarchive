@@ -18,25 +18,18 @@ describe ChallengeRequestsController, bookmark_search: true, collection_search: 
     end
 
     context "with gift exchanges where request summary is private" do
+      authorized_roles = %w[support policy_and_abuse superadmin].freeze
       let(:challenge) { create(:gift_exchange, requests_summary_visible: false) }
       let(:collection) { create(:collection, challenge: challenge) }
 
-      it "allows support admins to view the requests summary" do
-        fake_login_admin(create(:support_admin))
+      subject { get :index, params: { collection_id: collection.name } }
 
-        get :index, params: { collection_id: collection.name }
-
+      let(:success) do
         expect(response).to have_http_status(:success)
         expect(response).to render_template(:index)
       end
 
-      it "does not allow admins with other roles to view the requests summary" do
-        fake_login_admin(create(:tag_wrangling_admin))
-
-        get :index, params: { collection_id: collection.name }
-
-        it_redirects_to_with_notice(collection_path(collection), "You are not allowed to view the requests summary!")
-      end
+      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
     end
   end
 end

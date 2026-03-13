@@ -336,11 +336,13 @@ public
   end
 
   def privileged_collection_admin?
-    logged_in_as_admin? && (current_admin.roles & %w[support policy_and_abuse superadmin]).present?
+    policy(Collection).access?
   end
 
   def users_or_privileged_collection_admin_only
-    logged_in? || privileged_collection_admin? || access_denied
+    return if logged_in? || privileged_collection_admin?
+
+    logged_in_as_admin? ? admin_only_access_denied : access_denied
   end
 
   def collection_maintainers_only
@@ -348,7 +350,9 @@ public
   end
 
   def collection_maintainers_or_privileged_admins_only
-    (logged_in? && @collection && @collection.user_is_maintainer?(current_user)) || privileged_collection_admin? || access_denied
+    return if (logged_in? && @collection && @collection.user_is_maintainer?(current_user)) || privileged_collection_admin?
+
+    logged_in_as_admin? ? admin_only_access_denied : access_denied
   end
 
   def collection_owners_only
@@ -356,7 +360,9 @@ public
   end
 
   def collection_owners_or_privileged_admins_only
-    (logged_in? && @collection && @collection.user_is_owner?(current_user)) || privileged_collection_admin? || access_denied
+    return if (logged_in? && @collection && @collection.user_is_owner?(current_user)) || privileged_collection_admin?
+
+    logged_in_as_admin? ? admin_only_access_denied : access_denied
   end
 
   def not_allowed(fallback=nil)

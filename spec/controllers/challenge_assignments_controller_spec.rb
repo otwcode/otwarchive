@@ -454,29 +454,32 @@ describe ChallengeAssignmentsController do
   end
 
   describe "admin access to assignments pages" do
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
     let(:gift_exchange) { create(:gift_exchange, assignments_sent_at: Faker::Time.backward) }
     let(:user) { other_user }
 
-    it "allows support admins to view assignments index and individual assignment pages" do
-      fake_logout
-      fake_login_admin(create(:support_admin))
+    before { fake_logout }
 
-      get :index, params: { collection_id: collection.name }
-      expect(response).to have_http_status(:success)
-      expect(response).to render_template(:index)
+    describe "GET #index" do
+      subject { get :index, params: { collection_id: collection.name } }
 
-      get :show, params: { id: assignment.id, collection_id: collection.name }
-      expect(response).to have_http_status(:success)
-      expect(response).to render_template(:show)
+      let(:success) do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
     end
 
-    it "does not allow admins with other roles to view assignments index" do
-      fake_logout
-      fake_login_admin(create(:tag_wrangling_admin))
+    describe "GET #show" do
+      subject { get :show, params: { id: assignment.id, collection_id: collection.name } }
 
-      get :index, params: { collection_id: collection.name }
+      let(:success) do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:show)
+      end
 
-      it_redirects_to_user_login_with_error
+      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
     end
   end
 end
