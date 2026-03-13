@@ -1,7 +1,7 @@
 <div class="intro module">
   <h2 class="heading"><%= t(".intro_description") %></h2>
   <p class="stats"><%= ts("more than %{fandom_count} fandoms | %{user_count} users | %{work_count} works", fandom_count: content_tag(:span, number_with_delimiter(@fandom_count), class: "count"), user_count: content_tag(:span, number_with_delimiter(@user_count), class: "count"), work_count: content_tag(:span, number_with_delimiter(@work_count), class: "count")).html_safe %></p>
-  <p class="parent"><%= t(".parent_org_intro") %> <%= link_to t(".parent_org_name"), "http://transformativeworks.org" %>.</p>
+  <p class="parent"><%= t(".parent_org_intro_html", parent_org_link: link_to(t(".parent_org_name"), "http://transformativeworks.org")) %></p>
 
   <div class="account module">
 

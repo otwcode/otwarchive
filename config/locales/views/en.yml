@@ -1688,7 +1688,7 @@ en:
         tumblr: ao3org on Tumblr
     intro_module:
       intro_description: A non-profit, non-commercial archive for transformative fanworks; created by and for fans of books, music, art, games, shows, movies, real-person fiction (RPF), and other fandoms.
-      parent_org_intro: The Archive of Our Own (AO3) is a project of the
+      parent_org_intro_html: The Archive of Our Own (AO3) is a project of the %{parent_org_link}.
       parent_org_name: Organization for Transformative Works
     privacy:
       account_termination:
