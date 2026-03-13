@@ -12,7 +12,7 @@ module AutocompleteSource
   AUTOCOMPLETE_WORD_TERMINATOR = ",,".freeze
 
   def transliterate(input)
-    input = input.to_s.mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/, "")
+    input = input.to_s.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/, "")
     result = +""
     input.each_char do |char|
       tl = ActiveSupport::Inflector.transliterate(char)
@@ -241,9 +241,6 @@ module AutocompleteSource
 
     # Split a string into words.
     def autocomplete_phrase_split(string)
-      # Use the ActiveSupport::Multibyte::Chars class to handle downcasing
-      # instead of the basic string class, because it can handle downcasing
-      # letters with accents or other diacritics.
       normalized = self.transliterate(string).downcase.to_s
 
       # Split on one or more spaces, ampersands, slashes, double quotation marks,
