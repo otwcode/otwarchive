@@ -153,6 +153,14 @@ describe AbuseReport do
       end
     end
 
+    shared_examples "enough bookmark reports" do |url|
+      let(:report) { build(:abuse_report, url: url) }
+      it "can't be submitted" do
+        expect(report.save).to be_falsey
+        expect(report.errors[:base].first).to include("This bookmark has already been reported.")
+      end
+    end
+
     shared_examples "alright" do |url|
       let(:report) { build(:abuse_report, url: url) }
       it "can be submitted" do
@@ -388,6 +396,80 @@ describe AbuseReport do
         end
         # Should be valid because old reports don't count
         report = build(:abuse_report, url: user_url)
+        expect(report.save).to be_truthy
+      end
+    end
+
+    context "for a bookmark reported the maximum number of times" do
+      bookmark_url = "http://archiveofourown.org/bookmarks/456"
+
+      before do
+        ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX.times do
+          create(:abuse_report, url: bookmark_url)
+        end
+        expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX)
+      end
+
+      # obviously
+      it_behaves_like "enough bookmark reports", bookmark_url
+
+      # the same bookmark, different protocol
+      it_behaves_like "enough bookmark reports", "https://archiveofourown.org/bookmarks/456"
+
+      # the same bookmark, with parameters/anchors
+      it_behaves_like "enough bookmark reports", "http://archiveofourown.org/bookmarks/456?show_notes=true"
+      it_behaves_like "enough bookmark reports", "http://archiveofourown.org/bookmarks/456#notes"
+      it_behaves_like "enough bookmark reports", "http://archiveofourown.org/bookmarks/456/?show_notes=true"
+
+      # the same bookmark, under works
+      it_behaves_like "enough bookmark reports", "http://archiveofourown.org/works/789/bookmarks/456"
+
+      # the same bookmark, under users
+      it_behaves_like "enough bookmark reports", "http://archiveofourown.org/users/someone/bookmarks/456"
+
+      # not the same bookmark
+      it_behaves_like "alright", "http://archiveofourown.org/bookmarks/4560"
+      it_behaves_like "alright", "http://archiveofourown.org/bookmarks/45"
+      it_behaves_like "alright", "http://archiveofourown.org/bookmarks/999"
+
+      # unrelated
+      it_behaves_like "alright", "http://archiveofourown.org/works/456"
+      it_behaves_like "alright", "http://archiveofourown.org/users/someone"
+
+      context "after the over-reporting period" do
+        before { travel(ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD.days) }
+
+        it_behaves_like "alright", bookmark_url
+      end
+    end
+
+    context "when reporting bookmark URLs that cross the reporting period timeframe" do
+      bookmark_url = "http://archiveofourown.org/bookmarks/457"
+
+      it "allows reporting a bookmark when old reports are outside the configured period" do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD.days.ago - 1.day) do
+          ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX.times do
+            create(:abuse_report, url: bookmark_url)
+          end
+        end
+
+        report = build(:abuse_report, url: bookmark_url)
+        expect(report.save).to be_truthy
+      end
+
+      it "counts only reports within the configured period" do
+        # Create reports outside the period
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD.days.ago - 1.day) do
+          create_list(:abuse_report, 2) do |abuse_report|
+            abuse_report.url = bookmark_url
+          end
+        end
+        # Crate reports within the configured period (one less than max)
+        (ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX - 1).times do
+          create(:abuse_report, url: bookmark_url)
+        end
+        # Should be valid because old reports don't count
+        report = build(:abuse_report, url: bookmark_url)
         expect(report.save).to be_truthy
       end
     end
