@@ -242,7 +242,7 @@ en:
           rename: Rename
           roles: Manage Roles
           troubleshoot: Troubleshoot
-        note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
+        note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex the user and their works and bookmarks, choose "Troubleshoot."
         page_heading: 'User: %{login} (%{id})'
         page_title: "%{login} - User Administration"
         status:
