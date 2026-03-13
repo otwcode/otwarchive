@@ -43,7 +43,7 @@
 # The current behavior of not raising an error has been deprecated, and this configuration option will be removed in
 # Rails 8.2.
 #++
-# Rails.configuration.active_record.raise_on_missing_required_finder_order_columns = true
+Rails.configuration.active_record.raise_on_missing_required_finder_order_columns = true
 
 ###
 # Controls how Rails handles path relative URL redirects.
@@ -58,7 +58,7 @@
 # Applications that want to allow these redirects can set the config to `:log` (previous default)
 # to only log warnings, or `:notify` to send ActiveSupport notifications.
 #++
-# Rails.configuration.action_controller.action_on_path_relative_redirect = :raise
+Rails.configuration.action_controller.action_on_path_relative_redirect = :raise
 
 ###
 # Use a Ruby parser to track dependencies between Action View templates
