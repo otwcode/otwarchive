@@ -8,6 +8,21 @@ shared_examples "a wrangleable" do
     end
   end
 
+  shared_examples "wrangling activity is never recorded" do
+    context "a wrangling activity has happened" do
+      before { User.should_update_wrangling_activity = true }
+
+      include_examples "no wrangling activity recorded"
+    end
+
+    context "no wrangling activity has happened" do
+      before { User.should_update_wrangling_activity = false }
+
+      include_examples "no wrangling activity recorded"
+    end
+  end
+
+
   describe "#update_last_wrangling_activity" do
     context "as a tag wrangler" do
       before { User.current_user = create(:tag_wrangler) }
@@ -31,26 +46,24 @@ shared_examples "a wrangleable" do
     end
   end
 
-  [
-    ["regular user", FactoryBot.create(:user)],
-    ["admin", FactoryBot.create(:admin)],
-    ["nil", nil]
-  ].each do |role, user|
-    context "as #{role}" do
-      before { User.current_user = user }
+  context "as a regular user" do
+    let(:user) { FactoryBot.create(:user) }
+    before { User.current_user = user }
 
-      context "a wrangling activity has happened" do
-        before { User.should_update_wrangling_activity = true }
+    include_examples "wrangling activity is never recorded"
+  end
 
-        include_examples "no wrangling activity recorded"
-      end
+  context "as an admin" do
+    let(:admin) { FactoryBot.create(:admin) }
+    before { User.current_user = admin }
 
-      context "no wrangling activity has happened" do
-        before { User.should_update_wrangling_activity = false }
+    include_examples "wrangling activity is never recorded"
+  end
 
-        include_examples "no wrangling activity recorded"
-      end
-    end
+  context "signed out" do
+    before { User.current_user = nil }
+
+    include_examples "wrangling activity is never recorded"
   end
 end
 

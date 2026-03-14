@@ -11,6 +11,10 @@ describe 'rake opendoors:import_url_mapping' do
   let!(:work_with_temp_url) { create(:work, id: id1, imported_from_url: temp_url) }
   let!(:work_with_no_url) { create(:work, id: id2, imported_from_url: nil) }
 
+  after do
+    File.delete("opendoors_result.txt") if File.exist?("opendoors_result.txt")
+  end
+
   context "Open Doors rake task" do
     it "takes a path to a CSV and updates works" do
       path = file_fixture("opendoors_import_url_mapping.csv")
