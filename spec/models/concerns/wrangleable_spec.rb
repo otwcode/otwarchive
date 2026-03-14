@@ -22,7 +22,6 @@ shared_examples "a wrangleable" do
     end
   end
 
-
   describe "#update_last_wrangling_activity" do
     context "as a tag wrangler" do
       before { User.current_user = create(:tag_wrangler) }
