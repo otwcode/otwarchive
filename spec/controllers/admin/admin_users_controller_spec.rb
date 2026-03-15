@@ -653,7 +653,7 @@ describe Admin::AdminUsersController do
               # Check that the second user's collection still exists
               expect(Collection.exists?(other_owner.collections.last.id)).to be_truthy
 
-              it_redirects_to_with_notice(admin_users_path(user_id: user.id), "All creations by user #{user.login} have been deleted.")
+              it_redirects_to_with_notice(admin_user_path(user), "All creations by user #{user.login} have been deleted.")
               expect(Work.exists?(work.id)).to be false
               expect(Comment.exists?(comment.id)).to be_falsey
             end
