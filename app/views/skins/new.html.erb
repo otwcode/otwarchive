@@ -11,7 +11,7 @@
 <!--main content-->
 <p class="notes">
   <%= ts('This form allows you to create a new site or work skin. Select "Work Skin" or "Site Skin" in the Type option list to choose which type of skin you are creating.') %>
-  <%= link_to_help 'skins-basics' %>
+  <%= link_to_help_modal(help_skins_basics_path, t(".skins_basics_help_title")) %>
 </p>
 <h3 class="landmark heading"><%= ts('Create New Skin') %></h3>
 

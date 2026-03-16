@@ -655,7 +655,6 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
   float: none;
   margin: auto;
   padding: 0;
-  line-height: 0.5;
 }
 
 .toggled form, .dynamic form {
@@ -673,7 +672,7 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
     box-shadow: none;
 }
 
-.toggled .bookmark form p.footnote {
+.toggled .bookmark form p.footnote, .dynamic .bookmark form p.footnote {
   padding-bottom: 0.643em;
 }
 
@@ -686,6 +685,24 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
 
 .post .text textarea {
   clear: right;
+}
+
+/* INTERACTION: CONFIRM (form with the sole purpose of requiring you to enter a string (e.g., password) before you can complete another action) */
+
+.confirm label {
+  display: block;
+  font-weight: bold;
+}
+
+.confirm input[type="text"], .confirm input[type="password"] {
+  margin-block: 0.25em;
+  padding: 0.643em 0.375em;
+}
+
+.confirm input[type="submit"] {
+  margin-block: 0.25em;
+  padding: 0.643em;
+  vertical-align: bottom;
 }
 
 /* CONTEXT: dashboard */
@@ -702,6 +719,13 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
 
 .dashboard form dt.landmark {
   clear: both;
+}
+
+/* CONTEXT: blurb */
+
+.blurb form li.input {
+  display: list-item;
+  padding-left: 0;
 }
 
 /* END == */

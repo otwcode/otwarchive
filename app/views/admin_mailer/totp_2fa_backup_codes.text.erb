@@ -1,0 +1,11 @@
+<% content_for :message do %>
+<%= t("mailer.general.greeting.informal.addressed_html", name: @admin.login) %>
+
+<%= t(".created") %>
+
+<% @codes.each do |code| %>
+<%= code %>
+<% end %>
+<% end %>
+
+<%= t(".do_rely_on") %>

@@ -1,0 +1,10 @@
+<% I18n.with_locale(current_user&.preference&.locale_for_mails) do %>
+  <h4><%= t(".page_heading") %></h4>
+
+  <dl id="help">
+    <dt><%= t(".locale.header") %></dt>
+    <dd>
+      <%= t(".locale.description") %>
+    </dd>
+  </dl>
+<% end %>

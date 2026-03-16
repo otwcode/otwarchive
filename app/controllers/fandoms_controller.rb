@@ -33,24 +33,15 @@ class FandomsController < ApplicationController
   end
 
   def unassigned
-    join_string = "LEFT JOIN wrangling_assignments
-                  ON (wrangling_assignments.fandom_id = tags.id)
-                  LEFT JOIN users
-                  ON (users.id = wrangling_assignments.user_id)"
-    conditions = "canonical = 1 AND users.id IS NULL"
-    unless params[:media_id].blank?
+    @fandoms = Fandom.joins("LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id)
+                 LEFT JOIN users ON (users.id = wrangling_assignments.user_id)").where(canonical: true, users: { id: nil })
+
+    if params[:media_id].present?
       @media = Media.find_by_name(params[:media_id])
-      if @media
-        join_string <<  " INNER JOIN common_taggings
-                        ON (tags.id = common_taggings.common_tag_id)"
-        conditions  << " AND common_taggings.filterable_id = #{@media.id}
-                        AND common_taggings.filterable_type = 'Tag'"
-      end
+      @fandoms = @fandoms.joins(:common_taggings).where(common_taggings: { filterable: @media }) if @media
     end
-    @fandoms = Fandom.joins(join_string).
-                      where(conditions).
-                      order(params[:sort] == 'count' ? "count DESC" : "sortable_name ASC").
-                      with_count.
-                      paginate(page: params[:page], per_page: 250)
+
+    order = params[:sort] == "count" ? "count DESC" : "sortable_name ASC"
+    @fandoms = @fandoms.order(order).with_count.paginate(page: params[:page], per_page: 250)
   end
 end

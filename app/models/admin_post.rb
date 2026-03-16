@@ -6,7 +6,7 @@ class AdminPost < ApplicationRecord
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, default: :disable_anon, suffix: :comments
+  }, default: :disable_anon, suffix: :comments, validate: { message: :invalid_permissions }
 
   belongs_to :language
   belongs_to :translated_post, class_name: "AdminPost"
@@ -100,7 +100,7 @@ class AdminPost < ApplicationRecord
 
   def expire_cached_home_admin_posts
     unless Rails.env.development?
-      Rails.cache.delete("home/index/home_admin_posts")
+      Rails.cache.delete("v1/home/index/home_admin_posts")
     end
   end
 

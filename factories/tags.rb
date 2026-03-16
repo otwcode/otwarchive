@@ -145,4 +145,9 @@ FactoryBot.define do
     association :filter, factory: :canonical_fandom
     association :filterable, factory: :work
   end
+
+  factory :tagging do
+    association :tagger, factory: :canonical_fandom
+    association :taggable, factory: :work
+  end
 end

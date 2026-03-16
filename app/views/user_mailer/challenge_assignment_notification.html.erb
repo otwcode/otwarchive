@@ -5,7 +5,7 @@
     <%= style_metadata_label(t(".recipient")) %><%= @request.nil? ? t(".recipient_missing") : style_link(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud)) %>
   </p>
 
-  <%= style_bold(t(".prompts")) %>
+  <%= style_metadata_label(t(".prompts")) %>
 
   <% @request.requests.each_with_index do |prompt, index| %>
     <% tag_groups = prompt.tag_groups %>

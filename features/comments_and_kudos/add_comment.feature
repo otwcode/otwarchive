@@ -186,6 +186,20 @@ Scenario: Comment threading, comment editing
     Then I should see "must be less than"
       And I should see "Now, we can devour the gods, together!"
 
+Scenario: I can see "Parent" and "Parent Thread" links on reply comments but not on top-level comments
+
+  Given the work "Random Work"
+  When I am logged in as "commenter"
+    And I post the comment "This is the top-level comment" on the work "Random Work"
+  Then I should not see "Parent"
+    And I should not see "Parent Thread"
+
+  When I reply to a comment with "This is the reply comment"
+  Then I should not see "Parent" within ".odd"
+    And I should not see "Parent Thread" within ".odd"
+    And I should see "Parent" within ".even"
+    And I should see "Parent Thread" within ".even"
+
 Scenario: Don't receive comment notifications of your own comments by default
 
   When I am logged in as "author"
@@ -314,6 +328,18 @@ Scenario: Cannot reply to comments (no button) while logged as admin
       And I follow "Comments (1)"
     Then I should see "Woohoo"
       And I should see "Reply"
+
+Scenario: When guest comments are disabled, display comment actions to admin/guests
+    Given the work "No Guest Comments Work" by "creator"
+    When I am logged in as "commenter"
+      And I view the work "No Guest Comments Work"
+      And I post a comment "I am the comment"    
+    When I am logged in as an admin
+      And I visit the reply page to the comment on "No Guest Comments Work"
+    Then I should see "Thread"
+    When I am logged out
+      And I visit the reply page to the comment on "No Guest Comments Work"
+    Then I should see "Thread"
 
   Scenario: Translated comment notification email
     Given the work "Generic Work" by "creator" and "cocreator"

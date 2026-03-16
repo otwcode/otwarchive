@@ -5,7 +5,7 @@ class UserInviteRequestsController < ApplicationController
   # GET /user_invite_requests
   # GET /user_invite_requests.xml
   def index
-    @user_invite_requests = UserInviteRequest.not_handled.page(params[:page])
+    @user_invite_requests = authorize UserInviteRequest.not_handled.page(params[:page])
   end
 
   # GET /user_invite_requests/new
@@ -51,6 +51,8 @@ class UserInviteRequestsController < ApplicationController
   # PUT /user_invite_requests/1
   # PUT /user_invite_requests/1.xml
   def update
+    authorize UserInviteRequest
+
     if params[:decline_all]
       params[:requests].each_pair do |id, quantity|
         unless quantity.blank?

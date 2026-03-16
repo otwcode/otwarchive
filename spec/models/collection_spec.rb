@@ -5,72 +5,6 @@ describe Collection do
     @collection = FactoryBot.create(:collection)
   end
 
-  describe "collections with challenges" do
-    [GiftExchange, PromptMeme].each do |challenge_klass|
-      %w[true false].each do |moderated_status|
-        describe "of type #{challenge_klass.name}" do
-          before do
-            @collection.challenge = challenge_klass.new
-            @collection.collection_preference.moderated = moderated_status
-            @challenge = @collection.challenge
-            @challenge.signups_open_at = Time.now - 3.days
-            @challenge.signups_close_at = Time.now + 3.days
-            @collection.save
-          end
-
-          it "should correctly identify the collection challenge type" do
-            expect(@collection.gift_exchange?).to eq(@challenge.is_a?(GiftExchange))
-            expect(@collection.prompt_meme?).to eq(@challenge.is_a?(PromptMeme))
-          end
-
-          describe "with open signup" do
-            before do
-              @challenge.signup_open = true
-            end
-
-            describe "and close date in the future" do
-              before do
-                @challenge.signups_open_at = Time.now - 3.days
-                @challenge.signups_close_at = Time.now + 3.days
-                @challenge.save
-              end
-
-              it "should be listed as open" do
-                expect(Collection.signup_open(@challenge.class.name)).to include(@collection)
-              end
-            end
-
-            describe "and close date in the past" do
-              before do
-                @challenge.signups_close_at = 2.days.ago
-                @challenge.signups_open_at = 8.days.ago
-                @challenge.signup_open = false
-                @challenge.save
-                @challenge.signup_open = true
-                @challenge.save
-              end
-
-              it "should not be listed as open" do
-                expect(Collection.signup_open(@challenge.class.name)).not_to include(@collection)
-              end
-            end
-          end
-
-          describe "with closed signup" do
-            before do
-              @challenge.signup_open = false
-              @challenge.save
-            end
-
-            it "should not be listed as open" do
-              expect(Collection.signup_open(@challenge.class.name)).not_to include(@collection)
-            end
-          end
-        end
-      end # moderated_status loop
-    end # challenges type loop
-  end
-
   describe "updated at timestamps for collection preferences" do
     let(:preference) { create(:collection_preference, collection: @collection, unrevealed: true, anonymous: true) }
 
@@ -708,6 +642,54 @@ describe Collection do
     it "delegates to SearchCounts" do
       expect(SearchCounts).to receive(:bookmarkable_count_for_collection).with(@collection).and_return(5)
       expect(@collection.approved_bookmarked_items_count).to eq(5)
+    end
+  end
+
+  describe "#reveal!" do
+    context "collection is only briefly set to unrevealed" do
+      let(:collection) { create(:unrevealed_collection) }
+      let(:collected_work) { create(:work, collections: [collection]) }
+      let(:collection_item) { collected_work.approved_collection_items.first }
+
+      it "doesn't async reveal the collection" do
+        suspend_resque_workers do
+          expect(collection).to receive(:reveal!).once.and_call_original
+          collection.collection_preference.update_attribute(:unrevealed, false)
+          collection.collection_preference.update_attribute(:unrevealed, true)
+
+          # job hasn't run yet
+          expect(collection_item.reload.unrevealed).to be_truthy
+          expect(collected_work.reload.in_unrevealed_collection).to be_truthy
+        end
+
+        # job ran but didn't reveal
+        expect(collection_item.reload.unrevealed).to be_truthy
+        expect(collected_work.reload.in_unrevealed_collection).to be_truthy
+      end
+    end
+  end
+
+  describe "#reveal_authors!" do
+    context "collection is only briefly set to have visible creators" do
+      let(:collection) { create(:anonymous_collection) }
+      let(:collected_work) { create(:work, collections: [collection]) }
+      let(:collection_item) { collected_work.approved_collection_items.first }
+
+      it "doesn't async reveal creators" do
+        suspend_resque_workers do
+          expect(collection).to receive(:reveal_authors!).once.and_call_original
+          collection.collection_preference.update_attribute(:anonymous, false)
+          collection.collection_preference.update_attribute(:anonymous, true)
+
+          # job hasn't run yet
+          expect(collection_item.reload.anonymous).to be_truthy
+          expect(collected_work.reload.in_anon_collection).to be_truthy
+        end
+
+        # job ran but didn't unanon
+        expect(collection_item.reload.anonymous).to be_truthy
+        expect(collected_work.reload.in_anon_collection).to be_truthy
+      end
     end
   end
 end

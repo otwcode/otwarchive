@@ -201,7 +201,7 @@ describe StoryParser do
 
     it "does NOT convert raw anchor links to absolute links" do
       location = "http://external_site"
-      story_in = "<html><body><p><a href=#local>local href</p></body></html>"
+      story_in = +"<html><body><p><a href=#local>local href</p></body></html>"
       result = @sp.parse_common(story_in, location)
       expect(result[:chapter_attributes][:content]).not_to include(location)
       expect(result[:chapter_attributes][:content]).to include("#local")

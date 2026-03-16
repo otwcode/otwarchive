@@ -35,7 +35,8 @@ tr:hover,
 div.dynamic,
 .dynamic form,
 #ui-datepicker-div,
-.ui-datepicker table {
+.ui-datepicker table,
+.annotation {
   background: #333;
   color: #eee;
   border-color: #222;
@@ -64,7 +65,6 @@ th,
 .work.navigation .download,
 .javascript .work.navigation .download .secondary,
 .thread .even,
-.system .tweet_list li,
 .ui-datepicker tr:hover {
   background: #2a2a2a;
 }
@@ -96,6 +96,7 @@ th,
 #footer,
 #dashboard ul,
 dl.meta,
+dl.meta .wrapper,
 .group.listbox,
 fieldset fieldset.listbox,
 #main li.blurb,
@@ -108,6 +109,7 @@ form.single fieldset,
 #inner .module .heading,
 .bookmark .status span,
 .splash .news li,
+.authentication fieldset,
 .filters .group dt.bookmarker {
   border-color: #555;
 }
