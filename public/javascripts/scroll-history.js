@@ -104,6 +104,14 @@ function initScrollHistory() {
 
   var scroll_history_button = document.querySelector("#scroll_history_button button");
   scroll_history_button.innerText = scroll_history_button.dataset.onText;
+
+  var scroll_history_enable_button = document.querySelector("#scroll_history_enable_button");
+  scroll_history_enable_button.innerText = scroll_history_enable_button.dataset.onText;
+  scroll_history_enable_button.autofocus = true;
+
+  var scroll_history_disable_button = document.querySelector("#scroll_history_disable_button");
+  scroll_history_disable_button.innerText = scroll_history_disable_button.dataset.onText;
+  scroll_history_disable_button.autofocus = false;
 }
 
 function clearAllScrollHistory() {
@@ -123,6 +131,14 @@ function deinitScrollHistory() {
   delete document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled;
   var scroll_history_button = document.querySelector("#scroll_history_button button");
   scroll_history_button.innerText = scroll_history_button.dataset.offText;
+
+  var scroll_history_enable_button = document.querySelector("#scroll_history_enable_button");
+  scroll_history_enable_button.innerText = scroll_history_enable_button.dataset.offText;
+  scroll_history_enable_button.autofocus = false;
+
+  var scroll_history_disable_button = document.querySelector("#scroll_history_disable_button");
+  scroll_history_disable_button.innerText = scroll_history_disable_button.dataset.offText;
+  scroll_history_disable_button.autofocus = true;
 }
 
 function scrollHistoryGoBack() {
@@ -174,12 +190,12 @@ $j(document).ready(function() {
   }
 
   var dialog = document.getElementById("scroll_history_dialog");
-  document.getElementById("scroll_history_enable_button").onclick = function () { dialog.close(); window.localStorage.setItem("save scroll history?", "yes"); initScrollHistory(); };
-  document.getElementById("scroll_history_disable_button").onclick = function () { dialog.close(); window.localStorage.setItem("save scroll history?", "no"); deinitScrollHistory(); };
-  document.getElementById("scroll_history_clear_all_button").onclick = function () { dialog.close(); clearAllScrollHistory(); };
-  document.getElementById("scroll_history_clear_this_button").onclick = function () { dialog.close(); window.localStorage.removeItem(getStorageKey()); };
+  document.getElementById("scroll_history_enable_button").onclick = function () { dialog.hidePopover(); window.localStorage.setItem("save scroll history?", "yes"); initScrollHistory(); };
+  document.getElementById("scroll_history_disable_button").onclick = function () { dialog.hidePopover(); window.localStorage.setItem("save scroll history?", "no"); deinitScrollHistory(); };
+  document.getElementById("scroll_history_clear_all_button").onclick = function () { dialog.hidePopover(); clearAllScrollHistory(); window.localStorage.setItem("save scroll history?", "no"); deinitScrollHistory(); };
+  document.getElementById("scroll_history_clear_this_button").onclick = function () { dialog.hidePopover(); window.localStorage.removeItem(getStorageKey()); window.localStorage.setItem("save scroll history?", "no"); deinitScrollHistory(); };
 
-  document.querySelector("#scroll_history_button button").onclick = function(e) { var dialog = document.getElementById("scroll_history_dialog"); dialog.showModal(); };
+  document.querySelector("#scroll_history_button button").onclick = function(e) { var dialog = document.getElementById("scroll_history_dialog"); dialog.showPopover(); };
   document.querySelector("#scroll_history_button").classList.remove("hidden");
 
  if (window.localStorage.getItem("save scroll history?") === "yes") {
