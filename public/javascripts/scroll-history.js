@@ -1,6 +1,6 @@
 
 var SCROLL_DISTANCE_MINIMUM_FOR_HISTORY = 300;
-var SCROLL_HISTORY_MAX_SIZE = 20;
+var SCROLL_HISTORY_MAX_SIZE = 1;
 var STORAGE_KEY_PREFIX = "scroll position history for ";
 
 function getStorageKey() {
@@ -81,6 +81,16 @@ function initScrollHistory() {
 
     if (Math.abs(new_position - previous_position) < SCROLL_DISTANCE_MINIMUM_FOR_HISTORY) {
       // If we haven't scrolled that far, don't save the position
+      return;
+    }
+
+    if (new_position <= 0) {
+      // Don't store a scroll all the way to the top, that isn't helpful when we only have one history records
+      return;
+    }
+
+    if (new_position + window.innerHeight >= document.body.scrollHeight) {
+      // Don't store a scroll all the way to the bottom, that isn't helpful when we only have one history record
       return;
     }
 
