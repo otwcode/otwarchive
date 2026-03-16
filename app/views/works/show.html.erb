@@ -85,10 +85,5 @@
 <%= render "hit_count/include" %>
 
 <%= content_for :footer_js do %>
-  <%= javascript_tag do %>
-    const SCROLL_HISTORY_DIALOG_PROMPT = '<%= j t(".scroll_history_dialog_prompt") %>';
-    const SCROLL_HISTORY_DIALOG_YES = '<%= j t(".scroll_history_dialog_yes") %>';
-    const SCROLL_HISTORY_DIALOG_NO = '<%= j t(".scroll_history_dialog_no") %>';
-  <% end %>
   <script src="/javascripts/scroll-history.js" type="text/javascript" id="scrollhistory" data-scroll-history-enabled></script>
 <% end %>

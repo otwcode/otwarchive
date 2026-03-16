@@ -1,9 +1,14 @@
 
 const SCROLL_DISTANCE_MINIMUM_FOR_HISTORY = 300;
 const SCROLL_HISTORY_MAX_SIZE = 20;
+const STORAGE_KEY_PREFIX = "scroll position history for ";
+
+function getStorageKey() {
+  return STORAGE_KEY_PREFIX + new URL(document.URL).pathname;
+}
 
 function getScrollHistory(return_default = true) {
-  const scroll_history_json = window.localStorage.getItem("scroll position history for " + new URL(document.URL).pathname);
+  const scroll_history_json = window.localStorage.getItem(getStorageKey());
   var scroll_history = return_default ? {"index": 0, "list": [0]} : undefined;
 
   try {
@@ -42,7 +47,7 @@ function getScrollHistory(return_default = true) {
 
 function saveScrollHistory(scroll_history) {
   try {
-    window.localStorage.setItem("scroll position history for " + new URL(document.URL).pathname, JSON.stringify(scroll_history));
+    window.localStorage.setItem(getStorageKey(), JSON.stringify(scroll_history));
   } catch (e) {
     // swallow quota exceeded errors to avoid breaking the page; we just break scroll history
     if (e instanceof DOMException && e.name === "QuotaExceededError") {
@@ -51,55 +56,36 @@ function saveScrollHistory(scroll_history) {
     }
     throw e;
   }
-
 }
 
-function scrollHistoryPreferencePrompt() {
-  try {
-    window.localStorage.setItem("__storage_test_of_at_least_64_bytes__", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    window.localStorage.removeItem("__storage_test_of_at_least_64_bytes__");
-  } catch (e) {
-    // something wrong with localStorage, no point prompting if we can't even save the preference
-    return;
-  }
-
-  const dialog = document.createElement("dialog");
-  const dialog_p = document.createElement("p");
-  const dialog_yes = document.createElement("button");
-  const dialog_no = document.createElement("button");
-
-  dialog_p.innerText = SCROLL_HISTORY_DIALOG_PROMPT;
-  dialog.appendChild(dialog_p);
-
-  dialog_yes.innerText = SCROLL_HISTORY_DIALOG_YES;
-  // this can throw if we somehow ran out of storage between the check at the top of this function and now, but that seems a reasonable case for an unhandled exception
-  dialog_yes.onclick = (e) => { dialog.close(); window.localStorage.setItem("save scroll history?", "yes"); actuallyInitScrollHistory(); };
-  dialog.appendChild(dialog_yes);
-
-  dialog_no.innerText = SCROLL_HISTORY_DIALOG_NO;
-  // this can throw, similar to above
-  dialog_no.onclick = (e) => { dialog.close(); window.localStorage.setItem("save scroll history?", "no"); };
-  dialog.appendChild(dialog_no);
-
-  document.querySelector("body").appendChild(dialog);
-
-  dialog.showModal();
-}
-
-function initScrollHistory() {
+function scrollToLastPosition() {
   const scroll_history = getScrollHistory(false);
   if (scroll_history !== undefined) {
     window.scrollTo({"top": scroll_history.list[scroll_history.index], behavior: "instant"});
   }
+}
+
+function initScrollHistory(scroll_to_last_position = false) {
+  if (scroll_to_last_position) {
+    scrollToLastPosition();
+  }
+
+  document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled = "true";
 
   document.addEventListener("scrollend", function() {
     if (document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled === undefined) {
       return;
     }
 
+    const scrolling_element = document.scrollingElement;
+    if (!scrolling_element) {
+      return;
+    }
+
+    const new_position = scrolling_element.scrollTop;
+
     const scroll_history = getScrollHistory();
     const previous_position = scroll_history.list[scroll_history.index];
-    const new_position = document.scrollingElement?.scrollTop ?? 0;
 
     if (Math.abs(new_position - previous_position) < SCROLL_DISTANCE_MINIMUM_FOR_HISTORY) {
       // If we haven't scrolled that far, don't save the position
@@ -123,6 +109,27 @@ function initScrollHistory() {
 
     saveScrollHistory(scroll_history);
   });
+
+  const scroll_history_button = document.querySelector("#scroll_history_button button");
+  scroll_history_button.innerText = scroll_history_button.dataset.onText;
+}
+
+function clearAllScrollHistory() {
+    var to_remove = [];
+    for (var i = 0; i < window.localStorage.length; i++) {
+        if (window.localStorage.key(i).startsWith(STORAGE_KEY_PREFIX)) {
+            to_remove.push(window.localStorage.key(i));
+        }
+    }
+    for (var i = 0; i < to_remove.length; i++) {
+        window.localStorage.removeItem(to_remove[i]);
+    }
+}
+
+function deinitScrollHistory() {
+  delete document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled;
+  const scroll_history_button = document.querySelector("#scroll_history_button button");
+  scroll_history_button.innerText = scroll_history_button.dataset.offText;
 }
 
 function scrollHistoryGoBack() {
@@ -168,19 +175,21 @@ $j(document).ready(function() {
     return;
   }
 
-  if (!('onscrollend' in window)) {
+  if (!("onscrollend" in window)) {
     // onscrollend event is not supported, nothing more to do
     return;
   }
 
-  const preference = window.localStorage.getItem("save scroll history?");
+  const dialog = document.getElementById("scroll_history_dialog");
+  document.getElementById("scroll_history_enable_button").onclick = (e) => { dialog.close(); window.localStorage.setItem("save scroll history?", "yes"); initScrollHistory(false); };
+  document.getElementById("scroll_history_disable_button").onclick = (e) => { dialog.close(); window.localStorage.setItem("save scroll history?", "no"); deinitScrollHistory(); };
+  document.getElementById("scroll_history_clear_all_button").onclick = (e) => { dialog.close(); clearAllScrollHistory(); };
+  document.getElementById("scroll_history_clear_this_button").onclick = (e) => { dialog.close(); window.localStorage.removeItem(getStorageKey()); };
 
-  if (preference === null && document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled !== undefined) {
-    // Prompt user for preference; this will call actuallyInitScrollHistory() if appropriate.
-    scrollHistoryPreferencePrompt();
-  } else if (preference === "yes") {
-    initScrollHistory();
-  } else {
-    delete document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled;
+  document.querySelector("#scroll_history_button button").onclick = function(e) { const dialog = document.getElementById("scroll_history_dialog"); dialog.showModal(); };
+  document.querySelector("#scroll_history_button").classList.remove("hidden");
+
+ if (window.localStorage.getItem("save scroll history?") === "yes") {
+    initScrollHistory(true);
   }
 });
