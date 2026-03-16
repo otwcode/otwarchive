@@ -7,7 +7,7 @@ function getStorageKey() {
   return STORAGE_KEY_PREFIX + new URL(document.URL).pathname;
 }
 
-function getScrollHistory(return_default = true) {
+function getScrollHistory(return_default) {
   var scroll_history_json = window.localStorage.getItem(getStorageKey());
   var scroll_history = return_default ? {"index": 0, "list": [0]} : undefined;
 
@@ -22,11 +22,7 @@ function getScrollHistory(return_default = true) {
             return value;
           }
 
-          if (
-            value.list instanceof Array
-            && value.index >= 0
-            && value.index < value.list.length
-          ) {
+          if (value.list instanceof Array && value.index >= 0 && value.index < value.list.length) {
             return value;
           }
 
@@ -51,7 +47,7 @@ function saveScrollHistory(scroll_history) {
   } catch (e) {
     // swallow quota exceeded errors to avoid breaking the page; we just break scroll history
     if (e instanceof DOMException && e.name === "QuotaExceededError") {
-      console.error("localStorage quota exceeded; not saving scroll history", scroll_history)
+      console.error("localStorage quota exceeded; not saving scroll history", scroll_history);
       return;
     }
     throw e;
@@ -80,7 +76,7 @@ function initScrollHistory() {
 
     var new_position = scrolling_element.scrollTop;
 
-    var scroll_history = getScrollHistory();
+    var scroll_history = getScrollHistory(true);
     var previous_position = scroll_history.list[scroll_history.index];
 
     if (Math.abs(new_position - previous_position) < SCROLL_DISTANCE_MINIMUM_FOR_HISTORY) {
@@ -130,7 +126,7 @@ function deinitScrollHistory() {
 }
 
 function scrollHistoryGoBack() {
-  var scroll_history = getScrollHistory();
+  var scroll_history = getScrollHistory(true);
 
   // If we have no history, or if we're at the end of history, bail
   if (scroll_history.list.length < 1 || scroll_history.index === scroll_history.list.length - 1) {
@@ -146,7 +142,7 @@ function scrollHistoryGoBack() {
 }
 
 function scrollHistoryGoForward() {
-  var scroll_history = getScrollHistory();
+  var scroll_history = getScrollHistory(true);
 
   // If we have no history, or if we're at the start of history, bail
   if (scroll_history.list.length < 1 || scroll_history.index === 0) {
