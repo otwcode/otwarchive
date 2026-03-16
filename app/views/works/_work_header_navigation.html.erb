@@ -50,12 +50,12 @@ dialog p { display: block !important; }
   <li class="scroll-history hidden" id="scroll_history_button">
     <button data-on-text="<%= t(".scroll_history.button_on") %>" data-off-text="<%= t(".scroll_history.button_off") %>"><%= t(".scroll_history.button_off") %></button>
     <dialog id="scroll_history_dialog" style="display: revert;" popover>
-      <p style="display: block"><%= simple_format t(".scroll_history.dialog.prompt") %></p>
-      <p style="display: block">
-      <button id="scroll_history_enable_button" data-on-text="<%= t(".scroll_history.dialog.enable_button_on") %>" data-off-text="<%= t(".scroll_history.dialog.enable_button_off") %>"><%= t(".scroll_history.dialog.enable_button_off") %></button>
-      <button id="scroll_history_disable_button" autofocus data-on-text="<%= t(".scroll_history.dialog.disable_button_on") %>" data-off-text="<%= t(".scroll_history.dialog.disable_button_off") %>"><%= t(".scroll_history.dialog.disable_button_off") %></button>
-      <button id="scroll_history_clear_all_button"><%= t(".scroll_history.dialog.clear_all") %></button>
-      <button id="scroll_history_clear_this_button"><%= t(".scroll_history.dialog.clear_this") %></button>
+      <p><%= t(".scroll_history.dialog.prompt") %></p>
+      <p>
+        <button id="scroll_history_enable_button" data-on-text="<%= t(".scroll_history.dialog.enable_button_on") %>" data-off-text="<%= t(".scroll_history.dialog.enable_button_off") %>"><%= t(".scroll_history.dialog.enable_button_off") %></button>
+        <button id="scroll_history_disable_button" autofocus data-on-text="<%= t(".scroll_history.dialog.disable_button_on") %>" data-off-text="<%= t(".scroll_history.dialog.disable_button_off") %>"><%= t(".scroll_history.dialog.disable_button_off") %></button>
+        <button id="scroll_history_clear_all_button"><%= t(".scroll_history.dialog.clear_all") %></button>
+        <button id="scroll_history_clear_this_button"><%= t(".scroll_history.dialog.clear_this") %></button>
       </p>
     </dialog>
   </li>
