@@ -47,12 +47,14 @@
   <li class="scroll-history hidden" id="scroll_history_button">
     <button command="show" commandfor="scroll_history_dialog" data-on-text="<%= t(".scroll_history.button_on") %>" data-off-text="<%= t(".scroll_history.button_off") %>"><%= t(".scroll_history.button_off") %></button>
     <dialog style="display: revert;" id="scroll_history_dialog">
-      <p><%= t(".scroll_history.dialog.prompt") %></p>
+      <p style="display: block"><%= t(".scroll_history.dialog.prompt") %></p>
+      <p style="display: block">
       <button id="scroll_history_enable_button"><%= t(".scroll_history.dialog.enable") %></button>
       <button id="scroll_history_disable_button"><%= t(".scroll_history.dialog.disable") %></button>
       <button id="scroll_history_clear_all_button"><%= t(".scroll_history.dialog.clear_all") %></button>
       <button id="scroll_history_clear_this_button"><%= t(".scroll_history.dialog.clear_this") %></button>
-      </dialog>
+      </p>
+    </dialog>
   </li>
 
   <% # for users, bookmark and mark to read later %>
