@@ -3090,6 +3090,8 @@ en:
       ratings_help_title: Rating help
       warnings_help_title: Warning help
     work_header_navigation:
+      scroll_history:
+        button_text: Scroll history
       chapter_index:
         button: Chapter Index
         full_page: Full-Page Index

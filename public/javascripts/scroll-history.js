@@ -93,7 +93,7 @@ function initScrollHistory() {
   }
 
   document.addEventListener("scrollend", function() {
-    if (document.querySelector("scrollhistory").dataset.scrollHistoryEnabled === undefined) {
+    if (document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled === undefined) {
       return;
     }
 
@@ -133,10 +133,10 @@ function scrollHistoryGoBack() {
     return;
   }
 
-  delete document.querySelector("scrollhistory").dataset.scrollHistoryEnabled;
+  delete document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled;
   scroll_history.index = scroll_history.index + 1; // we know this is a valid index, we checked above
   document.scrollingElement.scrollTo({top: scroll_history.list[scroll_history.index], behavior: "smooth"});
-  document.querySelector("scrollhistory").dataset.scrollHistoryEnabled = "true";
+  document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled = "true";
 
   saveScrollHistory(scroll_history);
 }
@@ -149,10 +149,10 @@ function scrollHistoryGoForward() {
     return;
   }
 
-  delete document.querySelector("scrollhistory").dataset.scrollHistoryEnabled;
+  delete document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled;
   scroll_history.index = scroll_history.index - 1; // we know this is a valid index, we checked above
   document.scrollingElement.scrollTo({top: scroll_history.list[scroll_history.index], behavior: "smooth"});
-  document.querySelector("scrollhistory").dataset.scrollHistoryEnabled = "true";
+  document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled = "true";
 
   saveScrollHistory(scroll_history);
 }
@@ -164,7 +164,7 @@ $j(document).ready(function() {
     window.localStorage.removeItem(x);
   } catch (e) {
     // localStorage is not available, nothing more to do
-    delete document.querySelector("scrollhistory").dataset.scrollHistoryEnabled;
+    delete document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled;
     return;
   }
 
@@ -175,12 +175,12 @@ $j(document).ready(function() {
 
   const preference = window.localStorage.getItem("save scroll history?");
 
-  if (preference === null && document.querySelector("#scrollhistory").dataset.scrollHistoryEnabled !== undefined) {
+  if (preference === null && document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled !== undefined) {
     // Prompt user for preference; this will call actuallyInitScrollHistory() if appropriate.
     scrollHistoryPreferencePrompt();
   } else if (preference === "yes") {
     initScrollHistory();
   } else {
-    delete document.querySelector("#scrollhistory").dataset.scrollHistoryEnabled;
+    delete document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled;
   }
 });
