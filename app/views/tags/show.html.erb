@@ -67,7 +67,7 @@
   <% if @has_mergers %>
     <div class="synonym listbox group">
       <h3 class="heading"><%= t(".synonyms") %></h3>
-      <% cache([:v1, :tag, :mergers, @tag.id], version: @tag.updated_at.to_fs(:usec), skip_digest: true) do %>
+      <% cache([:v1, :tag, :mergers, @tag.id], version: @tag.updated_at.to_fs(:usec), expires_in: 12.hours, skip_digest: true) do %>
         <ul class="tags commas index group"><%= tag_link_list(@tag.merger_data.sort) %></ul>
       <% end %>
     </div>
