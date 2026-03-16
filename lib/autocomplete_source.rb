@@ -241,6 +241,7 @@ module AutocompleteSource
 
     # Split a string into words.
     def autocomplete_phrase_split(string)
+      # transliterate to handle downcasing letters with accents or other diacritics.
       normalized = self.transliterate(string).downcase.to_s
 
       # Split on one or more spaces, ampersands, slashes, double quotation marks,
