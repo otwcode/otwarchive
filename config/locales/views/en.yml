@@ -3087,18 +3087,6 @@ en:
       ratings_help_title: Rating help
       warnings_help_title: Warning help
     work_header_navigation:
-      scroll_history:
-        dialog:
-          prompt: |
-            Do you want to enable keeping scroll history? You will automatically scroll back to your last 
-            position when you return to this page. This is stored only in your browser, and nothing is sent to the server.
-            Using this page you may also clear your scroll history for this page, or for all pages.
-          enable: Turn on
-          disable: Turn off
-          clear_all: Clear all history
-          clear_this: Clear for this page
-        button_on: Scroll history is on
-        button_off: Scroll history is off
       chapter_index:
         button: Chapter Index
         full_page: Full-Page Index
@@ -3107,6 +3095,15 @@ en:
       download:
         button: Download
         heading: Download
+      scroll_history:
+        button_off: Scroll history is off
+        button_on: Scroll history is on
+        dialog:
+          clear_all: Clear all history
+          clear_this: Clear for this page
+          disable: Turn off
+          enable: Turn on
+          prompt: "Do you want to enable keeping scroll history? You will automatically scroll back to your last \nposition when you return to this page. This is stored only in your browser, and nothing is sent to the server.\nUsing this page you may also clear your scroll history for this page, or for all pages.\n"
     work_header_notes:
       inspired_by:
         other_works_inspired_by_this_one: other works inspired by this one
