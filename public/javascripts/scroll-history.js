@@ -1,14 +1,14 @@
 
-const SCROLL_DISTANCE_MINIMUM_FOR_HISTORY = 300;
-const SCROLL_HISTORY_MAX_SIZE = 20;
-const STORAGE_KEY_PREFIX = "scroll position history for ";
+var SCROLL_DISTANCE_MINIMUM_FOR_HISTORY = 300;
+var SCROLL_HISTORY_MAX_SIZE = 20;
+var STORAGE_KEY_PREFIX = "scroll position history for ";
 
 function getStorageKey() {
   return STORAGE_KEY_PREFIX + new URL(document.URL).pathname;
 }
 
 function getScrollHistory(return_default = true) {
-  const scroll_history_json = window.localStorage.getItem(getStorageKey());
+  var scroll_history_json = window.localStorage.getItem(getStorageKey());
   var scroll_history = return_default ? {"index": 0, "list": [0]} : undefined;
 
   try {
@@ -59,17 +59,13 @@ function saveScrollHistory(scroll_history) {
 }
 
 function scrollToLastPosition() {
-  const scroll_history = getScrollHistory(false);
+  var scroll_history = getScrollHistory(false);
   if (scroll_history !== undefined) {
     window.scrollTo({"top": scroll_history.list[scroll_history.index], behavior: "instant"});
   }
 }
 
-function initScrollHistory(scroll_to_last_position = false) {
-  if (scroll_to_last_position) {
-    scrollToLastPosition();
-  }
-
+function initScrollHistory() {
   document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled = "true";
 
   document.addEventListener("scrollend", function() {
@@ -77,15 +73,15 @@ function initScrollHistory(scroll_to_last_position = false) {
       return;
     }
 
-    const scrolling_element = document.scrollingElement;
+    var scrolling_element = document.scrollingElement;
     if (!scrolling_element) {
       return;
     }
 
-    const new_position = scrolling_element.scrollTop;
+    var new_position = scrolling_element.scrollTop;
 
-    const scroll_history = getScrollHistory();
-    const previous_position = scroll_history.list[scroll_history.index];
+    var scroll_history = getScrollHistory();
+    var previous_position = scroll_history.list[scroll_history.index];
 
     if (Math.abs(new_position - previous_position) < SCROLL_DISTANCE_MINIMUM_FOR_HISTORY) {
       // If we haven't scrolled that far, don't save the position
@@ -110,25 +106,26 @@ function initScrollHistory(scroll_to_last_position = false) {
     saveScrollHistory(scroll_history);
   });
 
-  const scroll_history_button = document.querySelector("#scroll_history_button button");
+  var scroll_history_button = document.querySelector("#scroll_history_button button");
   scroll_history_button.innerText = scroll_history_button.dataset.onText;
 }
 
 function clearAllScrollHistory() {
     var to_remove = [];
-    for (var i = 0; i < window.localStorage.length; i++) {
+    var i;
+    for (i = 0; i < window.localStorage.length; i++) {
         if (window.localStorage.key(i).startsWith(STORAGE_KEY_PREFIX)) {
             to_remove.push(window.localStorage.key(i));
         }
     }
-    for (var i = 0; i < to_remove.length; i++) {
+    for (i = 0; i < to_remove.length; i++) {
         window.localStorage.removeItem(to_remove[i]);
     }
 }
 
 function deinitScrollHistory() {
   delete document.querySelector("#scroll_history_button").dataset.scrollHistoryEnabled;
-  const scroll_history_button = document.querySelector("#scroll_history_button button");
+  var scroll_history_button = document.querySelector("#scroll_history_button button");
   scroll_history_button.innerText = scroll_history_button.dataset.offText;
 }
 
@@ -166,7 +163,7 @@ function scrollHistoryGoForward() {
 
 $j(document).ready(function() {
   try {
-    const x = "__storage_test__";
+    var x = "__storage_test__";
     window.localStorage.setItem(x, x);
     window.localStorage.removeItem(x);
   } catch (e) {
@@ -180,16 +177,17 @@ $j(document).ready(function() {
     return;
   }
 
-  const dialog = document.getElementById("scroll_history_dialog");
-  document.getElementById("scroll_history_enable_button").onclick = (e) => { dialog.close(); window.localStorage.setItem("save scroll history?", "yes"); initScrollHistory(false); };
-  document.getElementById("scroll_history_disable_button").onclick = (e) => { dialog.close(); window.localStorage.setItem("save scroll history?", "no"); deinitScrollHistory(); };
-  document.getElementById("scroll_history_clear_all_button").onclick = (e) => { dialog.close(); clearAllScrollHistory(); };
-  document.getElementById("scroll_history_clear_this_button").onclick = (e) => { dialog.close(); window.localStorage.removeItem(getStorageKey()); };
+  var dialog = document.getElementById("scroll_history_dialog");
+  document.getElementById("scroll_history_enable_button").onclick = function () { dialog.close(); window.localStorage.setItem("save scroll history?", "yes"); initScrollHistory(); };
+  document.getElementById("scroll_history_disable_button").onclick = function () { dialog.close(); window.localStorage.setItem("save scroll history?", "no"); deinitScrollHistory(); };
+  document.getElementById("scroll_history_clear_all_button").onclick = function () { dialog.close(); clearAllScrollHistory(); };
+  document.getElementById("scroll_history_clear_this_button").onclick = function () { dialog.close(); window.localStorage.removeItem(getStorageKey()); };
 
-  document.querySelector("#scroll_history_button button").onclick = function(e) { const dialog = document.getElementById("scroll_history_dialog"); dialog.showModal(); };
+  document.querySelector("#scroll_history_button button").onclick = function(e) { var dialog = document.getElementById("scroll_history_dialog"); dialog.showModal(); };
   document.querySelector("#scroll_history_button").classList.remove("hidden");
 
  if (window.localStorage.getItem("save scroll history?") === "yes") {
-    initScrollHistory(true);
+    scrollToLastPosition();
+    initScrollHistory();
   }
 });
