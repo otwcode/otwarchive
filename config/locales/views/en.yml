@@ -3101,11 +3101,11 @@ en:
         dialog:
           clear_all: Clear all history
           clear_this: Clear for this page
-          enable_button_on: Leave it on
-          enable_button_off: Turn it on
-          disable_button_on: Turn it off
           disable_button_off: Leave it off
-          prompt: "Turning on scroll history will mean you return to your last scroll position when you return to this page in this browser on this device.\n\nThis scroll position is stored only in your browser, and nothing is sent to the server."
+          disable_button_on: Turn it off
+          enable_button_off: Turn it on
+          enable_button_on: Leave it on
+          prompt: Turning on scroll history will mean you return to your last scroll position when you return to this page in this browser on this device. This scroll position is stored only in your browser, and nothing is sent to the server.
     work_header_notes:
       inspired_by:
         other_works_inspired_by_this_one: other works inspired by this one
