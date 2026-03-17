@@ -53,15 +53,16 @@ class AbuseReport < ApplicationRecord
 
   scope :by_date, -> { order('created_at DESC') }
 
-  # Standardize the format of work, chapter, comment, and profile URLs
+  # Standardize the format of work, chapter, comment, profile and bookmark URLs
   # to get it ready for the url_is_not_over_reported validation.
   # Work URLs: "works/123"
   # Chapter URLs: "chapters/123"
   # Comment URLs: "comments/123"
   # Profile URLs: "users/username"
+  # Bookmark URLs: "bookmarks/123"
   before_validation :standardize_url, on: :create
   def standardize_url
-    return unless url =~ %r{((chapters|works|comments)/\d+)} || url =~ %r{(users/\w+)}
+    return unless url =~ %r{((chapters|works|comments|bookmarks)/\d+)} || url =~ %r{(users/\w+)}
 
     self.url = add_scheme_to_url(url)
     self.url = clean_url(url)
@@ -214,6 +215,14 @@ class AbuseReport < ApplicationRecord
   # times within the configured time period
   def url_is_not_over_reported
     case url
+    when %r{/bookmarks/\d+}
+      bookmarks_params_only = url.match(%r{/bookmarks/\d+/}).to_s
+      bookmark_report_period = ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD.days.ago
+      existing_reports_total = AbuseReport.where('created_at > ? AND
+                                                 url LIKE ?',
+                                                 bookmark_report_period,
+                                                 "%#{bookmarks_params_only}%").count
+      errors.add(:base, :over_reported_bookmark) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX
     when %r{/comments/\d+}
       comment_params_only = url.match(%r{/comments/\d+/}).to_s
       comment_report_period = ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD.days.ago

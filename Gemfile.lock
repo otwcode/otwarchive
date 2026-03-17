@@ -1,4 +1,16 @@
 GIT
+  remote: https://github.com/otwcode/devise
+  revision: fade89f61c64e766d87f24cfcb980ee533a5d5f2
+  ref: fade89f
+  specs:
+    devise (5.0.2)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 7.0)
+      responders
+      warden (~> 1.2.3)
+
+GIT
   remote: https://github.com/rails/rails-observers
   revision: 389b577322d8b17336730b2dc4e179060a23c8e7
   specs:
@@ -234,22 +246,16 @@ GEM
       activerecord (>= 7.2.0)
       mysql2 (>= 0.4.0, < 0.6.0)
       railties (>= 7.2.0)
-    devise (4.9.3)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0)
-      responders
-      warden (~> 1.2.3)
     devise-async (1.0.0)
       activejob (>= 5.0)
       devise (>= 4.0)
-    devise-pwned_password (0.1.12)
-      devise (~> 4)
+    devise-pwned_password (0.2.0)
+      devise (>= 4, < 6)
       pwned (~> 2.4)
-    devise-two-factor (6.1.0)
-      activesupport (>= 7.0, < 8.1)
-      devise (~> 4.0)
-      railties (>= 7.0, < 8.1)
+    devise-two-factor (6.4.0)
+      activesupport (>= 7.2, < 8.2)
+      devise (>= 4.0, < 6.0)
+      railties (>= 7.2, < 8.2)
       rotp (~> 6.0)
     diff-lcs (1.6.2)
     docile (1.4.1)
@@ -287,7 +293,7 @@ GEM
       railties (>= 6.1.0)
     faker (3.5.2)
       i18n (>= 1.8.11, < 2)
-    faraday (2.14.0)
+    faraday (2.14.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -719,7 +725,7 @@ DEPENDENCIES
   dalli
   database_cleaner
   departure (~> 8.0)
-  devise
+  devise!
   devise-async
   devise-pwned_password
   devise-two-factor

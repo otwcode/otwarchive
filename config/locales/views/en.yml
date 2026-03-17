@@ -184,7 +184,7 @@ en:
           admin_user: User Administration
           creations: Creations
         no_creations: This user has no works or comments.
-        page_heading: Works and Comments by %{user}
+        page_heading: Works and Comments by %{user} (%{id})
         page_title: "%{login} - User Creations"
       history:
         heading: User History
@@ -626,8 +626,21 @@ en:
           hide_works: hide their works or bookmarks from you
           intro: 'Blocking a user will not:'
   bookmarks:
+    bookmark_blurb:
+      deleted: This has been deleted, sorry!
+      save: Save
+      saved: Saved
+    bookmark_owner_navigation:
+      delete: Delete
+      delete_confirmation: Are you sure you want to delete this bookmark?
+      edit: Edit
+      share: Share
+      share_bookmark: Share Bookmark
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    bookmarkable_blurb:
+      save: Save
+      saved: Saved
     external_work_fields:
       fandoms_help_title: Fandom help
       ratings_help_title: Rating help
@@ -638,6 +651,12 @@ en:
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
+      navigation:
+        bookmarks: Bookmarks
+        edit: Edit Bookmark
+        new: Bookmark
+        new_external_work: Bookmark External Work
+        works: Works
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
     search_form:
       word_count: Word count
@@ -2367,7 +2386,7 @@ en:
         legend: Display
         show_adult_content: Show me adult content without checking.
         show_whole_work_default: Show the whole work by default.
-      locale_help_title: Locale preferences
+      locale_help_title: Locale preferences help
       misc:
         heading: Misc
         legend: Misc
@@ -2464,12 +2483,19 @@ en:
       name: Name (required)
       submit: Submit
   readings:
+    confirm_clear:
+      notice_html: Are you sure you want to <strong><em>clear</em></strong> your entire history? This <strong>cannot be undone</strong>.
+      page_heading: Clear Entire History
+      submit: Yes, Clear Entire History
     index:
+      clear_entire_history: Clear Entire History
       history:
         landmark: List of History Items
+        navigation: History
         page_heading: History
       marked_for_later:
         landmark: List of Marked for Later Items
+        navigation: Marked for Later
         page_heading: Marked for Later
   related_works:
     index:
@@ -2664,10 +2690,14 @@ en:
     show:
       canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
       canonical_tag: canonical tag
+      children:
+        heading: 'Child tags (displaying the first %{count} of each type):'
+        more: and more
       fandom_relationship_tags: Relationship tags in this fandom
       filter_bookmarks: filter bookmarks
       filter_works: filter works
       list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
+      synonyms: 'Tags with the same meaning:'
     wrangle:
       manage:
         comments: Comments (%{count})
@@ -2976,6 +3006,10 @@ en:
     byline:
       add_co-creators: Add co-creators
       show_co-creator_options: Add co-creators?
+    drafts:
+      page_heading: Unposted Draft
+      please_note: 'Please note:'
+      unposted_drafts_get_deleted: Unposted drafts are only saved for 30 days from the day they are first created, and then deleted from %{app_name}.
     edit_tags:
       page_heading:
         edit_tags_and_language_html: Edit Work Tags and Language for %{title}
