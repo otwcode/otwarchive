@@ -51,8 +51,8 @@ Feature: Search collected works
   has correct blurbs in the creator's collected works page for admins and the
   creator, and the collections exist on filters on that page
     Given I have the anonymous collection "Johnlock"
-    And I have the hidden collection "Adlock"
-    And I am logged in as "author"
+      And I have the hidden collection "Adlock"
+      And I am logged in as "author"
       And I post the work "Normal"
       And I post the work "Scarlet" in the collection "Johnlock"
       And I post the work "Hound" in the collection "Adlock"
