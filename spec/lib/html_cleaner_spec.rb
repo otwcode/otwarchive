@@ -63,6 +63,31 @@ describe HtmlCleaner do
           expect(result).to be_empty
         end
 
+        it "keeps allow=\"fullscreen\" on iframes from allowed sources" do
+          html = '<iframe width="560" height="315" src="//vimeo.com/embed/123" allow="fullscreen" frameborder="0"></iframe>'
+          result = sanitize_value(field, html)
+          expect(result).to include('allow="fullscreen"')
+        end
+
+        it "restricts allow attribute to just fullscreen" do
+          html = '<iframe width="560" height="315" src="//vimeo.com/embed/123" allow="fullscreen; autoplay" frameborder="0"></iframe>'
+          result = sanitize_value(field, html)
+          expect(result).to include('allow="fullscreen"')
+          expect(result).not_to include("autoplay")
+        end
+
+        it "strips allow attribute if it does not include fullscreen" do
+          html = '<iframe width="560" height="315" src="//vimeo.com/embed/123" allow="autoplay" frameborder="0"></iframe>'
+          result = sanitize_value(field, html)
+          expect(result).not_to include("allow=")
+        end
+
+        it "keeps legacy allowfullscreen on iframes" do
+          html = '<iframe width="560" height="315" src="//vimeo.com/embed/123" allowfullscreen frameborder="0"></iframe>'
+          result = sanitize_value(field, html)
+          expect(result).to include("allowfullscreen")
+        end
+
         %w[criticalcommons.org].each do |source|
           it "doesn't convert src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
