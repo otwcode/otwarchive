@@ -73,7 +73,7 @@ class TagWranglersController < ApplicationController
             assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
             assignment.save!
           end
-          noncanonical_fandom.push(fandom) unless fandom.canonical?
+          noncanonical_fandoms.push(fandom) unless fandom.canonical?
         end
         if noncanonical_fandoms.length == 1
           flash[:error] = t(".noncanonical_fandoms_tried_assignment.one", fandom_string: noncanonical_fandoms[0].name) 
