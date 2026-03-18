@@ -169,7 +169,7 @@ namespace :After do
 
   desc "Remove wrangling assigments of non-canonical fandoms"
   task(remove_noncanonical_fandom_wrangling_assignments: :environment) do
-    WranglingAssignment.joins("LEFT JOIN tags ON (tags.id = wrangling_assignments.fandom_id)").where(tags: {canonical: false}).find_each { |assignment| assignment.destroy }
+    WranglingAssignment.joins("LEFT JOIN tags ON (tags.id = wrangling_assignments.fandom_id)").where(tags: {canonical: false}).find_each(&:destroy)
   end
 
   desc "Add default rating to works missing a rating"

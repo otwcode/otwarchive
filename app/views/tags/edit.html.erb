@@ -65,8 +65,8 @@
       <% if @wranglers %>
         <dt><%= ts("Wranglers") %></dt>
           <% if (@tag.type.to_s == "Fandom") & !@tag.canonical? %>
-            <p> 
-              <%= t('.wrangler_noncanon_fandom') %>
+            <p>
+              <%= t(".wrangler_noncanon_fandom") %>
             </p>
           <% else %>
             <dd><%= wrangler_list(@wranglers, @tag) %></dd>

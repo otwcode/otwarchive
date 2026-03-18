@@ -145,7 +145,7 @@ end
 
 describe "rake After:remove_noncanonical_fandom_wrangling_assignments" do
   let(:noncanonical_fandom) { Fandom.create(canonical: false) }
-  let(:user) { User.create() }
+  let(:user) { User.create }
   let(:assignment) { WranglingAssignment.create(user_id: :user.id, fandom_id: :noncanonical_fandom.id) }
   
   it "deletes wrangling assignments of noncanonical fandoms" do
