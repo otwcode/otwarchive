@@ -49,10 +49,11 @@ class TagWranglersController < ApplicationController
       .where(last_wrangler: wrangler)
       .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
       .includes(:merger, :parents)
-    results = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
+    results = [["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"]] 
     wrangled_tags.find_each(order: :desc) do |tag|
       merger = tag.merger&.name || ""
-      fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }.join(", ")
+      fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }
+        .join(", ")
       results << [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]
     end
     filename = "wrangled_tags_#{wrangler.login}_#{Time.now.utc.strftime('%Y-%m-%d-%H%M')}.csv"
@@ -62,38 +63,35 @@ class TagWranglersController < ApplicationController
   def create
     authorize :wrangling if logged_in_as_admin?
 
-    unless params[:tag_fandom_string].blank?
-      names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
-      fandoms = Fandom.where('name IN (?)', names)
+    if params[:tag_fandom_string].present?
+      names = params[:tag_fandom_string].gsub(/$/, ",").split(",").map(&:strip)
+      fandoms = Fandom.where(name: names)
       noncanonical_fandoms = []
-      unless fandoms.blank?
-        for fandom in fandoms
-          if !fandom.canonical?
-            noncanonical_fandoms.push(fandom)
-          else
-            unless !current_user.respond_to?(:fandoms) || current_user.fandoms.include?(fandom)
-              assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
-              assignment.save!
-            end
+      if fandoms.present?
+        fandoms.each do |fandom|
+          unless !current_user.respond_to?(:fandoms) || current_user.fandoms.include?(fandom) || !fandom.canonical?
+            assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
+            assignment.save!
           end
+          noncanonical_fandom.push(fandom) unless fandom.canonical?
         end
         if noncanonical_fandoms.length == 1
-          flash[:error] = t('.noncanonical_fandoms_tried_assignment.one', fandom_string: noncanonical_fandoms[0].name) 
+          flash[:error] = t(".noncanonical_fandoms_tried_assignment.one", fandom_string: noncanonical_fandoms[0].name) 
         else
-          flash[:error] = t('.noncanonical_fandoms_tried_assignment.other', fandom_strings: helpers.to_sentence(noncanonical_fandoms.map{ |fandom| fandom.name })) unless noncanonical_fandoms.empty?
+          flash[:error] = t(".noncanonical_fandoms_tried_assignment.other", fandom_strings: helpers.to_sentence(noncanonical_fandoms.map(&:name))) unless noncanonical_fandoms.empty? # rubocop:disable Metrics/BlockNesting
         end
       end
     end
-    unless params[:assignments].blank?
+    if params[:assignments].present?
       params[:assignments].each_pair do |fandom_id, user_logins|
         fandom = Fandom.find(fandom_id)
         user_logins.uniq.each do |login|
-          unless login.blank?
-            user = User.find_by(login: login)
-            unless user.nil? || user.fandoms.include?(fandom)
-              assignment = user.wrangling_assignments.build(fandom_id: fandom.id)
-              assignment.save!
-            end
+          next if login.blank?
+
+          user = User.find_by(login: login)
+          unless user.nil? || user.fandoms.include?(fandom)
+            assignment = user.wrangling_assignments.build(fandom_id: fandom.id)
+            assignment.save!
           end
         end
       end
