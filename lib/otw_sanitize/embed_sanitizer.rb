@@ -189,7 +189,7 @@ module OtwSanitize
     # Restrict the iframe "allow" attribute to only the "fullscreen" directive.
     # Removes the attribute entirely if "fullscreen" is not present.
     def restrict_iframe_allow_attribute
-      return unless node["allow"].present?
+      return if node["allow"].blank?
 
       if node["allow"].split(/[\s;,]+/).include?("fullscreen")
         node["allow"] = "fullscreen"
