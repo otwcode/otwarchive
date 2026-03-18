@@ -77,7 +77,11 @@ class TagWranglersController < ApplicationController
             end
           end
         end
-        flash[:error] = t('.noncanonical_fandoms_tried_assignment', fandom_strings: helpers.to_sentence(noncanonical_fandoms.map{ |fandom| fandom.name })) unless noncanonical_fandoms.empty?
+        if noncanonical_fandoms.length == 1
+          flash[:error] = t('.noncanonical_fandoms_tried_assignment.one', fandom_string: noncanonical_fandoms[0].name) 
+        else
+          flash[:error] = t('.noncanonical_fandoms_tried_assignment.other', fandom_strings: helpers.to_sentence(noncanonical_fandoms.map{ |fandom| fandom.name })) unless noncanonical_fandoms.empty?
+        end
       end
     end
     unless params[:assignments].blank?

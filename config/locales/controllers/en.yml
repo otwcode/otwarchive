@@ -286,7 +286,9 @@ en:
     index:
       page_subtitle: fandoms
   tag_wranglers:
-    noncanonical_fandoms_tried_assignment: "Could not assign fandom(s) %{fandom_strings}. Non-canonical fandoms cannot be assigned."
+    noncanonical_fandoms_tried_assignment: 
+      one: "Could not assign fandom %{fandom_string}. Non-canonical fandoms cannot be assigned."
+      other: "Could not assign fandoms %{fandom_strings}. Non-canonical fandoms cannot be assigned."
   tags:
     index:
       collection_page_title: "%{collection_title} - Tags"
