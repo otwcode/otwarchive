@@ -65,13 +65,19 @@ class TagWranglersController < ApplicationController
     unless params[:tag_fandom_string].blank?
       names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
       fandoms = Fandom.where('name IN (?)', names)
+      noncanonical_fandoms = []
       unless fandoms.blank?
         for fandom in fandoms
-          unless !current_user.respond_to?(:fandoms) || current_user.fandoms.include?(fandom)
-            assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
-            assignment.save!
+          if !fandom.canonical?
+            noncanonical_fandoms.push(fandom)
+          else
+            unless !current_user.respond_to?(:fandoms) || current_user.fandoms.include?(fandom)
+              assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
+              assignment.save!
+            end
           end
         end
+        flash[:error] = t('.noncanonical_fandoms_tried_assignment', fandom_strings: helpers.to_sentence(noncanonical_fandoms.map{ |fandom| fandom.name })) unless noncanonical_fandoms.empty?
       end
     end
     unless params[:assignments].blank?
