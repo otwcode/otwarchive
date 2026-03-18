@@ -49,7 +49,7 @@ class TagWranglersController < ApplicationController
       .where(last_wrangler: wrangler)
       .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
       .includes(:merger, :parents)
-    results = [["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"]] 
+    results = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
     wrangled_tags.find_each(order: :desc) do |tag|
       merger = tag.merger&.name || ""
       fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }
@@ -63,11 +63,11 @@ class TagWranglersController < ApplicationController
   def create
     authorize :wrangling if logged_in_as_admin?
 
-    if params[:tag_fandom_string].present?
-      names = params[:tag_fandom_string].gsub(/$/, ",").split(",").map(&:strip)
-      fandoms = Fandom.where(name: names)
+    unless params[:tag_fandom_string].blank?
+      names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
+      fandoms = Fandom.where('name IN (?)', names)
       noncanonical_fandoms = []
-      if fandoms.present?
+      unless fandoms.blank?
         fandoms.each do |fandom|
           unless !current_user.respond_to?(:fandoms) || current_user.fandoms.include?(fandom) || !fandom.canonical?
             assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
@@ -82,16 +82,16 @@ class TagWranglersController < ApplicationController
         end
       end
     end
-    if params[:assignments].present?
+    unless params[:assignments].blank?
       params[:assignments].each_pair do |fandom_id, user_logins|
         fandom = Fandom.find(fandom_id)
         user_logins.uniq.each do |login|
-          next if login.blank?
-
-          user = User.find_by(login: login)
-          unless user.nil? || user.fandoms.include?(fandom)
-            assignment = user.wrangling_assignments.build(fandom_id: fandom.id)
-            assignment.save!
+          unless login.blank?
+            user = User.find_by(login: login)
+            unless user.nil? || user.fandoms.include?(fandom)
+              assignment = user.wrangling_assignments.build(fandom_id: fandom.id)
+              assignment.save!
+            end
           end
         end
       end
