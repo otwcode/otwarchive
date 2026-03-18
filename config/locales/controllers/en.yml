@@ -282,13 +282,14 @@ en:
     index:
       page_title: "%{username} - Subscriptions"
       subscription_type_page_title: "%{username} - %{subscription_type} Subscriptions"
+  tag_wranglers:
+    create:
+      noncanonical_fandoms_tried_assignment:
+        one: Could not assign fandom %{fandom_string}. Non-canonical fandoms cannot be assigned.
+        other: Could not assign fandoms %{fandom_strings}. Non-canonical fandoms cannot be assigned.
   tag_wranglings:
     index:
       page_subtitle: fandoms
-  tag_wranglers:
-    noncanonical_fandoms_tried_assignment: 
-      one: "Could not assign fandom %{fandom_string}. Non-canonical fandoms cannot be assigned."
-      other: "Could not assign fandoms %{fandom_strings}. Non-canonical fandoms cannot be assigned."
   tags:
     index:
       collection_page_title: "%{collection_title} - Tags"

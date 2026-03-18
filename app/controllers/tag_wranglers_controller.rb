@@ -75,11 +75,7 @@ class TagWranglersController < ApplicationController
           end
           noncanonical_fandoms.push(fandom) unless fandom.canonical?
         end
-        if noncanonical_fandoms.length == 1
-          flash[:error] = t(".noncanonical_fandoms_tried_assignment.one", fandom_string: noncanonical_fandoms[0].name) 
-        else
-          flash[:error] = t(".noncanonical_fandoms_tried_assignment.other", fandom_strings: helpers.to_sentence(noncanonical_fandoms.map(&:name))) unless noncanonical_fandoms.empty? # rubocop:disable Metrics/BlockNesting
-        end
+        flash[:error] = t(".noncanonical_fandoms_tried_assignment", count: noncanonical_fandoms.length, fandom_strings: helpers.to_sentence(noncanonical_fandoms.map(&:name))) unless noncanonical_fandoms.empty? # rubocop:disable Metrics/BlockNesting
       end
     end
     unless params[:assignments].blank?
