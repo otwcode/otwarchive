@@ -1,8 +1,9 @@
 class CreateImportedUrls < ActiveRecord::Migration[8.0]
   def change
     create_table :imported_urls do |t|
-      t.belongs_to :work, index: { unique: true }, foreign_key: true
+      t.belongs_to :work
 
+      
       t.string :original, null: false, index:true
       t.string :minimal, null: false
       t.string :minimal_no_protocol_no_www, null: false
