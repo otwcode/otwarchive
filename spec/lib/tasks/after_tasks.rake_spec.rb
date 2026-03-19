@@ -145,11 +145,18 @@ end
 
 describe "rake After:remove_noncanonical_fandom_wrangling_assignments" do
   let(:noncanonical_fandom) { Fandom.create(canonical: false) }
-  let(:user) { User.create }
-  let(:assignment) { WranglingAssignment.create(user_id: :user.id, fandom_id: :noncanonical_fandom.id) }
+  let(:user) { create(:tag_wrangler) }
+  let(:assignment1) { WranglingAssignment.create(user_id: :user.id, fandom_id: :noncanonical_fandom.id) }
   
   it "deletes wrangling assignments of noncanonical fandoms" do
-    expect(WranglingAssignment.all).to be_empty
+    expect(WranglingAssignment.none?)
+  end
+
+  let(:canonical_fandom) { Fandom.create(canonical: true) }
+  let(:assignment2) { WranglingAssignment.create(user_id: :user.id, fandom_id: :noncanonical_fandom.id) }
+
+  it "doesn't delete wrangling assignments of canonical fandoms" do
+    expect(WranglingAssignment.any?)
   end
 end
 
