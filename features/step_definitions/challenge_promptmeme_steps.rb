@@ -277,6 +277,15 @@ When /^I sign up for "([^\"]*)" many-fandom prompt meme$/ do |title|
     click_button "Submit"
 end
 
+When /^I sign up for "([^"]*)" with combination ESCAPE_CHARS$/ do |title|
+  step %{I start signing up for "#{title}"}
+  step %{I fill in the 1st field with id matching "title" with "These & < > ' ? are some HTML escape chars"}
+  click_button "Submit"
+  step %{I should see "Sign-up was successfully created"}
+  step %{I should see "These "}
+  step %{I should see " are some HTML escape chars"}
+end
+
 When /^I add prompt (\d+)$/ do |number|
   step %{I add prompt #{number} with "Stargate Atlantis"}
 end
@@ -338,6 +347,16 @@ end
 When /^I view prompts for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by(title: title))
   step %{I follow "Prompts ("}
+end
+
+When /^I view my claims$/ do
+  step %{I follow "My Dashboard"}
+  step %{I follow "Claims"}
+end
+
+When /^I view my claims for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by(title: title))
+  step %{I follow "My Claims"}
 end
 
 ### WHEN claiming
