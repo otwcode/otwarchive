@@ -38,7 +38,7 @@
                     <%= link_to wrangler, tag_wrangler_path(:id => wrangler) %>
                     <!--BACK END PLS take off this span and give the link the class delete-->
                     <span class="delete">
-                      <%= link_to '×', tag_wrangler_path(redirect_params.merge(:id => wrangler, :fandom_id => assignments.first.id)), :method => :delete, title: "remove" %>
+                      <%= link_to "×", tag_wrangler_path(redirect_params.merge(id: wrangler, fandom_id: assignments.first.id)), method: :delete, title: "remove" %>
                     </span>
                   </li>
                 <% end %>
