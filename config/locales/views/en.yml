@@ -2505,11 +2505,8 @@ en:
         hide_work_from_search_engines: Hide my work from search engines when possible.
         legend: Privacy
       public_site_skins: Public Site Skins
-<<<<<<< HEAD
-      work_title_format_help_title: Work title format
-=======
       skins_basics_help_title: Skins basics
->>>>>>> master
+      work_title_format_help_title: Work title format
       your_locale: Your locale
       your_site_skin: Your site skin
       your_time_zone: Your time zone
