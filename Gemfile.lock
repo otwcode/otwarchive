@@ -121,7 +121,6 @@ GEM
     after_commit_everywhere (1.6.0)
       activerecord (>= 4.2)
       activesupport
-    akismetor (1.0.0)
     ast (2.4.3)
     audited (5.8.0)
       activerecord (>= 5.2, < 8.2)
@@ -709,7 +708,6 @@ DEPENDENCIES
   acts_as_list (~> 0.9.7)
   addressable
   after_commit_everywhere
-  akismetor
   audited (~> 5.3)
   awesome_print
   aws-sdk-s3

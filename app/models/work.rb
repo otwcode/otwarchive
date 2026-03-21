@@ -1138,7 +1138,7 @@ class Work < ApplicationRecord
 
   def check_for_spam
     return unless %w(staging production).include?(Rails.env)
-    self.spam = Akismetor.spam?(akismet_attributes)
+    self.spam = AkismetClient.spam?(akismet_attributes)
     self.spam_checked_at = Time.now
     save
   end
@@ -1162,14 +1162,14 @@ class Work < ApplicationRecord
     update_attribute(:spam, true)
     ModeratedWork.mark_reviewed(self)
     # don't submit spam reports unless in production mode
-    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+    Rails.env.production? && AkismetClient.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
     update(spam: false, hidden_by_admin: false)
     ModeratedWork.mark_approved(self)
     # don't submit ham reports unless in production mode
-    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+    Rails.env.production? && AkismetClient.submit_ham(akismet_attributes)
   end
 
   def notify_of_hiding
