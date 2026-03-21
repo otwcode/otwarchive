@@ -1,11 +1,9 @@
-# rubocop:disable Cucumber/RegexStepName
-
-require "uri"
-require "cgi"
+require 'uri'
+require 'cgi'
 
 module WithinHelpers
-  def with_scope(locator, &)
-    locator ? within(locator, &) : yield
+  def with_scope(locator)
+    locator ? within(locator) { yield } : yield
   end
 end
 World(WithinHelpers)
@@ -108,7 +106,7 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do 
 end
 
 Then /^(?:|I )should see JSON:$/ do |expected_json|
-  require "json"
+  require 'json'
   expected = JSON.pretty_generate(JSON.parse(expected_json))
   actual   = JSON.pretty_generate(JSON.parse(response.body))
   expected.should == actual
@@ -142,13 +140,13 @@ Then /^(?:|I )should see '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
   end
 end
 
-Then %r{^(?:|I )should see /([^/]*)/(?: within "([^"]*)")?$} do |regexp, selector|
+Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
   regexp = Regexp.new(regexp)
   with_scope(selector) do
     if page.respond_to? :should
-      page.should have_xpath("//*", text: regexp)
+      page.should have_xpath('//*', text: regexp)
     else
-      assert page.has_xpath?("//*", text: regexp)
+      assert page.has_xpath?('//*', text: regexp)
     end
   end
 end
@@ -173,13 +171,13 @@ Then /^(?:|I )should not see '([^']*)'(?: within "([^"]*)")?$/ do |text, selecto
   end
 end
 
-Then %r{^(?:|I )should not see /([^/]*)/(?: within "([^"]*)")?$} do |regexp, selector|
+Then /^(?:|I )should not see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
   regexp = Regexp.new(regexp)
   with_scope(selector) do
     if page.respond_to? :should
-      page.should have_no_xpath("//*", text: regexp)
+      page.should have_no_xpath('//*', text: regexp)
     else
-      assert page.has_no_xpath?("//*", text: regexp)
+      assert page.has_no_xpath?('//*', text: regexp)
     end
   end
 end
@@ -191,7 +189,7 @@ end
 Then /^the "([^"]*)" field(?: within "([^"]*)")? should contain "([^"]*)"$/ do |field, selector, value|
   with_scope(selector) do
     field = find_field(field)
-    field_value = (field.tag_name == "textarea") ? field.text : field.value
+    field_value = (field.tag_name == 'textarea') ? field.text : field.value
     if field_value.respond_to? :should
       field_value.should =~ /#{value}/
     else
@@ -202,7 +200,7 @@ end
 
 Then /^the field labeled "([^"]*)" should contain "([^"]*)"$/ do |label, value|
   field = find_field(label)
-  field_value = (field.tag_name == "textarea") ? field.text : field.value
+  field_value = (field.tag_name == 'textarea') ? field.text : field.value
   if field_value.respond_to? :should
     field_value.should =~ /#{value}/
   else
@@ -213,7 +211,7 @@ end
 Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ do |field, selector, value|
   with_scope(selector) do
     field = find_field(field)
-    field_value = (field.tag_name == "textarea") ? field.text : field.value
+    field_value = (field.tag_name == 'textarea') ? field.text : field.value
     if field_value.respond_to? :should_not
       field_value.should_not =~ /#{value}/
     else
@@ -255,7 +253,7 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   query = URI.parse(current_url).query
   actual_params = query ? CGI.parse(query) : {}
   expected_params = {}
-  expected_pairs.rows_hash.each_pair { |k, v| expected_params[k] = v.split(",") }
+  expected_pairs.rows_hash.each_pair{|k,v| expected_params[k] = v.split(',')}
 
   if actual_params.respond_to? :should
     actual_params.should == expected_params
@@ -265,8 +263,8 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
 end
 
 Then /^I should download a ([^"]*) file with(?: (\d+) rows and)? the header row "(.*?)"$/ do |type, rows, header|
-  page.response_headers["Content-Disposition"].should =~ /attachment; filename=.*?\.#{type}/i
-  page.response_headers["Content-Type"].should =~ %r{/#{type}}i
+  page.response_headers['Content-Disposition'].should =~ /attachment; filename=.*?\.#{type}/i
+  page.response_headers['Content-Type'].should =~ /\/#{type}/i
   body_without_bom = page.body.encode("UTF-8").delete!("\xEF\xBB\xBF")
   csv = CSV.parse(body_without_bom, col_sep: "\t") # array of arrays
   expect(csv.first.join(" ")).to eq(header)
@@ -282,7 +280,7 @@ Then /^show me the network traffic$/ do
   puts page.driver.network_traffic.to_yaml
 end
 
-Then /^cookie "([^"]*)" should be like "([^"]*)"$/ do |cookie, value|
+Then /^cookie "([^\"]*)" should be like "([^\"]*)"$/ do |cookie, value|
   cookie_value = Capybara.current_session.driver.request.cookies.[](cookie)
   if cookie_value.respond_to? :should
     cookie_value.should =~ /#{value}/
@@ -295,5 +293,3 @@ Then /^cookie "([^"]*)" should be deleted$/ do |cookie|
   cookie_value = Capybara.current_session.driver.request.cookies.[](cookie)
   assert cookie_value.nil?
 end
-
-# rubocop:enable Cucumber/RegexStepName
