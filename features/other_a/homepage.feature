@@ -3,7 +3,7 @@ Feature: Various things on the homepage
   Scenario: Logged out
 
   When I am on the homepage
-  Then I should see "The Archive of Our Own is a project of the Organization for Transformative Works."
+  Then I should see "The Archive of Our Own (AO3) is a project of the Organization for Transformative Works."
 
   Scenario: Diversity statement
 
