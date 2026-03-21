@@ -1,6 +1,4 @@
 class PseudsController < ApplicationController
-  cache_sweeper :pseud_sweeper
-
   before_action :load_user
   before_action :check_ownership, only: [:create, :destroy, :new]
   before_action :check_ownership_or_admin, only: [:edit, :update]

@@ -11,7 +11,7 @@ class ReadingsController < ApplicationController
 
   def index
     @readings = @user.readings.visible
-    @page_subtitle = t(".history_page_title")
+    @page_subtitle = t(".history_page_title", username: @user.login)
     if params[:show] == 'to-read'
       @readings = @readings.where(toread: true)
       @page_subtitle = t(".marked_for_later_page_title")
@@ -55,6 +55,9 @@ class ReadingsController < ApplicationController
     end
 
     redirect_to user_readings_path(current_user)
+  end
+
+  def confirm_clear
   end
 
   protected
