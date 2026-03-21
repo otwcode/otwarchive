@@ -322,6 +322,7 @@ Rails.application.routes.draw do
     end
     resources :readings do
       collection do
+        get :confirm_clear
         post :clear
       end
     end
@@ -479,7 +480,7 @@ Rails.application.routes.draw do
     resources :media
     resources :fandoms
     resources :people
-    resources :prompts
+    resources :prompts, except: [:index]
     resources :tags do
       resources :works
     end
@@ -657,6 +658,9 @@ Rails.application.routes.draw do
     preferences_misc
     preferences_privacy
     preferences_work_title_format
+    skins_basics
+    skins_creating
+    skins_parents
     tags_fandoms
     tags_ratings
     tags_warnings
@@ -672,6 +676,9 @@ Rails.application.routes.draw do
   get "/help/misc-preferences.html", to: redirect("/help/preferences_misc")
   get "/help/privacy-preferences.html", to: redirect("/help/preferences_privacy")
   get "/help/work_title_format.html", to: redirect("/help/preferences_work_title_format")
+  get "/help/skins-basics.html", to: redirect("/help/skins_basics")
+  get "/help/skins-creating.html", to: redirect("/help/skins_creating")
+  get "/help/skins-parents.html", to: redirect("/help/skins_parents")
   get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
   get "/help/rating-help.html", to: redirect("/help/tags_ratings")
   get "/help/warning-help.html", to: redirect("/help/tags_warnings")

@@ -170,7 +170,7 @@ Set by an admin, these banners appear on every page until the user dismisses the
     border-radius: 2em;
 }
 
-.announcement h1, .announcement h2, .announcement h3, .announcement h4, .announcement h5, .announcement h6 {
+.announcement h1, .announcement h2, .announcement h3, .announcement h4, .announcement h5, .announcement h6, .banner h1, .banner h2, .banner h3, .banner h4, .banner h5, .banner h6 {
   border: none;
   color: inherit;
   margin: 0;

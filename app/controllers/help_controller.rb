@@ -26,6 +26,15 @@ class HelpController < ApplicationController
   def preferences_work_title_format
   end
 
+  def skins_basics
+  end
+
+  def skins_creating
+  end
+
+  def skins_parents
+  end
+
   def tags_fandoms
   end
 

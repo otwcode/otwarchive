@@ -181,3 +181,20 @@ Feature: Invite queue management
 
     When I press "Resend Invitation"
     Then 1 email should be delivered to invitee@example.org
+
+  Scenario: Invitation requests don't get stuck in the queue if a user changes their email to the requests' email
+    Given account creation is enabled
+      And the invitation queue is enabled
+      And account creation requires an invitation
+      And the invite_from_queue_at is yesterday
+      And an invitation request for "test@archiveofourown.org"
+      And the following activated users exist
+        | login | email                       |
+        | fred  | nottest@archiveofourown.org |
+    When I am logged in as "fred"
+      And I change my email to "test@archiveofourown.org"
+      And all emails have been delivered
+      And the scheduled check_invite_queue job is run
+      And I go to the invite_requests page
+    Then I should see "There are currently 0 people on the waiting list"
+      And 0 emails should be delivered to test@archiveofourown.org

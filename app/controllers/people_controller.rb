@@ -1,9 +1,8 @@
 class PeopleController < ApplicationController
-
   before_action :load_collection
 
   def search
-    if people_search_params.blank?
+    if params[:people_search].blank?
       @search = PseudSearchForm.new({})
     else
       options = people_search_params.merge(page: params[:page])
@@ -24,10 +23,9 @@ class PeopleController < ApplicationController
     end
   end
 
-  protected
+  private
 
   def people_search_params
-    return {} unless params[:people_search].present?
-    params[:people_search].permit!
+    params.require(:people_search).permit(:query, :name, :collection_id, :fandom)
   end
 end
