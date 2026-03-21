@@ -1205,6 +1205,56 @@ en:
         symbols_html: When browsing the Archive, warnings will be displayed in the blurb of each work. Official warning tags are displayed in bold. A four square grid in the top left corner of each work's blurb indicates the work's rating, completion status, pairing category, and any Archive warnings that apply to it. Refer to the %{symbols_key_chart_link} for more information.
         symbols_key_chart: Symbols Key Chart
       welcome_header: Welcome to the %{app_name}!
+    html:
+      header: HTML on the Archive
+      allowed_html:
+        header: Allowed HTML
+      formatting:
+        a_blank_line: If you leave a blank line between two paragraphs, we will put paragraph tags in for you around the two paragraphs.
+        after_first_put_note: When you edit your HTML after you first put it in, you will see the results of our formatting work, so you can correct any mistakes our formatter might have made. Please note that the best way to get good results is to put in good HTML -- that is how you can be sure your story will look right across various browsers, screen readers, mobile devices, and downloads.
+        description: 'When you enter HTML into the archive, we do some cleanup on it to make sure that it is safe (so spammers and hackers cannot upload badness) and try and do some basic formatting both for your convenience and for accessibility reasons. Here are the formatting steps we take:'
+        example:
+          em:
+            sentence_html: '&lt;em&gt;%{rodney_italic}&lt;/em&gt; McKay'
+            rodney: Rodney
+          strong:
+            sentence_html: I will &lt;strong&gt;%{never_bold}&lt;/strong&gt; understand you!
+            never: never
+          blockquote:
+            sentence_html: '&lt;blockquote&gt;%{text_blockquote}&lt;/blockquote&gt;'
+            text: To quote a block of text
+          inline_quote:
+            sentence_html: <p>Use q to &lt;q&gt;%{phrase_inline_quote}&lt;/q&gt;</p>
+            phrase: To quote a phrase
+          cite:
+            sentence_html: <p>Try cite to cite &lt;cite&gt;%{phrase_or_title_cite}&lt;/cite&gt;</p>
+            phrase_or_title: a phrase or title
+          chapter_title: <h3>Chapter title<h3>
+          footnote_title: <h6>Footnote title<h6>
+          scene_title: <h4>Scene title<h4>
+          subtitle-h2: <h2>Subtitle<h2>
+          subtitle-h5: <h5>Subtitle<h5>
+          title: <h1>Title<h1>
+        forgotten_open_tags: If you have forgotten to close a formatting tag, it will be closed at the end of the paragraph for you.
+        good_html_note: Good HTML means HTML that labels what the text is supposed to be -- so if you have paragraphs, they should be inside paragraph tags, not just separated with break tags. If you have emphasized text, it should be inside em tags. If you have a list of items, each item should be inside list tags. If you %{negative_italic} have a list of items, you shouldn't have list tags. :) (We are putting together a set of more detailed helpful references about this, but this is the basic idea.)
+        header: How Do We Format Your HTML?
+        mis-nested_tags:
+          sentence_html: 'If you have mis-nested tags like this: &lt;em&gt;&lt;strong&gt;%{text_bold_italic}&lt;/em&gt;&lt;/strong&gt; we will fix the mis-nesting (so it would become &lt;em&gt;&lt;strong&gt;%{corrected_text_bold_italic}&lt;/strong&gt;&lt;/em&gt;).'
+          text: text!
+          corrected_text: text!
+        negative: don't
+        not_satisfied_note: If you find yourself putting in HTML that doesn't mean the right thing, in order to get a particular visual effect, please resist! The work skin feature allows you to apply custom CSS to works, and that lets you make them look just about any way you want them to (and is easier if you are starting from good HTML).
+        recommendations:
+          emphasis_html: For emphasis, use emphasis tags %{emphasis_tags_code}
+          headings_html: 'For headings, use heading tags: %{heading_tags_code}'
+          lead_in: 'Some specific recommendations:'
+          quote_html: 'To quote poetry, phrases or titles use quote tags: %{quote_tags_code}'
+        single_carriage_return: If you have a single carriage return between two lines of text, we will put in a break tag for you.
+        tags_spanning_paragraphs: If you open a formatting tag in one paragraph and close it several paragraphs later, we will reopen/close it within each paragraph.
+        two_blank_lines: If you have two blank lines in a row between paragraphs, we will add extra whitespace in for you (with <p>&nbsp;</p>)
+        two_break_tags: If you have two break tags in a row (<br /><br />) with nothing between them, we will turn that into paragraph tags.
+        unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
+        unwanted_larger_text: If one bit of your text shows up larger than the rest, probably our formatter couldn't figure out to put paragraph tags around it. You can fix this by manually putting in the paragraph tags around that one bit.
     preferences_locale:
       locale:
         description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
@@ -3076,6 +3126,9 @@ en:
       no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
+    standard_form:
+      html_help_title: Html help
+      rte_help_title: Rte help
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"

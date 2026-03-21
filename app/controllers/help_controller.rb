@@ -5,7 +5,13 @@ class HelpController < ApplicationController
   def first_login
   end
 
+  def html
+  end
+
   def preferences_locale
+  end
+
+  def rte
   end
 
   def skins_basics

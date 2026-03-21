@@ -76,7 +76,7 @@ module ApplicationHelper
   def allowed_html_instructions(strip_images: false)
     # i18n-tasks-use t("application_helper.text_limited_html")
     # i18n-tasks-use t("application_helper.text_limited_html_strip_images_html")
-    t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help("html-help"))
+    t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help_modal(help_html_path, t(".html_help_title")))
   end
 
   # Byline helpers

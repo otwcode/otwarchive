@@ -651,7 +651,9 @@ Rails.application.routes.draw do
 
   %w[
     first_login
+    html
     preferences_locale
+    rte
     skins_basics
     skins_creating
     skins_parents
@@ -664,6 +666,8 @@ Rails.application.routes.draw do
 
   # Redirects for moved help files
   get "/first_login_help", to: redirect("/help/first_login")
+  get "/help/html-help.html", to: redirect("/help/html")
+  get "/help/rte-help.html", to: redirect("/help/rte")
   get "/help/skins-basics.html", to: redirect("/help/skins_basics")
   get "/help/skins-creating.html", to: redirect("/help/skins_creating")
   get "/help/skins-parents.html", to: redirect("/help/skins_parents")
