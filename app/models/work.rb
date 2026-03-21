@@ -165,7 +165,8 @@ class Work < ApplicationRecord
   end
 
   validates :user_defined_tags_count,
-            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
+            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } },
+            unless: -> { User.current_user.is_a?(Admin) }
 
   # If the recipient doesn't allow gifts, it should not be possible to give them
   # a gift work unless it fulfills a gift exchange assignment or non-anonymous
