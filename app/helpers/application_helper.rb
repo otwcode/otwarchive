@@ -78,7 +78,7 @@ module ApplicationHelper
     # i18n-tasks-use t("application_helper.text_limited_html_strip_images_html")
     t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help("html-help"))
   end
-
+  
   def link_to_modal(content = "", options = {})
     options[:class] ||= ""
     options[:for] ||= ""
