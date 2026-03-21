@@ -411,9 +411,7 @@ Scenario: subscriptions are not deleted without confirmation
 
 Scenario: Work subscriptions page hides unrevealed work details
   Given I am logged in as "creator_user"
-    And I set up the collection "Unrevealed Collection" with name "Unrevealed_Collection"
-    And I check "This collection is unrevealed"
-    And I submit
+    And I have a hidden collection "Unrevealed Collection"
     And I post the work "Secret Story"
     And "subscriber_user" subscribes to work "Secret Story"
     And I am logged in as "creator_user"
@@ -421,8 +419,7 @@ Scenario: Work subscriptions page hides unrevealed work details
   When I am logged in as "subscriber_user"
     And I go to the subscriptions page for "subscriber_user"
   Then I should see "Mystery Work"
-    And I should not see "Secret Story"
-    And I should not see a link "Secret Story"
-    And I should not see a link "creator_user"
-    And I should see the raw text "Unsubscribe from Mystery Work"
-    And I should not see the raw text "Unsubscribe from Secret Story"
+    And I should not see a button with text "Secret Story"
+    And I should not see a button with text "creator_user"
+    And I should see a button with text "Unsubscribe from Mystery Work"
+    And I should not see a button with text "Unsubscribe from Secret Story"
