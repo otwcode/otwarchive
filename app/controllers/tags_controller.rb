@@ -4,25 +4,13 @@ class TagsController < ApplicationController
   before_action :load_collection
   before_action :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
   before_action :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
-  before_action :load_tag, only: [:edit, :update, :wrangle, :mass_update]
-  before_action :load_tag_and_subtags, only: [:show]
+  before_action :load_tag, only: [:show, :edit, :update, :wrangle, :mass_update]
   around_action :record_wrangling_activity, only: [:create, :update, :mass_update]
 
   caches_page :feed
 
   def load_tag
-    @tag = Tag.find_by_name(params[:id])
-    unless @tag && @tag.is_a?(Tag)
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
-    end
-  end
-
-  # improved performance for show page
-  def load_tag_and_subtags
-    @tag = Tag.includes(:direct_sub_tags).find_by_name(params[:id])
-    unless @tag && @tag.is_a?(Tag)
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
-    end
+    @tag = Tag.find_by_name!(params[:id])
   end
 
   # GET /tags
@@ -79,15 +67,8 @@ class TagsController < ApplicationController
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
       @collections = @tag.collections.paginate(page: params[:page])
     end
-    # cache the children, since it's a possibly massive query
-    @tag_children = Rails.cache.fetch "v1/views/tags/#{@tag.cache_key}/children" do
-      children = {}
-      (@tag.child_types - %w(SubTag)).each do |child_type|
-        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count_cache DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
-        children[child_type] = tags.to_a.uniq unless tags.blank?
-      end
-      children
-    end
+
+    @has_mergers = @tag.canonical && @tag.mergers.exists?
   end
 
   def feed

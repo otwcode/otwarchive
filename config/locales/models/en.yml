@@ -88,6 +88,7 @@ en:
           attributes:
             base:
               over_reported: This page has already been reported. Our volunteers only need one report in order to investigate and resolve an issue, so please be patient and do not submit another report.
+              over_reported_bookmark: This bookmark has already been reported. Our volunteers only need one report in order to investigate and resolve an issue, so please be patient and do not submit another report.
               over_reported_comment: This comment has already been reported. Our volunteers only need one report in order to investigate and resolve an issue, so please be patient and do not submit another report.
               over_reported_series: This series has already been reported. Our volunteers only need one report in order to investigate and resolve an issue, so please be patient and do not submit another report.
             url:

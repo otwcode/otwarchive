@@ -183,6 +183,10 @@ ABUSE_REPORTS_PER_COMMENT_PERIOD: 30
 ABUSE_REPORTS_PER_SERIES_MAX: 3
 # time period, in days, used to total number of reports for a given series URL
 ABUSE_REPORTS_PER_SERIES_PERIOD: 30
+# max number of abuse reports to accept for a given bookmark URL
+ABUSE_REPORTS_PER_BOOKMARK_MAX: 3
+# time period, in days, used to total number of reports for a given bookmark URL
+ABUSE_REPORTS_PER_BOOKMARK_PERIOD: 30
 # max number of abuse reports to accept from a given email
 ABUSE_REPORTS_PER_EMAIL_MAX: 5
 

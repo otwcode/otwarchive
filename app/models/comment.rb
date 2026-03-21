@@ -24,6 +24,8 @@ class Comment < ApplicationRecord
 
   delegate :user, to: :pseud, allow_nil: true
 
+  attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4
+
   # Whether the writer of the comment this is replying to allows guest replies
   validate :guest_can_reply, if: :reply_comment?, unless: :pseud_id, on: :create
   def guest_can_reply
@@ -137,6 +139,10 @@ class Comment < ApplicationRecord
       comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
       comment_post_modified_gmt: comment_post_modified_gmt
     }
+
+    attributes[:cloudflare_bot_score] = cloudflare_bot_score if cloudflare_bot_score
+    attributes[:cloudflare_ja3_hash] = cloudflare_ja3_hash if cloudflare_ja3_hash
+    attributes[:cloudflare_ja4] = cloudflare_ja4 if cloudflare_ja4
 
     attributes[:recheck_reason] = "edit" if will_save_change_to_edited_at? && will_save_change_to_comment_content?
 

@@ -609,3 +609,8 @@ Then "the history table should show they were {word} as next of kin of {string}"
   user_id = User.find_by(login: username).id
   step %{I should see "#{action.capitalize} as Fannish Next of Kin for: #{user_id}" within "#user_history"}
 end
+
+Then "I should see the user id for {string} in the creations page heading" do |login|
+  user = User.find_by(login: login)
+  expect(page).to have_content("Works and Comments by #{login} (#{user.id})")
+end

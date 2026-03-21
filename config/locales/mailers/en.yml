@@ -326,7 +326,9 @@ en:
         text:
           one: 'If you don''t know why your work was hidden, and you have not received a separate email explaining why, please contact the Policy & Abuse committee directly: %{contact_abuse_url}.'
           other: 'If you don''t know why your works were hidden, and you have not received a separate email explaining why, please contact the Policy & Abuse committee directly: %{contact_abuse_url}.'
-      hidden_multiple: "%{count} of your works have been hidden by the Policy & Abuse committee:"
+      hidden_multiple:
+        one: "%{count} of your works has been hidden by the Policy & Abuse committee:"
+        other: "%{count} of your works have been hidden by the Policy & Abuse committee:"
       hidden_one:
         html: Your work %{title} has been hidden by the Policy & Abuse committee.
         text: Your work "%{title}" (%{work_url}) has been hidden by the Policy & Abuse committee.
@@ -508,7 +510,7 @@ en:
         your_assignments: your Assignments page
       optional_tags: Optional Tags
       prompt_url: Prompt URL
-      prompts: 'Prompts:'
+      prompts: Prompts
       recipient: Recipient
       recipient_missing: 'None: contact a moderator for help!'
       subject: "[%{app_name}][%{collection_title}] Your assignment!"
@@ -848,8 +850,12 @@ en:
           text: If you did not make this request, you can safely ignore and delete this email. Someone else may have entered your email address by mistake.
         instructions:
           html: "%{intro_bold} If the link in this email has expired, you will need to %{new_password_reset_link}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, %{contact_support_link} for further assistance."
-          intro: If you made this request, please %{choose_new_password_link} within %{count} days.
-          text: 'If you made this request, please use this link to choose a new password within %{count} days: %{choose_new_password_url}. If the link in this email has expired, you will need to request a new password reset: %{new_password_reset_url}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, contact Support for further assistance: %{contact_support_url}.'
+          intro:
+            one: If you made this request, please %{choose_new_password_link} within %{count} day.
+            other: If you made this request, please %{choose_new_password_link} within %{count} days.
+          text:
+            one: 'If you made this request, please use this link to choose a new password within %{count} day: %{choose_new_password_url}. If the link in this email has expired, you will need to request a new password reset: %{new_password_reset_url}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, contact Support for further assistance: %{contact_support_url}.'
+            other: 'If you made this request, please use this link to choose a new password within %{count} days: %{choose_new_password_url}. If the link in this email has expired, you will need to request a new password reset: %{new_password_reset_url}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, contact Support for further assistance: %{contact_support_url}.'
         intro: Someone has made a request to reset the password for your %{app_name} account.
         new_password_reset: request a new password reset
         reset_emails_clarification:

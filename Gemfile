@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 8.0.0"
+gem "rails", "~> 8.1.0"
 gem "rails-i18n", "~> 8.0", git: "https://github.com/svenfuchs/rails-i18n", ref: "54c1c7c2fdcc311427ec6f1dadd298a60db1ddef"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -61,7 +61,7 @@ gem "terrapin"
 gem 'fastimage'
 
 # Gems for authentication
-gem "devise"
+gem "devise", git: "https://github.com/otwcode/devise", ref: "fade89f"
 gem "devise-async" # To mails through queues
 gem "bcrypt"
 gem "devise-pwned_password"
@@ -184,5 +184,5 @@ group :staging, :production do
   gem "sentry-resque"
 end
 
-gem "image_processing", "~> 1.12"
+gem "image_processing", "~> 1.14"
 gem "ostruct"

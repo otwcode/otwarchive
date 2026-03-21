@@ -1,7 +1,7 @@
 class TagQuery < Query
 
   def klass
-    'Tag'
+    "TagDecorator"
   end
 
   def index_name
@@ -24,7 +24,8 @@ class TagQuery < Query
       suggested_fandom_filter,
       suggested_character_filter,
       in_use_filter,
-      unwrangled_filter
+      unwrangled_filter,
+      synonymous_filter
     ].flatten.compact
   end
 
@@ -142,6 +143,10 @@ class TagQuery < Query
   # exclusion_filters section.
   def wrangled_filter
     exists_filter("fandom_ids") unless options[:wrangled].nil?
+  end
+
+  def synonymous_filter
+    term_filter(:merger_id, options[:merger_id]) unless options[:merger_id].nil?
   end
 
   ################
