@@ -1120,8 +1120,6 @@ class Work < ApplicationRecord
     user = users.first
     {
       comment_type: "fanwork-post",
-      key: ArchiveConfig.AKISMET_KEY,
-      blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_role: "user",
       comment_date_gmt: created_at.to_time.iso8601,

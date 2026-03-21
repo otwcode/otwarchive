@@ -40,11 +40,11 @@ describe AkismetClient do
 
   context "with a valid api key" do
     before(:all) do
-      skip "Missing valid Akismet API key" unless AkismetClient.valid_key?(ArchiveConfig.AKISMET_KEY, ArchiveConfig.AKISMET_NAME)
+      skip "Missing valid Akismet API key" unless AkismetClient.valid_key?
     end
     
-    ham_attributes = { key: ArchiveConfig.AKISMET_KEY, blog: ArchiveConfig.AKISMET_NAME, user_ip: "127.0.0.1", user_role: "administrator" }
-    spam_attributes = { key: ArchiveConfig.AKISMET_KEY, blog: ArchiveConfig.AKISMET_NAME, user_ip: "127.0.0.1", comment_author: "akismet-guaranteed-spam" }
+    ham_attributes = { user_ip: "127.0.0.1", user_role: "administrator" }
+    spam_attributes = { user_ip: "127.0.0.1", comment_author: "akismet-guaranteed-spam" }
 
     before do
       allow(AkismetClient).to receive(:enabled?).and_return(true)
@@ -82,7 +82,7 @@ describe AkismetClient do
       allow(AkismetClient).to receive(:enabled?).and_return(false)
     end
 
-    comment_attributes = { key: ArchiveConfig.AKISMET_KEY, blog: ArchiveConfig.AKISMET_NAME, user_ip: "127.0.0.1", comment_author: "akismet-guaranteed-spam" }
+    comment_attributes = { user_ip: "127.0.0.1", comment_author: "akismet-guaranteed-spam" }
 
     describe "#spam?" do
       it "returns false" do

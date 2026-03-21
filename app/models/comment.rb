@@ -128,8 +128,6 @@ class Comment < ApplicationRecord
 
     attributes = {
       comment_type: comment_type,
-      key: ArchiveConfig.AKISMET_KEY,
-      blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_agent: user_agent,
       user_role: user_role,

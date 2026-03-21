@@ -6,8 +6,12 @@ class AkismetClient
 
   SUBMISSION_RESPONSE = "Thanks for making the web a better place.".freeze
 
-  def self.valid_key?(key, blog)
-    key.present? && blog.present? && self.post("/1.1/verify-key", body: URI.encode_www_form(key: key, blog: blog)).body == "valid"
+  def self.valid_key?
+    return false unless ArchiveConfig.AKISMET_KEY.present? && ArchiveConfig.AKISMET_NAME.present?
+
+    self.post("/1.1/verify-key", body: URI.encode_www_form(
+      key: ArchiveConfig.AKISMET_KEY, blog: ArchiveConfig.AKISMET_NAME
+    )).body == "valid"
   end
 
   def self.spam?(attributes)
@@ -37,7 +41,7 @@ class AkismetClient
     # disable learning from tests
     body = body.merge(is_test: true) if Rails.env.test?
 
-    URI.encode_www_form(body)
+    URI.encode_www_form(body.merge(key: ArchiveConfig.AKISMET_KEY, blog: ArchiveConfig.AKISMET_NAME))
   end
 
   private_class_method :encode_body
