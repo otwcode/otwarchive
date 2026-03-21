@@ -85,6 +85,8 @@ en:
         blocked: You have blocked the user %{name}.
       destroy:
         unblocked: You have unblocked the user %{name}.
+      index:
+        page_title: "%{username} - Blocked Users"
   bookmarks:
     create:
       success: Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.
