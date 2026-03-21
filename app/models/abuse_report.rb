@@ -58,7 +58,7 @@ class AbuseReport < ApplicationRecord
   # Work URLs: "works/123"
   # Chapter URLs: "chapters/123"
   # Comment URLs: "comments/123"
-  # Profile URLs: "users/username"  
+  # Profile URLs: "users/username"
   # Bookmark URLs: "bookmarks/123"
   # Series URLs: "series/123"
   before_validation :standardize_url, on: :create
