@@ -2342,10 +2342,10 @@ en:
         legend: Mute a user
         muted_users: Muted Users
         none: You have not muted any users.
+        page_title: "%{username} - Muted Users"
         restore_site_skin_faq_link_text: instructions for reverting to the default site skin
         site_skin_warning_html: Please note that if you are not using the default site skin, muting may not work properly. The Skins and Archive Interface FAQ has %{restore_site_skin_faq_link}.
         title: Muted Users
-        page_title: '%{username} - Muted Users'
         will:
           intro:
             one: 'You can mute up to %{mute_limit} user. Muting a user:'
