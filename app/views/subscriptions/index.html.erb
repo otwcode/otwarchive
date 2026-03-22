@@ -60,7 +60,7 @@
           <%= t(".series") if @subscribable_type.blank? %>
           <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
         <% end %>
-      <% elsif subscription.subscribable && subscription.subscribable.try(:unrevealed?) && subscription.subscribable_type === "Work" %>
+      <% elsif subscription.subscribable && subscription.subscribable.try(:unrevealed?) && subscription.subscribable_type == "Work" %>
         <%= t(".mystery_work") %>
       <% else %>
         <%= subscription.name %>
@@ -68,7 +68,7 @@
     </dt>
     <dd>
       <%= form_for [current_user, subscription], html: { method: :delete } do |f| %>
-        <% if subscription.subscribable && subscription.subscribable.try(:unrevealed?) && subscription.subscribable_type === "Work" %>
+        <% if subscription.subscribable && subscription.subscribable.try(:unrevealed?) && subscription.subscribable_type == "Work" %>
           <%= f.submit t(".button_html", name: t(".mystery_work")) %>
         <% else %>
           <%= f.submit t(".button_html", name: subscription.name) %>
