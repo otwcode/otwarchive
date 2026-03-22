@@ -124,12 +124,6 @@ Then /^(?:|I )should see the raw text "([^"]*)"(?: within "([^"]*)")?$/ do |text
   end
 end
 
-Then /^(?:|I )should not see the raw text "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-  with_scope(selector) do
-    page.body.should_not =~ /#{Regexp.escape(text)}/m
-  end
-end
-
 Then /^(?:|I )should see '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
     if page.respond_to? :should
