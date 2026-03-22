@@ -520,6 +520,7 @@ en:
         footnote_comment_permissions: Comment permissions from the selected post will replace any permissions selected on this page.
         footnote_tags: Tags from the selected post will replace any tags entered on this page.
         label: Translation of
+      type_paste_rich_text: Type or paste formatted text.
     show:
       navigation:
         admin:
@@ -715,6 +716,7 @@ en:
   chapters:
     chapter_form:
       rte_help_title: Rte help
+      type_paste_rich_text: Type or paste formatted text.
     posting_fieldset:
       actions:
         cancel: Cancel
@@ -2304,6 +2306,7 @@ en:
   known_issues:
     known_issues_form:
       rte_help_title: Rte help
+      type_paste_rich_text: Type or paste formatted text.
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"
@@ -3197,6 +3200,7 @@ en:
       select: Select work skin
     standard_form:
       rte_help_title: Rte help
+      type_paste_rich_text: Type or paste formatted text.
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
