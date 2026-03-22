@@ -50,18 +50,21 @@
 <dl class="subscription index group">
   <% @subscriptions.each do |subscription| %>
     <dt>
-      <% if subscription.subscribable && !subscription.subscribable.try(:unrevealed?) %>
-        <%= link_to(subscription.name, subscription.subscribable) %>
+      <% if subscription.subscribable %>
         <% case subscription.subscribable_type %>
         <% when "Work" %>
-          <%= t(".work") if @subscribable_type.blank? %>
-          <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
+          <% if subscription.subscribable.try(:unrevealed?) %>
+            <%= t(".mystery_work") %> (Work)
+          <% else %>
+            <%= link_to(subscription.name, subscription.subscribable) %>
+            <%= t(".work") if @subscribable_type.blank? %>
+            <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
+          <% end %>
         <% when "Series" %>
+          <%= link_to(subscription.name, subscription.subscribable) %>
           <%= t(".series") if @subscribable_type.blank? %>
           <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
         <% end %>
-      <% elsif subscription.subscribable && subscription.subscribable.try(:unrevealed?) && subscription.subscribable_type == "Work" %>
-        <%= t(".mystery_work") %> (Work)
       <% else %>
         <%= subscription.name %>
       <% end %>
