@@ -3,7 +3,7 @@ Feature: Muting
     Given the user "pest" exists and is activated
       And I am logged in as "muter"
     When I go to the muted users page for "muter"
-      Then the page title should include "muter - Muted Users"
+    Then the page title should include "muter - Muted Users"
     When I fill in "muted_id" with "pest"
       And I press "Mute"
       And I press "Yes, Mute User"
