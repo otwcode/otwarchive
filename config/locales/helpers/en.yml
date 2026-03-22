@@ -1,6 +1,8 @@
 ---
 en:
   application_helper:
+    allowed_html_instructions:
+      html_help_title: Html help
     anonymous_byline: Anonymous
     anonymous_with_name_byline_html: Anonymous [%{pseud_byline}]
     archivist_byline_html: "%{external_creator} [archived by %{pseud_byline}]"

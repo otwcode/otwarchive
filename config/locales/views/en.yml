@@ -513,6 +513,7 @@ en:
         label: Who can comment on this news post
       language:
         label: Choose a language
+      rte_help_title: Rte help
       tags:
         label: Tags
       translated_post:
@@ -712,6 +713,8 @@ en:
       heading: Sign-up Summary for %{collection}
       no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
+    chapter_form:
+      rte_help_title: Rte help
     posting_fieldset:
       actions:
         cancel: Cancel
@@ -1206,7 +1209,6 @@ en:
         symbols_key_chart: Symbols Key Chart
       welcome_header: Welcome to the %{app_name}!
     html:
-      header: HTML on the Archive
       allowed_html:
         header: Allowed HTML
       formatting:
@@ -1214,34 +1216,34 @@ en:
         after_first_put_note: When you edit your HTML after you first put it in, you will see the results of our formatting work, so you can correct any mistakes our formatter might have made. Please note that the best way to get good results is to put in good HTML -- that is how you can be sure your story will look right across various browsers, screen readers, mobile devices, and downloads.
         description: 'When you enter HTML into the archive, we do some cleanup on it to make sure that it is safe (so spammers and hackers cannot upload badness) and try and do some basic formatting both for your convenience and for accessibility reasons. Here are the formatting steps we take:'
         example:
-          em:
-            sentence_html: '&lt;em&gt;%{rodney_italic}&lt;/em&gt; McKay'
-            rodney: Rodney
-          strong:
-            sentence_html: I will &lt;strong&gt;%{never_bold}&lt;/strong&gt; understand you!
-            never: never
           blockquote:
-            sentence_html: '&lt;blockquote&gt;%{text_blockquote}&lt;/blockquote&gt;'
+            sentence_html: "&lt;blockquote&gt;%{text_blockquote}&lt;/blockquote&gt;"
             text: To quote a block of text
-          inline_quote:
-            sentence_html: <p>Use q to &lt;q&gt;%{phrase_inline_quote}&lt;/q&gt;</p>
-            phrase: To quote a phrase
+          chapter_title: "<h3>Chapter title<h3>"
           cite:
-            sentence_html: <p>Try cite to cite &lt;cite&gt;%{phrase_or_title_cite}&lt;/cite&gt;</p>
             phrase_or_title: a phrase or title
-          chapter_title: <h3>Chapter title<h3>
-          footnote_title: <h6>Footnote title<h6>
-          scene_title: <h4>Scene title<h4>
-          subtitle-h2: <h2>Subtitle<h2>
-          subtitle-h5: <h5>Subtitle<h5>
-          title: <h1>Title<h1>
+            sentence_html: "<p>Try cite to cite &lt;cite&gt;%{phrase_or_title_cite}&lt;/cite&gt;</p>"
+          em:
+            rodney: Rodney
+            sentence_html: "&lt;em&gt;%{rodney_italic}&lt;/em&gt; McKay"
+          footnote_title: "<h6>Footnote title<h6>"
+          inline_quote:
+            phrase: To quote a phrase
+            sentence_html: "<p>Use q to &lt;q&gt;%{phrase_inline_quote}&lt;/q&gt;</p>"
+          scene_title: "<h4>Scene title<h4>"
+          strong:
+            never: never
+            sentence_html: I will &lt;strong&gt;%{never_bold}&lt;/strong&gt; understand you!
+          subtitle-h2: "<h2>Subtitle<h2>"
+          subtitle-h5: "<h5>Subtitle<h5>"
+          title: "<h1>Title<h1>"
         forgotten_open_tags: If you have forgotten to close a formatting tag, it will be closed at the end of the paragraph for you.
         good_html_note: Good HTML means HTML that labels what the text is supposed to be -- so if you have paragraphs, they should be inside paragraph tags, not just separated with break tags. If you have emphasized text, it should be inside em tags. If you have a list of items, each item should be inside list tags. If you %{negative_italic} have a list of items, you shouldn't have list tags. :) (We are putting together a set of more detailed helpful references about this, but this is the basic idea.)
         header: How Do We Format Your HTML?
         mis-nested_tags:
+          corrected_text: text!
           sentence_html: 'If you have mis-nested tags like this: &lt;em&gt;&lt;strong&gt;%{text_bold_italic}&lt;/em&gt;&lt;/strong&gt; we will fix the mis-nesting (so it would become &lt;em&gt;&lt;strong&gt;%{corrected_text_bold_italic}&lt;/strong&gt;&lt;/em&gt;).'
           text: text!
-          corrected_text: text!
         negative: don't
         not_satisfied_note: If you find yourself putting in HTML that doesn't mean the right thing, in order to get a particular visual effect, please resist! The work skin feature allows you to apply custom CSS to works, and that lets you make them look just about any way you want them to (and is easier if you are starting from good HTML).
         recommendations:
@@ -1253,13 +1255,77 @@ en:
         tags_spanning_paragraphs: If you open a formatting tag in one paragraph and close it several paragraphs later, we will reopen/close it within each paragraph.
         two_blank_lines: If you have two blank lines in a row between paragraphs, we will add extra whitespace in for you (with <p>&nbsp;</p>)
         two_break_tags: If you have two break tags in a row (<br /><br />) with nothing between them, we will turn that into paragraph tags.
-        unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
         unwanted_larger_text: If one bit of your text shows up larger than the rest, probably our formatter couldn't figure out to put paragraph tags around it. You can fix this by manually putting in the paragraph tags around that one bit.
+        unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
+      header: HTML on the Archive
     preferences_locale:
       locale:
         description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
         header: Set preferred locale
       page_heading: Locale Preferences
+    rte:
+      description_html: 'The exact behavior of the Rich Text Editor (%{rte_abbreviation}) depends on your device, browser, and operating system as well as the source you''re pasting from. However, starting with a well-formatted document will help you get the most out of the %{rte_abbreviation_no_title}. Here are some general tips to ensure that as much of your formatting as possible will be retained:'
+      enter_once:
+        enter_for_once: Enter
+        enter_for_twice: Enter
+        intro_sentence_html: Press %{enter_for_once_key} %{once_italic} between paragraphs.
+        once: once
+        paragraph_html: Pressing %{enter_for_twice_key} twice will insert a blank paragraph, creating additional, and likely unwanted, space between paragraphs when you paste into the %{rte_abbreviation}. The Archive uses top and bottom margins to create the appearance of a blank line between paragraphs; you can use the paragraph formatting options in your text editor to create a similar effect without adding extra %{p_tag_code} tags.
+        rte_abbreviated: RTE
+      header: Rich Text
+      pasting_formatting:
+        alignment:
+          css_abbreviated: CSS
+          css_for_inline_abbreviated: CSS
+          description_html: Text alignment is now generally achieved with %{css_abbreviation}, and because the Archive does not allow inline %{css_for_inline_abbreviation}, alignment will often be lost when pasting.
+          header: Alignment
+          rte_abbreviated: RTE
+          when_it_works_html: Pasting from sources that use the %{align_tag_code} attribute and %{center_tag_code} element will keep the formatting intact, but please note that the alignment buttons in the %{rte_abbreviation} cannot modify center alignment created with the %{center_tag_code} tag.
+        header: Pasting Specific Types of Formatting
+        headings:
+          description_html: Text editors use many different styles for their heading presets. For example, selecting Heading 4 in OpenOffice produces italicized sans-serif text. Even when successfully pasting a heading into the %{rte_abbreviation}, this visual formatting is %{negation_italic} preserved -- only the %{h4_tag_code} tag is. This is not a bug. %{html_abbreviation} is designed to tell the browser what text means (e.g. "This is a heading") and not how it should be displayed (e.g. "This should be in Arial"). If you wish to modify the style of a heading or any other part of your work, please use a Work Skin.
+          header: Headings
+          html_abbreviated: HTML
+          negation: not
+          rte_abbreviated: RTE
+        indented_text:
+          description_html: Indented text is a purely visual effect with no %{html_abbreviation} equivalent and will not be preserved. Please use a Work Skin to indent text.
+          header: Indented Text
+          html_abbreviated: HTML
+        underline_strikethrough:
+          css_abbreviated: CSS
+          css_for_inline_abbreviated: CSS
+          description_html: Underline and strikethrough are often produced with %{css_abbreviation}. Because the Archive does not allow the use of inline %{css_for_inline_abbreviation}, these text styles are frequently lost when pasting.
+          header: Underline and Strikethrough
+          when_it_works_html: Pasting from web pages that use %{u_tag_code}, %{del_tag_code}, %{strike_tag_code}, or %{s_tag_code} tags will work.
+      pasting_from:
+        google_drive:
+          css_abbreviated: CSS
+          css_full: Cascading Style Sheets
+          description_html: Google Drive uses inline %{css_abbreviation} to change the alignment of text and to produce bold, italic, underline, and strikethrough formatting. Unfortunately, we cannot allow inline styles on the Archive, so only pure %{html_abbreviation} formatting such as headings, lists, links, and tables is retained.
+          header: Google Drive
+          html_abbreviated: HTML
+          html_for_sanitizer_abbreviated: HTML
+          misleading_appearance_html: In some browsers, the formatting may appear to be preserved upon pasting into the %{rte_abbreviation}, but it will be stripped by our %{html_for_sanitizer_abbreviation} sanitizer upon previewing or posting your work.
+          rte_abbreviated: RTE
+        header: Pasting from Specific Text Editors
+        scrivener:
+          copy_as: Select either "Copy as HTML" or "Copy as HTML (Basic, using <p> and <span>)"
+          copy_special: Choose Copy Special
+          description_html: 'Scrivener users will typically get better results by pasting into the %{html_abbreviation} editor and then switching to the %{rte_abbreviation} to make changes. To copy HTML from Scrivener, do the following:'
+          edit_menu: Go to the Edit menu
+          header: Scrivener
+          html_abbreviated: HTML
+          rte_abbreviated: RTE
+      rte_abbreviated: RTE
+      rte_abbreviated_no_title: RTE
+      rte_full: Rich Text Editor
+      use_preset_styles:
+        html_abbreviated: HTML
+        html_full: HyperText Markup Language
+        intro_sentence_html: Use preset styles for headings, block quotations, code, and so on.
+        paragraph_html: The Styles option generally found in a text editor's Format menu will often translate into %{html_abbreviation} tags when pasting into the %{rte_abbreviation}. Simply changing the font size, font name, or text indent to create a visual approximation of a heading or block quote will always fail.
+        rte_abbreviated: RTE
     skins_basics:
       only: only
       site_skins_basics: A site skin lets you customize your browsing experience when you are logged in to your account. Don't like the Archive fonts? You can change them! Don't like the red header? Swap it out for blue! When you make a site skin, keep in mind that you are only changing the Archive for yourself -- other Archive users will see the Archive in whatever skin they are using. In other words, site skins are useful for creating your own ideal browsing experience, not for changing the way a work appears for others.
@@ -2235,6 +2301,9 @@ en:
       waiting_list:
         one: There is currently %{count} person on the waiting list.
         other: There are currently %{count} people on the waiting list.
+  known_issues:
+    known_issues_form:
+      rte_help_title: Rte help
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"
@@ -3127,7 +3196,6 @@ en:
     skin:
       select: Select work skin
     standard_form:
-      html_help_title: Html help
       rte_help_title: Rte help
     work_approved_children:
       inspired_by:
@@ -3190,5 +3258,6 @@ en:
       required_information: Required information
       rich_text_editor: Rich Text
       rich_text_notes_html: Type or paste formatted text.
+      rte_help_title: Rte help
       title: Title
       title_failure: Please enter a title.
