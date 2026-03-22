@@ -61,7 +61,7 @@
           <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
         <% end %>
       <% elsif subscription.subscribable && subscription.subscribable.try(:unrevealed?) && subscription.subscribable_type == "Work" %>
-        <%= t(".mystery_work") %>
+        <%= t(".mystery_work") %> (Work)
       <% else %>
         <%= subscription.name %>
       <% end %>
