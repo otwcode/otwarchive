@@ -242,7 +242,7 @@ en:
           rename: Rename
           roles: Manage Roles
           troubleshoot: Troubleshoot
-        note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
+        note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex the user and their works and bookmarks, choose "Troubleshoot."
         page_heading: 'User: %{login} (%{id})'
         page_title: "%{login} - User Administration"
         status:
@@ -1804,6 +1804,10 @@ en:
         note_html: Follow AO3 on Bluesky or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
         other_outlets: Organization for Transformative Works' news outlets
         tumblr: ao3org on Tumblr
+    intro_module:
+      intro_description: A non-profit, non-commercial archive for transformative fanworks; created by and for fans of books, music, art, games, shows, movies, real-person fiction (RPF), and other fandoms.
+      parent_org: Organization for Transformative Works
+      parent_org_intro_html: The Archive of Our Own (AO3) is a project of the %{parent_org_link}.
     privacy:
       account_termination:
         backup_copies_html: '"Active records" do not include the backup copies of Content created for legal and/or disaster recovery purposes (refer to the %{general_principles_link}).'
