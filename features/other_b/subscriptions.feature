@@ -419,8 +419,8 @@ Scenario: Work subscriptions page hides unrevealed work details
   When I am logged in as "subscriber_user"
     And I go to the subscriptions page for "subscriber_user"
   Then I should see "Mystery Work"
-    And I should not see a button with text "Secret Story"
-    And I should not see a button with text "creator_user"
+    And I should not see a link "Secret Story"
+    And I should not see a link "creator_user"
     And I should see a button with text "Unsubscribe from Mystery Work"
     And I should not see a button with text "Unsubscribe from Secret Story"
 
