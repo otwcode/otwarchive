@@ -242,7 +242,7 @@ en:
           rename: Rename
           roles: Manage Roles
           troubleshoot: Troubleshoot
-        note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
+        note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex the user and their works and bookmarks, choose "Troubleshoot."
         page_heading: 'User: %{login} (%{id})'
         page_title: "%{login} - User Administration"
         status:
@@ -1288,6 +1288,81 @@ en:
       load_archive_skin_components: If you create a replacement skin, you might want to load up all the skins that make up the current default Archive site as parents. This option is only available when you select "replace archive skin entirely" from the "What it does" menu. After that, you can edit your skin and delete just the ones you don't want. This will be easier if you are using nearly all of them, since there are a lot!
       load_archive_skin_components_header: Load Archive Skin Components
       skins_interface_faq: the Skins and Interface FAQ
+    symbols_key:
+      categories:
+        alt: Second Square
+        femslash:
+          alt: F/F
+          definition: 'F/F: female/female relationships'
+        gen:
+          alt: Gen
+          definition: 'Gen: no romantic or sexual relationships, or relationships which are not the main focus of the work'
+        heading: Relationships, pairings, orientations
+        het:
+          alt: F/M
+          definition: 'F/M: female/male relationships'
+        multi:
+          alt: Multi
+          definition: 'Multi: more than one kind of relationship, or a relationship with multiple partners'
+        none:
+          alt: blank square
+          definition: The work was not put in any categories
+        other:
+          alt: Other
+          definition: Other relationships
+        slash:
+          alt: M/M
+          definition: 'M/M: male/male relationships'
+      page_heading: Symbols we use on the Archive
+      ratings:
+        alt: First Square
+        explicit:
+          alt: E
+          definition: 'Explicit: only suitable for adults'
+        general:
+          alt: G
+          definition: General Audiences
+        heading: Content rating
+        mature:
+          alt: M
+          definition: Mature
+        none:
+          alt: blank square
+          definition: The work was not given any rating
+        teen:
+          alt: T
+          definition: Teen And Up Audiences
+      status:
+        alt: Fourth Square
+        complete:
+          alt: ticky
+          definition: This work is completed!/This prompt is filled!
+        heading: Is the work finished or the prompt fulfilled?
+        incomplete:
+          alt: stop sign
+          definition: This is a work in progress or is incomplete/unfulfilled.
+        none:
+          alt: blank square
+          definition: This work's status is unknown.
+      warnings:
+        alt: Third Square
+        default:
+          alt: questioned exclamation mark
+          definition_html: The author chose not to warn for content, or Archive Warnings %{emphasized_modal} apply, but the author has chosen not to specify them.
+          emphasized_modal: could
+        external_work:
+          alt: globe
+          definition: This is an external work; please consult the work itself for warnings.
+        heading: Content warnings
+        none:
+          alt: blank square
+          definition: The work was not marked with any Archive Warnings. Please note that an author may have included other information about their work in the Additional Tags (Genre, Warnings, Other Information) section.
+        warning_yes:
+          alt: exclamation mark
+          definition_html: 'At least one of these warnings applies: graphic depictions of violence, major character death, rape/%{non_con}, underage sex. The specific warnings are shown in the Archive Warnings tags.'
+          non_con:
+            acronym: non-con
+            title: non-consensual sex
     tags_fandoms:
       description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
       more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
@@ -1686,6 +1761,10 @@ en:
         note_html: Follow AO3 on Bluesky or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
         other_outlets: Organization for Transformative Works' news outlets
         tumblr: ao3org on Tumblr
+    intro_module:
+      intro_description: A non-profit, non-commercial archive for transformative fanworks; created by and for fans of books, music, art, games, shows, movies, real-person fiction (RPF), and other fandoms.
+      parent_org: Organization for Transformative Works
+      parent_org_intro_html: The Archive of Our Own (AO3) is a project of the %{parent_org_link}.
     privacy:
       account_termination:
         backup_copies_html: '"Active records" do not include the backup copies of Content created for legal and/or disaster recovery purposes (refer to the %{general_principles_link}).'
