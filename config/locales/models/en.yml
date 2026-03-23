@@ -213,6 +213,11 @@ en:
             subscribable:
               blank: The item you tried to subscribe to does not exist. It may have been deleted.
               format: "%{message}"
+        owned_tag_set:
+          attributes:
+            tag_set_ownerships:
+              invalid: You cannot add or remove that user from the tag set.
+              format: "%{message}"
         user:
           attributes:
             age_over_13:

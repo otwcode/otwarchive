@@ -33,7 +33,7 @@ end
 # ...with the fandom tags "x, y, z" and the character tags "a, b, c"
 # ...with an invisible tag list and the freeform tags "m, n, o"
 # ...with owners "a, b, c" and the freeform tags "x"
-When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)?(:? additional owners "([^\"]*)" and)? (.*)$/ do |title, visibility, owners, tags|
+When /^I set up the( invalid)? tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)?(:? additional owners "([^\"]*)" and)? (.*)$/ do |invalid, title, visibility, owners, tags|
   unless OwnedTagSet.find_by(title: title).present?
     visit new_tag_set_path
     fill_in("owned_tag_set_title", with: title)
@@ -44,7 +44,9 @@ When /^I set up the tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag 
     step %{I add #{tags} to the tag set}
     step %{I toggle the owners "#{owners}"}
     step %{I submit}
-    step %{I should see a create confirmation message}
+    if not invalid.present?
+      step %{I should see a create confirmation message}
+    end
   end
 end
 
@@ -121,7 +123,7 @@ When /^I start to nominate fandoms? "([^\"]*)" and characters? "([^\"]*)" in "([
   @fandoms = fandom.split(/, ?/)
   @chars = char.split(/, ?/)
   char_index = 0
-  chars_per_fandom = @chars.size/@fandoms.size
+  chars_per_fandom = @chars.size / @fandoms.size
   1.upto(@fandoms.size) do |i|
     fill_in("Fandom #{i}", with: @fandoms[i - 1])
     0.upto(chars_per_fandom - 1) do |j|
