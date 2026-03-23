@@ -1,7 +1,7 @@
 class ChallengeClaimsController < ApplicationController
 
   before_action :users_only, except: [:index]
-  before_action :users_or_privileged_collection_admin_only, only: [:index]
+  before_action :users_or_privileged_collection_admins_only, only: [:index]
   before_action :load_collection, except: [:index]
   before_action :collection_owners_only, except: [:index, :show, :create, :destroy]
   before_action :load_claim_from_id, only: [:show, :destroy]
@@ -79,7 +79,7 @@ class ChallengeClaimsController < ApplicationController
       not_allowed(@collection) unless user_scoped? || @challenge.user_allowed_to_see_assignments?(current_user) || privileged_collection_admin?
 
       @claims = ChallengeClaim.unposted_in_collection(@collection)
-      @claims = @claims.where(claiming_user_id: current_user.id) if user_scoped?
+      @claims = @claims.where(claiming_user_id: current_user.id) if user_scoped? && current_user
 
       # sorting
       set_sort_order

@@ -5,7 +5,7 @@ class ChallengeSignupsController < ApplicationController
   include ExportsHelper
 
   before_action :users_only, except: [:summary, :index, :show]
-  before_action :users_or_privileged_collection_admin_only, only: [:index, :show]
+  before_action :users_or_privileged_collection_admins_only, only: [:index, :show]
   before_action :load_collection, except: [:index]
   before_action :load_challenge, except: [:index]
   before_action :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]

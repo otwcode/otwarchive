@@ -1,6 +1,5 @@
 class CollectionParticipantsController < ApplicationController
   before_action :users_only, except: [:index]
-  before_action :users_or_privileged_collection_admin_only, only: [:index]
   before_action :load_collection
   before_action :load_participant, only: [:update, :destroy]
   before_action :allowed_to_promote, only: [:update]

@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe ChallengeRequestsController, bookmark_search: true, collection_search: true, work_search: true do 
+describe ChallengeRequestsController do
   include LoginMacros
   include RedirectExpectationHelper
 
   describe "index" do
-    context "when there are anonymous prompts" do
+    context "when there are anonymous prompts", bookmark_search: true, collection_search: true, work_search: true do
       render_views
 
       it "does not throw a 500 error if sorting by prompter with an anonymous prompt" do

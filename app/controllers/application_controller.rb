@@ -339,7 +339,7 @@ public
     policy(Collection).access?
   end
 
-  def users_or_privileged_collection_admin_only
+  def users_or_privileged_collection_admins_only
     return if logged_in? || privileged_collection_admin?
 
     logged_in_as_admin? ? admin_only_access_denied : access_denied

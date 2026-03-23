@@ -38,9 +38,9 @@ class CollectionItemsController < ApplicationController
                           else
                             @collection_items.unreviewed_by_user
                           end
-    elsif logged_in_as_admin?
-      admin_only_access_denied and return
     else
+      admin_only_access_denied and return if logged_in_as_admin?
+
       flash[:error] = ts("You don't have permission to see that, sorry!")
       redirect_to collections_path and return
     end
