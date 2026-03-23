@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ImportedUrl do
   let(:url) { ImportedUrl.new }
-  
+
   it "sets formatted urls on save" do
     formatter = UrlFormatter.new("http://www.trickster.org/llwyden/misc/cracked.html")
     url.original = formatter.original

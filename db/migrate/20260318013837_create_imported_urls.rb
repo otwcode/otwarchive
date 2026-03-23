@@ -3,7 +3,7 @@ class CreateImportedUrls < ActiveRecord::Migration[8.0]
     create_table :imported_urls do |t|
       t.belongs_to :work
 
-      t.string :original, null: false, index:true
+      t.string :original, null: false, index: true
       t.string :minimal, null: false
       t.string :minimal_no_protocol_no_www, null: false
       t.string :no_www, null: false
