@@ -288,6 +288,7 @@ module TagsHelper
   end
 
   def get_symbol_link(css_class, title_string)
+    # Use nil for aria-label so screen readers read the link text.
     content_tag(:li, link_to_help_modal(help_symbols_key_path, nil, link: ("<span class=\"#{css_class}\" title=\"#{title_string}\"><span class=\"text\">" + title_string + "</span></span>").html_safe))
   end
 
