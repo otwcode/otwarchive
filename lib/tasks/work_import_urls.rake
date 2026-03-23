@@ -11,12 +11,11 @@ namespace :work_import_urls do
     puts "Backfilling #{total} work_import_urls records..."
 
     scope.find_each(batch_size: batch_size) do |work|
-      next if WorkImportUrl.exists?(work_id: work.id)
+      next if ImportedUrl.exists?(work_id: work.id)
 
-      url = work.read_attribute(:imported_from_url)
-      WorkImportUrl.create!(
-        work: work,
-        url: url
+      ImportedUrl.create!(
+        work_id: work.id,
+        original: work.imported_from_url
       )
 
       processed += 1
