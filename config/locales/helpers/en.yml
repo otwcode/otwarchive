@@ -51,6 +51,9 @@ en:
       default_label: QR code
   series_helper:
     series_description_html: Part %{index} of %{series_link}
+  tags_helper:
+    get_symbol_link:
+      title: Symbols key
   users_helper:
     collections_link: Collections (%{coll_number})
     log:

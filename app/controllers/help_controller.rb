@@ -23,6 +23,9 @@ class HelpController < ApplicationController
   def skins_parents
   end
 
+  def symbols_key
+  end
+
   def tags_fandoms
   end
 

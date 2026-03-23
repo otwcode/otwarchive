@@ -288,7 +288,10 @@ module TagsHelper
   end
 
   def get_symbol_link(css_class, title_string)
-    content_tag(:li, link_to_help('symbols-key', link = ("<span class=\"#{css_class}\" title=\"#{title_string}\"><span class=\"text\">" + title_string + "</span></span>").html_safe))
+    symbol = tag.span(tag.span(title_string, class: "text"), class: css_class, title: title_string)
+    # Use link_to_modal rather than link_to_help_modal so we can use a title rather than an aria-label, ensuring screen readers read the link text.
+    # Keep classes added by link_to_help_modal for consistency with code prior to AO3-7352.
+    content_tag(:li, link_to_modal(symbol, for: help_symbols_key_path, title: t("tags_helper.get_symbol_link.title"), class: "help symbol question"))
   end
 
   # return the right warnings class
