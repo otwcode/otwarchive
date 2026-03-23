@@ -14,7 +14,7 @@ namespace :OwnedTagSet do
           # so just track which pairs of (psued, owner/maintainer) exist
           pseud_owner = [ownership.pseud_id, ownership.owner]
           # Keep the first assignment for each pseud and role, remove others
-          if unique_ownerships.include?(pseud_owner) then
+          if unique_ownerships.include?(pseud_owner)
             ownership.destroy
           else
             unique_ownerships.add(pseud_owner)

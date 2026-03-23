@@ -57,9 +57,8 @@ describe "rake OwnedTagSet:deduplicate_owners" do
 
     # Don't rely on ordering of owners - just count how many of each are present
     def owner_count(owners)
-      return owners.group_by { |pseud| pseud }
-          .map { |pseud, pseuds| [pseud, pseuds.length] }
-          .to_h
+      owners.group_by { |pseud| pseud }
+        .transform_values { :length }
     end
 
     expect(owner_count(owned_tag_set.owners)).to eq({ pseud1 => 2, pseud2 => 1, pseud3 => 3 })

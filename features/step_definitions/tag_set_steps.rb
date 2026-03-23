@@ -16,8 +16,8 @@ end
 # ...the category tags "a, b, c"
 # If you want ratings, warnings, or categories, first load basic or default tags for those types
 When /^I add (.*) to the tag ?set$/ do |tags|
-  tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
-    if type == "category" || type == "rating" || type == "warning"
+  tags.scan(/the (\w+) tags "([^"]*)"/).each do |type, scanned_tags|
+    if %w[category rating warning].include?(type)
       tags = scanned_tags.split(/, ?/)
       tags.each { |tag| check(tag) }
     else
@@ -33,8 +33,8 @@ end
 # ...with the fandom tags "x, y, z" and the character tags "a, b, c"
 # ...with an invisible tag list and the freeform tags "m, n, o"
 # ...with owners "a, b, c" and the freeform tags "x"
-When /^I set up the( invalid)? tag ?set "([^\"]*)" with(?: (?:an? )(visible|invisible) tag list and)?(:? additional owners "([^\"]*)" and)? (.*)$/ do |invalid, title, visibility, owners, tags|
-  unless OwnedTagSet.find_by(title: title).present?
+When /^I set up the( invalid)? tag ?set "([^"]*)" with(?: (?:an? )(visible|invisible) tag list and)?(:? additional owners "([^"]*)" and)? (.*)$/ do |invalid, title, visibility, owners, tags|
+  if OwnedTagSet.find_by(title: title).blank?
     visit new_tag_set_path
     fill_in("owned_tag_set_title", with: title)
     fill_in("owned_tag_set_description", with: "Here's my tagset")
@@ -44,15 +44,13 @@ When /^I set up the( invalid)? tag ?set "([^\"]*)" with(?: (?:an? )(visible|invi
     step %{I add #{tags} to the tag set}
     step %{I toggle the owners "#{owners}"}
     step %{I submit}
-    if not invalid.present?
-      step %{I should see a create confirmation message}
-    end
+    step %{I should see a create confirmation message} if invalid.blank?
   end
 end
 
 # Takes things like When I add the fandom tags "Bandom" to the tag set "MoreJoyDay".
 # Don't forget the extra s, even if it's singular.
-When /^I add (.*) to the tag ?set "([^\"]*)"$/ do |tags, title|
+When /^I add (.*) to the tag ?set "([^"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
   step %{I add #{tags} to the tag set}
   step %{I submit}
@@ -61,12 +59,12 @@ end
 
 # Takes things like When I remove the fandom tags "Bandom" to the tag set "MoreJoyDay".
 # Don't forget the extra s, even if it's singular.
-When /^I remove (.*) from the tag ?set "([^\"]*)"$/ do |tags, title|
+When /^I remove (.*) from the tag ?set "([^"]*)"$/ do |tags, title|
   step %{I go to the "#{title}" tag set edit page}
-  tags.scan(/the (\w+) tags "([^\"]*)"/).each do |type, scanned_tags|
+  tags.scan(/the (\w+) tags "([^"]*)"/).each do |type, scanned_tags|
     tags = scanned_tags.split(/, ?/)
 
-    if type == "category" || type == "rating" || type == "warning"
+    if %w[category rating warning].include?(type)
       tags.each { |tag| uncheck(tag) }
     else
       tags.each { |tag| check(tag) }
@@ -82,8 +80,8 @@ When "I toggle the owner(s) {string}" do |owners|
   fill_in("owned_tag_set_owner_changes", with: owners) if owners.present?
 end
 
-When /^I set up the nominated tag ?set "([^\"]*)" with (\d*) fandom noms? and (\d*) (character|relationship) noms?$/ do |title, fandom_count, nested_count, nested_type|
-  unless OwnedTagSet.find_by(title: "#{title}").present?
+When /^I set up the nominated tag ?set "([^"]*)" with (\d*) fandom noms? and (\d*) (character|relationship) noms?$/ do |title, fandom_count, nested_count, nested_type|
+  if OwnedTagSet.find_by(title: title.to_s).blank?
     step %{I go to the new tag set page}
     fill_in("owned_tag_set_title", with: title)
     fill_in("owned_tag_set_description", with: "Here's my tagset")
@@ -95,7 +93,7 @@ When /^I set up the nominated tag ?set "([^\"]*)" with (\d*) fandom noms? and (\
   end
 end
 
-When /^I nominate (.*) fandoms and (.*) characters in the "([^\"]*)" tag ?set as "([^\"]*)"/ do |fandom_count, char_count, title, login|
+When /^I nominate (.*) fandoms and (.*) characters in the "([^"]*)" tag ?set as "([^"]*)"/ do |fandom_count, char_count, title, login|
   step %{I am logged in as "#{login}"}
   step %{I go to the "#{title}" tag set page}
   step %{I follow "Nominate"}
@@ -107,7 +105,7 @@ When /^I nominate (.*) fandoms and (.*) characters in the "([^\"]*)" tag ?set as
   end
 end
 
-When /^I have (?:a|the) nominated tag ?set "([^\"]*)"/ do |title|
+When /^I have (?:a|the) nominated tag ?set "([^"]*)"/ do |title|
   step %{I am logged in as "tagsetter"}
   step %{I set up the nominated tag set "#{title}" with 3 fandom noms and 3 character noms}
   step %{I nominate 3 fandoms and 3 characters in the "#{title}" tagset as "nominator"}
@@ -115,7 +113,7 @@ When /^I have (?:a|the) nominated tag ?set "([^\"]*)"/ do |title|
   step %{I should see a success message}
 end
 
-When /^I start to nominate fandoms? "([^\"]*)" and characters? "([^\"]*)" in "([^\"]*)"(?: as "([^"]*)")?$/ do |fandom, char, title, user|
+When /^I start to nominate fandoms? "([^"]*)" and characters? "([^"]*)" in "([^"]*)"(?: as "([^"]*)")?$/ do |fandom, char, title, user|
   user ||= "nominator"
   step %{I am logged in as "#{user}"}
   step %{I go to the "#{title}" tag set page}
@@ -133,7 +131,7 @@ When /^I start to nominate fandoms? "([^\"]*)" and characters? "([^\"]*)" in "([
   end
 end
 
-When /^I nominate fandoms? "([^\"]*)" and characters? "([^\"]*)" in "([^\"]*)"(?: as "([^"]*)")?$/ do |fandom, char, title, user|
+When /^I nominate fandoms? "([^"]*)" and characters? "([^"]*)" in "([^"]*)"(?: as "([^"]*)")?$/ do |fandom, char, title, user|
   user ||= "nominator"
   step %{I start to nominate fandoms "#{fandom}" and characters "#{char}" in "#{title}" as "#{user}"}
   step %{I submit}
@@ -161,19 +159,19 @@ When /^there are (\d+) unreviewed nominations$/ do |n|
   end
 end
 
-When /^I review nominations for "([^\"]*)"/ do |title|
+When /^I review nominations for "([^"]*)"/ do |title|
   step %{I am logged in as "tagsetter"}
   step %{I go to the "#{title}" tag set page}
   step %{I follow "Review Nominations"}
 end
 
-When /^I review associations for "([^\"]*)"/ do |title|
+When /^I review associations for "([^"]*)"/ do |title|
   step %{I am logged in as "tagsetter"}
   step %{I go to the "#{title}" tag set page}
   step %{I follow "Review Associations"}
 end
 
-When /^I nominate and approve fandom "([^\"]*)" and character "([^\"]*)" in "([^\"]*)"/ do |fandom, char, title|
+When /^I nominate and approve fandom "([^"]*)" and character "([^"]*)" in "([^"]*)"/ do |fandom, char, title|
   step %{I am logged in as "tagsetter"}
   step %{I set up the nominated tag set "#{title}" with 3 fandom noms and 3 character noms}
   step %{I nominate fandom "#{fandom}" and character "#{char}" in "#{title}"}
@@ -185,8 +183,8 @@ When /^I nominate and approve fandom "([^\"]*)" and character "([^\"]*)" in "([^
   step %{I should see "Successfully added to set: #{char}"}
 end
 
-When /^I nominate and approve tags with Unicode characters in "([^\"]*)"/ do |title|
-  tags = "The Hobbit - All Media Types, Dís, Éowyn, Kíli, Bifur/Óin, スマイルプリキュア, 新白雪姫伝説プリーティア".split(', ')
+When /^I nominate and approve tags with Unicode characters in "([^"]*)"/ do |title|
+  tags = "The Hobbit - All Media Types, Dís, Éowyn, Kíli, Bifur/Óin, スマイルプリキュア, 新白雪姫伝説プリーティア".split(", ")
   step %{I am logged in as "tagsetter"}
   step %{I set up the nominated tag set "#{title}" with 7 fandom noms and 0 character noms}
   step %{I am logged in as "nominator"}
@@ -210,13 +208,13 @@ When "I approve the nominated {word} tag {string}" do |tag_type, tag_name|
 end
 
 When /^I should see the tags with Unicode characters/ do
-  tags = "The Hobbit - All Media Types, Dís, Éowyn, Kíli, Bifur/Óin, スマイルプリキュア, 新白雪姫伝説プリーティア".split(', ')
+  tags = "The Hobbit - All Media Types, Dís, Éowyn, Kíli, Bifur/Óin, スマイルプリキュア, 新白雪姫伝説プリーティア".split(", ")
   tags.each do |tag|
     step %{I should see "#{tag}"}
   end
 end
 
-When /^I view the tag set "([^\"]*)"/ do |tagset|
+When /^I view the tag set "([^"]*)"/ do |tagset|
   tagset = OwnedTagSet.find_by(title: tagset)
   visit tag_set_path(tagset)
 end
@@ -232,7 +230,7 @@ end
 When /^I view associations for a tag set that does not exist/ do
   id = 1
   tagset = OwnedTagSet.find_by(id: id)
-  tagset.destroy if tagset
+  tagset&.destroy
   visit tag_set_associations_path(id)
 end
 
@@ -240,18 +238,18 @@ When /^I expand the unassociated characters and relationships$/ do
   find('button[data-action-target="#list_for_unassociated_char_and_rel"]').click
 end
 
-Then /^"([^\"]*)" should be associated with the "([^\"]*)" fandom "([^\"]*)"$/ do |tag, fandom_type, fandom_name|
+Then /^"([^"]*)" should be associated with the "([^"]*)" fandom "([^"]*)"$/ do |tag, fandom_type, fandom_name|
   name = fandom_name.tr(" ", "_")
   type = fandom_type.tr(" ", "_")
   step %{I should see "#{tag}" within "ol#list_for_fandom_#{name}_in_#{type}_Fandoms li"}
 end
 
-Then /^"([^\"]*)" should be an unassociated tag$/ do |tag|
+Then /^"([^"]*)" should be an unassociated tag$/ do |tag|
   step %{I should see "#{tag}" within "ol#list_for_unassociated_char_and_rel"}
 end
 
 Then "the maintainers should be {string}" do |maintainers|
-  expected = maintainers.split(" ").sort
+  expected = maintainers.split.sort
   actual = all(".meta ul.mods li").map(&:text).sort
   assert_equal actual, expected
 end
