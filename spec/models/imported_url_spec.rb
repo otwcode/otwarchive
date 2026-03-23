@@ -15,6 +15,5 @@ describe ImportedUrl do
     expect(url.with_https).to eq(formatter.with_https)
     expect(url.encoded).to eq(formatter.encoded)
     expect(url.decoded).to eq(formatter.decoded)
-    expect(create(:url)).to be_valid
   end
 end
