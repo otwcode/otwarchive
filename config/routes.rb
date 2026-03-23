@@ -655,6 +655,7 @@ Rails.application.routes.draw do
     skins_basics
     skins_creating
     skins_parents
+    symbols_key
     tags_fandoms
     tags_ratings
     tags_warnings
@@ -667,6 +668,7 @@ Rails.application.routes.draw do
   get "/help/skins-basics.html", to: redirect("/help/skins_basics")
   get "/help/skins-creating.html", to: redirect("/help/skins_creating")
   get "/help/skins-parents.html", to: redirect("/help/skins_parents")
+  get "/help/symbols-key.html", to: redirect("/help/symbols_key")
   get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
   get "/help/rating-help.html", to: redirect("/help/tags_ratings")
   get "/help/warning-help.html", to: redirect("/help/tags_warnings")

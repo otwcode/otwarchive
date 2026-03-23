@@ -288,7 +288,7 @@ module TagsHelper
   end
 
   def get_symbol_link(css_class, title_string)
-    content_tag(:li, link_to_help('symbols-key', link = ("<span class=\"#{css_class}\" title=\"#{title_string}\"><span class=\"text\">" + title_string + "</span></span>").html_safe))
+    content_tag(:li, link_to_help_modal(help_symbols_key_path, nil, link: ("<span class=\"#{css_class}\" title=\"#{title_string}\"><span class=\"text\">" + title_string + "</span></span>").html_safe))
   end
 
   # return the right warnings class
