@@ -639,7 +639,7 @@ Feature: Gift Exchange Challenge
     Then I should see "My Assignments"
       And I should not see "Awesome Gift Exchange"
 
-  Scenario: Information regarding the status of an assignment is not confusing (AO3-7140)
+  Scenario: Draft Assignments are displayed as draft and use the creation date instead of the published date used for published Assignments
     Given everyone has their assignments for "Non Confusing Exchange"
     When I am logged in as "myname1"
       And I go to the assignments page for "myname1"

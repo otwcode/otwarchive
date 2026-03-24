@@ -15,7 +15,7 @@
       <% if !assignment.posted? %>
         <%= t(".header_draft", link: (link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work")) %>
       <% else %>
-        <%= t(".header_posted", link: (link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work")) %>
+        <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work" %>
       <% end %>
     <% end %>
 
@@ -36,9 +36,9 @@
       <% if !assignment.posted? %>
         <%= t(".stats.status.unposted") %>
       <% elsif !assignment.fulfilled? %>
-        <strong><%= t(".stats.status.unfullfilled") %><!-- BACK END add approve button for mod --></strong>
+        <strong><%= t(".stats.status.unapproved") %><!-- BACK END add approve button for mod --></strong>
       <% else %>
-        <%= t(".stats.status.fullfilled") %>
+        <%= t(".stats.status.fulfilled") %>
       <% end %>
     </dd>
 
