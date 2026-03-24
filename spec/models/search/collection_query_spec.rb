@@ -20,22 +20,24 @@ describe CollectionQuery do
   end
 
   it "sorts by bookmarked items" do
-    q = CollectionQuery.new(sort_column: "public_bookmarked_items_count", sort_direction: "desc")
+    q = CollectionQuery.new(sort_column: "bookmarked_items_count", sort_direction: "desc")
     expect(q.generated_query[:sort]).to eq([{ "public_bookmarked_items_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
   it "sorts by works" do
-    q = CollectionQuery.new(sort_column: "public_works_count", sort_direction: "desc")
+    q = CollectionQuery.new(sort_column: "works_count", sort_direction: "desc")
     expect(q.generated_query[:sort]).to eq([{ "public_works_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
   it "sorts by general bookmarked items when logged in" do
-    q = CollectionQuery.new(sort_column: "public_bookmarked_items_count", sort_direction: "desc", admin_logged_in: true)
+    User.current_user = create(:user)
+    q = CollectionQuery.new(sort_column: "bookmarked_items_count", sort_direction: "desc")
     expect(q.generated_query[:sort]).to eq([{ "general_bookmarked_items_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
   it "sorts by general works when logged in" do
-    q = CollectionQuery.new(sort_column: "public_works_count", sort_direction: "desc", admin_logged_in: true)
+    User.current_user = create(:user)
+    q = CollectionQuery.new(sort_column: "works_count", sort_direction: "desc")
     expect(q.generated_query[:sort]).to eq([{ "general_works_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
