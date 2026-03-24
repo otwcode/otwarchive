@@ -301,7 +301,7 @@ class StoryParser
 
     @options = options
     work.imported_from_url = location # @todo remove this as part of AO3-6979
-    ImportedUrl.create!(work_id: work.id, original: work.imported_from_url)
+    work.imported_url = ImportedUrl.new(original: work.imported_from_url)
 
     work.ip_address = options[:ip_address]
     work.expected_number_of_chapters = work.chapters.length
