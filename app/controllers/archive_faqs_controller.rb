@@ -142,10 +142,10 @@ class ArchiveFaqsController < ApplicationController
   end
 
   def require_language_id
-  return if params[:language_id].present? && Locale.exists?(iso: params[:language_id])
+    return if params[:language_id].present? && Locale.exists?(iso: params[:language_id])
 
-  redirect_to url_for(params.permit!.merge(language_id: @i18n_locale.to_s))
-end
+    redirect_to url_for(params.permit!.merge(language_id: @i18n_locale.to_s))
+  end
 
   def default_locale_only
     return if default_locale?
