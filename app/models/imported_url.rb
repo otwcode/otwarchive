@@ -1,6 +1,6 @@
 # Url of an imported work
 class ImportedUrl < ApplicationRecord
-  belongs_to :Work
+  belongs_to :work
 
   before_save :set_formatted_urls
   def set_formatted_urls
