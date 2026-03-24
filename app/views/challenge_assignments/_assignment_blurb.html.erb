@@ -15,7 +15,7 @@
       <% if !assignment.posted? %>
         <%= t(".header_draft", link: (link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work")) %>
       <% else %>
-        <%= t(".header_posted", link: (link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work")) %>
+        <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work" %>
       <% end %>
     <% end %>
 
