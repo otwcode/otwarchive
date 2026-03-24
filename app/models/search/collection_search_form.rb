@@ -25,9 +25,8 @@ class CollectionSearchForm
     define_method(filterable) { options[filterable] }
   end
 
-  def initialize(opts = {}, admin_logged_in = false) # rubocop:disable Style/OptionalBooleanParameter
+  def initialize(opts = {})
     @options = opts
-    @options[:admin_logged_in] = admin_logged_in
     process_options
     @searcher = CollectionQuery.new(@options)
   end
@@ -66,8 +65,8 @@ class CollectionSearchForm
     [
       ["Date Created", "created_at"],
       %w[Title title.keyword],
-      ["Bookmarked Items", "public_bookmarked_items_count"],
-      %w[Works public_works_count]
+      ["Bookmarked Items", "bookmarked_items_count"],
+      %w[Works works_count]
     ].freeze
   end
 
