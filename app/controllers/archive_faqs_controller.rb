@@ -118,7 +118,7 @@ class ArchiveFaqsController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html { redirect_to archive_faqs_path(@archive_faq, language_id: @i18n_locale) }
+      format.html { redirect_to manage_archive_faqs_path(language_id: @i18n_locale) }
       format.js { render nothing: true }
     end
   end
@@ -142,10 +142,10 @@ class ArchiveFaqsController < ApplicationController
   end
 
   def require_language_id
-    return if params[:language_id].present? && Locale.exists?(iso: params[:language_id])
+  return if params[:language_id].present? && Locale.exists?(iso: params[:language_id])
 
-    redirect_to url_for(request.query_parameters.merge(language_id: @i18n_locale.to_s))
-  end
+  redirect_to url_for(params.permit!.merge(language_id: @i18n_locale.to_s))
+end
 
   def default_locale_only
     return if default_locale?

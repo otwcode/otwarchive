@@ -23,7 +23,7 @@ class ArchiveFaq < ApplicationRecord
   end
 
   def to_param
-    slug_was
+    slug_was || slug
   end
 
   def self.reorder_list(positions)
