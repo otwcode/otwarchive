@@ -80,7 +80,7 @@ describe ArchiveFaqsController do
     end
   end
 
-  shared_examples "a non-English action that nobody can access" do
+    shared_examples "a non-English action that nobody can access" do
     before { fake_login_admin(admin) }
 
     context "with no role" do
@@ -88,7 +88,7 @@ describe ArchiveFaqsController do
 
       it "redirects with an error" do
         subject
-        it_redirects_to_with_error(archive_faqs_path, "Sorry, this action is only available for English FAQs.")
+        it_redirects_to_with_error(archive_faqs_path(language_id: locale), "Sorry, this action is only available for English FAQs.")
       end
     end
 
@@ -98,7 +98,7 @@ describe ArchiveFaqsController do
 
         it "redirects with an error" do
           subject
-          it_redirects_to_with_error(archive_faqs_path, "Sorry, this action is only available for English FAQs.")
+          it_redirects_to_with_error(archive_faqs_path(language_id: locale), "Sorry, this action is only available for English FAQs.")
         end
       end
     end
@@ -241,7 +241,7 @@ describe ArchiveFaqsController do
         expect { faq.reload }
           .to change { faq.title }
       end
-      it_redirects_to_with_notice(faq, "Archive FAQ was successfully updated.")
+      it_redirects_to_with_notice(archive_faq_path(faq, language_id: locale), "Archive FAQ was successfully updated.")
     end
 
     context "for the default locale" do
@@ -294,7 +294,7 @@ describe ArchiveFaqsController do
     subject { post :create, params: { archive_faq: attributes_for(:archive_faq), language_id: locale } }
     let(:success) do
       expect(ArchiveFaq.count).to eq(1)
-      it_redirects_to_with_notice(assigns[:archive_faq], "Archive FAQ was successfully created.")
+      it_redirects_to_with_notice(archive_faq_path(assigns[:archive_faq], language_id: locale), "Archive FAQ was successfully created.")
     end
 
     context "for the default locale" do
@@ -334,7 +334,7 @@ describe ArchiveFaqsController do
       expect(faq1.reload.position).to eq(3)
       expect(faq2.reload.position).to eq(1)
       expect(faq3.reload.position).to eq(2)
-      it_redirects_to_with_notice(archive_faqs_path, "Archive FAQs order was successfully updated.")
+      it_redirects_to_with_notice(archive_faqs_path(language_id: locale), "Archive FAQs order was successfully updated.")
     end
 
     context "for the default locale" do
@@ -372,7 +372,7 @@ describe ArchiveFaqsController do
     let(:success) do
       expect { faq.reload }
         .to raise_exception(ActiveRecord::RecordNotFound)
-      it_redirects_to(archive_faqs_path)
+      it_redirects_to(archive_faqs_path(language_id: locale))
     end
 
     context "for the default locale" do

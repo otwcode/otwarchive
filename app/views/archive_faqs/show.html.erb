@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= link_to t(".page_heading"), archive_faqs_path %> > <%= @archive_faq.title %></h2>
+<h2 class="heading"><%= link_to t(".page_heading"), archive_faqs_path(language_id: params[:language_id]) %> > <%= @archive_faq.title %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -17,7 +17,7 @@
     <div class="header">
       <h3 class="heading">
         <% if Globalize.locale.to_s != "en" || policy(ArchiveFaq).full_access? -%>
-          <%= link_to t(".edit"), edit_archive_faq_path(@archive_faq) %>
+          <%= link_to t(".edit"), edit_archive_faq_path(@archive_faq, language_id: params[:language_id]) %>
         <% end %>
       </h3>
     </div>
@@ -34,7 +34,7 @@
         </h3>
         <ul class="toc">
           <% for q in @questions %>
-            <li><%= link_to q.question, archive_faq_path(@archive_faq, anchor: q.anchor) %></li>
+            <li><%= link_to q.question, archive_faq_path(@archive_faq, anchor: q.anchor, language_id: params[:language_id]) %></li>
           <% end %>
         </ul>
       </nav>

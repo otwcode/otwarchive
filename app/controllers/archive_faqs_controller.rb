@@ -86,7 +86,7 @@ class ArchiveFaqsController < ApplicationController
     @archive_faq = authorize ArchiveFaq.new(archive_faq_params)
     if @archive_faq.save
       flash[:notice] = t(".success")
-      redirect_to(@archive_faq)
+      redirect_to archive_faq_path(@archive_faq, language_id: @i18n_locale)
     else
       render action: "new"
     end
@@ -99,7 +99,7 @@ class ArchiveFaqsController < ApplicationController
 
     if @archive_faq.update(archive_faq_params)
       flash[:notice] = t(".success")
-      redirect_to(@archive_faq)
+      redirect_to archive_faq_path(@archive_faq, language_id: @i18n_locale)
     else
       render action: "edit"
     end
@@ -118,15 +118,9 @@ class ArchiveFaqsController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html { redirect_to(archive_faqs_path) }
+      format.html { redirect_to archive_faqs_path(@archive_faq, language_id: @i18n_locale) }
       format.js { render nothing: true }
     end
-  end
-
-  # The ?language_id=somelanguage needs to persist throughout URL changes
-  # Get the value from set_locale to make sure there's no problem with order
-  def default_url_options
-    { language_id: set_locale.to_s }
   end
 
   # Set the locale as an instance variable first
@@ -157,7 +151,7 @@ class ArchiveFaqsController < ApplicationController
     return if default_locale?
 
     flash[:error] = t("archive_faqs.default_locale_only")
-    redirect_to archive_faqs_path
+    redirect_to archive_faqs_path(@archive_faq, language_id: @i18n_locale)
   end
 
   # Setting I18n.locale directly is not thread safe
@@ -174,7 +168,7 @@ class ArchiveFaqsController < ApplicationController
   def destroy
     @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
     @archive_faq.destroy
-    redirect_to(archive_faqs_path)
+    redirect_to archive_faqs_path(language_id: @i18n_locale)
   end
 
   private
