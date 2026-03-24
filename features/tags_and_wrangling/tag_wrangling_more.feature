@@ -13,6 +13,16 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       | Enigel      | wrangulator   |
       | dizmo       | wrangulator   |
 
+    # default wrangler selection to current user for non-admins
+    When I am logged in as "dizmo" with password "wrangulator"
+      And I follow "Tag Wrangling"
+      And I follow "Wranglers"
+    Then "dizmo" should be selected within "wrangler_id"
+    When I am logged in as a "tag_wrangling" admin
+      And I follow "Tag Wrangling"
+      And I follow "Wranglers"
+    Then "" should be selected within "wrangler_id"
+
     # accessing tag wrangling pages
     When I am logged in as "dizmo" with password "wrangulator"
       And I follow "Tag Wrangling"
@@ -60,6 +70,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
 
     # assigning another wrangler to a fandom
     When I follow "Wranglers"
+      And I select "" from "wrangler_id"
       And I fill in "fandom_string" with "Ghost"
       And I press "Filter"
     Then I should see "Ghost Soup"
