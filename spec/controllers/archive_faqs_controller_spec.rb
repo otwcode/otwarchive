@@ -80,7 +80,7 @@ describe ArchiveFaqsController do
     end
   end
 
-    shared_examples "a non-English action that nobody can access" do
+  shared_examples "a non-English action that nobody can access" do
     before { fake_login_admin(admin) }
 
     context "with no role" do
