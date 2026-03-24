@@ -83,7 +83,7 @@
         </dd>
         <dt><%= label_tag :wrangler_id, t(".assignments.only_wrangler") %></dt>
         <dd>
-          <%= select_tag :wrangler_id, options_for_select(['', 'No Wrangler'] + @wranglers.collect(&:login), params[:wrangler_id].nil? && !logged_in_as_admin? ? current_user.login : params[:wrangler_id].to_s) %>
+          <%= select_tag :wrangler_id, options_for_select(["", t(".assignments.no_wrangler")] + @wranglers.collect(&:login), params[:wrangler_id].nil? && !logged_in_as_admin? ? current_user.login : params[:wrangler_id].to_s) %>
         </dd>
         <dt><%= label_tag :fandom_string, t(".assignments.only_fandoms_starting_with") %></dt>
         <dd>
