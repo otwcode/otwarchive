@@ -292,9 +292,8 @@ describe Tag do
       end
 
       it "autocomplete should work" do
-        tag_character = FactoryBot.create(:character, canonical: true, name: "kirk")
-        tag_fandom = FactoryBot.create(:fandom, name: "Star Trek", canonical: true)
-        tag_fandom.add_to_autocomplete
+        create(:canonical_fandom, name: "Star Trek")
+        tag_character = create(:canonical_character, name: "kirk")
         results = Tag.autocomplete_fandom_lookup(term: +"ki", fandom: "Star Trek")
         expected_tag = "#{tag_character.id}: #{tag_character.name}"
         expect(results).to eq([expected_tag])
@@ -302,12 +301,10 @@ describe Tag do
 
       it "autocomplete should deduplicate tags between fandoms" do
         # Create two fandoms
-        tag_fandom_og = FactoryBot.create(:fandom, name: "Star Trek", canonical: true)
-        tag_fandom_og.add_to_autocomplete
-        tag_fandom_reboot = FactoryBot.create(:fandom, name: "Star Trek (2009 Reboot)", canonical: true)
-        tag_fandom_reboot.add_to_autocomplete
+        tag_fandom_og = create(:canonical_fandom, name: "Star Trek")
+        tag_fandom_reboot = create(:canonical_fandom, name: "Star Trek (2009 Reboot)")
         # And add a character tag that is in both of them
-        tag_character = FactoryBot.create(:character, canonical: true, name: "kirk")
+        tag_character = create(:canonical_character, name: "kirk")
         CommonTagging.new(common_tag: tag_character, filterable: tag_fandom_og).save
         CommonTagging.new(common_tag: tag_character, filterable: tag_fandom_reboot).save
         # Search results should still only show a single tag
