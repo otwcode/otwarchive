@@ -649,29 +649,12 @@ Rails.application.routes.draw do
   end
   resources :orphans, only: [:index, :new, :create]
 
-  %w[
-    first_login
-    preferences_locale
-    skins_basics
-    skins_creating
-    skins_parents
-    symbols_key
-    tags_fandoms
-    tags_ratings
-    tags_warnings
-  ].each do |action|
+  HelpController::HELP_ACTIONS.each do |action|
     get "/help/#{action}", to: "help##{action}"
-  end
 
-  # Redirects for moved help files
-  get "/first_login_help", to: redirect("/help/first_login")
-  get "/help/skins-basics.html", to: redirect("/help/skins_basics")
-  get "/help/skins-creating.html", to: redirect("/help/skins_creating")
-  get "/help/skins-parents.html", to: redirect("/help/skins_parents")
-  get "/help/symbols-key.html", to: redirect("/help/symbols_key")
-  get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
-  get "/help/rating-help.html", to: redirect("/help/tags_ratings")
-  get "/help/warning-help.html", to: redirect("/help/tags_warnings")
+    # Redirects for moved help files
+    get HelpController::HELP_REDIRECTS[action], to: redirect("/help/#{action}")
+  end
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
