@@ -38,6 +38,8 @@ class Admin
   
       session[:otp_admin_id] = admin.id
 
+      set_flash_message! :alert, :warn_pwned_with_2fa if admin.password_pwned?(admin_params[:password])
+
       render "admin/sessions/totp"
     end
   
