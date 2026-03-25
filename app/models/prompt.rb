@@ -37,7 +37,7 @@ class Prompt < ApplicationRecord
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
-    read_attribute(:title).try(:html_safe)
+    self[:title].try(:html_safe)
   end
 
   # VALIDATIONS
