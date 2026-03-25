@@ -60,7 +60,6 @@ en:
       signed_in: Successfully logged in.
       signed_out: Successfully logged out.
       warn_pwned: Your password has appeared in a data breach from another site and is no longer secure. For your protection, please select a new, unique password.
-      warn_pwned_with_2fa: Your password has appeared in a data breach from another site and is no longer secure. For your protection, please select a new, unique password using the password reset form.
     unlocks:
       send_instructions: You will receive an email with instructions for how to unlock your account in a few minutes.
       send_paranoid_instructions: If your account exists, you will receive an email with instructions for how to unlock it in a few minutes.
