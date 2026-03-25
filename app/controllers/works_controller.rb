@@ -14,7 +14,8 @@ class WorksController < ApplicationController
   before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
-  before_action :log_admin_activity, only: [:update_tags]
+  before_action :save_old_tags, only: [:update_tags]
+  after_action :log_admin_activity, only: [:update_tags], if: [:tried_to_save?], unless: [:work_cannot_be_saved?]
   before_action :check_parent_visible, only: [:navigate]
   before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
 
@@ -780,6 +781,10 @@ class WorksController < ApplicationController
     !(@work.errors.empty? && @work.valid?)
   end
 
+  def tried_to_save?
+    params[:update_button].present?
+  end
+
   def set_work_form_fields
     @work.reset_published_at(@chapter)
     @series = current_user.series.distinct
@@ -825,12 +830,16 @@ class WorksController < ApplicationController
     end
   end
 
+  def save_old_tags
+    @old_tags = @work.tags.pluck(:name)
+  end
+
   def log_admin_activity
     if logged_in_as_admin?
       options = { action: params[:action] }
 
       if params[:action] == 'update_tags'
-        summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}"
+        summary = "Old tags: #{@old_tags.join(', ')}"
       end
 
       AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)

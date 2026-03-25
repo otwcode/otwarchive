@@ -202,13 +202,35 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should see "Mature"
       And I should see "Admin-Added Relationship"
       And I should see "Admin-Added Character"
-     When I follow "Activities"
-     Then I should see "Admin Activities"
-     When I visit the last activities item
-     Then I should see "No Archive Warnings Apply"
+    When I follow "Activities"
+    Then I should see "Admin Activities"
+    When I visit the last activities item
+    Then I should see "No Archive Warnings Apply"
       And I should see "Old tags"
       And I should see "User-Added Fandom"
       And I should not see "Admin-Added Fandom"
+
+  Scenario: No activity log when tag edits are invalid
+    Given I am logged in as "regular_user"
+      And I post the work "Changes" with fandom "User-Added Fandom"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Changes"
+      And I follow "Edit Tags and Language"
+      And I uncheck "No Archive Warnings Apply"
+    When I press "Update"
+      And I follow "Activities"
+    Then I should see 0 admin activity log entries
+
+  Scenario: No activity log when previewing without saving
+    Given I am logged in as "regular_user"
+      And I post the work "Changes" with fandom "User-Added Fandom"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Changes"
+      And I follow "Edit Tags and Language"
+      And I fill in "Fandoms" with "Admin-Added Fandom"
+    When I press "Preview"
+      And I follow "Activities"
+    Then I should see 0 admin activity log entries
 
   Scenario: Can edit external works
     Given basic languages
