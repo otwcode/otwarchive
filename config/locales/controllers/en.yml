@@ -282,7 +282,6 @@ en:
     index:
       page_title: "%{username} - Series"
     show:
-      anonymous: Anonymous
       unrevealed_series: Mystery Series
   subscriptions:
     delete_all:
