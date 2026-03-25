@@ -246,34 +246,34 @@ Feature: Collection
     And I go to the collections page
     And I select "Works" from "collection_search_sort_column"
     And I press "Sort and Filter"
-  Then I should see the text with tags '<a href="/collections/Privates/works">2</a>'
-    And I should see the text with tags '<a href="/collections/Publics/works">1</a>'
+  Then the 1st collection result should contain "Works: 2"
+    And the 2nd collection result should contain "Works: 1"
   When I log out
-  Then I should see the text with tags '<a href="/collections/Privates/works">0</a>'
-    And I should see the text with tags '<a href="/collections/Publics/works">1</a>'
+  Then the 1st collection result should contain "Works: 1"
+    And the 2st collection result should contain "Works: 0"
   When I am logged in as a super admin
     And I go to the collections page
     And I select "Works" from "collection_search_sort_column"
     And I press "Sort and Filter"
-  Then I should see the text with tags '<a href="/collections/Privates/works">2</a>'
-    And I should see the text with tags '<a href="/collections/Publics/works">1</a>'
+  Then the 1st collection result should contain "Works: 2"
+    And the 2nd collection result should contain "Works: 1"
   When I go to the collections page
     And I select "Bookmarked Items" from "collection_search_sort_column"
     And I press "Sort and Filter"
-  Then I should see the text with tags '<a href="/collections/Privates/bookmarks">1</a>'
-    And I should see the text with tags '<a href="/collections/Publics/bookmarks">2</a>'
+  Then the 1st collection result should contain "Bookmarked Items: 2"
+    And the 2nd collection result should contain "Bookmarked Items: 1"
   When I log out
     And I go to the collections page
     And I select "Bookmarked Items" from "collection_search_sort_column"
     And I press "Sort and Filter"
-  Then I should see the text with tags '<a href="/collections/Privates/bookmarks">1</a>'
-    And I should not see the text with tags '<a href="/collections/Publics/bookmarks">2</a>'
+  Then the 1st collection result should contain "Bookmarked Items: 1"
+    And the 2nd collection result should not contain "Bookmarked Items"
   When I am logged in as a super admin
     And I go to the collections page
     And I select "Bookmarked Items" from "collection_search_sort_column"
     And I press "Sort and Filter"
-  Then I should see the text with tags '<a href="/collections/Privates/bookmarks">1</a>'
-    And I should see the text with tags '<a href="/collections/Publics/bookmarks">2</a>'
+  Then the 1st collection result should contain "Bookmarked Items: 2"
+    And the 2nd collection result should contain "Bookmarked Items: 1"
 
   Scenario: Look at a collection, see the rules and intro and FAQ
 
