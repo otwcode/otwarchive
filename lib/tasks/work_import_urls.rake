@@ -12,9 +12,10 @@ namespace :work_import_urls do
 
     scope.find_each(batch_size: batch_size) do |work|
       next unless ImportedUrl.exists?(work_id: work.id)
-        work.imported_url = ImportedUrl.new(original: work.imported_from_url)
-        processed += 1
-        puts "Processed #{processed}/#{total}" if (processed % batch_size).zero?
+      
+      work.imported_url = ImportedUrl.new(original: work.imported_from_url)
+      processed += 1
+      puts "Processed #{processed}/#{total}" if (processed % batch_size).zero?
     end
 
     puts "Done! Backfilled #{processed} records."
