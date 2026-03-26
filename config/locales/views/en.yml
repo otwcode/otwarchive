@@ -497,6 +497,8 @@ en:
           submit: Enable Two-Step Verification
         page_heading: Set Up Two-Step Verification
       show_backup_codes:
+        backup_codes_copied: Backup codes copied!
+        copy_to_clipboard: Copy backup codes to clipboard
         finish: Finish
         page_heading: Two-Step Verification Backup Codes
         write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
