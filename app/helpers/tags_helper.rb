@@ -152,10 +152,8 @@ module TagsHelper
   end
 
   def show_wrangling_dashboard
-    # Warning: @current_user_tag_wrangler is cached and not a 1:1 replacement for checking whether the current user is a wrangler
-    (logged_in_as_admin? || @current_user_tag_wrangler) && # rubocop:disable Rails/HelperInstanceVariable
     (%w(tags tag_wranglings tag_wranglers tag_wrangling_requests unsorted_tags).include?(controller.controller_name) ||
-    (@tag && controller.controller_name == 'comments'))
+    (@tag && controller.controller_name == 'comments')) && can_wrangle?
   end
 
   # Returns a nested list of meta tags

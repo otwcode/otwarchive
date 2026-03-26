@@ -334,7 +334,7 @@ public
           current_user_offer_assignments: current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count,
           current_user_unposted_works_size: current_user.unposted_works.size,
           current_user_opendoors: permit?("opendoors"),
-          current_user_tag_wrangler: current_user.is_tag_wrangler? # also used in TagsHelper#show_wrangling_dashboard
+          current_user_tag_wrangler: current_user.is_tag_wrangler?
         }
       end
       user_menu_data.each do |variable, value|
