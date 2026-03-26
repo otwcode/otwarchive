@@ -1,7 +1,7 @@
 <% # expects local variable f %>
 <dt class="language required">
   <%= f.label :language_id, "#{t('works.associations.language.choose')} *" %>
-  <%= link_to_help "languages-help" %>
+  <%= link_to_help_modal(help_languages_help_path, t(".languages_help_title")) %>
 </dt>
 <dd class="language required">
   <select id="work_language_id" name="work[language_id]">
