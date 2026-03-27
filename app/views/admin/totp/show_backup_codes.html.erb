@@ -14,12 +14,16 @@
 </ul>
 
 <p class="actions">
-  <%= link_to t(".copy_to_clipboard"), "#", id: "copy-totp-backup-codes", onclick: "copyBackupCodes()", style: "visibility: hidden;" %>
+  <button id="copy-totp-backup-codes" onclick="copyBackupCodes()" style="visibility: hidden;">
+    <%= t(".copy_to_clipboard") %>
+  </button>
   <%= link_to t(".finish"), admins_path %>
 </p>
 <!--/content-->
 
 <script type="text/javascript">
+    document.getElementById("copy-totp-backup-codes").style.visibility = "visible";
+
     async function copyBackupCodes() {
         await navigator.clipboard.writeText("<%= @backup_codes.join('\n') %>");
         document.getElementById("copy-totp-backup-codes").textContent = "<%= t(".backup_codes_copied") %>";
@@ -27,8 +31,4 @@
         // Prevent reloading the page
         return false;
     }
-</script>
-
-<script type=text/javascript defer>
-    document.getElementById("copy-totp-backup-codes").style.visibility = "visible";
 </script>
