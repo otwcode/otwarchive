@@ -118,6 +118,13 @@ describe Admin::BannersController do
 
     it_behaves_like "only authorized admins are allowed",
                     authorized_roles: %w[superadmin board board_assistants_team communications support]
+    
+    it "redirects to show page with error for active banners" do
+      fake_login_admin(create(:admin, roles: ["superadmin"]))
+      active_banner = create(:admin_banner, active: true)
+      get :confirm_delete, params: { id: active_banner }
+      it_redirects_to_with_error(admin_banner_path(active_banner), "Active banners cannot be deleted.")
+    end
   end
 
   describe "DELETE #destroy" do
@@ -130,5 +137,11 @@ describe Admin::BannersController do
 
     it_behaves_like "only authorized admins are allowed",
                     authorized_roles: %w[superadmin board board_assistants_team communications support]
+    
+    it "redirects to show page with error for active banners" do
+      fake_login_admin(create(:admin, roles: ["superadmin"]))
+      active_banner = create(:admin_banner, active: true)
+      delete :destroy, params: { id: active_banner }
+      it_redirects_to_with_error(admin_banner_path(active_banner), "Active banners cannot be deleted.")
   end
 end
