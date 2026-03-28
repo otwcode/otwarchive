@@ -1280,7 +1280,7 @@ en:
           chapter_title: "<h3>Chapter title<h3>"
           cite:
             phrase_or_title: a phrase or title
-            sentence_html: "<p>Try cite to cite &lt;cite&gt;%{phrase_or_title_cite}&lt;/cite&gt;</p>"
+            sentence_html: Try cite to cite &lt;cite&gt;%{phrase_or_title_cite}&lt;/cite&gt;
           em:
             rodney: Rodney
             sentence_html: "&lt;em&gt;%{rodney_italic}&lt;/em&gt; McKay"
