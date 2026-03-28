@@ -1287,7 +1287,7 @@ en:
           footnote_title: "<h6>Footnote title<h6>"
           inline_quote:
             phrase: To quote a phrase
-            sentence_html: "<p>Use q to &lt;q&gt;%{phrase_inline_quote}&lt;/q&gt;</p>"
+            sentence_html: Use q to &lt;q&gt;%{phrase_inline_quote}&lt;/q&gt;
           scene_title: "<h4>Scene title<h4>"
           strong:
             never: never
