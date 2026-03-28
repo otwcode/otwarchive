@@ -55,9 +55,9 @@
   <dt><%= t(".formatting.recommendations.quote_html", quote_tags_code: tag.code("blockquote, q, cite")) %></dt>
   <dd id="quotes">
     <ul>
-      <li><p><%= t(".formatting.example.blockquote.sentence_html", text_blockquote: tag.blockquote(tag.p(t(".formatting.example.blockquote.text")))) %></p></li>
-      <li><p><%= t(".formatting.example.inline_quote.sentence_html", phrase_inline_quote: tag.q(t(".formatting.example.inline_quote.phrase"))) %></p></li>
-      <li><p><%= t(".formatting.example.cite.sentence_html", phrase_or_title_cite: tag.cite(t(".formatting.example.cite.phrase_or_title"))) %></p></li>
+      <li><%= t(".formatting.example.blockquote.sentence_html", text_blockquote: tag.blockquote(tag.p(t(".formatting.example.blockquote.text")))) %></li>
+      <li><%= t(".formatting.example.inline_quote.sentence_html", phrase_inline_quote: tag.q(t(".formatting.example.inline_quote.phrase"))) %></li>
+      <li><%= t(".formatting.example.cite.sentence_html", phrase_or_title_cite: tag.cite(t(".formatting.example.cite.phrase_or_title"))) %></li>
     </ul>
   </dd>
 </dl>
