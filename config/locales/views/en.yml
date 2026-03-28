@@ -1292,13 +1292,13 @@ en:
           strong:
             never: never
             sentence_html: I will &lt;strong&gt;%{never_bold}&lt;/strong&gt; understand you!
-          subtitle-h2: "<h2>Subtitle<h2>"
-          subtitle-h5: "<h5>Subtitle<h5>"
+          subtitle_h2: "<h2>Subtitle<h2>"
+          subtitle_h5: "<h5>Subtitle<h5>"
           title: "<h1>Title<h1>"
         forgotten_open_tags: If you have forgotten to close a formatting tag, it will be closed at the end of the paragraph for you.
         good_html_note: Good HTML means HTML that labels what the text is supposed to be -- so if you have paragraphs, they should be inside paragraph tags, not just separated with break tags. If you have emphasized text, it should be inside em tags. If you have a list of items, each item should be inside list tags. If you %{negative_italic} have a list of items, you shouldn't have list tags. :) (We are putting together a set of more detailed helpful references about this, but this is the basic idea.)
         header: How Do We Format Your HTML?
-        mis-nested_tags:
+        misnested_tags:
           corrected_text: text!
           sentence_html: 'If you have mis-nested tags like this: &lt;em&gt;&lt;strong&gt;%{text_bold_italic}&lt;/em&gt;&lt;/strong&gt; we will fix the mis-nesting (so it would become &lt;em&gt;&lt;strong&gt;%{corrected_text_bold_italic}&lt;/strong&gt;&lt;/em&gt;).'
           text: text!

@@ -18,7 +18,7 @@
   <li><%= t(".formatting.single_carriage_return") %></li>
   <li><%= t(".formatting.two_break_tags") %></li>
   <li><%= t(".formatting.two_blank_lines") %></li>
-  <li><%= t(".formatting.mis-nested_tags.sentence_html", text_bold_italic: tag.strong(tag.em(t(".formatting.mis-nested_tags.text"))), corrected_text_bold_italic: tag.strong(tag.em(t(".formatting.mis-nested_tags.corrected_text")))) %></li>
+  <li><%= t(".formatting.misnested_tags.sentence_html", text_bold_italic: tag.em(tag.strong(t(".formatting.misnested_tags.text"))), corrected_text_bold_italic: tag.em(tag.strong(t(".formatting.misnested_tags.corrected_text")))) %></li>
   <li><%= t(".formatting.forgotten_open_tags") %></li>
   <li><%= t(".formatting.tags_spanning_paragraphs") %></li>
   <li><%= t(".formatting.unwilling_to_break") %></li>
@@ -38,10 +38,10 @@
   <dd id="headings">
     <ul>
       <li><h1><%= t(".formatting.example.title") %></h1></li>
-      <li><h2><%= t(".formatting.example.subtitle-h2") %></h2></li>
+      <li><h2><%= t(".formatting.example.subtitle_h2") %></h2></li>
       <li><h3><%= t(".formatting.example.chapter_title") %></h3></li>
       <li><h4><%= t(".formatting.example.scene_title") %></h4></li>
-      <li><h5><%= t(".formatting.example.subtitle-h5") %></h5></li>
+      <li><h5><%= t(".formatting.example.subtitle_h5") %></h5></li>
       <li><h6><%= t(".formatting.example.footnote_title") %></h6></li>
     </ul>
   </dd>
