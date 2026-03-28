@@ -16,7 +16,7 @@ class ReadingsController < ApplicationController
       @readings = @readings.where(toread: true)
       @page_subtitle = t(".marked_for_later_page_title")
     end
-    @readings = @readings.order("last_viewed DESC")
+    @readings = @readings.order("last_viewed DESC").includes(work: :pseuds)
     @pagy, @readings = pagy(@readings)
   end
 
