@@ -51,22 +51,31 @@
   <% @subscriptions.each do |subscription| %>
     <dt>
       <% if subscription.subscribable %>
-        <%= link_to(subscription.name, subscription.subscribable) %>
         <% case subscription.subscribable_type %>
         <% when "Work" %>
-          <%= t(".work") if @subscribable_type.blank? %>
-          <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
+          <% if subscription.subscribable.unrevealed? %>
+            <%= t(".mystery_work") %> <%= t(".work") if @subscribable_type.blank? %>
+          <% else %>
+            <%= link_to(subscription.name, subscription.subscribable) %>
+            <%= t(".work") if @subscribable_type.blank? %>
+            <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
+          <% end %>
         <% when "Series" %>
+          <%= link_to(subscription.name, subscription.subscribable) %>
           <%= t(".series") if @subscribable_type.blank? %>
           <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
+        <% when "User" %>
+          <%= link_to(subscription.name, subscription.subscribable) %>
         <% end %>
       <% else %>
         <%= subscription.name %>
       <% end %>
     </dt>
     <dd>
-      <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
-        <%= f.submit t(".button_html", name: subscription.name) %>
+      <%= form_for [current_user, subscription], html: { method: :delete } do |f| %>
+        <% unrevealed_work = subscription.subscribable_type == "Work" && subscription.subscribable&.unrevealed? %>
+        <% name = unrevealed_work ? t(".mystery_work") : subscription.name %>
+        <%= f.submit t(".button_html", name: name) %>
       <% end %>
     </dd>
   <% end %>
