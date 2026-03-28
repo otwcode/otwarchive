@@ -241,6 +241,8 @@ en:
         muted: You have muted the user %{name}.
       destroy:
         unmuted: You have unmuted the user %{name}.
+      index:
+        page_title: "%{username} - Muted Users"
   people:
     index:
       collection_page_title: "%{collection_title} - People"
