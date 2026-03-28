@@ -62,10 +62,10 @@ class Admin::BannersController < Admin::BaseController
   # GET /admin/banners/1/confirm_delete
   def confirm_delete
     @admin_banner = authorize AdminBanner.find(params[:id])
-    if @admin_banner.active?
-      flash[:error] = ts('Active banners cannot be deleted.')
-      redirect_to @admin_banner
-    end
+    return unless @admin_banner.active?
+    
+    flash[:error] = ts('Active banners cannot be deleted.')
+    redirect_to @admin_banner
   end
 
   # DELETE /admin/banners/1
