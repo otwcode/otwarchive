@@ -2515,6 +2515,10 @@ en:
       edit_my_pseuds: Manage My Pseuds
       edit_my_works: Edit My Works
       edit_profile: Edit Profile
+  prompts:
+    prompt_blurb:
+      restricted:
+        work_unavailable: This work is only available to registered users of the Archive.
   pseuds:
     delete_preview:
       cancel: Cancel

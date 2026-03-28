@@ -86,7 +86,16 @@
         <ul class="index group">
           <% prompt.fulfilled_claims.map(&:creation).each do |creation| %>
             <% if creation.is_a?(Work) %>
-              <%= render "works/work_blurb", :work => creation %>
+              <% if guest? && creation.restricted %>
+                <%= image_tag("lockblue.png", size: "15x15",
+                                   alt: ts("(Restricted)"),
+                                   title: ts("Restricted"),
+                                   skip_pipeline: true) %>
+                                   
+                <%= t(".restricted.work_unavailable") %>
+              <% else%>
+                <%= render "works/work_blurb", :work => creation %>
+              <% end %>
             <% end %>
           <% end %>
         </ul>
