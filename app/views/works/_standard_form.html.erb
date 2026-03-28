@@ -50,7 +50,7 @@
         <!-- if the user has open assignments? -->
         <dt class="collection">
           <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %>
-          <%= link_to_help "add-work-to-assignment" %>
+          <%= link_to_help_modal(help_add_work_to_assignment_path, t(".add_work_to_assignment_help_title")) %>
         </dt>
         <dd class="collection listbox group">
           <h4 class="heading"><%= ts("Open Assignments") %></h4>
@@ -63,7 +63,7 @@
         <!-- if the user has open claims? -->
         <dt class="collection">
           <%= f.label "challenge_claim_ids[]", ts("Fulfill a Claim") %>
-          <%= link_to_help "add-work-to-assignment" %>
+          <%= link_to_help_modal(help_add_work_to_assignment_path, t(".add_work_to_assignment_help_title")) %>
         </dt>
         <dd class="collection listbox group">
           <h4 class="heading"><%= ts("Open Claims") %></h4>
@@ -75,7 +75,7 @@
       <!-- Add collection -->
       <dt class="collection" title="<%= ts("post to collection or challenge") %>">
         <%= f.label :collection_names, ts("Post to Collections / Challenges") %>
-        <%= link_to_help "add-collectible-to-collection" %>
+        <%= link_to_help_modal(help_add_collectible_to_collection_path, t(".add_collectible_to_collection_help_title")) %>
       </dt>
       <dd class="collection" title="<%= ts("post to collection or challenge") %>">
         <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>
@@ -226,7 +226,7 @@
         </dt>
         <dd class="backdate">
           <%= label_tag "backdate-options-show", ts("Set a different publication date") %>
-          <%= link_to_help "backdating-help" %>
+          <%= link_to_help_modal(help_backdating_path, t(".backdating_help_title")) %>
 
           <fieldset id="backdate-options" class="optional">
             <dl>

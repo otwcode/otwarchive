@@ -727,6 +727,9 @@ en:
       tos_faq: Terms of Service FAQ
     preview:
       page_heading: Preview
+  collectibles:
+    collectible_form:
+      add_collectible_to_collection_help_title: Adding to collections help
   collection_items:
     collection_item_form:
       add: Add
@@ -1118,6 +1121,20 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    add_collectible_to_collection:
+      header: Adding To Collections
+      instructions: Enter collection names as a comma-separated list, and the item you are editing will be added to all the collections you specify.
+      collection_names: Note that you need to use the collection's name, which gets used in the collection's URL, and not the collection's spiffy title (because different collections can have the same title). A collection's name is the equivalent of your user login. Names will be auto-completed for you if you have JavaScript turned on.
+      moderated_and_anonymous_collections: Also note&colon; if the collection you are submitting to is moderated, and you aren't a member, your story will not be added to the collection automatically - it will have to be approved by one of the collection's moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it's waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.
+      removing_from_collection: If you change your mind about having an item in a collection, you can either edit the list of collections when editing it, or you can manage all your collected items under the "My Collections" page in your account.
+    add_work_to_assignment:
+      header: Fulfilling Assignments
+      guidance: If you have any open challenge assignments, you can choose one of them here if the story you are posting is meant to fulfill one of them. This will automatically add your story to the challenge collection (or submit it for approval) and also mark your assignment as fulfilled for the challenge moderators. 
+      moderated_and_anonymous_collections: Note&colon; if the collection you are submitting to is moderated, and you aren't a member, your story will not be added to the collection automatically &#8212; it will have to be approved by one of the collection's moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it's waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.
+    backdating:
+      header: Publication Date Options
+      guidance: When posting a work, you have the option to set a different publication date &#8212; in other words, to backdate the work. You can also set publication dates for individual chapters. Please note that in both cases, this affects whether and where your work appears on your dashboard and the works page, etc. These pages which show the date when your work was last updated &#8212; the publication date of your work or of one of your chapters, whichever is the most recent date.
+      chapters: Any subsequent chapters you add will have that date pre-set on the form, though you will still have the option of overriding that date. This means that if you don't know or care exactly when each chapter was originally published, you can still backdate your work conveniently.
     first_login:
       additional_info:
         header: Additional Browsing Information
@@ -3182,6 +3199,8 @@ en:
     byline:
       add_co-creators: Add co-creators
       show_co-creator_options: Add co-creators?
+    chapter_form:
+      backdating_help_title: Publication date options help
     drafts:
       page_heading: Unposted Draft
       please_note: 'Please note:'
@@ -3252,6 +3271,10 @@ en:
       no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
+    standard_form:
+      add_collectible_to_collection_help_title: Adding to collections help
+      add_work_to_assignment_help_title: Fulfilling assignments help
+      backdating_help_title: Publication date options help
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
