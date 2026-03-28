@@ -341,12 +341,34 @@ public
     @collection = Collection.find_by(name: params[:collection_id]) if params[:collection_id]
   end
 
+  def privileged_collection_admin?
+    policy(Collection).access?
+  end
+
+  def users_or_privileged_collection_admins_only
+    return if logged_in? || privileged_collection_admin?
+
+    logged_in_as_admin? ? admin_only_access_denied : access_denied
+  end
+
   def collection_maintainers_only
     logged_in? && @collection && @collection.user_is_maintainer?(current_user) || access_denied
   end
 
+  def collection_maintainers_or_privileged_admins_only
+    return if (logged_in? && @collection && @collection.user_is_maintainer?(current_user)) || privileged_collection_admin?
+
+    logged_in_as_admin? ? admin_only_access_denied : access_denied
+  end
+
   def collection_owners_only
     logged_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
+  end
+
+  def collection_owners_or_privileged_admins_only
+    return if (logged_in? && @collection && @collection.user_is_owner?(current_user)) || privileged_collection_admin?
+
+    logged_in_as_admin? ? admin_only_access_denied : access_denied
   end
 
   def not_allowed(fallback=nil)
