@@ -29,9 +29,9 @@ class Admin::BannersController < Admin::BaseController
     if @admin_banner.save
       if @admin_banner.active?
         AdminBanner.banner_on
-        flash[:notice] = ts("admin.banners.create.banner_on")
+        flash[:notice] = t("admin.banners.create.banner_on")
       else
-        flash[:notice] = ts("admin.banners.create.success")
+        flash[:notice] = t("admin.banners.create.success")
       end
       redirect_to @admin_banner
     else
@@ -46,7 +46,7 @@ class Admin::BannersController < Admin::BaseController
     if !@admin_banner.update(admin_banner_params)
       render action: 'edit'
     elsif params[:admin_banner_minor_edit]
-      flash[:notice] = ts("admin.banners.update.minor_edit")
+      flash[:notice] = t("admin.banners.update.minor_edit")
       redirect_to @admin_banner
     else
       if @admin_banner.active?
