@@ -1270,23 +1270,23 @@ en:
         description: 'When you enter HTML into the archive, we do some cleanup on it to make sure that it is safe (so spammers and hackers cannot upload badness) and try and do some basic formatting both for your convenience and for accessibility reasons. Here are the formatting steps we take:'
         example:
           blockquote:
-            sentence_html: "&lt;blockquote&gt;%{text_blockquote}&lt;/blockquote&gt;"
+            description_html: "&lt;blockquote&gt;%{text_blockquote}&lt;/blockquote&gt;"
             text: To quote a block of text
           chapter_title: "<h3>Chapter title<h3>"
           cite:
             phrase_or_title: a phrase or title
-            sentence_html: Try cite to cite &lt;cite&gt;%{phrase_or_title_cite}&lt;/cite&gt;
+            description_html: Try cite to cite &lt;cite&gt;%{phrase_or_title_cite}&lt;/cite&gt;
           em:
             rodney: Rodney
-            sentence_html: "&lt;em&gt;%{rodney_italic}&lt;/em&gt; McKay"
+            description_html: "&lt;em&gt;%{rodney_italic}&lt;/em&gt; McKay"
           footnote_title: "<h6>Footnote title<h6>"
           inline_quote:
             phrase: To quote a phrase
-            sentence_html: Use q to &lt;q&gt;%{phrase_inline_quote}&lt;/q&gt;
+            description_html: Use q to &lt;q&gt;%{phrase_inline_quote}&lt;/q&gt;
           scene_title: "<h4>Scene title<h4>"
           strong:
             never: never
-            sentence_html: I will &lt;strong&gt;%{never_bold}&lt;/strong&gt; understand you!
+            description_html: I will &lt;strong&gt;%{never_bold}&lt;/strong&gt; understand you!
           subtitle_h2: "<h2>Subtitle<h2>"
           subtitle_h5: "<h5>Subtitle<h5>"
           title: "<h1>Title<h1>"
@@ -1295,7 +1295,7 @@ en:
         header: How Do We Format Your HTML?
         misnested_tags:
           corrected_text: text!
-          sentence_html: 'If you have mis-nested tags like this: &lt;em&gt;&lt;strong&gt;%{text_bold_italic}&lt;/em&gt;&lt;/strong&gt; we will fix the mis-nesting (so it would become &lt;em&gt;&lt;strong&gt;%{corrected_text_bold_italic}&lt;/strong&gt;&lt;/em&gt;).'
+          description_html: 'If you have mis-nested tags like this: &lt;em&gt;&lt;strong&gt;%{text_bold_italic}&lt;/em&gt;&lt;/strong&gt; we will fix the mis-nesting (so it would become &lt;em&gt;&lt;strong&gt;%{corrected_text_bold_italic}&lt;/strong&gt;&lt;/em&gt;).'
           text: text!
         negation: don't
         not_satisfied_note: If you find yourself putting in HTML that doesn't mean the right thing, in order to get a particular visual effect, please resist! The work skin feature allows you to apply custom CSS to works, and that lets you make them look just about any way you want them to (and is easier if you are starting from good HTML).
@@ -1357,7 +1357,7 @@ en:
         enter_for_twice: Enter
         intro_sentence_html: Press %{enter_for_once_key} %{once_italic} between paragraphs.
         once: once
-        paragraph_html: Pressing %{enter_for_twice_key} twice will insert a blank paragraph, creating additional, and likely unwanted, space between paragraphs when you paste into the %{rte_abbreviation}. The Archive uses top and bottom margins to create the appearance of a blank line between paragraphs; you can use the paragraph formatting options in your text editor to create a similar effect without adding extra %{p_tag_code} tags.
+        description_html: Pressing %{enter_for_twice_key} twice will insert a blank paragraph, creating additional, and likely unwanted, space between paragraphs when you paste into the %{rte_abbreviation}. The Archive uses top and bottom margins to create the appearance of a blank line between paragraphs; you can use the paragraph formatting options in your text editor to create a similar effect without adding extra %{p_tag_code} tags.
         rte_abbreviated: RTE
       header: Rich Text
       pasting_formatting:
@@ -1411,7 +1411,7 @@ en:
         html_abbreviated: HTML
         html_full: HyperText Markup Language
         intro_sentence_html: Use preset styles for headings, block quotations, code, and so on.
-        paragraph_html: The Styles option generally found in a text editor's Format menu will often translate into %{html_abbreviation} tags when pasting into the %{rte_abbreviation}. Simply changing the font size, font name, or text indent to create a visual approximation of a heading or block quote will always fail.
+        description_html: The Styles option generally found in a text editor's Format menu will often translate into %{html_abbreviation} tags when pasting into the %{rte_abbreviation}. Simply changing the font size, font name, or text indent to create a visual approximation of a heading or block quote will always fail.
         rte_abbreviated: RTE
     skins_basics:
       only: only
