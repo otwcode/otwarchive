@@ -4,13 +4,13 @@
 
 <ul>
   <li><p><%= t(".enter_once.description_html",
-               intro_sentence_bold_html: tag.strong(t(".enter_once.intro_sentence_html", enter_for_once_key: tag.kbd(t(".enter_once.enter_for_once")), once_italic: tag.em(t(".enter_once.once")))),
                enter_for_twice_key: tag.kbd(t(".enter_once.enter_for_twice")),
-               rte_abbreviation: tag.abbr(t(".enter_once.rte_abbreviated")),
-               p_tag_code: tag.code("<p>")) %></p></li>
+               intro_sentence_bold_html: tag.strong(t(".enter_once.intro_sentence_html", enter_for_once_key: tag.kbd(t(".enter_once.enter_for_once")), once_italic: tag.em(t(".enter_once.once")))),
+               p_tag_code: tag.code("<p>"),
+               rte_abbreviation: tag.abbr(t(".enter_once.rte_abbreviated"))) %></p></li>
   <li><p><%= t(".use_preset_styles.description_html",
-               intro_sentence_bold_html: tag.strong(t(".use_preset_styles.intro_sentence_html")),
                html_abbreviation: tag.abbr(t(".use_preset_styles.html_abbreviated"), title: t(".use_preset_styles.html_full")),
+               intro_sentence_bold_html: tag.strong(t(".use_preset_styles.intro_sentence_html")),
                rte_abbreviation: tag.abbr(t(".use_preset_styles.rte_abbreviated"))) %></p></li>
 </ul>
 
