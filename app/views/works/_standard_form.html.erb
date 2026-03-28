@@ -307,9 +307,7 @@
       </ul>
       <p class="rtf-html-instructions note">
         <span class="html-notes"><%= allowed_html_instructions %></span>
-        <span class="hidden rtf-notes">
-          <%= t(".type_paste_rich_text") %><%= link_to_help_modal(help_rte_path, t(".rte_help_title")) %>
-        </span>
+        <span class="hidden rtf-notes"><%= rich_text_instructions %></span>
       </p>
       <p class="notice">
         <%= ts("<strong>Note:</strong> Text entered in the posting form is <strong>not</strong> automatically saved. Always keep a backup copy of your work.").html_safe %>

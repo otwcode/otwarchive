@@ -513,14 +513,12 @@ en:
         label: Who can comment on this news post
       language:
         label: Choose a language
-      rte_help_title: Rte help
       tags:
         label: Tags
       translated_post:
         footnote_comment_permissions: Comment permissions from the selected post will replace any permissions selected on this page.
         footnote_tags: Tags from the selected post will replace any tags entered on this page.
         label: Translation of
-      type_paste_rich_text: Type or paste formatted text.
     show:
       navigation:
         admin:
@@ -714,9 +712,6 @@ en:
       heading: Sign-up Summary for %{collection}
       no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
-    chapter_form:
-      rte_help_title: Rte help
-      type_paste_rich_text: Type or paste formatted text.
     posting_fieldset:
       actions:
         cancel: Cancel
@@ -2472,10 +2467,6 @@ en:
       waiting_list:
         one: There is currently %{count} person on the waiting list.
         other: There are currently %{count} people on the waiting list.
-  known_issues:
-    known_issues_form:
-      rte_help_title: Rte help
-      type_paste_rich_text: Type or paste formatted text.
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"
@@ -3374,9 +3365,6 @@ en:
       no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
-    standard_form:
-      rte_help_title: Rte help
-      type_paste_rich_text: Type or paste formatted text.
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
@@ -3437,7 +3425,5 @@ en:
       post: Post
       required_information: Required information
       rich_text_editor: Rich Text
-      rich_text_notes_html: Type or paste formatted text.
-      rte_help_title: Rte help
       title: Title
       title_failure: Please enter a title.
