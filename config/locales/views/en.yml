@@ -1357,7 +1357,7 @@ en:
         enter_for_twice: Enter
         intro_sentence_html: Press %{enter_for_once_key} %{once_italic} between paragraphs.
         once: once
-        description_html: Pressing %{enter_for_twice_key} twice will insert a blank paragraph, creating additional, and likely unwanted, space between paragraphs when you paste into the %{rte_abbreviation}. The Archive uses top and bottom margins to create the appearance of a blank line between paragraphs; you can use the paragraph formatting options in your text editor to create a similar effect without adding extra %{p_tag_code} tags.
+        description_html: "%{intro_sentence_bold_html} Pressing %{enter_for_twice_key} twice will insert a blank paragraph, creating additional, and likely unwanted, space between paragraphs when you paste into the %{rte_abbreviation}. The Archive uses top and bottom margins to create the appearance of a blank line between paragraphs; you can use the paragraph formatting options in your text editor to create a similar effect without adding extra %{p_tag_code} tags."
         rte_abbreviated: RTE
       header: Rich Text
       pasting_formatting:
@@ -1411,7 +1411,7 @@ en:
         html_abbreviated: HTML
         html_full: HyperText Markup Language
         intro_sentence_html: Use preset styles for headings, block quotations, code, and so on.
-        description_html: The Styles option generally found in a text editor's Format menu will often translate into %{html_abbreviation} tags when pasting into the %{rte_abbreviation}. Simply changing the font size, font name, or text indent to create a visual approximation of a heading or block quote will always fail.
+        description_html: "%{intro_sentence_bold_html} The Styles option generally found in a text editor's Format menu will often translate into %{html_abbreviation} tags when pasting into the %{rte_abbreviation}. Simply changing the font size, font name, or text indent to create a visual approximation of a heading or block quote will always fail."
         rte_abbreviated: RTE
     skins_basics:
       only: only
