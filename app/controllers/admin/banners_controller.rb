@@ -64,7 +64,7 @@ class Admin::BannersController < Admin::BaseController
     @admin_banner = authorize AdminBanner.find(params[:id])
     return unless @admin_banner.active?
     
-    flash[:error] = ts('Active banners cannot be deleted.')
+    flash[:error] = ts("Active banners cannot be deleted.")
     redirect_to @admin_banner
   end
 
@@ -72,11 +72,11 @@ class Admin::BannersController < Admin::BaseController
   def destroy
     @admin_banner = authorize AdminBanner.find(params[:id])
     if @admin_banner.active?
-      flash[:error] = ts('Active banners cannot be deleted.')
+      flash[:error] = ts("Active banners cannot be deleted.")
       redirect_to @admin_banner
     else
       @admin_banner.destroy
-      flash[:notice] = ts('Banner successfully deleted.')
+      flash[:notice] = ts("Banner successfully deleted.")
       redirect_to admin_banners_path
     end
   end

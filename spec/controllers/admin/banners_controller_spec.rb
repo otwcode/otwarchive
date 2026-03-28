@@ -143,5 +143,6 @@ describe Admin::BannersController do
       active_banner = create(:admin_banner, active: true)
       delete :destroy, params: { id: active_banner }
       it_redirects_to_with_error(admin_banner_path(active_banner), "Active banners cannot be deleted.")
+    end
   end
 end
