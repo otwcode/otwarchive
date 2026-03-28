@@ -289,4 +289,28 @@ describe CollectionsController, collection_search: true do
       end
     end
   end
+
+  describe "admin access to owner pages" do
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
+    let(:collection) { create(:collection) }
+
+    describe "GET #edit" do
+      subject { get :edit, params: { id: collection.name } }
+
+      let(:success) do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:edit)
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
+    end
+
+    it "does not allow support admins to update" do
+      fake_login_admin(create(:support_admin))
+
+      put :update, params: { id: collection.name, collection: { title: "Changed title" } }
+
+      it_redirects_to_user_login_with_error
+    end
+  end
 end

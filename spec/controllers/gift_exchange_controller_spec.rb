@@ -120,4 +120,18 @@ describe Challenge::GiftExchangeController do
       it_redirects_to_with_notice(collection, "Challenge settings were deleted.")
     end
   end
+
+  describe "admin access to challenge settings" do
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
+    before { fake_logout }
+
+    subject { get :edit, params: { collection_id: collection.name } }
+
+    let(:success) do
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:edit)
+    end
+
+    it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
+  end
 end

@@ -90,7 +90,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
       And I am logged in as "tangler" with password "wr@ngl3r"
     When I am on the wranglers page
-      And I follow "x"
+      And I follow "×"
     Then I should see "Wranglers were successfully unassigned!"
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
@@ -104,7 +104,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       | wranglerette   |
     When I am logged in as "wranglerette"
       And I am on the wranglers page
-      And I follow "x"
+      And I follow "×"
     Then I should see "Wranglers were successfully unassigned!"
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
