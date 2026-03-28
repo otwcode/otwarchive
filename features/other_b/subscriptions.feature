@@ -418,7 +418,7 @@ Scenario: Work subscriptions page hides unrevealed work details
     And I edit the work "Secret Story" to be in the collection "Unrevealed_Collection"
   When I am logged in as "subscriber_user"
     And I go to the subscriptions page for "subscriber_user"
-  Then I should see "Mystery Work"
+  Then I should see "Mystery Work (Work)"
     And I should not see a link "Secret Story"
     And I should not see a link "creator_user"
     And I should see a button with text "Unsubscribe from Mystery Work"
@@ -438,4 +438,17 @@ Scenario: A subscriber of a series can still see it even though its only work is
     And I should see a link "creator_user"
     And I should not see a button with text "Unsubscribe from Mystery Work"
     And I should see a button with text "Unsubscribe from Test Series"
-  
+
+Scenario: Unsubscribing from a mystery work shows mystery work name in flash notice
+  Given I am logged in as "creator_user"
+    And I have a hidden collection "Unrevealed Collection"
+    And I post the work "Secret Story"
+    And "subscriber_user" subscribes to work "Secret Story"
+    And I am logged in as "creator_user"
+    And I edit the work "Secret Story" to be in the collection "Unrevealed_Collection"
+  When I am logged in as "subscriber_user"
+    And I go to the subscriptions page for "subscriber_user"
+    And I press "Unsubscribe from Mystery Work"
+  Then I should see "You have successfully unsubscribed from Mystery Work."
+    And I should be on the subscriptions page for "subscriber_user"
+
