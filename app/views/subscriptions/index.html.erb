@@ -51,14 +51,19 @@
   <% @subscriptions.each do |subscription| %>
     <dt>
       <% if subscription.subscribable %>
-        <%= link_to(subscription.name, subscription.subscribable) %>
         <% case subscription.subscribable_type %>
         <% when "Work" %>
+          <%= subscription.name %>
           <%= t(".work") if @subscribable_type.blank? %>
           <%= t(".byline_html", creators: byline(subscription.subscribable)) unless subscription.subscribable.unrevealed? %>
         <% when "Series" %>
+          <%= link_to(subscription.name, subscription.subscribable) %>
           <%= t(".series") if @subscribable_type.blank? %>
           <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
+        <% when "User" %>
+          <%= link_to(subscription.name, subscription.subscribable) %>
+        <% else %>
+          <%= subscription.name %>
         <% end %>
       <% else %>
         <%= subscription.name %>

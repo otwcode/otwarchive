@@ -27,7 +27,7 @@ class Subscription < ApplicationRecord
   # The name of the object to which the user is subscribed
   def name
     if subscribable_type == "Work" && subscribable&.unrevealed?
-      I18n.t("subscriptions.index.mystery_work")
+      I18n.t("subscriptions.mystery_work.deleted")
     elsif subscribable.respond_to?(:login)
       subscribable.login
     elsif subscribable.respond_to?(:name)
