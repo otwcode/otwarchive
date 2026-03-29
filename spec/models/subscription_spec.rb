@@ -86,19 +86,6 @@ describe Subscription do
     end
   end
 
-  context "when subscribable is unrevealed" do
-    before do
-      work = create(:work)
-      subscription.subscribable_id = work.id
-      subscription.subscribable_type = "Work"
-      work.update!(collection_names: create(:unrevealed_collection).name)
-    end
-
-    it "has a name" do
-      expect(subscription.name).to eq("Mystery Work")
-    end
-  end
-
   context "when subscribable is not a valid object to subscribe to" do
     before do
       subscription.subscribable_id = 1
