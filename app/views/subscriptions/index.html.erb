@@ -55,7 +55,7 @@
         <% case subscription.subscribable_type %>
         <% when "Work" %>
           <%= t(".work") if @subscribable_type.blank? %>
-          <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
+          <%= t(".byline_html", creators: byline(subscription.subscribable)) unless subscription.subscribable.unrevealed? %>
         <% when "Series" %>
           <%= t(".series") if @subscribable_type.blank? %>
           <%= t(".byline_html", creators: byline(subscription.subscribable)) %>
