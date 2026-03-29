@@ -1254,7 +1254,7 @@ en:
         two_break_tags: If you have two break tags in a row (<br /><br />) with nothing between them, we will turn that into paragraph tags.
         unwanted_larger_text: If one bit of your text shows up larger than the rest, probably our formatter couldn't figure out to put paragraph tags around it. You can fix this by manually putting in the paragraph tags around that one bit.
         unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
-      header: HTML on the Archive
+      page_heading: HTML on the Archive
     preferences_collection:
       allow_collection_invitation:
         changing: Changing this setting won't affect any existing works in collections.
@@ -1359,7 +1359,7 @@ en:
         intro_sentence_html: Press %{enter_for_once_key} %{once_italic} between paragraphs.
         once: once
         rte_abbreviated: RTE
-      header: Rich Text
+      page_heading: Rich Text
       pasting_formatting:
         alignment:
           css_abbreviated: CSS
