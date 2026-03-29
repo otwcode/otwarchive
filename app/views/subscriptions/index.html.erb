@@ -65,7 +65,7 @@
       <% end %>
     </dt>
     <dd>
-      <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
+      <%= form_for [current_user, subscription], html: { method: :delete } do |f| %>
         <%= f.submit t(".button_html", name: subscription.name) %>
       <% end %>
     </dd>
