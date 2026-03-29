@@ -54,7 +54,7 @@
         <% case subscription.subscribable_type %>
         <% when "Work" %>
           <% if subscription.subscribable.unrevealed? %>
-            <%= t(".mystery_work") %> <%= t(".work") if @subscribable_type.blank? %>
+            <%= subscription.name %> <%= t(".work") if @subscribable_type.blank? %>
           <% else %>
             <%= link_to(subscription.name, subscription.subscribable) %>
             <%= t(".work") if @subscribable_type.blank? %>
@@ -73,9 +73,7 @@
     </dt>
     <dd>
       <%= form_for [current_user, subscription], html: { method: :delete } do |f| %>
-        <% unrevealed_work = subscription.subscribable_type == "Work" && subscription.subscribable&.unrevealed? %>
-        <% name = unrevealed_work ? t(".mystery_work") : subscription.name %>
-        <%= f.submit t(".button_html", name: name) %>
+        <%= f.submit t(".button_html", name: subscription.name) %>
       <% end %>
     </dd>
   <% end %>
