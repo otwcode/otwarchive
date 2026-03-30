@@ -143,23 +143,6 @@ describe "rake After:clean_up_noncanonical_categories" do
   end
 end
 
-describe "rake After:remove_noncanonical_fandom_wrangling_assignments" do
-  let(:noncanonical_fandom) { create(:fandom, canonical: false) }
-  let(:user) { create(:tag_wrangler) }
-  let(:assignment1) { create(:wrangling_assignment, user_id: :user.id, fandom_id: :noncanonical_fandom.id) }
-  
-  it "deletes wrangling assignments of noncanonical fandoms" do
-    expect(WranglingAssignment.none?)
-  end
-
-  let(:canonical_fandom) { create(:fandom, canonical: true) }
-  let(:assignment2) { create(:wrangling_assignment, user_id: :user.id, fandom_id: :noncanonical_fandom.id) }
-
-  it "doesn't delete wrangling assignments of canonical fandoms" do
-    expect(WranglingAssignment.any?)
-  end
-end
-
 describe "rake After:fix_tags_with_extra_spaces" do
   let(:borked_tag) { Freeform.create(name: "whatever") }
 
@@ -864,5 +847,23 @@ describe "rake After:sync_approved_to_spam" do
 
     expect(synced_spam_comment.approved).to be_falsey
     expect(synced_spam_comment.spam).to be_truthy
+  end
+end
+
+describe "rake After:remove_noncanonical_fandom_wrangling_assignments" do
+  let(:noncanonical_fandom) { create(:fandom, canonical: false) }
+  let(:assignment1) { create(:wrangling_assignment, fandom_id: :noncanonical_fandom.id) }
+
+  it "deletes wrangling assignments of noncanonical fandoms" do
+    subject.invoke
+    expect(WranglingAssignment.all).to be_empty
+  end
+
+  let(:canonical_fandom) { create(:canonical_fandom) }
+  let(:assignment2) { create(:wrangling_assignment, fandom_id: :noncanonical_fandom.id) }
+
+  it "doesn't delete wrangling assignments of canonical fandoms" do
+    subject.invoke
+    expect(WranglingAssignment.any?).to be_truthy
   end
 end
