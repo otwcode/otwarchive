@@ -45,6 +45,9 @@ en:
       default_label: QR code
   series_helper:
     series_description_html: Part %{index} of %{series_link}
+  tags_helper:
+    edit:
+      wrangler_noncanon_fandom: Non-canonical fandoms cannot be assigned.
   users_helper:
     collections_link: Collections (%{coll_number})
     log:

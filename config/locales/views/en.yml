@@ -2664,7 +2664,6 @@ en:
     edit:
       save_changes: Save changes
       submit_legend: Submit
-      wrangler_noncanon_fandom: Non-canonical fandoms cannot be assigned.
     index:
       about:
         popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
