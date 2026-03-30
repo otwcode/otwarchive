@@ -709,6 +709,13 @@ describe Admin::AdminUsersController do
             subject.call
             it_redirects_to_with_notice(admin_user_path(user), "User account troubleshooting complete.")
           end
+
+          it "reindexes account" do
+            expect do
+              fake_login_admin(admin)
+              subject.call
+            end.to add_to_reindex_queue(user, :users)
+          end
         end
       end
     end

@@ -651,10 +651,17 @@ Rails.application.routes.draw do
 
   %w[
     first_login
+    preferences_collection
+    preferences_comment
+    preferences_display
     preferences_locale
+    preferences_misc
+    preferences_privacy
+    preferences_work_title_format
     skins_basics
     skins_creating
     skins_parents
+    symbols_key
     tags_fandoms
     tags_ratings
     tags_warnings
@@ -664,9 +671,16 @@ Rails.application.routes.draw do
 
   # Redirects for moved help files
   get "/first_login_help", to: redirect("/help/first_login")
+  get "/help/collection-preferences.html", to: redirect("/help/preferences_collection")
+  get "/help/comment-preferences.html", to: redirect("/help/preferences_comment")
+  get "/help/display-preferences.html", to: redirect("/help/preferences_display")
+  get "/help/misc-preferences.html", to: redirect("/help/preferences_misc")
+  get "/help/privacy-preferences.html", to: redirect("/help/preferences_privacy")
+  get "/help/work_title_format.html", to: redirect("/help/preferences_work_title_format")
   get "/help/skins-basics.html", to: redirect("/help/skins_basics")
   get "/help/skins-creating.html", to: redirect("/help/skins_creating")
   get "/help/skins-parents.html", to: redirect("/help/skins_parents")
+  get "/help/symbols-key.html", to: redirect("/help/symbols_key")
   get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
   get "/help/rating-help.html", to: redirect("/help/tags_ratings")
   get "/help/warning-help.html", to: redirect("/help/tags_warnings")
