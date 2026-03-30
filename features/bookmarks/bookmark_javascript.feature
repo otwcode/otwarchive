@@ -161,7 +161,7 @@ Feature: Create, edit and delete bookmarks with javascript enabled
 
   @javascript
   Scenario: Deleting bookmarks from the bookmarks page does not keep the filtering
-      Given I am logged in as "PharloomEditor"
+    Given I am logged in as "PharloomEditor"
       And I post the work "Shakra"
       And I post the work "Hornet"
       And I post the work "Sherma"
