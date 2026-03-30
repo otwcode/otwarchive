@@ -21,14 +21,13 @@
 </p>
 <!--/content-->
 
-<script type="text/javascript">
-    document.getElementById("copy-totp-backup-codes").style.visibility = "visible";
+<% content_for :footer_js do %>
+    <script type="text/javascript">
+        document.getElementById("copy-totp-backup-codes").style.visibility = "visible";
 
-    async function copyBackupCodes() {
-        await navigator.clipboard.writeText("<%= @backup_codes.join('\n') %>");
-        document.getElementById("copy-totp-backup-codes").textContent = "<%= t(".backup_codes_copied") %>";
-
-        // Prevent reloading the page
-        return false;
-    }
-</script>
+        async function copyBackupCodes() {
+            await navigator.clipboard.writeText("<%= @backup_codes.join('\n') %>");
+            document.getElementById("copy-totp-backup-codes").textContent = "<%= t(".backup_codes_copied") %>";
+        }
+    </script>
+<% end %>
