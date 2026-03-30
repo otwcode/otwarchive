@@ -655,7 +655,7 @@ Feature: Gift Exchange Challenge
     Then I should see "My Assignments"
       And I should not see "Awesome Gift Exchange"
 
-  Scenario: Draft Assignments are displayed as draft and use the creation date instead of the published date used for published Assignments
+  Scenario: Draft Assignments are displayed as draft and use the creation date instead of the publication date
     Given everyone has their assignments for "Non Confusing Exchange"
     When I am logged in as "myname1"
       And I go to the assignments page for "myname1"
