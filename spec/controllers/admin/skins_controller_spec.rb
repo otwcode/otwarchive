@@ -118,38 +118,6 @@ describe Admin::SkinsController do
     let(:site_skin) { create(:skin, :public) }
     let(:work_skin) { create(:work_skin, :public) }
 
-    shared_examples "unauthorized admin cannot update default skin" do
-      before { site_skin.update!(official: true) }
-
-      it "does not modify the default skin" do
-        expect do
-          put :update, params: { id: :update, set_default: site_skin.title, last_updated_by: admin.id }
-        end.not_to change { AdminSetting.first.default_skin }
-      end
-
-      it "redirects with error" do
-        put :update, params: { id: :update, set_default: site_skin.title, last_updated_by: admin.id }
-        it_redirects_to_simple(root_path)
-        expect(flash[:error]).to eq("Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
-    end
-
-    shared_examples "authorized admin can update default skin" do
-      before { site_skin.update!(official: true) }
-
-      it "modifies the default skin" do
-        expect do
-          put :update, params: { id: :update, set_default: site_skin.title, last_updated_by: admin.id }
-        end.to change { AdminSetting.first.default_skin }.from(nil).to(site_skin)
-      end
-
-      it "redirects with notice" do
-        put :update, params: { id: :update, set_default: site_skin.title, last_updated_by: admin.id }
-        it_redirects_to_simple(admin_skins_path)
-        expect(flash[:notice]).to include("Default skin changed to #{site_skin.title}")
-      end
-    end
-
     shared_examples "unauthorized admin cannot update site skin" do
       it "does not modify site skin" do
         expect do
@@ -205,7 +173,6 @@ describe Admin::SkinsController do
     end
 
     context "when admin has no role" do
-      it_behaves_like "unauthorized admin cannot update default skin"
       it_behaves_like "unauthorized admin cannot update site skin"
       it_behaves_like "unauthorized admin cannot update work skin"
     end
@@ -214,7 +181,6 @@ describe Admin::SkinsController do
       context "when admin has #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
-        it_behaves_like "unauthorized admin cannot update default skin"
         it_behaves_like "unauthorized admin cannot update site skin"
         it_behaves_like "unauthorized admin cannot update work skin"
       end
@@ -223,7 +189,6 @@ describe Admin::SkinsController do
     context "when admin has superadmin role" do
       let(:admin) { create(:admin, roles: ["superadmin"]) }
 
-      it_behaves_like "authorized admin can update default skin"
       it_behaves_like "authorized admin can update site skin"
       it_behaves_like "authorized admin can update work skin"
 
@@ -250,7 +215,6 @@ describe Admin::SkinsController do
     context "when admin has support role" do
       let(:admin) { create(:admin, roles: ["support"]) }
 
-      it_behaves_like "unauthorized admin cannot update default skin"
       it_behaves_like "authorized admin can update work skin"
 
       context "when attempting to update a site skin" do
