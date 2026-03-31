@@ -21,11 +21,6 @@ fieldset {
   min-width: 0;
 }
 
-/* Guideline: Forms are written by lots of people, and, this is beta, change a LOT.
-I've written a load of possible different nests to give a reasonably/broadly consistent view whatever goes in,
-but it's probably not complete.
-*/
-
 fieldset, form dl, fieldset dl dl, fieldset fieldset fieldset, fieldset fieldset dl dl, dd.hideme, form blockquote.userstuff {
   display: block;
   background: #ddd;
