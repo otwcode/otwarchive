@@ -247,6 +247,8 @@ en:
     index:
       collection_page_title: "%{collection_title} - People"
   preferences:
+    index:
+      page_title: "%{username} - Preferences"
     update:
       error: Sorry, something went wrong. Please try that again.
       success: Your preferences were successfully updated.
