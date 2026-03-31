@@ -104,6 +104,7 @@ class ApplicationController < ActionController::Base
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
   helper_method :guest?
+  helper_method :privileged_collection_admin?
 
   # Title helpers
   helper_method :process_title
