@@ -2518,7 +2518,7 @@ en:
   prompts:
     prompt_blurb:
       restricted:
-        work_unavailable: This work is only available to registered users of the Archive.
+        work_unavailable: Some of these prompts are only available to registered users of the Archive.
   pseuds:
     delete_preview:
       cancel: Cancel

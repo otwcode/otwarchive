@@ -84,16 +84,19 @@
       <div class="work listbox group">
         <h5 class="heading"><%= ts("Fulfilled By")%></h5>
         <ul class="index group">
-          <% prompt.fulfilled_claims.map(&:creation).each do |creation| %>
-            <% if creation.is_a?(Work) %>
-              <% if guest? && creation.restricted %>
+          <% if guest? && prompt.fulfilled_restricted_claims.count > 0 %>
+          <li>
                 <%= image_tag("lockblue.png", size: "15x15",
                                    alt: ts("(Restricted)"),
                                    title: ts("Restricted"),
                                    skip_pipeline: true) %>
                                    
                 <%= t(".restricted.work_unavailable") %>
-              <% else%>
+          </li>
+          <% end %>
+          <% prompt.fulfilled_claims.map(&:creation).each do |creation| %>
+            <% if creation.is_a?(Work) %>
+              <% unless guest? && creation.restricted %>
                 <%= render "works/work_blurb", :work => creation %>
               <% end %>
             <% end %>
