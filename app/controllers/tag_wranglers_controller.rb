@@ -69,14 +69,13 @@ class TagWranglersController < ApplicationController
       noncanonical_fandoms = []
       unless fandoms.blank? || !current_user.respond_to?(:fandoms)
         fandoms.each do |fandom|
-          unless current_user.fandoms.include?(fandom)
-            unless fandom.canonical?
-              noncanonical_fandoms.push(fandom)
-              next
-            end
-            assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
-            assignment.save!
+          next if current_user.fandoms.include?(fandom)
+          unless fandom.canonical?
+            noncanonical_fandoms.push(fandom)
+            next
           end
+          assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
+          assignment.save!
         end
         flash[:error] = t(".noncanonical_fandoms_tried_assignment", count: noncanonical_fandoms.length, fandom_list: helpers.to_sentence(noncanonical_fandoms.map(&:name))) unless noncanonical_fandoms.empty?
       end

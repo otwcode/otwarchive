@@ -30,19 +30,21 @@ end
 
 When /^(?:|I )press "([^"]*)"(?: within "([^"]*)")?$/ do |button, selector|
   with_scope(selector) do
-    click_button(button)
+    if @javascript
+      page.find_button(button).execute_script("this.click()")
+    else
+      click_button(button)
+    end
   end
 end
 
 When /^(?:|I )follow "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
   with_scope(selector) do
-    click_link(link)
-  end
-end
-
-When /^(?:|I )follow '([^']*)'(?: within "([^"]*)")?$/ do |link, selector|
-  with_scope(selector) do
-    click_link(link)
+    if @javascript
+      page.find_link(link).execute_script("this.click()")
+    else
+      click_link(link)
+    end
   end
 end
 
