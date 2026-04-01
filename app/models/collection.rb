@@ -406,6 +406,28 @@ class Collection < ApplicationRecord
     self.icon_comment_text = nil
   end
 
+  def self.expire_blurb_cache(id)
+    # Expire both versions of the blurb, whether the user is logged in or not.
+    %w[logged-in logged-out].each do |logged_in|
+      cache_key = "collection-blurb-#{logged_in}-#{id}-v5"
+      ActionController::Base.new.expire_fragment(cache_key)
+    end
+  end
+
+  def self.expire_profile_cache(id)
+    ActionController::Base.new.expire_fragment("collection-profile-#{id}")
+  end
+
+  def self.expire_caches(id)
+    Collection.expire_blurb_cache(id)
+    Collection.expire_profile_cache(id)
+  end
+
+  # Blurbs use data from Elasticsearch via CollectionDecorator, so we need to refresh the blurb cache on reindex
+  def self.successful_reindex(ids)
+    ids.each { |id| Collection.expire_blurb_cache(id) }
+  end
+
   # Work and bookmark counts for indexing; these come from the database.
 
   def general_works_count
