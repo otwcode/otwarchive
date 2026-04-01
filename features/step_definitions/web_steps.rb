@@ -48,6 +48,16 @@ When /^(?:|I )follow "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
   end
 end
 
+When /^(?:|I )follow '([^"]*)'(?: within "([^"]*)")?$/ do |link, selector|
+  with_scope(selector) do
+    if @javascript
+      page.find_link(link).execute_script("this.click()")
+    else
+      click_link(link)
+    end
+  end
+end
+
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
     fill_in(field, with: value)
@@ -87,13 +97,25 @@ end
 
 When /^(?:|I )check "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
   with_scope(selector) do
-    check(field)
+    if @javascript
+      if !page.find_field(field).checked?
+        page.find_field(field).execute_script("this.click()")
+      end
+    else
+      check(field)
+    end
   end
 end
 
 When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
   with_scope(selector) do
-    uncheck(field)
+    if @javascript
+      if page.find_field(field).checked?
+        page.find_field(field).execute_script("this.click()")
+      end
+    else
+      uncheck(field)
+    end
   end
 end
 
