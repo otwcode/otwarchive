@@ -86,12 +86,8 @@
         <ul class="index group">
           <% if guest? && prompt.fulfilled_restricted_claims.count > 0 %>
           <li>
-                <%= image_tag("lockblue.png", size: "15x15",
-                                   alt: ts("(Restricted)"),
-                                   title: ts("Restricted"),
-                                   skip_pipeline: true) %>
-                                   
-                <%= t(".restricted.work_unavailable") %>
+            <%= image_tag("lockblue.png", size: "15x15", alt: "(Restricted)", title: "Restricted", skip_pipeline: true) %>
+            <%= t(".restricted.work_unavailable") %>
           </li>
           <% end %>
           <% prompt.fulfilled_claims.map(&:creation).each do |creation| %>
