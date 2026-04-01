@@ -41,7 +41,7 @@ module TagsHelper
   def wrangler_list(wranglers, tag)
     if wranglers.blank?
       if @tag[:type] == 'Fandom'
-        t("tags_helper.edit.wrangler_noncanon_fandom") unless @tag.canonical?
+        return t("tags_helper.edit.wrangler_noncanon_fandom") unless tag.canonical?
         sign_up_fandoms = tag.name
       elsif Tag::USER_DEFINED.include?(@tag.class.name) && !tag.fandoms.blank?
         sign_up_fandoms = tag.fandoms.select(&:canonical?).collect(&:name).join(", ")
