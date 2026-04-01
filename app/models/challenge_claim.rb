@@ -71,6 +71,9 @@ class ChallengeClaim < ApplicationRecord
              CollectionItem.user_approval_statuses[:approved], CollectionItem.collection_approval_statuses[:approved])
   }
 
+  scope :fulfilled_restricted, -> {
+    fulfilled.where("works.restricted = 1")
+  }
 
   scope :posted, -> { joins(WORKS_JOIN).where("challenge_claims.creation_id IS NOT NULL AND works.posted = 1") }
 
