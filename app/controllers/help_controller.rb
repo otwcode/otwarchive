@@ -32,7 +32,7 @@ class HelpController < ApplicationController
              preferences_misc: "/help/misc-preferences.html",
              preferences_privacy: "/help/privacy-preferences.html",
              preferences_work_title_format: "/help/work_title_format.html"
-          }).freeze
+           }).freeze
 
   before_action :users_only, only: [:first_login]
   layout proc { |controller| controller.request.xhr? ? false : "application" } # rubocop:disable Lint/AmbiguousBlockAssociation
