@@ -98,9 +98,7 @@ end
 When /^(?:|I )check "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
   with_scope(selector) do
     if @javascript
-      if !page.find_field(field).checked?
-        page.find_field(field).execute_script("this.click()")
-      end
+      page.find_field(field).execute_script("this.click()") unless page.find_field(field).checked?
     else
       check(field)
     end
@@ -110,9 +108,7 @@ end
 When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
   with_scope(selector) do
     if @javascript
-      if page.find_field(field).checked?
-        page.find_field(field).execute_script("this.click()")
-      end
+      page.find_field(field).execute_script("this.click()") if page.find_field(field).checked?
     else
       uncheck(field)
     end

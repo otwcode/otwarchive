@@ -44,7 +44,7 @@ module TagsHelper
         t("tags_helper.edit.wrangler_noncanon_fandom") unless @tag.canonical?
         sign_up_fandoms = tag.name
       elsif Tag::USER_DEFINED.include?(@tag.class.name) && !tag.fandoms.blank?
-        sign_up_fandoms = tag.fandoms.select { |f| f.canonical? }.collect(&:name).join(', ')
+        sign_up_fandoms = tag.fandoms.select(&:canonical?).collect(&:name).join(", ")
       end
       link_to "Sign Up", tag_wranglers_path(sign_up_fandoms: sign_up_fandoms)
     else
