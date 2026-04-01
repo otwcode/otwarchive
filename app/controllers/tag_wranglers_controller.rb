@@ -79,7 +79,7 @@ class TagWranglersController < ApplicationController
           assignment.save!
         end
         flash[:error] = t(".noncanonical_fandoms_tried_assignment", count: noncanonical_fandoms.length, fandom_list: helpers.to_sentence(noncanonical_fandoms.map(&:name))) unless noncanonical_fandoms.empty?
-      endabout:blank#blocked
+      end
     end
     unless params[:assignments].blank?
       params[:assignments].each_pair do |fandom_id, user_logins|
