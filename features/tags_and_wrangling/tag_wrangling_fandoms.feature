@@ -218,15 +218,8 @@ Scenario: Cannot sign up for non-canonical fandom
   Given the following activated tag wrangler exists
     | login  | password    |
     | Enigel | wrangulate! |
-    And basic tags
-    And a media exists with name: "TV Shows", canonical: true
-    And a character exists with name: "Neal Caffrey", canonical: true
     And I am logged in as "Enigel" with password "wrangulate!"
-    And I follow "Tag Wrangling"
-    And I follow "New Tag"
-    And I fill in "Name" with "SG1"
-    And I choose "Fandom"
-    And I press "Create Tag"
+    And a noncanonical Fandom "SG1"
 
   # cannot sign up through edit page to a non-canonical fandom
   When I view the tag "SG1"

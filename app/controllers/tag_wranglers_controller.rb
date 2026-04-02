@@ -67,7 +67,7 @@ class TagWranglersController < ApplicationController
       names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
       fandoms = Fandom.where('name IN (?)', names)
       noncanonical_fandoms = []
-      unless fandoms.blank? || !current_user.respond_to?(:fandoms)
+      if fandoms.present? && current_user.respond_to?(:fandoms)
         fandoms.each do |fandom|
           next if current_user.fandoms.include?(fandom)
           

@@ -47,7 +47,7 @@ en:
   series_helper:
     series_description_html: Part %{index} of %{series_link}
   tags_helper:
-    edit:
+    wrangler_list:
       wrangler_noncanon_fandom: Non-canonical fandoms cannot be assigned.
     get_symbol_link:
       title: Symbols key
