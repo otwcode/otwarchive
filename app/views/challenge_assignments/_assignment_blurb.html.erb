@@ -13,7 +13,7 @@
   <% # link to the work %>
     <% if assignment.creation %>
       <% if !assignment.posted? %>
-        <%= t(".header_draft", title_link: (link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work")) %>
+        <%= t(".header_draft_html", title_link: (link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work")) %>
       <% else %>
         <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, class: "work" %>
       <% end %>

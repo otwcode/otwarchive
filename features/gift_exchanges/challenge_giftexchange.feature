@@ -641,17 +641,21 @@ Feature: Gift Exchange Challenge
 
   Scenario: Draft Assignments are displayed as draft and use the creation date instead of the publication date
     Given everyone has their assignments for "Non Confusing Exchange"
+      And it is currently 4/13/2016
     When I am logged in as "myname1"
       And I go to the assignments page for "myname1"
     Then I should see "My Assignments"
       And I should see "Non Confusing Exchange"
     When I follow "Fulfill"
       And I fill in the basic work information for "InProgress"
+      And I set the publication date to 6 December 2012
       And I press "Preview"
       And I go to the assignments page for "myname1"
     Then I should see "(draft)"
       And I should see "Status: Unposted"
       And I should see "Created"
+      And I should not see "Created: 2012-12-06"
+      And I should see "Created: 2016-04-13"
     When I post the work "InProgress"
       And I go to the assignments page for "myname1"
       And I follow "Completed Assignments"
@@ -660,6 +664,9 @@ Feature: Gift Exchange Challenge
       And I should not see "Created"
       And I should not see "(draft)"
       And I should see "Status: Complete"
+      And I should see "Posted"
+      And I should not see "Posted: 2016-04-13"
+      And I should see "Posted: 2012-12-06"
 
   Scenario: A mod can purge assignments after they have been sent, but must
   first confirm the action
