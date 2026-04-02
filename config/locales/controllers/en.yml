@@ -96,7 +96,7 @@ en:
     index:
       access_denied_user: You aren't allowed to see that user's assignments.
     update_multiple:
-      approve_error: "We couldn't approve the assignment for %{request}."
+      approve_error: We couldn't approve the assignment for %{request}.
     validation:
       not_owner: You aren't the owner of that assignment.
   challenge_signups:
