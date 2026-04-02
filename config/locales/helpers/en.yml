@@ -47,10 +47,10 @@ en:
   series_helper:
     series_description_html: Part %{index} of %{series_link}
   tags_helper:
-    wrangler_list:
-      wrangler_noncanon_fandom: Non-canonical fandoms cannot be assigned.
     get_symbol_link:
       title: Symbols key
+    wrangler_list:
+      wrangler_noncanon_fandom: Non-canonical fandoms cannot be assigned.
   users_helper:
     collections_link: Collections (%{coll_number})
     log:
