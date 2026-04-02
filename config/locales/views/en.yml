@@ -3088,11 +3088,6 @@ en:
           tag_wrangling: Tag Wrangling
           works: My Works
       new:
-        beta_reminder:
-          give_feedback: give us your feedback
-          reminder: 'Reminder:'
-          report_bugs: Please report any pesky bugs and %{give_feedback_link}!
-          warning: This site is in beta. Things may break or crash without notice.
         login:
           create_account: Create an account now
           forgot: Forgot your password or username? %{reset_password_link}.
