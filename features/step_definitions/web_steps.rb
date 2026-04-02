@@ -28,6 +28,9 @@ When /^(?:|I )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
+# Capybara simply waits that the button / link is clickable before interacting
+# with it. This appends the clicking action to the end of the javascript call
+# stack, which makes sure that every javascript action is taken before clicking
 When /^(?:|I )press "([^"]*)"(?: within "([^"]*)")?$/ do |button, selector|
   with_scope(selector) do
     if @javascript
@@ -48,7 +51,7 @@ When /^(?:|I )follow "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
   end
 end
 
-When /^(?:|I )follow '([^"]*)'(?: within "([^"]*)")?$/ do |link, selector|
+When /^(?:|I )follow '([^']*)'(?: within "([^"]*)")?$/ do |link, selector|
   with_scope(selector) do
     if @javascript
       page.find_link(link).execute_script("this.click()")
