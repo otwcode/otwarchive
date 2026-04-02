@@ -190,7 +190,7 @@ class ChallengeAssignmentsController < ApplicationController
       when "approve"
         if (item = assignment.get_collection_item)
           item.approve_by_collection
-          item.save || (@errors << ts("We couldn't approve the assignment for %{request}.", request: assignment.request_byline))
+          item.save || (@errors << t(".approve_error", request: assignment.request_byline))
         end
       when "cover"
         # cover_[assignment_id] = pinch hitter pseud
