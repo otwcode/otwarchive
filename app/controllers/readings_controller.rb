@@ -10,11 +10,12 @@ class ReadingsController < ApplicationController
   end
 
   def index
-    @readings = @user.readings.visible
-    @page_subtitle = t(".history_page_title", username: @user.login)
     if params[:show] == 'to-read'
       @readings = @readings.where(toread: true)
-      @page_subtitle = t(".marked_for_later_page_title")
+      @page_subtitle = t(".marked_for_later_page_title", username: @user.login)
+    else 
+      @readings = @user.readings.visible
+      @page_subtitle = t(".history_page_title", username: @user.login)
     end
     @readings = @readings.order("last_viewed DESC").includes(work: :pseuds)
     @pagy, @readings = pagy(@readings)
