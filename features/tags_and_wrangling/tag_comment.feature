@@ -171,7 +171,7 @@ I'd like to comment on a tag'
       And I should see "And now things should not break!"
     # all it checks is that the pagination links aren't broken
     When I follow "Previous" within ".pagination"
-      Then I should not see "And now things should not break!"
+    Then I should not see "And now things should not break!"
 
    Scenario: Comments pagination for a tag with periods in the name
 
