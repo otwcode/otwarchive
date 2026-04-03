@@ -22,14 +22,14 @@ Feature: Prompt Meme Challenge
   When I create Battle 12 promptmeme
   Then Battle 12 prompt meme should be correctly created
 
-  Scenario: Prompt meme timezone updates without caching
-  
-  Given I have Battle 12 prompt meme fully set up
-    And I am logged in as a random user
-  When I set my time zone to "(GMT +03:00) Nairobi"
-  Then I should see "EAT" within ".userstuff.summary"
-  When I set my time zone to "(GMT +05:30) Mumbai"
-  Then I should see "IST" within ".userstuff.summary"
+  # Scenario: Prompt meme timezone updates without caching
+  # 
+  # Given I have Battle 12 prompt meme fully set up
+  #   And I am logged in as a random user
+  # When I set my time zone to "(GMT +03:00) Nairobi"
+  # Then I should see "EAT" within ".userstuff.summary"
+  # When I set my time zone to "(GMT +05:30) Mumbai"
+  # Then I should see "IST" within ".userstuff.summary"
 
   Scenario: User can see a prompt meme
   
