@@ -24,13 +24,13 @@
   <% end %> <!--end blurb header cache-->
 
   <!--summary/descriptions-->
-  <h6 class="landmark heading"><%= ts("Summary") %></h6>
+  <h6 class="landmark heading"><%= t(".summary") %></h6>
   <blockquote class="userstuff summary">
     <% cache("collection-blurb-#{logged_in}-#{collection.id}-v5-summary", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
       <%=raw strip_images(sanitize_field(collection, :description)) || "&nbsp;".html_safe %>
     <% end %>
     <% if collection.challenge && collection.challenge.signup_open %>
-      <p><%= ts("Sign-ups close at:") %> <%= time_in_zone(collection.challenge.signups_close_at, (collection.challenge.time_zone || Time.zone.name)) %></p>
+      <p><%= t(".signups_close_at") %> <%= time_in_zone(collection.challenge.signups_close_at, (collection.challenge.time_zone || Time.zone.name)) %></p>
     <% end %>
   </blockquote>
 
