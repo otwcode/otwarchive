@@ -118,7 +118,7 @@ Feature: Reading count
   Then I should see "This work was added to your Marked for Later list."
   When I go to reader's reading page
     And I follow "Marked for Later"
-  Then I should see the page title "writer - Marked for Later"
+  Then I should see the page title "reader - Marked for Later"
     And I should see "Marked for Later" within "h2.heading"
     And I should see "Testy"
     And I should see "(Marked for Later.)"
