@@ -142,7 +142,9 @@ module HtmlCleaner
 
   # strip img tags, optionally leaving the HTML attributes (e.g. src and alt) exposed
   def strip_images(value, keep_src: false)
-    value.gsub(%r{(?:<(img .*?) ?/?>)}, keep_src ? "\\1" : "")
+    value.gsub(%r{(?:<(img .*?) ?/?>)}) do
+      keep_src ? Sanitize.clean(Regexp.last_match(1)) : ""
+    end
   end
 
   def strip_html_breaks_simple(value)
