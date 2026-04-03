@@ -186,6 +186,10 @@ module NavigationHelpers
       edit_collection_gift_exchange_path(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange matching page$/i
       collection_potential_matches_path(Collection.find_by(title: $1))
+    when /^"(.*)" prompt meme edit page$/i
+      edit_collection_prompt_meme_path(Collection.find_by(title: $1))
+    when /^the "(.*)" claims page$/i
+      collection_claims_path(Collection.find_by(title: $1))
     when /^the works tagged "(.*?)" in collection "(.*?)"$/i
       step %{all indexing jobs have been run}
       collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
