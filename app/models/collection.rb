@@ -409,10 +409,10 @@ class Collection < ApplicationRecord
   def self.expire_blurb_cache(id)
     # Expire both versions of the blurb, whether the user is logged in or not.
     %w[logged-in logged-out].each do |logged_in|
-      %w[
-        collection-blurb-#{logged_in}-#{id}-v5-header
-        collection-blurb-#{logged_in}-#{id}-v5-summary
-        collection-blurb-#{logged_in}-#{id}-v5-body
+      [
+        "collection-blurb-#{logged_in}-#{id}-v5-header",
+        "collection-blurb-#{logged_in}-#{id}-v5-summary",
+        "collection-blurb-#{logged_in}-#{id}-v5-body"
       ].each do |cache_key|
         ActionController::Base.new.expire_fragment(cache_key)
       end
