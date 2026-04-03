@@ -1244,6 +1244,12 @@ describe HtmlCleaner do
         result = 'Hi! img src="http://example.org/image.png" alt=\'something\' Bye'
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
+
+      it "escapes the values within the element's attributes" do
+        string = 'Hi! <img src="https://example.com" alt="<script/src=\'http://ha.ckers.org/xss.js\'>"> Bye'
+        result = 'Hi! img src="https://example.com" alt=""> Bye'
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
     end
   end
 end
