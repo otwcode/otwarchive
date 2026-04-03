@@ -99,7 +99,7 @@ en:
       not_owner: You aren't the owner of that assignment.
   challenge_claims:
     index:
-      page_title: "%username - Challenge Claims"
+      page_title: "%{username} - Challenge Claims"
   challenge_signups:
     new:
       page_title: New Challenge Sign-up
