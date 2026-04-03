@@ -667,7 +667,6 @@ en:
         close_requests_html: Close Requests &#8593;
         heading:
           for_collection: Sign-ups for %{collection}
-          for_search: Sign-up
         navigation:
           download_csv: Download (CSV)
           search: Search
@@ -2357,7 +2356,7 @@ en:
       one: "%{count} guest has also left kudos"
       other: "%{count} guests have also left kudos"
     index:
-      page_heading_html: "%{users} who left kudos on %{work_link}"
+      page_heading_html: "%{users} Who Left Kudos on %{work_link}"
     user_links:
       more_link:
         one: "%{count} more user"
