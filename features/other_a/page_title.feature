@@ -71,3 +71,15 @@ Scenario: New tag set page has the expected browser page title
   When I am logged in as "user"
   When I go to the new tag set page
   Then I should see the page title "New Owned Tag Set | Example Archive"
+
+Scenario: User work skins page has the expected browser page title
+
+  When I am logged in as "skinner"
+    And I go to skinner's work skins page
+  Then I should see the page title "skinner - Work Skins | Example Archive"
+
+Scenario: User site skins page has the expected browser page title
+
+  When I am logged in as "skinner"
+    And I go to skinner's site skins page
+  Then I should see the page title "skinner - Site Skins | Example Archive"

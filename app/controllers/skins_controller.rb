@@ -24,9 +24,11 @@ class SkinsController < ApplicationController
       if is_work_skin
         @skins = @user.work_skins.sort_by_recent.includes(:author).with_attached_icon
         @title = ts('My Work Skins')
+        @page_subtitle = "#{@user.login} - Work Skins"
       else
         @skins = @user.skins.site_skins.sort_by_recent.includes(:author).with_attached_icon
         @title = ts('My Site Skins')
+        @page_subtitle = "#{@user.login} - Site Skins"
       end
     else
       if is_work_skin

@@ -153,6 +153,10 @@ module NavigationHelpers
       user_subscriptions_path(user_id: $1)
     when /^(.*?)(?:'s)? profile page$/i
       user_profile_path(user_id: $1)
+    when /^(.*)'s work skins page/
+      user_skins_path(user_id: $1, skin_type: "WorkSkin")
+    when /^(.*)'s site skins page/
+      user_skins_path(user_id: $1, skin_type: "Site")
     when /^(.*)'s skins page/
       user_skins_path(user_id: $1)
     when /^(.*)'s edit multiple works page/
