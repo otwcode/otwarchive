@@ -71,7 +71,6 @@ class ChallengeClaimsController < ApplicationController
     if !(@collection = Collection.find_by(name: params[:collection_id])).nil? && @collection.closed? && !@collection.user_is_maintainer?(current_user)
       flash[:notice] = ts("This challenge is currently closed to new posts.")
     end
-    @page_subtitle = t(".page_title", username: @user.login)
     if params[:collection_id]
       return unless load_collection
 
@@ -90,6 +89,7 @@ class ChallengeClaimsController < ApplicationController
         @claims = @claims.order(@sort_order)
       end
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
+      @page_subtitle = t(".page_title", username: @user.login)
       if current_user == @user
         @claims = @user.request_claims.order_by_date.unposted
 				if params[:posted]
