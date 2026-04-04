@@ -23,14 +23,17 @@ class SkinsController < ApplicationController
       end
       if is_work_skin
         @skins = @user.work_skins.sort_by_recent.includes(:author).with_attached_icon
+        @page_subtitle = t(".work_skin_page_title", username: @user.login)
         @title = ts('My Work Skins')
       else
         @skins = @user.skins.site_skins.sort_by_recent.includes(:author).with_attached_icon
+        @page_subtitle = t(".site_skin_page_title", username: @user.login)
         @title = ts('My Site Skins')
       end
     else
       if is_work_skin
         @skins = WorkSkin.approved_skins.sort_by_recent_featured.includes(:author).with_attached_icon
+        @page_subtitle = t(".public_work_skin_page_title")
         @title = ts('Public Work Skins')
       else
         @skins = if logged_in?
@@ -38,6 +41,7 @@ class SkinsController < ApplicationController
                  else
                    Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured.with_attached_icon
                  end
+        @page_subtitle = t(".public_site_skin_page_title")
         @title = ts('Public Site Skins')
       end
     end
