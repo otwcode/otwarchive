@@ -622,4 +622,34 @@ describe SkinsController do
       end
     end
   end
+
+  describe "GET #index" do
+    let(:user) { create(:user) }
+
+    context "when logged in as the user viewing their work skins" do
+      before { fake_login_known_user(user) }
+
+      it "sets the page subtitle with the username for work skins" do
+        get :index, params: { user_id: user.login, skin_type: "WorkSkin" }
+        expect(assigns[:page_subtitle]).to eq("#{user.login} - Work Skins")
+      end
+
+      it "sets the page subtitle with the username for site skins" do
+        get :index, params: { user_id: user.login }
+        expect(assigns[:page_subtitle]).to eq("#{user.login} - Site Skins")
+      end
+    end
+
+    context "when logged out" do
+      it "sets the page subtitle for public work skins" do
+        get :index, params: { skin_type: "WorkSkin" }
+        expect(assigns[:page_subtitle]).to eq("Public Work Skins")
+      end
+
+      it "sets the page subtitle for public site skins" do
+        get :index
+        expect(assigns[:page_subtitle]).to eq("Public Site Skins")
+      end
+    end
+  end
 end
