@@ -1282,8 +1282,8 @@ describe HtmlCleaner do
       end
 
       it "escapes the values within the element's attributes" do
-        string = 'Hi! <img src="https://<span>" alt="<script\src=\'http://ha.ckers.org/xss.js\'>"> Bye'
-        result = 'Hi! img src="https://&lt;span&gt;" alt="&lt;script\src=\'http://ha.ckers.org/xss.js\'&gt;" Bye'
+        string = 'Hi! <img src="https://<span>" alt="<script/src=\'http://ha.ckers.org/xss.js\'>"> Bye'
+        result = 'Hi! img src="https://&lt;span&gt;" alt="&lt;script/src=\'http://ha.ckers.org/xss.js\'&gt;" Bye'
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
 
