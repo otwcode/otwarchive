@@ -142,9 +142,20 @@ module HtmlCleaner
 
   # strip img tags, optionally leaving the HTML attributes (e.g. src and alt) exposed
   def strip_images(value, keep_src: false)
-    value.gsub(%r{(?:<(img .*?) ?/?>)}) do
-      keep_src ? Sanitize.clean(Regexp.last_match(1)) : ""
+    fragment = Nokogiri::HTML5.fragment(value)
+    fragment.css("img").each do |img|
+      if keep_src
+        src = img["src"]
+        alt = img["alt"]
+        src = "src=\"#{src}\"" unless src.blank?
+        alt = "alt=\"#{alt}\"" unless alt.blank?
+        text = "img #{src} #{alt}".strip
+        img.replace(Nokogiri::XML::Text.new(text, fragment))
+      else
+        img.unlink
+      end
     end
+    fragment.to_html
   end
 
   def strip_html_breaks_simple(value)
