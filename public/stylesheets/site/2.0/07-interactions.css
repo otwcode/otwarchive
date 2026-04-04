@@ -261,6 +261,12 @@ form li ul.autocomplete li.input {
   margin-top: 0 !important;
 }
 
+/* Pinch hitter autocomplete dropdown must escape the assignments container.
+   Core form styles set fieldset/dl to overflow: hidden, which clips it. */
+form fieldset.maintainer-assignments, form fieldset.maintainer-assignments dl.index {
+  overflow: visible;
+}
+
 .autocomplete li.added, .post .meta dd ul li.added {
   display: inline-block;
 }

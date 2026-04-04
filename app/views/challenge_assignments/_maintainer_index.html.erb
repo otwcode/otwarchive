@@ -57,7 +57,7 @@
     <%= render "maintainer_index_fulfilled" %>
   <% else %>
     <%= form_tag update_multiple_collection_assignments_path(@collection), method: :put do %>
-      <fieldset>
+      <fieldset class="maintainer-assignments">
 
         <% if !(params[:pinch_hit] || params[:unfulfilled] || params[:fulfilled]) %>
           <%= render "maintainer_index_defaulted" %>
