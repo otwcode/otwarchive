@@ -35,7 +35,7 @@ class Collection < ApplicationRecord
 
   before_destroy :destroy_challenge
   def destroy_challenge
-    challenge.destroy if challenge
+    challenge&.destroy
   end
 
   has_many :prompts, dependent: :destroy
