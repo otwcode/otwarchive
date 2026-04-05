@@ -382,6 +382,11 @@ class Work < ApplicationRecord
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
   end
 
+  after_destroy :clean_up_claims
+  def clean_up_claims
+    self.challenge_claims.each {|a| a.creation = nil; a.save!}
+  end
+
   ########################################################################
   # RESQUE
   ########################################################################
