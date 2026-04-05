@@ -456,3 +456,9 @@ Feature: Create Gifts
     Then "giftee2" should be emailed
       And the email should have "\[Hidden Treasury\] A gift work for you from Hidden Treasury" in the subject
       And the email to "giftee2" should be non-translated
+
+  Scenario: Gifts page for non-user recipient shouldn't show escaped HTML
+    Given I give the work to "Someone Who Isn't A User"
+      And I press "Post"
+    When I go to the gifts page for the recipient Someone Who Isn't A User
+    Then I should see "Gifts for Someone Who Isn't A User"
