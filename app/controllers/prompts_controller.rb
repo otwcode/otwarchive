@@ -125,8 +125,7 @@ class PromptsController < ApplicationController
       flash[:notice] = ts("Prompt was successfully added.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
-      redirect_to edit_collection_signup_path(@collection, @challenge_signup)
+      render action: :new
     end
   end
 
