@@ -379,18 +379,18 @@ class Work < ApplicationRecord
 
   after_destroy :clean_up_assignments
   def clean_up_assignments
-    self.challenge_assignments.each { |a|
+    self.challenge_assignments.each do |a|
       a.creation = nil
       a.save!
-    }
+    end
   end
 
   after_destroy :clean_up_claims
   def clean_up_claims
-    self.challenge_claims.each { |a|
+    self.challenge_claims.each do |a|
       a.creation = nil
       a.save!
-    }
+    end
   end
 
   ########################################################################
