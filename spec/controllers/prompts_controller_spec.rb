@@ -24,7 +24,7 @@ describe PromptsController do
       it "displays the prompt" do
         get :show, params: { collection_id: collection.name, id: prompt.id }
         expect(flash[:error]).blank?
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
         expect(response).to render_template("prompts/show")
         expect(assigns(:prompt)).to eq(prompt)
       end
@@ -117,7 +117,7 @@ describe PromptsController do
       let(:user) { Pseud.find(ChallengeSignup.in_collection(open_signup.collection).first.pseud_id).user }
       it "should have no errors" do
         post :new, params: { collection_id: open_signup.collection.name, prompt_type: "offer" }
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
         expect(flash[:error]).blank?
         expect(assigns(:index)).to eq(open_signup.offers.count)
       end
@@ -175,7 +175,7 @@ describe PromptsController do
             }
           }
         }
-        expect(response).to have_http_status(200) # no redirect
+        expect(response).to have_http_status(:ok) # no redirect
         expect(assigns[:prompt].errors[:base]).to eq(
           ["^These character tags in your offer are not canonical and cannot be used in this challenge: Sakura Typomoto. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations."]
         )
