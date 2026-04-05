@@ -326,9 +326,17 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
+    subject = if @collection
+                t("user_mailer.prompter_notification.subject.collection",
+                  app_name: ArchiveConfig.APP_SHORT_NAME,
+                  collection_title: @collection.title)
+              else
+                t("user_mailer.prompter_notification.subject.no_collection",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+              end
     mail(
       to: @user.email,
-      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: subject
     )
   end
 
