@@ -922,7 +922,7 @@ describe Comment do
     context "when the comment is not marked as spam" do
       let(:comment) { create(:comment, approved: true, spam: false) }
 
-      it "flags the comment as spam." do
+      it "flags the comment as spam" do
         comment.mark_as_spam!
         comment.reload
         expect(comment.approved).to be_falsey
@@ -933,7 +933,7 @@ describe Comment do
     context "when the comment is already marked as spam" do
       let(:comment) { create(:comment, approved: false, spam: false) }
 
-      it "flags the comment as spam." do
+      it "flags the comment as spam" do
         comment.mark_as_spam!
         comment.reload
         expect(comment.approved).to be_falsey
@@ -945,7 +945,7 @@ describe Comment do
   describe "#mark_as_ham!" do
     let(:comment) { create(:comment, approved: false, spam: true) }
 
-    it "flags the comment as legitimate." do
+    it "flags the comment as legitimate" do
       comment.mark_as_ham!
       comment.reload
       expect(comment.approved).to be_truthy
