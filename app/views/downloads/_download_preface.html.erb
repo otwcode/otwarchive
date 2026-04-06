@@ -71,7 +71,7 @@
     <%# i18n-tasks-use t("downloads.download_preface.translation_of.revealed_html") %>
     <%# i18n-tasks-use t("downloads.download_preface.translation_of.unrevealed") %>
     <% translations = @work.approved_related_works.where(translation: true) %>
-    <% related_works = @work.parent_work_relationships.reject { |wr| !wr.parent } %>
+    <% related_works = @work.parent_work_relationships %>
     <% if translations.any? || related_works.any? %>
       <ul>
         <% translations.each do |related_work| %>
