@@ -838,8 +838,8 @@ en:
         subject: "[%{app_name}] Your password has been changed"
       reset_password_instructions:
         change_your_password: change your password
-        choose_new_password_modal: use this link to choose a new password
         choose_new_password_imperative: use this link to choose a new password
+        choose_new_password_modal: use this link to choose a new password
         contact_policy_abuse: contact Policy & Abuse
         contact_policy_abuse_instructions:
           html: If you have other reasons to believe that someone else currently has access to your %{app_name} account, please %{contact_policy_abuse_link} with all relevant information.
