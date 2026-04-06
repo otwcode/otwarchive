@@ -3176,6 +3176,7 @@ en:
       parent:
         header: This work is a remix, a translation, a podfic, or was inspired by another work
         deleted: Deleted work
+        delete_button: Remove
         delete_confirm: Are you sure you want to delete the connection to this work?
     byline:
       add_co-creators: Add co-creators
