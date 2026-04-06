@@ -125,9 +125,15 @@ module WorksHelper
   end
 
   def related_work_note(related_work, relation, download: false)
+    default_locale = download ? :en : nil
+
+    if (related_work == nil)
+      return t(".#{relation}.deleted",
+        locale: default_locale)
+    end
+
     work_link = link_to related_work.title, polymorphic_url(related_work)
     language = tag.span(related_work.language.name, lang: related_work.language.short) if related_work.language
-    default_locale = download ? :en : nil
 
     creator_link = if download
                      byline(related_work, visibility: "public", only_path: false)

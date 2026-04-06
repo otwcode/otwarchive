@@ -944,6 +944,7 @@ en:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
+        deleted: Inspired by a deleted work
       language: 'Language:'
       notes: Notes
       originally_posted_html: Posted originally on the %{archive_link} at %{work_url}.
@@ -963,6 +964,7 @@ en:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
+        deleted: A translation of a deleted work
       updated: 'Updated: %{date}'
       words: 'Words: %{count_with_delimiters}'
   errors:
@@ -3269,6 +3271,7 @@ en:
         restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
+        deleted: Inspired by a deleted work
       jump:
         endnotes_and_related_works_html: "(See the end of the work for %{endnotes_link} and %{related_works_link}.)"
         endnotes_html: "(See the end of the work for %{endnotes_link}.)"
