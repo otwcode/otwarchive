@@ -27,7 +27,7 @@ class Freeform < Tag
   end
 
   def fandoms
-    parents.by_type('Fandom').by_name
+    parents.by_type("Fandom").by_name
   end
 
   def medias
