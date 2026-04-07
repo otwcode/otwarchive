@@ -1,0 +1,63 @@
+<h4><%= t(".page_heading") %></h4>
+<dl id="symbols-key">
+  <dt><img src="/images/key-square-1.png" alt="<%= t(".ratings.alt") %>" /></dt>
+  <dd><h4><%= t(".ratings.heading") %></h4>
+    <dl>
+      <dt><img src="/images/skins/iconsets/default/rating-general-audience.png" alt="<%= t(".ratings.general.alt") %>" /></dt>
+      <dd><%= t(".ratings.general.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/rating-teen.png" alt="<%= t(".ratings.teen.alt") %>" /></dt>
+      <dd><%= t(".ratings.teen.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/rating-mature.png" alt="<%= t(".ratings.mature.alt") %>" /></dt>
+      <dd><%= t(".ratings.mature.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/rating-explicit.png" alt="<%= t(".ratings.explicit.alt") %>" /></dt>
+      <dd><%= t(".ratings.explicit.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/rating-notrated.png" alt="<%= t(".ratings.none.alt") %>" /></dt>
+      <dd><%= t(".ratings.none.definition") %></dd>
+    </dl>
+  </dd>
+  <dt><img src="/images/key-square-2.png" alt="<%= t(".categories.alt") %>" /></dt>
+  <dd><h4><%= t(".categories.heading") %></h4>
+    <dl>
+      <dt><img src="/images/skins/iconsets/default/category-femslash.png" alt="<%= t(".categories.femslash.alt") %>" /></dt>
+      <dd><%= t(".categories.femslash.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/category-het.png" alt="<%= t(".categories.het.alt") %>" /></dt>
+      <dd><%= t(".categories.het.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/category-gen.png" alt="<%= t(".categories.gen.alt") %>" /></dt>
+      <dd><%= t(".categories.gen.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/category-slash.png" alt="<%= t(".categories.slash.alt") %>" /></dt>
+      <dd><%= t(".categories.slash.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/category-multi.png" alt="<%= t(".categories.multi.alt") %>" /></dt>
+      <dd><%= t(".categories.multi.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/category-other.png" alt="<%= t(".categories.other.alt") %>" /></dt>
+      <dd><%= t(".categories.other.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/category-none.png" alt="<%= t(".categories.none.alt") %>" /></dt>
+      <dd><%= t(".categories.none.definition") %></dd>
+    </dl>
+  </dd>
+  <dt><img src="/images/key-square-3.png" alt="<%= t(".warnings.alt") %>" /></dt>
+  <dd><h4><%= t(".warnings.heading") %></h4>
+    <dl>
+      <dt><img src="/images/skins/iconsets/default/warning-choosenotto.png" alt="<%= t(".warnings.default.alt") %>" /></dt>
+      <dd><%= t(".warnings.default.definition_html", emphasized_modal: tag.em(t(".warnings.default.emphasized_modal"))) %>
+      </dd>
+      <dt><img src="/images/skins/iconsets/default/warning-yes.png" alt="<%= t(".warnings.warning_yes.alt") %>" /></dt>
+      <dd><%= t(".warnings.warning_yes.definition_html", non_con: tag.acronym(t(".warnings.warning_yes.non_con.acronym"), title: t(".warnings.warning_yes.non_con.title"))) %>
+      </dd>
+      <dt><img src="/images/skins/iconsets/default/warning-no.png" alt="<%= t(".warnings.none.alt") %>" /></dt>
+      <dd><%= t(".warnings.none.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/warning-external-work.png" alt="<%= t(".warnings.external_work.alt") %>" /></dt>
+      <dd><%= t(".warnings.external_work.definition") %></dd>
+    </dl>
+  </dd>
+  <dt><img src="/images/key-square-4.png" alt="<%= t(".status.alt") %>" /></dt>
+  <dd><h4><%= t(".status.heading") %></h4>
+    <dl>
+      <dt><img src="/images/skins/iconsets/default/complete-no.png" alt="<%= t(".status.incomplete.alt") %>" /></dt>
+      <dd><%= t(".status.incomplete.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/complete-yes.png" alt="<%= t(".status.complete.alt") %>" /></dt>
+      <dd><%= t(".status.complete.definition") %></dd>
+      <dt><img src="/images/skins/iconsets/default/category-none.png" alt="<%= t(".status.none.alt") %>" /></dt>
+      <dd><%= t(".status.none.definition") %></dd>
+    </dl>
+  </dd>
+</dl>

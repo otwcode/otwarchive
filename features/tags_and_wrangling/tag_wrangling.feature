@@ -5,7 +5,7 @@ Feature: Tag wrangling
 
     Given the role "tag_wrangler"
     When I am logged in as "dizmo"
-    Then I should not see "Tag Wrangling" within "#header"
+    Then I should not see "Tag Wrangling" within "#greeting"
     When I am logged in as a "tag_wrangling" admin
       And I go to the manage users page
       And I fill in "Name" with "dizmo"
@@ -17,7 +17,7 @@ Feature: Tag wrangling
     Then I should see "User was successfully updated"
     # accessing wrangling pages
     When I am logged in as "dizmo"
-      And I follow "Tag Wrangling" within "#header"
+      And I follow "Tag Wrangling" within "#greeting"
     Then I should see "Wrangling Home"
     # no access otherwise
     When I log out
