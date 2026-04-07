@@ -57,7 +57,10 @@ class CollectionQuery < Query
   end
 
   def signup_closes_in_future_filter
-    { range: { signups_close_at: { gt: "now" } } } if options[:signup_open].present?
+    { bool: { should: [
+      { range: { signups_close_at: { gt: "now" } } },
+      { bool: { must_not: { exists: { field: "signups_close_at" } } } }
+    ] } } if options[:signup_open].present?
   end
 
   def closed_filter
