@@ -288,6 +288,9 @@ en:
     show:
       anonymous: Anonymous
       unrevealed_series: Mystery Series
+  stats:
+    index:
+      page_title: "%{username} - Stats"
   subscriptions:
     delete_all:
       error: There were problems deleting your subscriptions.
