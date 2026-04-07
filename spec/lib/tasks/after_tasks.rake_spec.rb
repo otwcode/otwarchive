@@ -849,3 +849,21 @@ describe "rake After:sync_approved_to_spam" do
     expect(synced_spam_comment.spam).to be_truthy
   end
 end
+
+describe "rake After:remove_noncanonical_fandom_wrangling_assignments" do
+  let!(:fandom1) { create(:fandom, canonical: false) }
+  let!(:assignment1) { create(:wrangling_assignment, fandom: fandom1) }
+
+  it "deletes wrangling assignments of noncanonical fandoms" do
+    subject.invoke
+    expect(WranglingAssignment.all).not_to include(assignment1)
+  end
+
+  let!(:fandom2) { create(:canonical_fandom) }
+  let!(:assignment2) { create(:wrangling_assignment, fandom: fandom2) }
+
+  it "doesn't delete wrangling assignments of canonical fandoms" do
+    subject.invoke
+    expect(WranglingAssignment.all).to include(assignment2)
+  end
+end

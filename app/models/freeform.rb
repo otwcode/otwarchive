@@ -27,7 +27,7 @@ class Freeform < Tag
   end
 
   def fandoms
-    parents.select {|t| t.is_a? Fandom}.sort
+    parents.by_type("Fandom").by_name
   end
 
   def medias

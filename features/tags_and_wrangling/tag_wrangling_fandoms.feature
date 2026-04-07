@@ -213,3 +213,24 @@ Scenario: Checking the media pages
     And I should see "A weird thing" within "#letter-W .tags"
     And I should see "Be a second B fandom" within "#letter-B .tags"
     And I should see "Be another thing" within "#letter-B .tags"
+
+Scenario: Cannot sign up for non-canonical fandom
+  Given the following activated tag wrangler exists
+    | login  | password    |
+    | Enigel | wrangulate! |
+    And I am logged in as "Enigel" with password "wrangulate!"
+    And a noncanonical Fandom "SG1"
+
+  # cannot sign up through edit page to a non-canonical fandom
+  When I view the tag "SG1"
+    And I follow "Edit"
+  Then I should not see "Sign Up"
+    And I should see "Non-canonical fandoms cannot be assigned."
+
+  # cannot sign up through wranglers page to a non-canonical fandom
+  When I follow "Tag Wrangling"
+    And I follow "Wranglers"
+    And I fill in "tag_fandom_string" with "SG1"
+    And I press "Assign"
+  Then "SG1" should not be assigned to the wrangler "Enigel"
+    And I should see "Could not assign fandom SG1. Non-canonical fandoms cannot be assigned."
