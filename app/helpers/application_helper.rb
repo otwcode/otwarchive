@@ -76,9 +76,14 @@ module ApplicationHelper
   def allowed_html_instructions(strip_images: false)
     # i18n-tasks-use t("application_helper.text_limited_html")
     # i18n-tasks-use t("application_helper.text_limited_html_strip_images_html")
-    t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help("html-help"))
+    t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help_modal(help_html_path, t("application_helper.allowed_html_instructions.html_help_title")))
   end
-  
+
+  # Returns instructions and help button that is shown above the RTE window
+  def rich_text_instructions
+    t("application_helper.rich_text_instructions.type_paste_rich_text_html", help_link: link_to_help_modal(help_rte_path, t("application_helper.rich_text_instructions.rte_help_title")))
+  end
+
   def link_to_modal(content = "", options = {})
     options[:class] ||= ""
     options[:for] ||= ""
