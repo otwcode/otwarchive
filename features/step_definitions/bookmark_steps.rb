@@ -450,6 +450,10 @@ When "I follow {string} in the blurb for {word}'s bookmark of {string}" do |link
   find("#bookmark_#{bookmark_id}").click_link(link)
 end
 
+When "I confirm the bookmark's deletion" do
+  expect(page.accept_alert).to eq("Are you sure you want to delete this bookmark?") if @javascript
+end
+
 Then "the {word} bookmark form should be open in the bookmarkable blurb for {string}" do |action, title|
   work_id = Work.find_by(title: title).id
   within("#bookmark_#{work_id}") do

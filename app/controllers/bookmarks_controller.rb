@@ -62,6 +62,7 @@ class BookmarksController < ApplicationController
   end
 
   def index
+    session[:should_redirect_back] = true
     if @bookmarkable
       @bookmarks = @bookmarkable.bookmarks.not_private.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       @bookmarks = @bookmarks.where(hidden_by_admin: false) unless logged_in_as_admin?
@@ -160,6 +161,7 @@ class BookmarksController < ApplicationController
   # GET    /:locale/works/:work_id/bookmark/:id
   # GET    /:locale/external_works/:external_work_id/bookmark/:id
   def show
+    session[:should_redirect_back] = false
   end
 
   # GET /bookmarks/new
@@ -286,8 +288,7 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
-    if request.referer&.match("&user_id") || request.referer&.match(user_bookmarks_path(current_user))
-      # Already on the user bookmarks path
+    if session[:should_redirect_back]
       redirect_back_or_to user_bookmarks_path(current_user)
     else
       redirect_to user_bookmarks_path(current_user)
