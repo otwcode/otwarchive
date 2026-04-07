@@ -36,7 +36,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     aaronh-chronic (0.3.9)
-    action_text-trix (2.1.17)
+    action_text-trix (2.1.18)
       railties
     actioncable (8.1.2.1)
       actionpack (= 8.1.2.1)
