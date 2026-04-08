@@ -92,6 +92,53 @@ describe CollectionItem, :ready do
     end
   end
 
+  describe "blurb cache expiry" do
+    let!(:collection) { create(:collection) }
+    let!(:work) { create(:work) }
+
+    context "when a collection item is created" do
+      it "expires the collection blurb cache" do
+        expect(Collection).to receive(:expire_blurb_caches_for_hierarchy).with(collection)
+        CollectionItem.create!(collection: collection, item: work)
+      end
+    end
+
+    context "when a collection item is destroyed" do
+      let!(:item) { CollectionItem.create!(collection: collection, item: work) }
+
+      it "expires the collection blurb cache" do
+        expect(Collection).to receive(:expire_blurb_caches_for_hierarchy).with(collection)
+        item.destroy!
+      end
+    end
+
+    context "when a collection item's approval status changes" do
+      let!(:item) do
+        CollectionItem.create!(collection: collection, item: work,
+                               collection_approval_status: :approved,
+                               user_approval_status: :approved)
+      end
+
+      it "expires the collection blurb cache" do
+        expect(Collection).to receive(:expire_blurb_caches_for_hierarchy).with(collection)
+        item.update!(collection_approval_status: :rejected)
+      end
+    end
+
+    context "when a collection item is updated without changing approval status" do
+      let!(:item) do
+        CollectionItem.create!(collection: collection, item: work,
+                               collection_approval_status: :approved,
+                               user_approval_status: :approved)
+      end
+
+      it "does not expire the collection blurb cache" do
+        expect(Collection).not_to receive(:expire_blurb_caches_for_hierarchy)
+        item.update!(unrevealed: true)
+      end
+    end
+  end
+
   describe "reindexing" do
     let!(:parent_collection) { create(:collection) }
     let!(:collection) { create_invalid(:collection, parent: parent_collection) }

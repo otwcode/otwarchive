@@ -25,11 +25,15 @@ class Collection < ApplicationRecord
 
   before_validation :clear_icon
   before_validation :cleanup_url
+  before_save :track_collection_blurb_cache_invalidation
   before_create :ensure_associated
   def ensure_associated
     self.collection_preference = CollectionPreference.new unless self.collection_preference
     self.collection_profile = CollectionProfile.new unless self.collection_profile
   end
+
+  after_create :add_to_autocomplete
+  after_update :refresh_autocomplete_for_name_or_title_change, if: :saved_change_to_name_or_title?
 
   belongs_to :challenge, dependent: :destroy, polymorphic: true
   has_many :prompts, dependent: :destroy
@@ -49,6 +53,11 @@ class Collection < ApplicationRecord
     signups.each(&:destroy)
     prompts.each(&:destroy)
   end
+
+  before_destroy :remove_from_autocomplete
+  before_destroy :remember_collection_blurb_ids_for_destroy
+  after_commit :expire_collection_blurb_caches_after_save_commit, on: %i[create update]
+  after_commit :expire_collection_blurb_caches_after_destroy_commit, on: :destroy
 
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
@@ -232,6 +241,51 @@ class Collection < ApplicationRecord
   end
   ## END AUTOCOMPLETE
 
+  def saved_change_to_name_or_title?
+    saved_change_to_name? || saved_change_to_title?
+  end
+
+  def refresh_autocomplete_for_name_or_title_change
+    remove_stale_from_autocomplete
+    add_to_autocomplete
+  end
+
+  def track_collection_blurb_cache_invalidation
+    @expire_collection_blurb_after_commit = collection_blurb_columns_changing? || icon_attachment_changing?
+  end
+
+  def collection_blurb_columns_changing?
+    keys = changed_attributes.keys.map(&:to_s) - %w[updated_at created_at]
+    (keys - ["email"]).any?
+  end
+
+  def icon_attachment_changing?
+    attachment_changes["icon"].present?
+  end
+
+  def expire_collection_blurb_caches_after_save_commit
+    return unless @expire_collection_blurb_after_commit
+
+    Collection.expire_blurb_caches_for_hierarchy(self)
+  ensure
+    @expire_collection_blurb_after_commit = false
+  end
+
+  def remember_collection_blurb_ids_for_destroy
+    @collection_blurb_ids_to_expire_on_destroy =
+      ([self, parent] + children).compact.map(&:id).uniq
+  end
+
+  def expire_collection_blurb_caches_after_destroy_commit
+    return if @collection_blurb_ids_to_expire_on_destroy.blank?
+
+    @collection_blurb_ids_to_expire_on_destroy.each do |id|
+      Collection.expire_blurb_cache(id)
+    end
+  ensure
+    @collection_blurb_ids_to_expire_on_destroy = nil
+  end
+
   def parent_name=(name)
     @parent_name = name
     self.parent = Collection.find_by(name: name)
@@ -414,8 +468,24 @@ class Collection < ApplicationRecord
     end
   end
 
+  def self.expire_blurb_caches_for_hierarchy(collection)
+    return unless collection
+
+    ([collection, collection.parent] + collection.children).compact.uniq.each do |c|
+      expire_blurb_cache(c.id)
+    end
+  end
+
   def self.expire_profile_cache(id)
     ActionController::Base.new.expire_fragment("collection-profile-#{id}")
+  end
+
+  def self.expire_profile_caches_for_hierarchy(collection)
+    return unless collection
+
+    ([collection, collection.parent] + collection.children).compact.uniq.each do |c|
+      expire_profile_cache(c.id)
+    end
   end
 
   def self.expire_caches(id)

@@ -7,8 +7,6 @@ class CollectionParticipantsController < ApplicationController
   before_action :has_other_owners, only: [:update, :destroy]
   before_action :collection_maintainers_only, only: [:index, :add, :update]
 
-  cache_sweeper :collection_sweeper
-
   def owners_required
     flash[:error] = t("collection_participants.validation.owners_required")
     redirect_to collection_participants_path(@collection)

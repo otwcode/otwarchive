@@ -296,4 +296,18 @@ class CollectionItem < ApplicationRecord
     pertinent_attributes = %w[collection_approval_status user_approval_status]
     (self.saved_changes.keys & pertinent_attributes).present?
   end
+
+  after_commit :expire_collection_blurb_cache, on: %i[create destroy]
+  after_commit :expire_collection_blurb_cache_on_update, on: :update
+
+  def expire_collection_blurb_cache
+    Collection.expire_blurb_caches_for_hierarchy(collection)
+  end
+
+  def expire_collection_blurb_cache_on_update
+    return unless saved_change_to_collection_approval_status? ||
+                  saved_change_to_user_approval_status?
+
+    Collection.expire_blurb_caches_for_hierarchy(collection)
+  end
 end

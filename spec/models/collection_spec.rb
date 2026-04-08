@@ -692,4 +692,51 @@ describe Collection do
       end
     end
   end
+
+  describe "blurb cache invalidation" do
+    let(:collection) { create(:collection) }
+
+    it "expires blurb caches when display attributes change" do
+      expect(Collection).to receive(:expire_blurb_caches_for_hierarchy).with(collection)
+      collection.update!(title: "New display title")
+    end
+
+    it "does not expire blurb caches when only the contact email changes" do
+      col = create(:collection)
+      expect(Collection).not_to receive(:expire_blurb_caches_for_hierarchy)
+      col.update!(email: "maintainer@example.com")
+    end
+  end
+
+  describe "profile fragment cache invalidation" do
+    let(:collection) { create(:collection) }
+
+    it "expires profile caches but not blurb caches when only profile text changes" do
+      expect(Collection).to receive(:expire_profile_caches_for_hierarchy).with(collection)
+      expect(Collection).not_to receive(:expire_blurb_caches_for_hierarchy)
+      collection.collection_profile.update!(intro: "Welcome to the collection.")
+    end
+  end
+
+  describe "maintainer blurb cache invalidation" do
+    let(:collection) { create(:collection) }
+    let(:other_user) { create(:user) }
+
+    it "expires blurb caches when an owner is added" do
+      expect(Collection).to receive(:expire_blurb_caches_for_hierarchy).with(collection)
+      create(:collection_participant,
+             collection: collection,
+             pseud: other_user.default_pseud,
+             participant_role: CollectionParticipant::OWNER)
+    end
+
+    it "does not expire blurb caches when an invited user is added" do
+      col = create(:collection)
+      expect(Collection).not_to receive(:expire_blurb_caches_for_hierarchy)
+      create(:collection_participant,
+             collection: col,
+             pseud: other_user.default_pseud,
+             participant_role: CollectionParticipant::INVITED)
+    end
+  end
 end

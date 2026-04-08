@@ -5,7 +5,6 @@ class CollectionsController < ApplicationController
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   before_action :validate_challenge_type
   before_action :check_parent_visible, only: [:index]
-  cache_sweeper :collection_sweeper
 
   # Lazy fix to prevent passing unsafe values to eval via challenge_type
   # In both CollectionsController#create and CollectionsController#update there are a vulnerable usages of eval
