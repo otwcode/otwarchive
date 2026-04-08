@@ -653,6 +653,7 @@ en:
       choose_fandom: choose a fandom
       navigation:
         bookmarks: Bookmarks
+        collections: Collections
         edit: Edit Bookmark
         new: Bookmark
         new_external_work: Bookmark External Work

@@ -8,6 +8,7 @@
         <% if @tag.canonical || @tag.merger %>
           <li><%= link_to ts("Works"), tag_works_path(@tag) %></li>
           <li><%= link_to ts("Bookmarks"), tag_bookmarks_path(@tag) %></li>
+          <li><%= link_to ts("Collections"), tag_collections_path(@tag) %></li>
         <% end %>
     	<% if can_wrangle? %>
           <li><%= link_to ts("Edit"), edit_tag_path(@tag) %> </li>

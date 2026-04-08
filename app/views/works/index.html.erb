@@ -26,6 +26,7 @@
       <% if @tag && !@collection %>
         <li><%= span_if_current ts("Works"), tag_works_path(@tag) %></li>
         <li><%= span_if_current ts("Bookmarks"), tag_bookmarks_path(@tag) %></li>
+        <li><%= span_if_current ts("Collections"), tag_collections_path(@tag) %></li>
       <% end %>
       <% if @facets.present? %>
         <%# Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>

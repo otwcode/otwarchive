@@ -61,4 +61,13 @@ module SearchHelper
       **params.slice(:tag_id, :collection_id, :pseud_id, :user_id).permit!
     )
   end
+
+  def collections_original_path
+    url_for(
+      controller: :collections,
+      action: :index,
+      only_path: true,
+      **params.slice(:tag_id, :fandom_id, :collection_id, :pseud_id, :user_id).permit!
+    )
+  end
 end
