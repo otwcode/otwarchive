@@ -12,6 +12,7 @@ class StatsController < ApplicationController
 
   # gather statistics for the user on all their works
   def index
+    @page_subtitle = t(".page_title", username: @user.login)
     user_works = Work.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
     user_chapters = Chapter.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
     work_query = user_works

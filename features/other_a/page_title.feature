@@ -83,3 +83,13 @@ Scenario: User site skins page has the expected browser page title
   When I am logged in as "skinner"
     And I go to skinner's site skins page
   Then I should see the page title "skinner - Site Skins | Example Archive"
+
+Scenario: Public site skins page has the expected browser page title
+
+  When I go to the public skins page
+  Then I should see the page title "Public Site Skins | Example Archive"
+
+Scenario: Public work skins page has the expected browser page title
+
+  When I go to the work-skins page
+  Then I should see the page title "Public Work Skins | Example Archive"

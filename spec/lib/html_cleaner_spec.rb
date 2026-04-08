@@ -1171,6 +1171,8 @@ describe HtmlCleaner do
 
   describe "strip_images" do
     let(:result) { "Hi!  Bye" }
+    let(:result_for_malformed_html) { "Hi! " }
+    let(:result_for_multiline_html) { "Hi!  Bye\n" }
 
     context "without keep_src" do
       it "removes the img tag entirely when the src uses double quotes" do
@@ -1183,9 +1185,9 @@ describe HtmlCleaner do
         expect(strip_images(string)).to eq(result)
       end
 
-      it "removes the img tag entirely when the src uses mismatched quotes" do
+      it "removes the img tag and everything after when the src uses mismatched quotes" do
         string = "Hi! <img src=\"http://example.org/image.png'> Bye"
-        expect(strip_images(string)).to eq(result)
+        expect(strip_images(string)).to eq(result_for_malformed_html)
       end
 
       it "removes the img tag entirely when the src is missing" do
@@ -1193,9 +1195,19 @@ describe HtmlCleaner do
         expect(strip_images(string)).to eq(result)
       end
 
-      it "removes the img tag entirely when the src is missing a closing quotation mark" do
+      it "removes the img tag and everything after it when the src is missing a closing quotation mark" do
         string = 'Hi! <img src="http://example.org/image.png /> Bye'
-        expect(strip_images(string)).to eq(result)
+        expect(strip_images(string)).to eq(result_for_malformed_html)
+      end
+
+      it "removes the img tag entirely when there are newlines between arguments" do
+        string = <<~HTML
+          Hi! <img
+           src="https://example.org/image.png
+           "
+           alt="something" /> Bye
+        HTML
+        expect(strip_images(string)).to eq(result_for_multiline_html)
       end
     end
 
@@ -1210,9 +1222,9 @@ describe HtmlCleaner do
         expect(strip_images(string, keep_src: false)).to eq(result)
       end
 
-      it "removes the img tag entirely when the src uses mismatched quotes" do
+      it "removes the img tag and everything after it when the src uses mismatched quotes" do
         string = "Hi! <img src=\"http://example.org/image.png'> Bye"
-        expect(strip_images(string, keep_src: false)).to eq(result)
+        expect(strip_images(string, keep_src: false)).to eq(result_for_malformed_html)
       end
 
       it "removes the img tag entirely when the src is missing" do
@@ -1220,34 +1232,64 @@ describe HtmlCleaner do
         expect(strip_images(string, keep_src: false)).to eq(result)
       end
 
-      it "removes the img tag entirely when the src is missing a closing quotation mark" do
+      it "removes the img tag and everything after it when the src is missing a closing quotation mark" do
         string = 'Hi! <img src="http://example.org/image.png /> Bye'
-        expect(strip_images(string, keep_src: false)).to eq(result)
+        expect(strip_images(string, keep_src: false)).to eq(result_for_malformed_html)
+      end
+
+      it "removes the img tag entirely when there are newlines between arguments" do
+        string = <<~HTML
+          Hi! <img
+           src="https://example.org/image.png
+           "
+           alt="something" /> Bye
+        HTML
+        expect(strip_images(string, keep_src: false)).to eq(result_for_multiline_html)
       end
     end
 
     context "with keep_src: true" do
       it "keeps the img tag attributes" do
         string = 'Hi! <img src="http://example.org/image.png" alt=\'something\'> Bye'
-        result = 'Hi! img src="http://example.org/image.png" alt=\'something\' Bye'
+        result = 'Hi! img src="http://example.org/image.png" alt="something" Bye'
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "keeps the img tag attributes when there are newlines between arguments" do
+        string = <<~HTML
+          Hi! <img
+           src="https://example.org/image.png
+           "
+           alt="something" /> Bye
+        HTML
+        result = <<~EXPECTED
+          Hi! img src="https://example.org/image.png
+           " alt="something" Bye
+        EXPECTED
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
 
       it "does not keep tag trailing slash without a space" do
         string = 'Hi! <img src="http://example.org/image.png" alt=\'something\' /> Bye'
-        result = 'Hi! img src="http://example.org/image.png" alt=\'something\' Bye'
+        result = 'Hi! img src="http://example.org/image.png" alt="something" Bye'
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
 
       it "does not keep tag trailing slash with a space" do
         string = 'Hi! <img src="http://example.org/image.png" alt=\'something\'/> Bye'
-        result = 'Hi! img src="http://example.org/image.png" alt=\'something\' Bye'
+        result = 'Hi! img src="http://example.org/image.png" alt="something" Bye'
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
 
       it "escapes the values within the element's attributes" do
-        string = 'Hi! <img src="https://example.com" alt="<script/src=\'http://ha.ckers.org/xss.js\'>"> Bye'
-        result = 'Hi! img src="https://example.com" alt=""> Bye'
+        string = 'Hi! <img src="https://<span>" alt="<script/src=\'http://ha.ckers.org/xss.js\'>"> Bye'
+        result = 'Hi! img src="https://&lt;span&gt;" alt="&lt;script/src=\'http://ha.ckers.org/xss.js\'&gt;" Bye'
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "escapes the value within the alt attribute when it contains an initial >" do
+        string = 'Hi! <img src="https://example.com" alt="><script src=\'http://ha.ckers.org/xss.js\'>"> Bye'
+        result = 'Hi! img src="https://example.com" alt="&gt;&lt;script src=\'http://ha.ckers.org/xss.js\'&gt;" Bye'
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
     end

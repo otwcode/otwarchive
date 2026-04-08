@@ -5,6 +5,9 @@ class HelpController < ApplicationController
   def first_login
   end
 
+  def html
+  end
+
   def preferences_collection
   end
 
@@ -24,6 +27,9 @@ class HelpController < ApplicationController
   end
 
   def preferences_work_title_format
+  end
+
+  def rte
   end
 
   def skins_basics
