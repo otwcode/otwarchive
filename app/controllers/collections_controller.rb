@@ -61,6 +61,7 @@ class CollectionsController < ApplicationController
     @page_subtitle = "Open Challenges"
     @hide_dashboard = true
     @sort_and_filter = true
+    @show_type_filter = true
     @search = CollectionSearchForm.new(challenge_filter_params.merge(signup_open: true, sort_column: "signups_close_at", page: params[:page]))
     @challenge_collections = @search.search_results
   end
