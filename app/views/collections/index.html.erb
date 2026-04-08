@@ -1,23 +1,19 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <% if @user %>
-    <%= t(".page_heading.users_collections", user: @user.login) %>
+  <% if @collections.empty? %>
+    <%# do we need this disclaimer? %>
+    <%= ts("Sorry, there were no collections found.") %>
+  <% elsif @user %>
+    <%= t(".page_heading.collections_by", collections: search_header(@collections, @query, ts("Collection")), user: @user.login) %>
   <% elsif @collection %>
-    <%= t(".page_heading.challenges_subcollections_in", collection: @collection.title) %>
+    <%= t(".page_heading.subcollections_in", subcollections: search_header(@collections, @query, ts("Subcollection")), collection: @collection.title) %>
   <% elsif @work %>
-    <%= t(".page_heading.collections_including", work: @work.title) %>
+    <%= t(".page_heading.collections_including", collections: search_header(@collections, @query, ts("Collection")), work: @work.title) %>
   <% else %>
-    <%= t(".page_heading.collections_in_the", archive: ArchiveConfig.APP_NAME) %>
+    <%= t(".page_heading.collections_in_the", collections: search_header(@collections, @query, ts("Collection")), archive: ArchiveConfig.APP_NAME) %>
   <% end %>
 </h2>
 
-<h3 class="heading">
-  <% if @collections.empty? %>
-    <%= ts("Sorry, there were no collections found.") %>
-  <% else %>
-    <%= search_header @collections, @query, ts("Collection") %>
-  <% end %>
-</h3>
 <!--/descriptions-->
 
 <!--Subnavigation, sorting and actions-->

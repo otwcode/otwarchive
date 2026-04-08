@@ -803,10 +803,10 @@ en:
         label: Multifandom
     index:
       page_heading:
-        challenges_subcollections_in: Challenges/Subcollections in %{collection}
-        collections_in_the: Collections in the %{archive}
-        collections_including: Collections including %{work}
-        users_collections: "%{user}'s Collections"
+        collections_by: "%{collections} by %{user}"
+        collections_in_the: "%{collections} in the %{archive}"
+        collections_including: "%{collections} including %{work}"
+        subcollections_in: "%{subcollections} in %{collection}"
     sidebar:
       bookmarks: Bookmarked Items (%{count})
       challenge_settings: Challenge Settings
