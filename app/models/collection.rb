@@ -43,6 +43,9 @@ class Collection < ApplicationRecord
   has_many :assignments, class_name: "ChallengeAssignment", dependent: :destroy
   has_many :claims, class_name: "ChallengeClaim", dependent: :destroy
 
+  before_destroy :remove_from_autocomplete
+  before_destroy :remember_collection_blurb_ids_for_destroy
+
   # We need to get rid of all of these if the challenge is destroyed
   after_save :clean_up_challenge
   def clean_up_challenge
@@ -54,8 +57,6 @@ class Collection < ApplicationRecord
     prompts.each(&:destroy)
   end
 
-  before_destroy :remove_from_autocomplete
-  before_destroy :remember_collection_blurb_ids_for_destroy
   after_commit :expire_collection_blurb_caches_after_save_commit, on: %i[create update]
   after_commit :expire_collection_blurb_caches_after_destroy_commit, on: :destroy
 
