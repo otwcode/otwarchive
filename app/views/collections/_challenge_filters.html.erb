@@ -91,29 +91,31 @@
         </ul>
       </dd>
 
-      <dt><%= t("collections.filters.type.label") %></dt>
-      <dd>
-        <ul>
-          <li>
-            <%= f.label "challenge_type", value: "GiftExchange" do %>
-              <%= f.radio_button "challenge_type", "GiftExchange" %>
-              <%= label_indicator_and_text(t("collections.filters.type.gift_exchange")) %>
-            <% end %>
-          </li>
-          <li>
-            <%= f.label "challenge_type", value: "PromptMeme" do %>
-              <%= f.radio_button "challenge_type", "PromptMeme" %>
-              <%= label_indicator_and_text(t("collections.filters.type.prompt_meme")) %>
-            <% end %>
-          </li>
-          <li>
-            <%= f.label "challenge_type", value: "" do %>
-              <%= f.radio_button "challenge_type", "" %>
-              <%= label_indicator_and_text(t("collections.filters.type.any")) %>
-            <% end %>
-          </li>
-        </ul>
-      </dd>
+      <% if @show_type_filter %>
+        <dt><%= t("collections.filters.type.label") %></dt>
+        <dd>
+          <ul>
+            <li>
+              <%= f.label "challenge_type", value: "GiftExchange" do %>
+                <%= f.radio_button "challenge_type", "GiftExchange" %>
+                <%= label_indicator_and_text(t("collections.filters.type.gift_exchange")) %>
+              <% end %>
+            </li>
+            <li>
+              <%= f.label "challenge_type", value: "PromptMeme" do %>
+                <%= f.radio_button "challenge_type", "PromptMeme" %>
+                <%= label_indicator_and_text(t("collections.filters.type.prompt_meme")) %>
+              <% end %>
+            </li>
+            <li>
+              <%= f.label "challenge_type", value: "" do %>
+                <%= f.radio_button "challenge_type", "" %>
+                <%= label_indicator_and_text(t("collections.filters.type.any")) %>
+              <% end %>
+            </li>
+          </ul>
+        </dd>
+      <% end %>
 
       <dt class="landmark"><%= t("collections.filters.submit.landmark") %></dt>
       <dd class="submit actions"><%= submit_tag t("collections.filters.submit.button") %></dd>
