@@ -40,17 +40,6 @@ class Collection < ApplicationRecord
   has_many :assignments, class_name: "ChallengeAssignment", dependent: :destroy
   has_many :claims, class_name: "ChallengeClaim", dependent: :destroy
 
-  # We need to get rid of all of these if the challenge is destroyed
-  after_save :clean_up_challenge
-  def clean_up_challenge
-    return if self.challenge_id
-
-    assignments.each(&:destroy)
-    potential_matches.each(&:destroy)
-    signups.each(&:destroy)
-    prompts.each(&:destroy)
-  end
-
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
   has_many :approved_collection_items, -> { approved_by_both }, class_name: "CollectionItem"

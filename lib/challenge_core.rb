@@ -83,6 +83,15 @@ module ChallengeCore
     IndexQueue.enqueue_id(Collection, collection.id, :main)
   end
 
+  def clean_up_challenge
+    return unless collection
+
+    collection.assignments.each(&:destroy)
+    collection.potential_matches.each(&:destroy)
+    collection.signups.each(&:destroy)
+    collection.prompts.each(&:destroy)
+  end
+
   module ClassMethods
     # override datetime setters so we can take strings
     def override_datetime_setters
@@ -103,6 +112,7 @@ module ChallengeCore
   def self.included(base)
     base.class_eval do
       after_commit :update_collection_index, if: :should_update_collection_index?
+      before_destroy :clean_up_challenge
     end
     base.extend(ClassMethods)
   end
