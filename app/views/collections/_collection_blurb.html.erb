@@ -17,7 +17,7 @@
       <% unless collection.tag_string.blank? %>
         <h5 class="tags heading">
           <span class="landmark"><%= t(".collection_tags") %></span>
-          <%= safe_join(collection.tags.collect{ |tag| link_to_tag_works(tag) }, t("support.array.words_connector")) %>
+          <%= safe_join(collection.tags.collect{ |tag| link_to(tag.name, tag_collections_path(tag), class: "tag") }, t("support.array.words_connector")) %>
         </h5>
       <% end %>
     </div>
