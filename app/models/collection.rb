@@ -31,12 +31,7 @@ class Collection < ApplicationRecord
     self.collection_profile = CollectionProfile.new unless self.collection_profile
   end
 
-  belongs_to :challenge, polymorphic: true
-
-  before_destroy :destroy_challenge
-  def destroy_challenge
-    challenge&.destroy
-  end
+  belongs_to :challenge, dependent: :destroy, polymorphic: true
 
   has_many :prompts, dependent: :destroy
 
