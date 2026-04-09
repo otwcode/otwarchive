@@ -19,6 +19,18 @@
 <!--Subnavigation, sorting and actions-->
 <h3 class="landmark heading"><%= ts("Navigation") %></h3>
 <ul class="navigation actions" role="navigation">
+  <% if @tag && !@collection %>
+    <li><%= span_if_current ts("Works"), tag_works_path(@tag) %></li>
+    <li><%= span_if_current ts("Bookmarks"), tag_bookmarks_path(@tag) %></li>
+    <li><%= span_if_current ts("Collections"), tag_collections_path(@tag) %></li>
+  <% end %>
+  <% if @facets.present? %>
+    <%# Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+    <li class="narrow-shown hidden"><a href="#work-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
+  <% end %>
+  <% if @tag && logged_in? && !@collection %>
+    <li><%= render "favorite_tags/form", current_user: @current_user, favorite_tag: @favorite_tag %></li>
+  <% end %>
   <% # Collections and Open Challenges links unless a logged in user viewing own collections page %>
   <% unless logged_in? && @user && @user == current_user %>
     <li><%= span_if_current ts("Collections"), collections_path %></li>
