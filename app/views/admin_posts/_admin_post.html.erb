@@ -11,7 +11,7 @@
     <dd class="published"><%= admin_post.created_at %></dd>
     <% if admin_post.translated_post %>
       <dt class="original translations"><%= ts("Original:") %></dt>
-      <dd class="original translations"><%= link_to raw(admin_post.translated_post.title), admin_post.translated_post %></dd>
+      <dd class="original translations"><%= link_to admin_post.translated_post.title.html_safe, admin_post.translated_post %></dd>
     <% elsif !admin_post.translations.empty? %>
       <dt class="translations"><%= ts("Translations:") %></dt>
       <dd class="translations">
