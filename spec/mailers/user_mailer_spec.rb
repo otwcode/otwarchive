@@ -1344,15 +1344,14 @@ describe UserMailer do
 
       let(:collection) { create(:collection) }
       let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
-      let(:work) { create(:work, challenge_claims: [claim], fandom_string: "Fandom 1, Fandom 2", character_string: "A, B") }
+      let(:work) { create(:work, challenge_claims: [claim]) }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
       it_behaves_like "a translated email"
 
       it "has the correct subject line" do
-        # do we really need the collection title in the subject line twice? same question for the gift notification email
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] A response to your prompt in #{collection.title}"
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
         expect(email).to have_subject(subject)
       end
 
