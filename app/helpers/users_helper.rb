@@ -102,12 +102,10 @@ module UsersHelper
   end
 
   def gifts_link(user)
-    works = if logged_in_as_admin?
-              user.gift_works.visible_to_admin
-            elsif logged_in?
-              user.gift_works.visible_to_registered_user
-            else
+    works = if User.current_user.nil?
               user.gift_works.visible_to_all
+            else
+              user.gift_works.visible_to_registered_user
             end
     gift_number = works.distinct.count
     span_if_current t("users_helper.gifts_link", gift_number: gift_number), user_gifts_path(user)

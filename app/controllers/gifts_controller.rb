@@ -18,12 +18,10 @@ class GiftsController < ApplicationController
       pseud = Pseud.parse_byline(@recipient_name)
       @works = pseud ? pseud.gift_works : Work.giftworks_for_recipient_name(@recipient_name)
     end
-    @works = if logged_in_as_admin?
-               @works.visible_to_admin
-             elsif logged_in?
-               @works.visible_to_registered_user
-             else
+    @works = if guest?
                @works.visible_to_all
+             else
+               @works.visible_to_registered_user
              end
     @works = @works.in_collection(@collection) if @collection
     @works = @works.order("revised_at DESC").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)

@@ -48,7 +48,7 @@ Feature: Create Gifts
       And I should not see "GiftStory2 by gifter for giftee1"
       And I should see "Gifts (1)"
 
-  Scenario: When logged in as admin, gifts page for recipient should show locked and hidden gifts
+  Scenario: When logged in as admin, gifts page for recipient should show locked but not hidden gifts
     When I give the work to "giftee1"
       And I press "Post"
       And I set up the draft "GiftStory2" as a gift to "giftee1"
@@ -60,8 +60,8 @@ Feature: Create Gifts
     When I go to giftee1's gifts page
     Then I should see "GiftStory1 by gifter for giftee1"
       And I should see "GiftStory2 by gifter for giftee1"
-      And I should see "Rude Gift by gifter for giftee1"
-      And I should see "Gifts (3)"
+      And I should not see "Rude Gift by gifter for giftee1"
+      And I should see "Gifts (2)"
 
   Scenario: Gifts page for user should show gifts given to their pseud
     Given I give the work to "g1 (giftee1)"
@@ -89,7 +89,7 @@ Feature: Create Gifts
     Then I should see "GiftStory1 by gifter for g1"
       And I should not see "GiftStory2 by gifter for g1"
 
-  Scenario: When logged in as admin, gifts page for recipient without account should show locked and hidden gifts
+  Scenario: When logged in as admin, gifts page for recipient without account should show locked but not hidden gifts
     When I give the work to "g1"
       And I press "Post"
       And I set up the draft "GiftStory2" as a gift to "g1"
@@ -101,7 +101,7 @@ Feature: Create Gifts
     When I go to the gifts page for the recipient g1
     Then I should see "GiftStory1 by gifter for g1"
       And I should see "GiftStory2 by gifter for g1"
-      And I should see "Rude Gift by gifter for g1"
+      And I should not see "Rude Gift by gifter for g1"
 
   Scenario: Giving a work as a gift when posting directly
     Given I give the work to "giftee1"
