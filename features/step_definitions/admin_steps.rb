@@ -362,6 +362,17 @@ When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   click_button("Post")
 end
 
+When /^I make a translation of an admin post with title "([^"]*)"$/ do |title|
+  admin_post = AdminPost.find_by(title: "Default Admin Post")
+  admin_post_id = !admin_post.nil? ? admin_post.id : 0
+  visit new_admin_post_path
+  fill_in("admin_post_title", with: title)
+  fill_in("content", with: "Some translated content.")
+  step %{I select "Deutsch" from "Choose a language"}
+  fill_in("admin_post_translated_post_id", with: admin_post_id)
+  click_button("Post")
+end
+
 When /^I hide the work "(.*?)"$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)

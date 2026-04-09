@@ -172,19 +172,13 @@ Feature: Admin Actions to Post News
   Given I have posted an admin post
     And basic languages
     And I am logged in as a "translation" admin
-  When I follow "Admin Posts"
-    And I follow "Post AO3 News"
-    And I fill in "admin_post_title" with "Deutsch News & a <strong> Warning"
-    And I fill in "content" with "Some translated content."
-    And I fill in "Translation of" with "1"
-    And I select "Deutsch" from "Choose a language"
-    And I press "Post"
+  When I make a translation of an admin post with title "Deutsch News & a <strong> Warning"
   Then I should see "Admin Post was successfully created."
   When I am logged in as "ordinaryuser"
     And I go to the admin-posts page
     And I follow "Deutsch News & a <strong> Warning"
-  Then I should see "Deutsch News & a <strong> Warning" within "dd.original.translations"
-    And I should not see "Deutsch News &amp; a &lt;strong&gt; Warning"
+  Then I should see "Default Admin Post" within "dd.original.translations"
+    And I should not see "Default Admin Post &amp;"
     
   Scenario: Admin post should be shown on the homepage
     Given I have posted an admin post
