@@ -56,6 +56,7 @@ en:
       title: Symbols key
   users_helper:
     collections_link: Collections (%{coll_number})
+    gifts_link: Gifts (%{gift_number})
     log:
       ban: Suspended Permanently
       email_change: Email Changed
