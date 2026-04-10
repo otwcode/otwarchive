@@ -40,8 +40,8 @@ class SkinsController < ApplicationController
                  end
         @title = ts('Public Site Skins')
       end
+      @page_subtitle = @title.html_safe
     end
-    @page_subtitle = @title.html_safe
   end
 
   # GET /skins/1
