@@ -9,6 +9,8 @@
     <%= t(".page_heading.subcollections_in", subcollections: search_header(@collections, @query, ts("Subcollection"), @owner), collection: @collection.title) %>
   <% elsif @work %>
     <%= t(".page_heading.collections_including", collections: search_header(@collections, @query, ts("Collection"), @owner), work: @work.title) %>
+  <% elsif @tag %>
+    <%= "whoa it's a tag" %>
   <% else %>
     <%= t(".page_heading.collections_in_the", collections: search_header(@collections, @query, ts("Collection"), @owner), archive: ArchiveConfig.APP_NAME) %>
   <% end %>

@@ -1,4 +1,5 @@
 class CollectionsController < ApplicationController
+  before_action :load_owner, only: [:index]
   before_action :users_only, only: [:new, :edit, :create, :update]
   before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
@@ -30,30 +31,72 @@ class CollectionsController < ApplicationController
   end
 
   def index
-    if params[:work_id]
-      @work = Work.find(params[:work_id])
+    base_options = {
+      page: params[:page] || 1,
+    }
+    options = params[:collection_search].present? ? collection_filter_params : {}
+    options.merge!(base_options)
+
+    if logged_in? && @tag
+      @favorite_tag = @current_user.favorite_tags
+                                   .where(tag_id: @tag.id).first ||
+                      FavoriteTag
+                      .new(tag_id: @tag.id, user_id: @current_user.id)
+    end
+
+    if params[:work_id].present?
       @collections = @work.approved_collections
         .by_title
         .for_blurb
         .paginate(page: params[:page])
-    elsif params[:collection_id]
-      @collection = Collection.find_by!(name: params[:collection_id])
-      @search = CollectionSearchForm.new({ parent_id: @collection.id, sort_column: "title.keyword" }.merge(page: params[:page]))
+    elsif @owner.present?
+      @search = CollectionSearchForm.new(options.merge(parent: @owner))
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
-      @page_subtitle = t(".subcollections_page_title", collection_title: @collection.title)
-    elsif params[:user_id]
-      @user = User.find_by!(login: params[:user_id])
-      @search = CollectionSearchForm.new({ maintainer_id: @user.id, sort_column: "title.keyword" }.merge(page: params[:page]))
-      @collections = @search.search_results.scope(:for_search)
-      flash_search_warnings(@collections)
-      @page_subtitle = ts("%{username} - Collections", username: @user.login)
+      @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
     else
       @sort_and_filter = true
-      @search = CollectionSearchForm.new(collection_filter_params.merge(page: params[:page]))
+      @search = CollectionSearchForm.new(options)
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
+      @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
     end
+
+    # if params[:work_id]
+    #   @work = Work.find(params[:work_id])
+    #   @collections = @work.approved_collections
+    #     .by_title
+    #     .for_blurb
+    #     .paginate(page: params[:page])
+    # elsif params[:collection_id]
+    #   @collection = Collection.find_by!(name: params[:collection_id])
+    #   @search = CollectionSearchForm.new({ parent_id: @collection.id, sort_column: "title.keyword" }.merge(page: params[:page]))
+    #   @collections = @search.search_results.scope(:for_search)
+    #   flash_search_warnings(@collections)
+    #   @page_subtitle = t(".subcollections_page_title", collection_title: @collection.title)
+    # elsif params[:user_id]
+    #   @user = User.find_by!(login: params[:user_id])
+    #   @search = CollectionSearchForm.new({ maintainer_id: @user.id, sort_column: "title.keyword" }.merge(page: params[:page]))
+    #   @collections = @search.search_results.scope(:for_search)
+    #   flash_search_warnings(@collections)
+    #   @page_subtitle = ts("%{username} - Collections", username: @user.login)
+    # elsif params[:tag_id]
+    #   if logged_in?
+    #     @favorite_tag = @current_user.favorite_tags
+    #                                 .where(tag_id: @tag.id).first ||
+    #                     FavoriteTag
+    #                     .new(tag_id: @tag.id, user_id: @current_user.id)
+    #     end
+    #   @sort_and_filter = true
+    #   @search = CollectionSearchForm.new({ tag_id: @tag.id, sort_column: "created_at" }.merge(page: params[:page]))
+    #   @collections = @search.search_results.scope(:for_search)
+    #   flash_search_warnings(@collections)
+    # else
+    #   @sort_and_filter = true
+    #   @search = CollectionSearchForm.new(collection_filter_params.merge(page: params[:page]))
+    #   @collections = @search.search_results.scope(:for_search)
+    #   flash_search_warnings(@collections)
+    # end
   end
 
   # display challenges that are currently taking signups
@@ -189,6 +232,48 @@ class CollectionsController < ApplicationController
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
     redirect_to(collections_path)
+  end
+
+  protected
+
+  def load_owner
+    if params[:user_id].present?
+      @user = User.find_by!(login: params[:user_id])
+    end
+    if params[:collection_id].present?
+      @collection = Collection.find_by!(name: params[:collection_id])
+    end
+    if params[:tag_id]
+      @tag = Tag.find_by_name(params[:tag_id])
+      unless @tag && @tag.is_a?(Tag)
+        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
+      end
+      unless @tag.canonical?
+        if @tag.merger.present?
+          redirect_to tag_collections_path(@tag.merger) and return
+        else
+          redirect_to(tag_path(@tag)) && return
+        end
+      end
+    end
+    @owner = @user || @collection || @tag
+  end
+
+  def index_page_title
+    # TODO: uhhhh. it's probably not this.
+    if @owner.present?
+      owner_name = case @owner.class.to_s
+                   when 'User'
+                     @owner.login
+                   when 'Collection'
+                     @owner.title
+                   else
+                     @owner.try(:name)
+                   end
+      "#{owner_name} - Collections".html_safe
+    else
+      "Latest Collections"
+    end
   end
 
   private

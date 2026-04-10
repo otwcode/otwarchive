@@ -24,6 +24,7 @@ class CollectionQuery < Query
 
   # Combine the available filters
   def filters
+    add_owner
     [
       multifandom_filter,
       signup_open_filter,
@@ -42,6 +43,19 @@ class CollectionQuery < Query
     @queries = [
       general_query
     ].flatten.compact
+  end
+
+  def add_owner
+    owner = options[:parent]
+    case owner
+      when Tag
+        options[:filter_ids] ||= []
+        options[:filter_ids] << owner.id
+      when User
+        options[:maintainer_id] = owner.id
+      when Collection
+        options[:parent_id] = owner.id
+    end
   end
 
   ####################
@@ -86,9 +100,9 @@ class CollectionQuery < Query
   end
 
   def filter_id_filter
-    return if filter_ids.blank?
+    return if options[:filter_ids].blank?
 
-    filter_ids.map { |filter_id| term_filter(:filter_ids, filter_id) }
+    options[:filter_ids].map { |filter_id| term_filter(:filter_ids, filter_id) }
   end
 
   def named_tag_inclusion_filter
