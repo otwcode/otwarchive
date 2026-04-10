@@ -10,7 +10,7 @@ describe PromptMeme do
       expect(Collection.exists?(collection.id)).to be true
     end
 
-    it "nullifies the collection's challenge reference" do
+    it "nullifies the collection's challenge references" do
       challenge.destroy!
       collection.reload
       expect(collection.challenge_id).to be_nil
