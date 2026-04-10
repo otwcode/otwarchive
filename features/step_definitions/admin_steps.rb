@@ -373,7 +373,7 @@ When "I make a translation of an admin post with title {string}" do |title|
   click_button("Post")
 end
 
-When "I visit the admin post with title {string}" do |title|
+When "I visit the admin post with title {string}" do |_title|
   admin_post = AdminPost.order(created_at: :desc).first
   visit admin_post_path(admin_post)
 end
