@@ -373,6 +373,11 @@ When "I make a translation of an admin post with title {string}" do |title|
   click_button("Post")
 end
 
+When "I visit the admin post with title {string}" do |title|
+  admin_post = AdminPost.order(created_at: :desc).first
+  visit admin_post_path(admin_post)
+end
+
 When /^I hide the work "(.*?)"$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
