@@ -31,6 +31,7 @@
     <%# i18n-tasks-use t("works.work_header_notes.inspired_by.restricted_html") %>
     <%# i18n-tasks-use t("works.work_header_notes.inspired_by.revealed_html") %>
     <%# i18n-tasks-use t("works.work_header_notes.inspired_by.unrevealed") %>
+    <%# i18n-tasks-use t("works.work_header_notes.inspired_by.deleted") %>
     <% for related_work in @work.parents_after_saving %>
       <li>
         <% relation = related_work.translation ? "translation_of" : "inspired_by" %>
