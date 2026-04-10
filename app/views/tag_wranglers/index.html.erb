@@ -77,15 +77,15 @@
     <fieldset>
       <h3 class="landmark heading">Filters</h3>
       <dl class="filters">
-        <dt><%= label_tag :media_id, t(".assignments.only_media") %></dt>
+        <dt><%= label_tag :media_id, t(".filters.only_media") %></dt>
         <dd>
           <%= select_tag :media_id, options_for_select([''] + Media.canonical.by_name.collect(&:name), params[:media_id]) %>
         </dd>
-        <dt><%= label_tag :wrangler_id, t(".assignments.only_wrangler") %></dt>
+        <dt><%= label_tag :wrangler_id, t(".filters.only_wrangler") %></dt>
         <dd>
-          <%= select_tag :wrangler_id, options_for_select(["", t(".assignments.no_wrangler")] + @wranglers.collect(&:login), params[:wrangler_id].nil? && !logged_in_as_admin? ? current_user.login : params[:wrangler_id].to_s) %>
+          <%= select_tag :wrangler_id, options_for_select(["", t(".filters.no_wrangler")] + @wranglers.collect(&:login), params[:wrangler_id].nil? && !logged_in_as_admin? ? current_user.login : params[:wrangler_id].to_s) %>
         </dd>
-        <dt><%= label_tag :fandom_string, t(".assignments.only_fandoms_starting_with") %></dt>
+        <dt><%= label_tag :fandom_string, t(".filters.only_fandoms_starting_with") %></dt>
         <dd>
           <%= text_field_tag :fandom_string, params[:fandom_string] %>
         </dd>

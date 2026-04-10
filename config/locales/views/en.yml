@@ -2868,7 +2868,7 @@ en:
       work: "(Work)"
   tag_wranglers:
     index:
-      assignments:
+      filters:
         no_wrangler: No Wrangler
         only_fandoms_starting_with: Only fandoms starting with
         only_media: Only media
