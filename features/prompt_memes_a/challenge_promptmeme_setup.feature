@@ -507,9 +507,9 @@ Feature: Prompt Meme Challenge
     And I view prompts for "Battle 12"
   Then I should see "These & < > ' ? are some HTML escape chars"
   When I claim a prompt from "Battle 12"
-    And I view my claims for "Battle 12"
+    And I go to the "Battle 12" claims page for the current user
   Then I should see "These & < > ' ? are some HTML escape chars"
-  When I view my claims
+  When I go to claimer's claims page
   Then I should see "These & < > ' ? are some HTML escape chars"
 
   When I am logged in as "mod1"

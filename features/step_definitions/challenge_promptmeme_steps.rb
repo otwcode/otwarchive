@@ -349,16 +349,6 @@ When /^I view prompts for "([^\"]*)"$/ do |title|
   step %{I follow "Prompts ("}
 end
 
-When "I view my claims" do
-  step %{I follow "My Dashboard"}
-  step %{I follow "Claims"}
-end
-
-When "I view my claims for {string}" do |title|
-  visit collection_path(Collection.find_by(title: title))
-  step %{I follow "My Claims"}
-end
-
 ### WHEN claiming
 
 When /^I claim a prompt from "([^\"]*)"$/ do |title|
