@@ -362,9 +362,9 @@ When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   click_button("Post")
 end
 
-When /^I make a translation of an admin post with title "([^"]*)"$/ do |title|
+When "I make a translation of an admin post with title {string}" do |title|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
-  admin_post_id = !admin_post.nil? ? admin_post.id : 0
+  admin_post_id = admin_post.nil? ? 0 : admin_post.id
   visit new_admin_post_path
   fill_in("admin_post_title", with: title)
   fill_in("content", with: "Some translated content.")
