@@ -1,18 +1,13 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
   <% if @collections.empty? %>
-    <%# do we need this disclaimer? %>
-    <%= ts("Sorry, there were no collections found.") %>
-  <% elsif @user %>
-    <%= t(".page_heading.collections_by", collections: search_header(@collections, @query, ts("Collection"), @owner), user: @user.login) %>
+    <%= t(".page_heading.sorry") %>
+  <% elsif @user || @tag || @work %>
+    <%= search_header(@collections, @query, t(".page_heading.collection"), @owner) %>
   <% elsif @collection %>
-    <%= t(".page_heading.subcollections_in", subcollections: search_header(@collections, @query, ts("Subcollection"), @owner), collection: @collection.title) %>
-  <% elsif @work %>
-    <%= t(".page_heading.collections_including", collections: search_header(@collections, @query, ts("Collection"), @owner), work: @work.title) %>
-  <% elsif @tag %>
-    <%= "whoa it's a tag" %>
+    <%= search_header(@collections, @query, t(".page_heading.subcollection"), @owner) %>
   <% else %>
-    <%= t(".page_heading.collections_in_the", collections: search_header(@collections, @query, ts("Collection"), @owner), archive: ArchiveConfig.APP_NAME) %>
+    <%= t(".page_heading.collections_in_the", collections: search_header(@collections, @query, t(".page_heading.collection"), @owner), archive: ArchiveConfig.APP_NAME) %>
   <% end %>
 </h2>
 

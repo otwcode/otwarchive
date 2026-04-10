@@ -240,6 +240,9 @@ class CollectionsController < ApplicationController
     if params[:user_id].present?
       @user = User.find_by!(login: params[:user_id])
     end
+    if params[:work_id].present?
+      @work = Work.find(params[:work_id])
+    end
     if params[:collection_id].present?
       @collection = Collection.find_by!(name: params[:collection_id])
     end
@@ -256,7 +259,7 @@ class CollectionsController < ApplicationController
         end
       end
     end
-    @owner = @user || @collection || @tag
+    @owner = @user || @work || @collection || @tag
   end
 
   def index_page_title

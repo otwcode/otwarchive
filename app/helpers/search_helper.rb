@@ -27,6 +27,8 @@ module SearchHelper
       header << ts("by %{username}", username: parent.login)
     when Language
       header << ts("in %{language}", language: parent.name)
+    when Work
+      header << ts("including %{work}", work: parent.title)
     end
 
     header << ts("in %{tag_link}", tag_link: link_to_tag_with_text(parent, parent.name)) if parent.is_a?(Tag)

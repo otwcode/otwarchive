@@ -804,10 +804,10 @@ en:
         label: Multifandom
     index:
       page_heading:
-        collections_by: "%{collections} by %{user}"
+        collection: Collection
         collections_in_the: "%{collections} in the %{archive}"
-        collections_including: "%{collections} including %{work}"
-        subcollections_in: "%{subcollections} in %{collection}"
+        sorry: Sorry, there were no collections found.
+        subcollection: Subcollection
     sidebar:
       bookmarks: Bookmarked Items (%{count})
       challenge_settings: Challenge Settings
