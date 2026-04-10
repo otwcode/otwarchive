@@ -14,6 +14,7 @@ Feature: Edit preferences
   When I am logged in as "scott" with password "password"
     And I go to scott's user page
     And I follow "Preferences"
+  Then I should see the page title "scott - Preferences"  
   Then I should see "Set My Preferences"
     And I should see "Hide my work from search engines when possible."
     And I should see "Hide the share buttons on my work."
