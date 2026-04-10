@@ -135,6 +135,11 @@
     <p class="footnote">
       <%= link_to t(".clear_filters"), collections_path %>
     </p>
+    <div>
+      <%= hidden_field_tag("collection_id", @collection.id) if @collection %>
+      <%= hidden_field_tag("tag_id", @tag.to_param) if @tag %>
+      <%= hidden_field_tag("user_id", @user.login) if @user %>
+    </div>
   <% end %>
   <% # On narrow screens, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
   <p class="narrow-shown hidden">

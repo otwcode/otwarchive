@@ -29,7 +29,7 @@
     <li><%= render "favorite_tags/form", current_user: @current_user, favorite_tag: @favorite_tag %></li>
   <% end %>
   <% # Collections and Open Challenges links unless a logged in user viewing own collections page %>
-  <% unless logged_in? && @user && @user == current_user %>
+  <% unless @tag || (logged_in? && @user && @user == current_user) %>
     <li><%= span_if_current ts("Collections"), collections_path %></li>
     <li><%= link_to ts("Open Challenges"), list_challenges_collections_path %></li>
   <% end %>
@@ -42,7 +42,7 @@
     <% # Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
     <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
       <li><%= link_to ts("New Subcollection"), new_collection_collection_path(@collection) %></li>
-    <% else %>
+    <% elsif !@tag %>
       <li><%= link_to ts("New Collection"), new_collection_path %></li>
     <% end %>
   <% end %>
