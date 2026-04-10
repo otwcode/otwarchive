@@ -497,6 +497,8 @@ en:
           submit: Enable Two-Step Verification
         page_heading: Set Up Two-Step Verification
       show_backup_codes:
+        backup_codes_copied: Backup Codes Copied!
+        copy_to_clipboard: Copy Backup Codes to Clipboard
         finish: Finish
         page_heading: Two-Step Verification Backup Codes
         write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
@@ -667,9 +669,7 @@ en:
         close_requests_html: Close Requests &#8593;
         heading:
           for_collection: Sign-ups for %{collection}
-          for_search:
-            one: Sign-up
-            other: Sign-ups
+          for_search: Sign-up
         navigation:
           download_csv: Download (CSV)
           search: Search
@@ -1205,11 +1205,214 @@ en:
         symbols_html: When browsing the Archive, warnings will be displayed in the blurb of each work. Official warning tags are displayed in bold. A four square grid in the top left corner of each work's blurb indicates the work's rating, completion status, pairing category, and any Archive warnings that apply to it. Refer to the %{symbols_key_chart_link} for more information.
         symbols_key_chart: Symbols Key Chart
       welcome_header: Welcome to the %{app_name}!
+    html:
+      allowed_html:
+        header: Allowed HTML
+      formatting:
+        a_blank_line: If you leave a blank line between two paragraphs, we will put paragraph tags in for you around the two paragraphs.
+        after_first_put_note: When you edit your HTML after you first put it in, you will see the results of our formatting work, so you can correct any mistakes our formatter might have made. Please note that the best way to get good results is to put in good HTML -- that is how you can be sure your story will look right across various browsers, screen readers, mobile devices, and downloads.
+        description: 'When you enter HTML into the archive, we do some cleanup on it to make sure that it is safe (so spammers and hackers cannot upload badness) and try and do some basic formatting both for your convenience and for accessibility reasons. Here are the formatting steps we take:'
+        example:
+          blockquote:
+            description_html: "&lt;blockquote&gt;%{text_blockquote}&lt;/blockquote&gt;"
+            text: To quote a block of text
+          chapter_title: "<h3>Chapter title<h3>"
+          cite:
+            description_html: Try cite to cite &lt;cite&gt;%{phrase_or_title_cite}&lt;/cite&gt;
+            phrase_or_title: a phrase or title
+          em:
+            description_html: "&lt;em&gt;%{rodney_italic}&lt;/em&gt; McKay"
+            rodney: Rodney
+          footnote_title: "<h6>Footnote title<h6>"
+          inline_quote:
+            description_html: Use q to &lt;q&gt;%{phrase_inline_quote}&lt;/q&gt;
+            phrase: To quote a phrase
+          scene_title: "<h4>Scene title<h4>"
+          strong:
+            description_html: I will &lt;strong&gt;%{never_bold}&lt;/strong&gt; understand you!
+            never: never
+          subtitle_h2: "<h2>Subtitle<h2>"
+          subtitle_h5: "<h5>Subtitle<h5>"
+          title: "<h1>Title<h1>"
+        forgotten_open_tags: If you have forgotten to close a formatting tag, it will be closed at the end of the paragraph for you.
+        good_html_note_html: Good HTML means HTML that labels what the text is supposed to be -- so if you have paragraphs, they should be inside paragraph tags, not just separated with break tags. If you have emphasized text, it should be inside em tags. If you have a list of items, each item should be inside list tags. If you %{negation_italic} have a list of items, you shouldn't have list tags. :) (We are putting together a set of more detailed helpful references about this, but this is the basic idea.)
+        header: How Do We Format Your HTML?
+        misnested_tags:
+          corrected_text: text!
+          description_html: 'If you have mis-nested tags like this: &lt;em&gt;&lt;strong&gt;%{text_bold_italic}&lt;/em&gt;&lt;/strong&gt; we will fix the mis-nesting (so it would become &lt;em&gt;&lt;strong&gt;%{corrected_text_bold_italic}&lt;/strong&gt;&lt;/em&gt;).'
+          text: text!
+        negation: don't
+        not_satisfied_note: If you find yourself putting in HTML that doesn't mean the right thing, in order to get a particular visual effect, please resist! The work skin feature allows you to apply custom CSS to works, and that lets you make them look just about any way you want them to (and is easier if you are starting from good HTML).
+        recommendations:
+          emphasis_html: For emphasis, use emphasis tags %{emphasis_tags_code}
+          headings_html: 'For headings, use heading tags: %{heading_tags_code}'
+          lead_in: 'Some specific recommendations:'
+          quote_html: 'To quote poetry, phrases or titles use quote tags: %{quote_tags_code}'
+        single_carriage_return: If you have a single carriage return between two lines of text, we will put in a break tag for you.
+        tags_spanning_paragraphs: If you open a formatting tag in one paragraph and close it several paragraphs later, we will reopen/close it within each paragraph.
+        two_blank_lines: If you have two blank lines in a row between paragraphs, we will add extra whitespace in for you (with <p>&nbsp;</p>)
+        two_break_tags: If you have two break tags in a row (<br /><br />) with nothing between them, we will turn that into paragraph tags.
+        unwanted_larger_text: If one bit of your text shows up larger than the rest, probably our formatter couldn't figure out to put paragraph tags around it. You can fix this by manually putting in the paragraph tags around that one bit.
+        unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
+      page_heading: HTML on the Archive
+    preferences_collection:
+      allow_collection_invitation:
+        changing: Changing this setting won't affect any existing works in collections.
+        disabling: Leaving this option disabled will prevent other users from inviting your works into their collections at all, and you won't receive any notifications.
+        enabling_html: Enabling this option will allow other %{app_name} users to invite your work into their collection. Your work won't be added to the collection until you have accepted the request. For more information on accepting collection invitations, refer to %{how_to_approve_faq_link}
+        header: Allow others to invite my works to collections
+        how_to_approve_faq: How do I approve or reject an invitation to include my work in a collection?
+      allow_gifts:
+        description_html: If this option is disabled, users are only able to give a gift work to you if they're completing a gift exchange assignment or fulfilling a claimed prompt in a prompt meme. If you'd like to allow users to give you gift works outside of assignments and claimed prompts, enable this option. Note that you're always able to refuse gifts individually. Check out %{how_to_refuse_faq_link} for instructions.
+        header: Allow anyone to gift me works
+        how_to_refuse_faq: How do I refuse a gift?
+      page_heading: Collections, Challenges and Gifts Preferences
+      turn_off_collection_emails:
+        description: Enable this option if you would prefer not to receive email alerts from collections, such as creator and work reveals. We'll still email you if your username or work is hidden after being added to a collection. Notifications will still be delivered to your Archive inbox unless you have chosen to disable them.
+        header: Turn off emails from collections
+      turn_off_collection_inbox:
+        description: Enable this option if you would prefer not to receive notifications in your Archive inbox from collections, for example, notifying you when hidden works are revealed. Notifications will still be emailed to you unless you have chosen to disable them.
+        header: Turn off inbox messages from collections
+      turn_off_gift_emails:
+        description: Enable this option if you would prefer not to receive email alerts when someone gifts a work to you. Notifications will still be displayed on your Gifts page.
+        header: Turn off emails about gift works
+    preferences_comment:
+      guest_replies_off:
+        description_html: Enable this option if you would prefer not to receive replies from users who aren't logged in to an Archive account on comments you leave on news posts or other creators' works. This setting doesn't apply to comments on your own works; for more on controlling who can interact with you on your works check out the %{posting_and_editing_faq_link}.
+        header: Do not allow guests to reply to my comments on news posts or other users' works
+        posting_and_editing_faq: Posting and Editing FAQ
+      page_heading: Comment Preferences
+      turn_off_copies_own_comments:
+        description: Enable this option if you prefer not to receive emails for your own comments (for example, when you reply to comments on your own works).
+        header: Turn off copies of your own comments
+      turn_off_emails:
+        description: Enable this option if you would prefer not to receive email alerts when someone comments on your work or replies to a comment you have made. Comment notifications will still be delivered to your Archive inbox unless you have chosen to disable them.
+        header: Turn off emails about comments
+      turn_off_inbox:
+        description: Enable this option if you would prefer not to receive notifications in your Archive inbox when someone comments on your work or replies to a comment you have made. Comment notifications will still be emailed to you unless you have chosen to disable them.
+        header: Turn off messages to your inbox about comments
+      turn_off_kudos_emails:
+        description: Enable this option if you would prefer not to receive email notifications when someone leaves kudos on your work.
+        header: Turn off emails about kudos
+    preferences_display:
+      hide_additional_tags:
+        description: When this option is enabled, additional tags on works will be hidden by default. You can click 'Show Additional Tags' to display the tags for any individual work. You must have JavaScript enabled to use this option.
+        header: Hide additional tags (you can still choose to show them)
+      hide_warnings:
+        description: When this option is enabled, Archive warning tags on works will be hidden by default. You can click 'Show Warnings' to display the warnings for any individual work. You must have JavaScript enabled to use this option.
+        header: Hide warnings (you can still choose to show them)
+      hide_work_skins:
+        description: When this option is enabled, the custom skin another user has specified for their work will not be displayed. Instead your normal site skin will be applied.
+        header: Hide other people's work skins
+      page_heading: Display Preferences
+      show_adult_content:
+        description: When this option is enabled, you won't be asked to confirm that you wish to access works rated Mature, Explicit or Not Rated before the work is displayed.
+        header: Show me adult content without checking
+      show_whole_work_default:
+        description: When this option is enabled, works with multiple chapters will display as a single page.
+        header: Show the whole work by default
     preferences_locale:
       locale:
         description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
         header: Set preferred locale
       page_heading: Locale Preferences
+    preferences_misc:
+      page_heading: Miscellaneous Preferences
+      turn_off_banner_every_page:
+        description: Occasionally, Archive staff may notify users of important events or site changes by displaying a banner across all pages on the site. If you want to dismiss the banner while you're logged in, enable this option. Please note that this only hides the banner which was displaying at the time you enabled this option. If the banner is changed, the new banner will be displayed until you enable this option again.
+        header: Turn off the banner showing on every page
+      turn_on_history:
+        description: When enabled, History keeps a log of every work you access on the Archive while logged in. You can delete individual works from your History or clear the whole History. If you enable this option and subsequently disable it, works accessed while the option was enabled will still be saved (but you will have to enable History again to see them).
+        header: Turn on History
+      turn_on_new_user_help:
+        description: Enabling this option will turn on the banner offering information and hints on getting started with the Archive!
+        header: Turn the new user help banner back on
+    preferences_privacy:
+      allow_co_creator_invite:
+        changing: Changing this setting won't affect any existing shared works.
+        disabling: Leaving this option disabled will prevent other users from inviting you to be listed as a co-creator on a new work, chapter or series, and you won't receive any notifications.
+        enabling: Enabling this option will allow other %{app_name} users to invite you to be listed as a co-creator on a work, chapter, or series. You won't be listed as a co-creator anywhere on the site until you have accepted the request. If you have this option enabled, you can find any requests you receive in your Dashboard under "Co-Creator Requests". You will also receive an email notifying you of the request.
+        header: Allow others to invite me to be a co-creator.
+      hide_share_buttons:
+        description: This preference allows you to disable the one-click share buttons which allow others to recommend your work on external sites like Twitter and Tumblr.
+        header: Hide the share buttons on my work.
+        note: Please note that once you have posted a work online, it is always possible for a reader to copy and paste a link to your work anywhere they wish -- if you want to restrict access to your work here, your best bet is to lock the work to registered users of the Archive.
+      hide_work_from_search_engines:
+        description: Enabling this option will tell search engines not to index your user page, your works, or your series. Please note that not all search engines respect this setting. Pages which list your works or series - for example, the main works page - may also still be indexed. If you wish to avoid your works or series being indexed under any circumstances, we recommend that you restrict them to Archive users only.
+        header: Hide my work from search engines when possible.
+      more_information_html: For more on your preferences and what these options mean, check out our %{preferences_faq_link}.
+      page_heading: Privacy Preferences
+      preferences_faq: Preferences FAQ
+    preferences_work_title_format:
+      description: 'Specify how the page title looks in your browser when you are reading a story. Some examples:'
+      example:
+        default: This is the default format.
+        no_fandom: Don't include the fandom.
+        reverse_underscore: Start with fandom, then with author, then title, with underscores instead of dashes.
+      page_heading: Work Title Format
+    rte:
+      description_html: 'The exact behavior of the Rich Text Editor (%{rte_abbreviation}) depends on your device, browser, and operating system as well as the source you''re pasting from. However, starting with a well-formatted document will help you get the most out of the %{rte_abbreviation_no_title}. Here are some general tips to ensure that as much of your formatting as possible will be retained:'
+      enter_once:
+        description_html: "%{intro_sentence_bold_html} Pressing %{enter_for_twice_key} twice will insert a blank paragraph, creating additional, and likely unwanted, space between paragraphs when you paste into the %{rte_abbreviation}. The Archive uses top and bottom margins to create the appearance of a blank line between paragraphs; you can use the paragraph formatting options in your text editor to create a similar effect without adding extra %{p_tag_code} tags."
+        enter_for_once: Enter
+        enter_for_twice: Enter
+        intro_sentence_html: Press %{enter_for_once_key} %{once_italic} between paragraphs.
+        once: once
+        rte_abbreviated: RTE
+      page_heading: Rich Text
+      pasting_formatting:
+        alignment:
+          css_abbreviated: CSS
+          css_for_inline_abbreviated: CSS
+          description_html: Text alignment is now generally achieved with %{css_abbreviation}, and because the Archive does not allow inline %{css_for_inline_abbreviation}, alignment will often be lost when pasting.
+          header: Alignment
+          rte_abbreviated: RTE
+          when_it_works_html: Pasting from sources that use the %{align_tag_code} attribute and %{center_tag_code} element will keep the formatting intact, but please note that the alignment buttons in the %{rte_abbreviation} cannot modify center alignment created with the %{center_tag_code} tag.
+        header: Pasting Specific Types of Formatting
+        headings:
+          description_html: Text editors use many different styles for their heading presets. For example, selecting Heading 4 in OpenOffice produces italicized sans-serif text. Even when successfully pasting a heading into the %{rte_abbreviation}, this visual formatting is %{negation_italic} preserved -- only the %{h4_tag_code} tag is. This is not a bug. %{html_abbreviation} is designed to tell the browser what text means (e.g. "This is a heading") and not how it should be displayed (e.g. "This should be in Arial"). If you wish to modify the style of a heading or any other part of your work, please use a Work Skin.
+          header: Headings
+          html_abbreviated: HTML
+          negation: not
+          rte_abbreviated: RTE
+        indented_text:
+          description_html: Indented text is a purely visual effect with no %{html_abbreviation} equivalent and will not be preserved. Please use a Work Skin to indent text.
+          header: Indented Text
+          html_abbreviated: HTML
+        underline_strikethrough:
+          css_abbreviated: CSS
+          css_for_inline_abbreviated: CSS
+          description_html: Underline and strikethrough are often produced with %{css_abbreviation}. Because the Archive does not allow the use of inline %{css_for_inline_abbreviation}, these text styles are frequently lost when pasting.
+          header: Underline and Strikethrough
+          when_it_works_html: Pasting from web pages that use %{u_tag_code}, %{del_tag_code}, %{strike_tag_code}, or %{s_tag_code} tags will work.
+      pasting_from:
+        google_drive:
+          css_abbreviated: CSS
+          css_full: Cascading Style Sheets
+          description_html: Google Drive uses inline %{css_abbreviation} to change the alignment of text and to produce bold, italic, underline, and strikethrough formatting. Unfortunately, we cannot allow inline styles on the Archive, so only pure %{html_abbreviation} formatting such as headings, lists, links, and tables is retained.
+          header: Google Drive
+          html_abbreviated: HTML
+          html_for_sanitizer_abbreviated: HTML
+          misleading_appearance_html: In some browsers, the formatting may appear to be preserved upon pasting into the %{rte_abbreviation}, but it will be stripped by our %{html_for_sanitizer_abbreviation} sanitizer upon previewing or posting your work.
+          rte_abbreviated: RTE
+        header: Pasting from Specific Text Editors
+        scrivener:
+          copy_as: Select either "Copy as HTML" or "Copy as HTML (Basic, using <p> and <span>)"
+          copy_special: Choose Copy Special
+          description_html: 'Scrivener users will typically get better results by pasting into the %{html_abbreviation} editor and then switching to the %{rte_abbreviation} to make changes. To copy HTML from Scrivener, do the following:'
+          edit_menu: Go to the Edit menu
+          header: Scrivener
+          html_abbreviated: HTML
+          rte_abbreviated: RTE
+      rte_abbreviated: RTE
+      rte_abbreviated_no_title: RTE
+      rte_full: Rich Text Editor
+      use_preset_styles:
+        description_html: "%{intro_sentence_bold_html} The Styles option generally found in a text editor's Format menu will often translate into %{html_abbreviation} tags when pasting into the %{rte_abbreviation}. Simply changing the font size, font name, or text indent to create a visual approximation of a heading or block quote will always fail."
+        html_abbreviated: HTML
+        html_full: HyperText Markup Language
+        intro_sentence_html: Use preset styles for headings, block quotations, code, and so on.
+        rte_abbreviated: RTE
     skins_basics:
       only: only
       site_skins_basics: A site skin lets you customize your browsing experience when you are logged in to your account. Don't like the Archive fonts? You can change them! Don't like the red header? Swap it out for blue! When you make a site skin, keep in mind that you are only changing the Archive for yourself -- other Archive users will see the Archive in whatever skin they are using. In other words, site skins are useful for creating your own ideal browsing experience, not for changing the way a work appears for others.
@@ -1288,6 +1491,81 @@ en:
       load_archive_skin_components: If you create a replacement skin, you might want to load up all the skins that make up the current default Archive site as parents. This option is only available when you select "replace archive skin entirely" from the "What it does" menu. After that, you can edit your skin and delete just the ones you don't want. This will be easier if you are using nearly all of them, since there are a lot!
       load_archive_skin_components_header: Load Archive Skin Components
       skins_interface_faq: the Skins and Interface FAQ
+    symbols_key:
+      categories:
+        alt: Second Square
+        femslash:
+          alt: F/F
+          definition: 'F/F: female/female relationships'
+        gen:
+          alt: Gen
+          definition: 'Gen: no romantic or sexual relationships, or relationships which are not the main focus of the work'
+        heading: Relationships, pairings, orientations
+        het:
+          alt: F/M
+          definition: 'F/M: female/male relationships'
+        multi:
+          alt: Multi
+          definition: 'Multi: more than one kind of relationship, or a relationship with multiple partners'
+        none:
+          alt: blank square
+          definition: The work was not put in any categories
+        other:
+          alt: Other
+          definition: Other relationships
+        slash:
+          alt: M/M
+          definition: 'M/M: male/male relationships'
+      page_heading: Symbols we use on the Archive
+      ratings:
+        alt: First Square
+        explicit:
+          alt: E
+          definition: 'Explicit: only suitable for adults'
+        general:
+          alt: G
+          definition: General Audiences
+        heading: Content rating
+        mature:
+          alt: M
+          definition: Mature
+        none:
+          alt: blank square
+          definition: The work was not given any rating
+        teen:
+          alt: T
+          definition: Teen And Up Audiences
+      status:
+        alt: Fourth Square
+        complete:
+          alt: ticky
+          definition: This work is completed!/This prompt is filled!
+        heading: Is the work finished or the prompt fulfilled?
+        incomplete:
+          alt: stop sign
+          definition: This is a work in progress or is incomplete/unfulfilled.
+        none:
+          alt: blank square
+          definition: This work's status is unknown.
+      warnings:
+        alt: Third Square
+        default:
+          alt: questioned exclamation mark
+          definition_html: The author chose not to warn for content, or Archive Warnings %{emphasized_modal} apply, but the author has chosen not to specify them.
+          emphasized_modal: could
+        external_work:
+          alt: globe
+          definition: This is an external work; please consult the work itself for warnings.
+        heading: Content warnings
+        none:
+          alt: blank square
+          definition: The work was not marked with any Archive Warnings. Please note that an author may have included other information about their work in the Additional Tags (Genre, Warnings, Other Information) section.
+        warning_yes:
+          alt: exclamation mark
+          definition_html: 'At least one of these warnings applies: graphic depictions of violence, major character death, rape/%{non_con}, underage sex. The specific warnings are shown in the Archive Warnings tags.'
+          non_con:
+            acronym: non-con
+            title: non-consensual sex
     tags_fandoms:
       description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
       more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
@@ -2370,6 +2648,7 @@ en:
         allow_collection_invitation: Allow others to invite my works to collections.
         allow_gifts: Allow anyone to gift me works.
         heading: Collections, Challenges and Gifts
+        help_title: Collection preferences
         legend: Collections, Challenges and Gifts
         turn_off_collection_emails: Turn off emails from collections.
         turn_off_collection_inbox: Turn off inbox messages from collections.
@@ -2377,6 +2656,7 @@ en:
       comments:
         guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
         heading: Comments
+        help_title: Comment preferences
         legend: Comments
         turn_off_copies_own_comments: Turn off copies of your own comments.
         turn_off_emails: Turn off emails about comments.
@@ -2384,6 +2664,7 @@ en:
         turn_off_kudos_emails: Turn off emails about kudos.
       display:
         heading: Display
+        help_title: Display preferences
         hide_additional_tags: Hide additional tags (you can still choose to show them).
         hide_warnings: Hide warnings (you can still choose to show them).
         hide_work_skins: Hide work skins (you can still choose to show them).
@@ -2393,6 +2674,7 @@ en:
       locale_help_title: Locale preferences help
       misc:
         heading: Misc
+        help_title: Misc preferences
         legend: Misc
         turn_off_banner_every_page: Turn off the banner showing on every page.
         turn_on_history: Turn on History.
@@ -2410,11 +2692,13 @@ en:
       privacy:
         allow_co_creator_invite: Allow others to invite me to be a co-creator.
         heading: Privacy
+        help_title: Privacy preferences
         hide_share_buttons: Hide the share buttons on my work.
         hide_work_from_search_engines: Hide my work from search engines when possible.
         legend: Privacy
       public_site_skins: Public Site Skins
       skins_basics_help_title: Skins basics
+      work_title_format_help_title: Work title format
       your_locale: Your locale
       your_site_skin: Your site skin
       your_time_zone: Your time zone
@@ -2687,7 +2971,9 @@ en:
         canonical_or_synonymous: Canonical or synonymous
         noncanonical: Non-canonical
         noncanonical_and_nonsynonymous: Non-canonical and non-synonymous
+        noncanonical_nonsynonymous_and_not_unwrangleable: Non-canonical and non-synonymous and not marked unwrangleable
         synonymous: Synonymous
+        unwrangleable: Unwrangleable
       tag_name: Tag name
       type: Type
       wrangling_status: Wrangling status
@@ -2919,11 +3205,6 @@ en:
           tag_wrangling: Tag Wrangling
           works: My Works
       new:
-        beta_reminder:
-          give_feedback: give us your feedback
-          reminder: 'Reminder:'
-          report_bugs: Please report any pesky bugs and %{give_feedback_link}!
-          warning: This site is in beta. Things may break or crash without notice.
         login:
           create_account: Create an account now
           forgot: Forgot your password or username? %{reset_password_link}.
@@ -3140,6 +3421,5 @@ en:
       post: Post
       required_information: Required information
       rich_text_editor: Rich Text
-      rich_text_notes_html: Type or paste formatted text.
       title: Title
       title_failure: Please enter a title.

@@ -9,6 +9,7 @@ class PreferencesController < ApplicationController
   end
 
   def index
+    @page_subtitle = t(".page_title", username: @user.login)
     @preference = @user.preference
     authorize @preference if logged_in_as_admin?
     @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq

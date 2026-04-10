@@ -30,7 +30,6 @@ class User < ApplicationRecord
   has_many :roles_users
   has_many :roles, through: :roles_users, dependent: :destroy
 
-  ### BETA INVITATIONS ###
   has_many :invitations, as: :creator
   has_one :invitation, as: :invitee
   has_many :user_invite_requests, dependent: :destroy
@@ -472,8 +471,6 @@ class User < ApplicationRecord
   def sole_owned_collections
     self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
   end
-
-  ### BETA INVITATIONS ###
 
   # If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed
