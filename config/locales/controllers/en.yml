@@ -123,7 +123,11 @@ en:
       page_title: "%{collection_title} - Profile"
   collections:
     index:
-      subcollections_page_title: "%{collection_title} - Subcollections"
+      page_title:
+        general: "Collections"
+        subcollection: "%{collection_title} - Subcollections"
+        tag: "%{tag_name} - Collections"
+        user: "%{user_name} - Collections"
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.

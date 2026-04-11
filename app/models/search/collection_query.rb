@@ -47,6 +47,7 @@ class CollectionQuery < Query
 
   def add_owner
     owner = options[:parent]
+    # should maybe be an if statement?
     case owner
       when Tag
         options[:filter_ids] ||= []
@@ -100,9 +101,9 @@ class CollectionQuery < Query
   end
 
   def filter_id_filter
-    return if options[:filter_ids].blank?
+    return if filter_ids.blank?
 
-    options[:filter_ids].map { |filter_id| term_filter(:filter_ids, filter_id) }
+    filter_ids.map { |filter_id| term_filter(:filter_ids, filter_id) }
   end
 
   def named_tag_inclusion_filter

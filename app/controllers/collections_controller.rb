@@ -37,6 +37,8 @@ class CollectionsController < ApplicationController
     options = params[:collection_search].present? ? collection_filter_params : {}
     options.merge!(base_options)
 
+    @page_title = index_page_title
+
     if logged_in? && @tag
       @favorite_tag = @current_user.favorite_tags
                                    .where(tag_id: @tag.id).first ||
@@ -227,6 +229,18 @@ class CollectionsController < ApplicationController
       end
     end
     @owner = @user || @work || @collection || @tag
+  end
+
+  def index_page_title
+    if @collection.present?
+      t(".page_title.subcollection", collection_title: @collection.title)
+    elsif @user.present?
+      t(".page_title.user", user_name: @user.login)
+    elsif @tag.present?
+      t(".page_title.tag", tag_name: @tag.name)
+    else
+      t(".page_title.general")
+    end
   end
 
   private
