@@ -36,7 +36,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     aaronh-chronic (0.3.9)
-    action_text-trix (2.1.17)
+    action_text-trix (2.1.18)
       railties
     actioncable (8.1.2.1)
       actionpack (= 8.1.2.1)
@@ -147,7 +147,7 @@ GEM
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.3.0)
-    bcrypt (3.1.20)
+    bcrypt (3.1.22)
     bcrypt_pbkdf (1.1.0)
     better_html (2.0.2)
       actionview (>= 6.0)

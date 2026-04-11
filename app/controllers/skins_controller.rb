@@ -41,6 +41,7 @@ class SkinsController < ApplicationController
         @title = ts('Public Site Skins')
       end
     end
+    @page_subtitle = @title.html_safe
   end
 
   # GET /skins/1
@@ -152,7 +153,7 @@ class SkinsController < ApplicationController
       current_user.preference.skin_id = AdminSetting.default_skin_id
       current_user.preference.save
     end
-    flash[:notice] = ts("You are now using the default Archive skin again!")
+    flash[:notice] = t("skins.default_skin")
     redirect_back_or_to root_path
   end
 

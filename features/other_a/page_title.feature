@@ -71,3 +71,13 @@ Scenario: New tag set page has the expected browser page title
   When I am logged in as "user"
   When I go to the new tag set page
   Then I should see the page title "New Owned Tag Set | Example Archive"
+
+Scenario: Public site skins page has the expected browser page title
+
+  When I go to the public skins page
+  Then I should see the page title "Public Site Skins | Example Archive"
+
+Scenario: Public work skins page has the expected browser page title
+
+  When I go to the work-skins page
+  Then I should see the page title "Public Work Skins | Example Archive"
