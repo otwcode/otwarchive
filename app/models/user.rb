@@ -24,7 +24,7 @@ class User < ApplicationRecord
   # Allows other models to get the current user with User.current_user
   thread_cattr_accessor :current_user
 
-  before_validation :canonicalize_email, if: :will_save_change_to_email?
+  after_validation :canonicalize_email, if: :will_save_change_to_email?
 
   # Authorization plugin
   acts_as_authorized_user
@@ -34,7 +34,7 @@ class User < ApplicationRecord
 
   has_many :invitations, as: :creator
   has_one :invitation, as: :invitee
-  has_many :user_invite_requests, dependent: :destroy
+  has_many :user_invite_requests, dependent: :destroy 
 
   attr_accessor :invitation_token
   before_create :create_default_associateds
