@@ -60,7 +60,9 @@ module ApplicationHelper
   COLLECTION_FILTER_ACTIONS = %w[index list_challenges list_ge_challenges list_pm_challenges].freeze
 
   def page_has_filters?
-    @facets.present? || (controller.controller_name == "collections" && COLLECTION_FILTER_ACTIONS.include?(controller.action_name)) || (controller.controller_name == "fandoms" && controller.action_name == "unassigned")
+    @facets.present? || # rubocop:disable Rails/HelperInstanceVariable
+      (controller.controller_name == "collections" && COLLECTION_FILTER_ACTIONS.include?(controller.action_name)) ||
+      (controller.controller_name == "fandoms" && controller.action_name == "unassigned")
   end
 
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
