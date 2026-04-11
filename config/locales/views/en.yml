@@ -805,6 +805,20 @@ en:
         footnote: Use this if your collection is not fandom-specific.
         label: Multifandom
     index:
+      landmark:
+        navigation: Navigation
+        list_collections: List of Collections
+      navigation:
+        all_collections: Collections
+        bookmarks: Bookmarks
+        collections: Collections
+        filters: Filters
+        manage_collection: Manage Collection Items
+        new_collection: New Collection
+        new_subcollection: New Subcollection
+        open_challenges: Open Challenges
+        user_collections: Collections
+        works: Works
       page_heading:
         collection: Collection
         collections_in_the: "%{collections} in the %{archive}"

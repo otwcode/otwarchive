@@ -39,13 +39,6 @@ class CollectionsController < ApplicationController
 
     @page_title = index_page_title
 
-    if logged_in? && @tag
-      @favorite_tag = @current_user.favorite_tags
-                                   .where(tag_id: @tag.id).first ||
-                      FavoriteTag
-                      .new(tag_id: @tag.id, user_id: @current_user.id)
-    end
-
     if params[:work_id].present?
       @collections = @work.approved_collections
         .by_title
