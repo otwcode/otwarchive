@@ -35,10 +35,10 @@ class SkinsController < ApplicationController
         @page_subtitle = t(".public_work_page_title")
       else
         @skins = if logged_in?
-          Skin.approved_skins.usable.site_skins.sort_by_recent_featured.with_attached_icon
-        else
-          Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured.with_attached_icon
-        end
+                   Skin.approved_skins.usable.site_skins.sort_by_recent_featured.with_attached_icon
+                 else
+                   Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured.with_attached_icon
+                 end
         @title = ts('Public Site Skins')
         @page_subtitle = t(".public_site_page_title")
       end
