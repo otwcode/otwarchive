@@ -753,6 +753,11 @@ en:
       meta:
         collection_tags: 'Collection tags:'
   collections:
+    challenge_collections:
+      list_heading: List of Challenges
+      no_challenges: There are no challenges currently open for sign-ups in the archive.
+      open_description: The following challenges are currently open for sign-ups! Those closing soonest are at the top.
+      search_header_label: Challenge
     collection_blurb:
       collection_tags: 'Collection Tags:'
     filters:
