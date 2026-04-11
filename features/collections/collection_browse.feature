@@ -179,7 +179,7 @@ Feature: Collection
       And I should not see "Some Other Collection"
       And I should not see "Surprise Presents"
 
-  Scenario: Filter collections by non-canonical and non-existent collection tags
+  Scenario: Filter collections by canonicals, synonyms, noncanonicals, and non-existent collection tags
 
   Given a set of collections for searching
   When I go to the collections page
@@ -187,8 +187,8 @@ Feature: Collection
     And I press "Sort and Filter"
   Then I should see "Some Test Collection"
     And I should see "Some Other Collection"
+    And I should see "Surprise Presents"
     But I should not see "Another Plain Collection"
-    And I should not see "Surprise Presents"
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
   When I fill in "collection_search_tag" with "The Best Tag,The Better Tag"
@@ -204,7 +204,15 @@ Feature: Collection
   Then I should see "Some Test Collection"
     And I should see "Some Other Collection"
     And I should see "Another Plain Collection"
-    But I should not see "Surprise Presents"
+    And I should see "Surprise Presents"
+    And I should not see "Another Gift Swap"
+    And I should not see "On Demand"
+  When I fill in "collection_search_tag" with "TBT"
+    And I press "Sort and Filter"
+  Then I should see "Surprise Presents"
+    But I should not see "Some Test Collection"
+    And I should not see "Some Other Collection"
+    And I should not see "Another Plain Collection"
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
 

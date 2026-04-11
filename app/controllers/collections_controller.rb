@@ -246,7 +246,7 @@ class CollectionsController < ApplicationController
   private
 
   def collection_filter_params
-    params.permit(:commit, collection_search: [
+    params.permit(:commit, :tag_id, collection_search: [
       :title, :challenge_type, :moderated, :multifandom, :closed, :tag,
       :sort_column, :sort_direction
     ])[:collection_search] || {}

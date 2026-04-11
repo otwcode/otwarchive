@@ -138,6 +138,11 @@ Given "I have joined the collection {string} as {string}" do |title, login|
 end
 
 Given "a set of collections for searching" do
+  thebest = Fandom.where(name: "The Best Tag", canonical: true).first_or_create
+  # thebetter = Fandom.where(name: "The Better Tag", canonical: true).first_or_create
+  tbt = Fandom.find_or_create_by(name: "TBT")
+  tbt.reload.merger = thebest
+  tbt.save
   profile = CollectionProfile.create!(faq: "<dl><dt>What is this test thing?</dt><dd>It's a test collection</dd></dl>",
                                       intro: "Welcome to the test collection",
                                       rules: "Be nice to testers")
@@ -159,6 +164,7 @@ Given "a set of collections for searching" do
                     :moderated,
                     name: "surprisetest",
                     title: "Surprise Presents",
+                    tag_string: "TBT",
                     challenge: FactoryBot.create(:gift_exchange))
   FactoryBot.create(:collection,
                     name: "swaptest",

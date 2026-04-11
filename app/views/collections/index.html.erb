@@ -1,8 +1,6 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <% if @collections.empty? %>
-    <%= t(".page_heading.sorry") %>
-  <% elsif @user || @tag || @work %>
+  <% if @user || @tag || @work %>
     <%= search_header(@collections, @query, t(".page_heading.collection"), @owner) %>
   <% elsif @collection %>
     <%= search_header(@collections, @query, t(".page_heading.subcollection"), @owner) %>
@@ -10,6 +8,13 @@
     <%= t(".page_heading.collections_in_the", collections: search_header(@collections, @query, t(".page_heading.collection"), @owner), archive: ArchiveConfig.APP_NAME) %>
   <% end %>
 </h2>
+
+<%# TODO: Do we still need this now that there's a 0 in the search header? %>
+<% if @collections.empty? %>
+  <h3 class="heading">
+    <%= t(".page_heading.sorry") %>
+  </h3>
+<% end %>
 
 <!--/descriptions-->
 
