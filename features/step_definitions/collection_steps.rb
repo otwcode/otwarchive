@@ -342,3 +342,56 @@ Then "{string} should have the {string} role in the collection {string}" do |byl
     expect(page).to have_select("#{pseud.user.login}_role", selected: role)
   end
 end
+
+Given "a set of open challenges for searching" do
+  FactoryBot.create(:collection,
+                    name: "open_ge",
+                    title: "Open GE",
+                    tag_string: "Some cool tag",
+                    challenge: FactoryBot.create(:gift_exchange,
+                                                 signup_open: true,
+                                                 signups_open_at: Time.zone.now - 2.days,
+                                                 signups_close_at: Time.zone.now + 1.week),
+                    challenge_type: "GiftExchange")
+  FactoryBot.create(:collection,
+                    name: "multifandom_ge",
+                    title: "Multifandom GE",
+                    multifandom: true,
+                    challenge: FactoryBot.create(:gift_exchange,
+                                                 signup_open: true,
+                                                 signups_open_at: Time.zone.now - 1.day,
+                                                 signups_close_at: Time.zone.now + 1.week),
+                    challenge_type: "GiftExchange")
+  FactoryBot.create(:collection,
+                    name: "open_pm",
+                    title: "Open PM",
+                    challenge: FactoryBot.create(:prompt_meme,
+                                                 signup_open: true,
+                                                 signups_open_at: Time.zone.now - 2.days,
+                                                 signups_close_at: Time.zone.now + 1.week),
+                    challenge_type: "PromptMeme")
+  FactoryBot.create(:collection,
+                    name: "no_close_pm",
+                    title: "No Close PM",
+                    challenge: FactoryBot.create(:prompt_meme, signup_open: true, signups_open_at: Time.zone.now - 1.day),
+                    challenge_type: "PromptMeme")
+  FactoryBot.create(:collection,
+                    :moderated,
+                    name: "moderated_ge",
+                    title: "Moderated GE",
+                    challenge: FactoryBot.create(:gift_exchange,
+                                                 signup_open: true,
+                                                 signups_open_at: Time.zone.now - 1.day,
+                                                 signups_close_at: Time.zone.now + 1.week),
+                    challenge_type: "GiftExchange")
+  FactoryBot.create(:collection,
+                    :closed,
+                    name: "closed_ge",
+                    title: "Closed Collection GE",
+                    challenge: FactoryBot.create(:gift_exchange,
+                                                 signup_open: true,
+                                                 signups_open_at: Time.zone.now - 1.day,
+                                                 signups_close_at: Time.zone.now + 1.week),
+                    challenge_type: "GiftExchange")
+  step %{all indexing jobs have been run}
+end

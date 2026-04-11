@@ -82,6 +82,15 @@ describe CollectionQuery do
       expect(query.search_results).not_to include signup_past_open_collection
     end
 
+    it "includes collections with no closing date when signup_open is true" do
+      no_close_pm = create(:prompt_meme, signup_open: true, signups_open_at: Time.current - 1.day)
+      no_close_collection = create(:collection, challenge: no_close_pm, challenge_type: "PromptMeme")
+      run_all_indexing_jobs
+
+      query = CollectionQuery.new(signup_open: true)
+      expect(query.search_results).to include no_close_collection
+    end
+
     it "filters collections by multifandom filter" do
       query = CollectionQuery.new(multifandom: true)
       expect(query.search_results).not_to include prompt_meme_collection
