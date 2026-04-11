@@ -290,6 +290,9 @@ en:
       unrevealed_series: Mystery Series
   skins:
     default_skin: You are now using the default site skin again!
+    index:
+      public_site_page_title: "Public Site Skins"
+      public_work_page_title: "Public Work Skins"
   stats:
     index:
       page_title: "%{username} - Stats"

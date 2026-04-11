@@ -32,15 +32,16 @@ class SkinsController < ApplicationController
       if is_work_skin
         @skins = WorkSkin.approved_skins.sort_by_recent_featured.includes(:author).with_attached_icon
         @title = ts('Public Work Skins')
+        @page_subtitle = t(".public_work_page_title")
       else
         @skins = if logged_in?
-                   Skin.approved_skins.usable.site_skins.sort_by_recent_featured.with_attached_icon
-                 else
-                   Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured.with_attached_icon
-                 end
+          Skin.approved_skins.usable.site_skins.sort_by_recent_featured.with_attached_icon
+        else
+          Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured.with_attached_icon
+        end
         @title = ts('Public Site Skins')
+        @page_subtitle = t(".public_site_page_title")
       end
-      @page_subtitle = @title.html_safe
     end
   end
 
