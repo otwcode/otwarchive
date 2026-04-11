@@ -9,6 +9,7 @@ class RolesUser < ApplicationRecord
   after_destroy :log_role_removal
   after_destroy :destroy_last_wrangling_activity
   after_destroy :enqueue_to_index
+  after_commit :expire_user_menu_data_cache
 
   def log_role_addition
     admin = User.current_user
@@ -34,5 +35,9 @@ class RolesUser < ApplicationRecord
     return unless role.name == "tag_wrangler"
 
     user.last_wrangling_activity&.destroy
+  end
+
+  def expire_user_menu_data_cache
+    Rails.cache.delete([:user_menu_data, user.id])
   end
 end

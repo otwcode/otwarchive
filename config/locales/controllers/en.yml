@@ -251,6 +251,8 @@ en:
     index:
       collection_page_title: "%{collection_title} - People"
   preferences:
+    index:
+      page_title: "%{username} - Preferences"
     update:
       error: Sorry, something went wrong. Please try that again.
       success: Your preferences were successfully updated.
@@ -290,6 +292,11 @@ en:
     show:
       anonymous: Anonymous
       unrevealed_series: Mystery Series
+  skins:
+    default_skin: You are now using the default site skin again!
+  stats:
+    index:
+      page_title: "%{username} - Stats"
   subscriptions:
     delete_all:
       error: There were problems deleting your subscriptions.
