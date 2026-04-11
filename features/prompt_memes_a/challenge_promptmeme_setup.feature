@@ -499,9 +499,11 @@ Feature: Prompt Meme Challenge
   When I view my signup for "Battle 12"
     And I follow "Edit Sign-up"
   Then I should see "These & < > ' ? are some HTML escape chars" in the "challenge_signup_requests_attributes_0_title" input
+    And I should see "Request 1"
   When I view my signup for "Battle 12"
     And I follow "Edit Prompt"
   Then I should see "These & < > ' ? are some HTML escape chars" in the "prompt_title" input
+    And I should see "Request 1"
 
   When I am logged in as "claimer"
     And I view prompts for "Battle 12"
