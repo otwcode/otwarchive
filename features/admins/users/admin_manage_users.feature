@@ -121,6 +121,7 @@ Feature: Admin Actions to manage users
       And I go to the user administration page for "lurker"
       And I follow "Creations"
     Then I should see "Works and Comments by lurker"
+      And I should see the user id for "lurker" in the creations page heading
       And I should see "This user has no works or comments."
       And the page should have a dashboard sidebar
     When I go to lurker's user page

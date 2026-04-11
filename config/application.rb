@@ -22,7 +22,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 8.0
+    config.load_defaults 8.1
 
     %w[
       app/models/challenge_models
@@ -63,6 +63,10 @@ module Otwarchive
     config.encoding = "utf-8"
 
     config.action_view.automatically_disable_submit_tag = false
+
+    # Add autocomplete="off" attributes to hidden fields
+    # Workaround for a Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=654072
+    config.action_view.remove_hidden_field_autocomplete = false
 
     # Disable dumping schemas after migrations.
     # This can cause problems since we don't always update versions on merge.

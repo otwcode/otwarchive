@@ -179,6 +179,14 @@ ABUSE_REPORTS_PER_WORK_PERIOD: 31
 ABUSE_REPORTS_PER_COMMENT_MAX: 3
 # time period, in days, used to total number of reports for a given comment URL
 ABUSE_REPORTS_PER_COMMENT_PERIOD: 30
+# max number of abuse reports to accept for a given series URL
+ABUSE_REPORTS_PER_SERIES_MAX: 3
+# time period, in days, used to total number of reports for a given series URL
+ABUSE_REPORTS_PER_SERIES_PERIOD: 30
+# max number of abuse reports to accept for a given bookmark URL
+ABUSE_REPORTS_PER_BOOKMARK_MAX: 3
+# time period, in days, used to total number of reports for a given bookmark URL
+ABUSE_REPORTS_PER_BOOKMARK_PERIOD: 30
 # max number of abuse reports to accept from a given email
 ABUSE_REPORTS_PER_EMAIL_MAX: 5
 
@@ -706,6 +714,9 @@ MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE: 120
 # Job size used for the HitCountUpdateJob class:
 HIT_COUNT_JOB_SIZE: 1000
 
+# Batch size used by Indexer when reading records from the database:
+SEARCH_INDEXER_BATCH_SIZE: 1000
+
 # Batch size used for the HitCountUpdateJob class:
 HIT_COUNT_BATCH_SIZE: 100
 
@@ -787,5 +798,7 @@ PERCONA_ARGS: >
 # Production may have more than 5 for these
 BOOKMARKABLE_SHARDS: 5
 COLLECTION_SHARDS: 5
-WORKS_SHARDS: 5
+PSEUD_SHARDS: 5
+TAG_SHARDS: 5
 USER_SHARDS: 5
+WORKS_SHARDS: 5

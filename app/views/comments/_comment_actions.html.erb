@@ -1,6 +1,6 @@
 <h5 class="landmark heading"><%= t(".comment_actions") %></h5>
 
-<ul class="actions" id="navigation_for_comment_<%= comment.id %>" <% if focused_on_comment(comment) %> style="display:none;"<% end %>>
+<ul class="actions" id="navigation_for_comment_<%= comment.id %>" <% if can_reply_to_comment?(comment) && focused_on_comment(comment) %> style="display:none;"<% end %>>
   <%# The effect is "Frozen" replaces "Reply." We can't do that in the helper
     # method for the reply link because that would prevent "Frozen" from
     # appearing on the Unreviewed Comments page for works with moderated

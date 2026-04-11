@@ -329,6 +329,18 @@ Scenario: Cannot reply to comments (no button) while logged as admin
     Then I should see "Woohoo"
       And I should see "Reply"
 
+Scenario: When guest comments are disabled, display comment actions to admin/guests
+    Given the work "No Guest Comments Work" by "creator"
+    When I am logged in as "commenter"
+      And I view the work "No Guest Comments Work"
+      And I post a comment "I am the comment"    
+    When I am logged in as an admin
+      And I visit the reply page to the comment on "No Guest Comments Work"
+    Then I should see "Thread"
+    When I am logged out
+      And I visit the reply page to the comment on "No Guest Comments Work"
+    Then I should see "Thread"
+
   Scenario: Translated comment notification email
     Given the work "Generic Work" by "creator" and "cocreator"
       And a locale with translated emails
