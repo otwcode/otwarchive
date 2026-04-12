@@ -46,4 +46,16 @@ describe AdminPost do
       expect(new_post.reload.disable_all_comments?).to be(false)
     end
   end
+
+  describe "#translations" do
+    let(:language1) { create(:language, name: "Arabic", short: "ar", sortable_name: "arabic") }
+    let(:language2) { create(:language, name: "Finnish", short: "fi", sortable_name: "Suomi") }
+    let(:parent_post) { create(:admin_post) }
+    let!(:language1_post) { create(:admin_post, language: language1, translated_post: parent_post) }
+    let!(:language2_post) { create(:admin_post, language: language2, translated_post: parent_post) }
+
+    it "sorts by the post's language sortable name, case-insensitive" do
+      expect(parent_post.reload.translations).to eq([language1_post, language2_post])
+    end
+  end
 end
