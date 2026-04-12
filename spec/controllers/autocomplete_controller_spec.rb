@@ -51,7 +51,7 @@ describe AutocompleteController do
 
     before { fake_login_known_user(user) }
 
-    it "matches by name or title and formats results as 'Title (name)'" do
+    it "matches by name or title and formats suggestions as 'Title (name)'" do
       get :collection_parent_name, params: { term: "some", format: :json }
       expect(JSON.parse(response.body)).to contain_exactly(
         { "id" => "some_name", "name" => "Unrelated Title (some_name)" },
