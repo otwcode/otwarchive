@@ -209,8 +209,8 @@ class Prompt < ApplicationRecord
     self.request_claims.fulfilled
   end
 
-  def fulfilled_restricted_claims
-    self.request_claims.fulfilled_restricted
+  def fulfilled_unrestricted_claims
+    self.request_claims.fulfilled_unrestricted
   end
 
   # Computes the "full" tag set (tag_set + optional_tag_set), and stores the
