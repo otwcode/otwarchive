@@ -654,5 +654,70 @@ namespace :After do
     AuditsBackfillJob.spawn_jobs
     puts "Backfill started and running on resque in background"
   end
+
+  desc "Create placeholder comments for orphaned replies whose parent was physically deleted"
+  task(create_placeholders_for_orphaned_comments: :environment) do
+    orphaned_commentable_ids = Comment
+      .joins("LEFT JOIN comments AS commentable_comments ON comments.commentable_id = commentable_comments.id")
+      .where(commentable_type: "Comment")
+      .where(commentable_comments: { id: nil })
+      .distinct
+      .pluck(:commentable_id)
+
+    if orphaned_commentable_ids.empty?
+      puts "No orphaned comments found."
+      next
+    end
+
+    puts "Found #{orphaned_commentable_ids.size} missing parent comment(s). Creating placeholders..."
+    $stdout.flush
+
+    # Collect orphan info and sort by position in tree (top-down).
+    # This ensures that when multiple comments are deleted in the same branch,
+    # we create the higher placeholders first so they exist as parents for the lower ones.
+
+    orphan_info = orphaned_commentable_ids.map do |missing_id|
+      orphan = Comment.where(commentable_id: missing_id, commentable_type: "Comment").order(:id).first
+      { missing_id: missing_id, orphan: orphan }
+    end
+    orphan_info.sort_by! { |info| info[:orphan].threaded_left }
+
+    created_count = 0
+
+    Comment.transaction do
+      orphan_info.each do |info|
+        missing_id = info[:missing_id]
+        orphan = info[:orphan]
+
+        # Find the closest existing ancestor using the nested set.
+        # Using the orphan's threaded_left/right
+        parent = Comment.where(
+          "thread = ? AND threaded_left < ? AND threaded_right > ?",
+          orphan.thread,
+          orphan.threaded_left,
+          orphan.threaded_right
+        ).order(threaded_left: :desc).first
+
+        raise "Could not determine parent for missing comment #{missing_id} — possible data corruption" unless parent
+
+        placeholder = Comment.new(
+          commentable: parent,
+          thread: orphan.thread,
+          comment_content: "deleted comment",
+          is_deleted: true
+        )
+        placeholder.id = missing_id
+        placeholder.save(validate: false)
+        created_count += 1
+
+        puts "  Created placeholder for comment #{missing_id} in thread #{orphan.thread}."
+        $stdout.flush
+      end
+    end
+
+    puts "Done. Created #{created_count} placeholder(s)."
+    $stdout.flush
+  end
+
   # This is the end that you have to put new tasks above.
 end
