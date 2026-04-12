@@ -8,13 +8,13 @@ describe ImportedUrl do
     url.original = formatter.original
     url.save
 
-    expect(url.minimal).to eq(formatter.minimal)
-    expect(url.minimal_no_protocol_no_www).to eq(formatter.minimal_no_protocol_no_www)
-    expect(url.no_www).to eq(formatter.no_www)
-    expect(url.with_www).to eq(formatter.with_www)
-    expect(url.with_http).to eq(formatter.with_http)
-    expect(url.with_https).to eq(formatter.with_https)
-    expect(url.encoded).to eq(formatter.encoded)
-    expect(url.decoded).to eq(formatter.decoded)
+    expect(url.minimal).to eq("http://www.trickster.org/llwyden/misc/cracked.html")
+    expect(url.minimal_no_protocol_no_www).to eq("trickster.org/llwyden/misc/cracked.html")
+    expect(url.no_www).to eq("http://trickster.org/llwyden/misc/cracked.html")
+    expect(url.with_www).to eq("http://www.www.trickster.org/llwyden/misc/cracked.html")
+    expect(url.with_http).to eq("http://www.trickster.org/llwyden/misc/cracked.html")
+    expect(url.with_https).to eq("https://www.trickster.org/llwyden/misc/cracked.html")
+    expect(url.encoded).to eq( "http://www.trickster.org/llwyden/misc/cracked.html")
+    expect(url.decoded).to eq("http://www.trickster.org/llwyden/misc/cracked.html")
   end
 end
