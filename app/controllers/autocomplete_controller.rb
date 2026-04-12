@@ -138,7 +138,13 @@ class AutocompleteController < ApplicationController
 
   # For creating collections, autocomplete the name of a parent collection owned by the user only
   def collection_parent_name
-    render_output(current_user.maintained_collections.top_level.with_name_like(params[:term]).pluck(:name).sort)
+    results = current_user.maintained_collections.top_level
+      .with_name_or_title_like(params[:term])
+      .limit(10)
+      .order(:title)
+      .pluck(:name, :title)
+      .map { |name, title| { id: name, name: "#{title} (#{name})" } }
+    respond_with(results)
   end
 
   # for looking up existing urls for external works to avoid duplication

@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe AutocompleteController do
+  include LoginMacros
+
   describe "tag" do
     let!(:tag1) { create(:canonical_fandom, name: "Match") }
     let!(:tag2) { create(:canonical_fandom, name: "Blargh") }
@@ -39,6 +41,22 @@ describe AutocompleteController do
         get :collection_title, params: { term: "here", format: :json }
         expect(JSON.parse(response.body)).to eq([{ "id" => "I am here", "name" => "not_here: I am here" }])
       end
+    end
+  end
+
+  describe "GET #collection_parent_name" do
+    let!(:user) { create(:user) }
+    let!(:collection1) { create(:collection, name: "some_name", title: "Unrelated Title", owner: user.default_pseud) }
+    let!(:collection2) { create(:collection, name: "unrelated_name", title: "Some Title", owner: user.default_pseud) }
+
+    before { fake_login_known_user(user) }
+
+    it "matches by name or title and formats results as 'Title (name)'" do
+      get :collection_parent_name, params: { term: "some", format: :json }
+      expect(JSON.parse(response.body)).to contain_exactly(
+        { "id" => "some_name", "name" => "Unrelated Title (some_name)" },
+        { "id" => "unrelated_name", "name" => "Some Title (unrelated_name)" }
+      )
     end
   end
 end
