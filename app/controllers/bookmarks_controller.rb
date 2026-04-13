@@ -286,8 +286,9 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
+    referer_route = Rails.application.routes.recognize_path request.referer
     # We check that the URL from where the bookmark was deleted is an index of some sort. If it is not, we cannot redirect the user back since it would cause a 404 error
-    if (Rails.application.routes.recognize_path request.referer)[:action] == "index" && (Rails.application.routes.recognize_path request.referer)[:controller] == "bookmarks"
+    if referer_route[:action] == "index" && referer_route[:controller] == "bookmarks"
       redirect_back_or_to user_bookmarks_path(current_user)
     else
       redirect_to user_bookmarks_path(current_user)
