@@ -4,7 +4,7 @@ class PreferencesController < ApplicationController
 
   # Ensure that the current user is authorized to view and change this information
   def load_user
-    @user = User.find_by(login: params[:user_id])
+    @user = User.find_by!(login: params[:user_id])
     @check_ownership_of = @user
   end
 

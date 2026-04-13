@@ -49,6 +49,14 @@ describe PreferencesController do
 
       it_behaves_like "an action only authorized admins can access", authorized_roles: read_roles
     end
+
+    context "as nonexistent user" do
+      it "raises a 404 error" do
+        expect do
+          get :index, params: { user_id: "deleted_user" }
+        end.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
   describe "PUT #update" do
