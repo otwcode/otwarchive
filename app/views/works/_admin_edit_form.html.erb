@@ -1,4 +1,4 @@
-<%= form_for(@work, html: { id: "work-form", class: "verbose work post" }, url: { action: "update_tags" }) do |f| %>
+<%= form_for(@work, html: { id: "work-form", class: "verbose work post" }, url: { action: "update" }) do |f| %>
   <p class="required notice">* <%= t(".required_information") %></p>
 
   <%= render "work_form_tags", include_blank: false %>

@@ -365,7 +365,9 @@ en:
       page_title:
         unrevealed: Mystery Work
     update:
+      tags_updated: Tags were successfully updated.
       unposted_notice: Your changes have not been saved. Please post your work or save the draft if you want to keep them.
+      work_updated: Work was successfully updated.
     update_tags:
       page_title: Preview Work Tags
   wrangling_guidelines:
