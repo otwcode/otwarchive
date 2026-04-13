@@ -837,9 +837,7 @@ class WorksController < ApplicationController
 
   def log_admin_activity
     if logged_in_as_admin?
-      if params[:action].in?(%w[update update_tags])
-        summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}"
-      end
+      summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}" if params[:action].in?(%w[update update_tags])
 
       AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
     end
@@ -858,13 +856,13 @@ class WorksController < ApplicationController
       render :preview_tags
     elsif params[:save_button]
       @work.save
-      flash[:notice] = t(".tags_updated")
+      flash[:notice] = t("works.update.tags_updated")
       redirect_to(@work)
     else
       @work.posted = true
       @work.minor_version = @work.minor_version + 1
       @work.save
-      flash[:notice] = t(".work_updated")
+      flash[:notice] = t("works.update.work_updated")
       redirect_to(@work)
     end
   end
