@@ -336,7 +336,7 @@ Given /^a set of works with various access levels for searching$/ do
 end
 
 Given "a set of old multilanguage works for searching" do
-  german = Language.find_or_create_by!(short: "de", name: "Deutsch")
+  german = Language.find_or_create_by!(short: "de", name: "Deutsch", sortable_name: "Deutsch")
 
   FactoryBot.create(:work,
                     title: "My &lt;strong&gt;er German Work",
