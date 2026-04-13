@@ -62,7 +62,6 @@ class BookmarksController < ApplicationController
   end
 
   def index
-    session[:should_redirect_back] = true
     if @bookmarkable
       @bookmarks = @bookmarkable.bookmarks.not_private.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       @bookmarks = @bookmarks.where(hidden_by_admin: false) unless logged_in_as_admin?
@@ -161,7 +160,6 @@ class BookmarksController < ApplicationController
   # GET    /:locale/works/:work_id/bookmark/:id
   # GET    /:locale/external_works/:external_work_id/bookmark/:id
   def show
-    session[:should_redirect_back] = false
   end
 
   # GET /bookmarks/new
@@ -288,7 +286,8 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
-    if session[:should_redirect_back]
+    # We check that the URL from where the bookmark was deleted is an index of some sort. If it is not, we cannot redirect the user back since it would cause a 404 error
+    if (Rails.application.routes.recognize_path request.referer)[:action] == "index" && (Rails.application.routes.recognize_path request.referer)[:controller] == "bookmarks"
       redirect_back_or_to user_bookmarks_path(current_user)
     else
       redirect_to user_bookmarks_path(current_user)

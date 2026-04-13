@@ -95,14 +95,6 @@ When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
   end
 end
 
-When "I confirm the popup" do
-  page.accept_confirm
-end
-
-When "I dismiss the popup" do
-  page.dismiss_confirm
-end
-
 When /^(?:|I )choose "(.*)"$/ do |field|
   choose(field)
 end
