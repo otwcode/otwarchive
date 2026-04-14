@@ -520,10 +520,7 @@ describe HtmlCleaner do
 
       it "preserves allowed global attributes in #{field}" do
         html = '<p align="left" dir="ltr" lang="en" title="text title">some text</p>'
-
         result = sanitize_value(field, html)
-        doc = Nokogiri::HTML.fragment(result)
-
         expect(result).to include(html)
       end
     end
