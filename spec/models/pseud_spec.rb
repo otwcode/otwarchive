@@ -94,6 +94,31 @@ describe Pseud do
     end
   end
 
+  describe "#change_bookmarks_ownership" do
+    let(:user) { create(:user) }
+    let(:pseud) { create(:pseud, user: user) }
+    let(:default_pseud) { user.default_pseud }
+
+    let!(:bookmarks) { Array.new(2) { create(:bookmark, pseud: pseud) } }
+
+    before do
+      IndexQueue.new("index:bookmark:main").run
+    end
+
+    it "enqueues transferred bookmarks for indexing" do
+      pseud.change_bookmarks_ownership
+
+      bookmarks.each do |bookmark|
+        expect(bookmark.reload.pseud_id).to eq(default_pseud.id)
+      end
+
+      indexed_ids = IndexQueue.new("index:bookmark:main").ids
+      bookmarks.each do |bookmark|
+        expect(indexed_ids).to include(bookmark.id.to_s)
+      end
+    end
+  end
+
   describe "#clear_icon" do
     subject { create(:pseud, icon_alt_text: "icon alt", icon_comment_text: "icon comment") }
 
