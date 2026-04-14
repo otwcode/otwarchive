@@ -3316,6 +3316,8 @@ en:
       page_heading:
         edit_tags_and_language_html: Edit Work Tags and Language for %{title}
         edit_tags_html: Edit Work Tags for %{title}
+    filters:
+      submit_landmark: Submit
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works
@@ -3324,8 +3326,6 @@ en:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
       recent_works_html: These are some of the latest works posted to the Archive. To find more works, %{choose_fandom_link} or %{advanced_search_link}.
-    filters:
-      submit_landmark: Submit
     meta:
       original_creators:
         one: 'Original Creator ID:'
