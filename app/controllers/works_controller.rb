@@ -14,7 +14,8 @@ class WorksController < ApplicationController
   before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
-  before_action :log_admin_activity, only: [:update_tags]
+  before_action :save_old_tags, only: [:update_tags]
+  after_action :log_admin_activity, only: [:update_tags], unless: [:work_cannot_be_saved?]
   before_action :check_parent_visible, only: [:navigate]
   before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
 
@@ -825,48 +826,28 @@ class WorksController < ApplicationController
     end
   end
 
+  def save_old_tags
+    @old_language = @work.language.name
+    @old_tags = @work.tags.pluck(:name)
+  end
+
   def log_admin_activity
     return unless logged_in_as_admin?
 
     if params[:action] == "update_tags"
-      unless params[:work][:language_id].empty?
-        old_language_id = @work.language_id
-        new_language_id = params[:work][:language_id].to_i
-
-        if old_language_id != new_language_id
-          new_language_name = Language.find_by(id: new_language_id).name
-          edit_language_summary = "<p>Old language: #{@work.language.name}</p><p>New language: #{new_language_name}</p>"
-
-          AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_language_summary)
-        end
+      if @work.saved_change_to_language_id?
+        new_language = @work.language.name
+        edit_summary = "<p>Old language: #{@old_language}</p><p>New language: #{new_language}</p>"
+        AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_summary)
       end
 
-      # Don't log if nothing changed.
-      rating_changed = params[:work][:rating_string] != @work.rating_string
-      fandoms_changed = params[:work][:fandom_string] != @work.fandom_string 
-      relationships_changed = params[:work][:relationship_string] != @work.relationship_string
-      characters_changed = params[:work][:character_string] != @work.character_string
-      freeforms_changed = params[:work][:freeform_string] != @work.freeform_string
-      # Saving without previewing uses "strings" category and warning parameters
-      # but previewing and saving uses "string" ones
-      if params[:work][:category_strings].nil?
-        categories_changed = params[:work][:category_string] != @work.category_string
-        warnings_changed = params[:work][:archive_warning_string] != @work.archive_warning_string
-      else
-        # The category_strings and archive_warning_strings params values
-        # both start with an empty element which has to be dropped here
-        categories_changed = params[:work][:category_strings].drop(1).sort != @work.category_strings.sort
-        warnings_changed = params[:work][:archive_warning_strings].drop(1).sort != @work.archive_warning_strings.sort
+      new_tags = @work.tags.pluck(:name)
+      tags_changed = new_tags.sort != @old_tags.sort
+      if tags_changed
+        edit_summary = "Old tags: #{@old_tags.join(', ')}"
+        AdminActivity.log_action(current_admin, @work, action: "update_tags", summary: edit_summary)
       end
-
-      return unless rating_changed || fandoms_changed || relationships_changed ||
-                    characters_changed || freeforms_changed ||
-                    categories_changed || warnings_changed
-
-      summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}"
     end
-
-    AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
   end
 
   private
