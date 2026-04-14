@@ -72,7 +72,7 @@ Feature: Tag wrangling
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
     When I am logged in as a "tag_wrangling" admin
       And I am on the wranglers page
-      And I follow "x"
+      And I follow "×"
     Then I should see "Wranglers were successfully unassigned!"
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"

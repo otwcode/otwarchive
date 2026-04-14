@@ -30,7 +30,6 @@ class User < ApplicationRecord
   has_many :roles_users
   has_many :roles, through: :roles_users, dependent: :destroy
 
-  ### BETA INVITATIONS ###
   has_many :invitations, as: :creator
   has_one :invitation, as: :invitee
   has_many :user_invite_requests, dependent: :destroy
@@ -94,7 +93,9 @@ class User < ApplicationRecord
   has_many :user_past_usernames, dependent: :destroy
 
   before_update :add_renamed_at, if: :will_save_change_to_login?
+  before_update :cleanup_pseuds_autocomplete, if: :will_save_change_to_login?
   after_update :update_pseud_name
+  after_update :add_pseuds_to_autocomplete, if: :saved_change_to_login?
   after_update :send_wrangler_username_change_notification, if: :is_tag_wrangler?
   after_update :log_change_if_login_was_edited, if: :saved_change_to_login?
   after_update :log_email_change, if: :saved_change_to_email?
@@ -471,8 +472,6 @@ class User < ApplicationRecord
     self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
   end
 
-  ### BETA INVITATIONS ###
-
   # If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed
     if self.invitation_token.present?
@@ -548,25 +547,23 @@ class User < ApplicationRecord
 
   def update_pseud_name
     return unless saved_change_to_login? && login_before_last_save.present?
-
-    old_pseud = pseuds.where(name: login_before_last_save).first
-    if login.downcase == login_before_last_save.downcase
-      old_pseud.name = login
-      old_pseud.save!
-    else
+    
+    pseud_to_update = pseuds.where(name: login_before_last_save).first
+    # If the new login is (case insensitive) different from the old login
+    if login.downcase != login_before_last_save.downcase
       new_pseud = pseuds.where(name: login).first
-      # do nothing if they already have the matching pseud
-      if new_pseud.blank?
-        if old_pseud.present?
-          # change the old pseud to match
-          old_pseud.name = login
-          old_pseud.save!(validate: false)
-        else
-          # shouldn't be able to get here, but just in case
-          Pseud.create!(name: login, user_id: id)
-        end
+      # If the user does have an existing pseud for the new login
+      if new_pseud.present?
+        pseud_to_update = new_pseud
+      # If the pseud for the old login doesn't exist
+      elsif pseud_to_update.blank?
+        # shouldn't be able to get here, but just in case
+        Pseud.create!(name: login, user_id: id)
+        return
       end
     end
+    pseud_to_update.name = login
+    pseud_to_update.save!(validate: false)
   end
 
   def reindex_user_creations_after_rename
@@ -615,6 +612,18 @@ class User < ApplicationRecord
     options[:note] = "Change made by #{current_admin&.login}" if current_admin
     user_past_emails.create!(email_address: email_before_last_save, changed_at: self.updated_at)
     create_log_item(options)
+  end
+
+  def add_pseuds_to_autocomplete
+    pseuds.each do |pseud|
+      # have to reload the pseud from the db otherwise it has the outdated login
+      pseud.reload
+      pseud.add_to_autocomplete
+    end
+  end
+
+  def cleanup_pseuds_autocomplete
+    pseuds.each(&:remove_stale_from_autocomplete_before_save)
   end
 
   def remove_stale_from_autocomplete

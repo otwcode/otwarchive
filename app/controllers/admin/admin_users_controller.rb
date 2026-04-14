@@ -184,8 +184,23 @@ class Admin::AdminUsersController < Admin::BaseController
       comment.destroy_or_mark_deleted # comments with replies cannot be destroyed, mark deleted instead
     end
 
+    @user.profile.title = nil
+    @user.profile.about_me = nil
+
+    # Override validations because there is no ticket number available
+    @user.profile.save(validate: false)
+    
+    @user.pseuds.each do |pseud|
+      pseud.description = nil
+      pseud.delete_icon = 1
+      pseud.clear_icon
+
+      # Override validations because there is no ticket number available
+      pseud.save(validate: false)
+    end
+
     flash[:notice] = t(".success", login: @user.login)
-    redirect_to(admin_users_path)
+    redirect_to(admin_user_path(@user))
   end
 
   def troubleshoot
@@ -195,6 +210,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @user.set_user_work_dates
     @user.reindex_user_creations
     @user.update_works_index_timestamp!
+    @user.enqueue_to_index
     @user.create_log_item(options = { action: ArchiveConfig.ACTION_TROUBLESHOOT, admin_id: current_admin.id })
     flash[:notice] = ts("User account troubleshooting complete.")
     redirect_to admin_user_path(@user)

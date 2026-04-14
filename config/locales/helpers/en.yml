@@ -1,13 +1,19 @@
 ---
 en:
   application_helper:
+    allowed_html_instructions:
+      html_help_title: Html help
+    help_modal:
+      help_symbol: "?"
+    rich_text_instructions:
+      rte_help_title: Rte help
+      type_paste_rich_text_html: Type or paste formatted text. %{help_link}
+    text_limited_html: Plain text with limited HTML %{help_link}
+    text_limited_html_strip_images_html: Plain text with limited HTML %{help_link} Embedded images (&lt;img&gt; tags) will be displayed as HTML, including the image's source link and any alt text.
+  byline_helper:
     anonymous_byline: Anonymous
     anonymous_with_name_byline_html: Anonymous [%{pseud_byline}]
     archivist_byline_html: "%{external_creator} [archived by %{pseud_byline}]"
-    help_modal:
-      help_symbol: "?"
-    text_limited_html: Plain text with limited HTML %{help_link}
-    text_limited_html_strip_images_html: Plain text with limited HTML %{help_link} Embedded images (&lt;img&gt; tags) will be displayed as HTML, including the image's source link and any alt text.
   collections_helper:
     collection_item_approval_options:
       collection:
@@ -45,6 +51,9 @@ en:
       default_label: QR code
   series_helper:
     series_description_html: Part %{index} of %{series_link}
+  tags_helper:
+    get_symbol_link:
+      title: Symbols key
   users_helper:
     collections_link: Collections (%{coll_number})
     log:

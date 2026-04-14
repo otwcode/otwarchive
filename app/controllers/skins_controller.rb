@@ -32,6 +32,7 @@ class SkinsController < ApplicationController
       if is_work_skin
         @skins = WorkSkin.approved_skins.sort_by_recent_featured.includes(:author).with_attached_icon
         @title = ts('Public Work Skins')
+        @page_subtitle = t(".public_work_page_title")
       else
         @skins = if logged_in?
                    Skin.approved_skins.usable.site_skins.sort_by_recent_featured.with_attached_icon
@@ -39,6 +40,7 @@ class SkinsController < ApplicationController
                    Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured.with_attached_icon
                  end
         @title = ts('Public Site Skins')
+        @page_subtitle = t(".public_site_page_title")
       end
     end
   end
@@ -152,7 +154,7 @@ class SkinsController < ApplicationController
       current_user.preference.skin_id = AdminSetting.default_skin_id
       current_user.preference.save
     end
-    flash[:notice] = ts("You are now using the default Archive skin again!")
+    flash[:notice] = t("skins.default_skin")
     redirect_back_or_to root_path
   end
 
@@ -180,15 +182,19 @@ class SkinsController < ApplicationController
   private
 
   def skin_params
-    params.require(:skin).permit(
-      :title, :description, :public, :css, :role, :ie_condition, :unusable,
-      :font, :base_em, :margin, :paragraph_margin, :background_color,
+    allowed_attributes = [
+      :title, :description, :css, :role, :ie_condition, :unusable, :font,
+      :base_em, :margin, :paragraph_margin, :background_color,
       :foreground_color, :headercolor, :accent_color, :icon,
       media: [],
       skin_parents_attributes: [
         :id, :position, :parent_skin_id, :parent_skin_title, :_destroy
       ]
-    )
+    ]
+
+    allowed_attributes += [:public] if current_user.is_a?(User) && current_user.official
+
+    params.require(:skin).permit(allowed_attributes)
   end
 
   def load_skin

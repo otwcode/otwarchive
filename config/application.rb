@@ -8,8 +8,8 @@ Bundler.require(*Rails.groups)
 
 module Otwarchive
   class Application < Rails::Application
-    app_config = YAML.load_file(Rails.root.join("config/config.yml"))
-    app_config.merge!(YAML.load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
+    app_config = YAML.safe_load_file(Rails.root.join("config/config.yml"))
+    app_config.merge!(YAML.safe_load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
     ::ArchiveConfig = OpenStruct.new(app_config)
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
@@ -22,7 +22,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 8.0
+    config.load_defaults 8.1
 
     %w[
       app/models/challenge_models
@@ -63,6 +63,10 @@ module Otwarchive
     config.encoding = "utf-8"
 
     config.action_view.automatically_disable_submit_tag = false
+
+    # Add autocomplete="off" attributes to hidden fields
+    # Workaround for a Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=654072
+    config.action_view.remove_hidden_field_autocomplete = false
 
     # Disable dumping schemas after migrations.
     # This can cause problems since we don't always update versions on merge.

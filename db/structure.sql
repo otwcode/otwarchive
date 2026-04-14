@@ -207,6 +207,10 @@ CREATE TABLE `admins` (
   `reset_password_token` varchar(255) DEFAULT NULL,
   `reset_password_sent_at` datetime DEFAULT NULL,
   `locked_at` datetime DEFAULT NULL,
+  `otp_secret` varchar(255) DEFAULT NULL,
+  `consumed_timestep` int(11) DEFAULT NULL,
+  `otp_required_for_login` tinyint(1) DEFAULT NULL,
+  `otp_backup_codes` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_admins_on_email` (`email`),
   UNIQUE KEY `index_admins_on_login` (`login`),
@@ -274,7 +278,7 @@ DROP TABLE IF EXISTS `audits`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `audits` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `auditable_id` int(11) DEFAULT NULL,
   `auditable_type` varchar(255) DEFAULT NULL,
   `associated_id` int(11) DEFAULT NULL,
@@ -543,7 +547,7 @@ DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `pseud_id` int(11) DEFAULT NULL,
   `comment_content` text NOT NULL,
   `depth` int(11) DEFAULT NULL,
@@ -553,11 +557,11 @@ CREATE TABLE `comments` (
   `name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `ip_address` varchar(255) DEFAULT NULL,
-  `commentable_id` int(11) DEFAULT NULL,
+  `commentable_id` bigint(20) DEFAULT NULL,
   `commentable_type` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `thread` int(11) DEFAULT NULL,
+  `thread` bigint(20) DEFAULT NULL,
   `user_agent` varchar(500) DEFAULT NULL,
   `approved` tinyint(1) NOT NULL DEFAULT 0,
   `hidden_by_admin` tinyint(1) NOT NULL DEFAULT 0,
@@ -805,9 +809,9 @@ DROP TABLE IF EXISTS `inbox_comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `inbox_comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
-  `feedback_comment_id` int(11) DEFAULT NULL,
+  `feedback_comment_id` bigint(20) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `read` tinyint(1) NOT NULL DEFAULT 0,
@@ -1530,6 +1534,20 @@ CREATE TABLE `subscriptions` (
   KEY `subscribable` (`subscribable_id`,`subscribable_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `support_notices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `support_notices` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `notice_content` text NOT NULL,
+  `notice_content_sanitizer_version` smallint(6) NOT NULL DEFAULT 0,
+  `support_notice_type` tinyint(4) NOT NULL DEFAULT 0,
+  `active` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tag_nominations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1670,6 +1688,36 @@ CREATE TABLE `user_invite_requests` (
   PRIMARY KEY (`id`),
   KEY `index_user_invite_requests_on_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_past_emails`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_past_emails` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `email_address` varchar(255) DEFAULT NULL,
+  `changed_at` datetime(6) DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_user_past_emails_on_user_id` (`user_id`),
+  CONSTRAINT `fk_rails_34fa06d128` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_past_usernames`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_past_usernames` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `changed_at` datetime(6) DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_user_past_usernames_on_user_id` (`user_id`),
+  CONSTRAINT `fk_rails_d0ee71c7c9` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1815,6 +1863,13 @@ CREATE TABLE `wrangling_guidelines` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 INSERT INTO `schema_migrations` (version) VALUES
+('20260207100830'),
+('20260124181621'),
+('20260103083447'),
+('20260103083335'),
+('20251221113250'),
+('20251221104708'),
+('20251215194643'),
 ('20251112114418'),
 ('20251002101320'),
 ('20250906065547'),

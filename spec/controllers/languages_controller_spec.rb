@@ -140,8 +140,8 @@ describe LanguagesController do
     end
 
     %w[translation superadmin support policy_and_abuse].each do |role|
-      Language.create(name: "Deutsch", short: "de")
       context "when logged in as an admin with #{role} role" do
+        let!(:deutsch) { Language.create(name: "Deutsch", short: "de") }
         let(:admin) { create(:admin, roles: [role]) }
 
         it "renders the edit template for a non-default language" do

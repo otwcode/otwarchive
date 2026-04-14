@@ -165,7 +165,8 @@ class Work < ApplicationRecord
   end
 
   validates :user_defined_tags_count,
-            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
+            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } },
+            unless: -> { User.current_user.is_a?(Admin) }
 
   # If the recipient doesn't allow gifts, it should not be possible to give them
   # a gift work unless it fulfills a gift exchange assignment or non-anonymous
@@ -1203,6 +1204,16 @@ class Work < ApplicationRecord
   end
 
   def bookmarkable_json
+    # If the work is unrevealed, it should not have any information that can be searched on
+    if unrevealed?
+      return as_json(
+        root: false,
+        bookmarkable_type: "Work",
+        unrevealed: true,
+        bookmarkable_join: { name: "bookmarkable" }
+      ) 
+    end
+
     methods = %i[collection_ids work_types]
     %w[general public].each do |visibility|
       methods << :"#{visibility}_tags"
@@ -1225,8 +1236,8 @@ class Work < ApplicationRecord
       anonymous: anonymous?,
       creators: indexed_creators,
       unrevealed: unrevealed?,
-      pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
-      user_ids: anonymous? || unrevealed? ? nil : user_ids,
+      pseud_ids: anonymous? ? nil : pseud_ids,
+      user_ids: anonymous? ? nil : user_ids,
       bookmarkable_type: "Work",
       bookmarkable_join: { name: "bookmarkable" },
       public_word_count: word_count,

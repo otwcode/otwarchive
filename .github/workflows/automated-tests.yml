@@ -10,6 +10,10 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   automated-tests:
     name: ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
@@ -37,7 +41,7 @@ jobs:
           - 3306:3306
 
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:8.19.10
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.3.0
         ports:
           - 9200:9200
         options: >-
@@ -169,7 +173,7 @@ jobs:
         run: bundle exec ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           # Optional for public repos. However, individual forks can set this
           # secret to reduce the chance of being rate-limited by GitHub.
@@ -180,7 +184,7 @@ jobs:
 
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.command == 'cucumber' }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: test failures ${{ hashFiles('tmp/capybara/*') }}
           path: tmp/capybara
