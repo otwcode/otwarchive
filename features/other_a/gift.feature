@@ -46,6 +46,7 @@ Feature: Create Gifts
       And I go to giftee1's gifts page
     Then I should see "GiftStory1 by gifter for giftee1"
       And I should not see "GiftStory2 by gifter for giftee1"
+      And I should not see "Rude Gift by gifter for giftee1"
       And I should see "Gifts (1)"
 
   Scenario: When logged in as admin, gifts page for recipient should show locked but not hidden gifts
@@ -88,6 +89,7 @@ Feature: Create Gifts
     When I go to the gifts page for the recipient g1
     Then I should see "GiftStory1 by gifter for g1"
       And I should not see "GiftStory2 by gifter for g1"
+      And I should not see "Rude Gift by gifter for g1"
 
   Scenario: When logged in as admin, gifts page for recipient without account should show locked but not hidden gifts
     When I give the work to "g1"
