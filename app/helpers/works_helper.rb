@@ -143,7 +143,7 @@ module WorksHelper
         t(".#{relation}.unrevealed",
           locale: default_locale)
       end
-    elsif related_work.restricted? && (download || (!logged_in? && !logged_in_as_admin?))
+    elsif related_work.restricted? && (download || guest?)
       t(".#{relation}.restricted_html",
         language: language,
         locale: default_locale,
