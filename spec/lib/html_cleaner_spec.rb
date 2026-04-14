@@ -517,6 +517,15 @@ describe HtmlCleaner do
 
         expect(doc.xpath("./details[@open]")).to be_empty
       end
+
+      it "preserves allowed global attributes in #{field}" do
+        html = '<p align="left" dir="ltr" lang="en" title="text title">some text</p>'
+
+        result = sanitize_value(field, html)
+        doc = Nokogiri::HTML.fragment(result)
+
+        expect(result).to include(html)
+      end
     end
   end
 
