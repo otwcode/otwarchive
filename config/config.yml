@@ -468,6 +468,7 @@ SUPPORTED_CSS_PROPERTIES:
 - drop-initial-value
 - elevation
 - empty-cells
+- fill
 - filter
 - fit
 - fit-position
