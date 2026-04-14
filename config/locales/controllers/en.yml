@@ -17,6 +17,17 @@ en:
         page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+    banners:
+      cannot_delete_active: Active banners cannot be deleted.
+      create:
+        banner_on: Setting banner back on for all users. This may take some time.
+        success: Banner successfully created.
+      destroy:
+        success: Banner successfully deleted.
+      update:
+        banner_on: Setting banner back on for all users. This may take some time.
+        minor_edit: Updating banner for users who have not already dismissed it. This may take some time.
+        success: Banner successfully updated.
     sessions:
       invalid_totp: Incorrect two-step verification code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
     support_notices:
