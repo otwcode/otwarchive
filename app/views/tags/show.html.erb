@@ -6,14 +6,14 @@
     <% if @tag.canonical || @tag.merger || can_wrangle? %>
       <ul class="navigation actions" role="navigation">
         <% if @tag.canonical || @tag.merger %>
-          <li><%= link_to ts("Works"), tag_works_path(@tag) %></li>
-          <li><%= link_to ts("Bookmarks"), tag_bookmarks_path(@tag) %></li>
-          <li><%= link_to ts("Collections"), tag_collections_path(@tag) %></li>
+          <li><%= link_to t(".navigation.works"), tag_works_path(@tag) %></li>
+          <li><%= link_to t(".navigation.bookmarks"), tag_bookmarks_path(@tag) %></li>
+          <li><%= link_to t(".navigation.collections"), tag_collections_path(@tag) %></li>
         <% end %>
     	<% if can_wrangle? %>
-          <li><%= link_to ts("Edit"), edit_tag_path(@tag) %> </li>
+          <li><%= link_to t(".navigation.edit"), edit_tag_path(@tag) %> </li>
           <li><%= tag_comment_link(@tag) %></li>
-          <li class="reindex"><%= link_to ts("Troubleshoot"), tag_troubleshooting_path(@tag) %> </li>
+          <li class="reindex"><%= link_to t(".navigation.troubleshoot"), tag_troubleshooting_path(@tag) %> </li>
         <% end %>
       </ul>
     <% end %>

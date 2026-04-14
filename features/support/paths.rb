@@ -199,7 +199,7 @@ module NavigationHelpers
       tag_bookmarks_path(Tag.find_by_name(Regexp.last_match(1)))
     when /^the collections "(.*)"$/i
       step %{all indexing jobs have been run}
-      tag_collections_path(Tag.find_by_name($1))
+      tag_collections_path(Tag.find_by_name(Regexp.last_match(1)))
     when /^the bookmarks in collection "(.*)"$/i
       step %{all indexing jobs have been run}
       collection_bookmarks_path(Collection.find_by(title: $1))

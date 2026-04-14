@@ -49,6 +49,10 @@ en:
   qr_code_helper:
     qr_code_as_svg:
       default_label: QR code
+  search_helper:
+    search_header:
+      scope:
+        work: including %{work}
   series_helper:
     series_description_html: Part %{index} of %{series_link}
   tags_helper:

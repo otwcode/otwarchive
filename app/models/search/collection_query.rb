@@ -49,17 +49,17 @@ class CollectionQuery < Query
     owner = options[:parent]
     # should maybe be an if statement?
     case owner
-      when Tag
-        options[:filter_ids] ||= []
-        options[:filter_ids] << owner.id
-      when User
-        options[:maintainer_id] = owner.id
-        options[:sort_column] = "title.keyword"
-        options[:sort_direction] = "asc"
-      when Collection
-        options[:parent_id] = owner.id
-        options[:sort_column] = "title.keyword"
-        options[:sort_direction] = "asc"
+    when Tag
+      options[:filter_ids] ||= []
+      options[:filter_ids] << owner.id
+    when User
+      options[:maintainer_id] = owner.id
+      options[:sort_column] = "title.keyword"
+      options[:sort_direction] = "asc"
+    when Collection
+      options[:parent_id] = owner.id
+      options[:sort_column] = "title.keyword"
+      options[:sort_direction] = "asc"
     end
   end
 

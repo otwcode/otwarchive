@@ -32,7 +32,7 @@ class CollectionsController < ApplicationController
 
   def index
     base_options = {
-      page: params[:page] || 1,
+      page: params[:page] || 1
     }
     options = params[:collection_search].present? ? collection_filter_params : {}
     options.merge!(base_options)
@@ -45,9 +45,7 @@ class CollectionsController < ApplicationController
         .for_blurb
         .paginate(page: params[:page])
     elsif @owner.present?
-      if @tag.present?
-        @sort_and_filter = true
-      end
+      @sort_and_filter = @tag.present?
       @search = CollectionSearchForm.new(options.merge(parent: @owner))
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
@@ -199,26 +197,16 @@ class CollectionsController < ApplicationController
   protected
 
   def load_owner
-    if params[:user_id].present?
-      @user = User.find_by!(login: params[:user_id])
-    end
-    if params[:work_id].present?
-      @work = Work.find(params[:work_id])
-    end
-    if params[:collection_id].present?
-      @collection = Collection.find_by!(name: params[:collection_id])
-    end
+    @user = User.find_by!(login: params[:user_id]) if params[:user_id].present?
+    @work = Work.find(params[:work_id]) if params[:work_id].present?
+    @collection = Collection.find_by!(name: params[:collection_id]) if params[:collection_id].present?
     if params[:tag_id].present?
       @tag = Tag.find_by_name(params[:tag_id])
-      unless @tag && @tag.is_a?(Tag)
-        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
-      end
+      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'" unless @tag.is_a?(Tag)
+
       unless @tag.canonical?
-        if @tag.merger.present?
-          redirect_to tag_collections_path(@tag.merger) and return
-        else
-          redirect_to(tag_path(@tag)) && return
-        end
+        redirect_path = @tag.merger.present? ? tag_collections_path(@tag.merger) : tag_path(@tag)
+        redirect_to redirect_path and return
       end
     end
     @owner = @user || @work || @collection || @tag
