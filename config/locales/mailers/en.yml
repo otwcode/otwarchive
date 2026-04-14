@@ -232,8 +232,12 @@ en:
         attribution:
           anon: by Anonymous
           named:
-            html: by %{creator_links}
-            text: by %{creators}
+            html:
+              one: by %{creator_links}
+              other: by %{creator_links}
+            text:
+              one: by %{creators}
+              other: by %{creators}
         link_with_word_count: "%{creation_link} (%{word_count})"
         title_with_chapter_number: Chapter %{position} of %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
