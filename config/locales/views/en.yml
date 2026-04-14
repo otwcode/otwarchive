@@ -2878,6 +2878,12 @@ en:
       series: "(Series)"
       work: "(Work)"
   tag_wranglers:
+    index:
+      filters:
+        no_wrangler: No Wrangler
+        only_fandoms_starting_with: Only fandoms starting with
+        only_media: Only media
+        only_wrangler: Only wrangler
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
       tags_wrangled_csv: Tags Wrangled (CSV)
