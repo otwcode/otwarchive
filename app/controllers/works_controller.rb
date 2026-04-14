@@ -834,18 +834,25 @@ class WorksController < ApplicationController
   def log_admin_activity
     return unless logged_in_as_admin?
 
-    if @work.saved_change_to_language_id?
-      new_language = @work.language.name
-      edit_summary = "<p>Old language: #{@old_language}</p><p>New language: #{new_language}</p>"
-      AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_summary)
-    end
+    action = params[:action]
+
+    log_admin_language_edit if @work.saved_change_to_language_id?
 
     new_tags = @work.tags.pluck(:name)
     tags_changed = new_tags.sort != @old_tags.sort
-    if tags_changed
-      edit_summary = "Old tags: #{@old_tags.join(', ')}"
-      AdminActivity.log_action(current_admin, @work, action: "update_tags", summary: edit_summary)
-    end
+ 
+    log_admin_tag_edit(action) if tags_changed
+  end
+
+  def log_admin_language_edit 
+    new_language = @work.language.name
+    edit_summary = "<p>Old language: #{@old_language}</p><p>New language: #{new_language}</p>"
+    AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_summary)
+  end
+
+  def log_admin_tag_edit(action)
+    edit_summary = "Old tags: #{@old_tags.join(', ')}"
+    AdminActivity.log_action(current_admin, @work, action: action, summary: edit_summary)
   end
 
   private
