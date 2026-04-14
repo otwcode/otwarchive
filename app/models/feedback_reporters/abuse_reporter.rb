@@ -1,12 +1,13 @@
 class AbuseReporter < FeedbackReporter
-  attr_accessor :creator_ids
+  attr_accessor :creator_ids, :user_agent
 
   def report_attributes
     super.deep_merge(
       "departmentId" => department_id,
       "subject" => subject,
       "description" => ticket_description,
-      "cf" => custom_zoho_fields
+      "cf" => custom_zoho_fields,
+      "channel" => channel
     )
   end
 
@@ -20,7 +21,8 @@ class AbuseReporter < FeedbackReporter
     {
       "cf_ip" => ip_address.presence || "Unknown IP",
       "cf_ticket_url" => truncated_referer,
-      "cf_user_id" => creator_ids.presence || ""
+      "cf_user_id" => creator_ids.presence || "",
+      "cf_user_agent" => user_agent || "Unknown user agent"
     }
   end
 
@@ -38,5 +40,9 @@ class AbuseReporter < FeedbackReporter
     return "No comment submitted." if description.blank?
 
     strip_images(description.html_safe, keep_src: true)
+  end
+
+  def channel
+    "Abuse Form"
   end
 end

@@ -59,3 +59,37 @@ Scenario: Banning a user's email should not affect their ability to post comment
     And I post the work "New Work"
     And I post a comment "here's a great comment"
   Then I should see "Comment created!"
+
+Scenario: Banning a user's email should prevent requesting invites
+  Given I am logged in as a "policy_and_abuse" admin
+  When I have banned the address "foo@bar.com"
+    And I log out
+    And account creation requires an invitation
+    And the invitation queue is enabled
+  Then I should not be able to add the email "foo@bar.com" to the invite queue
+
+Scenario: Banning a user's email should prevent aliases requesting invites
+  Given I am logged in as a "policy_and_abuse" admin
+  When I have banned the address "foo+bar@gmail.com"
+    And I log out
+    And account creation requires an invitation
+    And the invitation queue is enabled
+  Then I should not be able to add the email "foo@gmail.com" to the invite queue
+    And I should not be able to add the email "fo.o@gmail.com" to the invite queue
+    And I should not be able to add the email "foo+baz@gmail.com" to the invite queue
+    And I should not be able to add the email "foo@googlemail.com" to the invite queue
+
+Scenario: User's email banned after joining invite queue should remove their email
+  Given I am a visitor
+  When I am on the homepage
+    And I follow "Get an Invitation"
+    And I fill in "Email" with "foo+bar@baz.com"
+    And I press "Add me to the list"
+  Then I should see "You've been added to our queue"
+  When I am logged in as a "policy_and_abuse" admin
+    And I go to the manage invite queue page
+  Then I should see "foo+bar@baz.com"
+    And I should not see "foo@baz.com"
+  When I have banned the address "foo+qux@baz.com"
+    And I go to the manage invite queue page
+  Then I should not see "foo+bar@baz.com"

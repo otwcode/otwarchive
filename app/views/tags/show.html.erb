@@ -64,11 +64,13 @@
   </div>
   <% end %>
 
-  <% unless @tag_children['Merger'].blank? %>
-  <div class="synonym listbox group">
-    <h3 class="heading"><%= ts('Tags with the same meaning') %>:</h3>
-    <ul class="tags commas index group"><%= tag_link_list(@tag_children['Merger'].sort) %></ul>
-  </div>
+  <% if @has_mergers %>
+    <div class="synonym listbox group">
+      <h3 class="heading"><%= t(".synonyms") %></h3>
+      <% cache([:v1, :tag, :mergers, @tag.id], version: @tag.updated_at.to_fs(:usec), expires_in: 12.hours, skip_digest: true) do %>
+        <ul class="tags commas index group"><%= tag_link_list(@tag.merger_data.sort) %></ul>
+      <% end %>
+    </div>
   <% end %>
 
   <% unless @tag.direct_meta_tags.blank? %>
@@ -89,23 +91,21 @@
   </div>
   <% end %>
 
-  <% unless (@tag_children.keys - ['Merger']).blank? %>
-    <!-- caching -->
-    <% cache("tag-#{@tag.cache_key}-children-v3", skip_digest: true) do %>
+  <% cache([:v1, :tag, :children, @tag.id], version: @tag.updated_at.to_fs(:usec), skip_digest: true) do %>
+    <% children = @tag.child_data(Tag::USER_DEFINED) %>
+    <% if children.present? %>
       <div class="child listbox group">
-        <h3 class="heading"><%= ts('Child tags (displaying the first %{count} of each type)', :count => ArchiveConfig.TAG_LIST_LIMIT) %>:</h3>
-        <% %w(Character Relationship Freeform).each do |type| %>
-          <% if @tag_children[type].present? %>
-            <div class="<%= type.to_s.pluralize.downcase %> listbox group">
-              <h4 class="heading"><%= type.constantize::NAME.pluralize %>:</h4>
-              <ul class="tags commas index group">
-                <%= tag_link_list(@tag_children[type].sort) %>
-                <% if @tag_children[type].length > ArchiveConfig.TAG_LIST_LIMIT %>
-                  <li><%= ts("and more") %></li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
+        <h3 class="heading"><%= t(".children.heading", count: ArchiveConfig.TAG_LIST_LIMIT) %></h3>
+        <% children.each do |type, tags| %>
+          <div class="<%= type.pluralize.downcase %> listbox group">
+            <h4 class="heading"><%= type.constantize.model_name.human(count: :many) %></h4>
+            <ul class="tags commas index group">
+              <%= tag_link_list(tags.sort) %>
+              <% if tags.total_entries > ArchiveConfig.TAG_LIST_LIMIT %>
+                <li><%= t(".children.more") %></li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
       </div>
     <% end %>
@@ -138,6 +138,20 @@
       <% end %>
     </div>
     <% end %>
+
+    <% unless @collections.blank? %>
+      <div class="collection listbox group">
+      <h3 class="heading"><%= ts('Collections which have used it as a tag') %>:</h3>
+      <%= paginated_section @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+          <ul class="index group">
+            <% for collection in @collections %>
+              <%= render 'collections/collection_blurb', :collection => collection %>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    <% end %>
+
   <% end %>
 </div>
 <!--/content-->

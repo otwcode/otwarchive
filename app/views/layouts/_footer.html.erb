@@ -1,16 +1,16 @@
 <!-- BEGIN footer -->
 <div id="footer" role="contentinfo" class="region">
   <h3 class="landmark heading"><%= t(".landmark") %></h3>
-  <ul class="navigation actions" role="navigation">
+  <ul class="navigation actions">
     <% if logged_in? || logged_in_as_admin? %>
       <% cache(skin_chooser_key, skip_digest: true) do %>
         <% unless Skin.in_chooser.empty? %>
           <li class="module group">
             <h4 class="heading"><%= t(".customize.header") %></h4>
             <ul class="menu">
-              <li><%= link_to t(".customize.default"), unset_skins_path %></li>
+              <li><%= button_to t(".customize.default"), unset_skins_path, method: :post %></li>
               <% Skin.in_chooser.order(:title).each do |s| %>
-                <li><%= link_to s.title, set_skin_path(s) %></li>
+                <li><%= button_to s.title, set_skin_path(s), method: :post %></li>
               <% end %>
             </ul>
           </li>
@@ -26,6 +26,7 @@
         <li><%= link_to t(".about.content_policy"), content_path %></li>
         <li><%= link_to t(".about.privacy_policy"), privacy_path %></li>
         <li><%= link_to t(".about.dmca_policy"), dmca_path %> </li>
+        <li><%= link_to t(".about.status_page"), "https://www.otwstatus.org" %></li>
       </ul>
     </li>
     <li class="module group">

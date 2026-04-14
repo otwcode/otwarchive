@@ -2,6 +2,7 @@ class Pseud < ApplicationRecord
   include Searchable
   include WorksOwner
   include Justifiable
+  include AfterCommitEverywhere
 
   has_one_attached :icon do |attachable|
     attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
@@ -73,8 +74,15 @@ class Pseud < ApplicationRecord
   validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
 
+  after_create :add_to_autocomplete
+  after_create :reindex_user
+  before_update :cleanup_autocomplete, if: :will_save_change_to_name?
+  after_update :add_to_autocomplete, if: :saved_change_to_name?
   after_update :check_default_pseud
   after_update :expire_caches
+  after_update :reindex_user, if: :saved_change_to_name?
+  before_destroy :remove_from_autocomplete
+  after_destroy :reindex_user
   after_commit :reindex_creations, :touch_comments
 
   scope :alphabetical, -> { order(:name) }
@@ -110,6 +118,13 @@ class Pseud < ApplicationRecord
       .where(
         pseuds: { id: pseud_ids }, works: { posted: true, hidden_by_admin: false }
       ).group('pseuds.id')
+  }
+
+  scope :has_works_for, lambda { |pseud_ids|
+    joins(:works)
+      .where(pseuds: { id: pseud_ids })
+      .distinct
+      .pluck(:id)
   }
 
   scope :public_rec_count_for, -> (pseud_ids) {
@@ -153,11 +168,15 @@ class Pseud < ApplicationRecord
   end
 
   # Produces a byline that indicates the user's name if pseud is not unique
+  # Do NOT internationalize this because
+  # This is also used as an input format that cannot be localised
   def byline
     (name != user_name) ? "#{name} (#{user_name})" : name
   end
 
   # get the former byline
+  # Do NOT internationalize this because
+  # This is also used as an input format that cannot be localised
   def byline_was
     past_name = name_was.blank? ? name : name_was
     # if we have a user and their login has changed get the old one
@@ -255,14 +274,19 @@ class Pseud < ApplicationRecord
     # [attribute]_was for the pseud's user will behave as if this were an
     # after_* callback on the user, instead of a before_* callback on self.
     #
-    # see psued_sweeper.rb:13 for more context
-    #
     past_user_name = user.blank? ? "" : (user.login_before_last_save.blank? ? user.login : user.login_before_last_save)
     (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
   end
 
-  # This method is for removing stale autocomplete records in a before_*
-  # callback, such as the one used in PseudSweeper
+  def cleanup_autocomplete
+    if user.saved_changes.any?
+      remove_stale_from_autocomplete
+    else
+      remove_stale_from_autocomplete_before_save
+    end
+  end
+
+  # This method is for removing stale autocomplete records in a before_* callback.
   #
   # This is a particular case for the Pseud model
   def remove_stale_from_autocomplete_before_save
@@ -393,6 +417,7 @@ class Pseud < ApplicationRecord
     if saved_change_to_name?
       works.touch_all
       series.each(&:expire_byline_cache)
+      chapters.each(&:expire_byline_cache)
     end
   end
 
@@ -442,5 +467,9 @@ class Pseud < ApplicationRecord
     IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
     IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
     IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+  end
+
+  def reindex_user
+    after_commit { user.enqueue_to_index }
   end
 end

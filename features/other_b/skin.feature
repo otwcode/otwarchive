@@ -53,6 +53,13 @@ Feature: Non-public site and work skins
     And I submit
   Then I should see "must be unique"
 
+  Scenario: Skin titles should be less than 255 characters
+  Given I am logged in as "skinner"
+  When I am on the new skin page
+    And I fill in "Title" with "A" repeated 256 times
+    And I submit
+  Then I should see "must be less than 255 characters long"
+
   Scenario: The user who creates a skin should be able to edit it
   Given I am logged in as "skinner"
     And I create the skin "my skin"
@@ -244,7 +251,7 @@ Feature: Non-public site and work skins
   When I set up the skin "Work Skin" with css ".selector {position: fixed; top: 0;}"
     And I select "Work Skin" from "Type"
     And I submit
-  Then I should see "The position property in .selector cannot have the value fixed in Work skins, sorry!"
+  Then I should see "The position property in .selector cannot have the value fixed in work skins, sorry!"
 
   Scenario: User should be able to access their site and work skins from an
   individual skin's show page

@@ -12,7 +12,6 @@ module OtwSanitize
       archiveorg: %r{^archive\.org/embed/},
       bilibili: %r{^(player\.)?bilibili\.com/},
       criticalcommons: %r{^criticalcommons\.org/},
-      eighttracks: %r{^8tracks\.com/},
       google: %r{^google\.com/},
       podfic: %r{^podfic\.com/},
       soundcloud: %r{^(w\.)?soundcloud\.com/},

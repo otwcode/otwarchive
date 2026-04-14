@@ -4,15 +4,11 @@ describe BookmarksController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  def it_redirects_to_user_login
-    it_redirects_to_simple new_user_session_path
-  end
-
   describe "new" do
     context "without javascript" do
       it "redirects logged out users" do
         get :new
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
       
       context "when logged in" do
@@ -35,7 +31,7 @@ describe BookmarksController do
     context "denies access for work that isn't visible to user" do
       subject { get :new, params: { work_id: work } }
       let(:success) { expect(response).to render_template("new") }
-      let(:success_admin) { it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.") }
+      let(:success_admin) { it_redirects_to_user_login_with_error }
 
       include_examples "denies access for work that isn't visible to user"
     end
@@ -47,7 +43,7 @@ describe BookmarksController do
     context "when user is not logged in" do
       it "redirects to login" do
         post :create, params: { work_id: work.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -106,6 +102,23 @@ describe BookmarksController do
           let!(:series_bookmark) { create(:bookmark, bookmarkable: series_with_same_id, pseud: pseud) }
 
           it_behaves_like "all is correct"
+        end
+      end
+
+      context "when user creates a bookmark to add to a collection" do
+        let(:collection) { create(:collection) }
+      
+        it "shows the collection warning message" do
+          bookmark_params = {
+            pseud_id: pseud.id,
+            collection_names: collection.name
+          }
+          post :create, params: { work_id: work.id, bookmark: bookmark_params }
+      
+          bookmark = assigns(:bookmark)
+          success_msg = "Bookmark was successfully created. It should appear in bookmark listings within the next few minutes. Please note: private bookmarks are not listed in collections."
+          
+          it_redirects_to_with_notice(bookmark_path(bookmark), success_msg)
         end
       end
 
@@ -190,6 +203,26 @@ describe BookmarksController do
         expect(assigns(:bookmark).pseud_id).to eq(other_pseud.id)
       end
     end
+
+    context "when user updates a bookmark to add it to a collection" do
+      let(:user) { create(:user) }
+      let(:pseud) { user.default_pseud }
+      let(:bookmark) { create(:bookmark, pseud: pseud) }
+      let(:collection) { create(:collection) }
+    
+      before do
+        fake_login_known_user(user)
+      end
+    
+      it "shows the collection warning message" do
+        put :update, params: { id: bookmark.id, bookmark: { collection_names: collection.name } }
+
+        success_msg = "Bookmark was successfully updated. " \
+                      "Added to collection(s): #{collection.title}. " \
+                      "Please note: private bookmarks are not listed in collections."
+        it_redirects_to_with_notice(bookmark_path(bookmark), success_msg)
+      end
+    end
   end
 
   describe "share" do
@@ -221,7 +254,7 @@ describe BookmarksController do
 
       fake_login_known_user(bookmark.pseud.user)
       get :share, params: { id: bookmark.id }
-      it_redirects_to_with_error(root_path, "Sorry, you need to have JavaScript enabled for this.")
+      it_redirects_to_with_error(bookmark, "Sorry, you need to have JavaScript enabled for this.")
     end
   end
 

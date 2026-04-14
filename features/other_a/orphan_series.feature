@@ -79,3 +79,12 @@ Feature: Orphan series
     Then "orphan_account" should be a co-creator of the series "Shared Series"
       And "orphan_account" should be a co-creator of the work "Shared Beginnings"
       But "orphan_account" should not be a co-creator of the work "Keeper's Solo"
+
+Scenario: Cancelling series orphan redirects to series
+  Given I add the work "Work to be Rued" to the series "My Biggest Mistakes"
+    And I add the work "Regrettable Work" to the series "My Biggest Mistakes"
+    And I view the series "My Biggest Mistakes"
+  When I follow "Orphan Series"
+  Then I should see "Are you sure you want to permanently remove all identifying data from your series"
+  When I follow "Cancel"
+  Then I should see "My Biggest Mistakes" within "#main h2"

@@ -1,11 +1,12 @@
-/*==GROUP: COMMENTS
-http://otwcode.github.com/docs/front_end_coding/patterns/comments
+/* ==GROUP: COMMENTS
+https://otwcode.github.io/docs/patterns/comments.html
 
 Comments are shown in #feedback at the end of a chapter or work, at the end of news posts, and can also be shown on their own page as a threaded list.
 The comment form generally belongs to the class "post".
 Comments are also shown in user home: inbox and that containing view is styled in zone-home.
 Wrangler discussion boards are not grouped with comments and they only show up in the Tag Zone.
-test note: have put clearfixes on listbox, blurb and comments here, to allow for dynamic content and for skins robustness, but it's an eleventh hour change and needs testing in ie7*/
+test note: have put clearfixes on listbox, blurb and comments here, to allow for dynamic content and for skins robustness, but it's an eleventh hour change and needs testing in ie7
+*/
 
 #feedback {
   margin: 0 0 auto;
@@ -91,6 +92,11 @@ fieldset.comments, .comment .userstuff {
   padding: 0.643em;
 }
 
+.comment .actions {
+  float: none;
+  text-align: right;
+}
+
 /* mods */
 
 .abbreviated .icon {
@@ -110,4 +116,4 @@ fieldset.comments, .comment .userstuff {
   padding-left: 83px;
 }
 
-/*END== */
+/* END == */

@@ -21,7 +21,7 @@ describe CommentsController do
       context "when comment is unreviewed" do
         it "redirects logged out user to login path with an error" do
           get :add_comment_reply, params: { comment_id: unreviewed_comment.id }
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you cannot reply to an unapproved comment.")
+          it_redirects_to_with_error(new_user_session_path(return_to: add_comment_reply_comments_path(comment_id: unreviewed_comment.id)), "Sorry, you cannot reply to an unapproved comment.")
         end
 
         it "redirects logged in user to root path with an error" do

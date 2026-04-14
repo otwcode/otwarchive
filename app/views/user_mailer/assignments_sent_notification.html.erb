@@ -1,0 +1,11 @@
+<% content_for :message do %>
+  <p><%= t(".all_sent_out.html", collection_link: style_link(@collection.title, collection_url(@collection))) %></p>
+<% end %>
+
+<% content_for :footer_note do %>
+  <%= collection_footer_note_html(@is_collection_email, @collection) %>
+<% end %>
+
+<% content_for :sent_at do %>
+  <%= l(Time.current) %>
+<% end %>

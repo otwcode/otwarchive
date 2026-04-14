@@ -5,20 +5,25 @@ Feature: Delete pseud.
   I want to delete a pseud
 
   Scenario: Delete pseud, have option to move works, delete works, or orphan works. Test if those choices work.
-    Given I have loaded the fixtures
+    Given the user "testuser" exists and is activated
+      And "testuser" has the pseud "tester_pseud"
+      And "testuser" has the pseud "testy"
+      And "testuser" has the pseud "testymctesty"
+      And pseud "tester_pseud" has a bookmark of a work titled "one" by "testuser2"
+      And pseud "testy" has a bookmark of a work titled "two" by "testuser2"
+      And pseud "testymctesty" has a bookmark of a work titled "three" by "testuser2"
     When I am logged in as "sad_user_with_no_pseuds"
       And I am on sad_user_with_no_pseuds's pseuds page
     Then I should not see "Delete"
 
-    When I am logged out
-      And I am logged in as "testuser"
+    When I am logged in as "testuser"
       And I am on testuser's pseuds page
       And I follow "delete_tester_pseud"
       And I press "Cancel"
     Then I should see "The pseud was not deleted."
     When I am on testuser's pseuds page
       And I follow "tester_pseud"
-    Then I should see "fifth by testuser2"
+    Then I should see "one by testuser2"
 
     When I am on testuser's pseuds page
       And I follow "delete_tester_pseud"
@@ -34,7 +39,7 @@ Feature: Delete pseud.
     Then I should see "The pseud was successfully deleted."
     When I am on testuser's pseuds page
       And I follow "testymctesty"
-    Then I should see "fourth by testuser2"
+    Then I should see "three by testuser2"
 
   Scenario: Deleting a pseud shouldn't break gift exchange signups.
     Given I am logged in as "moderator"

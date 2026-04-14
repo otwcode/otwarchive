@@ -23,7 +23,7 @@ describe ValidationHelper do
         exclusion: ['one', 'two', 'three']
       }
 
-      expected = <<-EOF
+      expected = +<<-EOF
       | <script>
       | //<![CDATA[
       | var validation_for_10 = new LiveValidation('10', { wait: 500, onlyOnBlur: false });
@@ -52,7 +52,7 @@ describe ValidationHelper do
       # }
       options = {}
 
-      expected = <<-EOF
+      expected = +<<-EOF
       | <script>
       | //<![CDATA[
       | var validation_for_10 = new LiveValidation('10', { wait: 500, onlyOnBlur: false });
@@ -73,7 +73,7 @@ describe ValidationHelper do
         presence: false
       }
 
-      expected = <<-EOF
+      expected = +<<-EOF
       | <script>
       | //<![CDATA[
       | var validation_for_10 = new LiveValidation('10', { wait: 500, onlyOnBlur: false });

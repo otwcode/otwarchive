@@ -160,3 +160,24 @@ Feature: Orphan work
       And I orphan the work "Half-Orphaned"
     Then "orphan_account" should be a co-creator of Chapter 1 of "Half-Orphaned"
       But "orphan_account" should not be a co-creator of Chapter 2 of "Half-Orphaned"
+
+  Scenario: Cancelling multiple work orphan redirects to edit multiple works page
+    Given the work "Work1" by "orphaneer"
+      And the work "Work2" by "orphaneer"
+      And I am logged in as "orphaneer"
+    When I go to orphaneer's edit multiple works page
+    When I check "work_ids[]" within "//label[@title='select Work1']"
+      And I check "work_ids[]" within "//label[@title='select Work2']"
+      And I press "Orphan"
+    Then I should see "Orphaning will permanently remove all identifying data from the following work(s),"
+    When I follow "Cancel"
+    Then I should be on orphaneer's edit multiple works page
+
+  Scenario: Cancelling single work orphan redirects to the work's edit page
+    Given the work "Work1" by "orphaneer"
+      And I am logged in as "orphaneer"
+    When I edit the work "Work1"
+      And I follow "Orphan Work"
+    Then I should see "Orphaning will permanently remove all identifying data from the following work(s),"
+    When I follow "Cancel"
+    Then the page title should include "Edit Work"

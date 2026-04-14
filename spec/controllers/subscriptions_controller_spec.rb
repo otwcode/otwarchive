@@ -16,8 +16,7 @@ describe SubscriptionsController do
 
     it "redirects to login when not logged in" do
       get :index, params: { user_id: user.login }
-      it_redirects_to_with_error(new_user_session_path,
-                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      it_redirects_to_user_login_with_error
     end
 
     context "when logged in" do
@@ -88,6 +87,27 @@ describe SubscriptionsController do
           get :index, params: { user_id: user.login, type: "Invalid" }  
           expect(assigns[:page_subtitle]).to eq("#{user.login} - Subscriptions")
         end
+      end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    let(:work) { create(:work) }
+    let!(:subscription) { create(:subscription, user: user, subscribable: work) }
+
+    before { fake_login_known_user(user) }
+
+    it "redirects with the work title in the success notice" do
+      delete :destroy, params: { user_id: user.login, id: subscription.id }
+      it_redirects_to_with_notice(user_subscriptions_path(user), "You have successfully unsubscribed from #{work.title}.")
+    end
+
+    context "when the work is in an unrevealed collection" do
+      before { work.update!(collection_names: create(:unrevealed_collection).name) }
+
+      it "redirects with 'Mystery Work' in the success notice" do
+        delete :destroy, params: { user_id: user.login, id: subscription.id }
+        it_redirects_to_with_notice(user_subscriptions_path(user), "You have successfully unsubscribed from Mystery Work.")
       end
     end
   end

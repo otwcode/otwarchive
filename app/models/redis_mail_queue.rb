@@ -5,8 +5,8 @@ class RedisMailQueue
   def self.queue_kudo(author, kudo)
     key = "kudos_#{author.id}_#{kudo.commentable_type}_#{kudo.commentable_id}"
     REDIS_KUDOS.rpush(key, kudo.name)
-    REDIS_KUDOS.sadd("kudos_#{author.id}", key)
-    REDIS_KUDOS.sadd("notification_kudos", author.id)
+    REDIS_KUDOS.sadd?("kudos_#{author.id}", key)
+    REDIS_KUDOS.sadd?("notification_kudos", author.id)
   end
 
   # batch and deliver all the outstanding kudo notifications
@@ -23,10 +23,10 @@ class RedisMailQueue
       end
       keys.each do |key|
         # atomically get the info and then delete the key
-        guest_count, names, = REDIS_KUDOS.multi do
-          REDIS_KUDOS.lrem(key, 0, "guest")
-          REDIS_KUDOS.lrange(key, 0, -1)
-          REDIS_KUDOS.del(key)
+        guest_count, names, = REDIS_KUDOS.multi do |redis|
+          redis.lrem(key, 0, "guest")
+          redis.lrange(key, 0, -1)
+          redis.del(key)
         end
 
         # get the commentable
@@ -58,7 +58,7 @@ class RedisMailQueue
     key = "subscription_#{subscription.id}"
     entry = "#{creation.class.name}_#{creation.id}"
     REDIS_GENERAL.rpush(key, entry)
-    REDIS_GENERAL.sadd("notification_subscription", subscription.id)
+    REDIS_GENERAL.sadd?("notification_subscription", subscription.id)
   end
 
   # batch and deliver all the outstanding subscription notifications
@@ -67,13 +67,18 @@ class RedisMailQueue
     subscription_list = to_notify("subscription")
     subscription_list.each do |subscription_id|
       key = "subscription_#{subscription_id}"
-      entries, = REDIS_GENERAL.multi do
-        REDIS_GENERAL.lrange(key, 0, -1)
-        REDIS_GENERAL.del(key)
+      entries, = REDIS_GENERAL.multi do |redis|
+        redis.lrange(key, 0, -1)
+        redis.del(key)
       end
       begin
         # don't die if we hit one deleted subscription
-        UserMailer.batch_subscription_notification(subscription_id, entries.to_json).deliver_later
+        subscription = Subscription.find_by(id: subscription_id)
+        next unless subscription
+
+        I18n.with_locale(subscription.user.preference.locale_for_mails) do
+          UserMailer.batch_subscription_notification(subscription_id, entries.to_json).deliver_later
+        end
       rescue ActiveRecord::RecordNotFound
         # never rescue all errors
       end
@@ -91,9 +96,9 @@ class RedisMailQueue
   def self.to_notify(notification_type)
     redis = redis_for_type(notification_type)
     # atomically get all the users to notify and then delete the list
-    list, = redis.multi do
-      redis.smembers("notification_#{notification_type}")
-      redis.del "notification_#{notification_type}"
+    list, = redis.multi do |transaction|
+      transaction.smembers("notification_#{notification_type}")
+      transaction.del "notification_#{notification_type}"
     end
     list
   end

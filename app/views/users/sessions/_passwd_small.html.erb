@@ -1,6 +1,6 @@
 <%# We need to override the ids to avoid accessibility issues on the new user session page,
 which has a second user session form %>
-<%= form_for(User.new, url: user_session_path, html: { id: "new_user_session_small" }) do |f| %>
+<%= form_for(User.new, url: user_session_path(return_to: request.fullpath.start_with?(new_user_session_path) ? params[:return_to] : request.fullpath), html: { id: "new_user_session_small" }) do |f| %>
   <dl>
     <dt><%= f.label :login, t(".username_or_email"), for: "user_session_login_small" %></dt>
     <dd><%= f.text_field :login, autocomplete: "on", id: "user_session_login_small" %></dd>

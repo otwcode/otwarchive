@@ -10,22 +10,16 @@ describe RelatedWorksController do
 
   describe "GET #index" do
     context "for a blank user" do
-      before(:each) do
-        get :index, params: { user_id: "" }
-      end
-
-      it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(user_related_works_path, "Whose related works were you looking for?") 
+      it "raises a RecordNotFound error" do
+        expect { get :index, params: { user_id: "" } }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
     context "for a nonexistent user" do
-      before(:each) do
-        get :index, params: { user_id: "user" }
-      end
-
-      it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(user_related_works_path, "Sorry, we couldn't find that user")
+      it "raises a RecordNotFound error" do
+        expect { get :index, params: { user_id: "user" } }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -49,7 +43,7 @@ describe RelatedWorksController do
       end
 
       it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(related_work_path(@related_work), "Sorry, but you don't have permission to do that. Try removing the link from your own work.")
+        it_redirects_to_with_error(user_related_works_path(child_creator), "Sorry, but you don't have permission to do that. Try removing the link from your own work.")
       end
     end
 
@@ -61,7 +55,7 @@ describe RelatedWorksController do
       end
 
       it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(related_work_path(@related_work), "Sorry, but you don't have permission to do that.")
+        it_redirects_to_with_error(root_path, "Sorry, but you don't have permission to do that.")
       end
     end
 
@@ -106,7 +100,7 @@ describe RelatedWorksController do
       end
 
       it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(related_work_path(related_work), "Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
+        it_redirects_to_with_error(user_related_works_path(parent_creator), "Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
       end
     end
 
@@ -117,7 +111,7 @@ describe RelatedWorksController do
       end
 
       it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(related_work_path(related_work), "Sorry, but you don't have permission to do that.")
+        it_redirects_to_with_error(root_path, "Sorry, but you don't have permission to do that.")
       end
     end
 

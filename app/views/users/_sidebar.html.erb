@@ -13,8 +13,11 @@
     </li>
 	<% end %>
 
-	<% if @user == current_user %>
+  <% if @user == current_user || policy(:preference).index? %>
     <li><%= span_if_current t(".choices.preferences"), user_preferences_path(@user) %></li>
+  <% end %>
+
+  <% if @user == current_user %>
     <li><%= span_if_current t(".choices.skins"), user_skins_path(@user) %></li>
   <% end %>
 </ul>
@@ -32,7 +35,7 @@
 	  <li><%= bookmarks_link(@user, @pseud) %></li>
 	<% end %>
 
-  <li><%= span_if_current t(".pitch.collections", coll_number: @user.maintained_collections.count), user_collections_path(@user) %></li>
+  <li><%= collections_link(@user) %></li>
 </ul>
 
 <% if @user == current_user || policy(:inbox_comment).show? %>
@@ -56,7 +59,7 @@
       <li><%= span_if_current t(".switch.co_creator_requests", count: Creatorship.unapproved.for_user(@user).count), user_creatorships_path(@user) %></li>
     <% end %>
     <li><%= span_if_current t(".switch.sign_ups", signup_number: @user.challenge_signups.count), user_signups_path(@user) %></li>
-    <li><%= span_if_current t(".switch.assignments", assignment_number: (@user.offer_assignments.undefaulted.count + @user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(@user) %></li>
+    <li><%= span_if_current t(".switch.assignments", assignment_number: @user.assignments.unposted.undefaulted.count), user_assignments_path(@user) %></li>
     <li><%= span_if_current t(".switch.claims", claim_number: @user.request_claims.unposted.count), user_claims_path(@user) %></li>
     <li><%= span_if_current t(".switch.related_works", related_works_number: (@user.related_works.posted.count + @user.parent_work_relationships.count)), user_related_works_path(@user) %></li>
   <% end %>

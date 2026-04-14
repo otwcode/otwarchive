@@ -72,6 +72,16 @@ module SearchCounts
   end
 
   ######################################################################
+  # COLLECTION COUNTS FOR USER/PSEUD DASHBOARD
+  ######################################################################
+
+  def collection_count_for_user(user)
+    Rails.cache.fetch(["user", user.id, "collections_count"], dashboard_cache_options) do
+      CollectionQuery.new(maintainer_id: user.id).count
+    end
+  end
+
+  ######################################################################
   # BOOKMARK COUNTS FOR USER/PSEUD DASHBOARD
   ######################################################################
 

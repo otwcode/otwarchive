@@ -18,6 +18,13 @@ background:purple; color:#555;}
 0.875em/1.286 line height = 14px with 18px leading
 0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements */
 
+/* AO3-6869 -- Workaround for a layout bug in WebKit, triggered by `float` and LiveValidation's placeholder span */
+form#new_abuse_report .footnote {
+  float: none;
+  margin-right: 0;
+  width: fit-content;
+}
+
 /* styling for AO3-3359 to remove top padding from the new button
 and preserve the balance/symmetry of the page */
 #new_work_search fieldset:first-of-type .submit {
@@ -56,10 +63,11 @@ a.resp-sharing-button__link:hover {
 }
 
 .resp-sharing-button__icon svg {
-  width: 1em;
-  height: 1em;
-  margin-right: 0.4em;
-  vertical-align: top
+  width: 1.25em;
+  height: 1.25em;
+  margin-right: 0.25em;
+  vertical-align: text-bottom;
+  overflow: visible;
 }
 
 /* Non solid icons get a stroke */
@@ -78,7 +86,8 @@ a.resp-sharing-button__link:hover {
   background-color: #55acee;
 }
 
-.resp-sharing-button--twitter:hover, a:focus .resp-sharing-button--twitter {
+.resp-sharing-button--twitter:hover,
+a:focus .resp-sharing-button--twitter {
   background-color: #2795e9;
 }
 
@@ -86,8 +95,18 @@ a.resp-sharing-button__link:hover {
   background-color: #35465C;
 }
 
-.resp-sharing-button--tumblr:hover, a:focus .resp-sharing-button--tumblr {
+.resp-sharing-button--tumblr:hover,
+a:focus .resp-sharing-button--tumblr {
   background-color: #222d3c;
+}
+
+.resp-sharing-button--bluesky {
+  background-color: #1185fe;
+}
+
+.resp-sharing-button--bluesky:hover,
+a:focus .resp-sharing-button--bluesky {
+  background-color: #0168d6;
 }
 
 .resp-sharing-button--twitter {
@@ -110,4 +129,15 @@ a.resp-sharing-button__link:hover {
 .resp-sharing-button--tumblr:active {
   background-color: #222d3c;
   border-color: #222d3c;
+}
+
+.resp-sharing-button--bluesky {
+  background-color: #1185fe;
+  border-color: #1185fe;
+}
+
+.resp-sharing-button--bluesky:hover,
+.resp-sharing-button--bluesky:active {
+  background-color: #0168d6;
+  border-color: #0168d6;
 }

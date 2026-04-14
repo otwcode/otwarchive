@@ -256,6 +256,11 @@ Given "I recategorize the {string} fandom as a {string} tag" do |name, tag_type|
   click_button("Save changes")
 end
 
+Given "the tag list limit is {int}" do |limit|
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.TAG_LIST_LIMIT = limit
+end
+
 ### WHEN
 
 When /^the periodic tag count task is run$/i do
@@ -403,6 +408,11 @@ end
 
 When /^I view the (canonical|synonymous|unfilterable|unwrangled|unwrangleable) (character|relationship|freeform) bin for "(.*?)"$/ do |status, type, tag|
   visit wrangle_tag_path(Tag.find_by(name: tag), show: type.pluralize, status: status)
+end
+
+When "I select {string} from the {string} wrangling assigment dropdown" do |login, tagname|
+  tag = Tag.find_by(name: tagname)
+  select(login, from: "assignments_#{tag.id}_")
 end
 
 ### THEN

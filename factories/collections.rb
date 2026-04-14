@@ -15,11 +15,9 @@ FactoryBot.define do
   end
 
   factory :collection_preference do |f|
-    collection
   end
 
   factory :collection_profile do |f|
-    collection
   end
 
   factory :collection do |f|
@@ -44,6 +42,14 @@ FactoryBot.define do
 
     factory :anonymous_unrevealed_collection do
       association :collection_preference, unrevealed: true, anonymous: true
+    end
+
+    trait :closed do
+      association :collection_preference, closed: true
+    end
+
+    trait :moderated do
+      association :collection_preference, moderated: true
     end
   end
 

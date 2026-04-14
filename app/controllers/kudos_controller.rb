@@ -1,5 +1,4 @@
 class KudosController < ApplicationController
-  skip_before_action :store_location
   before_action :load_parent, only: [:index]
   before_action :check_parent_visible, only: [:index]
   before_action :admin_logout_required, only: [:create]
@@ -42,7 +41,8 @@ class KudosController < ApplicationController
       respond_to do |format|
         format.html do
           flash[:kudos_notice] = t(".success")
-          redirect_to request.referer and return
+          redirect_path = url_from(request.referer) || polymorphic_path(@kudo.commentable)
+          redirect_to "#{redirect_path}#kudos_message" and return
         end
 
         format.js do
@@ -59,7 +59,8 @@ class KudosController < ApplicationController
           return if check_user_status
 
           flash[:kudos_error] = error_message
-          redirect_to request.referer and return
+          redirect_path = url_from(request.referer) || polymorphic_path(@kudo.commentable || root_path)
+          redirect_to "#{redirect_path}#kudos_message" and return
         end
 
         format.js do
@@ -77,7 +78,8 @@ class KudosController < ApplicationController
     respond_to do |format|
       format.html do
         flash[:kudos_error] = error_message
-        redirect_to request.referer
+        redirect_path = url_from(request.referer) || polymorphic_path(@kudo&.commentable || root_path)
+        redirect_to "#{redirect_path}#kudos_message" and return
       end
 
       format.js do

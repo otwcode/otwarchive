@@ -24,6 +24,9 @@ Before do
 
   # Don't authenticate for Zoho.
   allow_any_instance_of(ZohoAuthClient).to receive(:access_token)
+  
+  # Don't display TOS prompts.
+  allow_any_instance_of(ApplicationHelper).to receive(:tos_exempt_page?).and_return(true)
 
   # Clear Memcached
   Rails.cache.clear
@@ -39,6 +42,7 @@ Before do
   REDIS_KUDOS.flushall
   REDIS_RESQUE.flushall
   REDIS_ROLLOUT.flushall
+  REDIS_RATELIMITS.flushall
 
   Indexer.all.map(&:prepare_for_testing)
 end
@@ -56,6 +60,14 @@ end
 
 Before "not @javascript" do
   Capybara.app_host = "http://www.example.com"
+end
+
+Before "@no-js-emulation" do
+  Capybara.current_driver = :rack_test_no_data_method
+end
+
+After "@no-js-emulation" do
+  Capybara.use_default_driver
 end
 
 Before "@disable_caching" do

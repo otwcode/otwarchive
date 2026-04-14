@@ -67,21 +67,22 @@ class ChallengeAssignmentsController < ApplicationController
     false
   end
 
-
-
   # ACTIONS
 
   def index
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
-        if params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
-          @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted
-        else
-          @challenge_assignments = @user.offer_assignments.undefaulted + @user.pinch_hit_assignments.undefaulted
-        end
+        @challenge_assignments = @user.assignments.undefaulted
+        @challenge_assignments = @challenge_assignments.in_collection(@collection) if params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
+        @challenge_assignments = if params[:posted] == "true"
+                                   @challenge_assignments.posted
+                                 else
+                                   @challenge_assignments.unposted
+                                 end
+        @pagy, @challenge_assignments = pagy(@challenge_assignments.order(Arel.sql("COALESCE(sent_at, covered_at) ASC, id ASC")))
       else
-        flash[:error] = ts("You aren't allowed to see that user's assignments.")
-        redirect_to '/' and return
+        flash[:error] = t(".access_denied_user")
+        redirect_to root_path and return
       end
     else
       # do error-checking for the collection case
@@ -219,10 +220,8 @@ class ChallengeAssignmentsController < ApplicationController
   def default
     @challenge_assignment.defaulted_at = Time.now
     @challenge_assignment.save
-    
-    assignments_page_url = collection_assignments_url(@challenge_assignment.collection)
-    
-    @challenge_assignment.collection.notify_maintainers_challenge_default(@challenge_assignment, assignments_page_url)
+
+    @challenge_assignment.collection.notify_maintainers_assignment_default(@challenge_assignment)
 
     flash[:notice] = "We have notified the collection maintainers that you had to default on your assignment."
     redirect_to user_assignments_path(current_user)

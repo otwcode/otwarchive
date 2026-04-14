@@ -1,0 +1,34 @@
+<fieldset>
+  <legend><%= t(".legend") %></legend>
+
+  <p class="notice">
+    <%= t(".post_notice_html",
+          content_policy_link: link_to(t(".content_policy"), content_path),
+          tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
+  </p>
+
+  <ul class="actions">
+    <% unless @chapter.posted? %>
+      <li><%= submit_tag t(".actions.save_draft"), name: "save_button" %></li>
+    <% end %>
+
+    <%# In preview mode, replace Preview option with Edit. %>
+    <% if @preview_mode %>
+      <li><%= submit_tag t(".actions.edit"), name: "edit_button" %></li>
+    <% else %>
+      <li><%= submit_tag t(".actions.preview"), name: "preview_button" %></li>
+    <% end %>
+
+    <%# Update if chapter is already posted, Post if it's not. %>
+    <% if @chapter.posted? %>
+      <li><%= submit_tag t(".actions.update"), name: "update_button" %></li>
+    <% else %>
+      <li><%= submit_tag t(".actions.post"),
+                name: @preview_mode ? "post_button" : "post_without_preview_button",
+                data: { disable_with: t(".actions.please_wait") } %></li>
+    <% end %>
+
+    <li><%= link_to t(".actions.cancel"), @chapter.new_record? ? work_path(@work) : work_chapter_path(@work, @chapter) %></li>
+  </ul>
+
+</fieldset>

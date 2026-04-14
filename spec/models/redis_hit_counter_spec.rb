@@ -82,13 +82,13 @@ describe RedisHitCounter do
       travel_to "2020-01-30 02:59:00 UTC" do
         RedisHitCounter.add(work_id, ip_address)
 
-        expect(RedisHitCounter.redis.exists("visits:20200129")).to be_truthy
+        expect(RedisHitCounter.redis.exists?("visits:20200129")).to be_truthy
       end
 
       travel_to "2020-01-30 03:01:00 UTC" do
         RedisHitCounter.remove_old_visits
 
-        expect(RedisHitCounter.redis.exists("visits:20200129")).to be_falsey
+        expect(RedisHitCounter.redis.exists?("visits:20200129")).to be_falsey
       end
     end
 
@@ -104,8 +104,8 @@ describe RedisHitCounter do
       travel_to "2020-01-30 03:02:00 UTC" do
         RedisHitCounter.remove_old_visits
 
-        expect(RedisHitCounter.redis.exists("visits:20200129")).to be_falsey
-        expect(RedisHitCounter.redis.exists("visits:20200130")).to be_truthy
+        expect(RedisHitCounter.redis.exists?("visits:20200129")).to be_falsey
+        expect(RedisHitCounter.redis.exists?("visits:20200130")).to be_truthy
       end
     end
 

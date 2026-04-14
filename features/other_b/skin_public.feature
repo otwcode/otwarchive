@@ -13,18 +13,12 @@ Feature: Public skins
     And the skin "public skin" is cached
     And the skin "public skin" is in the chooser
   When I am logged in as "skinner"
-    And I follow "public skin"
+    And I press "public skin"
   Then I should see "The skin public skin has been set. This will last for your current session."
     And the page should have the cached skin "public skin"
-  When I follow "Default"
-  Then I should see "You are now using the default Archive skin again!"
+  When I press "Default"
+  Then I should see "You are now using the default site skin again!"
     And the page should not have the cached skin "public skin"
-
-  Scenario: A user can't set an uncached public skin for a session
-  Given the approved public skin "Uncached Public Skin"
-    And I am logged in as "skinner"
-  When I set the skin "Uncached Public Skin" for this session
-  Then I should see "Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like Uncached Public Skin to be added!"
 
   Scenario: Only public skins should be on the main skins page
   Given basic skins
@@ -108,7 +102,7 @@ Feature: Public skins
   Then I should see "Cached skin"
     And I should not see "Uncached skin"
 
-  Scenario: A user can preview a cached public site skin, and it will take the 
+  Scenario: A user can preview a cached public site skin, and it will take the
   user to the works page for a canonical tag with between 10 and 20 works
   Given the approved public skin "Usable Skin"
     And the skin "Usable Skin" is cached
@@ -124,3 +118,34 @@ Feature: Public skins
     And I should see "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above."
   When I follow "Return To Skin To Use"
   Then I should be on "Usable Skin" skin page
+
+  Scenario: Setting a skin from the footer maintains the same page
+    Given basic skins
+      And the approved public skin "unique skin"
+      And the skin "unique skin" is cached
+      And the skin "unique skin" is in the chooser
+      And I am logged in
+    When I go to the works page
+      And I press "unique skin"
+    Then the page should have the cached skin "unique skin"
+      And I should be on the works page
+
+  Scenario: A regular user can't apply to make a skin public
+  Given I am logged in
+  When I go to the new skin page
+  Then I should not see "Apply to make public"
+
+  Scenario: A user with the official role can apply to make a skin public
+  Given the user "SkinTeam" exists and has the role "official"
+    And I am logged in as "SkinTeam"
+  When I set up the skin "Skin We're Gonna Add"
+    And I attach a preview for the skin
+    And I check "Apply to make public"
+    And I submit
+  Then I should see "Skin was successfully created"
+
+  Scenario: Admins can't see the "Apply to make public" checkbox
+  Given the approved public skin "Usable Skin"
+    And I am logged in as a "superadmin" admin
+  When I edit the skin "Usable Skin"
+  Then I should not see "Apply to make public"

@@ -1,0 +1,13 @@
+<ul class="navigation actions">
+  <li><%= span_if_current t(".index"), admin_support_notices_path %></li>
+  <li><%= span_if_current t(".new"), new_admin_support_notice_path %></li>
+
+  <% if @support_notice && @support_notice.persisted? %>
+    <li><%= span_if_current t(".edit"), edit_admin_support_notice_path(@support_notice) %></li>
+    <% unless @support_notice.active? %>
+      <li>
+        <%= link_to t(".delete"), confirm_delete_admin_support_notice_path(@support_notice), data: { confirm: t(".confirm_delete") } %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

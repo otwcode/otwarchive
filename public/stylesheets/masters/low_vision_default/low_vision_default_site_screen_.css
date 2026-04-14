@@ -36,7 +36,6 @@ form blockquote.userstuff {
 }
 
 #inner .filters,
-#footer,
 .filters dt,
 media .listbox,
 .bookmark .recent .index {
@@ -65,7 +64,8 @@ fieldset fieldset fieldset,
 fieldset fieldset dl dl,
 form.single fieldset,
 dd.hideme,
-form blockquote.userstuff {
+form blockquote.userstuff,
+.authentication fieldset {
   border: 2px solid;
 }
 
@@ -119,14 +119,14 @@ pre {
 .blurb .actions a,
 #header li a,
 #footer li a,
+#footer li button,
 #header .open .menu {
   display: block;
 }
 
 #header .navigation,
 #header li a,
-#footer ul,
-#footer li a {
+#footer * {
   float: none;
 }
 
@@ -142,18 +142,17 @@ pre {
   position: static;
 }
 
-#footer {
-  float: left;
-  padding: 0;
-}
-
 #header,
 #header .open a,
 #header .primary .dropdown a:focus,
 #header .user .dropdown a:focus,
 #footer,
 .actions a:hover,
-.actions a:focus {
+.actions a:focus,
+input[type="submit"]:hover,
+input[type="submit"]:focus,
+.actions button:hover,
+.actions button:focus {
   background: #900;
   color: #eee;
 }
@@ -177,11 +176,60 @@ pre {
   color: #111;
 }
 
+#footer button {
+  cursor: pointer;
+  height: unset;
+  width: 100%;
+  white-space: normal;
+    box-sizing: border-box;
+}
+
 .bookmark div.user {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .bookmark .recent,
 .bookmark .recent .index {
   border: none;
+}
+
+.javascript .work.navigation .secondary {
+  width: 100%;
+    box-sizing: border-box;
+}
+
+.javascript .work.navigation .expanded + .secondary,
+.javascript .work.navigation .secondary li,
+.javascript .work.navigation .secondary p,
+.javascript .work.navigation .secondary a {
+  display: block;
+}
+
+.javascript .work.navigation .secondary p {
+  padding-block-start: 0.375em;
+}
+
+.javascript .work.navigation .secondary select {
+  max-width: 100%;
+  min-width: auto;
+}
+
+.javascript .work.navigation .secondary a {
+  height: 100%;
+  min-height: 1.286em;
+  padding-inline: 0.5em;
+  white-space: normal;
+}
+
+.annotation {
+  border: 2px solid;
+    flex-flow: column wrap;
+}
+
+body .narrow-shown {
+  display: block;
+}
+
+.actions li.narrow-shown {
+  display: inline;
 }

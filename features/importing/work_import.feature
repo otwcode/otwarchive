@@ -270,7 +270,7 @@ Feature: Import Works
     When I follow "Edit"
       And I follow "1"
       And I fill in "content" with "some extra content that is longer than before"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Words:11"
 
 #  Scenario: Import works for others and have them automatically notified

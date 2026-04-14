@@ -63,9 +63,7 @@ When /^an admin creates a different active banner$/ do
   step %{I should see "Setting banner back on for all users. This may take some time."}
 end
 
-When /^I turn off the banner$/ do
-  step %{I am logged in as "newname"}
-  step %{I am on newname's user page}
+When "I turn off the banner" do
   click_button("×")
 end
 

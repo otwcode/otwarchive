@@ -184,7 +184,7 @@ en:
           admin_user: User Administration
           creations: Creations
         no_creations: This user has no works or comments.
-        page_heading: Works and Comments by %{user}
+        page_heading: Works and Comments by %{user} (%{id})
         page_title: "%{login} - User Creations"
       history:
         heading: User History
@@ -199,13 +199,18 @@ en:
             details: Details
           sign_in:
             current:
-              action: Current Login
+              action: Most Recent Login
               no_details: No login recorded
             details: 'IP Address: %{ip}'
             last:
               action: Previous Login
               no_details: No previous login recorded
           summary: Shows what notable actions, such as creating an account, a user performed, and when they did them.
+      index:
+        role: Role
+        settings:
+          label: Search settings
+          past: Include past usernames and emails
       show:
         fnok:
           form:
@@ -219,6 +224,12 @@ en:
           invitation: 'Invitation:'
           no_invitation: Created without invitation
           no_role: No roles
+          past_emails:
+            one: 'Past email:'
+            other: 'Past emails:'
+          past_logins:
+            one: 'Past username:'
+            other: 'Past usernames:'
           role:
             one: 'Role:'
             other: 'Roles:'
@@ -231,7 +242,7 @@ en:
           rename: Rename
           roles: Manage Roles
           troubleshoot: Troubleshoot
-        note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
+        note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex the user and their works and bookmarks, choose "Troubleshoot."
         page_heading: 'User: %{login} (%{id})'
         page_title: "%{login} - User Administration"
         status:
@@ -309,8 +320,9 @@ en:
           new: Ban email address
           search: Find banned emails
         notes:
-          canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned).
-          guest_comments: Banned email addresses cannot be used in guest comments.
+          canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@example.com will not be allowed if foo@example.com is banned).
+          guest_comments: Banned email addresses cannot be used in guest comments and cannot be added to the invitation queue.
+          unaffected_users: They will not affect users with that address or prevent invitations sent to that email address from being used.
         page_heading: Manage Banned Emails
     header:
       nav:
@@ -339,6 +351,7 @@ en:
           rejected: Rejected Skins
           skins: Skins
         spam: Spam
+        support_notices: Support Notices
         users:
           email_search: Bulk Email Search
           manage: Manage Users
@@ -370,6 +383,11 @@ en:
         page_heading: Log In as Admin
         reset_link: Forgot admin password?
         submit: Log In as Admin
+      totp:
+        enter_totp: Enter the verification code from your authenticator app to finish logging in to your admin account.
+        page_heading: Two-Step Verification
+        submit: Log In as Admin
+        totp_label: 6-digit verification code
     settings:
       index:
         fields:
@@ -406,6 +424,84 @@ en:
         update: Update
       update:
         success: Archive settings were successfully updated.
+    support_notices:
+      confirm_delete:
+        delete: Delete Support Notice
+        submit: Yes, Delete Support Notice
+        warning_html: Are you sure you want to <strong><em>delete</em></strong> this support notice?
+      edit:
+        page_heading: Edit Support Notice
+      index:
+        page_heading: Support Notices
+      navigation:
+        confirm_delete: Are you sure you want to delete this support notice?
+        delete: Delete Support Notice
+        edit: Edit Support Notice
+        index: Support Notices
+        new: New Support Notice
+      new:
+        page_heading: New Support Notice
+      show:
+        page_heading: Support Notice
+      support_notice_blurb:
+        active: Active
+        confirm_delete: Are you sure you want to delete this support notice?
+        delete: Delete
+        edit: Edit
+        landmark: Support Notice Actions
+      support_notice_form:
+        actions:
+          create: Create Support Notice
+          update: Update Support Notice
+        active: Active
+        landmark:
+          actions: Actions
+          content: Support Notice
+        legend:
+          actions: Actions
+          content: Support Notice
+        required_information: Required information
+        text: Support notice text
+        type:
+          caution: Caution
+          error: Error
+          label: Support notice type
+          notice: Notice
+    totp:
+      confirm_disable:
+        page_heading: Disable Two-Step Verification
+        password_label: Admin password
+        required_before_disabling: Before disabling two-step verification, you need to verify your password.
+        submit: Disable Two-Step Verification
+      new:
+        page_heading: Confirm Password
+        password_label: Admin password
+        required_before_enabling: Before enabling two-step verification, you need to verify your password.
+        submit: Continue
+      reauthenticate_create:
+        about:
+          effects_of_enabling: When two-step verification is enabled, logging in to your %{app_name} admin account will require both your admin password and a verification code from your authenticator app.
+          general_info: Two-step verification, also called two-factor authentication, helps prevent other people from accessing your account even if they know your password. All you need to set it up is an authenticator app such as 1Password, Google Authenticator, or Twilio Authy.
+          heading: About Two-Step Verification
+        app_setup:
+          heading: 'Step 1: Set up your authenticator app'
+          instructions: Use your authenticator app to scan the QR code or enter the manual setup key. The app will give you a 6-digit code, which you'll use in the next step.
+          key:
+            format_note: Spaces and capitalization don't matter
+            heading: Setup Key
+        enter_code:
+          heading: 'Step 2: Enter your 6-digit code'
+          instructions: Enter the 6-digit code from your app to enable two-step verification
+          label: 6-digit code
+          please_wait: Please wait...
+          submit: Enable Two-Step Verification
+        page_heading: Set Up Two-Step Verification
+      show_backup_codes:
+        backup_codes_copied: Backup Codes Copied!
+        copy_to_clipboard: Copy Backup Codes to Clipboard
+        finish: Finish
+        page_heading: Two-Step Verification Backup Codes
+        write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
     user_creations:
       confirm_remove_pseud:
         caution: Are you sure you want to remove the creator's pseud from this work?
@@ -441,13 +537,21 @@ en:
       page_heading: AO3 News
   admins:
     index:
+      account:
+        heading: Account Settings
+        roles:
+          label: Admin roles
+          none: You currently have no admin roles assigned to you.
+        totp:
+          disable_totp: Disable two-step verification
+          disabled: Disabled
+          enable_totp: Set up two-step verification with an authenticator app
+          enabled: Enabled
+          label: Two-step verification
+          regenerate_backup_codes: Regenerate backup codes
       confidentiality_reminder: You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s).
       log_out_reminder: Please remember to log out before resuming your normal site activity!
       page_title: Hi, %{login}!
-      responsibility: With great power comes great responsibility.
-      roles:
-        heading: 'Your admin roles:'
-        none: You currently have no admin roles assigned to you.
   archive_faqs:
     admin_index:
       confirm_delete: Are you sure you want to delete this FAQ category?
@@ -524,12 +628,40 @@ en:
           hide_works: hide their works or bookmarks from you
           intro: 'Blocking a user will not:'
   bookmarks:
+    bookmark_blurb:
+      deleted: This has been deleted, sorry!
+      save: Save
+      saved: Saved
+    bookmark_owner_navigation:
+      delete: Delete
+      delete_confirmation: Are you sure you want to delete this bookmark?
+      edit: Edit
+      share: Share
+      share_bookmark: Share Bookmark
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    bookmarkable_blurb:
+      save: Save
+      saved: Saved
+    external_work_fields:
+      fandoms_help_title: Fandom help
+      ratings_help_title: Rating help
+    filters:
+      from: From
+      to: To
+      word_count: Word count
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
+      navigation:
+        bookmarks: Bookmarks
+        edit: Edit Bookmark
+        new: Bookmark
+        new_external_work: Bookmark External Work
+        works: Works
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
+    search_form:
+      word_count: Word count
   challenge:
     gift_exchange:
       challenge_signups:
@@ -537,9 +669,7 @@ en:
         close_requests_html: Close Requests &#8593;
         heading:
           for_collection: Sign-ups for %{collection}
-          for_search:
-            one: Sign-up
-            other: Sign-ups
+          for_search: Sign-up
         navigation:
           download_csv: Download (CSV)
           search: Search
@@ -547,6 +677,28 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+    shared:
+      challenge_requests:
+        fandom: Fandom %{allowed_fandom_count}
+  challenge_assignments:
+    to_default:
+      button: Default
+      confirmation: Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone.
+    to_fulfill:
+      button: Fulfill
+    user_index:
+      claims: My Claims
+      claims_note_html: Looking for prompts you claimed in a prompt meme? Try %{claims_link}.
+      navigation:
+        completed: Completed Assignments
+        unposted: Unposted Assignments
+      page_heading:
+        all: My Assignments
+        collection_html: My Assignments in %{collection_link}
+  challenge_claims:
+    user_index:
+      assignments: My Assignments
+      assignments_note_html: Looking for assignments you were given for a gift exchange? Try %{assignments_link}.
   challenge_signups:
     signup_form:
       notice:
@@ -555,15 +707,26 @@ en:
           preferences_link_text: update your preferences
           prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
           refuse_link_text: refuse a gift
+    summary:
+      being_generated: The summary is being generated. Please try again in a few minutes.
+      heading: Sign-up Summary for %{collection}
+      no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
-    chapter_form:
+    posting_fieldset:
+      actions:
+        cancel: Cancel
+        edit: Edit
+        please_wait: Please wait...
+        post: Post
+        preview: Preview
+        save_draft: Save Draft
+        update: Update
       content_policy: Content Policy
+      legend: Post Chapter
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
     preview:
-      content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
-      tos_faq: Terms of Service FAQ
+      page_heading: Preview
   collection_items:
     collection_item_form:
       add: Add
@@ -587,10 +750,59 @@ en:
         notice:
           unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
         page_heading: Items by %{username} in Collections
+  collection_profile:
+    show:
+      meta:
+        collection_tags: 'Collection tags:'
   collections:
+    collection_blurb:
+      collection_tags: 'Collection Tags:'
+    filters:
+      clear_filters: Clear Filters
+      closed:
+        exclude: 'No'
+        include: Either
+        label: Closed
+        only: 'Yes'
+      landmark: Filters
+      leave_filters: Top of Collections Index
+      legend: 'Filter collections:'
+      moderated:
+        exclude: 'No'
+        include: Either
+        label: Moderated
+        only: 'Yes'
+      multifandom:
+        exclude: 'No'
+        include: Either
+        label: Multifandom
+        only: 'Yes'
+      sort:
+        column: Sort by
+        direction:
+          ascending: Ascending
+          descending: Descending
+          label: Sort direction
+      submit:
+        button: Sort and Filter
+        landmark: Sort and Filter
+      tag: Filter by tag
+      title: Filter by title
+      type:
+        any: Any
+        gift_exchange: Gift Exchange Challenge
+        label: Collection Type
+        no_challenge: No Challenge
+        prompt_meme: Prompt Meme Challenge
     form:
+      header_image_url:
+        footnote: PNG, JPEG, GIF
+        label: Custom header URL
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
+      multifandom:
+        footnote: Use this if your collection is not fandom-specific.
+        label: Multifandom
     index:
       page_heading:
         challenges_subcollections_in: Challenges/Subcollections in %{collection}
@@ -618,6 +830,14 @@ en:
       tags: Tags
       works: Works (%{count})
   comments:
+    comment_actions:
+      approve: Approve
+      comment: Comment
+      comment_actions: Comment Actions
+      parent: Parent
+      parent_thread: Parent Thread
+      reply_to_this: Reply to this comment
+      thread: Thread
     comment_form:
       anonymous_creator: Anonymous Creator
       anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
@@ -671,8 +891,13 @@ en:
           alt_action: You can however still leave Kudos!
           disable_all: Sorry, this work doesn't allow comments.
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
+          draft: Sorry, you can't comment on a draft.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+      previous_chapter_html: "%{back_arrow_html} Previous Chapter"
+    confirm_delete:
+      confirm_button: Yes, delete!
+      delete_confirmation: Are you sure you want to delete this comment?
     edit:
       back: Back
       page_heading: Editing comment
@@ -691,18 +916,47 @@ en:
       page_heading_html: Unreviewed Comments on %{commentable_link}
   downloads:
     download_afterword:
+      afterword: Afterword
+      comment: drop by the Archive and comment
+      end_notes: End Notes
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link}"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
-      please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
-      work_comment: drop by the Archive and comment
+      please_comment_html: Please %{comment_link} to let the creator know if you enjoyed their work!
+    download_chapter:
+      chapter_byline_html: Chapter by %{byline_names_link}
+      chapter_end_notes_with_chapter_notes: more notes
+      chapter_end_notes_without_chapter_notes: notes
+      chapter_notes: Chapter Notes
+      chapter_summary: Chapter Summary
+      full_chapter_title_with_title: 'Chapter %{chapter_number}: %{title}'
+      full_chapter_title_without_title: Chapter %{chapter_number}
+      section_chapter_end_notes: Chapter End Notes
+      see_chapter_end_notes_html: See the end of the chapter for %{chapter_end_notes_link}
     download_preface:
+      byline_html: by %{byline_names_link}
+      chapters: 'Chapters: %{chapter_total_display}'
+      collections: 'Collections:'
+      completed: 'Completed: %{date}'
+      end_notes_with_work_notes: more notes
+      end_notes_without_work_notes: notes
       inspired_by:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
+      language: 'Language:'
+      notes: Notes
+      originally_posted_html: Posted originally on the %{archive_link} at %{work_url}.
+      preface: Preface
+      published: 'Published: %{date}'
+      see_end_notes_html: See the end of the work for %{end_notes_link}
+      series: 'Series:'
+      series_list_html: Part %{position} of %{series_link}
+      stats: 'Stats:'
+      summary: Summary
+      tag_type: "%{tag_type}:"
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
@@ -711,12 +965,97 @@ en:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
+      updated: 'Updated: %{date}'
+      words: 'Words: %{count_with_delimiters}'
   errors:
+    '429':
+      browse_more_slowly: If you are receiving this error repeatedly, try browsing more slowly or loading fewer pages at a time.
+      made_too_many_requests: You have made too many requests in a short time period. Please wait a while before trying again.
+      page_heading: Error 429
+      subtitle: Too Many Requests
     timeout_error:
       contact_support: contact Support
       html: If you still get this error after a few tries, you can %{contact_support_link}.
       page_heading: Timeout Error
       subtitle: The page was responding too slowly. Please try again after a few minutes.
+  external_authors:
+    claim:
+      actions:
+        assign_to_orphan_account:
+          one: Assign my work to the %{app_name} orphan_account, removing both my name and email address.
+          other: Assign my works to the %{app_name} orphan_account, removing both my name and email address.
+        do_not_import: From now on, do not import works with this email address.
+        label: Actions
+        leave_with_archivist:
+          one: Leave my work in the care of the archivist.
+          other: Leave my works in the care of the archivist.
+        orphan_keep_name:
+          one: Orphan my work and take my email address off it, but keep my name.
+          other: Orphan my works and take my email address off them, but keep my name.
+        remove_works_entirely:
+          one: Please remove my work from %{app_name} entirely.
+          other: Please remove my works from %{app_name} entirely.
+      add_works_to_account_button:
+        one: Add this work to %{current_user}'s account
+        other: Add these works to %{current_user}'s account
+      archive_moved_message:
+        one: An archive including one of your works has been moved to the %{app_full_name} (%{app_name}). Please let us know what you'd like us to do with it. If you do nothing, the work will remain attached to the archivist account.
+        other: An archive including some of your works has been moved to the %{app_full_name} (%{app_name}). Please let us know what you'd like us to do with them. If you do nothing, the works will remain attached to the archivist account.
+      claim_all:
+        one: Claim Work
+        other: Claim All Works
+      claim_before_edit_message_html:
+        one: If you would like to edit the work please claim it first. You can then use the Edit Works feature on your %{dashboard_link} to orphan, delete, or edit it. (You will be able to delete the account if you wish after editing.)
+        other: If you would like to edit the works, or handle different works separately, please claim them first. You can then use the Edit Works feature on your %{dashboard_link} to orphan, delete, or edit them either in groups or one at a time. (You will be able to delete the account if you wish after editing.)
+      claim_works_logged_in_html:
+        one: Claim your work as %{current_user}. If you would like to claim this work under a different account (or create a new account to claim it with), log out and reload this page first.
+        other: Claim your works as %{current_user}. If you would like to claim these works under a different account (or create a new account to claim them with), log out and reload this page first.
+      contact_open_doors: contact Open Doors
+      dashboard: dashboard
+      import_without_email: 'Important: If you tick "Do not email me in future" but do not tick "Do not import works", works may be imported without you being told. If that''s not what you want, turn off importing as well as emails.'
+      invitation_to_create_account:
+        one: We invite you to create an account on %{app_name}! The work will automatically be added to your account and you will have full control over it.
+        other: We invite you to create an account on %{app_name}! The works will automatically be added to your account and you will have full control over them.
+      login_instructions:
+        one: If you already have an %{app_name} account, log in and reload this page, and the work will be added to that account.
+        other: If you already have an %{app_name} account, log in and reload this page, and the works will be added to that account.
+      my_imported:
+        one: My Imported Work
+        other: My Imported Works
+      notes:
+        claim:
+          one: You can claim your work.
+          other: You can claim your works.
+        create_account:
+          one: You can create an account and claim your work (if you already have an account, log in to claim it).
+          other: You can create an account and claim your works (if you already have an account, log in to claim them).
+        delete_or_orphan:
+          one: You can also choose to delete or orphan your work.
+          other: You can also choose to delete or orphan your works.
+        do_not_email: You can also tell us not to email you or import works with this email address in the future.
+        do_nothing:
+          one: If you do nothing, the work will remain attached to the archivist account.
+          other: If you do nothing, the works will remain attached to the archivist account.
+        go_over_again: Wait, wait, go over this again?
+        orphaning_explanation:
+          one: Orphaning keeps it on %{app_name} so future fans can still enjoy it, but with your contact information and/or your name removed.
+          other: Orphaning keeps them on %{app_name} so future fans can still enjoy them, but with your contact information and/or your name removed.
+      notifications:
+        do_not_email: Do not email me in the future when works are imported with this email address.
+        label: Notifications
+      other_options:
+        heading: Other Options
+        legend: Other Options
+      page_heading:
+        one: Claiming Your Imported Work
+        other: Claiming Your Imported Works
+      refer_to_orphaning_faq: Refer to the Orphaning FAQ.
+      review_before_decision_html:
+        one: If you want to review your work before you make your decision, but don't have an %{app_name} account, %{contact_open_doors_link} with your pseud and the title of your work and we will send you a copy.
+        other: If you want to review your works before you make your decision, but don't have an %{app_name} account, %{contact_open_doors_link} with your pseud and the titles of your works and we will send you a copy.
+      sign_up_button:
+        one: Sign me up and give me my work!
+        other: Sign me up and give me my works!
   external_works:
     notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
   fandoms:
@@ -726,7 +1065,7 @@ en:
     new:
       abuse:
         contact: contact our Policy and Abuse team
-        reports: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
+        reports_html: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
       do_not_spam_html: "<strong>We respond to every report we receive, but we are a small volunteer team.</strong> For this reason, we ask you to not submit multiple reports regarding any one issue, or encourage other people to report the same issue, unless there is additional information to offer."
       form:
         comment:
@@ -754,7 +1093,7 @@ en:
         landmark:
           reference: Reference Links
         page_title: Support and Feedback
-      languages_html: "<strong>We can answer Support inquiries in %{list}.</strong> Please allow for additional delay for responses in any language other than English."
+      languages_html: "<strong>We can answer Support inquiries in %{list_html}.</strong> Please allow for additional delay for responses in any language other than English."
       navigation:
         faqs: FAQs & Tutorials
         known_issues: Known Issues
@@ -774,9 +1113,509 @@ en:
         tag_changes: Requests to canonize or change tags
         work_problems: Works labeled with the wrong language or duplicate works
       status:
-        current: For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumblr_link}.
-        tumblr: ao3org Tumblr
-        twitter: "@AO3_Status Twitter feed"
+        bluesky: "@status.archiveofourown.org"
+        current_html: For current updates on AO3 performance or downtime, please check our %{status_page_link} and follow %{bluesky_link} on Bluesky or %{tumblr_link} on Tumblr.
+        status_page: status page
+        tumblr: ao3org
+  help:
+    first_login:
+      additional_info:
+        header: Additional Browsing Information
+        history_mark_later:
+          header: History and Mark for Later
+          history: History
+          history_faq: History and Mark for Later FAQ
+          html: You can access and manage your history by going to %{your_dashboard_link} and selecting the "%{history_link}" link in the side menu in the default browser skin or on top of the page in mobile devices. You can clear your history, or delete individual entries if you don't want these entries to show up in your history. You can also add works to the "Marked for Later" list in your history. For more information on History, please visit the %{history_faq_link}.
+          your_dashboard: your Dashboard
+        subscriptions:
+          header: Subscriptions
+          html: You can subscribe to a work, collection, series of works, or user by selecting the "Subscribe" link at the top or bottom of a work, or at the top or bottom of a collection or series page, or the user's profile page. You can check your subscriptions from %{your_dashboard_link} by selecting the "Subscriptions" link. For more information on Subscriptions, please visit the %{subscriptions_feed_faq_link}.
+          subscriptions_feed_faq: Subscriptions and Feeds FAQ
+          your_dashboard: your Dashboard
+      bookmarking_works:
+        bookmarks_faq: Bookmarks FAQ
+        header: Bookmarking Works
+        html: You can bookmark works on the Archive as well as works hosted on other sites. You can choose to make your bookmarks public or private. You can also mark a public bookmark as a rec (recommendation). Additionally, you can add notes and tags to the bookmark, and/or add it to a collection. For more instructions on managing your Bookmarks, please visit the %{bookmarks_faq_link}.
+      browsing:
+        all_fandoms: All Fandoms
+        fandoms: Fandoms
+        header: Browsing
+        html: You can start browsing works by going to the "%{fandoms_link}" tab at the top of any Archive page in the default skin and selecting either "%{all_fandoms_link}" or one of the subsets such as "%{movies_link}". Alternatively, you can use the %{search_feature_link} to look for specific fandoms, works, or users. You can use the "Sort and Filter" form to narrow down the results in any fandom page. For more instructions, please visit %{search_browse_faq_link} and the %{search_browse_tutorial_link}.
+        movies: Movies
+        search_browse_faq: Search and Browse FAQ
+        search_browse_tutorial: Searching and browsing tutorial
+        search_feature: search feature
+      editing_profile:
+        edit_my_profile: Edit My Profile
+        header: Editing Your Profile, Password, and Preferences
+        html: To add your info, go to %{your_dashboard_link}, select the "%{profile_link}" tab, and select "%{edit_my_profile_link}" from the range of options at the end of the page. Here, you can enter some basic personal information. It's also where to go to change your password. Refer to the %{profile_faq_link} for more information.
+        profile: Profile
+        profile_faq: Profile FAQ
+        your_dashboard: your Dashboard
+      logging_in_out:
+        forgot_password: forgot your password
+        header: Logging In and Logging Out
+        html: To log in, locate the login link and fill in your Username and  Password. The link will be located at the top right of the screen and as indicated by your screenreader if you're using one. If you forget your password, then select "%{forgot_password_link}". To log out, select "Log Out" on the top right corner in the default browser skin.
+      posting_works:
+        header: Posting Works
+        html: To open the Post New Work page, just select the %{post_new_link} link from the menu of the Post tab located at the top right of the page in the default browser skin. Visit the %{posting_editing_faq_link} or check out our %{tutorial_link} for more information.
+        post_new: Post New
+        posting_editing_faq: Posting and Editing FAQ
+        tutorial: 'Tutorial: Posting a Work on AO3'
+      preferences:
+        edit_my_profile: Edit My Profile
+        header: Preferences
+        html: '"%{set_my_preferences_link}" is located next to the "%{edit_my_profile_link}" button, and allows you to adjust certain settings to personalize your experience on the site. The Preferences area controls both the Archive''s behavior (such as whether your history is saved) and the Archive''s appearance. Go to the %{preferences_faq_link} for more details.'
+        preferences_faq: Preferences FAQ
+        set_my_preferences: Set My Preferences
+        skins_detail_html: For more information on how to customize the skins and interface of the Archive, refer to the %{skins_faq_link} and %{tutorials_list_link}.
+        skins_faq: Skins and Archive Interface FAQ
+        tutorials_list: List of Tutorials
+      pseuds:
+        header: Pseuds
+        html: Pseuds are like pen names linked to your account. You can use different pseuds to post your works under the appropriate name while still managing them through the same account. You can %{manage_your_pseuds_link} through your profile page. For more information, please visit the %{pseuds_faq_link}.
+        manage_your_pseuds: manage your pseuds
+        pseuds_faq: Pseuds FAQ
+      support_and_feedback:
+        archive_faq: Archive FAQ
+        contact_support: contact Support
+        header: Support and Feedback
+        html: Some frequently asked questions about the Archive are answered in the broader %{archive_faq_link}. You may also like to check out our %{known_issues_link}. If you need more help, please %{contact_support_link}. If you want to know more about some user-created tools that work with the Archive, please visit the %{unofficial_tools_faq_link}.
+        known_issues: Known Issues
+        unofficial_tools_faq: Unofficial Browser Tools FAQ
+      table_of_contents: Table of Contents
+      tags:
+        header: Tags
+        html: All tags on the Archive—including those for fandoms, relationships, and characters—start out user-created. You can always use the existing tags by selecting from the autocomplete list. If you cannot find the tags you want to use, feel free to create new tags for your works. Behind the scenes, our tag wrangling team will match the tags up with their synonyms, so that people can find your work whether you tag it "<abbr>AMTDI</abbr>", "Aliens Made Them Do It", or "Sex Pollen". Refer to the %{tags_faq_link} to learn more.
+        tags_faq: Tags FAQ
+      tips_to_start: Here are some tips to help you get started.
+      tos:
+        additional_questions_html: If you have additional questions that are not covered here, please %{contact_abuse_link}.
+        contact_abuse: contact our Policy & Abuse team
+        content_policy: Content Policy
+        header: Terms of Service
+        info_html: You can learn about our policies and procedures by reviewing the %{tos_link}, including the %{content_policy_link} and %{privacy_policy_link}. Answers to common questions are available in the %{tos_faq_link}.
+        privacy_policy: Privacy Policy
+        tos: Terms of Service
+        tos_faq: Terms of Service FAQ
+      warnings:
+        archive_specific_warnings: Archive-specific warnings
+        description_html: 'The Archive defines four "primary" %{archive_specific_warnings_link}: "Graphic Depictions Of Violence", "Major Character Death", "Rape/Non-Con", and "Underage Sex". When posting a work, you have the option to explicitly select warnings for this content, deny the presence of such content ("No Archive Warnings Apply"), or choose not to apply warnings regardless of whether or not these warnings are applicable ("Creator Chose Not To Use Archive Warnings"). Remember, "No Archive Warnings Apply" only refers to the listed primary warnings.'
+        header: Warnings
+        symbols_html: When browsing the Archive, warnings will be displayed in the blurb of each work. Official warning tags are displayed in bold. A four square grid in the top left corner of each work's blurb indicates the work's rating, completion status, pairing category, and any Archive warnings that apply to it. Refer to the %{symbols_key_chart_link} for more information.
+        symbols_key_chart: Symbols Key Chart
+      welcome_header: Welcome to the %{app_name}!
+    html:
+      allowed_html:
+        header: Allowed HTML
+      formatting:
+        a_blank_line: If you leave a blank line between two paragraphs, we will put paragraph tags in for you around the two paragraphs.
+        after_first_put_note: When you edit your HTML after you first put it in, you will see the results of our formatting work, so you can correct any mistakes our formatter might have made. Please note that the best way to get good results is to put in good HTML -- that is how you can be sure your story will look right across various browsers, screen readers, mobile devices, and downloads.
+        description: 'When you enter HTML into the archive, we do some cleanup on it to make sure that it is safe (so spammers and hackers cannot upload badness) and try and do some basic formatting both for your convenience and for accessibility reasons. Here are the formatting steps we take:'
+        example:
+          blockquote:
+            description_html: "&lt;blockquote&gt;%{text_blockquote}&lt;/blockquote&gt;"
+            text: To quote a block of text
+          chapter_title: "<h3>Chapter title<h3>"
+          cite:
+            description_html: Try cite to cite &lt;cite&gt;%{phrase_or_title_cite}&lt;/cite&gt;
+            phrase_or_title: a phrase or title
+          em:
+            description_html: "&lt;em&gt;%{rodney_italic}&lt;/em&gt; McKay"
+            rodney: Rodney
+          footnote_title: "<h6>Footnote title<h6>"
+          inline_quote:
+            description_html: Use q to &lt;q&gt;%{phrase_inline_quote}&lt;/q&gt;
+            phrase: To quote a phrase
+          scene_title: "<h4>Scene title<h4>"
+          strong:
+            description_html: I will &lt;strong&gt;%{never_bold}&lt;/strong&gt; understand you!
+            never: never
+          subtitle_h2: "<h2>Subtitle<h2>"
+          subtitle_h5: "<h5>Subtitle<h5>"
+          title: "<h1>Title<h1>"
+        forgotten_open_tags: If you have forgotten to close a formatting tag, it will be closed at the end of the paragraph for you.
+        good_html_note_html: Good HTML means HTML that labels what the text is supposed to be -- so if you have paragraphs, they should be inside paragraph tags, not just separated with break tags. If you have emphasized text, it should be inside em tags. If you have a list of items, each item should be inside list tags. If you %{negation_italic} have a list of items, you shouldn't have list tags. :) (We are putting together a set of more detailed helpful references about this, but this is the basic idea.)
+        header: How Do We Format Your HTML?
+        misnested_tags:
+          corrected_text: text!
+          description_html: 'If you have mis-nested tags like this: &lt;em&gt;&lt;strong&gt;%{text_bold_italic}&lt;/em&gt;&lt;/strong&gt; we will fix the mis-nesting (so it would become &lt;em&gt;&lt;strong&gt;%{corrected_text_bold_italic}&lt;/strong&gt;&lt;/em&gt;).'
+          text: text!
+        negation: don't
+        not_satisfied_note: If you find yourself putting in HTML that doesn't mean the right thing, in order to get a particular visual effect, please resist! The work skin feature allows you to apply custom CSS to works, and that lets you make them look just about any way you want them to (and is easier if you are starting from good HTML).
+        recommendations:
+          emphasis_html: For emphasis, use emphasis tags %{emphasis_tags_code}
+          headings_html: 'For headings, use heading tags: %{heading_tags_code}'
+          lead_in: 'Some specific recommendations:'
+          quote_html: 'To quote poetry, phrases or titles use quote tags: %{quote_tags_code}'
+        single_carriage_return: If you have a single carriage return between two lines of text, we will put in a break tag for you.
+        tags_spanning_paragraphs: If you open a formatting tag in one paragraph and close it several paragraphs later, we will reopen/close it within each paragraph.
+        two_blank_lines: If you have two blank lines in a row between paragraphs, we will add extra whitespace in for you (with <p>&nbsp;</p>)
+        two_break_tags: If you have two break tags in a row (<br /><br />) with nothing between them, we will turn that into paragraph tags.
+        unwanted_larger_text: If one bit of your text shows up larger than the rest, probably our formatter couldn't figure out to put paragraph tags around it. You can fix this by manually putting in the paragraph tags around that one bit.
+        unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
+      page_heading: HTML on the Archive
+    preferences_collection:
+      allow_collection_invitation:
+        changing: Changing this setting won't affect any existing works in collections.
+        disabling: Leaving this option disabled will prevent other users from inviting your works into their collections at all, and you won't receive any notifications.
+        enabling_html: Enabling this option will allow other %{app_name} users to invite your work into their collection. Your work won't be added to the collection until you have accepted the request. For more information on accepting collection invitations, refer to %{how_to_approve_faq_link}
+        header: Allow others to invite my works to collections
+        how_to_approve_faq: How do I approve or reject an invitation to include my work in a collection?
+      allow_gifts:
+        description_html: If this option is disabled, users are only able to give a gift work to you if they're completing a gift exchange assignment or fulfilling a claimed prompt in a prompt meme. If you'd like to allow users to give you gift works outside of assignments and claimed prompts, enable this option. Note that you're always able to refuse gifts individually. Check out %{how_to_refuse_faq_link} for instructions.
+        header: Allow anyone to gift me works
+        how_to_refuse_faq: How do I refuse a gift?
+      page_heading: Collections, Challenges and Gifts Preferences
+      turn_off_collection_emails:
+        description: Enable this option if you would prefer not to receive email alerts from collections, such as creator and work reveals. We'll still email you if your username or work is hidden after being added to a collection. Notifications will still be delivered to your Archive inbox unless you have chosen to disable them.
+        header: Turn off emails from collections
+      turn_off_collection_inbox:
+        description: Enable this option if you would prefer not to receive notifications in your Archive inbox from collections, for example, notifying you when hidden works are revealed. Notifications will still be emailed to you unless you have chosen to disable them.
+        header: Turn off inbox messages from collections
+      turn_off_gift_emails:
+        description: Enable this option if you would prefer not to receive email alerts when someone gifts a work to you. Notifications will still be displayed on your Gifts page.
+        header: Turn off emails about gift works
+    preferences_comment:
+      guest_replies_off:
+        description_html: Enable this option if you would prefer not to receive replies from users who aren't logged in to an Archive account on comments you leave on news posts or other creators' works. This setting doesn't apply to comments on your own works; for more on controlling who can interact with you on your works check out the %{posting_and_editing_faq_link}.
+        header: Do not allow guests to reply to my comments on news posts or other users' works
+        posting_and_editing_faq: Posting and Editing FAQ
+      page_heading: Comment Preferences
+      turn_off_copies_own_comments:
+        description: Enable this option if you prefer not to receive emails for your own comments (for example, when you reply to comments on your own works).
+        header: Turn off copies of your own comments
+      turn_off_emails:
+        description: Enable this option if you would prefer not to receive email alerts when someone comments on your work or replies to a comment you have made. Comment notifications will still be delivered to your Archive inbox unless you have chosen to disable them.
+        header: Turn off emails about comments
+      turn_off_inbox:
+        description: Enable this option if you would prefer not to receive notifications in your Archive inbox when someone comments on your work or replies to a comment you have made. Comment notifications will still be emailed to you unless you have chosen to disable them.
+        header: Turn off messages to your inbox about comments
+      turn_off_kudos_emails:
+        description: Enable this option if you would prefer not to receive email notifications when someone leaves kudos on your work.
+        header: Turn off emails about kudos
+    preferences_display:
+      hide_additional_tags:
+        description: When this option is enabled, additional tags on works will be hidden by default. You can click 'Show Additional Tags' to display the tags for any individual work. You must have JavaScript enabled to use this option.
+        header: Hide additional tags (you can still choose to show them)
+      hide_warnings:
+        description: When this option is enabled, Archive warning tags on works will be hidden by default. You can click 'Show Warnings' to display the warnings for any individual work. You must have JavaScript enabled to use this option.
+        header: Hide warnings (you can still choose to show them)
+      hide_work_skins:
+        description: When this option is enabled, the custom skin another user has specified for their work will not be displayed. Instead your normal site skin will be applied.
+        header: Hide other people's work skins
+      page_heading: Display Preferences
+      show_adult_content:
+        description: When this option is enabled, you won't be asked to confirm that you wish to access works rated Mature, Explicit or Not Rated before the work is displayed.
+        header: Show me adult content without checking
+      show_whole_work_default:
+        description: When this option is enabled, works with multiple chapters will display as a single page.
+        header: Show the whole work by default
+    preferences_locale:
+      locale:
+        description: This preference allows you to select your preferred language for email messages that the Archive sends to you. The templates for these messages are currently being updated and translated by our volunteers. This is a work in progress; not all messages will be available in languages other than English at this time. If the template for that email has not yet been translated to your language, it will be sent in English.
+        header: Set preferred locale
+      page_heading: Locale Preferences
+    preferences_misc:
+      page_heading: Miscellaneous Preferences
+      turn_off_banner_every_page:
+        description: Occasionally, Archive staff may notify users of important events or site changes by displaying a banner across all pages on the site. If you want to dismiss the banner while you're logged in, enable this option. Please note that this only hides the banner which was displaying at the time you enabled this option. If the banner is changed, the new banner will be displayed until you enable this option again.
+        header: Turn off the banner showing on every page
+      turn_on_history:
+        description: When enabled, History keeps a log of every work you access on the Archive while logged in. You can delete individual works from your History or clear the whole History. If you enable this option and subsequently disable it, works accessed while the option was enabled will still be saved (but you will have to enable History again to see them).
+        header: Turn on History
+      turn_on_new_user_help:
+        description: Enabling this option will turn on the banner offering information and hints on getting started with the Archive!
+        header: Turn the new user help banner back on
+    preferences_privacy:
+      allow_co_creator_invite:
+        changing: Changing this setting won't affect any existing shared works.
+        disabling: Leaving this option disabled will prevent other users from inviting you to be listed as a co-creator on a new work, chapter or series, and you won't receive any notifications.
+        enabling: Enabling this option will allow other %{app_name} users to invite you to be listed as a co-creator on a work, chapter, or series. You won't be listed as a co-creator anywhere on the site until you have accepted the request. If you have this option enabled, you can find any requests you receive in your Dashboard under "Co-Creator Requests". You will also receive an email notifying you of the request.
+        header: Allow others to invite me to be a co-creator.
+      hide_share_buttons:
+        description: This preference allows you to disable the one-click share buttons which allow others to recommend your work on external sites like Twitter and Tumblr.
+        header: Hide the share buttons on my work.
+        note: Please note that once you have posted a work online, it is always possible for a reader to copy and paste a link to your work anywhere they wish -- if you want to restrict access to your work here, your best bet is to lock the work to registered users of the Archive.
+      hide_work_from_search_engines:
+        description: Enabling this option will tell search engines not to index your user page, your works, or your series. Please note that not all search engines respect this setting. Pages which list your works or series - for example, the main works page - may also still be indexed. If you wish to avoid your works or series being indexed under any circumstances, we recommend that you restrict them to Archive users only.
+        header: Hide my work from search engines when possible.
+      more_information_html: For more on your preferences and what these options mean, check out our %{preferences_faq_link}.
+      page_heading: Privacy Preferences
+      preferences_faq: Preferences FAQ
+    preferences_work_title_format:
+      description: 'Specify how the page title looks in your browser when you are reading a story. Some examples:'
+      example:
+        default: This is the default format.
+        no_fandom: Don't include the fandom.
+        reverse_underscore: Start with fandom, then with author, then title, with underscores instead of dashes.
+      page_heading: Work Title Format
+    rte:
+      description_html: 'The exact behavior of the Rich Text Editor (%{rte_abbreviation}) depends on your device, browser, and operating system as well as the source you''re pasting from. However, starting with a well-formatted document will help you get the most out of the %{rte_abbreviation_no_title}. Here are some general tips to ensure that as much of your formatting as possible will be retained:'
+      enter_once:
+        description_html: "%{intro_sentence_bold_html} Pressing %{enter_for_twice_key} twice will insert a blank paragraph, creating additional, and likely unwanted, space between paragraphs when you paste into the %{rte_abbreviation}. The Archive uses top and bottom margins to create the appearance of a blank line between paragraphs; you can use the paragraph formatting options in your text editor to create a similar effect without adding extra %{p_tag_code} tags."
+        enter_for_once: Enter
+        enter_for_twice: Enter
+        intro_sentence_html: Press %{enter_for_once_key} %{once_italic} between paragraphs.
+        once: once
+        rte_abbreviated: RTE
+      page_heading: Rich Text
+      pasting_formatting:
+        alignment:
+          css_abbreviated: CSS
+          css_for_inline_abbreviated: CSS
+          description_html: Text alignment is now generally achieved with %{css_abbreviation}, and because the Archive does not allow inline %{css_for_inline_abbreviation}, alignment will often be lost when pasting.
+          header: Alignment
+          rte_abbreviated: RTE
+          when_it_works_html: Pasting from sources that use the %{align_tag_code} attribute and %{center_tag_code} element will keep the formatting intact, but please note that the alignment buttons in the %{rte_abbreviation} cannot modify center alignment created with the %{center_tag_code} tag.
+        header: Pasting Specific Types of Formatting
+        headings:
+          description_html: Text editors use many different styles for their heading presets. For example, selecting Heading 4 in OpenOffice produces italicized sans-serif text. Even when successfully pasting a heading into the %{rte_abbreviation}, this visual formatting is %{negation_italic} preserved -- only the %{h4_tag_code} tag is. This is not a bug. %{html_abbreviation} is designed to tell the browser what text means (e.g. "This is a heading") and not how it should be displayed (e.g. "This should be in Arial"). If you wish to modify the style of a heading or any other part of your work, please use a Work Skin.
+          header: Headings
+          html_abbreviated: HTML
+          negation: not
+          rte_abbreviated: RTE
+        indented_text:
+          description_html: Indented text is a purely visual effect with no %{html_abbreviation} equivalent and will not be preserved. Please use a Work Skin to indent text.
+          header: Indented Text
+          html_abbreviated: HTML
+        underline_strikethrough:
+          css_abbreviated: CSS
+          css_for_inline_abbreviated: CSS
+          description_html: Underline and strikethrough are often produced with %{css_abbreviation}. Because the Archive does not allow the use of inline %{css_for_inline_abbreviation}, these text styles are frequently lost when pasting.
+          header: Underline and Strikethrough
+          when_it_works_html: Pasting from web pages that use %{u_tag_code}, %{del_tag_code}, %{strike_tag_code}, or %{s_tag_code} tags will work.
+      pasting_from:
+        google_drive:
+          css_abbreviated: CSS
+          css_full: Cascading Style Sheets
+          description_html: Google Drive uses inline %{css_abbreviation} to change the alignment of text and to produce bold, italic, underline, and strikethrough formatting. Unfortunately, we cannot allow inline styles on the Archive, so only pure %{html_abbreviation} formatting such as headings, lists, links, and tables is retained.
+          header: Google Drive
+          html_abbreviated: HTML
+          html_for_sanitizer_abbreviated: HTML
+          misleading_appearance_html: In some browsers, the formatting may appear to be preserved upon pasting into the %{rte_abbreviation}, but it will be stripped by our %{html_for_sanitizer_abbreviation} sanitizer upon previewing or posting your work.
+          rte_abbreviated: RTE
+        header: Pasting from Specific Text Editors
+        scrivener:
+          copy_as: Select either "Copy as HTML" or "Copy as HTML (Basic, using <p> and <span>)"
+          copy_special: Choose Copy Special
+          description_html: 'Scrivener users will typically get better results by pasting into the %{html_abbreviation} editor and then switching to the %{rte_abbreviation} to make changes. To copy HTML from Scrivener, do the following:'
+          edit_menu: Go to the Edit menu
+          header: Scrivener
+          html_abbreviated: HTML
+          rte_abbreviated: RTE
+      rte_abbreviated: RTE
+      rte_abbreviated_no_title: RTE
+      rte_full: Rich Text Editor
+      use_preset_styles:
+        description_html: "%{intro_sentence_bold_html} The Styles option generally found in a text editor's Format menu will often translate into %{html_abbreviation} tags when pasting into the %{rte_abbreviation}. Simply changing the font size, font name, or text indent to create a visual approximation of a heading or block quote will always fail."
+        html_abbreviated: HTML
+        html_full: HyperText Markup Language
+        intro_sentence_html: Use preset styles for headings, block quotations, code, and so on.
+        rte_abbreviated: RTE
+    skins_basics:
+      only: only
+      site_skins_basics: A site skin lets you customize your browsing experience when you are logged in to your account. Don't like the Archive fonts? You can change them! Don't like the red header? Swap it out for blue! When you make a site skin, keep in mind that you are only changing the Archive for yourself -- other Archive users will see the Archive in whatever skin they are using. In other words, site skins are useful for creating your own ideal browsing experience, not for changing the way a work appears for others.
+      work_skins_basics_html: A work skin lets you change the way one or more of your works appears to others. Work skins will %{only_bold} affect the body of the work -- that is, you can't change what the Archive navigation or background look like for someone else. What you can do, however, is create your own classes. For instance, you can change the color of some of your text, or indent some paragraphs in a particular way, and so on.
+    skins_creating:
+      allowed_keywords:
+        description_html: We allow all standard CSS keyword values (e.g., %{absolute_code}, %{bottom_code}, %{center_code}, %{underline_code}, etc.).
+        header: Keywords
+      allowed_properties: We allow the following properties including all their variations (and shorthand values)
+      allowed_specific_properties: We also allow the following specific properties
+      colors:
+        common_color_names: the set of commonly-supported color names
+        description_html: You can specify colors using hex values (eg, %{black_hex_code} is black in hex) or with RGB or RGBA values (e.g., %{black_rgb_code} and %{black_rgba_code} both give you black). This may be safer since not all browsers will necessarily support all color names. However, color names are more readable and easier to remember, so we also allow color names. (We suggest you stick to %{common_color_names_link}.)
+        header: Colors
+      comments:
+        description: Comments are stripped from CSS.
+        header: Comments
+      css_basics:
+        description:
+          background_color_example_html: 'Inside any tags with the id "header", set the background color to purple: %{background_color_css_code}'
+          blink_example_html: 'Inside any tags with the class "meta", make the text blink: (we do not advise this) %{blink_css_code}'
+          css_getting_started_tutorial: Getting Started (CSS Tutorial) from MDN
+          css_intro_tutorial: CSS introduction tutorial
+          css_selectors_and_rules_html: The %{selector_bold} is either the name of an HTML tag (like %{body_tag_code} or %{h1_tag_code}), or it can be an id or class that has been set on a tag. The %{property_bold} is what you want to change in the contents of that tag (for instance the font size), and the %{value_bold} is what you want to set it to.
+          css_tutorials: 'Some useful CSS tutorials for more information:'
+          example_css: 'selector {property: value;}'
+          examples_header: 'Examples:'
+          font_size_example_html: 'Inside the "body" tag, set the font size slightly larger than the baseline: %{font_size_css_code}'
+          line_of_css_html: 'A line of CSS code looks pretty much like this: %{example_css_code}'
+          property: property
+          selector: selector
+          value: value
+        header: 'If you are new to CSS, here are the basics:'
+      custom_properties:
+        description:
+          accepting_properties_html: All properties except %{font_family_code} and %{content_code} accept the %{var_code} function as a value. We don't allow fallbacks.
+          availability_html: Custom properties and the %{var_code} function are only available for site skins, and won't work on work skins.
+          names: Custom property names can contain any combination of lowercase letters (a-z) in the English alphabet, numerals zero to nine (0-9), dashes (-), and underscores (_). They can't contain single (') or double (") quotation marks, or URLs. Any uppercase letters (A-Z) will be converted to lowercase.
+        header: Custom Properties (Variables)
+      external_urls:
+        description_html: We allow external image URLs (specified as %{example_url_code}) in JPG, GIF, and PNG formats. Please note, however, that skins using external images will not be approved for public use.
+        header: URLs
+      font_family:
+        description:
+          cannot: cannot
+          font_names_html: In the %{font_family_code} property, we allow you to specify any font with an alphanumeric name. You can (but don't have to) specify the name with single or double quotes around it, just make sure the quotes match. (e.g., 'Gill Sans' and "Gill Sans" are both fine; 'Gill Sans" won't work.) Keep in mind that a font has to be installed on the user's operating system to work. It's a good idea when specifying fonts to use fallbacks in case your first-choice font isn't available. See %{web_safe_fonts_link}.
+          no_font_face_html: We %{cannot_bold} allow the %{font_face_code} attribute. Sorry! If you have an uncommon font that you want to use in a skin you would like to share, we suggest adding a comment in the skin's "Description" field with a pointer to a place for users to download the font themselves, and using web-safe fonts as fallbacks.
+          separate_properties_html: Unfortunately, you cannot use the %{font_code} shorthand in your CSS. All font properties have to be specified separately, e.g., %{font_properties_css_code}
+          web_safe_fonts: a set of web-safe fonts with fallbacks
+        header: Font and Font Family
+      intro:
+        description: 'Note that for security reasons, you can only use a limited set of CSS code: all other declarations and comments will be removed!'
+        header: You can create new skins for the Archive using our wizard, or by writing your own CSS (cascading style sheets) code
+      numeric_values:
+        description:
+          em_unit_html: 'PS: we highly encourage learning about and using %{em_code}, which lets you set things relative to the viewer''s current font size! It will make your layouts much more flexible and responsive to different browser/font settings.'
+          precision_html: 'You can specify numeric values up to two decimal places, either as percentages or in %{various_units_link}: %{units_list_code}'
+          units_list: cm, em, ex, in, mm, pc, pt, px
+          various_units: various units
+        header: Numeric Values
+      one_declaration_per_ruleset:
+        description_html: 'The CSS parser we use retains only one declaration for each property, meaning that rulesets like %{repeated_declarations_css_code} will have all but the last %{background_code} declaration removed (so your gradient would only show up in WebKit browsers). To avoid losing declarations with repeated properties, split each one into its own ruleset, like so:'
+        header: Use only one declaration per property per ruleset
+      scale:
+        description_html: You can specify scale (for the %{transform_code} property) as %{scale_numeric_value_code} where the numeric value can be specified up to two decimal places.
+        header: Scale
+        numeric_value: numeric value
+      skin_examples:
+        description_html: "%{public_skins_link} are visible and you can read their code and copy them to edit for your own use."
+        header: Look at other public skins for examples
+        public_skins: All approved public skins
+    skins_parents:
+      header: Skin Parents
+      inheriting_default: By default, skins will be loaded after the Archive default style. If you don't want this, you can specify in the "What it does" menu that you want your skin to replace rather than add to the Archive default style.
+      layering_html: You can combine and layer multiple site skins by making one the parent of another. Parent skins are loaded in order so that the style of all the skins can be displayed in that order. For more information on skins, please refer to %{skins_interface_faq_link}.
+      load_archive_skin_components: If you create a replacement skin, you might want to load up all the skins that make up the current default Archive site as parents. This option is only available when you select "replace archive skin entirely" from the "What it does" menu. After that, you can edit your skin and delete just the ones you don't want. This will be easier if you are using nearly all of them, since there are a lot!
+      load_archive_skin_components_header: Load Archive Skin Components
+      skins_interface_faq: the Skins and Interface FAQ
+    symbols_key:
+      categories:
+        alt: Second Square
+        femslash:
+          alt: F/F
+          definition: 'F/F: female/female relationships'
+        gen:
+          alt: Gen
+          definition: 'Gen: no romantic or sexual relationships, or relationships which are not the main focus of the work'
+        heading: Relationships, pairings, orientations
+        het:
+          alt: F/M
+          definition: 'F/M: female/male relationships'
+        multi:
+          alt: Multi
+          definition: 'Multi: more than one kind of relationship, or a relationship with multiple partners'
+        none:
+          alt: blank square
+          definition: The work was not put in any categories
+        other:
+          alt: Other
+          definition: Other relationships
+        slash:
+          alt: M/M
+          definition: 'M/M: male/male relationships'
+      page_heading: Symbols we use on the Archive
+      ratings:
+        alt: First Square
+        explicit:
+          alt: E
+          definition: 'Explicit: only suitable for adults'
+        general:
+          alt: G
+          definition: General Audiences
+        heading: Content rating
+        mature:
+          alt: M
+          definition: Mature
+        none:
+          alt: blank square
+          definition: The work was not given any rating
+        teen:
+          alt: T
+          definition: Teen And Up Audiences
+      status:
+        alt: Fourth Square
+        complete:
+          alt: ticky
+          definition: This work is completed!/This prompt is filled!
+        heading: Is the work finished or the prompt fulfilled?
+        incomplete:
+          alt: stop sign
+          definition: This is a work in progress or is incomplete/unfulfilled.
+        none:
+          alt: blank square
+          definition: This work's status is unknown.
+      warnings:
+        alt: Third Square
+        default:
+          alt: questioned exclamation mark
+          definition_html: The author chose not to warn for content, or Archive Warnings %{emphasized_modal} apply, but the author has chosen not to specify them.
+          emphasized_modal: could
+        external_work:
+          alt: globe
+          definition: This is an external work; please consult the work itself for warnings.
+        heading: Content warnings
+        none:
+          alt: blank square
+          definition: The work was not marked with any Archive Warnings. Please note that an author may have included other information about their work in the Additional Tags (Genre, Warnings, Other Information) section.
+        warning_yes:
+          alt: exclamation mark
+          definition_html: 'At least one of these warnings applies: graphic depictions of violence, major character death, rape/%{non_con}, underage sex. The specific warnings are shown in the Archive Warnings tags.'
+          non_con:
+            acronym: non-con
+            title: non-consensual sex
+    tags_fandoms:
+      description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
+      more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
+      page_heading: Fandom Tags
+      tags_faq: Tags FAQ
+    tags_ratings:
+      explicit:
+        description: This is for porn, graphic violence, etc.
+        header: Explicit (Adult!)
+      general_audiences:
+        description: This content is suitable for anyone.
+        header: General Audiences
+      mature:
+        description: This is for content with adult themes (sex, violence, etc.) that isn't as graphic as explicit-rated content.
+        header: Mature (Adult!)
+      more_info:
+        html: "(For more information, see the %{ratings_and_warnings_tos_section_link}.)"
+        ratings_and_warnings_tos_section: Ratings and Warnings section of the %{app_name} Terms of Service
+      not_rated:
+        description: For searching, screening, and other Archive functions, this may get treated the same way as explicit-rated content.  In reality, it could be anything from porn to completely family-friendly stuff.  Choose this rating if you prefer not to rate your content (because you don't like ratings, because you're trying to avoid spoilers, etc.).
+        header: Not Rated (Adult!)
+      page_heading: Rating Tags
+      teen_and_up_audiences:
+        description: The content may be inappropriate for audiences under 13.
+        header: Teen And Up Audiences
+    tags_warnings:
+      choose_not_to_use:
+        description: Use this if you don't want to warn for anything. You may also choose this option if you don't know what you should warn for; if you don't like warning for certain topics or warnings in general; if you want to avoid some spoilers, but not others; etc.
+        header: 'Choose Not To Use Archive Warnings:'
+      description: 'The %{app_name} has chosen, for legal and other reasons, to mandate that users either warn for—or explicitly choose not to warn for—a short list of common warnings: Graphic Depictions of Violence, Major Character Death, Rape/Non-Con, and Underage Sex. We understand that creators may wish to not warn for some of these things, or to warn for additional content, and have provided options for them to do so within this framework.'
+      graphic_depictions_of_violence:
+        description: This is for gory, graphic, explicitly described violence. Exactly where to draw the line is your call.
+        header: 'Graphic Depictions Of Violence:'
+      major_character_death:
+        description: Please use your best judgment about who counts as a major character.
+        header: 'Major Character Death:'
+      no_archive_warnings_apply:
+        description: Use this if the Archive warnings don't apply to your content. (In other words, if it contains no graphic depictions of violence, major character death, rape/non-con, or underage sexual activity.)
+        header: 'No Archive Warnings Apply:'
+      other_warnings:
+        html: You can also use the "Additional Tags" field to give other or more detailed warnings. Our policies regarding warnings can be found in the %{tos_link} and %{tos_faq_link}.
+        tos: Terms of Service
+        tos_faq: Terms of Service FAQ
+      page_heading: Warning Tags
+      rape_non_con:
+        description: This is your call. If you think your content may be seen as containing non-consensual sexual activity, but you don't feel like using this warning or you're not sure if you should, you always have the option of using "Choose Not to Use Archive Warnings" instead.
+        header: 'Rape/Non-Con:'
+      underage_sex:
+        description: This is for descriptions or depictions of sexual activity involving characters under the age of eighteen. (This doesn't include dating activity like kissing or vague references with no actual description or depiction.) This warning generally applies to humans; if you are creating a pornographic work about space aliens who only live for a month or thousand-year-old vampires with twelve-year-old bodies, please just use your best judgment. You are always free to specify characters' ages or to use "Choose Not to Use Archive Warnings".
+        header: 'Underage Sex:'
   home:
     about:
       ao3:
@@ -1108,93 +1947,6 @@ en:
         volunteer_listings: volunteer position listings
     fandoms:
       all_fandoms: All Fandoms
-    first_login_help:
-      additional_info:
-        header: Additional Browsing Information
-        history_mark_later:
-          header: History and Mark for Later
-          history: History
-          history_faq: History and Mark for Later FAQ
-          html: You can access and manage your history by going to %{your_dashboard_link} and selecting the "%{history_link}" link in the side menu in the default browser skin or on top of the page in mobile devices. You can clear your history, or delete individual entries if you don't want these entries to show up in your history. You can also add works to the "Marked for Later" list in your history. For more information on History, please visit the %{history_faq_link}.
-          your_dashboard: your Dashboard
-        subscriptions:
-          header: Subscriptions
-          html: You can subscribe to a work, collection, series of works, or user by selecting the "Subscribe" link at the top or bottom of a work, or at the top or bottom of a collection or series page, or the user's profile page. You can check your subscriptions from %{your_dashboard_link} by selecting the "Subscriptions" link. For more information on Subscriptions, please visit the %{subscriptions_feed_faq_link}.
-          subscriptions_feed_faq: Subscriptions and Feeds FAQ
-          your_dashboard: your Dashboard
-      bookmarking_works:
-        bookmarks_faq: Bookmarks FAQ
-        header: Bookmarking Works
-        html: You can bookmark works on the Archive as well as works hosted on other sites. You can choose to make your bookmarks public or private. You can also mark a public bookmark as a rec (recommendation). Additionally, you can add notes and tags to the bookmark, and/or add it to a collection. For more instructions on managing your Bookmarks, please visit the %{bookmarks_faq_link}.
-      browsing:
-        all_fandoms: All Fandoms
-        fandoms: Fandoms
-        header: Browsing
-        html: You can start browsing works by going to the "%{fandoms_link}" tab at the top of any Archive page in the default skin and selecting either "%{all_fandoms_link}" or one of the subsets such as "%{movies_link}". Alternatively, you can use the %{search_feature_link} to look for specific fandoms, works, or users. You can use the "Sort and Filter" form to narrow down the results in any fandom page. For more instructions, please visit %{search_browse_faq_link} and the %{search_browse_tutorial_link}.
-        movies: Movies
-        search_browse_faq: Search and Browse FAQ
-        search_browse_tutorial: Searching and browsing tutorial
-        search_feature: search feature
-      editing_profile:
-        edit_my_profile: Edit My Profile
-        header: Editing Your Profile, Password, and Preferences
-        html: To add your info, go to %{your_dashboard_link}, select the "%{profile_link}" tab, and select "%{edit_my_profile_link}" from the range of options at the end of the page. Here, you can enter some basic personal information. It's also where to go to change your password. Refer to the %{profile_faq_link} for more information.
-        profile: Profile
-        profile_faq: Profile FAQ
-        your_dashboard: your Dashboard
-      logging_in_out:
-        forgot_password: forgot your password
-        header: Logging In and Logging Out
-        html: To log in, locate the login link and fill in your Username and  Password. The link will be located at the top right of the screen and as indicated by your screenreader if you're using one. If you forget your password, then select "%{forgot_password_link}". To log out, select "Log Out" on the top right corner in the default browser skin.
-      posting_works:
-        header: Posting Works
-        html: To open the Post New Work page, just select the %{post_new_link} link from the menu of the Post tab located at the top right of the page in the default browser skin. Visit the %{posting_editing_faq_link} or check out our %{tutorial_link} for more information.
-        post_new: Post New
-        posting_editing_faq: Posting and Editing FAQ
-        tutorial: 'Tutorial: Posting a Work on AO3'
-      preferences:
-        edit_my_profile: Edit My Profile
-        header: Preferences
-        html: '"%{set_my_preferences_link}" is located next to the "%{edit_my_profile_link}" button, and allows you to adjust certain settings to personalize your experience on the site. The Preferences area controls both the Archive''s behavior (such as whether your history is saved) and the Archive''s appearance. Go to the %{preferences_faq_link} for more details.'
-        preferences_faq: Preferences FAQ
-        set_my_preferences: Set My Preferences
-        skins_detail_html: For more information on how to customize the skins and interface of the Archive, refer to the %{skins_faq_link} and %{tutorials_list_link}.
-        skins_faq: Skins and Archive Interface FAQ
-        tutorials_list: List of Tutorials
-      pseuds:
-        header: Pseuds
-        html: Pseuds are like pen names linked to your account. You can use different pseuds to post your works under the appropriate name while still managing them through the same account. You can %{manage_your_pseuds_link} through your profile page. For more information, please visit the %{pseuds_faq_link}.
-        manage_your_pseuds: manage your pseuds
-        pseuds_faq: Pseuds FAQ
-      support_and_feedback:
-        archive_faq: Archive FAQ
-        contact_support: contact Support
-        header: Support and Feedback
-        html: Some frequently asked questions about the Archive are answered in the broader %{archive_faq_link}. You may also like to check out our %{known_issues_link}. If you need more help, please %{contact_support_link}. If you want to know more about some user-created tools that work with the Archive, please visit the %{unofficial_tools_faq_link}.
-        known_issues: Known Issues
-        unofficial_tools_faq: Unofficial Browser Tools FAQ
-      table_of_contents: Table of Contents
-      tags:
-        header: Tags
-        html: All tags on the Archive—including those for fandoms, relationships, and characters—start out user-created. You can always use the existing tags by selecting from the autocomplete list. If you cannot find the tags you want to use, feel free to create new tags for your works. Behind the scenes, our tag wrangling team will match the tags up with their synonyms, so that people can find your work whether you tag it "<abbr>AMTDI</abbr>", "Aliens Made Them Do It", or "Sex Pollen". Refer to the %{tags_faq_link} to learn more.
-        tags_faq: Tags FAQ
-      tips_to_start: Here are some tips to help you get started.
-      tos:
-        additional_questions_html: If you have additional questions that are not covered here, please %{contact_abuse_link}.
-        contact_abuse: contact our Policy & Abuse team
-        content_policy: Content Policy
-        header: Terms of Service
-        info_html: You can learn about our policies and procedures by reviewing the %{tos_link}, including the %{content_policy_link} and %{privacy_policy_link}. Answers to common questions are available in the %{tos_faq_link}.
-        privacy_policy: Privacy Policy
-        tos: Terms of Service
-        tos_faq: Terms of Service FAQ
-      warnings:
-        archive_specific_warnings: Archive-specific warnings
-        description_html: 'The Archive defines four "primary" %{archive_specific_warnings_link}: "Graphic Depictions Of Violence", "Major Character Death", "Rape/Non-Con", and "Underage Sex". When posting a work, you have the option to explicitly select warnings for this content, deny the presence of such content ("No Archive Warnings Apply"), or choose not to apply warnings regardless of whether or not these warnings are applicable ("Creator Chose Not To Use Archive Warnings"). Remember, "No Archive Warnings Apply" only refers to the listed primary warnings.'
-        header: Warnings
-        symbols_html: When browsing the Archive, warnings will be displayed in the blurb of each work. Official warning tags are displayed in bold. A four square grid in the top left corner of each work's blurb indicates the work's rating, completion status, pairing category, and any Archive warnings that apply to it. Refer to the %{symbols_key_chart_link} for more information.
-        symbols_key_chart: Symbols Key Chart
-      welcome_header: Welcome to the %{app_name}!
     index:
       browse_or_favorite:
         one: Browse fandoms by media or favorite up to %{count} tag to have it listed here!
@@ -1207,11 +1959,15 @@ en:
           title: Is it later already?
         note: Some works you've marked for later.
       social:
+        bluesky: "@status.archiveofourown.org on Bluesky"
         heading: Follow us
-        note_html: Follow the Archive on Twitter or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
+        note_html: Follow AO3 on Bluesky or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
         other_outlets: Organization for Transformative Works' news outlets
         tumblr: ao3org on Tumblr
-        twitter: "@AO3_Status on Twitter"
+    intro_module:
+      intro_description: A non-profit, non-commercial archive for transformative fanworks; created by and for fans of books, music, art, games, shows, movies, real-person fiction (RPF), and other fandoms.
+      parent_org: Organization for Transformative Works
+      parent_org_intro_html: The Archive of Our Own (AO3) is a project of the %{parent_org_link}.
     privacy:
       account_termination:
         backup_copies_html: '"Active records" do not include the backup copies of Content created for legal and/or disaster recovery purposes (refer to the %{general_principles_link}).'
@@ -1731,6 +2487,7 @@ en:
         update: Update Language
       support_available: Support available
     index:
+      language_code_format_html: "(%{code})"
       navigation:
         add: Add a Language
         edit: Edit
@@ -1750,6 +2507,7 @@ en:
         header: About the Archive
         privacy_policy: Privacy Policy
         site_map: Site Map
+        status_page: Site Status
         tos: Terms of Service
       contact_us:
         header: Contact Us
@@ -1890,6 +2648,7 @@ en:
         allow_collection_invitation: Allow others to invite my works to collections.
         allow_gifts: Allow anyone to gift me works.
         heading: Collections, Challenges and Gifts
+        help_title: Collection preferences
         legend: Collections, Challenges and Gifts
         turn_off_collection_emails: Turn off emails from collections.
         turn_off_collection_inbox: Turn off inbox messages from collections.
@@ -1897,6 +2656,7 @@ en:
       comments:
         guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
         heading: Comments
+        help_title: Comment preferences
         legend: Comments
         turn_off_copies_own_comments: Turn off copies of your own comments.
         turn_off_emails: Turn off emails about comments.
@@ -1904,14 +2664,17 @@ en:
         turn_off_kudos_emails: Turn off emails about kudos.
       display:
         heading: Display
+        help_title: Display preferences
         hide_additional_tags: Hide additional tags (you can still choose to show them).
         hide_warnings: Hide warnings (you can still choose to show them).
         hide_work_skins: Hide work skins (you can still choose to show them).
         legend: Display
         show_adult_content: Show me adult content without checking.
         show_whole_work_default: Show the whole work by default.
+      locale_help_title: Locale preferences help
       misc:
         heading: Misc
+        help_title: Misc preferences
         legend: Misc
         turn_off_banner_every_page: Turn off the banner showing on every page.
         turn_on_history: Turn on History.
@@ -1929,20 +2692,38 @@ en:
       privacy:
         allow_co_creator_invite: Allow others to invite me to be a co-creator.
         heading: Privacy
+        help_title: Privacy preferences
         hide_share_buttons: Hide the share buttons on my work.
         hide_work_from_search_engines: Hide my work from search engines when possible.
         legend: Privacy
-        show_date_of_birth: Show my date of birth to other people.
-        show_email_address: Show my email address to other people.
       public_site_skins: Public Site Skins
+      skins_basics_help_title: Skins basics
+      work_title_format_help_title: Work title format
       your_locale: Your locale
       your_site_skin: Your site skin
       your_time_zone: Your time zone
   profile:
+    edit:
+      about_me: About Me
+      browser_title: Edit Profile
+      change_profile_landmark: Change Profile
+      page_heading: Edit My Profile
+      privacy_policy: Privacy Policy
+      public_information_notice_html: Any personal information you post on your public AO3 profile, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites, will be accessible by the general public. To learn more about what data AO3 collects when you're on the site and how we use it, check out our %{privacy_policy_link}.
+      title: Title
+      update: Update
     pseud_list:
       more_pseuds:
         one: "%{count} more pseud"
         other: "%{count} more pseuds"
+    show:
+      delete_account_confirmation: This will permanently delete your account and cannot be undone. Are you sure?
+      delete_my_account: Delete My Account
+      edit_my_preferences: Set My Preferences
+      edit_my_profile: Edit My Profile
+      edit_my_pseuds: Manage My Pseuds
+      edit_my_works: Edit My Works
+      edit_profile: Edit Profile
   pseuds:
     delete_preview:
       cancel: Cancel
@@ -1958,6 +2739,10 @@ en:
       transfer:
         one: Transfer this bookmark to the default pseud
         other: Transfer these bookmarks to the default pseud
+    new:
+      back_to_pseuds: Back To Pseuds
+      create_pseud: Create Pseud
+      new_pseud: New Pseud
     pseud_blurb:
       confirm_delete: Are you sure?
       default_pseud: Default Pseud
@@ -1983,17 +2768,68 @@ en:
         size: Icons should be sized 100x100 pixels for best results.
       icon_upload: Upload a new icon
       make_default: Make this name default
-      name: Name
+      name: Name (required)
       submit: Submit
+  readings:
+    confirm_clear:
+      notice_html: Are you sure you want to <strong><em>clear</em></strong> your entire history? This <strong>cannot be undone</strong>.
+      page_heading: Clear Entire History
+      submit: Yes, Clear Entire History
+    index:
+      clear_entire_history: Clear Entire History
+      history:
+        landmark: List of History Items
+        navigation: History
+        page_heading: History
+      marked_for_later:
+        landmark: List of Marked for Later Items
+        navigation: Marked for Later
+        page_heading: Marked for Later
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
   series:
+    series_module:
+      hidden_by_admin_alt: "(Hidden by Admin)"
+      hidden_by_administrator: Hidden by Administrator
+      landmark:
+        fandom: Fandom
+        summary: Summary
+      restricted: Restricted
+      restricted_alt: "(Restricted)"
+      series_by_html: "%{series_title_link} by %{byline}"
     series_order:
       draft_work_title: "%{title} (DRAFT)"
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+    form:
+      css: CSS
+      description: Description
+      icon: Upload a preview (png, jpeg or gif)
+      load_archive_skin_components: 'Load Archive Skin Components:'
+      parent_skins: Parent Skins
+      public: Apply to make public
+      skin_type: Type
+      skins_basics_help_title: Skins basics
+      skins_creating_help_title: Skins creating
+      skins_parents_help_title: Skins parents
+      title: Title
+    index:
+      skins_basics_help_title: Skins basics
+    new:
+      skins_basics_help_title: Skins basics
+    new_wizard:
+      skins_basics_help_title: Skins basics
+    revert_skin_form:
+      revert_to_default: Revert to Default Skin
+    wizard_form:
+      description: Description
+      skins_parents_help_title: Skins parents
+      title: Title
+  stats:
+    index:
+      flat_view: Flat View
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
@@ -2035,6 +2871,55 @@ en:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
       tags_wrangled_csv: Tags Wrangled (CSV)
   tag_wranglings:
+    index:
+      general_resources:
+        ao3_catch_and_release: AO3_Catch_and_Release
+        ao3_catch_and_release_html: "%{ao3_catch_and_release_link} - For more information, please see the %{ao3_wrangling_project_faq_link}"
+        ao3_wrangling_project_faq: Tag Wrangling AO3 Project FAQ
+        current_wrangling_limitations: Current Wrangling Limitations
+        current_wrangling_limitations_html: "%{current_wrangling_limitations_link} - Details about current wrangling limitations and policies"
+        fandom_and_megafandom_directory: Directory of Fandom & Megafandom Wiki Pages
+        fandom_and_megafandom_directory_html: "%{fandom_and_megafandom_directory_link} - All currently available fandom & megafandom wiki pages"
+        fandoms_in_need_of_cowranglers: Fandoms in need of Cowranglers
+        fandoms_in_need_of_cowranglers_html: "%{fandoms_in_need_of_cowranglers_link} - Interested in helping out a fandom in need?"
+        heading: 'General Wrangling Resources:'
+        otw_slack_chat: OTW Slack Chat
+        otw_slack_chat_html: "%{otw_slack_chat_link} - For more information please see the %{tag_wrangling_slack_tutorial_link}"
+        tag_wranglers_mailing_list: Tag Wranglers Mailing List Conversations
+        tag_wranglers_mailing_list_html: "%{tag_wranglers_mailing_list_link} - Message Archive for the Tagwranglers Mailing List"
+        tag_wrangling_bugs: Tag Wrangling Bugs & Troubleshooting
+        tag_wrangling_bugs_html: "%{tag_wrangling_bugs_link} - Having technical issues while wrangling? Check here for solutions!"
+        tag_wrangling_committee: Tag Wrangling Committee
+        tag_wrangling_committee_html: "%{tag_wrangling_committee_link} - Full collection of wiki links & policies"
+        tag_wrangling_communication_policy: Tag Wrangling Communication Policy
+        tag_wrangling_communication_policy_html: "%{tag_wrangling_communication_policy_link} - Includes instructions for leaving tag comments and chat rules"
+        tag_wrangling_faq: Tag Wrangling FAQ
+        tag_wrangling_faq_html: "%{tag_wrangling_faq_link} - Check here to find answers to frequently asked questions"
+        tag_wrangling_moodle: Tag Wrangling Moodle
+        tag_wrangling_moodle_html: "%{tag_wrangling_moodle_link} - Additional modular training and support for all wranglers"
+        tag_wrangling_slack_tutorial: Tag Wrangling Slack Tutorial
+        tag_wrangling_training: Tag Wrangling Training
+        tag_wrangling_training_html: "%{tag_wrangling_training_link} - New wranglers, start here!"
+        unassigned_fandoms: Unassigned Fandoms
+        unassigned_fandoms_html: "%{unassigned_fandoms_link} - A list of all current unassigned fandoms"
+        vacations_and_retiring: Vacation and Retiring from Wrangling
+        vacations_and_retiring_html: "%{vacations_and_retiring_link} - Unable to wrangle for more than 2 weeks? Read about options for taking a break from wrangling!"
+      manage:
+        comments: Comments (%{count})
+        edit: Edit
+        works: Works
+        wrangle: Wrangle
+      notes:
+        contact_chair_html: For confidential issues (including difficulty reaching other wranglers), please email Chairs at %{tag_wranglers_chair_email_link} or use the phrase "%{question_for_chair_bold}" in %{tw_wranglers_slack_link}, %{tw_wranglers_quietroom_slack_link}, or in any training room and let them know you would like to chat via direct message.
+        contact_supervisor_html: If you have questions, difficulty accessing the wiki, or need technical assistance, please email Tag Wranglers Supervisors or use the phrase "%{question_for_supervisor_bold}" to contact a Supervisor in %{tw_wranglers_slack_link}, %{tw_wranglers_quietroom_slack_link}, or in any training room.
+        landmark: Notes
+        question_for_chair: Question for a Chair!
+        question_for_supervisor: Question for a Supervisor!
+        tw_wranglers_quietroom_slack: "#tw-wranglers-quietroom"
+        tw_wranglers_slack: "#tw-wranglers"
+        wrangle_to_guidelines_html: Wrangle tags in accordance with the %{wrangling_guidelines_link}.
+        wrangling_guidelines: wrangling guidelines
+      page_heading: Tag Wrangling
     wrangler_dashboard:
       characters_by_fandom: Characters by fandom (%{count})
       fandoms_by_media: Fandoms by media (%{count})
@@ -2053,6 +2938,7 @@ en:
       unsorted_tags: Unsorted Tags (%{count})
       use_type:
         bookmarks: Bookmarks
+        collections: Collections
         drafts: Drafts
         external_works: External Works
         private_bookmarks: Private Bookmarks
@@ -2085,17 +2971,29 @@ en:
         canonical_or_synonymous: Canonical or synonymous
         noncanonical: Non-canonical
         noncanonical_and_nonsynonymous: Non-canonical and non-synonymous
+        noncanonical_nonsynonymous_and_not_unwrangleable: Non-canonical and non-synonymous and not marked unwrangleable
         synonymous: Synonymous
+        unwrangleable: Unwrangleable
       tag_name: Tag name
       type: Type
       wrangling_status: Wrangling status
     show:
       canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
       canonical_tag: canonical tag
+      children:
+        heading: 'Child tags (displaying the first %{count} of each type):'
+        more: and more
       fandom_relationship_tags: Relationship tags in this fandom
       filter_bookmarks: filter bookmarks
       filter_works: filter works
       list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
+      synonyms: 'Tags with the same meaning:'
+    wrangle:
+      manage:
+        comments: Comments (%{count})
+        edit: Edit
+        works: Works
+        wrangle: Wrangle
   time:
     formats:
       date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
@@ -2137,7 +3035,6 @@ en:
       page_heading: Change Username
       ticket_id: Ticket ID
     change_email:
-      browser_title: Change Email
       caution:
         check_spam_html: "%{must_confirm_bold} Please check your spam folder or %{contact_support_link} if you do not receive the confirmation email."
         confirm_by: If you don't confirm your request by %{date}, your email address will not be changed.
@@ -2159,10 +3056,17 @@ en:
       request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
       resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
     change_password:
-      browser_title: Change Password
+      change_password: Change Password
+      confirm_new_password: Confirm new password
+      new_password: New password
+      old_password: Old password
+      page_heading: Change Password
+      password_length:
+        one: "%{minimum} to %{count} character"
+        other: "%{minimum} to %{count} characters"
+      submit: Submit
     change_username:
       account_faq: Account FAQ
-      browser_title: Change Username
       caution: Please use this feature with caution.
       change_window:
         one: You can change your username once per day.
@@ -2177,7 +3081,7 @@ en:
       more_info_html: For information on how changing your username will affect your account, please check out the %{account_faq_link}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old username on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
       new_pseud_instead_html: If that is not what you want, you can %{create_a_new_pseud_link} instead.
       new_username: New username
-      page_heading: Change My Username
+      page_heading: Change Username
       password: Password
       submit: Change Username
       submit_landmark: Submit
@@ -2222,40 +3126,34 @@ en:
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
-    edit:
-      about_me: About Me
-      browser_title: Edit Profile
-      change_profile_landmark: Change Profile
-      date_of_birth: Date of Birth
-      location: Location
-      page_heading: Edit My Profile
-      privacy_policy: Privacy Policy
-      public_information_notice_html: Any personal information you post on your public AO3 profile, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites, will be accessible by the general public. To learn more about what data AO3 collects when you're on the site and how we use it, check out our %{privacy_policy_link}.
-      title: Title
-      update: Update
     edit_header_navigation:
       change_email: Change Email
       change_password: Change Password
       change_username: Change Username
       edit_default_pseud_and_icon: Edit Default Pseud and Icon
-      edit_profile: Edit Profile
-    edit_user_navigation:
-      change_email: Change Email
-      change_password: Change Password
-      change_username: Change Username
-      edit_default_pseud_and_icon: Edit Default Pseud and Icon
       edit_my_profile: Edit My Profile
+      edit_profile: Edit Profile
     header_navigation:
+      admin_creations: Creations
       admin_user: User Administration
       edit_multiple: Edit Works
       invitations: Invitations
       new_work: Post New
     passwords:
+      edit:
+        change_password: Change Password
+        confirm_new_password: Confirm new password
+        new_password: New password
+        page_heading: Change Password
+        password_length:
+          one: "%{minimum} to %{count} character"
+          other: "%{minimum} to %{count} characters"
+        submit: Submit
       new:
-        email_or_username_html: Email address %{or} username
-        instructions: If you've forgotten your password, we can send instructions that will allow you to reset it. Please tell us the username or email address you used when you signed up for your Archive account.
-        or: or
-        page_heading: Forgotten your password?
+        email_html: Email address
+        instructions: Please enter the email address associated with your AO3 account. You may only request a password reset a limited number of times per day.
+        introductions: If you've forgotten your password, we can send you an email with instructions to reset your password.
+        page_heading: Reset Password
         reset_password: Reset Password
     registrations:
       legal:
@@ -2280,7 +3178,7 @@ en:
         confirm_password_validation: Please enter the same password in both fields.
         password: Password
         password_requirements: "%{minimum} to %{maximum} characters"
-        password_validation: Please enter a password! (At least %{minimum} letters long, please.)
+        password_validation: Please enter a password! (At least %{minimum} characters long, please.)
         username: Username
         username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
         username_validation: You need a username! (At least %{minimum} letters long, please.)
@@ -2307,18 +3205,13 @@ en:
           tag_wrangling: Tag Wrangling
           works: My Works
       new:
-        beta_reminder:
-          give_feedback: give us your feedback
-          reminder: 'Reminder:'
-          report_bugs: Please report any pesky bugs and %{give_feedback_link}!
-          warning: This site is in beta. Things may break or crash without notice.
         login:
           create_account: Create an account now
           forgot: Forgot your password or username? %{reset_password_link}.
           log_in: Log in
           no_account: Don't have an account? %{join_link}.
           request_invite: Request an invitation to join
-          reset_password: Reset password
+          reset_password: Reset your password
         restricted:
           account_exists: If you already have an Archive of Our Own account, log in now.
           commenting_unavailable: Commenting on this work is only available to registered users of the Archive.
@@ -2348,6 +3241,7 @@ en:
         content_policy: Content Policy
         dismiss: Dismiss permanently
         help_html: If you need technical support, %{contact_support_link}. If you experience harassment or have questions about our %{tos_link} (including the %{content_policy_link} and %{privacy_policy_link}), %{contact_abuse_link}.
+        help_title: First login help
         hide: Hide first login help banner
         new_user_tips: useful tips for new users
         our_faqs: our FAQs
@@ -2374,7 +3268,6 @@ en:
         pitch: Pitch
         switch: Switch
       pitch:
-        collections: Collections (%{coll_number})
         drafts: Drafts (%{drafts_number})
       switch:
         assignments: Assignments (%{assignment_number})
@@ -2398,10 +3291,14 @@ en:
     byline:
       add_co-creators: Add co-creators
       show_co-creator_options: Add co-creators?
+    drafts:
+      page_heading: Unposted Draft
+      please_note: 'Please note:'
+      unposted_drafts_get_deleted: Unposted drafts are only saved for 30 days from the day they are first created, and then deleted from %{app_name}.
     edit_tags:
-      content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
-      tos_faq: Terms of Service FAQ
+      page_heading:
+        edit_tags_and_language_html: Edit Work Tags and Language for %{title}
+        edit_tags_html: Edit Work Tags for %{title}
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works
@@ -2429,12 +3326,27 @@ en:
         multiple_works_restricted: Only show to registered users
         restricted: Only show your work to registered users
         unrestricted: Show to all
+    posting_fieldset:
+      actions:
+        cancel: Cancel
+        edit: Edit
+        please_wait: Please wait...
+        post: Post
+        preview: Preview
+        save_draft: Save Draft
+        update: Update
+      content_policy: Content Policy
+      legend: Post Work
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
     preface:
       title: Preface
     preview:
-      content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
-      tos_faq: Terms of Service FAQ
+      page_heading: Preview
+    preview_tags:
+      page_heading:
+        preview_tags: Preview Tags
+        preview_tags_and_language: Preview Tags and Language
     search_box:
       a11y_label: Work
       label: Work Search
@@ -2449,16 +3361,25 @@ en:
       no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
-    standard_form:
-      content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
-      tos_faq: Terms of Service FAQ
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
+    work_form_tags:
+      fandoms_help_title: Fandom help
+      ratings_help_title: Rating help
+      warnings_help_title: Warning help
+    work_header_navigation:
+      chapter_index:
+        button: Chapter Index
+        full_page: Full-Page Index
+        link: Chapter Index
+        submit: Go
+      download:
+        button: Download
+        heading: Download
     work_header_notes:
       inspired_by:
         other_works_inspired_by_this_one: other works inspired by this one
@@ -2485,3 +3406,20 @@ en:
     show:
       edit: Edit
       heading: Wrangling Guidelines
+    wrangling_guideline_form:
+      content_required: You need to post some content here.
+      content_too_long:
+        one: We salute your ambition! But sadly the content must be less than %{count} letter long.
+        other: We salute your ambition! But sadly the content must be less than %{count} letters long.
+      content_too_short:
+        one: Brevity is the soul of wit, but your content does have to be at least %{count} letter long.
+        other: Brevity is the soul of wit, but your content does have to be at least %{count} letters long.
+      guideline_text: Guideline text
+      html_editor: HTML
+      landmark:
+        post: Post
+      post: Post
+      required_information: Required information
+      rich_text_editor: Rich Text
+      title: Title
+      title_failure: Please enter a title.

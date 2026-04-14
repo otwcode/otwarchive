@@ -12,19 +12,19 @@ describe MailerHelper do
   end
 
   describe "#creation_title" do
-    context "when creation is a series" do
+    context "when the creation is a series" do
       it "returns the series title" do
         expect(creation_title(series)).to eq(series.title)
       end
     end
 
-    context "when creation is a work" do
+    context "when the creation is a work" do
       it "returns the work title" do
         expect(creation_title(work)).to eq(work.title)
       end
     end
 
-    context "when creation is a chapter" do
+    context "when the creation is a chapter" do
       it "returns the work title with the chapter number" do
         expect(creation_title(chapter)).to eq("Chapter #{chapter.position} of #{work.title}")
       end
@@ -32,19 +32,19 @@ describe MailerHelper do
   end
 
   describe "#creation_link_with_word_count" do
-    context "when creation is a chapter" do
+    context "when the creation is a chapter" do
       it "returns hyperlinked full_chapter_title and parenthetical word count" do
         expect(creation_link_with_word_count(chapter, chapter_url(chapter))).to eq("<i><b><a style=\"color:#990000\" href=\"#{chapter_url(chapter)}\">#{chapter.full_chapter_title}</a></b></i> (#{chapter.word_count} words)")
       end
     end
 
-    context "when creation is a series" do
+    context "when the creation is a series" do
       it "returns hyperlinked series title and parenthetical word count" do
         expect(creation_link_with_word_count(series, series_url(series))).to eq("<i><b><a style=\"color:#990000\" href=\"#{series_url(series)}\">#{series.title}</a></b></i> (#{series.word_count} words)")
       end
     end
 
-    context "when creation is a work" do
+    context "when the creation is a work" do
       it "returns hyperlinked work title and parenthetical word count" do
         expect(creation_link_with_word_count(work, work_url(work))).to eq("<i><b><a style=\"color:#990000\" href=\"#{work_url(work)}\">#{work.title}</a></b></i> (#{work.word_count} words)")
       end
@@ -52,19 +52,19 @@ describe MailerHelper do
   end
 
   describe "#creation_title_with_word_count" do
-    context "when creation is a chapter" do
+    context "when the creation is a chapter" do
       it "returns full_chapter_title and parenthetical word count" do
         expect(creation_title_with_word_count(chapter)).to eq("\"#{chapter.full_chapter_title}\" (#{chapter.word_count} words)")
       end
     end
 
-    context "when creation is a series" do
+    context "when the creation is a series" do
       it "returns series title and parenthetical word count" do
         expect(creation_title_with_word_count(series)).to eq("\"#{series.title}\" (#{series.word_count} words)")
       end
     end
 
-    context "when creation is a work" do
+    context "when the creation is a work" do
       it "returns work title and parenthetical word count" do
         expect(creation_title_with_word_count(work)).to eq("\"#{work.title}\" (#{work.word_count} words)")
       end
@@ -159,6 +159,403 @@ describe MailerHelper do
           label = "<b style=\"color:#990000\">#{labels[1]} </b>"
           list = "#{tag1.name}, #{tag2.name}"
           expect(style_work_tag_metadata(tags)).to eq("#{label}#{list}")
+        end
+      end
+    end
+  end
+
+  describe "#batch_subscription_subject" do
+    subject do
+      batch_subscription_subject(subscription, creation, additional_entries)
+    end
+
+    let(:creator) { create(:user, login: "creator").default_pseud }
+    let(:cocreator) { create(:user, login: "cocreator").default_pseud }
+    let(:creator_byline) { creation.pseuds.first.byline }
+    let(:cocreator_byline) { creation.pseuds.last.byline }
+    let(:chapter_position) { creation.position }
+    let(:app_nick) { "[#{ArchiveConfig.APP_SHORT_NAME}]" }
+
+    [0, 1, 2].each do |number|
+      context "when notification has #{number} additional entries" do
+        let(:additional_entries) { number }
+        let(:more) do
+          additional_entries.zero? ? "" : " and #{additional_entries} more"
+        end
+
+        context "when subscription is to a series" do
+          let(:work) do
+            create(
+              :work,
+              authors: [creator],
+              series: [create(:series, title: "Series Title")],
+              title: "Work Title"
+            )
+          end
+          let(:series) { work.series.first }
+          let(:subscription) { create(:subscription, subscribable: series) }
+
+          context "when main creation is a chapter" do
+            let(:creation) { create(:chapter, work: work) }
+
+            it { is_expected.to eq("#{app_nick} #{creator_byline} posted Chapter #{chapter_position} of #{work.title} in the #{series.title} series#{more}") }
+
+            context "when chapter is co-created" do
+              let(:creation) do
+                create(
+                  :chapter,
+                  authors: [creator, cocreator],
+                  work: work
+                )
+              end
+
+              it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted Chapter #{chapter_position} of #{work.title} in the #{series.title} series#{more}") }
+            end
+
+            context "when work is anonymous" do
+              let(:work) do
+                create(
+                  :work,
+                  authors: [creator],
+                  collections: [create(:anonymous_collection)],
+                  title: "Work Title",
+                  series: [create(:series, title: "Series Title")]
+                )
+              end
+
+              it { is_expected.to eq("#{app_nick} Anonymous posted Chapter #{chapter_position} of #{work.title} in the #{series.title} series#{more}") }
+            end
+          end
+
+          context "when main creation is a work" do
+            let(:creation) do
+              create(
+                :work,
+                authors: [creator],
+                series: [series],
+                title: "Work Title"
+              )
+            end
+
+            it { is_expected.to eq("#{app_nick} #{creator_byline} posted #{creation.title} in the #{series.title} series#{more}") }
+
+            context "when work is co-created" do
+              let(:creation) do
+                create(
+                  :work,
+                  authors: [creator, cocreator],
+                  series: [series],
+                  title: "Work Title"
+                )
+              end
+
+              it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted #{work.title} in the #{series.title} series#{more}") }
+            end
+
+            context "when work is anonymous" do
+              let(:creation) do
+                create(
+                  :work,
+                  collections: [create(:anonymous_collection)],
+                  series: [series],
+                  title: "Work Title"
+                )
+              end
+
+              it { is_expected.to eq("#{app_nick} Anonymous posted #{work.title} in the #{series.title} series#{more}") }
+            end
+          end
+        end
+
+        context "when subscription is to a user" do
+          let(:work) { create(:work, authors: [creator], title: "Work Title") }
+          let(:anonymous_work) do
+            create(
+              :work,
+              authors: [creator],
+              collections: [create(:anonymous_collection)],
+              title: "Work Title"
+            )
+          end
+          let(:subscription) do
+            create(:subscription, subscribable: creator.user)
+          end
+
+          context "when main creation is a chapter" do
+            let(:creation) { create(:chapter, authors: [creator], work: work) }
+
+            it { is_expected.to eq("#{app_nick} #{creator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
+
+            context "when chapter is co-created" do
+              let(:creation) do
+                create(:chapter, authors: [creator, cocreator], work: work)
+              end
+
+              it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
+            end
+
+            context "when work is co-created but chapter is not" do
+              let(:work) do
+                create(
+                  :work, authors: [creator, cocreator], title: "Work Title"
+                )
+              end
+              let(:creation) do
+                create(:chapter, work: work, authors: [creator])
+              end
+
+              it { is_expected.to eq("#{app_nick} #{creator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
+            end
+          end
+
+          context "when main creation is a work" do
+            let(:creation) do
+              create(:work, authors: [creator], title: "Work Title")
+            end
+
+            it { is_expected.to eq("#{app_nick} #{creator_byline} posted #{creation.title}#{more}") }
+
+            context "when work is co-created" do
+              let(:creation) do
+                create(
+                  :work, authors: [creator, cocreator], title: "Work Title"
+                )
+              end
+
+              it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted #{creation.title}#{more}") }
+            end
+          end
+        end
+
+        context "when subscription is to a work" do
+          let(:work) { create(:work, authors: [creator], title: "Work Title") }
+          let(:creation) { create(:chapter, authors: [creator], work: work) }
+          let(:subscription) { create(:subscription, subscribable: work) }
+
+          it { is_expected.to eq("#{app_nick} #{creator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
+
+          context "when work is anonymous" do
+            let(:work) do
+              create(:work, collections: [create(:anonymous_collection)])
+            end
+
+            it { is_expected.to eq("#{app_nick} Anonymous posted Chapter #{chapter_position} of #{work.title}#{more}") }
+          end
+
+          context "when chapter is co-created" do
+            let(:creation) do
+              create(:chapter, work: work, authors: [creator, cocreator])
+            end
+
+            it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
+          end
+
+          context "when work is co-created but chapter is not" do
+            let(:work) do
+              create(:work, authors: [creator, cocreator], title: "Work Title")
+            end
+            let(:creation) { create(:chapter, authors: [creator], work: work) }
+
+            it { is_expected.to eq("#{app_nick} #{creator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
+          end
+        end
+      end
+    end
+  end
+
+  describe "#batch_subscription_text_preface" do
+    subject do
+      batch_subscription_text_preface(creation)
+    end
+
+    let(:anon_work) do
+      create(:work, collections: [create(:anonymous_collection)])
+    end
+    let(:cocreated_work) do
+      create(:work, authors: [create(:pseud), create(:pseud)])
+    end
+
+    context "when the creation is a chapter" do
+      let(:work_title) { "\"#{creation.work.title}\"" }
+      let(:work_word_count) { creation.work.word_count }
+      let(:work_creators) { creator_text(creation.work) }
+
+      context "when work has one creator" do
+        let(:creation) { create(:chapter) }
+
+        it "includes the work creator and their URL, says \"new chapter\", and includes the work title and word count" do
+          expect(subject).to eq("#{work_creators} posted a new chapter of #{work_title} (#{work_word_count} words):")
+        end
+      end
+
+      context "when work has two creators" do
+        let(:creation) { create(:chapter, work: cocreated_work) }
+
+        it "includes the work creators and their URLs, says \"new chapter\", and includes the work title and word count" do
+          expect(subject).to eq("#{work_creators} posted a new chapter of #{work_title} (#{work_word_count} words):")
+        end
+      end
+
+      context "when work is anonymous" do
+        let(:creation) { create(:chapter, work: anon_work) }
+
+        it { is_expected.to eq("Anonymous posted a new chapter of #{work_title} (#{work_word_count} words):") }
+      end
+    end
+
+    context "when the creation is a work" do
+      let(:work_creators) { creator_text(creation) }
+
+      context "when work is new" do
+        context "when work has one creator" do
+          let(:creation) { create(:work) }
+
+          it "includes the work creator and their URL and says \"new work\"" do
+            expect(subject).to eq("#{work_creators} posted a new work:")
+          end
+        end
+
+        context "when work has two creators" do
+          let(:creation) { cocreated_work }
+
+          it "includes the work creators and their URLs and says \"new work\"" do
+            expect(subject).to eq("#{work_creators} posted a new work:")
+          end
+        end
+
+        context "when work is anonymous" do
+          let(:creation) { anon_work }
+
+          it { is_expected.to eq("Anonymous posted a new work:") }
+        end
+      end
+
+      context "when work is backdated" do
+        context "when work has one creator" do
+          let(:creation) { create(:work, backdate: true) }
+
+          it "includes the work creator and their URL and says \"backdated work\"" do
+            expect(subject).to eq("#{work_creators} posted a backdated work:")
+          end
+        end
+
+        context "when work has two creators" do
+          let(:creation) { cocreated_work }
+
+          before { creation.update(backdate: true) }
+
+          it "includes the work creators and their URLs and says \"backdated work\"" do
+            expect(subject).to eq("#{work_creators} posted a backdated work:")
+          end
+        end
+
+        context "when work is anonymous" do
+          let(:creation) { anon_work }
+
+          before { creation.update(backdate: true) }
+
+          it { is_expected.to eq("Anonymous posted a backdated work:") }
+        end
+      end
+    end
+  end
+
+  describe "#batch_subscription_html_preface" do
+    subject do
+      batch_subscription_html_preface(creation)
+    end
+
+    let(:anon_work) do
+      create(:work, collections: [create(:anonymous_collection)])
+    end
+    let(:cocreated_work) do
+      create(:work, authors: [create(:pseud), create(:pseud)])
+    end
+
+    context "when the creation is a chapter" do
+      let(:work_link) do
+        style_creation_link(creation.work.title, work_url(creation.work))
+      end
+      let(:work_word_count) { creation.work.word_count }
+      let(:work_creator_links) { creator_links(creation.work) }
+
+      context "when work has one creator" do
+        let(:creation) { create(:chapter) }
+
+        it "links to the work creator, says \"new chapter\", links to the work, and provides the work word count" do
+          expect(subject).to eq("#{work_creator_links} posted a new chapter of #{work_link} (#{work_word_count} words):")
+        end
+      end
+
+      context "when work has two creators" do
+        let(:creation) { create(:chapter, work: cocreated_work) }
+
+        it "links to the work creators, says \"new chapter\", links to the work, and provides the work word count" do
+          expect(subject).to eq("#{work_creator_links} posted a new chapter of #{work_link} (#{work_word_count} words):")
+        end
+      end
+
+      context "when work is anonymous" do
+        let(:creation) { create(:chapter, work: anon_work) }
+
+        it "says \"Anonymous posted a new chapter,\" links to the work, and provides the work word count" do
+          expect(subject).to eq("Anonymous posted a new chapter of #{work_link} (#{work_word_count} words):")
+        end
+      end
+    end
+
+    context "when the creation is a work" do
+      let(:work_creator_links) { creator_links(creation) }
+
+      context "when work is new" do
+        context "when work has one creator" do
+          let(:creation) { create(:work) }
+
+          it "links to the work creator and says \"posted a new work\"" do
+            expect(subject).to eq("#{work_creator_links} posted a new work:")
+          end
+        end
+
+        context "when work has two creators" do
+          let(:creation) { cocreated_work }
+
+          it "links to the work creators and says \"posted a new work\"" do
+            expect(subject).to eq("#{work_creator_links} posted a new work:")
+          end
+        end
+
+        context "when work is anonymous" do
+          let(:creation) { anon_work }
+
+          it { is_expected.to eq("Anonymous posted a new work:") }
+        end
+      end
+
+      context "when work is backdated" do
+        context "when work has one creator" do
+          let(:creation) { create(:work, backdate: true) }
+
+          it "links to the work creator and says \"posted a backdated work\"" do
+            expect(subject).to eq("#{work_creator_links} posted a backdated work:")
+          end
+        end
+
+        context "when work has two creators" do
+          let(:creation) { cocreated_work }
+
+          before { creation.update(backdate: true) }
+
+          it "links to the work creators and says \"posted a backdated work\"" do
+            expect(subject).to eq("#{work_creator_links} posted a backdated work:")
+          end
+        end
+
+        context "when work is anonymous" do
+          let(:creation) { anon_work }
+
+          before { creation.update(backdate: true) }
+
+          it { is_expected.to eq("Anonymous posted a backdated work:") }
         end
       end
     end

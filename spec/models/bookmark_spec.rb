@@ -46,4 +46,58 @@ describe Bookmark do
     expect(activity.save).to be_truthy
     expect(activity.target_name).to eq("Bookmark #{bookmark.id}")
   end
+
+  context "reindexing" do
+    let!(:parent_collection) { create(:collection) }
+    let!(:collection) { create_invalid(:collection, parent: parent_collection) }
+
+    context "when bookmark is created in collection" do
+      it "enqueues the collection for reindex" do
+        expect do
+          create(:bookmark, collections: [collection])
+        end.to add_to_reindex_queue(collection, :background) &
+               add_to_reindex_queue(parent_collection, :background)
+      end
+    end
+
+    context "when bookmark already exists in the collection" do
+      let!(:bookmark) { create(:bookmark, collections: [collection]) }
+
+      context "when bookmark is hidden by an admin" do
+        it "enqueues its collection for reindex" do
+          expect do
+            bookmark.update!(hidden_by_admin: true)
+          end.to add_to_reindex_queue(collection, :background) &
+                 add_to_reindex_queue(parent_collection, :background)
+        end
+      end
+
+      context "when bookmark is privated" do
+        it "enqueues its collection for reindex" do
+          expect do
+            bookmark.update!(private: true)
+          end.to add_to_reindex_queue(collection, :background) &
+                 add_to_reindex_queue(parent_collection, :background)
+        end
+      end
+
+      context "when bookmark is not significantly changed" do
+        it "doesn't enqueue its collection for reindex" do
+          expect do
+            bookmark.touch
+          end.to not_add_to_reindex_queue(collection, :background) &
+                 not_add_to_reindex_queue(parent_collection, :background)
+        end
+      end
+
+      context "when bookmark is destroyed" do
+        it "enqueues its collection for reindex" do
+          expect do
+            bookmark.destroy!
+          end.to add_to_reindex_queue(collection, :background) &
+                 add_to_reindex_queue(parent_collection, :background)
+        end
+      end
+    end
+  end
 end

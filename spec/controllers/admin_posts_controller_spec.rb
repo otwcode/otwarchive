@@ -89,6 +89,15 @@ describe AdminPostsController do
                 expect(AdminPostTag.find_by(name: "badtag")).to be_nil
               end
             end
+
+            context "with invalid comment permissions" do
+              it "renders the new template with error message" do
+                post :create, params: { admin_post: { comment_permissions: "Comment" } }.merge(base_params)
+
+                expect(response).to render_template(:new)
+                expect(assigns[:admin_post].errors.full_messages).to include("Comment permissions are invalid.")
+              end
+            end
           end
 
           context "when translated post has same language id" do

@@ -335,6 +335,40 @@ Given /^a set of works with various access levels for searching$/ do
   step %{all indexing jobs have been run}
 end
 
+Given "a set of old multilanguage works for searching" do
+  german = Language.find_or_create_by!(short: "de", name: "Deutsch")
+
+  FactoryBot.create(:work,
+                    title: "My &lt;strong&gt;er German Work",
+                    language: german,
+                    authors: [ensure_user("testuser2").default_pseud])
+
+  FactoryBot.create(:work,
+                    title: "unfinished",
+                    complete: false,
+                    expected_number_of_chapters: 2,
+                    authors: [ensure_user("testuser").default_pseud])
+
+  step %{all indexing jobs have been run}
+  step %{it is currently 3 years from now}
+end
+
+Given "a set of works with stats for searching" do
+  many = FactoryBot.create(:work, title: "many")
+  FactoryBot.create_list(:kudo, 4, commentable: many)
+  many.stat_counter.update_attribute(:hit_count, 10_000)
+
+  less = FactoryBot.create(:work, title: "less")
+  FactoryBot.create(:kudo, commentable: less)
+  less.stat_counter.update_attribute(:hit_count, 500)
+
+  FactoryBot.create(:work, title: "none")
+  FactoryBot.create(:work, title: "unfinished", complete: false, expected_number_of_chapters: 2)
+
+  step %{the statistics for all works are updated}
+  step %{all indexing jobs have been run}
+end
+
 ### WHEN
 
 When /^I search for a simple term from the search box$/ do

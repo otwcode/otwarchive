@@ -125,7 +125,7 @@ describe Tag do
         # Blank values will cause errors if assigned earlier due to division
         # in taggings_count_expiry.
         REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
-        REDIS_GENERAL.sadd("tag_update", tag.id)
+        REDIS_GENERAL.sadd?("tag_update", tag.id)
 
         RedisJobSpawner.perform_now("TagCountUpdateJob")
 
@@ -295,14 +295,14 @@ describe Tag do
         tag_character = FactoryBot.create(:character, canonical: true, name: "kirk")
         tag_fandom = FactoryBot.create(:fandom, name: "Star Trek", canonical: true)
         tag_fandom.add_to_autocomplete
-        results = Tag.autocomplete_fandom_lookup(term: "ki", fandom: "Star Trek")
+        results = Tag.autocomplete_fandom_lookup(term: +"ki", fandom: "Star Trek")
         expect(results.include?("#{tag_character.id}: #{tag_character.name}")).to be_truthy
         expect(results.include?("brave_sire_robin")).to be_falsey
       end
 
       it "old tag maker still works" do
-        tag_adult = Rating.create_canonical("adult", true)
-        tag_normal = ArchiveWarning.create_canonical("other")
+        tag_adult = Rating.create_canonical(+"adult", true)
+        tag_normal = ArchiveWarning.create_canonical(+"other")
         expect(tag_adult.name).to eq("adult")
         expect(tag_normal.name).to eq("other")
         expect(tag_adult.adult).to be_truthy

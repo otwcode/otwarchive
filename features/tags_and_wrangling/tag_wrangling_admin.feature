@@ -61,7 +61,7 @@ Feature: Tag wrangling
     When I fill in "Name" with "tangler"
       And I press "Find"
     Then I should see "tangler" within "#admin_users_table"
-    When I uncheck the "Tag Wrangler" role checkbox
+    When I uncheck the "tag_wrangler" role checkbox
       And I press "Update"
     Then I should see "User was successfully updated."
       And "tangler" should not be a tag wrangler
@@ -72,7 +72,7 @@ Feature: Tag wrangling
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
     When I am logged in as a "tag_wrangling" admin
       And I am on the wranglers page
-      And I follow "x"
+      And I follow "×"
     Then I should see "Wranglers were successfully unassigned!"
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"

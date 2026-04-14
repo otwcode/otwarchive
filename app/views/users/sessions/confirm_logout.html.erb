@@ -1,6 +1,7 @@
 <h3 class="heading"><%= ts("Log Out") %></h3>
 
 <%= form_tag destroy_user_session_path, method: :delete, class: "simple destroy" do %>
+  <%= hidden_field_tag(:return_to, params[:return_to]) if params[:return_to] %>
   <p class="notice"><%= ts("Are you sure you want to log out?") %></p>
   <p class="actions">
     <%= submit_tag ts("Yes, Log Out") %>

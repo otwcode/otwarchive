@@ -42,20 +42,25 @@ Please check out our development wiki for more information on:
 
 ### Workflow
 
-1. If you're a new contributor, find a task on the [issues reserved for first timers](https://otwarchive.atlassian.net/issues/?filter=13119). Otherwise, or if you're up for a challenge, pick a task from the general [open and unassigned issues](https://otwarchive.atlassian.net/issues/?filter=10800). (If you're a new contributor, don't worry about claiming the issue for now. If you make a Jira account, you'll get permissions for claiming issues in step 5.)
-2. Write code to address the issue.
+1. If this is your first contribution, we recommend starting with an [issue reserved for first timers](https://otwarchive.atlassian.net/issues/?filter=13119). After your first pull request, or if you're up for a challenge, choose any [open and unassigned issue](https://otwarchive.atlassian.net/issues/?filter=10800) available. (If you're a new contributor, don't worry about claiming the issue for now. If you make a Jira account, you'll get permissions for claiming issues in step 5.)
+2. Write code to address the issue. If you already have Jira permissions, be sure to set the issue status to ["In Progress"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira#status-guide).
 3. Optional: Create a Jira account if you'd like the ability to comment on, assign, and transition issues. Please make sure the Full Name on your Jira account either closely matches the name you'd like us to credit in the release notes or includes it in parentheses, e.g. "Nickname (CREDIT NAME)."
 4. Submit the code with a pull request following the checklist on [our template](https://github.com/otwcode/otwarchive/blob/master/.github/PULL_REQUEST_TEMPLATE.md).
-5. Once you've submitted a pull request, we'll review your code and give you permissions on Jira. Please be patient with us! Due to our workload, it may take some time before we can review and eventually merge your pull request.
+5. Once you've submitted a pull request, we'll review your code and give you permissions on Jira. (Please be patient with us! Due to our workload, it may take some time before we can review and eventually merge your pull request.)
 6. Once your pull request is merged, we will deploy it to our internal testing site and our QA team will check that everything is working as intended.
-7. If something is not working as intended, we may set the issue to ["Broken on Test"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira) and ask you to make further changes in new pull requests.
+7. If something is not working as intended, we may set the issue to ["Broken on Test"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira#status-guide) and ask you to make further changes in new pull requests.
 8. If all is well, your contribution will be deployed to the [Archive of Our Own](https://archiveofourown.org) and you will be credited in the [release notes](https://archiveofourown.org/admin_posts?tag=1)!
 
+### After your first pull request
+
+If you'd like to contribute more pull requests, please do not pick up any more issues with the difficulty "First Timers Only"; these are reserved for new contributors' very first pull requests. Instead, choose an issue of any other difficulty from the [open and unassigned issues](https://otwarchive.atlassian.net/issues/?filter=10800).  
+Once you have Jira permissions, make sure to assign any issue you pick up to yourself and set its status to "In Progress" and "In Review" as appropiate. If you set the Jira issue status to "In Progress" before submitting your pull request, Jira will automatically transition the issue to "In Review" for you. Thank you for contributing!
 
 ## Volunteering for the OTW
 
 If you would like to donate more of your time and expertise in a multi-national,
-inclusive, fandom-oriented team, you might enjoy [becoming an official OTW volunteer](http://transformativeworks.org/how-you-can-help/volunteer).
+inclusive, fandom-oriented team, you might enjoy [becoming an official OTW volunteer](https://www.transformativeworks.org/volunteer/).  
+We regularly recruit [AD&T Software Developers](https://github.com/otwcode/otwarchive/wiki/AD%26T-Committee-Software-Developer-Position-Description) as official volunteers. To become an official AD&T volunteer you must have submitted a minimum of two pull requests – at least one for an issue with medium or higher difficulty - and apply when [recruitment for the role is open](https://www.transformativeworks.org/volunteer/).
 
 
 ## Questions?

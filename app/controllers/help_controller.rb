@@ -1,0 +1,55 @@
+class HelpController < ApplicationController
+  before_action :users_only, only: [:first_login]
+  layout proc { |controller| controller.request.xhr? ? false : "application" } # rubocop:disable Lint/AmbiguousBlockAssociation
+
+  def first_login
+  end
+
+  def html
+  end
+
+  def preferences_collection
+  end
+
+  def preferences_comment
+  end
+
+  def preferences_display
+  end
+
+  def preferences_locale
+  end
+
+  def preferences_misc
+  end
+
+  def preferences_privacy
+  end
+
+  def preferences_work_title_format
+  end
+
+  def rte
+  end
+
+  def skins_basics
+  end
+
+  def skins_creating
+  end
+
+  def skins_parents
+  end
+
+  def symbols_key
+  end
+
+  def tags_fandoms
+  end
+
+  def tags_ratings
+  end
+
+  def tags_warnings
+  end
+end

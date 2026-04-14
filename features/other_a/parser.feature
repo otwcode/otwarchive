@@ -3,27 +3,59 @@ Feature: Parsing HTML
 
   # tests for parsing only are in spec/lib/html_cleaner_spec.rb
 
-  Scenario: Editing a work and saving it without changes should preserve the same content 
-  When I am logged in as "newbie" with password "password"
+  Scenario: Editing a work and saving it twice without changes should preserve the same content
+  When I am logged in as "newbie"
     And I set up the draft "My Awesome Story"
-    And I fill in "content" with 
+    And I fill in "content" with
     """
     This is paragraph 1.
 
     This is paragraph 2.
+
+
+
+    This is paragraph 3.
     """
     And I press "Preview"
   Then I should see "Preview"
-    And I should see the text with tags "<p>This is paragraph 1.</p><p>This is paragraph 2.</p>"
+    # testing the HTML here
+    And I should see the text with tags
+    """
+    <p>This is paragraph 1.</p>
+    <p>This is paragraph 2.</p>
+    <p> </p>
+    <p>This is paragraph 3.</p>
+    """
   When I press "Post"
-   And I follow "Edit"
-   And I press "Preview"
-  Then I should see the text with tags "<p>This is paragraph 1.</p><p>This is paragraph 2.</p>"
+    And I follow "Edit"
+  # testing the textarea content here
+  Then I should see in the "content" input
+    """
+    <p>This is paragraph 1.</p>
+
+    <p>This is paragraph 2.</p>
+
+    <p> </p>
+
+    <p>This is paragraph 3.</p>
+    """
+  When I press "Update"
+    And I follow "Edit"
+  Then I should see in the "content" input
+    """
+    <p>This is paragraph 1.</p>
+
+    <p>This is paragraph 2.</p>
+
+    <p> </p>
+
+    <p>This is paragraph 3.</p>
+    """
 
   Scenario: HTML Parser should kick in
-  When I am logged in as "newbie" with password "password"
+  When I am logged in as "newbie"
     And I set up the draft "My Awesome Story"
-    And I fill in "content" with 
+    And I fill in "content" with
     """
     A paragraph
 
@@ -31,7 +63,11 @@ Feature: Parsing HTML
     """
     And I press "Preview"
   Then I should see "Preview"
-    And I should see the text with tags "<p>A paragraph</p><p>Another paragraph.</p>" 
+    And I should see the text with tags
+    """
+    <p>A paragraph</p>
+    <p>Another paragraph.</p>
+    """
 
   Scenario: Work notes and content HTML can have classes and they are kept when editing after previewing
   Given I am logged in as a random user

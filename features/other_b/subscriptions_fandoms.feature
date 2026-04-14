@@ -13,7 +13,7 @@ Feature: Subscriptions
   When I follow "RSS Feed"
   Then I should not see "My Work Title"
     And I should not see "Stargate SG-1"
-    
+
   Scenario: Subscribe to a test fandom when there are works in it
 
   When I am logged in as "author"
@@ -43,7 +43,7 @@ Feature: Subscriptions
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
     And I check "F/F"
-    And I press "Post"
+    And I press "Update"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
   When I am logged in as "author"
     And I post a work "My Work Title" with category "F/F"
@@ -63,7 +63,7 @@ Feature: Subscriptions
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
     And I check "F/F"
-    And I press "Post"
+    And I press "Update"
     And all indexing jobs have been run
   Then I should see "Anonymous"
     And I should see "Collections: Hidden Treasury"
@@ -81,3 +81,25 @@ Feature: Subscriptions
     And I post the work "Glorious" with fandom "SGA"
   When I view the "SGA" works feed
   Then I should see "Glorious"
+
+  Scenario: Work authors are listed separately and absolutely linked
+    Given the work "Glorious" by "author" with fandom "SGA"
+      And a chapter with the co-author "cocreator" is added to "Glorious"
+    When I view the "SGA" works feed
+    Then the feed should have exactly 2 authors
+      And the 1st feed author should contain "http://www.example.com/users/author/pseuds/author"
+      And the 2nd feed author should contain "http://www.example.com/users/cocreator/pseuds/cocreator"
+
+  Scenario: External authors on imported works are listed separately without links
+    Given I set up importing with a mock website as an archivist
+      And I import the work "http://example.com/second-import-site-with-tags" by "author" with email "a@ao3.org" and by "cocreator" with email "b@ao3.org"
+      And I edit the work "Huddling"
+      And I unlock the work
+      And I press "Update"
+    When I view the "OTW RPF" works feed
+    Then I should see "Huddling"
+      And the feed should have exactly 2 authors
+      And the 1st feed author should contain "author [archived by archivist]"
+      And the 1st feed author should not have a link
+      And the 2nd feed author should contain "cocreator [archived by archivist]"
+      And the 2nd feed author should not have a link

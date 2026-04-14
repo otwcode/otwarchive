@@ -17,12 +17,18 @@
   <% @languages.each do |language| %>
     <% works_count = estimate_number(@works_counts[language.short] || 0) %>
     <% if language == Language.default %>
-      <dt><span lang="<%= language.short %>"><%= language.name %></span></dt>
+      <dt>
+        <span lang="<%= language.short %>"><%= language.name %></span>
+        <%= t(".language_code_format_html", code: content_tag(:abbr, language.short)) %>
+      </dt>
       <dd>
         <%= link_to t(".works_count", count: works_count, formatted_count: number_with_delimiter(works_count)), works_path %>
       </dd>
     <% else %>
-      <dt><%= link_to language.name, language, lang: language.short %></dt>
+      <dt>
+        <%= link_to language.name, language, lang: language.short %>
+        <%= t(".language_code_format_html", code: content_tag(:abbr, language.short)) %>
+      </dt>
       <dd>
         <%= link_to t(".works_count", count: works_count, formatted_count: number_with_delimiter(works_count)), language_works_path(language) %>
         <% if policy(Language).edit? %>

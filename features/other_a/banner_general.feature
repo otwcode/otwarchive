@@ -42,12 +42,14 @@ Scenario: Admin can deactivate a banner
 Scenario: User can turn off banner using "×" button
   Given there are no banners
     And an admin creates an active banner
+    And I am logged in
   When I turn off the banner
   Then the page should not have a banner
 
 Scenario: Banner stays off when logging out and in again
   Given there are no banners
     And an admin creates an active banner
+    And I am logged in as "newname"
     And I turn off the banner
   When I am logged out
     And I am logged in as "newname"
@@ -125,8 +127,8 @@ Scenario: Development & Membership admin can see edit options but not delete or 
     And I go to the admin_banners page
   Then I should see "Banners" within "#header .admin.navigation"
     And I should see "Banners" within "#main .navigation.actions"
-    And I should see "Edit" within "#main ul.banners.index.group"
-    But I should not see "Delete" within "#main ul.banners.index.group"
+    And I should see "Edit" within "#main ul.banner.index.group"
+    But I should not see "Delete" within "#main ul.banner.index.group"
     And I should not see "New Banner" within "#main .navigation.actions"
   When I follow "Edit"
   Then I should not see "New Banner" within "#main .navigation.actions"
@@ -140,3 +142,14 @@ Scenario: Development & Membership admin can see edit options but not delete or 
     And I should see "Edit Banner" within "#main .navigation.actions"
     But I should not see "Delete Banner" within "#main .navigation.actions"
     And I should not see "New Banner" within "#main .navigation.actions"
+
+  Scenario: Turning off a banner and logging out redirects to the proper page
+    Given there are no banners
+      And an admin creates an active banner
+      And I am logged in
+      And I am on the support page
+    When I turn off the banner
+    Then the page should not have a banner
+      And I should be on the support page
+    When I log out
+    Then I should be on the support page

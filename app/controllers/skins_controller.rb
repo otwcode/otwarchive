@@ -15,7 +15,8 @@ class SkinsController < ApplicationController
       @preference = current_user.preference
     end
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-      redirect_to new_user_session_path and return unless logged_in?
+      redirect_to new_user_session_path(return_to: request.fullpath) and return unless logged_in?
+
       if @user != current_user
         flash[:error] = "You can only browse your own skins and approved public skins."
         redirect_to skins_path and return
@@ -40,6 +41,7 @@ class SkinsController < ApplicationController
         @title = ts('Public Site Skins')
       end
     end
+    @page_subtitle = @title.html_safe
   end
 
   # GET /skins/1
@@ -84,6 +86,15 @@ class SkinsController < ApplicationController
       else
         render :new
       end
+    end
+  rescue ActiveRecord::RecordNotUnique
+    # If we pass Rails validations but get rejected by database unique indices, use the usual duplicate error message.
+    @skin.errors.add(:title, :taken)
+
+    if params[:wizard]
+      render :new_wizard
+    else
+      render :new
     end
   end
 
@@ -133,7 +144,7 @@ class SkinsController < ApplicationController
     else
       flash[:error] = ts("Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{title} to be added!", title: @skin.title)
     end
-    redirect_back_or_default @skin
+    redirect_back_or_to @skin
   end
 
   def unset
@@ -142,8 +153,8 @@ class SkinsController < ApplicationController
       current_user.preference.skin_id = AdminSetting.default_skin_id
       current_user.preference.save
     end
-    flash[:notice] = ts("You are now using the default Archive skin again!")
-    redirect_back_or_default "/"
+    flash[:notice] = t("skins.default_skin")
+    redirect_back_or_to root_path
   end
 
   # GET /skins/1/confirm_delete
@@ -170,15 +181,19 @@ class SkinsController < ApplicationController
   private
 
   def skin_params
-    params.require(:skin).permit(
-      :title, :description, :public, :css, :role, :ie_condition, :unusable,
-      :font, :base_em, :margin, :paragraph_margin, :background_color,
+    allowed_attributes = [
+      :title, :description, :css, :role, :ie_condition, :unusable, :font,
+      :base_em, :margin, :paragraph_margin, :background_color,
       :foreground_color, :headercolor, :accent_color, :icon,
       media: [],
       skin_parents_attributes: [
         :id, :position, :parent_skin_id, :parent_skin_title, :_destroy
       ]
-    )
+    ]
+
+    allowed_attributes += [:public] if current_user.is_a?(User) && current_user.official
+
+    params.require(:skin).permit(allowed_attributes)
   end
 
   def load_skin

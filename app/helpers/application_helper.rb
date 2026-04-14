@@ -19,7 +19,7 @@ module ApplicationHelper
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
 
-    show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
+    show_sidebar = (!@hide_dashboard && (@user || @admin_posts || @collection || show_wrangling_dashboard))
     class_names += " dashboard" if show_sidebar
 
     class_names += " filtered" if page_has_filters?
@@ -39,6 +39,19 @@ module ApplicationHelper
                     end
     when "errors"
       class_names = "system #{controller.controller_name} error-#{controller.action_name}"
+    # If you edit these classes, you may need to edit the main div's classes in layouts/session
+    when "sessions"
+      class_names = if controller.action_name == "create"
+                      "#{class_names} system session authentication"
+                    else
+                      class_names
+                    end
+    when "totp"
+      class_names = if %w(confirm_disable create disable new).include?(controller.action_name)
+                      "#{class_names} system session authentication reauthentication"
+                    else
+                      class_names
+                    end
     end
 
     class_names
@@ -60,111 +73,41 @@ module ApplicationHelper
     link_to content_tag(:span, ts("RSS Feed")), link_to_feed, title: ts("RSS Feed"), class: "rss"
   end
 
-  # 1: default shows just the link to help
-  # 2: show_text = true: shows "plain text with limited html" and link to help
-  def allowed_html_instructions(show_text = true)
-    (show_text ? h(ts("Plain text with limited HTML")) : "".html_safe) +
-      link_to_help("html-help")
+  def allowed_html_instructions(strip_images: false)
+    # i18n-tasks-use t("application_helper.text_limited_html")
+    # i18n-tasks-use t("application_helper.text_limited_html_strip_images_html")
+    t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help_modal(help_html_path, t("application_helper.allowed_html_instructions.html_help_title")))
   end
 
-  # Byline helpers
-  def byline(creation, options={})
-    if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous").html_safe
-      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
-        anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
-      end
-      return anon_byline
-    end
-    non_anonymous_byline(creation, options[:only_path])
-  end
-
-  def non_anonymous_byline(creation, url_path = nil)
-    only_path = url_path.nil? ? true : url_path
-
-    if @preview_mode
-      # Skip cache in preview mode
-      return byline_text(creation, only_path)
-    end
-
-    Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
-      byline_text(creation, only_path)
-    end
-  end
-
-  def byline_text(creation, only_path, text_only = false)
-    if creation.respond_to?(:author)
-      creation.author
-    else
-      pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a
-      pseuds = pseuds.flatten.uniq.sort
-
-      archivists = Hash.new []
-      if creation.is_a?(Work)
-        external_creatorships = creation.external_creatorships.select { |ec| !ec.claimed? }
-        external_creatorships.each do |ec|
-          archivist_pseud = pseuds.select { |p| ec.archivist.pseuds.include?(p) }.first
-          archivists[archivist_pseud] += [ec.author_name]
-        end
-      end
-
-      pseuds.map { |pseud|
-        pseud_byline = text_only ? pseud.byline : pseud_link(pseud, only_path)
-        if archivists[pseud].empty?
-          pseud_byline
-        else
-          archivists[pseud].map { |ext_author|
-            ts("%{ext_author} [archived by %{name}]", ext_author: ext_author, name: pseud_byline)
-          }.join(', ')
-        end
-      }.join(', ').html_safe
-    end
-  end
-
-  def pseud_link(pseud, only_path = true)
-    if only_path
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
-    else
-      link_to(pseud.byline, user_pseud_url(pseud.user, pseud), rel: "author")
-    end
-  end
-
-  # A plain text version of the byline, for when we don't want to deliver a linkified version.
-  def text_byline(creation, options={})
-    if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline += " [#{non_anonymous_byline(creation)}]".html_safe
-      end
-      anon_byline
-    else
-      only_path = false
-      text_only = true
-      byline_text(creation, only_path, text_only)
-    end
+  # Returns instructions and help button that is shown above the RTE window
+  def rich_text_instructions
+    t("application_helper.rich_text_instructions.type_paste_rich_text_html", help_link: link_to_help_modal(help_rte_path, t("application_helper.rich_text_instructions.rte_help_title")))
   end
 
   def link_to_modal(content = "", options = {})
     options[:class] ||= ""
     options[:for] ||= ""
-    options[:title] ||= options[:for]
 
     html_options = { class: "#{options[:class]} modal", title: options[:title] }
+    html_options[:"aria-label"] = options[:aria_label] if options[:aria_label]
+
     link_to content, options[:for], html_options
   end
 
-  # Currently, help files are static. We may eventually want to make these dynamic?
+  # TODO: AO3-7208 Make help modals dynamic and translatable and use link_to_help_modal instead of this method
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
     help_file = ""
-    #if Locale.active && Locale.active.language
-    #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
-    #end
 
     unless !help_file.blank? && File.exists?("#{Rails.root}/public/#{help_file}")
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
 
-    " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
+    " ".html_safe + link_to_modal(link, for: help_file, aria_label: help_entry.split("-").join(" ").capitalize, class: "help symbol question").html_safe
+  end
+
+  def link_to_help_modal(help_path, title)
+    link = tag.span(tag.span(t("application_helper.help_modal.help_symbol")), class: %w[symbol question])
+    " ".html_safe + link_to_modal(link, for: help_path, aria_label: title, class: "help symbol question")
   end
 
   # Inserts the flash alert messages for flash[:key] wherever
@@ -509,7 +452,7 @@ module ApplicationHelper
 
   def first_paragraph(full_text, placeholder_text = 'No preview available.')
     # is there a paragraph that does not have a child image?
-    paragraph = Nokogiri::HTML.parse(full_text).at_xpath('//p[not(img)]')
+    paragraph = Nokogiri::HTML5.parse(full_text).at_xpath("//p[not(img)]")
     if paragraph.present?
       # if so, get its text and put it in a fresh p tag
       paragraph_text = paragraph.text
@@ -557,7 +500,7 @@ module ApplicationHelper
     # series.
     return [] if creation.is_a?(Work) && creation.unrevealed?
 
-    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
+    creation.pseuds.pluck(:user_id).uniq.map { |id| "user-#{id}" }
   end
 
   def css_classes_for_creation_blurb(creation)

@@ -1,6 +1,4 @@
 class PseudsController < ApplicationController
-  cache_sweeper :pseud_sweeper
-
   before_action :load_user
   before_action :check_ownership, only: [:create, :destroy, :new]
   before_action :check_ownership_or_admin, only: [:edit, :update]
@@ -17,6 +15,7 @@ class PseudsController < ApplicationController
     @pseuds = @user.pseuds.with_attached_icon.alphabetical.paginate(page: params[:page])
     @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
     @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
+    @pseuds_with_works = Pseud.has_works_for(@pseuds.collect(&:id)) if @user == current_user
     @page_subtitle = @user.login
   end
 

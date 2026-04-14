@@ -18,10 +18,8 @@ FactoryBot.define do
       end
     end
 
-    factory :series_with_a_work do
-      after(:create) do |series|
-        create(:work, authors: series.pseuds, series: [series])
-      end
+    after(:create) do |series|
+      create(:work, authors: series.pseuds, series: [series]) if series.works.empty?
     end
   end
 end

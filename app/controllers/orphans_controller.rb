@@ -14,18 +14,23 @@ class OrphansController < ApplicationController
   def new
     if params[:work_id]
       @to_be_orphaned = Work.find(params[:work_id])
+      @return_to = edit_work_path(@to_be_orphaned)
       check_one_owned(@to_be_orphaned, current_user.works)
     elsif params[:work_ids]
       @to_be_orphaned = Work.where(id: params[:work_ids]).to_a
+      @return_to = show_multiple_user_works_path(current_user)
       check_all_owned(@to_be_orphaned, current_user.works)
     elsif params[:series_id]
       @to_be_orphaned = Series.find(params[:series_id])
+      @return_to = series_path(@to_be_orphaned)
       check_one_owned(@to_be_orphaned, current_user.series)
     elsif params[:pseud_id]
       @to_be_orphaned = Pseud.find(params[:pseud_id])
+      @return_to = user_pseuds_path(current_user)
       check_one_owned(@to_be_orphaned, current_user.pseuds)
     else
       @to_be_orphaned = current_user
+      @return_to = show_multiple_user_works_path(@to_be_orphaned)
     end
   end
 

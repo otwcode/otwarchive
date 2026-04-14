@@ -49,7 +49,7 @@ class BookmarkIndexer < Indexer
         },
         tag: {
           type: "text",
-          analyzer: "simple"
+          analyzer: "standard"
         },
         sort_id: {
           type: "keyword"

@@ -1,8 +1,4 @@
 class HomeController < ApplicationController
-
-  before_action :users_only, only: [:first_login_help]
-  skip_before_action :store_location, only: [:first_login_help, :token_dispenser]
-
   # unicorn_test
   def unicorn_test
   end
@@ -66,10 +62,6 @@ class HomeController < ApplicationController
   def about
     @page_subtitle = t(".page_title")
     render action: "about", layout: "application"
-  end
-
-  def first_login_help
-    render action: "first_login_help", layout: false
   end
 
   # home page itself
