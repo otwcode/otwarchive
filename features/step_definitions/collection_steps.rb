@@ -82,7 +82,7 @@ Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?
   collection.collection_preference.update_attribute(:closed, true) if closed.present?
 end
 
-Given "{string} owns the collection {string} with name {string}" do |owner, title, name|
+Given "a collection {string} with name {string} owned by {string}" do |title, name, owner|
   user = ensure_user(owner)
   FactoryBot.create(:collection, title: title, name: (name.presence || title.gsub(/[^\w]/, "_")), owner: user.default_pseud)
 end

@@ -356,9 +356,9 @@ Feature: Filters
   @javascript
   @collections
   Scenario: Filtering on a user collection page should only return collections by that user.
-    Given "meatloaf" owns the collection "Duplicate Name" with name "collection1"
-      And "recengine" owns the collection "Duplicate Name" with name "collection2"
-      And "recengine" owns the collection "The Hobbits" with name "collectionhobbit"
+    Given a collection "Duplicate Name" with name "collection1" owned by "meatloaf"
+      And a collection "Duplicate Name" with name "collection2" owned by "recengine"
+      And a collection "The Hobbits" with name "collectionhobbit" owned by "recengine"
       And all indexing jobs have been run
     When I go to recengine's user page
       And I follow "Collections (2)"
