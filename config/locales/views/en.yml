@@ -3324,6 +3324,8 @@ en:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
       recent_works_html: These are some of the latest works posted to the Archive. To find more works, %{choose_fandom_link} or %{advanced_search_link}.
+    filters:
+      submit_landmark: Submit
     meta:
       original_creators:
         one: 'Original Creator ID:'

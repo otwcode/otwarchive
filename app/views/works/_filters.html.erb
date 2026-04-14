@@ -8,7 +8,7 @@
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag ts("Filter results:") do %>
     <dl>
-      <dt class="landmark" aria-hidden="true"><%= ts("Submit") %></dt>
+      <dt class="landmark" aria-hidden="true"><%= t(".submit_landmark") %></dt>
       <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
       <dt class="sort">
         <%= f.label :sort_column, ts("Sort by") %>
@@ -160,7 +160,7 @@
           <% end %>
         </dl>
       </dd>
-      <dt class="landmark" aria-hidden="true"><%= ts("Submit") %></dt>
+      <dt class="landmark" aria-hidden="true"><%= t(".submit_landmark") %></dt>
       <dd class="submit actions"><%= f.submit ts("Sort and Filter") %></dd>
     </dl>
 
