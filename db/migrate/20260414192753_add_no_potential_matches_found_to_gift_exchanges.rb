@@ -1,4 +1,4 @@
-class AddNoPotentialMatchesFoundToGiftExchanges < ActiveRecord::Migration[7.2]
+class AddNoPotentialMatchesFoundToGiftExchanges < ActiveRecord::Migration[8.0]
   def change
     add_column :gift_exchanges, :no_potential_matches_found, :boolean, default: false, null: false
   end
