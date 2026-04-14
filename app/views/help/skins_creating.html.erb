@@ -1,0 +1,217 @@
+<dl id="help">
+  <dt><%= t(".intro.header") %></dt>
+  <dd>
+    <p><%= t(".intro.description") %></p>
+  </dd>
+
+  <dt><%= t(".allowed_properties") %></dt>
+  <dd>
+    <p>
+      <code>
+        background, border, column, cue, flex, font, layer-background,
+        layout-grid, list-style, margin, marker, outline, overflow, padding,
+        page-break, pause, scrollbar, text, transform, transition
+      </code>
+    </p>
+  </dd>
+  <dt><%= t(".allowed_specific_properties") %></dt>
+  <dd>
+    <p>
+      <code>
+        -replace, -use-link-source, accelerator, accent-color, align-content,
+        align-items, align-self, alignment-adjust, alignment-baseline,
+        appearance, azimuth, baseline-shift, behavior, binding, bookmark-label,
+        bookmark-level, bookmark-target, bottom, box-align, box-direction,
+        box-flex, box-flex-group, box-lines, box-orient, box-pack, box-shadow,
+        box-sizing, caption-side, clear, clip, color, color-profile,
+        color-scheme, content, counter-increment, counter-reset, crop, cue,
+        cue-after, cue-before, cursor, direction, display, dominant-baseline,
+        drop-initial-after-adjust, drop-initial-after-align,
+        drop-initial-before-adjust, drop-initial-before-align,
+        drop-initial-size, drop-initial-value, elevation, empty-cells, filter,
+        fit, fit-position, float, float-offset, font, font-effect,
+        font-emphasize, font-emphasize-position, font-emphasize-style,
+        font-family, font-size, font-size-adjust, font-smooth, font-stretch,
+        font-style, font-variant, font-weight, grid-columns, grid-rows,
+        hanging-punctuation, height, hyphenate-after, hyphenate-before,
+        hyphenate-character, hyphenate-lines, hyphenate-resource, hyphens,
+        icon, image-orientation, image-resolution, ime-mode, include-source,
+        inline-box-align, justify-content, layout-flow, left, letter-spacing,
+        line-break, line-height, line-stacking, line-stacking-ruby,
+        line-stacking-shift, line-stacking-strategy, mark, mark-after,
+        mark-before, marks, marquee-direction, marquee-play-count,
+        marquee-speed, marquee-style, max-height, max-width, min-height,
+        min-width, move-to, nav-down, nav-index, nav-left, nav-right, nav-up,
+        opacity, order, orphans, page, page-policy, phonemes, pitch,
+        pitch-range, play-during, position, presentation-level,
+        punctuation-trim, quotes, rendering-intent, resize, rest, rest-after,
+        rest-before, richness, right, rotation, rotation-point, ruby-align,
+        ruby-overhang, ruby-position, ruby-span, size, speak, speak-header,
+        speak-numeral, speak-punctuation, speech-rate, stress, string-set,
+        tab-side, table-layout, target, target-name, target-new,
+        target-position, top, unicode-bibi, unicode-bidi, user-select,
+        vertical-align, visibility, voice-balance, voice-duration,
+        voice-family, voice-pitch, voice-pitch-range, voice-rate, voice-stress,
+        voice-volume, volume, white-space, white-space-collapse, widows, width,
+        word-break, word-spacing, word-wrap, writing-mode, z-index
+      </code>
+    </p>
+  </dd>
+
+  <dt><%= t(".skin_examples.header") %></dt>
+  <dd>
+    <p>
+      <%= t(".skin_examples.description_html",
+            public_skins_link: link_to(t(".skin_examples.public_skins"), skins_path)) %>
+    </p>
+  </dd>
+
+  <dt><%= t(".one_declaration_per_ruleset.header") %></dt>
+  <dd>
+    <p>
+      <%= t(".one_declaration_per_ruleset.description_html",
+            repeated_declarations_css_code: tag.br + tag.code(tag.pre(%{
+        .my-class {
+          background: -moz-linear-gradient(top, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8 100%);
+          background: -o-linear-gradient(top, #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+          background: -webkit-linear-gradient(top, #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+        }
+             })),
+            background_code: tag.code("background")) %>
+      <code><pre>
+        .my-class { background: -moz-linear-gradient(top, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8 100%); }
+        .my-class { background: -o-linear-gradient(top, #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%); }
+        .my-class { background: -webkit-linear-gradient(top, #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%); }
+      </pre></code>
+    </p>
+  </dd>
+
+  <dt><%= t(".font_family.header") %></dt>
+  <dd>
+    <p>
+      <%= t(".font_family.description.separate_properties_html",
+            font_code: tag.code("font"),
+            font_properties_css_code: tag.code("font-size: 1.1em; font-weight: bold; font-family: Cambria, Constantia, Palatino, Georgia, serif;")) %>
+    </p>
+    <p>
+      <%= t(".font_family.description.font_names_html",
+            font_family_code: tag.code("font-family"),
+            web_safe_fonts_link:
+              link_to(t(".font_family.description.web_safe_fonts"),
+                "https://www.w3schools.com/cssref/css_fonts_fallbacks.asp")) %>
+    </p>
+    <p>
+      <%= t(".font_family.description.no_font_face_html",
+            cannot_bold: tag.strong(t(".font_family.description.cannot")),
+            font_face_code: tag.code("@font-face")) %>
+    </p>
+  </dd>
+
+  <dt><%= t(".custom_properties.header") %></dt>
+  <dd>
+    <p><%= t(".custom_properties.description.names") %></p>
+    <p>
+      <%= t(".custom_properties.description.accepting_properties_html",
+            font_family_code: tag.code("font-family"),
+            content_code: tag.code("content"),
+            var_code: tag.code("var()")) %>
+    </p>
+    <p><%= t(".custom_properties.description.availability_html", var_code: tag.code("var()")) %></p>
+  </dd>
+
+  <dt><%= t(".external_urls.header") %></dt>
+  <dd>
+    <p>
+      <%= t(".external_urls.description_html",
+            example_url_code: tag.code("url('https://example.com/my_awesome_image.jpg')")) %>
+    </p>
+  </dd>
+
+  <dt><%= t(".allowed_keywords.header") %></dt>
+  <dd>
+    <p>
+      <%= t(".allowed_keywords.description_html",
+            absolute_code: tag.code("absolute"),
+            bottom_code: tag.code("bottom"),
+            center_code: tag.code("center"),
+            underline_code: tag.code("underline")) %>
+    </p>
+  </dd>
+
+  <dt><%= t(".numeric_values.header") %></dt>
+  <dd>
+    <p>
+      <%= t(".numeric_values.description.precision_html",
+            various_units_link:
+              link_to(t(".numeric_values.description.various_units"),
+                "https://w3schools.com/css/css_units.asp"),
+            units_list_code: tag.br + tag.code(t(".numeric_values.description.units_list"))) %>
+    </p>
+    <p><%= t(".numeric_values.description.em_unit_html", em_code: tag.code("em")) %></p>
+  </dd>
+
+  <dt><%= t(".colors.header") %></dt>
+  <dd>
+    <p>
+      <%= t(".colors.description_html",
+            black_hex_code: tag.code("#000000"),
+            black_rgb_code: tag.code("rgb(0,0,0)"),
+            black_rgba_code: tag.code("rgba(0,0,0,0)"),
+            common_color_names_link: link_to(t(".colors.common_color_names"),
+              "https://www.w3schools.com/colors/colors_names.asp")) %>
+    </p>
+  </dd>
+
+  <dt><%= t(".scale.header") %></dt>
+  <dd>
+    <p>
+      <%= t(".scale.description_html",
+            transform_code: tag.code("transform"),
+            scale_numeric_value_code: tag.code("scale(#{t('.scale.numeric_value')})")) %>
+    </p>
+  </dd>
+
+  <dt><%= t(".comments.header") %></dt>
+  <dd>
+    <p><%= t(".comments.description") %></p>
+  </dd>
+
+  <dt><%= t(".css_basics.header") %></dt>
+  <dd>
+    <p>
+      <%= t(".css_basics.description.line_of_css_html",
+            example_css_code: tag.code(t(".css_basics.description.example_css"))) %>
+    </p>
+    <p>
+      <%= t(".css_basics.description.css_selectors_and_rules_html",
+            selector_bold: tag.strong(t(".css_basics.description.selector")),
+            body_tag_code: tag.code("body"),
+            h1_tag_code: tag.code("h1"),
+            property_bold: tag.strong(t(".css_basics.description.property")),
+            value_bold: tag.strong(t(".css_basics.description.value"))) %>
+    </p>
+    <p>
+      <%= t(".css_basics.description.examples_header") %>
+    </p>
+    <ul>
+      <li>
+        <%= t(".css_basics.description.font_size_example_html",
+              font_size_css_code: tag.code("body {font-size: 1.1em;}")) %>
+      </li>
+      <li>
+        <%= t(".css_basics.description.background_color_example_html",
+              background_color_css_code: tag.code("#header {background-color: purple}")) %>
+      </li>
+      <li>
+        <%= t(".css_basics.description.blink_example_html",
+              blink_css_code: tag.code(".meta {font-style: blink}")) %>
+      </li>
+    </ul>
+
+    <p><%= t(".css_basics.description.css_tutorials") %></p><ul>
+      <li><%= link_to(t(".css_basics.description.css_intro_tutorial"), "https://www.w3schools.com/css/css_intro.asp") %></li>
+      <li><%= link_to(t(".css_basics.description.css_getting_started_tutorial"), "http://developer.mozilla.org/docs/CSS/Getting_Started") %></li>
+    </ul>
+  </dd>
+
+</dl>

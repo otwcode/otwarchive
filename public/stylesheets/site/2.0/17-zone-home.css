@@ -70,7 +70,7 @@ user home, collections and challenges home, tag home, admin comms home
 }
 
 .dashboard.works-index h4.landmark, .dashboard.works-index ol.pagination {
-	float: left;
+	float: right;
 	width: 100%;
 }
 

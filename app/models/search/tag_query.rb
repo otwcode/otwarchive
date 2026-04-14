@@ -1,7 +1,7 @@
 class TagQuery < Query
 
   def klass
-    'Tag'
+    "TagDecorator"
   end
 
   def index_name
@@ -16,7 +16,6 @@ class TagQuery < Query
     [
       type_filter,
       wrangling_status_filter,
-      unwrangleable_filter,
       posted_works_filter,
       media_filter,
       fandom_filter,
@@ -24,7 +23,8 @@ class TagQuery < Query
       suggested_fandom_filter,
       suggested_character_filter,
       in_use_filter,
-      unwrangled_filter
+      unwrangled_filter,
+      synonymous_filter
     ].flatten.compact
   end
 
@@ -89,11 +89,13 @@ class TagQuery < Query
       { bool: { should: [exists_filter("merger_id"), term_filter(:canonical, true)] } }
     when "noncanonical_nonsynonymous"
       [{ bool: { must_not: exists_filter("merger_id") } }, term_filter(:canonical, false)]
+    when "unwrangleable"
+      term_filter(:unwrangleable, true)
+    when "noncanonical_nonsynonymous_not_unwrangleable"
+      [term_filter(:canonical, false), { bool: { must_not: exists_filter("merger_id") } }, term_filter(:unwrangleable, false)]
+    when "wrangleable"
+      [term_filter(:unwrangleable, false)]
     end
-  end
-
-  def unwrangleable_filter
-    term_filter(:unwrangleable, bool_value(options[:unwrangleable])) unless options[:unwrangleable].nil?
   end
 
   def posted_works_filter
@@ -142,6 +144,10 @@ class TagQuery < Query
   # exclusion_filters section.
   def wrangled_filter
     exists_filter("fandom_ids") unless options[:wrangled].nil?
+  end
+
+  def synonymous_filter
+    term_filter(:merger_id, options[:merger_id]) unless options[:merger_id].nil?
   end
 
   ################

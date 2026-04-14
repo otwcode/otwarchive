@@ -1,11 +1,24 @@
-# frozen_string_literal: true
-
 require "spec_helper"
 
 describe Comment do
   include ActiveJob::TestHelper
   def queue_adapter_for_test
     ActiveJob::QueueAdapters::TestAdapter.new
+  end
+
+  it "can have an id larger than unsigned int" do
+    comment = build(:comment, id: 5_294_967_295)
+    expect(comment).to be_valid
+    expect(comment.save).to be_truthy
+  end
+
+  it "can be created as a thread on a comment whose ID is larger than unsigned it" do
+    commentable = create(:comment, id: 5_294_967_295)
+    comment = build(:comment, commentable: commentable)
+    expect(comment).to be_valid
+    expect(comment.save).to be_truthy
+    expect(comment.commentable).to eq(commentable)
+    expect(comment.thread).to eq(commentable.id)
   end
 
   describe "validations" do
@@ -292,6 +305,16 @@ describe Comment do
         it "has comment_type \"fanwork-comment\"" do
           expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
         end
+
+        it "has comment_date_gmt as the comment's created date" do
+          expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
+        end
+
+        it "has comment_post_modified_gmt as the work's revision time and not the creation time" do
+          subject.ultimate_parent.set_revised_at(1.day.from_now)
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
+        end
       end
 
       context "when the commentable is an admin post" do
@@ -299,6 +322,14 @@ describe Comment do
 
         it "has comment_type \"comment\"" do
           expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+        end
+
+        it "has comment_date_gmt as the comment's created date" do
+          expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
+        end
+
+        it "has comment_post_modified_gmt as the admin post's creation time" do
+          expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
         end
       end
 
@@ -309,6 +340,16 @@ describe Comment do
           it "has comment_type \"fanwork-comment\"" do
             expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
           end
+
+          it "has comment_date_gmt as the comment's created date" do
+            expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
+          end
+
+          it "has comment_post_modified_gmt as the work's revision time and not the creation time" do
+            subject.ultimate_parent.set_revised_at(1.day.from_now)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
+          end
         end
 
         context "when the comment is on an admin post" do
@@ -317,6 +358,54 @@ describe Comment do
           it "has comment_type \"comment\"" do
             expect(subject.akismet_attributes[:comment_type]).to eq("comment")
           end
+
+          it "has comment_date_gmt as the comment's created date" do
+            expect(subject.akismet_attributes[:comment_date_gmt]).to eq(subject.created_at.iso8601)
+          end
+
+          it "has comment_post_modified_gmt as the admin post's creation time" do
+            expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
+          end
+        end
+      end
+
+      context "when cloudflare headers are available" do
+        before do
+          subject.cloudflare_bot_score = "42"
+          subject.cloudflare_ja3_hash = "a_hash"
+          subject.cloudflare_ja4 = "another_hash"
+        end
+
+        it "has cloudflare bot score" do
+          expect(subject.akismet_attributes[:cloudflare_bot_score]).to eq("42")
+        end
+
+        it "has cloudflare ja3 hash" do
+          expect(subject.akismet_attributes[:cloudflare_ja3_hash]).to eq("a_hash")
+        end
+
+        it "has cloudflare ja4" do
+          expect(subject.akismet_attributes[:cloudflare_ja4]).to eq("another_hash")
+        end
+      end
+
+      context "when cloudflare headers aren't available" do
+        before do
+          subject.cloudflare_bot_score = nil
+          subject.cloudflare_ja3_hash = nil
+          subject.cloudflare_ja4 = nil
+        end
+
+        it "doesn't have cloudflare bot score" do
+          expect(subject.akismet_attributes).not_to have_key(:cloudflare_bot_score)
+        end
+
+        it "doesn't have cloudflare ja3 hash" do
+          expect(subject.akismet_attributes).not_to have_key(:cloudflare_ja3_hash)
+        end
+
+        it "doesn't have cloudflare ja4" do
+          expect(subject.akismet_attributes).not_to have_key(:cloudflare_ja4)
         end
       end
     end

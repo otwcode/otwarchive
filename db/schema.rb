@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_07_100830) do
   create_table "abuse_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "email"
     t.string "url", limit: 2080, null: false
@@ -147,6 +147,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at", precision: nil
     t.datetime "locked_at", precision: nil
+    t.string "otp_secret"
+    t.integer "consumed_timestep"
+    t.boolean "otp_required_for_login"
+    t.text "otp_backup_codes"
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["login"], name: "index_admins_on_login", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
@@ -183,7 +187,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
     t.index ["slug"], name: "index_archive_faqs_on_slug", unique: true
   end
 
-  create_table "audits", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "audits", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "auditable_id"
     t.string "auditable_type"
     t.integer "associated_id"
@@ -392,7 +396,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
     t.index ["parent_id"], name: "index_collections_on_parent_id"
   end
 
-  create_table "comments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "comments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "pseud_id"
     t.text "comment_content", null: false
     t.integer "depth"
@@ -402,11 +406,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
     t.string "name"
     t.string "email"
     t.string "ip_address"
-    t.integer "commentable_id"
+    t.bigint "commentable_id"
     t.string "commentable_type"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
-    t.integer "thread"
+    t.bigint "thread"
     t.string "user_agent", limit: 500
     t.boolean "approved", default: false, null: false
     t.boolean "hidden_by_admin", default: false, null: false
@@ -584,9 +588,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
     t.index ["work_id"], name: "index_gifts_on_work_id"
   end
 
-  create_table "inbox_comments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "inbox_comments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "feedback_comment_id"
+    t.bigint "feedback_comment_id"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.boolean "read", default: false, null: false
@@ -1122,6 +1126,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
     t.index ["user_id"], name: "user_id"
   end
 
+  create_table "support_notices", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.text "notice_content", null: false
+    t.integer "notice_content_sanitizer_version", limit: 2, default: 0, null: false
+    t.integer "support_notice_type", limit: 1, default: 0, null: false
+    t.boolean "active", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tag_nominations", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "type"
     t.integer "tag_set_nomination_id"
@@ -1221,6 +1234,24 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.index ["user_id"], name: "index_user_invite_requests_on_user_id"
+  end
+
+  create_table "user_past_emails", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "email_address"
+    t.datetime "changed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_past_emails_on_user_id"
+  end
+
+  create_table "user_past_usernames", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "username"
+    t.datetime "changed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_past_usernames_on_user_id"
   end
 
   create_table "users", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -1333,4 +1364,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_114418) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id", name: "_fk_rails_c3b3935057"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id", name: "_fk_rails_993965df05"
+  add_foreign_key "user_past_emails", "users"
+  add_foreign_key "user_past_usernames", "users"
 end

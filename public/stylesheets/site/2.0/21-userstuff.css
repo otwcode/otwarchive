@@ -186,6 +186,10 @@
   list-style-position: inside;
 }
 
+.comment .userstuff blockquote {
+    display: flow-root;
+}
+
 .bookmark .user .userstuff {
   line-height: 1.5;
 }
