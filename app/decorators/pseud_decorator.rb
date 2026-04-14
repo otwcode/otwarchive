@@ -86,7 +86,6 @@ class PseudDecorator < SimpleDelegator
 
   def bookmarks_link
     return unless bookmarks_count > 0
-
     text = ActionController::Base.helpers.pluralize(bookmarks_count, "bookmarks")
     "<a href='#{bookmarks_path}'>#{text}</a>"
   end
