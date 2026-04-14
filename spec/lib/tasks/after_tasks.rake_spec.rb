@@ -805,6 +805,127 @@ describe "rake After:add_collection_tags" do
   end
 end
 
+describe "rake After:create_placeholders_for_orphaned_comments" do
+  context "when there are no orphaned comments" do
+    let!(:comment) { create(:comment) }
+
+    it "does not create any comments" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { Comment.count }
+        .and output("No orphaned comments found.\n").to_stdout
+    end
+  end
+
+  context "when a parent comment has been physically deleted" do
+    let!(:work) { create(:work) }
+    let!(:chapter) { work.last_posted_chapter }
+    let!(:root_comment) { create(:comment, commentable: chapter) }
+    let!(:reply) { create(:comment, commentable: root_comment) }
+    let!(:nested_reply) { create(:comment, commentable: reply) }
+
+    before do
+      reply.delete
+    end
+
+    it "creates a placeholder with the correct attributes" do
+      subject.invoke
+      placeholder = Comment.find_by(id: reply.id)
+
+      expect(placeholder).to be_present
+      expect(placeholder.is_deleted).to be true
+      expect(placeholder.comment_content).to eq("deleted comment")
+      expect(placeholder.thread).to eq(root_comment.thread)
+      expect(placeholder.commentable).to eq(root_comment)
+    end
+
+    it "creates a placeholder with valid nested set positioning" do
+      subject.invoke
+      placeholder = Comment.find_by(id: reply.id)
+      root_comment.reload
+
+      expect(placeholder.threaded_left).to be > root_comment.threaded_left
+      expect(placeholder.threaded_right).to be < root_comment.threaded_right
+    end
+
+    it "outputs progress messages" do
+      expect do
+        subject.invoke
+      end.to output(
+        /Found 1 missing parent comment.*Creating placeholders.*Created placeholder for comment #{reply.id}.*Done/m
+      ).to_stdout
+    end
+
+    it "allows CommentDecorator to build the tree without error" do
+      subject.invoke
+      expect do
+        CommentDecorator.from_thread_ids([root_comment.thread])
+      end.not_to raise_error
+    end
+  end
+
+  context "when multiple comments are deleted in the same branch" do
+    # Tree structure before deletion:
+    #   root_comment
+    #     reply_a (deleted)
+    #       reply_b (deleted)
+    #         reply_c
+    #           reply_d (deleted)
+    #             reply_e
+    let!(:work) { create(:work) }
+    let!(:chapter) { work.last_posted_chapter }
+    let!(:root_comment) { create(:comment, commentable: chapter) }
+    let!(:reply_a) { create(:comment, commentable: root_comment) }
+    let!(:reply_b) { create(:comment, commentable: reply_a) }
+    let!(:reply_c) { create(:comment, commentable: reply_b) }
+    let!(:reply_d) { create(:comment, commentable: reply_c) }
+    let!(:reply_e) { create(:comment, commentable: reply_d) }
+
+    before do
+      reply_a.delete
+      reply_b.delete
+      reply_d.delete
+    end
+
+    it "creates placeholders with the correct commentable for each missing comment" do
+      subject.invoke
+
+      # reply_b is detected as missing because reply_c (exists) points to it.
+      # Its closest existing ancestor is root_comment (reply_a is also deleted).
+      placeholder_b = Comment.find_by(id: reply_b.id)
+      expect(placeholder_b).to be_present
+      expect(placeholder_b.commentable).to eq(root_comment)
+
+      # reply_d is detected as missing because reply_e (exists) points to it.
+      # Its closest existing ancestor is reply_c.
+      placeholder_d = Comment.find_by(id: reply_d.id)
+      expect(placeholder_d).to be_present
+      expect(placeholder_d.commentable).to eq(reply_c)
+    end
+
+    it "creates placeholders with valid nested set positioning" do
+      subject.invoke
+      root_comment.reload
+      reply_c.reload
+
+      placeholder_b = Comment.find_by(id: reply_b.id)
+      expect(placeholder_b.threaded_left).to be > root_comment.threaded_left
+      expect(placeholder_b.threaded_right).to be < root_comment.threaded_right
+
+      placeholder_d = Comment.find_by(id: reply_d.id)
+      expect(placeholder_d.threaded_left).to be > reply_c.threaded_left
+      expect(placeholder_d.threaded_right).to be < reply_c.threaded_right
+    end
+
+    it "allows CommentDecorator to build the tree without error" do
+      subject.invoke
+      expect do
+        CommentDecorator.from_thread_ids([root_comment.thread])
+      end.not_to raise_error
+    end
+  end
+end
+
 describe "rake After:sync_approved_to_spam" do
   let(:synced_ham_comment) { create(:comment) }
   let(:synced_spam_comment) { create(:comment) }
@@ -847,5 +968,21 @@ describe "rake After:sync_approved_to_spam" do
 
     expect(synced_spam_comment.approved).to be_falsey
     expect(synced_spam_comment.spam).to be_truthy
+  end
+end
+
+describe "rake After:add_canonical_email" do
+  let(:user1) { create(:user, email: "A@example.com") }
+  let(:user2) { create(:user, email: "b@googlemail.com") }
+  let(:user3) { create(:user, email: "c+tag@example.com") }
+  let(:user4) { create(:user, email: "d.lastname@gmail.com") }
+
+  it "backfills the canonical_email column for existing users" do
+    subject.invoke
+    
+    expect(user1.canonical_email).to eq("a@example.com")
+    expect(user2.canonical_email).to eq("b@gmail.com")
+    expect(user3.canonical_email).to eq("c@example.com")
+    expect(user4.canonical_email).to eq("dlastname@gmail.com")
   end
 end

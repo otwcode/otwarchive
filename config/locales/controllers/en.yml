@@ -17,6 +17,17 @@ en:
         page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+    banners:
+      cannot_delete_active: Active banners cannot be deleted.
+      create:
+        banner_on: Setting banner back on for all users. This may take some time.
+        success: Banner successfully created.
+      destroy:
+        success: Banner successfully deleted.
+      update:
+        banner_on: Setting banner back on for all users. This may take some time.
+        minor_edit: Updating banner for users who have not already dismissed it. This may take some time.
+        success: Banner successfully updated.
     sessions:
       invalid_totp: Incorrect two-step verification code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
     support_notices:
@@ -97,6 +108,9 @@ en:
       access_denied_user: You aren't allowed to see that user's assignments.
     validation:
       not_owner: You aren't the owner of that assignment.
+  challenge_claims:
+    index:
+      page_title: "%{username} - Challenge Claims"
   challenge_signups:
     new:
       page_title: New Challenge Sign-up
@@ -134,6 +148,8 @@ en:
       reply: Sorry, you have been blocked by that user.
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.
+    check_guest_email_is_from_suspended_or_banned_user:
+      error: Sorry, you have been blocked from commenting.
     check_guest_replies_preference:
       error: Sorry, this user doesn't allow non-Archive users to reply to their comments.
     check_hidden_by_admin:
@@ -294,6 +310,9 @@ en:
       unrevealed_series: Mystery Series
   skins:
     default_skin: You are now using the default site skin again!
+    index:
+      public_site_page_title: Public Site Skins
+      public_work_page_title: Public Work Skins
   stats:
     index:
       page_title: "%{username} - Stats"
