@@ -8,7 +8,8 @@ describe "Before:backfill_language_sortable_name" do
   end
 
   it "backfills sortable_name with name when sortable_name is absent" do
-    language = build(:language, sortable_name: "")
+    language = build(:language)
+    language.sortable_name = ""
     language.save!(validate: false)
     expect { subject.invoke }
       .to change { language.reload.sortable_name }
