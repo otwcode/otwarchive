@@ -14,7 +14,7 @@ describe ImportedUrl do
     expect(url.with_www).to eq("http://www.www.trickster.org/llwyden/misc/cracked.html")
     expect(url.with_http).to eq("http://www.trickster.org/llwyden/misc/cracked.html")
     expect(url.with_https).to eq("https://www.trickster.org/llwyden/misc/cracked.html")
-    expect(url.encoded).to eq( "http://www.trickster.org/llwyden/misc/cracked.html")
+    expect(url.encoded).to eq("http://www.trickster.org/llwyden/misc/cracked.html")
     expect(url.decoded).to eq("http://www.trickster.org/llwyden/misc/cracked.html")
   end
 end

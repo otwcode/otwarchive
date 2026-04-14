@@ -12,6 +12,7 @@ namespace :work_import_urls do
 
     scope.find_each(batch_size: batch_size) do |work|
       next if ImportedUrl.exists?(work_id: work.id)
+
       work.imported_url = ImportedUrl.create(original: work.imported_from_url)
       processed += 1
       puts "Processed #{processed}/#{total}" if (processed % batch_size).zero?

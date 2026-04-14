@@ -1,7 +1,7 @@
-require 'spec_helper'
-require 'rake'
+require "spec_helper"
+require "rake"
 
-describe 'rake work_import_urls:backfill' do
+describe "rake work_import_urls:backfill" do
   it "should import the urls" do
     work = create(:work)
     work.imported_from_url = "http://www.trickster.org/llwyden/misc/cracked.html"
@@ -19,5 +19,5 @@ describe 'rake work_import_urls:backfill' do
     subject.invoke
 
     expect(ImportedUrl.count).to eq(1)
-    end
+  end
 end
