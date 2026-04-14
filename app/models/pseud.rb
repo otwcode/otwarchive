@@ -399,7 +399,9 @@ class Pseud < ApplicationRecord
   end
 
   def change_bookmarks_ownership
-    Bookmark.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
+    bookmark_ids = Bookmark.where(pseud_id: id).ids
+    Bookmark.where(pseud_id: id).update_all(pseud_id: user.default_pseud.id)
+    IndexQueue.enqueue_ids(Bookmark, bookmark_ids, :main) if bookmark_ids.present?
   end
 
   def change_collections_membership
