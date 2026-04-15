@@ -676,11 +676,13 @@ namespace :After do
     # This ensures that when multiple comments are deleted in the same branch,
     # we create the higher placeholders first so they exist as parents for the lower ones.
 
-    orphan_info = missing_commentable_ids.map do |missing_id|
+    orphan_info = missing_commentable_ids.filter_map do |missing_id|
       orphan = Comment.where(commentable_id: missing_id, commentable_type: "Comment").order(:id).first
+      next if orphan.nil?
+
       { missing_id: missing_id, orphan: orphan }
     end
-    orphan_info.sort_by! { |info| info[:orphan].threaded_left }
+    orphan_info.sort_by! { |info| info[:orphan].threaded_left || 0 }
 
     created_count = 0
 
@@ -698,7 +700,11 @@ namespace :After do
           orphan.threaded_right
         ).order(threaded_left: :desc).first
 
-        raise "Could not determine parent for missing comment #{missing_id} — possible data corruption" unless parent
+        unless parent
+          puts "  Skipping comment #{missing_id} — could not determine parent (possible data corruption)."
+          $stdout.flush
+          next
+        end
 
         placeholder = Comment.new(
           commentable: parent,
