@@ -724,13 +724,26 @@ namespace :After do
     puts "Done. Created #{created_count} placeholder(s)."
     $stdout.flush
   end
-
   
   desc "Backfill canonical_email for existing users"
   task(add_canonical_email: :environment) do
     User.find_in_batches.with_index do |batch, index|
       batch.each do |user|
         user.update_attribute(:canonical_email, EmailCanonicalizer.canonicalize(user.email)) if user.email
+      end
+
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    puts "Job complete."
+  end
+
+  desc "Backfill reportable for AbuseReports"
+  task(set_reportable: :environment) do
+    AbuseReport.find_in_batches.with_index do |batch, index|
+      batch.each do |abuse_report|
+        abuse_report.set_reportable
+        abuse_report.save
       end
 
       batch_number = index + 1

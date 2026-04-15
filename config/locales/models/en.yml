@@ -91,6 +91,8 @@ en:
               over_reported_bookmark: This bookmark has already been reported. Our volunteers only need one report in order to investigate and resolve an issue, so please be patient and do not submit another report.
               over_reported_comment: This comment has already been reported. Our volunteers only need one report in order to investigate and resolve an issue, so please be patient and do not submit another report.
               over_reported_series: This series has already been reported. Our volunteers only need one report in order to investigate and resolve an issue, so please be patient and do not submit another report.
+              over_reported_work: This work has already been reported. Our volunteers only need one report in order to investigate and resolve an issue, so please be patient and do not submit another report.
+              reported_item_not_found: The content you're trying to report does not exist.
             url:
               not_on_archive: does not appear to be on this site.
         admin_post:

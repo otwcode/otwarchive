@@ -64,6 +64,8 @@ class Work < ApplicationRecord
   # moderation
   has_one :moderated_work, dependent: :destroy
 
+  has_many :abuse_reports, as: :reportable, dependent: nil
+
   ########################################################################
   # VIRTUAL ATTRIBUTES
   ########################################################################
