@@ -269,7 +269,7 @@ describe AbuseReport do
 
       before do
         work = create(:work, id: 876)
-        create(:comment, id: 876, work: work)
+        create(:comment, id: 876, commentable: work)
         create(:comment, id: 87)
         create(:comment, id: 9009)
         create(:user, login: "someone")
@@ -757,23 +757,27 @@ describe AbuseReport do
 
     let(:ticket_id) { "123" }
     let(:work) { create(:work) }
+    
+    before do
+      create(:user, login: "someone")
+    end
 
     it "does not attach a download for non-work URLs asynchronously" do
-      allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/someone/")
+      subject = create(:abuse_report, url: "http://archiveofourown.org/users/someone/")
 
       expect { subject.attach_work_download(ticket_id) }
         .not_to have_enqueued_job
     end
 
     it "does not attach a download for comment sub-URLs asynchronously" do
-      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/comments/")
+      subject = create(:abuse_report, url: "http://archiveofourown.org/works/#{work.id}/comments/")
 
       expect { subject.attach_work_download(ticket_id) }
         .not_to have_enqueued_job
     end
 
     it "attaches a download for work URLs asynchronously" do
-      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+      subject = create(:abuse_report, url: "http://archiveofourown.org/works/#{work.id}/")
 
       expect { subject.attach_work_download(ticket_id) }
         .to have_enqueued_job
