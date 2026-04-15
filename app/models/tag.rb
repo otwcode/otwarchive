@@ -578,6 +578,10 @@ class Tag < ApplicationRecord
     if options[:fallback] && results.empty? && search_param.length > 0
       # do a standard tag lookup instead
       Tag.autocomplete_lookup(search_param: search_param, autocomplete_prefix: "autocomplete_tag_#{tag_type}")
+    elsif fandoms.count > 1
+      # Fandoms may contain the same tag in cached results
+      # If we have multiple fandoms, deduplicate before returning
+      results.uniq
     else
       results
     end
@@ -1101,7 +1105,7 @@ class Tag < ApplicationRecord
     self_type = %w[Character Fandom Media].include?(self.type) ? self.type.downcase : "fandom"
     TagQuery.new(options.merge(
                    type: tag_type,
-                   unwrangleable: false,
+                   wrangling_status: "wrangleable",
                    wrangled: false,
                    has_posted_works: true,
                    "pre_#{self_type}_ids": [self.id],

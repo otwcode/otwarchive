@@ -59,12 +59,6 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   line-height: 1.75em;
 }
 
-/* 0.583em x 24px = 14px */
-#header .heading sup {
-  font-size: 0.583em;
-  font-style: italic;
-}
-
 #header .logo {
   float: left;
   height: 42px;

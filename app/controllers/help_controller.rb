@@ -1,6 +1,7 @@
 class HelpController < ApplicationController
   HELP_ACTIONS = %i[
     first_login
+    html
     preferences_collection
     preferences_comment
     preferences_display
@@ -8,6 +9,7 @@ class HelpController < ApplicationController
     preferences_misc
     preferences_privacy
     preferences_work_title_format
+    rte
     skins_basics
     skins_creating
     skins_parents

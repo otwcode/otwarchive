@@ -3,18 +3,17 @@
   <h3 class="landmark heading"><%= t(".landmark") %></h3>
   <ul class="navigation actions">
     <% if logged_in? || logged_in_as_admin? %>
-      <% cache(skin_chooser_key, skip_digest: true) do %>
-        <% unless Skin.in_chooser.empty? %>
-          <li class="module group">
-            <h4 class="heading"><%= t(".customize.header") %></h4>
-            <ul class="menu">
-              <li><%= button_to t(".customize.default"), unset_skins_path, method: :post %></li>
-              <% Skin.in_chooser.order(:title).each do |s| %>
-                <li><%= button_to s.title, set_skin_path(s), method: :post %></li>
-              <% end %>
-            </ul>
-          </li>
-        <% end %>
+      <% skins = skin_chooser_data %>
+      <% unless skins.empty? %>
+        <li class="module group">
+          <h4 class="heading"><%= t(".customize.header") %></h4>
+          <ul class="menu">
+            <li><%= button_to t(".customize.default"), unset_skins_path, method: :post %></li>
+            <% skins.each do |s| %>
+              <li><%= button_to s[:title], set_skin_path(s[:param]), method: :post %></li>
+            <% end %>
+          </ul>
+        </li>
       <% end %>
     <% end %>
     <li class="module group">
