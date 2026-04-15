@@ -37,7 +37,16 @@ class CollectionsController < ApplicationController
     options = params[:collection_search].present? ? collection_filter_params : {}
     options.merge!(base_options)
 
-    @page_title = index_page_title
+    @page_title = case @owner
+                  when Collection
+                    t(".subcollection", collection_title: @collection.title)
+                  when User
+                    t(".user", user_name: @user.login)
+                  when Tag
+                    t(".tag", tag_name: @tag.name)
+                  else
+                    t(".general")
+                  end
 
     if params[:work_id].present?
       @collections = @work.approved_collections
@@ -210,18 +219,6 @@ class CollectionsController < ApplicationController
       end
     end
     @owner = @user || @work || @collection || @tag
-  end
-
-  def index_page_title
-    if @collection.present?
-      t(".page_title.subcollection", collection_title: @collection.title)
-    elsif @user.present?
-      t(".page_title.user", user_name: @user.login)
-    elsif @tag.present?
-      t(".page_title.tag", tag_name: @tag.name)
-    else
-      t(".page_title.general")
-    end
   end
 
   private
