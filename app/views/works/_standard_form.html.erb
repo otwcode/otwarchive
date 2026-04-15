@@ -83,7 +83,7 @@
 
       <dt class="recipient" title="<%= ts("gift to") %>">
         <%= f.label :recipients, ts("Gift this work to") %>
-        <%= link_to_help_modal(help_recipients_path, t(".recipients_help_title")) %>
+        <%= link_to_help_modal(help_recipients_path, t(".works_recipients_help_title")) %>
       </dt>
       <dd class="recipient" title="<%= ts("gift to") %>">
         <%= f.text_field :recipients, autocomplete_options("pseud", value: @work.recipients(for_form = true)) %>
@@ -95,7 +95,7 @@
       </dt>
       <dd class="parent">
         <%= label_tag "parent-options-show", ts("This work is a remix, a translation, a podfic, or was inspired by another work") %>
-        <%= link_to_help_modal(help_parent_works_help_path, t(".parent_works_help_title")) %>
+        <%= link_to_help_modal(help_works_parents_path, t(".works_parents_help_title")) %>
 
         <!-- Toggles on with parent checkbox -->
         <fieldset id="parent-options">
@@ -121,7 +121,7 @@
 
               <dt>
                 <%= p.label :language_id, ts("Language") %>
-                <%= link_to_help_modal(help_languages_help_path, t(".languages_help_title")) %>
+                <%= link_to_help_modal(help_works_languages_path, t(".works_languages_help_title")) %>
               </dt>
               <dd>
                 <%= p.select(:language_id, language_options_for_select(sorted_languages, "id"), prompt: " ") %>
@@ -130,7 +130,7 @@
               <dt class="translation"><%= p.check_box :translation %></dt>
               <dd class="translation">
                 <%= p.label :translation, ts("This is a translation") %>
-                <%= link_to_help_modal(help_translation_link_path, t(".translations_help_title")) %>
+                <%= link_to_help_modal(help_works_translation_link_path, t(".works_translation_link_help_title")) %>
               </dd>
             <% end %>
 
@@ -164,7 +164,7 @@
       </dt>
       <dd class="serial">
         <%= label_tag "series-options-show", ts("This work is part of a series") %>
-        <%= link_to_help_modal(help_choosing_series_path, t(".choosing_series_help_title")) %>
+        <%= link_to_help_modal(help_works_series_path, t(".works_series_help_title")) %>
 
         <!-- Toggles on with series checkbox -->
         <fieldset id="series-options">

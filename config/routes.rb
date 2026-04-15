@@ -651,10 +651,30 @@ Rails.application.routes.draw do
 
   HelpController::HELP_ACTIONS.each do |action|
     get "/help/#{action}", to: "help##{action}"
-
-    # Redirects for moved help files
-    get HelpController::HELP_REDIRECTS[action], to: redirect("/help/#{action}")
   end
+
+  # Redirects for moved help files
+  get "/first_login_help", to: redirect("/help/first_login")
+  get "/help/html-help.html", to: redirect("/help/html")
+  get "/help/collection-preferences.html", to: redirect("/help/preferences_collection")
+  get "/help/comment-preferences.html", to: redirect("/help/preferences_comment")
+  get "/help/display-preferences.html", to: redirect("/help/preferences_display")
+  get "/help/misc-preferences.html", to: redirect("/help/preferences_misc")
+  get "/help/privacy-preferences.html", to: redirect("/help/preferences_privacy")
+  get "/help/work_title_format.html", to: redirect("/help/preferences_work_title_format")
+  get "/help/rte-help.html", to: redirect("/help/rte")
+  get "/help/skins-basics.html", to: redirect("/help/skins_basics")
+  get "/help/skins-creating.html", to: redirect("/help/skins_creating")
+  get "/help/skins-parents.html", to: redirect("/help/skins_parents")
+  get "/help/symbols-key.html", to: redirect("/help/symbols_key")
+  get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
+  get "/help/rating-help.html", to: redirect("/help/tags_ratings")
+  get "/help/warning-help.html", to: redirect("/help/tags_warnings")
+  get "/help/languages-help.html", to: redirect("/help/works_languages")
+  get "/help/parent-works-help.html", to: redirect("/help/works_parents")
+  get "/help/recipients.html", to: redirect("/help/works_recipients")
+  get "/help/choosing-series.html", to: redirect("/help/works_series")
+  get "/help/languages-help.html", to: redirect("/help/works_translation_link")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
