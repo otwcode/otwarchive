@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/otwcode/devise
-  revision: fade89f61c64e766d87f24cfcb980ee533a5d5f2
-  ref: fade89f
+  revision: 5dd846ef7ba8aae6fe728e8e5fc2a1578a2c3f77
+  ref: 5dd846e
   specs:
-    devise (5.0.2)
+    devise (5.0.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 7.0)
