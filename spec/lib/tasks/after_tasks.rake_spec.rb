@@ -924,6 +924,27 @@ describe "rake After:create_placeholders_for_orphaned_comments" do
       end.not_to raise_error
     end
   end
+
+  context "when an orphaned comment has nil threaded_left" do
+    let!(:work) { create(:work) }
+    let!(:chapter) { work.last_posted_chapter }
+    let!(:root_comment_a) { create(:comment, commentable: chapter) }
+    let!(:reply_a) { create(:comment, commentable: root_comment_a) }
+    let!(:root_comment_b) { create(:comment, commentable: chapter) }
+    let!(:reply_b) { create(:comment, commentable: root_comment_b) }
+
+    before do
+      reply_a.update_columns(threaded_left: nil, threaded_right: nil)
+      root_comment_a.delete
+      root_comment_b.delete
+    end
+
+    it "does not raise an error" do
+      expect do
+        subject.invoke
+      end.not_to raise_error
+    end
+  end
 end
 
 describe "rake After:sync_approved_to_spam" do
