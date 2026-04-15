@@ -7,6 +7,8 @@ class Bookmark < ApplicationRecord
   belongs_to :bookmarkable, polymorphic: true, inverse_of: :bookmarks
   belongs_to :pseud, optional: false
 
+  has_many :abuse_reports, as: :reportable, dependent: nil
+
   validates :bookmarker_notes,
             length: { maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX) }
 

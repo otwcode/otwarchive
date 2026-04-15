@@ -1,4 +1,6 @@
 class AbuseReport < ApplicationRecord
+  belongs_to :reportable, polymorphic: true, optional: true
+
   validates :email, email_format: { allow_blank: false }
   validates_presence_of :language
   validates_presence_of :summary
@@ -145,6 +147,8 @@ class AbuseReport < ApplicationRecord
 
   def creator_ids
     if (work_id = reported_work_id)
+      return if url[%r{/comments/}, 0]
+
       work = Work.find_by(id: work_id)
       return "deletedwork" unless work
 
@@ -182,10 +186,9 @@ class AbuseReport < ApplicationRecord
     end
   end
 
-  # ID of the reported work, unless the report is about comment(s) on the work
+  # ID of the reported work
   def reported_work_id
-    comments = url[%r{/comments/}, 0]
-    url[%r{/works/(\d+)}, 1] if comments.nil?
+    url[%r{/works/(\d+)}, 1]
   end
 
   # ID of the reported comment
@@ -197,66 +200,92 @@ class AbuseReport < ApplicationRecord
   def reported_series_id
     url[%r{/series/(\d+)}, 1]
   end
+
+  # ID of the reported bookmark
+  def reported_bookmark_id
+    url[%r{/bookmarks/(\d+)}, 1]
+  end
   
   # Username (aka. login) of the reported user
   def reported_user_login
-    url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
+    url[%r{/users/(\w+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
+  end
+
+  # ID of the reported user
+  def reported_user_id
+    user = User.find_by!(login: reported_user_login)
+
+    user.id
   end
 
   def attach_work_download(ticket_id)
-    work_id = reported_work_id
-    return unless work_id
+    return unless self.reportable.instance_of?(Work)
 
-    work = Work.find_by(id: work_id)
-    ReportAttachmentJob.perform_later(ticket_id, work) if work
+    return if url[%r{/comments/}, 0]
+
+    work = self.reportable
+    ReportAttachmentJob.perform_later(ticket_id, work)
+  end
+
+  before_validation :set_reportable, if: :will_save_change_to_url?
+  def set_reportable
+    case url
+    when %r{(/comments/\d+)}
+      self.reportable = Comment.find(reported_comment_id)
+    when %r{(/bookmarks/\d+)}
+      self.reportable = Bookmark.find(reported_bookmark_id)
+    when %r{(/works/\d+)}
+      self.reportable = Work.find(reported_work_id)
+    when %r{(/series/\d+)}
+      self.reportable = Series.find(reported_series_id)
+    when %r{(/users/\w+)}
+      self.reportable = User.find(reported_user_id)
+    end
+  rescue ActiveRecord::RecordNotFound
+    errors.add(:base, :reported_item_not_found)
   end
 
   # if the URL clearly belongs to a specific piece of content
   # make sure it isn't reported more than ABUSE_REPORTS_PER_<type>_MAX
   # times within the configured time period
   def url_is_not_over_reported
-    case url
-    when %r{/bookmarks/\d+}
-      bookmarks_params_only = url.match(%r{/bookmarks/\d+/}).to_s
-      bookmark_report_period = ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD.days.ago
-      existing_reports_total = AbuseReport.where('created_at > ? AND
-                                                 url LIKE ?',
-                                                 bookmark_report_period,
-                                                 "%#{bookmarks_params_only}%").count
-      errors.add(:base, :over_reported_bookmark) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX
-    when %r{/comments/\d+}
-      comment_params_only = url.match(%r{/comments/\d+/}).to_s
-      comment_report_period = ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD.days.ago
-      existing_reports_total = AbuseReport.where('created_at > ? AND
-                                                 url LIKE ?',
-                                                 comment_report_period,
-                                                 "%#{comment_params_only}%").count
-      errors.add(:base, :over_reported_comment) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_MAX
-    when %r{/works/\d+}
-      # use "/works/123/" to avoid matching chapter or external work ids
-      work_params_only = url.match(%r{/works/\d+/}).to_s
-      work_report_period = ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago
-      existing_reports_total = AbuseReport.where('created_at > ? AND
-                                                 url LIKE ?',
-                                                 work_report_period,
-                                                 "%#{work_params_only}%").count
-      errors.add(:base, :over_reported) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
-    when %r{/users/\w+}
-      user_params_only = url.match(%r{/users/\w+/}).to_s
-      user_report_period = ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago
-      existing_reports_total = AbuseReport.where('created_at > ? AND
-                                                 url LIKE ?',
-                                                 user_report_period,
-                                                 "%#{user_params_only}%").count
-      errors.add(:base, :over_reported) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
-    when %r{/series/\d+}
-      series_params_only = url.match(%r{/series/\d+/}).to_s
-      series_report_period = ArchiveConfig.ABUSE_REPORTS_PER_SERIES_PERIOD.days.ago
-      existing_reports_total = AbuseReport.where('created_at > ? AND
-                                                 url LIKE ?',
-                                                 series_report_period,
-                                                 "%#{series_params_only}%").count
-      errors.add(:base, :over_reported_series) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_SERIES_MAX
+    return unless self.reportable
+
+    periods = {
+      "Bookmark" => ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD.days.ago,
+      "Comment" => ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD.days.ago,
+      "Work" => ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago,
+      "Series" => ArchiveConfig.ABUSE_REPORTS_PER_SERIES_PERIOD.days.ago,
+      "User" => ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago
+    }
+
+    max_reports = {
+      "Bookmark" => ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX,
+      "Comment" => ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_MAX,
+      "Work" => ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX,
+      "Series" => ArchiveConfig.ABUSE_REPORTS_PER_SERIES_MAX,
+      "User" => ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
+    }
+
+    report_period = periods[self.reportable.class.to_s]
+
+    existing_reports_total = AbuseReport.where(reportable: self.reportable)
+      .where("created_at > ?", report_period)
+      .count
+
+    return if existing_reports_total < max_reports[self.reportable.class.to_s]
+
+    case self.reportable.class.to_s
+    when "Bookmark"
+      errors.add(:base, :over_reported_bookmark)
+    when "Comment"
+      errors.add(:base, :over_reported_comment)
+    when "Work"
+      errors.add(:base, :over_reported_work)
+    when "Series"
+      errors.add(:base, :over_reported_series)
+    when "User"
+      errors.add(:base, :over_reported)
     end
   end
 

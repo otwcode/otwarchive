@@ -1007,3 +1007,50 @@ describe "rake After:add_canonical_email" do
     expect(user4.canonical_email).to eq("dlastname@gmail.com")
   end
 end
+
+describe "rake After:set_reportable" do
+  before do
+    work = create(:work, id: 1234)
+    create(:chapter, id: 1234, work: work)
+    create(:comment, id: 1234)
+    create(:bookmark, id: 1234)
+    create(:user, login: "abc")
+    create(:series, id: 1234)
+
+    allow(ArchiveConfig).to receive(:ABUSE_REPORTS_PER_WORK_MAX).and_return(10)
+  end
+
+  let(:abuse_report1) { create(:abuse_report, url: "https://archiveofourown.org/works/1234") }
+  let(:abuse_report2) { create(:abuse_report, url: "https://archiveofourown.org/comments/1234") }
+  let(:abuse_report3) { create(:abuse_report, url: "https://archiveofourown.org/bookmarks/1234") }
+  let(:abuse_report4) { create(:abuse_report, url: "https://archiveofourown.org/users/abc") }
+  let(:abuse_report5) { create(:abuse_report, url: "https://archiveofourown.org/series/1234") }
+  let(:abuse_report6) { create(:abuse_report, url: "https://archiveofourown.org/works/1234/comments/1234") }
+  let(:abuse_report7) { create(:abuse_report, url: "https://archiveofourown.org/works/1234/bookmarks/1234") }
+  let(:abuse_report8) { create(:abuse_report, url: "https://archiveofourown.org/chapters/1234") }
+  let(:abuse_report9) { create(:abuse_report, url: "https://archiveofourown.org/works/1234/chapters/1234") }
+  let(:abuse_report10) { create(:abuse_report, url: "https://archiveofourown.org/works/1234") }
+  let(:abuse_report11) { create(:abuse_report, url: "https://archiveofourown.org") }
+
+  it "backfills the reportable association for existing abuse reports" do
+    abuse_report10.url = "https://archiveofourown.org/works/0000"
+    abuse_report10.save!(validate: false)
+
+    AbuseReport.update_all(reportable_type: nil)
+    AbuseReport.update_all(reportable_id: nil)
+
+    subject.invoke
+
+    expect(abuse_report1.reload.reportable).to eq(Work.find(1234))
+    expect(abuse_report2.reload.reportable).to eq(Comment.find(1234))
+    expect(abuse_report3.reload.reportable).to eq(Bookmark.find(1234))
+    expect(abuse_report4.reload.reportable).to eq(User.find_by(login: "abc"))
+    expect(abuse_report5.reload.reportable).to eq(Series.find(1234))
+    expect(abuse_report6.reload.reportable).to eq(Comment.find(1234))
+    expect(abuse_report7.reload.reportable).to eq(Bookmark.find(1234))
+    expect(abuse_report8.reload.reportable).to eq(Work.find(1234))
+    expect(abuse_report9.reload.reportable).to eq(Work.find(1234))
+    expect(abuse_report10.reload.reportable).to be_nil
+    expect(abuse_report11.reload.reportable).to be_nil
+  end
+end

@@ -127,6 +127,10 @@ describe AbuseReport do
     context "for an already-reported work" do
       work_url = "http://archiveofourown.org/works/1234"
 
+      before do
+        create(:work, id: 1234)
+      end
+
       let(:common_report) { build(:abuse_report, url: work_url) }
       it "can be submitted up to a set number of times" do
         (ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX - 1).times do
@@ -169,6 +173,14 @@ describe AbuseReport do
       end
     end
 
+    shared_examples "enough work reports" do |url|
+      let(:report) { build(:abuse_report, url: url) }
+      it "can't be submitted" do
+        expect(report.save).to be_falsey
+        expect(report.errors[:base].first).to include("This work has already been reported.")
+      end
+    end
+
     shared_examples "alright" do |url|
       let(:report) { build(:abuse_report, url: url) }
       it "can be submitted" do
@@ -181,6 +193,16 @@ describe AbuseReport do
       work_url = "http://archiveofourown.org/works/789"
 
       before do
+        work = create(:work, id: 789)
+        create(:chapter, id: 123, work: work)
+        create(:user, login: "someone")
+        create(:comment, id: 876)
+        create(:series, id: 567)
+        create(:work, id: 9009)
+        create(:work, id: 78)
+        create(:work, id: 7890)
+        create(:external_work, id: 789)
+
         ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
           create(:abuse_report, url: work_url)
         end
@@ -188,42 +210,42 @@ describe AbuseReport do
       end
 
       # obviously
-      it_behaves_like "enough already", work_url
+      it_behaves_like "enough work reports", work_url
 
       # the same work, different protocol
-      it_behaves_like "enough already", "https://archiveofourown.org/works/789"
+      it_behaves_like "enough work reports", "https://archiveofourown.org/works/789"
 
       # the same work, with parameters/anchors
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789?smut=yes"
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789?smut=yes#timeline"
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789#timeline"
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789/?smut=yes"
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789/#timeline"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789?smut=yes"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789?smut=yes#timeline"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789#timeline"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/?smut=yes"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/#timeline"
 
       # the same work, in a collection
-      it_behaves_like "enough already", "http://archiveofourown.org/collections/rarepair/works/789"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/collections/rarepair/works/789"
 
       # the same work, under users
-      it_behaves_like "enough already", "http://archiveofourown.org/users/author/works/789"
-      it_behaves_like "enough already", "http://archiveofourown.org/users/coauthor/works/789"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/users/author/works/789"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/users/coauthor/works/789"
 
       # the same work, subpages
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789/bookmarks"
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789/collections"
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789/comments"
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789/kudos"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/bookmarks"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/collections"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/comments"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/kudos"
 
       # a specific chapter on the work
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789/chapters/123"
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789/chapters/123#major-character-death"
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789/chapters/123?ending=1"
-      it_behaves_like "enough already", "http://archiveofourown.org/works/789/chapters/123?ending=2#major-character-death"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/chapters/123"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/chapters/123#major-character-death"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/chapters/123?ending=1"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/chapters/123?ending=2#major-character-death"
+      it_behaves_like "enough work reports", "http://archiveofourown.org/chapters/123"
 
       # a comment on the work
       it_behaves_like "alright", "http://archiveofourown.org/works/789/comments/876"
 
       # the same work: variations we don't cover
-      it_behaves_like "alright", "http://archiveofourown.org/chapters/123"
       it_behaves_like "alright", "http://archiveofourown.org/comments/show_comments?work_id=789"
 
       # not the same work
@@ -246,6 +268,12 @@ describe AbuseReport do
       comment_url = "http://archiveofourown.org/comments/876"
 
       before do
+        work = create(:work, id: 876)
+        create(:comment, id: 876, commentable: work)
+        create(:comment, id: 87)
+        create(:comment, id: 9009)
+        create(:user, login: "someone")
+
         ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_MAX.times do
           create(:abuse_report, url: comment_url)
         end
@@ -299,6 +327,12 @@ describe AbuseReport do
       series_url = "http://archiveofourown.org/series/567"
 
       before do
+        create(:series, id: 567)
+        create(:series, id: 67)
+        create(:series, id: 1)
+        create(:user, login: "someone")
+        create(:work, id: 876)
+
         ArchiveConfig.ABUSE_REPORTS_PER_SERIES_MAX.times do
           create(:abuse_report, url: series_url)
         end
@@ -338,6 +372,10 @@ describe AbuseReport do
     context "when reporting work URLs that cross the reporting period timeframe" do
       work_url = "http://archiveofourown.org/works/790"
 
+      before do
+        create(:work, id: 790)
+      end
+
       it "allows reporting a work when old reports are outside the configured period" do
         travel_to(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago - 1.day) do
           ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
@@ -370,6 +408,12 @@ describe AbuseReport do
       user_url = "http://archiveofourown.org/users/someone"
 
       before do
+        create(:user, login: "someone")
+        create(:user, login: "some")
+        create(:user, login: "someoneelse")
+        create(:user, login: "somebody")
+        create(:work, id: 789)
+
         ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX.times do
           create(:abuse_report, url: user_url)
         end
@@ -420,6 +464,10 @@ describe AbuseReport do
     context "when reporting user URLs that cross the reporting period timeframe" do
       user_url = "http://archiveofourown.org/users/someone2"
 
+      before do
+        create(:user, login: "someone2")
+      end
+
       it "allows reporting a user URL when old reports are outside the configured period" do
         travel_to(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago - 1.day) do
           ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX.times do
@@ -452,6 +500,14 @@ describe AbuseReport do
       bookmark_url = "http://archiveofourown.org/bookmarks/456"
 
       before do
+        create(:bookmark, id: 456)
+        create(:bookmark, id: 4560)
+        create(:bookmark, id: 45)
+        create(:bookmark, id: 999)
+        create(:work, id: 999)
+        create(:work, id: 456)
+        create(:user, login: "someone")
+
         ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX.times do
           create(:abuse_report, url: bookmark_url)
         end
@@ -493,6 +549,10 @@ describe AbuseReport do
 
     context "when reporting bookmark URLs that cross the reporting period timeframe" do
       bookmark_url = "http://archiveofourown.org/bookmarks/457"
+
+      before do
+        create(:bookmark, id: 457)
+      end
 
       it "allows reporting a bookmark when old reports are outside the configured period" do
         travel_to(ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD.days.ago - 1.day) do
@@ -592,6 +652,57 @@ describe AbuseReport do
         end
       end
     end
+
+    context "for URLs with multiple resources referenced" do
+      context "for comment URLs with work ID" do
+        comment_url = "http://archiveofourown.org/works/123/comments/456"
+
+        before do
+          work = create(:work, id: 123)
+          create(:comment, commentable: work.first_chapter, id: 456)
+
+          ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_MAX.times do
+            create(:abuse_report, url: comment_url)
+          end
+          expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_MAX)
+        end
+
+        # does not prevent the work from being reportable
+        it_behaves_like "alright", "https://archiveofourown.org/works/123"
+      end
+
+      context "for bookmark URLs with work ID" do
+        bookmark_url = "http://archiveofourown.org/works/123/bookmarks/456"
+        before do
+          work = create(:work, id: 123)
+          create(:bookmark, bookmarkable: work, id: 456)
+
+          ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX.times do
+            create(:abuse_report, url: bookmark_url)
+          end
+          expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX)
+        end
+
+        # does not prevent the bookmark from being reportable
+        it_behaves_like "alright", "https://archiveofourown.org/works/123"
+      end
+
+      context "for work URLs with user" do
+        work_url = "http://archiveofourown.org/user/someone/work/123"
+        before do
+          user = create(:user, login: "someone")
+          create(:work, id: 123, authors: [user.default_pseud])
+
+          ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
+            create(:abuse_report, url: work_url)
+          end
+          expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX)
+        end
+
+        # does not prevent the user from being reportable
+        it_behaves_like "alright", "https://archiveofourown.org/user/someone"
+      end
+    end
   end
 
   context "when report is spam" do
@@ -646,23 +757,27 @@ describe AbuseReport do
 
     let(:ticket_id) { "123" }
     let(:work) { create(:work) }
+    
+    before do
+      create(:user, login: "someone")
+    end
 
     it "does not attach a download for non-work URLs asynchronously" do
-      allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/someone/")
+      subject = create(:abuse_report, url: "http://archiveofourown.org/users/someone/")
 
       expect { subject.attach_work_download(ticket_id) }
         .not_to have_enqueued_job
     end
 
     it "does not attach a download for comment sub-URLs asynchronously" do
-      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/comments/")
+      subject = create(:abuse_report, url: "http://archiveofourown.org/works/#{work.id}/comments/")
 
       expect { subject.attach_work_download(ticket_id) }
         .not_to have_enqueued_job
     end
 
     it "attaches a download for work URLs asynchronously" do
-      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+      subject = create(:abuse_report, url: "http://archiveofourown.org/works/#{work.id}/")
 
       expect { subject.attach_work_download(ticket_id) }
         .to have_enqueued_job
