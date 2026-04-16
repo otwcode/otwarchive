@@ -1,0 +1,55 @@
+<h2><%= t(".page_heading") %></h2>
+
+<p><%= t(".description_html", rte_abbreviation: tag.abbr(t(".rte_abbreviated"), title: t(".rte_full")), rte_abbreviation_no_title: tag.abbr(t(".rte_abbreviated_no_title"))) %></p>
+
+<ul>
+  <li><p><%= t(".enter_once.description_html",
+               enter_for_twice_key: tag.kbd(t(".enter_once.enter_for_twice")),
+               intro_sentence_bold_html: tag.strong(t(".enter_once.intro_sentence_html", enter_for_once_key: tag.kbd(t(".enter_once.enter_for_once")), once_italic: tag.em(t(".enter_once.once")))),
+               p_tag_code: tag.code("<p>"),
+               rte_abbreviation: tag.abbr(t(".enter_once.rte_abbreviated"))) %></p></li>
+  <li><p><%= t(".use_preset_styles.description_html",
+               html_abbreviation: tag.abbr(t(".use_preset_styles.html_abbreviated"), title: t(".use_preset_styles.html_full")),
+               intro_sentence_bold_html: tag.strong(t(".use_preset_styles.intro_sentence_html")),
+               rte_abbreviation: tag.abbr(t(".use_preset_styles.rte_abbreviated"))) %></p></li>
+</ul>
+
+<h3><%= t(".pasting_from.header") %></h3>
+
+<h4><%= t(".pasting_from.google_drive.header") %></h4>
+
+<p><%= t(".pasting_from.google_drive.description_html", css_abbreviation: tag.abbr(t(".pasting_from.google_drive.css_abbreviated"), title: t(".pasting_from.google_drive.css_full")), html_abbreviation: tag.abbr(t(".pasting_from.google_drive.html_abbreviated"))) %></p>
+
+<p><%= t(".pasting_from.google_drive.misleading_appearance_html", html_for_sanitizer_abbreviation: tag.abbr(t(".pasting_from.google_drive.html_for_sanitizer_abbreviated")), rte_abbreviation: tag.abbr(t(".pasting_from.google_drive.rte_abbreviated"))) %></p>
+
+<h4><%= t(".pasting_from.scrivener.header") %></h4>
+
+<p><%= t(".pasting_from.scrivener.description_html", html_abbreviation: tag.abbr(t(".pasting_from.scrivener.html_abbreviated")), rte_abbreviation: tag.abbr(t(".pasting_from.scrivener.rte_abbreviated"))) %></p>
+
+<ol>
+  <li><%= t(".pasting_from.scrivener.edit_menu") %></li>
+  <li><%= t(".pasting_from.scrivener.copy_special") %></li>
+  <li><%= t(".pasting_from.scrivener.copy_as") %></li>
+</ol>
+
+<h3><%= t(".pasting_formatting.header") %></h3>
+
+<h4><%= t(".pasting_formatting.underline_strikethrough.header") %></h4>
+
+<p><%= t(".pasting_formatting.underline_strikethrough.description_html", css_abbreviation: tag.abbr(t(".pasting_formatting.underline_strikethrough.css_abbreviated")), css_for_inline_abbreviation: tag.abbr(t(".pasting_formatting.underline_strikethrough.css_for_inline_abbreviated"))) %></p>
+
+<p><%= t(".pasting_formatting.underline_strikethrough.when_it_works_html", del_tag_code: tag.code("<del>"), s_tag_code: tag.code("<s>"), strike_tag_code: tag.code("<strike>"), u_tag_code: tag.code("<u>")) %></p>
+
+<h4><%= t(".pasting_formatting.alignment.header") %></h4>
+
+<p><%= t(".pasting_formatting.alignment.description_html", css_abbreviation: tag.abbr(t(".pasting_formatting.alignment.css_abbreviated")), css_for_inline_abbreviation: tag.abbr(t(".pasting_formatting.alignment.css_for_inline_abbreviated"))) %></p>
+
+<p><%= t(".pasting_formatting.alignment.when_it_works_html", align_tag_code: tag.code("align"), center_tag_code: tag.code("<center>"), rte_abbreviation: tag.abbr(t(".pasting_formatting.alignment.rte_abbreviated"))) %></p>
+
+<h4><%= t(".pasting_formatting.headings.header") %></h4>
+
+<p><%= t(".pasting_formatting.headings.description_html", h4_tag_code: tag.code("<h4>"), html_abbreviation: tag.abbr(t(".pasting_formatting.headings.html_abbreviated")), negation_italic: tag.em(t(".pasting_formatting.headings.negation")), rte_abbreviation: tag.abbr(t(".pasting_formatting.headings.rte_abbreviated"))) %></p>
+
+<h4><%= t(".pasting_formatting.indented_text.header") %></h4>
+
+<p><%= t(".pasting_formatting.indented_text.description_html", html_abbreviation: tag.abbr(t(".pasting_formatting.indented_text.html_abbreviated"))) %></p>

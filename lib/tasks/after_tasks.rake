@@ -654,5 +654,89 @@ namespace :After do
     AuditsBackfillJob.spawn_jobs
     puts "Backfill started and running on resque in background"
   end
+
+  desc "Create placeholder comments for orphaned replies whose parent was physically deleted"
+  task(create_placeholders_for_orphaned_comments: :environment) do
+    missing_commentable_ids = Comment
+      .joins("LEFT JOIN comments AS commentable_comments ON comments.commentable_id = commentable_comments.id")
+      .where(commentable_type: "Comment")
+      .where(commentable_comments: { id: nil })
+      .distinct
+      .pluck(:commentable_id)
+
+    if missing_commentable_ids.empty?
+      puts "No orphaned comments found."
+      next
+    end
+
+    puts "Found #{missing_commentable_ids.size} missing parent comment(s). Creating placeholders..."
+    $stdout.flush
+
+    # Collect orphan info and sort by position in tree (top-down).
+    # This ensures that when multiple comments are deleted in the same branch,
+    # we create the higher placeholders first so they exist as parents for the lower ones.
+
+    orphan_info = missing_commentable_ids.filter_map do |missing_id|
+      orphan = Comment.where(commentable_id: missing_id, commentable_type: "Comment").order(:id).first
+      next if orphan.nil?
+
+      { missing_id: missing_id, orphan: orphan }
+    end
+    orphan_info.sort_by! { |info| info[:orphan].threaded_left || 0 }
+
+    created_count = 0
+
+    Comment.transaction do
+      orphan_info.each do |info|
+        missing_id = info[:missing_id]
+        orphan = info[:orphan]
+
+        # Find the closest existing ancestor using the nested set.
+        # Using the orphan's threaded_left/right
+        parent = Comment.where(
+          "thread = ? AND threaded_left < ? AND threaded_right > ?",
+          orphan.thread,
+          orphan.threaded_left,
+          orphan.threaded_right
+        ).order(threaded_left: :desc).first
+
+        unless parent
+          puts "  Skipping comment #{missing_id} — could not determine parent (possible data corruption)."
+          $stdout.flush
+          next
+        end
+
+        placeholder = Comment.new(
+          commentable: parent,
+          thread: orphan.thread,
+          comment_content: "deleted comment",
+          is_deleted: true
+        )
+        placeholder.id = missing_id
+        placeholder.save(validate: false)
+        created_count += 1
+
+        puts "  Created placeholder for comment #{missing_id} in thread #{orphan.thread}."
+        $stdout.flush
+      end
+    end
+
+    puts "Done. Created #{created_count} placeholder(s)."
+    $stdout.flush
+  end
+
+  
+  desc "Backfill canonical_email for existing users"
+  task(add_canonical_email: :environment) do
+    User.find_in_batches.with_index do |batch, index|
+      batch.each do |user|
+        user.update_attribute(:canonical_email, EmailCanonicalizer.canonicalize(user.email)) if user.email
+      end
+
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    puts "Job complete."
+  end
   # This is the end that you have to put new tasks above.
 end

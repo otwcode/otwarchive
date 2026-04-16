@@ -89,6 +89,7 @@ class ChallengeClaimsController < ApplicationController
         @claims = @claims.order(@sort_order)
       end
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
+      @page_subtitle = t(".page_title", username: @user.login)
       if current_user == @user
         @claims = @user.request_claims.order_by_date.unposted
 				if params[:posted]

@@ -90,4 +90,25 @@ describe SubscriptionsController do
       end
     end
   end
+
+  describe "DELETE #destroy" do
+    let(:work) { create(:work) }
+    let!(:subscription) { create(:subscription, user: user, subscribable: work) }
+
+    before { fake_login_known_user(user) }
+
+    it "redirects with the work title in the success notice" do
+      delete :destroy, params: { user_id: user.login, id: subscription.id }
+      it_redirects_to_with_notice(user_subscriptions_path(user), "You have successfully unsubscribed from #{work.title}.")
+    end
+
+    context "when the work is in an unrevealed collection" do
+      before { work.update!(collection_names: create(:unrevealed_collection).name) }
+
+      it "redirects with 'Mystery Work' in the success notice" do
+        delete :destroy, params: { user_id: user.login, id: subscription.id }
+        it_redirects_to_with_notice(user_subscriptions_path(user), "You have successfully unsubscribed from Mystery Work.")
+      end
+    end
+  end
 end
