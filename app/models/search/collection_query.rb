@@ -126,24 +126,13 @@ class CollectionQuery < Query
   end
 
   def sort
-    column = if User.current_user.present?
-               case sort_column
-               when "bookmarked_items_count"
-                 "general_bookmarked_items_count"
-               when "works_count"
-                 "general_works_count"
-               else
-                 sort_column
-               end
+    column = case sort_column
+             when "bookmarked_items_count"
+               User.current_user.present? ? "general_bookmarked_items_count" : "public_bookmarked_items_count"
+             when "works_count"
+               User.current_user.present? ? "general_works_count" : "public_works_count"
              else
-               case sort_column
-               when "bookmarked_items_count"
-                 "public_bookmarked_items_count"
-               when "works_count"
-                 "public_works_count"
-               else
-                 sort_column
-               end
+               sort_column
              end
 
     direction = options[:sort_direction].presence

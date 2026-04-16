@@ -30,13 +30,13 @@ describe CollectionQuery do
   end
 
   it "sorts by general bookmarked items when logged in" do
-    User.current_user = create(:user)
+    User.current_user = build_stubbed(:user)
     q = CollectionQuery.new(sort_column: "bookmarked_items_count", sort_direction: "desc")
     expect(q.generated_query[:sort]).to eq([{ "general_bookmarked_items_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
   it "sorts by general works when logged in" do
-    User.current_user = create(:user)
+    User.current_user = build_stubbed(:user)
     q = CollectionQuery.new(sort_column: "works_count", sort_direction: "desc")
     expect(q.generated_query[:sort]).to eq([{ "general_works_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
