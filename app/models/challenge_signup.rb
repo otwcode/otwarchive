@@ -30,7 +30,7 @@ class ChallengeSignup < ApplicationRecord
   # we reject prompts if they are empty except for associated references
   accepts_nested_attributes_for :offers, :prompts, :requests, {allow_destroy: true,
     reject_if: proc { |attrs|
-                          attrs[:url].blank? && attrs[:description].blank? &&
+                          attrs[:title].blank? && attrs[:url].blank? && attrs[:description].blank? &&
                           (attrs[:tag_set_attributes].nil? || attrs[:tag_set_attributes].all? {|k,v| v.blank?}) &&
                           (attrs[:optional_tag_set_attributes].nil? || attrs[:optional_tag_set_attributes].all? {|k,v| v.blank?})
                         }
