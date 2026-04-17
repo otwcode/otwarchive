@@ -765,7 +765,7 @@ describe Admin::AdminUsersController do
       authorized_roles.each do |role|
         context "with #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
-          let!(:other_pseud) { create(:pseud, user:user) }
+          let!(:other_pseud) { create(:pseud, user: user) }
           let!(:older_comment) { create(:comment, pseud: other_pseud) }
           let!(:newer_comment) { create(:comment, pseud: user.default_pseud) }
           let!(:older_work) { create(:work, authors: [other_pseud]) }
