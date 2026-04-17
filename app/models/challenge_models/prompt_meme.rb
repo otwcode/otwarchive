@@ -45,4 +45,9 @@ class PromptMeme < ApplicationRecord
   def user_allowed_to_see_claims?(user)
     user_allowed_to_see_assignments?(user)
   end
+
+  validate :request_restriction_allows_fields
+  def request_restriction_allows_fields
+    errors.add(:base, :no_request_fields) unless request_restriction&.allows_any_fields?
+  end
 end

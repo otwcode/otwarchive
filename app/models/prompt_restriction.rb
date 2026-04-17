@@ -121,4 +121,10 @@ class PromptRestriction < ApplicationRecord
     type.constantize.in_prompt_restriction(self) # Safe constantize checked above
   end
 
+  def allows_any_fields?
+    return true if title_allowed || description_allowed || url_allowed
+
+    TagSet::TAG_TYPES.any? { |tag_type| allowed(tag_type) > 0 }
+  end
+
 end
