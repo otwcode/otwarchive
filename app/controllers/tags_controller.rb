@@ -81,7 +81,6 @@ class TagsController < ApplicationController
                else
                  @tag.works
                end
-
       @works = @works.visible_to_all.order(created_at: :desc).limit(25).includes(:tags, :language, :series)
     else
       redirect_to(tag_works_path(tag_id: @tag.to_param)) && return

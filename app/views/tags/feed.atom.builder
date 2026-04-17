@@ -4,7 +4,7 @@ atom_feed do |feed|
   @works.each_with_index do |work, index|
     next if work.unrevealed?
 
-    feed.updated work.created_at if index == 0
+    feed.updated work.created_at if index.zero?
 
     feed.entry work do |entry|
       entry.title work.title
