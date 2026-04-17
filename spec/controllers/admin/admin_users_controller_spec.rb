@@ -770,8 +770,6 @@ describe Admin::AdminUsersController do
           let!(:newer_comment) { create(:comment, pseud: user.default_pseud) }
           let!(:older_work) { create(:work, authors: [other_pseud]) }
           let!(:newer_work) { create(:work, authors: [user.default_pseud]) }
-          let!(:other_comment) { create(:comment) }
-          let!(:other_work) { create(:work) }
 
           before do
             fake_login_admin(admin)
