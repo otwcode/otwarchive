@@ -195,7 +195,7 @@ When /^I reply to a comment with "([^"]*)"$/ do |comment_text|
   end
 end
 
-When /^I visit the comments page for the work "([^"]+)"$/ do |work|
+When "I visit the comments page for the work {string}" do |work|
   work = Work.find_by(title: work)
   visit work_comments_path(work, only_path: false)
 end
