@@ -4,12 +4,13 @@ Feature: Comment on work
   As a reader
   I'd like to comment on a work
 
-Scenario: Comment links from downloads and static pages
+Scenario: New comment page for a work displays correctly
 
   Given the work "Generic Work"
   When I am logged in as "commenter"
     And I visit the new comment page for the work "Generic Work"
-  Then I should see the comment form
+  Then I should see "New Comment on"
+    And I should see a page link to the work "Generic Work" within ".comments-new h2.heading"
 
 Scenario: When logged in I can comment on a work
 

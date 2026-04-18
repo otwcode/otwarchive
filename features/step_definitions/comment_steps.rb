@@ -106,10 +106,6 @@ Then /^I should see Last Edited nowish$/ do
   step "I should see \"Last Edited #{nowish}\""
 end
 
-Then /^I should see the comment form$/ do
-  step %{I should see "New comment on"}
-end
-
 Then /^I should see the reply to comment form$/ do
   step %{I should see "Comment as" within ".odd"}
 end
