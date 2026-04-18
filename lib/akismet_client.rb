@@ -36,8 +36,8 @@ class AkismetClient
   end
 
   def self.encode_body(body = {})
-    # disable learning from tests
-    body = body.merge(is_test: true) if Rails.env.test?
+    # disable learning in non-production environments (https://akismet.com/blog/pro-tip-testing-testing/)
+    body = body.merge(is_test: true) unless Rails.env.production?
 
     URI.encode_www_form(body.merge(key: ArchiveConfig.AKISMET_KEY, blog: ArchiveConfig.AKISMET_NAME))
   end
