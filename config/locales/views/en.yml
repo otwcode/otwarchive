@@ -917,6 +917,8 @@ en:
     index:
       header_html: Reading Comments on %{link}
     new:
+      actions:
+        comment: Comment
       header_html: New Comment on %{link}
     show:
       comment_on_html: Comment on %{commentable_link}
