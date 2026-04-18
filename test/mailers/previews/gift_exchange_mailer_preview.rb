@@ -6,8 +6,8 @@ class GiftExchangeMailerPreview < ApplicationMailerPreview
     GiftExchangeMailer.no_potential_matches_notification(collection.id, email)
   end
 
-  # URL: /rails/mailers/user_mailer/no_potential_matches_collection_maintainer
-  def no_potential_matches_notification_collection_maintainer
+  # URL: /rails/mailers/user_mailer/no_potential_matches_maintainer
+  def no_potential_matches_notification_maintainer
     user = create(:user, :for_mailer_preview)
     collection = create(:collection, owners: [user.default_pseud])
     email = user.email
