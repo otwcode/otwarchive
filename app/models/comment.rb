@@ -506,17 +506,15 @@ class Comment < ApplicationRecord
   end
 
   def spam?
-    return false unless %w[staging production].include?(Rails.env)
-
     AkismetClient.spam?(akismet_attributes)
   end
 
   def submit_spam
-    Rails.env.production? && AkismetClient.submit_spam(akismet_attributes)
+    AkismetClient.submit_spam(akismet_attributes)
   end
 
   def submit_ham
-    Rails.env.production? && AkismetClient.submit_ham(akismet_attributes)
+    AkismetClient.submit_ham(akismet_attributes)
   end
 
   def mark_as_spam!

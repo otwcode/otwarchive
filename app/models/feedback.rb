@@ -37,13 +37,11 @@ class Feedback < ApplicationRecord
   end
 
   def mark_as_spam!
-    # don't submit spam reports unless in production mode
-    Rails.env.production? && AkismetClient.submit_spam(akismet_attributes)
+    AkismetClient.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
-    # don't submit ham reports unless in production mode
-    Rails.env.production? && AkismetClient.submit_ham(akismet_attributes)
+    AkismetClient.submit_ham(akismet_attributes)
   end
 
   def email_and_send

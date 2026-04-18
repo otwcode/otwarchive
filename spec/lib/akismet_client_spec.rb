@@ -47,6 +47,7 @@ describe AkismetClient do
     spam_attributes = { user_ip: "127.0.0.1", comment_author: "akismet-guaranteed-spam" }
 
     before do
+      allow(AkismetClient).to receive(:spam_submission_enabled?).and_return(true)
       allow(AkismetClient).to receive(:enabled?).and_return(true)
     end
 
@@ -80,6 +81,7 @@ describe AkismetClient do
   context "when akismet disabled" do
     before do
       allow(AkismetClient).to receive(:enabled?).and_return(false)
+      allow(AkismetClient).to receive(:spam_submission_enabled?).and_return(false)
     end
 
     comment_attributes = { user_ip: "127.0.0.1", comment_author: "akismet-guaranteed-spam" }
