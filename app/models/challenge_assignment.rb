@@ -375,11 +375,11 @@ class ChallengeAssignment < ApplicationRecord
 
     if no_potential_matches_found
       if collection.collection_email.present?
-        UserMailer.no_potential_matches_notification(collection.id, collection.collection_email).deliver_later
+        GiftExchangeMailer.no_potential_matches_notification(collection.id, collection.collection_email).deliver_later
       else
         collection.maintainers_list.each do |user|
           I18n.with_locale(user.preference.locale_for_mails) do
-            UserMailer.no_potential_matches_notification(collection.id, user.email).deliver_later
+            GiftExchangeMailer.no_potential_matches_notification(collection.id, user.email).deliver_later
           end
         end
       end
