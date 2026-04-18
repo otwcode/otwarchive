@@ -11,7 +11,7 @@ module CommentsHelper
     else
       title = link_to(commentable.commentable_name, commentable)
     end
-    t(".header_html", link: title)
+    t(".page_heading_html", link: title)
   end
 
   def link_to_comment_ultimate_parent(comment)
