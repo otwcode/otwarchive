@@ -557,6 +557,7 @@ When /^I list an external work as inspiration$/ do
   end
 end
 
+# Format is "DD [Month, english] YYYY"
 When /^I set the publication date to (\d+) (.*) (\d+)$/ do |day, month, year|
   if page.has_selector?("#backdate-options-show")
     check("backdate-options-show") if page.find("#backdate-options-show")

@@ -37,8 +37,8 @@
                   <li>
                     <%= link_to wrangler, tag_wrangler_path(:id => wrangler) %>
                     <!--BACK END PLS take off this span and give the link the class delete-->
-                    <span class="action" title="remove">
-                      <%= link_to 'x', tag_wrangler_path(redirect_params.merge(:id => wrangler, :fandom_id => assignments.first.id)), :method => :delete %>
+                    <span class="delete">
+                      <%= link_to "×", tag_wrangler_path(redirect_params.merge(id: wrangler, fandom_id: assignments.first.id)), method: :delete, title: "remove" %>
                     </span>
                   </li>
                 <% end %>
@@ -63,9 +63,9 @@
         <% end %>
       </dl>
       <p class="submit actions">
-        <%= hidden_field_tag :fandom_string, params[:fandom_string] %>
-        <%= hidden_field_tag :media_id, params[:media_id] %>
-        <%= hidden_field_tag :wrangler_id, params[:wrangler_id] %>
+        <%= hidden_field_tag :fandom_string, params[:fandom_string], id: nil %>
+        <%= hidden_field_tag :media_id, params[:media_id], id: nil %>
+        <%= hidden_field_tag :wrangler_id, params[:wrangler_id], id: nil %>
         <%= submit_tag 'Assign' %>
       </p>
     </fieldset>
@@ -76,16 +76,16 @@
   <%= form_tag tag_wranglers_path, :class => 'filters', :method => :get do %>
     <fieldset>
       <h3 class="landmark heading">Filters</h3>
-      <dl class="filters" role="menu">
-        <dt>Show Only Media</dt>
+      <dl class="filters">
+        <dt><%= label_tag :media_id, t(".filters.only_media") %></dt>
         <dd>
           <%= select_tag :media_id, options_for_select([''] + Media.canonical.by_name.collect(&:name), params[:media_id]) %>
         </dd>
-        <dt>Show Only Wrangler</dt>
+        <dt><%= label_tag :wrangler_id, t(".filters.only_wrangler") %></dt>
         <dd>
-          <%= select_tag :wrangler_id, options_for_select(['', 'No Wrangler'] + @wranglers.collect(&:login), params[:wrangler_id]) %>
+          <%= select_tag :wrangler_id, options_for_select(["", t(".filters.no_wrangler")] + @wranglers.collect(&:login), params[:wrangler_id].nil? && !logged_in_as_admin? ? current_user.login : params[:wrangler_id].to_s) %>
         </dd>
-        <dt>Only Fandoms Starting With</dt>
+        <dt><%= label_tag :fandom_string, t(".filters.only_fandoms_starting_with") %></dt>
         <dd>
           <%= text_field_tag :fandom_string, params[:fandom_string] %>
         </dd>

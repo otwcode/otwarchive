@@ -5,7 +5,7 @@ Feature: Tag wrangling
 
     Given the role "tag_wrangler"
     When I am logged in as "dizmo"
-    Then I should not see "Tag Wrangling" within "#header"
+    Then I should not see "Tag Wrangling" within "#greeting"
     When I am logged in as a "tag_wrangling" admin
       And I go to the manage users page
       And I fill in "Name" with "dizmo"
@@ -17,7 +17,7 @@ Feature: Tag wrangling
     Then I should see "User was successfully updated"
     # accessing wrangling pages
     When I am logged in as "dizmo"
-      And I follow "Tag Wrangling" within "#header"
+      And I follow "Tag Wrangling" within "#greeting"
     Then I should see "Wrangling Home"
     # no access otherwise
     When I log out
@@ -408,3 +408,12 @@ Feature: Tag wrangling
       And I view the unwrangled character bin for "World Domination"
     Then I should see "World Domination"
       And I should see "Comments (1)"
+
+  Scenario: Unwrangleable tags should not appear in mass wrangling bins
+    Given I am logged in as a tag wrangler
+      And a freeform exists with name: "Unwrangleable Nonsense", unwrangleable: true
+      And I post the work "My Plan" with freeform "Unwrangleable Nonsense" with second freeform "Wrangleable Sense"
+      And all indexing jobs have been run
+    When I go to the freeform mass bin
+      Then I should see "Wrangleable Sense"
+      Then I should not see "Unwrangleable Nonsense"

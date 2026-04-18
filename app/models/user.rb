@@ -24,16 +24,17 @@ class User < ApplicationRecord
   # Allows other models to get the current user with User.current_user
   thread_cattr_accessor :current_user
 
+  after_validation :canonicalize_email, if: :will_save_change_to_email?
+
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
   has_many :roles_users
   has_many :roles, through: :roles_users, dependent: :destroy
 
-  ### BETA INVITATIONS ###
   has_many :invitations, as: :creator
   has_one :invitation, as: :invitee
-  has_many :user_invite_requests, dependent: :destroy
+  has_many :user_invite_requests, dependent: :destroy 
 
   attr_accessor :invitation_token
   before_create :create_default_associateds
@@ -94,7 +95,9 @@ class User < ApplicationRecord
   has_many :user_past_usernames, dependent: :destroy
 
   before_update :add_renamed_at, if: :will_save_change_to_login?
+  before_update :cleanup_pseuds_autocomplete, if: :will_save_change_to_login?
   after_update :update_pseud_name
+  after_update :add_pseuds_to_autocomplete, if: :saved_change_to_login?
   after_update :send_wrangler_username_change_notification, if: :is_tag_wrangler?
   after_update :log_change_if_login_was_edited, if: :saved_change_to_login?
   after_update :log_email_change, if: :saved_change_to_email?
@@ -171,6 +174,10 @@ class User < ApplicationRecord
 
   has_many :log_items, dependent: :destroy
   validates_associated :log_items
+
+  def canonicalize_email
+    self.canonical_email = EmailCanonicalizer.canonicalize(self.email) if self.email
+  end
 
   def expire_caches
     return unless saved_change_to_login?
@@ -471,8 +478,6 @@ class User < ApplicationRecord
     self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
   end
 
-  ### BETA INVITATIONS ###
-
   # If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed
     if self.invitation_token.present?
@@ -613,6 +618,18 @@ class User < ApplicationRecord
     options[:note] = "Change made by #{current_admin&.login}" if current_admin
     user_past_emails.create!(email_address: email_before_last_save, changed_at: self.updated_at)
     create_log_item(options)
+  end
+
+  def add_pseuds_to_autocomplete
+    pseuds.each do |pseud|
+      # have to reload the pseud from the db otherwise it has the outdated login
+      pseud.reload
+      pseud.add_to_autocomplete
+    end
+  end
+
+  def cleanup_pseuds_autocomplete
+    pseuds.each(&:remove_stale_from_autocomplete_before_save)
   end
 
   def remove_stale_from_autocomplete

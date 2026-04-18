@@ -82,9 +82,16 @@ Scenario: User can turn off banner in preferences, but will still see a banner w
   When I am logged in as "banner_tester_2"
   Then the page should have the different banner
   
-Scenario: Admin can delete a banner and it will no longer be shown to users
+Scenario: Admin cannot delete an active banner
   Given there are no banners
     And an admin creates an active banner
+  When I am logged in as a "communications" admin
+    And I am on the admin_banners page
+  Then I should not see "Delete" within "#main ul.banner.index.group"
+
+Scenario: Admin can delete an inactive banner and it will no longer be shown to users
+  Given there are no banners
+    And an admin creates a banner
   When I am logged in as a "communications" admin
     And I am on the admin_banners page
     And I follow "Delete"
