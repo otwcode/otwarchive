@@ -15,13 +15,13 @@ module CommentsHelper
   end
 
   def title_for_new_comment_page(commentable)
-    if commentable.commentable_name.blank?
-      title = ""
-    elsif commentable.is_a?(Tag)
-      title = link_to_tag(commentable)
-    else
-      title = link_to(commentable.commentable_name, commentable)
-    end
+    title = if commentable.commentable_name.blank?
+              ""
+            elsif commentable.is_a?(Tag)
+              link_to_tag(commentable)
+            else
+              link_to(commentable.commentable_name, commentable)
+            end
     t("comments.new.page_heading_html", link: title)
   end
 
