@@ -124,7 +124,6 @@ class PromptRestriction < ApplicationRecord
   def allows_any_fields?
     return true if title_allowed || description_allowed || url_allowed
 
-    TagSet::TAG_TYPES.any? { |tag_type| allowed(tag_type) > 0 }
+    TagSet::TAG_TYPES.any? { |tag_type| allowed(tag_type).positive? }
   end
-
 end
