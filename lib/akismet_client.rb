@@ -8,14 +8,6 @@ class AkismetClient
 
   SUBMISSION_RESPONSE = "Thanks for making the web a better place."
 
-  def self.valid_key?
-    return false unless ArchiveConfig.AKISMET_KEY.present? && ArchiveConfig.AKISMET_NAME.present?
-
-    self.post("/1.1/verify-key", body: URI.encode_www_form(
-      key: ArchiveConfig.AKISMET_KEY, blog: ArchiveConfig.AKISMET_NAME
-    )).body == "valid"
-  end
-
   def self.spam?(attributes)
     return false unless self.enabled?
 
