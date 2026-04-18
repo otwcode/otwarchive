@@ -32,8 +32,8 @@ class ChallengeSignup < ApplicationRecord
                                 allow_destroy: true,
                                 reject_if: proc { |attrs|
                                   attrs[:title].blank? && attrs[:url].blank? && attrs[:description].blank? &&
-                                  (attrs[:tag_set_attributes].nil? || attrs[:tag_set_attributes].all? { |k, v| v.blank? }) &&
-                                  (attrs[:optional_tag_set_attributes].nil? || attrs[:optional_tag_set_attributes].all? { |k, v| v.blank? })
+                                    (attrs[:tag_set_attributes].nil? || attrs[:tag_set_attributes].all? { |_k, v| v.blank? }) &&
+                                    (attrs[:optional_tag_set_attributes].nil? || attrs[:optional_tag_set_attributes].all? { |_k, v| v.blank? })
                                 }
 
   scope :by_user, lambda {|user|
