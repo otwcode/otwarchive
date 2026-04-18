@@ -312,7 +312,7 @@ en:
     preview:
       remove_skin: Go back or click any link to remove the skin.
       return_to_skin: Return To Skin To Use
-      skin_title: You are previewing the skin %{title}. This is a randomly chosen page.
+      skin_title: You are previewing the skin %{title}.
       tip: 'Tip: You can preview any archive page you want by tacking on ''?site_skin=[skin_id]'' like you can see in the url above.'
   stats:
     index:

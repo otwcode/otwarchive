@@ -802,3 +802,9 @@ PSEUD_SHARDS: 5
 TAG_SHARDS: 5
 USER_SHARDS: 5
 WORKS_SHARDS: 5
+
+# The relative URL to redirect to when previewing a skin
+# e.g. /works -> http://test.archiveofourown.org/works?site_skin=[skin_id]
+# Production should pick something more suitable with roughly 1-20 works and
+# predictable content such as /users/OTW_Translation/works
+SKIN_PREVIEW_URL: '/works'

@@ -134,8 +134,7 @@ class SkinsController < ApplicationController
     flash[:notice] << t(".remove_skin")
     flash[:notice] << t(".tip")
     flash[:notice] << ("<a href='#{skin_path(@skin)}' class='action' role='button'>".html_safe + t(".return_to_skin") + "</a>".html_safe)
-    tag = FilterCount.where("public_works_count BETWEEN 10 AND 20").random_order.first.filter
-    redirect_to tag_works_path(tag, site_skin: @skin.id)
+    redirect_to "#{ArchiveConfig.SKIN_PREVIEW_URL}?site_skin=#{@skin.id}"
   end
 
   def set
