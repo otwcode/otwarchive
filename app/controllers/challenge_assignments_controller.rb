@@ -149,6 +149,7 @@ class ChallengeAssignmentsController < ApplicationController
     end
 
     ChallengeAssignment.update_placeholder_assignments!(@collection)
+    ChallengeAssignment.split_off_write_in_giver_assignments!(@collection)
     if @assignments.empty?
       flash[:notice] = "Assignments updated"
       redirect_to collection_potential_matches_path(@collection)
