@@ -1,9 +1,6 @@
 require "spec_helper"
 
 describe GiftExchangeMailer do
-  include ActionView::Helpers::UrlHelper
-  include MailerHelper
-
   describe "#no_potential_matches_notification" do
     subject(:email) { GiftExchangeMailer.no_potential_matches_notification(collection.id, "test@example.com") }
 
