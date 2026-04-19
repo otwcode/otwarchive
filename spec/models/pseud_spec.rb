@@ -99,7 +99,7 @@ describe Pseud do
     let(:pseud) { create(:pseud, user: user) }
     let(:default_pseud) { user.default_pseud }
 
-    let!(:bookmarks) { Array.new(2) { create(:bookmark, pseud: pseud) } }
+    let!(:bookmarks) { create_list(:bookmark, 2, pseud: pseud) }
 
     before do
       IndexQueue.new("index:bookmark:main").run
