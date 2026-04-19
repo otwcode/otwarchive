@@ -71,7 +71,7 @@ describe AkismetClient do
         expect(WebMock).to have_requested(:post, "https://rest.akismet.com/1.1/comment-check")
           .with(
             body: hash_including(comment_attributes.merge(blog: "http://transformativeworks.org", key: "679f25dc720c")),
-            headers: { "Content-Type" => "application/x-www-form-urlencoded" }
+            headers: { "Content-Type": "application/x-www-form-urlencoded" }
           )
       end
       
