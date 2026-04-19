@@ -133,27 +133,30 @@ class TagSetNominationsController < ApplicationController
 
   def base_nom_query(tag_type)
     TagNomination.where(type: (tag_type.is_a?(Array) ? tag_type.map {|t| "#{t.classify}Nomination"} : "#{tag_type.classify}Nomination")).
-      for_tag_set(@tag_set).unreviewed.limit(@nom_limit)
+      for_tag_set(@tag_set).unreviewed
+  end
+
+  # Paginate nominations by unique tagname, since the view groups duplicates.
+  def paginate_unique_noms(tag_type, page_param:)
+    query = base_nom_query(tag_type)
+    unique_ids = query.group(:tagname).select("MIN(tag_nominations.id)")
+    unique_query = TagNomination.where(id: unique_ids).order(:created_at, :id)
+    unique_count = query.distinct.count(:tagname)
+    pagy(unique_query, count: unique_count, page_param: page_param)
   end
 
   # set up various variables for reviewing nominations
   def setup_for_review
     set_limit
 
-    # Only this amount of tag nominations is shown on the review page.
-    # If there are more (more_noms == true), moderators have to approve/reject from the shown noms to see more noms.
-    # TODO: AO3-3764 Show all tag set nominations
-    @nom_limit = 30
     @nominations = HashWithIndifferentAccess.new
     @nominations_count = HashWithIndifferentAccess.new
-    more_noms = false
+    @paginations = HashWithIndifferentAccess.new
 
     if @tag_set.includes_fandoms?
       # all char and rel tags happen under fandom noms
       @nominations_count[:fandom] = @tag_set.fandom_nominations.unreviewed.count
-      more_noms = true if @nominations_count[:fandom] > @nom_limit
-      # Show a random selection of nominations if there are more noms than can be shown at once
-      @nominations[:fandom] = more_noms ? base_nom_query("fandom").random_order : base_nom_query("fandom").order(:tagname)
+      @paginations[:fandom], @nominations[:fandom] = paginate_unique_noms("fandom", page_param: :fandom_page)
       if (@limit[:character] > 0 || @limit[:relationship] > 0)
         @nominations[:cast] = base_nom_query(%w(character relationship)).
           join_fandom_nomination.
@@ -164,24 +167,17 @@ class TagSetNominationsController < ApplicationController
       # if there are no fandoms we're going to assume this is a one or few fandom tagset
       @nominations_count[:character] = @tag_set.character_nominations.unreviewed.count
       @nominations_count[:relationship] = @tag_set.relationship_nominations.unreviewed.count
-      more_noms = true if (@tag_set.character_nominations.unreviewed.count > @nom_limit || @tag_set.relationship_nominations.unreviewed.count > @nom_limit)
-      @nominations[:character] = base_nom_query("character") if @limit[:character] > 0
-      @nominations[:relationship] = base_nom_query("relationship") if @limit[:relationship] > 0
-      if more_noms # Show a random selection of nominations if there are more noms than can be shown at once
-        parent_tagnames = TagNomination.for_tag_set(@tag_set).unreviewed.random_order.limit(100).pluck(:parent_tagname).uniq.first(30)
-        @nominations[:character] = @nominations[:character].where(parent_tagname: parent_tagnames) if @limit[:character] > 0
-        @nominations[:relationship] = @nominations[:relationship].where(parent_tagname: parent_tagnames) if @limit[:relationship] > 0
+      if @limit[:character] > 0
+        @paginations[:character], @nominations[:character] = paginate_unique_noms("character", page_param: :character_page)
       end
-      @nominations[:character] = @nominations[:character].order(:parent_tagname, :tagname) if @limit[:character] > 0
-      @nominations[:relationship] = @nominations[:relationship].order(:parent_tagname, :tagname) if @limit[:relationship] > 0
+      if @limit[:relationship] > 0
+        @paginations[:relationship], @nominations[:relationship] = paginate_unique_noms("relationship", page_param: :relationship_page)
+      end
     end
-    @nominations_count[:freeform] =  @tag_set.freeform_nominations.unreviewed.count
-    more_noms = true if @nominations_count[:freeform] > @nom_limit
-    # Show a random selection of nominations if there are more noms than can be shown at once
-    @nominations[:freeform] = (more_noms ? base_nom_query("freeform").random_order : base_nom_query("freeform").order(:tagname)) unless @limit[:freeform].zero?
 
-    if more_noms
-      flash[:notice] = ts("There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some.")
+    unless @limit[:freeform].zero?
+      @nominations_count[:freeform] = @tag_set.freeform_nominations.unreviewed.count
+      @paginations[:freeform], @nominations[:freeform] = paginate_unique_noms("freeform", page_param: :freeform_page)
     end
 
     if @tag_set.tag_nominations.unreviewed.empty?

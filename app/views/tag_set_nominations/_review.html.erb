@@ -30,12 +30,22 @@
 
     <% %w(cast fandom character relationship freeform).each do |tag_type| %>
       <% if @nominations[tag_type] && @nominations[tag_type].count > 0 %>
-        <fieldset class="<%= tag_type %> listbox group">
-          <% heading = tag_type == "cast" ? ts("Already Approved Fandoms") : ts("#{tag_type_label_name(tag_type).pluralize} (%{count} left to review)", :count => @tag_set.send("#{tag_type}_nominations").unreviewed.count) %>
+        <fieldset class="<%= tag_type %> listbox group" id="<%= tag_type %>_nominations">
+          <% if tag_type == "cast" %>
+            <% heading = ts("Already Approved Fandoms") %>
+          <% else %>
+            <% pagy = @paginations[tag_type] %>
+            <% if pagy.pages > 1 %>
+              <% heading = ts("%{from} - %{to} of %{total} %{type}", from: pagy.from, to: pagy.to, total: pagy.count, type: tag_type_label_name(tag_type).pluralize) %>
+            <% else %>
+              <% heading = ts("%{type} (%{count} left to review)", type: tag_type_label_name(tag_type).pluralize, count: pagy.count) %>
+            <% end %>
+          <% end %>
           <legend><%= heading %></legend>
           <h3 class="heading"><%= heading %></h3>
           <%= check_all_none("Reject All", "Reject None", "reject") %>
           <%= check_all_none("Approve All", "Approve None", "approve") %>
+          <%== pagy_nav(@paginations[tag_type], anchor_string: "id=\"#{tag_type}_nominations\"") if @paginations&.dig(tag_type) %>
           <ol class="tags index group">
             <% if tag_type == "fandom" %>
               <%= render "review_fandoms", :fandoms => @nominations[:fandom] %>
@@ -47,6 +57,7 @@
               <% end %>
             <% end %>
           </ol>
+          <%== pagy_nav(@paginations[tag_type], anchor_string: "id=\"#{tag_type}_nominations\"") if @paginations&.dig(tag_type) %>
         </fieldset>
       <% end %>
     <% end %>

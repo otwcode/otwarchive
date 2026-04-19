@@ -177,7 +177,7 @@ Feature: Nominating and reviewing nominations for a tag set
     And I am logged in as "tagsetter"
   When I go to the "Nominated Tags" tag set page
     And I follow "Review Nominations"
-  Then I should see "left to review"
+  Then I should see "Fandoms (3 left to review)"
 
   Scenario: If a moderator approves a nominated tag it should no longer appear on the review page and should appear on the tag set page
   Given I am logged in as "tagsetter"
@@ -215,7 +215,7 @@ Feature: Nominating and reviewing nominations for a tag set
     And I check "fandom_approve_Bar__LBRACKETFoo_RBRACKET"
     And I check "character_approve_Bat__LBRACKETBar_RBRACKET"
     And I submit
-  Then I should see "Successfully added to set: Bar [Foo], Foo [Bar]"
+  Then I should see "Successfully added to set: Foo [Bar], Bar [Foo]"
     And I should see "Successfully added to set: Bat [Bar]"
     And I should see "Successfully rejected: Yar [Bar]"
   When I go to the "Nominated Tags" tag set page
