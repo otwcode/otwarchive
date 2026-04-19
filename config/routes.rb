@@ -674,7 +674,7 @@ Rails.application.routes.draw do
   get "/help/parent-works-help.html", to: redirect("/help/works_parents")
   get "/help/recipients.html", to: redirect("/help/works_recipients")
   get "/help/choosing-series.html", to: redirect("/help/works_series")
-  get "/help/languages-help.html", to: redirect("/help/works_translation_link")
+  get "/help/translation-link.html", to: redirect("/help/works_translation_link")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
