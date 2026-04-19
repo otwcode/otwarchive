@@ -92,6 +92,7 @@ I'd like to comment on a tag'
       And the email should contain "Cesy"
       And the email should contain "left the following comment on"
       And the email should contain "the tag"
+      And the email should have "on the Fandom tag Eroica" in the subject
 
     When I am logged in as "Enigel" with password "wrangulator"
       And I follow "Go to the thread starting from this comment" in the email
@@ -145,6 +146,21 @@ I'd like to comment on a tag'
     When I am logged in as "dizmo" with password "wrangulator"
       And I post the comment "Heads up" on the tag "Dr Who"
     Then 1 email should be delivered to "enigel@example.org"
+      And the email should have "on the Fandom tag Dr Who" in the subject
+
+  Scenario: Comments on child tags of fandoms should be received by the wrangler of the fandom
+    Given the following activated tag wranglers exist
+        | login       | password      | email             |
+        | dizmo       | wrangulator   | dizmo@example.org |
+        | Enigel      | wrangulator   | enigel@example.org|
+      And a canonical fandom "Doctor Who"
+      And the tag wrangler "Enigel" with password "wrangulator" is wrangler of "Doctor Who"
+      And a character exists with name: "John Smith", canonical: true
+      And I add the fandom "Doctor Who" to the character "John Smith"
+    When I am logged in as "dizmo" with password "wrangulator"
+      And I post the comment "Heads up" on the tag "John Smith"
+    Then 1 email should be delivered to "enigel@example.org"
+      And the email should have "on the Character tag John Smith" in the subject
 
   Scenario: Comments pagination for a regular tag
 

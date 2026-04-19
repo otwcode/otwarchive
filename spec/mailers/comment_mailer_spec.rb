@@ -477,7 +477,7 @@ describe CommentMailer do
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on the tag #{comment.ultimate_parent.commentable_name}"
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on the Fandom tag #{comment.ultimate_parent.commentable_name}"
         expect(email).to have_subject(subject)
       end
 
@@ -602,7 +602,7 @@ describe CommentMailer do
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on the tag #{comment.ultimate_parent.commentable_name}"
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on the Fandom tag #{comment.ultimate_parent.commentable_name}"
         expect(email).to have_subject(subject)
       end
 
@@ -726,7 +726,7 @@ describe CommentMailer do
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Reply to your comment on the tag #{comment.ultimate_parent.commentable_name}"
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Reply to your comment on the Fandom tag #{comment.ultimate_parent.commentable_name}"
         expect(email).to have_subject(subject)
       end
     end
@@ -869,7 +869,7 @@ describe CommentMailer do
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Edited reply to your comment on the tag #{comment.ultimate_parent.commentable_name}"
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Edited reply to your comment on the Fandom tag #{comment.ultimate_parent.commentable_name}"
         expect(email).to have_subject(subject)
       end
     end
@@ -969,7 +969,7 @@ describe CommentMailer do
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Comment you left on the tag #{comment.ultimate_parent.commentable_name}"
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Comment you left on the Fandom tag #{comment.ultimate_parent.commentable_name}"
         expect(email).to have_subject(subject)
       end
     end
@@ -1075,7 +1075,7 @@ describe CommentMailer do
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
-        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on the tag #{comment.ultimate_parent.commentable_name}"
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on the Fandom tag #{comment.ultimate_parent.commentable_name}"
         expect(email).to have_subject(subject)
       end
     end

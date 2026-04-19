@@ -62,7 +62,7 @@ en:
       subject:
         chapter: "[%{app_name}] Comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Comment on %{title}"
-        tag: "[%{app_name}] Comment on the tag %{name}"
+        tag: "[%{app_name}] Comment on the %{category} tag %{name}"
     comment_notification_footer:
       comment_thread:
         html: Go to the thread starting from this comment
@@ -113,7 +113,7 @@ en:
       subject:
         chapter: "[%{app_name}] Reply to your comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Reply to your comment on %{title}"
-        tag: "[%{app_name}] Reply to your comment on the tag %{name}"
+        tag: "[%{app_name}] Reply to your comment on the %{category} tag %{name}"
       you_wrote: 'You wrote:'
     comment_reply_sent_notification:
       chapter:
@@ -136,7 +136,7 @@ en:
       subject:
         chapter: "[%{app_name}] Reply you left to a comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Reply you left to a comment on %{title}"
-        tag: "[%{app_name}] Reply you left to a comment on the tag %{name}"
+        tag: "[%{app_name}] Reply you left to a comment on the %{category} tag %{name}"
       you_responded: 'You responded:'
     comment_sent_notification:
       chapter:
@@ -156,7 +156,7 @@ en:
       subject:
         chapter: "[%{app_name}] Comment you left on Chapter %{position} of %{title}"
         other: "[%{app_name}] Comment you left on %{title}"
-        tag: "[%{app_name}] Comment you left on the tag %{name}"
+        tag: "[%{app_name}] Comment you left on the %{category} tag %{name}"
     edited_comment_notification:
       chapter:
         titled: 'Chapter %{position}: %{title}'
@@ -175,7 +175,7 @@ en:
       subject:
         chapter: "[%{app_name}] Edited comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Edited comment on %{title}"
-        tag: "[%{app_name}] Edited comment on the tag %{name}"
+        tag: "[%{app_name}] Edited comment on the %{category} tag %{name}"
     edited_comment_reply_notification:
       chapter:
         titled: 'Chapter %{position}: %{title}'
@@ -197,8 +197,19 @@ en:
       subject:
         chapter: "[%{app_name}] Edited reply to your comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Edited reply to your comment on %{title}"
-        tag: "[%{app_name}] Edited reply to your comment on the tag %{name}"
+        tag: "[%{app_name}] Edited reply to your comment on the %{category} tag %{name}"
       you_wrote: 'You wrote:'
+    tag_category:
+      archive_warning: Warning
+      banned: Banned
+      category: Category
+      character: Character
+      fandom: Fandom
+      freeform: Freeform
+      media: Media
+      rating: Rating
+      relationship: Relationship
+      unsorted_tag: Unsorted
   kudo_mailer:
     batch_kudo_notification:
       guest:
