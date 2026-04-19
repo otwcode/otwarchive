@@ -914,12 +914,9 @@ en:
       page_heading: Editing comment
       show: Show
       update: Update
-    index:
-      page_heading_html: Reading Comments on %{commentable_link}
     new:
       actions:
         comment: Comment
-      page_heading_html: New Comment on %{commentable_link}
     show:
       comment_on_html: Comment on %{commentable_link}
     single_comment:
