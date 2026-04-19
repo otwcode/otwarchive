@@ -145,13 +145,32 @@ Feature: Nominating and reviewing nominations for a tag set
     And I press "Yes, Clear Tag Set Nominations"
   Then I should see "All nominations for this Tag Set have been cleared"
 
-  Scenario: Owner of a tag set with over 30 nominations sees a message that they can't all be displayed on one page
+  Scenario: Fandom nominations are paginated on the review page
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 6 fandom noms and 6 character noms
+    And there are 2 nominations per page
+  When there are 36 unreviewed nominations
+  Given I am logged in as "tagsetter"
+    And I review nominations for "Nominated Tags"
+  Then I should see "Next" within "fieldset.fandom .pagination"
+  When I follow "Next" within "fieldset.fandom .pagination"
+  Then I should see "Fandoms" within "fieldset.fandom"
+
+  Scenario: Freeform nominations are paginated on the review page
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 0 character noms
+    And the tag set "Nominated Tags" has 3 unreviewed freeform nominations
+    And there are 2 nominations per page
+  When I review nominations for "Nominated Tags"
+  Then I should see "Next" within "fieldset.freeform .pagination"
+
+  Scenario: Owner of a tag set with over 30 nominations does not see the randomized selection message
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 6 fandom noms and 6 character noms
   When there are 36 unreviewed nominations
   Given I am logged in as "tagsetter"
     And I review nominations for "Nominated Tags"
-  Then I should see "There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some"
+  Then I should not see "There are too many nominations to show at once"
 
   Scenario: If a set has received nominations, a moderator should be able to review nominated tags
   Given I have the nominated tag set "Nominated Tags"

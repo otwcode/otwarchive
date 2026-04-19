@@ -151,6 +151,19 @@ When /^there are (\d+) unreviewed nominations$/ do |n|
   end
 end
 
+Given "there are {int} nominations per page" do |amount|
+  allow_any_instance_of(ApplicationController).to receive(:pagy_get_limit).and_return(amount)
+end
+
+Given /^the tag set "([^\"]*)" has (\d+) unreviewed freeform nominations$/ do |title, count|
+  tag_set = OwnedTagSet.find_by!(title: title)
+  tag_set.update!(freeform_nomination_limit: count.to_i)
+  nomination = tag_set.tag_set_nominations.first || FactoryBot.create(:tag_set_nomination, owned_tag_set: tag_set)
+  count.to_i.times do |i|
+    FreeformNomination.create!(tag_set_nomination: nomination, tagname: "Freeform Tag #{i + 1}")
+  end
+end
+
 When /^I review nominations for "([^\"]*)"/ do |title|
   step %{I am logged in as "tagsetter"}
   step %{I go to the "#{title}" tag set page}

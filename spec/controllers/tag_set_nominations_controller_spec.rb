@@ -89,20 +89,17 @@ describe TagSetNominationsController do
                 context 'unreviewed freeform_nominations' do
                   context 'unreviewed freeform nominations <= 30' do
                     before do
-                      add_unreviewed_freeform_nominations(30)
+                      # Create with non-alphabetical names so ordering by tagname vs created_at differs
+                      FreeformNomination.create(tag_set_nomination: tag_set_nomination, tagname: "Zebra Freeform")
+                      FreeformNomination.create(tag_set_nomination: tag_set_nomination, tagname: "Apple Freeform")
+                      FreeformNomination.create(tag_set_nomination: tag_set_nomination, tagname: "Mango Freeform")
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns all freeform nominations in order' do
-                      expect(assigns(:nominations_count)[:freeform]).to eq(30)
-                      expect(assigns(:nominations)[:freeform].count).to eq(30)
-                      expect(assigns(:nominations)[:freeform].first.tagname).to eq('New Freeform 0')
-                    end
-
-                    it 'does not return a flash notice about too many nominations' do
-                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " \
-                                                         "randomized selection! Additional nominations will appear " \
-                                                         "after you approve or reject some.")
+                    it 'returns all freeform nominations ordered by creation date' do
+                      expect(assigns(:nominations)[:freeform].map(&:tagname)).to eq(
+                        ["Zebra Freeform", "Apple Freeform", "Mango Freeform"]
+                      )
                     end
                   end
 
@@ -112,15 +109,9 @@ describe TagSetNominationsController do
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns 30 freeform nominations' do
+                    it 'returns 30 freeform nominations on the first page' do
                       expect(assigns(:nominations_count)[:freeform]).to eq(31)
                       expect(assigns(:nominations)[:freeform].count).to eq(30)
-                    end
-
-                    it 'returns a flash notice about too many nominations' do
-                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " \
-                                                     "randomized selection! Additional nominations will appear " \
-                                                     "after you approve or reject some.")
                     end
                   end
 
@@ -177,35 +168,24 @@ describe TagSetNominationsController do
                   context 'unreviewed fandom nominations <= 30' do
                     let(:fandom_nom_num) { 30 }
 
-                    it 'returns all fandom nominations in order' do
+                    it 'returns all fandom nominations ordered by creation date' do
                       expect(assigns(:nominations_count)[:fandom]).to eq(30)
                       expect(assigns(:nominations)[:fandom].count).to eq(30)
-                      expect(assigns(:nominations)[:fandom].first.tagname).to eq('New Fandom 0')
+                      ids = assigns(:nominations)[:fandom].map(&:id)
+                      expect(ids).to eq(ids.sort)
                     end
 
                     it 'does not return associated character and relationship nominations' do
                       expect(assigns(:nominations)[:cast]).to be_empty
-                    end
-
-                    it 'does not return a flash notice about too many nominations' do
-                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " \
-                                                         "randomized selection! Additional nominations will appear " \
-                                                         "after you approve or reject some.")
                     end
                   end
 
                   context 'unreviewed fandom nominations > 30' do
                     let(:fandom_nom_num) { 31 }
 
-                    it 'returns 30 fandom nominations' do
+                    it 'returns 30 fandom nominations on the first page' do
                       expect(assigns(:nominations_count)[:fandom]).to eq(31)
                       expect(assigns(:nominations)[:fandom].count).to eq(30)
-                    end
-
-                    it 'returns a flash notice about too many nominations' do
-                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " \
-                                                     "randomized selection! Additional nominations will appear " \
-                                                     "after you approve or reject some.")
                     end
                   end
                 end
@@ -312,19 +292,15 @@ describe TagSetNominationsController do
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns all ordered character and relationship nominations' do
+                    it 'returns all character and relationship nominations ordered by creation date' do
                       expect(assigns(:nominations_count)[:character]).to eq(30)
                       expect(assigns(:nominations)[:character].count).to eq(30)
-                      expect(assigns(:nominations)[:character].first.tagname).to eq('New Character 0')
+                      character_ids = assigns(:nominations)[:character].map(&:id)
+                      expect(character_ids).to eq(character_ids.sort)
                       expect(assigns(:nominations_count)[:relationship]).to eq(30)
                       expect(assigns(:nominations)[:relationship].count).to eq(30)
-                      expect(assigns(:nominations)[:relationship].first.tagname).to eq('New Relationship 0')
-                    end
-
-                    it 'does not return a flash notice about too many nominations' do
-                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " \
-                                                         "randomized selection! Additional nominations will appear " \
-                                                         "after you approve or reject some.")
+                      relationship_ids = assigns(:nominations)[:relationship].map(&:id)
+                      expect(relationship_ids).to eq(relationship_ids.sort)
                     end
                   end
 
@@ -335,17 +311,11 @@ describe TagSetNominationsController do
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns 30 character and relationship nominations' do
+                    it 'returns 30 relationship nominations on the first page' do
                       expect(assigns(:nominations_count)[:character]).to eq(1)
                       expect(assigns(:nominations)[:character].count).to eq(1)
                       expect(assigns(:nominations_count)[:relationship]).to eq(31)
                       expect(assigns(:nominations)[:relationship].count).to eq(30)
-                    end
-
-                    it 'returns a flash notice about too many nominations' do
-                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " \
-                                                     "randomized selection! Additional nominations will appear " \
-                                                     "after you approve or reject some.")
                     end
                   end
                 end
