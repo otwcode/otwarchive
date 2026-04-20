@@ -105,11 +105,12 @@ Feature: Public skins
   Scenario: A user can preview a cached public site skin, and it will take the
   user to the configured page for skin previews
   Given the approved public skin "Usable Skin"
+    And the user "OTW_Translation" exists and is activated
     And the skin "Usable Skin" is cached
     And I am logged in as "skinner"
   When I go to the public skins page
     And I follow "Preview"
-  Then I should be on the works page
+  Then I should be on OTW_Translation's works page
     And I should see "You are previewing the skin Usable Skin."
     And I should see "Go back or click any link to remove the skin"
     And I should see "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above."

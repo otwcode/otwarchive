@@ -804,7 +804,7 @@ USER_SHARDS: 5
 WORKS_SHARDS: 5
 
 # The relative URL to redirect to when previewing a skin
-# e.g. /works -> http://test.archiveofourown.org/works?site_skin=[skin_id]
-# Production should pick something more suitable with roughly 1-20 works and
-# predictable content such as /users/OTW_Translation/works
-SKIN_PREVIEW_URL: '/works'
+# e.g. /users/OTW_Translation/works ->
+# http://test.archiveofourown.org/users/OTW_Translation/works?site_skin=[skin_id]
+# This will not work in dev unless you manually create the OTW_Translation user
+SKIN_PREVIEW_URL: '/users/OTW_Translation/works'
