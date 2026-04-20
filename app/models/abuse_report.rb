@@ -185,7 +185,7 @@ class AbuseReport < ApplicationRecord
   # ID of the reported work, unless the report is about comment(s) or bookmark(s) on the work
   def reported_work_id
     comments = url[%r{/comments/}, 0]
-    bookmarks = url[%r{/bookmarks}, 0]
+    bookmarks = url[%r{/bookmarks/}, 0]
     url[%r{/works/(\d+)}, 1] if comments.nil? && bookmarks.nil?
   end
 

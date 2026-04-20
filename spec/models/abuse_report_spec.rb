@@ -693,7 +693,7 @@ describe AbuseReport do
 
     context "for a work URL with bookmarks" do
       it "returns nil" do
-        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/bookmarks")
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/bookmarks/")
         expect(subject.reported_work_id).to be_nil
       end
     end
