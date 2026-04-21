@@ -342,3 +342,17 @@ Then "{string} should have the {string} role in the collection {string}" do |byl
     expect(page).to have_select("#{pseud.user.login}_role", selected: role)
   end
 end
+
+Then /^the (\d+)(?:st|nd|rd|th) collection result should contain "([^"]*)"$/ do |n, text| # rubocop:disable Cucumber/RegexStepName
+  selector = "ul.collection > li:nth-of-type(#{n})"
+  with_scope(selector) do
+    expect(page).to have_content(text)
+  end
+end
+
+Then /^the (\d+)(?:st|nd|rd|th) collection result should not contain "([^"]*)"$/ do |n, text| # rubocop:disable Cucumber/RegexStepName
+  selector = "ul.collection > li:nth-of-type(#{n})"
+  with_scope(selector) do
+    expect(page).not_to have_content(text)
+  end
+end
