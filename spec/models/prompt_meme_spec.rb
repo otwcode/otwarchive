@@ -5,11 +5,6 @@ describe PromptMeme do
     let!(:challenge) { create(:prompt_meme) }
     let!(:collection) { create(:collection, challenge: challenge) }
 
-    it "does not destroy the collection" do
-      challenge.destroy!
-      expect(Collection.exists?(collection.id)).to be true
-    end
-
     it "nullifies the collection's challenge references" do
       challenge.destroy!
       collection.reload

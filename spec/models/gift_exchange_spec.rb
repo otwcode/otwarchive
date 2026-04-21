@@ -47,11 +47,6 @@ describe GiftExchange do
     let!(:challenge) { create(:gift_exchange) }
     let!(:collection) { create(:collection, challenge: challenge) }
 
-    it "does not destroy the collection" do
-      challenge.destroy!
-      expect(Collection.exists?(collection.id)).to be true
-    end
-
     it "nullifies the collection's challenge references" do
       challenge.destroy!
       collection.reload
