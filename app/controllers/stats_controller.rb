@@ -17,9 +17,18 @@ class StatsController < ApplicationController
     user_chapters = Chapter.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
     work_query = user_works
       .joins(:taggings)
-      .joins("inner join tags on ((taggings.tagger_id = tags.id AND tags.merger_id IS NULL) OR EXISTS (SELECT * FROM tags AS tags2 WHERE tags.id = tags2.merger_id AND tags2.id = taggings.tagger_id)) AND tags.type = 'Fandom'")
+      .joins(<<~SQL.squish)
+        INNER JOIN tags
+          ON ((taggings.tagger_id = tags.id AND tags.merger_id IS NULL)
+            OR EXISTS ( /* If the tag has a synonym, we take the synonym instead */
+              SELECT * FROM tags AS tags2
+              WHERE tags.id = tags2.merger_id
+                AND tags2.id = taggings.tagger_id
+            ))
+          AND tags.type = 'Fandom'
+      SQL
       .select("distinct tags.name as fandom, works.id as id, works.title as title")
-    
+
     # sort
 
     # NOTE: Because we are going to be eval'ing the @sort variable later we MUST make sure that its content is
