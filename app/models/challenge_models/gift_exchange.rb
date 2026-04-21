@@ -77,4 +77,14 @@ class GiftExchange < ApplicationRecord
   def user_allowed_to_see_prompt?(user, prompt)
     self.collection.user_is_maintainer?(user) || prompt.pseud.user == user
   end
+
+  validate :request_restriction_allows_fields
+  def request_restriction_allows_fields
+    errors.add(:base, :no_request_fields) unless request_restriction&.allows_any_fields?
+  end
+
+  validate :offer_restriction_allows_fields
+  def offer_restriction_allows_fields
+    errors.add(:base, :no_offer_fields) unless offer_restriction&.allows_any_fields?
+  end
 end

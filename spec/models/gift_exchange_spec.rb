@@ -41,6 +41,32 @@ describe GiftExchange do
         expect(challenge.requests_num_allowed).to eq(challenge.requests_num_required)
       end
     end
+
+    context "when request restriction doesn't allow any fields" do
+      before do
+        r = challenge.request_restriction
+        r.description_allowed = false
+        TagSet::TAG_TYPES.each { |type| r.send("#{type}_num_allowed=", 0) }
+      end
+
+      it "fails" do
+        challenge.save
+        expect(challenge.errors[:base]).to include("Request Settings must allow at least one field.")
+      end
+    end
+
+    context "when offer restriction doesn't allow any fields" do
+      before do
+        r = challenge.offer_restriction
+        r.description_allowed = false
+        TagSet::TAG_TYPES.each { |type| r.send("#{type}_num_allowed=", 0) }
+      end
+
+      it "fails" do
+        challenge.save
+        expect(challenge.errors[:base]).to include("Offer Settings must allow at least one field.")
+      end
+    end
   end
 
   describe "reindexing" do
@@ -49,7 +75,7 @@ describe GiftExchange do
     context "when gift exchange is created" do
       it "enqueues the collection for reindex" do
         expect do
-          GiftExchange.create!(collection: collection)
+          create(:gift_exchange, collection: collection)
         end.to add_to_reindex_queue(collection, :main)
       end
     end
