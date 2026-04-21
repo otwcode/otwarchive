@@ -287,7 +287,7 @@ class BookmarksController < ApplicationController
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
     # We check that the URL from where the bookmark was deleted is a list of bookmarks. If it is not, we cannot redirect the user back since it would cause a 404 error
-    if %r{(/bookmarks)|(bookmarks/search)\z}.match?(URI.parse(request.referer).path)
+    if %r{(/bookmarks\z)|(bookmarks/search\z)}.match?(URI.parse(request.referer).path)
       redirect_back_or_to user_bookmarks_path(current_user)
     else
       redirect_to user_bookmarks_path(current_user)
