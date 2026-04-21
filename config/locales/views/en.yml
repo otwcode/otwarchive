@@ -713,6 +713,7 @@ en:
       no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
     chapter_form:
+      publication_date: Chapter Publication Date
       works_backdating_help_title: Publication Date Options
     posting_fieldset:
       actions:
@@ -732,6 +733,7 @@ en:
   collectibles:
     collectible_form:
       collectibles_add_to_collection_help_title: Adding To Collections
+      add_to_collections: Add to collections
   collection_items:
     collection_item_form:
       add: Add
