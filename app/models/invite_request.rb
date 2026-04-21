@@ -10,7 +10,7 @@ class InviteRequest < ApplicationRecord
   def set_simplified_email
     return if email.blank?
 
-    simplified = AdminBlacklistedEmail.canonical_email(email).split('@')
+    simplified = EmailCanonicalizer.canonicalize(email).split("@")
     self.simplified_email = simplified.first.delete(".").gsub(/\+.+$/, "") + "@#{simplified.last}"
   end
 

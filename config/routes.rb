@@ -652,6 +652,7 @@ Rails.application.routes.draw do
   %w[
     collectibles_add_to_collection
     first_login
+    html
     preferences_collection
     preferences_comment
     preferences_display
@@ -659,6 +660,7 @@ Rails.application.routes.draw do
     preferences_misc
     preferences_privacy
     preferences_work_title_format
+    rte
     skins_basics
     skins_creating
     skins_parents
@@ -677,12 +679,14 @@ Rails.application.routes.draw do
   get "/help/add-collectible-to-collection.html", to: redirect("/help/collectibles_add_to_collection")
   get "/help/add-work-to-assignment.html", to: redirect("/help/works_assignment")
   get "/help/backdating-help.html", to: redirect("/help/works_backdating")  
+  get "/help/html-help.html", to: redirect("/help/html")
   get "/help/collection-preferences.html", to: redirect("/help/preferences_collection")
   get "/help/comment-preferences.html", to: redirect("/help/preferences_comment")
   get "/help/display-preferences.html", to: redirect("/help/preferences_display")
   get "/help/misc-preferences.html", to: redirect("/help/preferences_misc")
   get "/help/privacy-preferences.html", to: redirect("/help/preferences_privacy")
   get "/help/work_title_format.html", to: redirect("/help/preferences_work_title_format")
+  get "/help/rte-help.html", to: redirect("/help/rte")
   get "/help/skins-basics.html", to: redirect("/help/skins_basics")
   get "/help/skins-creating.html", to: redirect("/help/skins_creating")
   get "/help/skins-parents.html", to: redirect("/help/skins_parents")

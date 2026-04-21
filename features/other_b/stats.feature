@@ -87,3 +87,9 @@ Feature: User statistics
   Then I should see "Fandom A" within ".fandom.listbox.group[1]"
     And I should see "Fandom B" within ".fandom.listbox.group[2]"
     And I should see "Fandom C" within ".fandom.listbox.group[3]"
+
+  Scenario: Statistics page title includes the username
+  
+  Given I am logged in as "NUMB3RSfan"
+  When I go to NUMB3RSfan's stats page
+  Then I should see the page title "NUMB3RSfan - Stats"

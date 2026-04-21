@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
   <% if @can_access_refused_gifts && params[:refused] %>
-    <%= ts("Refused Gifts for %{recipient}", recipient: @user ? @user.login : h(@recipient_name)) %>
+    <%= ts("Refused Gifts for %{recipient}", recipient: @user ? @user.login : @recipient_name) %>
   <% else %>
-    <%= ts("Gifts for %{recipient}", recipient: @user ? @user.login : h(@recipient_name)) %>
+    <%= ts("Gifts for %{recipient}", recipient: @user ? @user.login : @recipient_name) %>
   <% end %>
   <%= @collection ? ts("in %{collection}", collection: h(@collection.title)) : "" %>
 </h2>

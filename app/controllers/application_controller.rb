@@ -325,10 +325,22 @@ public
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
     unless current_user.nil?
-      @current_user_subscriptions_count, @current_user_visible_work_count, @current_user_bookmarks_count, @current_user_owned_collections_count, @current_user_challenge_signups_count, @current_user_offer_assignments, @current_user_unposted_works_size=
-             Rails.cache.fetch("user_menu_counts_#{current_user.id}",
-                               expires_in: 2.hours,
-                               race_condition_ttl: 5) { "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}" }.split(",").map(&:to_i)
+      user_menu_data = Rails.cache.fetch([:user_menu_data, current_user.id], expires_in: 2.hours, race_condition_ttl: 5) do
+        {
+          current_user_subscriptions_count: current_user.subscriptions.count,
+          current_user_visible_work_count: current_user.visible_work_count,
+          current_user_bookmarks_count: current_user.bookmarks.count,
+          current_user_owned_collections_count: current_user.owned_collections.count,
+          current_user_challenge_signups_count: current_user.challenge_signups.count,
+          current_user_offer_assignments: current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count,
+          current_user_unposted_works_size: current_user.unposted_works.size,
+          current_user_opendoors: permit?("opendoors"),
+          current_user_tag_wrangler: current_user.is_tag_wrangler?
+        }
+      end
+      user_menu_data.each do |variable, value|
+        instance_variable_set("@#{variable}", value)
+      end
     end
 
     yield
@@ -341,34 +353,12 @@ public
     @collection = Collection.find_by(name: params[:collection_id]) if params[:collection_id]
   end
 
-  def privileged_collection_admin?
-    policy(Collection).access?
-  end
-
-  def users_or_privileged_collection_admins_only
-    return if logged_in? || privileged_collection_admin?
-
-    logged_in_as_admin? ? admin_only_access_denied : access_denied
-  end
-
   def collection_maintainers_only
     logged_in? && @collection && @collection.user_is_maintainer?(current_user) || access_denied
   end
 
-  def collection_maintainers_or_privileged_admins_only
-    return if (logged_in? && @collection && @collection.user_is_maintainer?(current_user)) || privileged_collection_admin?
-
-    logged_in_as_admin? ? admin_only_access_denied : access_denied
-  end
-
   def collection_owners_only
     logged_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
-  end
-
-  def collection_owners_or_privileged_admins_only
-    return if (logged_in? && @collection && @collection.user_is_owner?(current_user)) || privileged_collection_admin?
-
-    logged_in_as_admin? ? admin_only_access_denied : access_denied
   end
 
   def not_allowed(fallback=nil)
