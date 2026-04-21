@@ -41,7 +41,7 @@
       </dd>
       <dt class="required">
         <%= label_tag :language_id, ts("Choose a language") + "*" %>
-        <%= link_to_help "languages-help" %>
+        <%= link_to_help_modal(help_works_languages_path, t(".works_languages_help_title")) %>
       </dt>
       <dd class="required">
         <select id="language_id" name="language_id">
