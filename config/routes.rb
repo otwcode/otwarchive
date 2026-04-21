@@ -650,9 +650,7 @@ Rails.application.routes.draw do
   resources :orphans, only: [:index, :new, :create]
 
   %w[
-    add_work_to_assignment
-    add_collectible_to_collection
-    backdating
+    collectibles_add_to_collection
     first_login
     preferences_collection
     preferences_comment
@@ -668,15 +666,17 @@ Rails.application.routes.draw do
     tags_fandoms
     tags_ratings
     tags_warnings
+    works_assignment
+    works_backdating
   ].each do |action|
     get "/help/#{action}", to: "help##{action}"
   end
 
   # Redirects for moved help files
   get "/first_login_help", to: redirect("/help/first_login")
-  get "/help/add-collectible-to-collection.html", to: redirect("/help/add_collectible_to_collection")
-  get "/help/add-work-to-assignment.html", to: redirect("/help/add_work_to_assignment")
-  get "/help/backdating-help.html", to: redirect("/help/backdating")  
+  get "/help/add-collectible-to-collection.html", to: redirect("/help/collectibles_add_to_collection")
+  get "/help/add-work-to-assignment.html", to: redirect("/help/works_assignment")
+  get "/help/backdating-help.html", to: redirect("/help/works_backdating")  
   get "/help/collection-preferences.html", to: redirect("/help/preferences_collection")
   get "/help/comment-preferences.html", to: redirect("/help/preferences_comment")
   get "/help/display-preferences.html", to: redirect("/help/preferences_display")

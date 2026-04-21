@@ -50,7 +50,7 @@
         <!-- if the user has open assignments? -->
         <dt class="collection">
           <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %>
-          <%= link_to_help_modal(help_add_work_to_assignment_path, t(".add_work_to_assignment_help_title")) %>
+          <%= link_to_help_modal(help_works_assignment_path, t(".works_assignment_help_title")) %>
         </dt>
         <dd class="collection listbox group">
           <h4 class="heading"><%= ts("Open Assignments") %></h4>
@@ -226,7 +226,7 @@
         </dt>
         <dd class="backdate">
           <%= label_tag "backdate-options-show", ts("Set a different publication date") %>
-          <%= link_to_help_modal(help_backdating_path, t(".backdating_help_title")) %>
+          <%= link_to_help_modal(help_works_backdating_path, t(".works_backdating_help_title")) %>
 
           <fieldset id="backdate-options" class="optional">
             <dl>

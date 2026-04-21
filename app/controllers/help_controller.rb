@@ -2,13 +2,7 @@ class HelpController < ApplicationController
   before_action :users_only, only: [:first_login]
   layout proc { |controller| controller.request.xhr? ? false : "application" } # rubocop:disable Lint/AmbiguousBlockAssociation
 
-  def add_collectible_to_collection
-  end
-
-  def add_work_to_assignment
-  end
-
-  def backdating
+  def collectibles_add_to_collection
   end
 
   def first_login
@@ -54,5 +48,11 @@ class HelpController < ApplicationController
   end
 
   def tags_warnings
+  end
+
+  def works_assignment
+  end
+
+  def works_backdating
   end
 end
