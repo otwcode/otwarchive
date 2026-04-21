@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/otwcode/devise
-  revision: fade89f61c64e766d87f24cfcb980ee533a5d5f2
-  ref: fade89f
+  revision: 5dd846ef7ba8aae6fe728e8e5fc2a1578a2c3f77
+  ref: 5dd846e
   specs:
-    devise (5.0.2)
+    devise (5.0.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 7.0)
@@ -36,7 +36,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     aaronh-chronic (0.3.9)
-    action_text-trix (2.1.17)
+    action_text-trix (2.1.18)
       railties
     actioncable (8.1.2.1)
       actionpack (= 8.1.2.1)
@@ -116,8 +116,8 @@ GEM
       uri (>= 0.13.1)
     acts_as_list (0.9.19)
       activerecord (>= 3.0)
-    addressable (2.8.7)
-      public_suffix (>= 2.0.2, < 7.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     after_commit_everywhere (1.6.0)
       activerecord (>= 4.2)
       activesupport
@@ -147,7 +147,7 @@ GEM
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.3.0)
-    bcrypt (3.1.20)
+    bcrypt (3.1.22)
     bcrypt_pbkdf (1.1.0)
     better_html (2.0.2)
       actionview (>= 6.0)
@@ -470,7 +470,7 @@ GEM
     pwned (2.4.1)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (2.2.22)
+    rack (2.2.23)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
     rack-dev-mark (0.8.0)

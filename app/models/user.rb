@@ -24,16 +24,17 @@ class User < ApplicationRecord
   # Allows other models to get the current user with User.current_user
   thread_cattr_accessor :current_user
 
+  after_validation :canonicalize_email, if: :will_save_change_to_email?
+
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
   has_many :roles_users
   has_many :roles, through: :roles_users, dependent: :destroy
 
-  ### BETA INVITATIONS ###
   has_many :invitations, as: :creator
   has_one :invitation, as: :invitee
-  has_many :user_invite_requests, dependent: :destroy
+  has_many :user_invite_requests, dependent: :destroy 
 
   attr_accessor :invitation_token
   before_create :create_default_associateds
@@ -173,6 +174,10 @@ class User < ApplicationRecord
 
   has_many :log_items, dependent: :destroy
   validates_associated :log_items
+
+  def canonicalize_email
+    self.canonical_email = EmailCanonicalizer.canonicalize(self.email) if self.email
+  end
 
   def expire_caches
     return unless saved_change_to_login?
@@ -472,8 +477,6 @@ class User < ApplicationRecord
   def sole_owned_collections
     self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
   end
-
-  ### BETA INVITATIONS ###
 
   # If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
   def mark_invitation_redeemed

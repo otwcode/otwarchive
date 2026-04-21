@@ -61,7 +61,7 @@ class Skin < ApplicationRecord
 
   after_save :skin_invalidate_cache
   def skin_invalidate_cache
-    skin_chooser_expire_cache
+    skin_chooser_expire_cache if saved_change_to_in_chooser? || in_chooser?
     skin_cache_version_update(id)
 
     # Work skins can't have children, but site skins (which have type nil)
