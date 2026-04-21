@@ -802,3 +802,9 @@ PSEUD_SHARDS: 5
 TAG_SHARDS: 5
 USER_SHARDS: 5
 WORKS_SHARDS: 5
+
+# The relative URL to redirect to when previewing a skin
+# e.g. /users/OTW_Translation/works ->
+# http://test.archiveofourown.org/users/OTW_Translation/works?site_skin=[skin_id]
+# This will not work in dev unless you manually create the OTW_Translation user
+SKIN_PREVIEW_URL: '/users/OTW_Translation/works'

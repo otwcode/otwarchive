@@ -103,17 +103,15 @@ Feature: Public skins
     And I should not see "Uncached skin"
 
   Scenario: A user can preview a cached public site skin, and it will take the
-  user to the works page for a canonical tag with between 10 and 20 works
+  user to the configured page for skin previews
   Given the approved public skin "Usable Skin"
+    And the user "OTW_Translation" exists and is activated
     And the skin "Usable Skin" is cached
-    And the canonical fandom "Dallas" with 2 works
-    And the canonical fandom "Major Crimes" with 11 works
-    And the canonical fandom "Rizzoli and Isles" with 21 works
     And I am logged in as "skinner"
   When I go to the public skins page
     And I follow "Preview"
-  Then I should be on the works tagged "Major Crimes"
-    And I should see "You are previewing the skin Usable Skin. This is a randomly chosen page."
+  Then I should be on OTW_Translation's works page
+    And I should see "You are previewing the skin Usable Skin."
     And I should see "Go back or click any link to remove the skin"
     And I should see "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above."
   When I follow "Return To Skin To Use"
