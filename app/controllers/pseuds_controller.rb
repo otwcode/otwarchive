@@ -63,6 +63,7 @@ class PseudsController < ApplicationController
 
   # GET /pseuds/1/edit
   def edit
+    @textbox_name = params[:id] # default value in the form's name textfield
     @pseud = @user.pseuds.find_by!(name: params[:id])
     authorize @pseud if logged_in_as_admin?
   end
@@ -108,6 +109,8 @@ class PseudsController < ApplicationController
       flash[:notice] = t(".successfully_updated")
       redirect_to([@user, @pseud])
     else
+      @textbox_name = @pseud.name
+      @pseud.assign_attributes({:name => params[:id]})
       render action: "edit"
     end
   end
