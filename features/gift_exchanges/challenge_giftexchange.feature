@@ -667,14 +667,14 @@ Feature: Gift Exchange Challenge
       And I set the publication date to 6 December 2012
       And I press "Preview"
       And I go to the assignments page for "myname1"
-    Then I should see "(draft)"
+    Then I should see "(Draft)"
       And I should see "Status: Unposted"
       And I should see "Created: 2016-04-13"
     When I post the work "InProgress"
       And I go to the assignments page for "myname1"
       And I follow "Completed Assignments"
     Then I should see "InProgress"
-      And I should not see "(draft)"
+      And I should not see "(Draft)"
       And I should see "Status: Complete"
       And I should see "Posted: 2012-12-06"
 
