@@ -80,7 +80,7 @@
     <% end %>
 
     <% # if prompt has been fulfilled list works %>
-    <% unless prompt.unfulfilled? || (guest? && prompt.fulfilled_claims_visible_to_all.count < 1) %>
+    <% unless prompt.unfulfilled? || (guest? && prompt.fulfilled_claims_visible_to_all.empty?) %>
       <div class="work listbox group">
         <h5 class="heading"><%= ts("Fulfilled By")%></h5>
         <ul class="index group">
