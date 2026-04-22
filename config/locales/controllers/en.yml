@@ -325,6 +325,9 @@ en:
   tags:
     index:
       collection_page_title: "%{collection_title} - Tags"
+  user_invite_requests:
+    new:
+      page_title: Request Invitations
   users:
     change_email:
       page_title: Change Email
