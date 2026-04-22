@@ -41,16 +41,16 @@ module TagSetsHelper
   end
 
   def nomination_review_heading(tag_type, pagy)
-    return ts("Already Approved Fandoms") if tag_type == "cast"
+    return t("tag_sets.nomination_review_heading.already_approved_fandoms") if tag_type == "cast"
 
     type_name = tag_type_label_name(tag_type).pluralize
     if pagy.pages > 1
-      ts("%{from} - %{to} of %{total} %{type}",
-         from: pagy.from, to: pagy.to,
-         total: pagy.count, type: type_name)
+      t("tag_sets.nomination_review_heading.paginated",
+        from: pagy.from, to: pagy.to,
+        total: pagy.count, type: type_name)
     else
-      ts("%{type} (%{count} left to review)",
-         type: type_name, count: pagy.count)
+      t("tag_sets.nomination_review_heading.left_to_review",
+        type: type_name, count: pagy.count)
     end
   end
 

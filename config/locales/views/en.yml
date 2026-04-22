@@ -2877,6 +2877,11 @@ en:
         works: My Work Subscriptions
       series: "(Series)"
       work: "(Work)"
+  tag_sets:
+    nomination_review_heading:
+      already_approved_fandoms: "Already Approved Fandoms"
+      paginated: "%{from} - %{to} of %{total} %{type}"
+      left_to_review: "%{type} (%{count} left to review)"
   tag_wranglers:
     index:
       filters:

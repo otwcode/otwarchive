@@ -167,17 +167,17 @@ class TagSetNominationsController < ApplicationController
       # if there are no fandoms we're going to assume this is a one or few fandom tagset
       @nominations_count[:character] = @tag_set.character_nominations.unreviewed.count
       @nominations_count[:relationship] = @tag_set.relationship_nominations.unreviewed.count
-      if @limit[:character] > 0
+      if @limit[:character].positive?
         @paginations[:character], @nominations[:character] =
           paginate_unique_noms("character", page_param: :character_page)
       end
-      if @limit[:relationship] > 0
+      if @limit[:relationship].positive?
         @paginations[:relationship], @nominations[:relationship] =
           paginate_unique_noms("relationship", page_param: :relationship_page)
       end
     end
 
-    if @limit[:freeform] > 0
+    if @limit[:freeform].positive?
       @nominations_count[:freeform] = @tag_set.freeform_nominations.unreviewed.count
       @paginations[:freeform], @nominations[:freeform] = paginate_unique_noms("freeform", page_param: :freeform_page)
     end

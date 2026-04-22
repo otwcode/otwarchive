@@ -96,14 +96,14 @@ describe TagSetNominationsController do
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns all freeform nominations ordered by creation date' do
+                    it "returns all freeform nominations ordered by creation date" do
                       expect(assigns(:nominations)[:freeform].map(&:tagname)).to eq(
                         ["Zebra Freeform", "Apple Freeform", "Mango Freeform"]
                       )
                     end
                   end
 
-                  context 'unreviewed freeform nominations exceed per page limit' do
+                  context "unreviewed freeform nominations exceed per page limit" do
                     let(:per_page) { ArchiveConfig.ITEMS_PER_PAGE }
 
                     before do
@@ -111,7 +111,7 @@ describe TagSetNominationsController do
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns one page of freeform nominations' do
+                    it "returns one page of freeform nominations" do
                       expect(assigns(:nominations_count)[:freeform]).to eq(per_page + 1)
                       expect(assigns(:nominations)[:freeform].count).to eq(per_page)
                     end
@@ -167,10 +167,10 @@ describe TagSetNominationsController do
                     get :index, params: { tag_set_id: owned_tag_set.id }
                   end
 
-                  context 'unreviewed fandom nominations within per page limit' do
+                  context "unreviewed fandom nominations within per page limit" do
                     let(:fandom_nom_num) { 20 }
 
-                    it 'returns all fandom nominations ordered by creation date' do
+                    it "returns all fandom nominations ordered by creation date" do
                       expect(assigns(:nominations_count)[:fandom]).to eq(20)
                       expect(assigns(:nominations)[:fandom].count).to eq(20)
                       ids = assigns(:nominations)[:fandom].map(&:id)
@@ -182,11 +182,11 @@ describe TagSetNominationsController do
                     end
                   end
 
-                  context 'unreviewed fandom nominations exceed per page limit' do
+                  context "unreviewed fandom nominations exceed per page limit" do
                     let(:per_page) { ArchiveConfig.ITEMS_PER_PAGE }
                     let(:fandom_nom_num) { per_page + 1 }
 
-                    it 'returns one page of fandom nominations' do
+                    it "returns one page of fandom nominations" do
                       expect(assigns(:nominations_count)[:fandom]).to eq(per_page + 1)
                       expect(assigns(:nominations)[:fandom].count).to eq(per_page)
                     end
@@ -267,7 +267,7 @@ describe TagSetNominationsController do
                   end
                 end
 
-                context 'duplicate tagnames across multiple nominators are paginated by unique tagname' do
+                context "duplicate tagnames across multiple nominators are paginated by unique tagname" do
                   let(:fandom_nom_num) { 0 }
                   let(:fandom_nom_status) { :unreviewed }
                   let(:noms_per_page) { ArchiveConfig.ITEMS_PER_PAGE }
@@ -287,14 +287,14 @@ describe TagSetNominationsController do
                     end
                   end
 
-                  it 'page 1 returns exactly one page of unique tagnames' do
+                  it "page 1 returns exactly one page of unique tagnames" do
                     get :index, params: { tag_set_id: owned_tag_set.id, fandom_page: 1 }
                     tagnames = assigns(:nominations)[:fandom].map(&:tagname)
                     expect(tagnames.length).to eq(noms_per_page)
                     expect(tagnames).to eq(tagnames.uniq)
                   end
 
-                  it 'page 2 returns the next page of unique tagnames without repeats from page 1' do
+                  it "page 2 returns the next page of unique tagnames without repeats from page 1" do
                     get :index, params: { tag_set_id: owned_tag_set.id, fandom_page: 1 }
                     page1_tagnames = assigns(:nominations)[:fandom].map(&:tagname)
 
@@ -306,7 +306,7 @@ describe TagSetNominationsController do
                     expect(page1_tagnames & page2_tagnames).to be_empty
                   end
 
-                  it 'page 3 returns the remaining unique tagnames' do
+                  it "page 3 returns the remaining unique tagnames" do
                     get :index, params: { tag_set_id: owned_tag_set.id, fandom_page: 3 }
                     page3_tagnames = assigns(:nominations)[:fandom].map(&:tagname)
 
@@ -314,7 +314,7 @@ describe TagSetNominationsController do
                     expect(page3_tagnames).to eq(page3_tagnames.uniq)
                   end
 
-                  it 'pagination count reflects unique tagnames not total nominations' do
+                  it "pagination count reflects unique tagnames not total nominations" do
                     get :index, params: { tag_set_id: owned_tag_set.id }
                     unique_count = noms_per_page * 3
                     total_count = unique_count + 2
@@ -344,14 +344,14 @@ describe TagSetNominationsController do
                     owned_tag_set.update_column(:relationship_nomination_limit, 1)
                   end
 
-                  context 'unreviewed character and relationship nominations within per page limit' do
+                  context "unreviewed character and relationship nominations within per page limit" do
                     before do
                       add_unreviewed_character_nominations(20)
                       add_unreviewed_relationship_nominations(20)
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns all character and relationship nominations ordered by creation date' do
+                    it "returns all character and relationship nominations ordered by creation date" do
                       expect(assigns(:nominations_count)[:character]).to eq(20)
                       expect(assigns(:nominations)[:character].count).to eq(20)
                       character_ids = assigns(:nominations)[:character].map(&:id)
@@ -363,7 +363,7 @@ describe TagSetNominationsController do
                     end
                   end
 
-                  context 'unreviewed relationship nominations exceed per page limit' do
+                  context "unreviewed relationship nominations exceed per page limit" do
                     let(:per_page) { ArchiveConfig.ITEMS_PER_PAGE }
 
                     before do
@@ -372,7 +372,7 @@ describe TagSetNominationsController do
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns one page of relationship nominations' do
+                    it "returns one page of relationship nominations" do
                       expect(assigns(:nominations_count)[:character]).to eq(1)
                       expect(assigns(:nominations)[:character].count).to eq(1)
                       expect(assigns(:nominations_count)[:relationship]).to eq(per_page + 1)
