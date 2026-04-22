@@ -44,6 +44,9 @@ en:
       on_tag_html: Comment on the tag %{name}
       on_unknown: Comment on unknown item
       on_work_html: Comment on the work %{title}
+    page_heading:
+      new_comment_html: New Comment on %{commentable_link}
+      reading_comments_html: Reading Comments on %{commentable_link}
   inbox_helper:
     comment_link_with_chapter_number: Chapter %{position} of %{title}
   qr_code_helper:
