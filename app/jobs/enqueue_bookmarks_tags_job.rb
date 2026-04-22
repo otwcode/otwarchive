@@ -2,10 +2,18 @@ class EnqueueBookmarksTagsJob < ApplicationJob
   queue_as :low
 
   def perform
-    base_scope = Tag.nonsynonymous.where(taggings_count_cache: 0)
+    base_scope = Tag.nonsynonymous
+                    .where(canonical: false)
+                    .where("NOT EXISTS (
+                      SELECT 1 FROM taggings 
+                      WHERE taggings.tagger_id = tags.id 
+                      AND taggings.taggable_type IN ('Work', 'ExternalWork')
+                    )")
+                    .limit(5000)
+                    .pluck(:id)
       
-    base_scope.find_in_batches(batch_size: 1000) do |tags|
-      ResetBookmarkTagsJob.perform_later(tags.map(&:id))
+    base_scope.each_slice(1000) do |batch_ids|
+      ResetBookmarkTagsJob.perform_later(batch_ids)
     end
   end
 end
