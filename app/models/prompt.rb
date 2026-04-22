@@ -209,10 +209,9 @@ class Prompt < ApplicationRecord
     self.request_claims.fulfilled
   end
 
-  def fulfilled_unrestricted_claims
-    self.request_claims.fulfilled_unrestricted
+  def fulfilled_claims_visible_to_all
+    self.request_claims.fulfilled.work_visible_to_all
   end
-
   # Computes the "full" tag set (tag_set + optional_tag_set), and stores the
   # result as an instance variable for speed. This is used by the matching
   # algorithm, which doesn't change any signup/prompt/tagset information, so
