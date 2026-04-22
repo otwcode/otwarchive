@@ -400,6 +400,9 @@ class Comment < ApplicationRecord
       end
     end
 
+    # Avoid duplicate inbox notifications when parent comment owner is a work creator who has already received the same notification with the approval request
+    return if self.saved_change_to_unreviewed? && !self.unreviewed? && self.ultimate_parent.commentable_owners.include?(parent_comment_owner)
+
     if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
       if self.saved_change_to_edited_at?
         update_feedback_in_inbox(parent_comment_owner)
