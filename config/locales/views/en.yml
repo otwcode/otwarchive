@@ -2879,9 +2879,9 @@ en:
       work: "(Work)"
   tag_sets:
     nomination_review_heading:
-      already_approved_fandoms: "Already Approved Fandoms"
-      paginated: "%{from} - %{to} of %{total} %{type}"
+      already_approved_fandoms: Already Approved Fandoms
       left_to_review: "%{type} (%{count} left to review)"
+      paginated: "%{from} - %{to} of %{total} %{type}"
   tag_wranglers:
     index:
       filters:
