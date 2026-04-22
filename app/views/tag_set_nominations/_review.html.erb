@@ -31,20 +31,7 @@
     <% %w(cast fandom character relationship freeform).each do |tag_type| %>
       <% if @nominations[tag_type] && @nominations[tag_type].count > 0 %>
         <fieldset class="<%= tag_type %> listbox group" id="<%= tag_type %>_nominations">
-          <% if tag_type == "cast" %>
-            <% heading = ts("Already Approved Fandoms") %>
-          <% else %>
-            <% pagy = @paginations[tag_type] %>
-            <% type_name = tag_type_label_name(tag_type).pluralize %>
-            <% if pagy.pages > 1 %>
-              <% heading = ts("%{from} - %{to} of %{total} %{type}",
-                   from: pagy.from, to: pagy.to,
-                   total: pagy.count, type: type_name) %>
-            <% else %>
-              <% heading = ts("%{type} (%{count} left to review)",
-                   type: type_name, count: pagy.count) %>
-            <% end %>
-          <% end %>
+          <% heading = nomination_review_heading(tag_type, @paginations[tag_type]) %>
           <legend><%= heading %></legend>
           <h3 class="heading"><%= heading %></h3>
           <%= check_all_none("Reject All", "Reject None", "reject") %>
