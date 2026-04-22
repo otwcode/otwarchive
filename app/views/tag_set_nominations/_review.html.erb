@@ -35,17 +35,24 @@
             <% heading = ts("Already Approved Fandoms") %>
           <% else %>
             <% pagy = @paginations[tag_type] %>
+            <% type_name = tag_type_label_name(tag_type).pluralize %>
             <% if pagy.pages > 1 %>
-              <% heading = ts("%{from} - %{to} of %{total} %{type}", from: pagy.from, to: pagy.to, total: pagy.count, type: tag_type_label_name(tag_type).pluralize) %>
+              <% heading = ts("%{from} - %{to} of %{total} %{type}",
+                   from: pagy.from, to: pagy.to,
+                   total: pagy.count, type: type_name) %>
             <% else %>
-              <% heading = ts("%{type} (%{count} left to review)", type: tag_type_label_name(tag_type).pluralize, count: pagy.count) %>
+              <% heading = ts("%{type} (%{count} left to review)",
+                   type: type_name, count: pagy.count) %>
             <% end %>
           <% end %>
           <legend><%= heading %></legend>
           <h3 class="heading"><%= heading %></h3>
           <%= check_all_none("Reject All", "Reject None", "reject") %>
           <%= check_all_none("Approve All", "Approve None", "approve") %>
-          <%== pagy_nav(@paginations[tag_type], anchor_string: "id=\"#{tag_type}_nominations\"") if @paginations&.dig(tag_type) %>
+          <% if @paginations&.dig(tag_type) %>
+            <%== pagy_nav(@paginations[tag_type],
+                   anchor_string: "id=\"#{tag_type}_nominations\"") %>
+          <% end %>
           <ol class="tags index group">
             <% if tag_type == "fandom" %>
               <%= render "review_fandoms", :fandoms => @nominations[:fandom] %>
@@ -57,7 +64,10 @@
               <% end %>
             <% end %>
           </ol>
-          <%== pagy_nav(@paginations[tag_type], anchor_string: "id=\"#{tag_type}_nominations\"") if @paginations&.dig(tag_type) %>
+          <% if @paginations&.dig(tag_type) %>
+            <%== pagy_nav(@paginations[tag_type],
+                   anchor_string: "id=\"#{tag_type}_nominations\"") %>
+          <% end %>
         </fieldset>
       <% end %>
     <% end %>

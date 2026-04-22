@@ -168,14 +168,16 @@ class TagSetNominationsController < ApplicationController
       @nominations_count[:character] = @tag_set.character_nominations.unreviewed.count
       @nominations_count[:relationship] = @tag_set.relationship_nominations.unreviewed.count
       if @limit[:character] > 0
-        @paginations[:character], @nominations[:character] = paginate_unique_noms("character", page_param: :character_page)
+        @paginations[:character], @nominations[:character] =
+          paginate_unique_noms("character", page_param: :character_page)
       end
       if @limit[:relationship] > 0
-        @paginations[:relationship], @nominations[:relationship] = paginate_unique_noms("relationship", page_param: :relationship_page)
+        @paginations[:relationship], @nominations[:relationship] =
+          paginate_unique_noms("relationship", page_param: :relationship_page)
       end
     end
 
-    unless @limit[:freeform].zero?
+    if @limit[:freeform] > 0
       @nominations_count[:freeform] = @tag_set.freeform_nominations.unreviewed.count
       @paginations[:freeform], @nominations[:freeform] = paginate_unique_noms("freeform", page_param: :freeform_page)
     end
