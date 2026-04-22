@@ -7,9 +7,19 @@ class RelatedWork < ActiveRecord::Base
   attribute :author, :string
   attribute :language_id, :integer
 
-  scope :posted, -> {
-    joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`").
-    where("child_works.posted = 1")
+  scope :posted, lambda {
+    joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`")
+      .where("child_works.posted = 1")
+  }
+
+  scope :with_unhidden_parents, lambda {
+    joins("INNER JOIN `works` `parent_works` ON `parent_works`.`id` = `related_works`.`parent_id`")
+      .where("parent_works.hidden_by_admin = false")
+  }
+
+  scope :unhidden, lambda {
+    joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`")
+      .where("child_works.hidden_by_admin = false")
   }
 
   before_validation :set_parent, if: :new_record?

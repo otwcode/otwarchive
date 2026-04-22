@@ -373,6 +373,82 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
   Then I should see "Works inspired by this one: Followup by Anonymous"
     And I should not see "remixer" within ".afterword .children"
 
+Scenario: Hidden inspired and inspiring works should not be listed on related work pages for users who can't access them
+  Given I have related works setup
+    And a related work has been posted and approved
+  When I am logged in as a "policy_and_abuse" admin
+    And I hide the work "Followup"
+    And I go to inspiration's related works page
+  Then I should see "Followup"
+  When I go to remixer's related works page
+  Then I should see "Followup"
+  When I am logged in as "remixer"
+    And I view my related works
+  Then I should see "Related Works (1)"
+    And I should see "Followup"
+  When I go to inspiration's related works page
+  Then I should not see "Followup"
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should see "Related Works (0)"
+    And I should not see "Followup"
+
+  When I am logged in as a "policy_and_abuse" admin
+    And I unhide the work "Followup"
+    And I hide the work "Worldbuilding"
+    And I go to inspiration's related works page
+  Then I should see "Worldbuilding"
+  When I go to remixer's related works page
+  Then I should see "Worldbuilding"
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should see "Related Works (1)"
+    And I should see "Worldbuilding"
+  When I go to remixer's related works page
+  Then I should not see "Worldbuilding"
+  When I am logged in as "remixer"
+    And I view my related works
+  Then I should see "Related Works (0)"
+    And I should not see "Worldbuilding"
+
+Scenario: Hidden translations and translated works should not be listed on related work pages for users who can't access them
+  Given I have related works setup
+    And a translation has been posted and approved
+  When I am logged in as a "policy_and_abuse" admin
+    And I hide the work "Worldbuilding Translated"
+    And I go to inspiration's related works page
+  Then I should see "Worldbuilding Translated"
+  When I go to translator's related works page
+  Then I should see "Worldbuilding Translated"
+  When I am logged in as "translator"
+    And I view my related works
+  Then I should see "Related Works (1)"
+    And I should see "Worldbuilding Translated"
+  When I go to inspiration's related works page
+  Then I should not see "Worldbuilding Translated"
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should see "Related Works (0)"
+    And I should not see "Worldbuilding Translated"
+
+  When I am logged in as a "policy_and_abuse" admin
+    And I unhide the work "Worldbuilding Translated"
+    And I hide the work "Worldbuilding"
+    And I go to inspiration's related works page
+  Then I should see "Worldbuilding"
+  When I go to translator's related works page
+  Then I should see "Worldbuilding"
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should see "Related Works (1)"
+    And I should see "Worldbuilding"
+  When I go to translator's related works page
+  Then I should not see "Worldbuilding"
+  When I am logged in as "translator"
+    And I view my related works
+  Then I should see "Related Works (0)"
+    And I should not see "Worldbuilding"
+
 Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
   the e-mail should link to each author's URL instead of showing escaped HTML
   Given I have related works setup
