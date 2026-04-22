@@ -8,19 +8,26 @@ class RelatedWork < ActiveRecord::Base
   attribute :language_id, :integer
 
   scope :posted, lambda {
-    joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`")
+    joins("INNER JOIN works child_works ON child_works.id = related_works.work_id")
       .where("child_works.posted = 1")
   }
 
   scope :with_unhidden_parents, lambda {
-    joins("INNER JOIN `works` `parent_works` ON `parent_works`.`id` = `related_works`.`parent_id`")
+    joins("INNER JOIN works parent_works ON parent_works.id = related_works.parent_id")
+      .where("parent_works.hidden_by_admin = false")
+  }
+
+  scope :with_unhidden_external_parents, lambda {
+    joins("INNER JOIN external_works parent_works ON parent_works.id = related_works.parent_id")
       .where("parent_works.hidden_by_admin = false")
   }
 
   scope :unhidden, lambda {
-    joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`")
+    joins("INNER JOIN works child_works ON child_works.id = related_works.work_id")
       .where("child_works.hidden_by_admin = false")
   }
+
+  scope :visible_to_all, -> { merge(Work.revealed.non_anon.unhidden).where(reciprocal: true) }
 
   before_validation :set_parent, if: :new_record?
   def set_parent
