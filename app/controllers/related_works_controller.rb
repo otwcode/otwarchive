@@ -6,29 +6,15 @@ class RelatedWorksController < ApplicationController
 
   def index
     @page_subtitle = t(".page_title", login: @user.login)
-    @translations_of_user = @user.related_works.posted.where(translation: true)
-    @remixes_of_user = @user.related_works.posted.where(translation: false)
-    @translations_by_user = @user.parent_work_relationships.posted.where(translation: true)
-    @remixes_by_user = @user.parent_work_relationships.posted.where(translation: false)
-    return if logged_in_as_admin?
 
-    translations_by_user_local = @translations_by_user.with_unhidden_parents
-    translations_by_user_external = @translations_by_user.with_unhidden_external_parents
-    remixes_by_user_local = @remixes_by_user.with_unhidden_parents
-    remixes_by_user_external = @remixes_by_user.with_unhidden_external_parents
+    @translations_of_user = @user.related_works.translations.visible_on_user_page(@user).visible
+    @remixes_of_user = @user.related_works.remixes.visible_on_user_page(@user).visible
 
-    @translations_of_user = @translations_of_user.unhidden
-    @remixes_of_user = @remixes_of_user.unhidden
-    if (@user == current_user)
-      @translations_by_user = (translations_by_user_local + translations_by_user_external).uniq
-      @remixes_by_user = (remixes_by_user_local + remixes_by_user_external).uniq
-      return
-    end
+    translations_by_user = @user.parent_work_relationships.translations.visible_on_user_page(@user)
+    remixes_by_user = @user.parent_work_relationships.remixes.visible_on_user_page(@user)
 
-    @translations_of_user = @translations_of_user.visible_to_all
-    @remixes_of_user = @remixes_of_user.visible_to_all
-    @translations_by_user = (translations_by_user_local.visible_to_all + translations_by_user_external.visible_to_all).uniq
-    @remixes_by_user = (remixes_by_user_local.visible_to_all + remixes_by_user_external.visible_to_all).uniq
+    @translations_by_user = (translations_by_user.of_visible_local_works + translations_by_user.of_visible_external_works).sort
+    @remixes_by_user = (remixes_by_user.of_visible_local_works + remixes_by_user.of_visible_external_works).sort
   end
 
   # GET /related_works/1
