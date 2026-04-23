@@ -4,6 +4,7 @@ class CollectionParticipant < ApplicationRecord
   belongs_to :collection
 
   after_commit :update_collection_index
+  after_commit :expire_collection_blurb_caches_if_maintainers_changed
 
   PARTICIPANT_ROLES = ["None", "Owner", "Moderator", "Member", "Invited"]
   NONE = PARTICIPANT_ROLES[0]
@@ -63,5 +64,23 @@ class CollectionParticipant < ApplicationRecord
     ids = [collection_id]
     ids += collection.children.pluck(:id) if collection.present?
     IndexQueue.enqueue_ids(Collection, ids.compact, :main)
+  end
+
+  def expire_collection_blurb_caches_if_maintainers_changed
+    return unless collection_id
+    return unless maintainer_list_affected_this_commit?
+
+    Collection.expire_blurb_caches_for_hierarchy(collection)
+  end
+
+  def maintainer_list_affected_this_commit?
+    if destroyed? || previously_new_record?
+      MAINTAINER_ROLES.include?(participant_role)
+    elsif previous_changes.key?("participant_role")
+      old_role, new_role = previous_changes["participant_role"]
+      MAINTAINER_ROLES.include?(old_role) || MAINTAINER_ROLES.include?(new_role)
+    else
+      false
+    end
   end
 end

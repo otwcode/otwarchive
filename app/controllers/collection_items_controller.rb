@@ -5,8 +5,6 @@ class CollectionItemsController < ApplicationController
   before_action :check_parent_visible, only: [:new]
   before_action :users_only, only: [:new]
 
-  cache_sweeper :collection_sweeper
-
   def index
 
     # TODO: AO3-6507 Refactor to use send instead of case statements.

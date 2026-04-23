@@ -20,7 +20,6 @@ class WorksController < ApplicationController
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
 
-  cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
 
   # we want to extract the countable params from work_search and move them into their fields
