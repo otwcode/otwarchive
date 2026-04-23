@@ -444,6 +444,18 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I follow "Activities"
     Then I should see 0 admin activity log entries
 
+  Scenario: When admin previews without saving, no Activities entries are added
+    Given basic languages
+      And the work "Some Fic"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Some Fic"
+      And I follow "Edit Tags and Language"
+      And I select "Mature" from "Rating"
+      And I select "Deutsch" from "Choose a language"
+    When I press "Preview"
+      And I follow "Activities"
+    Then I should see 0 admin activity log entries
+
   Scenario: can mark a work as spam
   Given the work "Spammity Spam"
     And I am logged in as a "policy_and_abuse" admin
