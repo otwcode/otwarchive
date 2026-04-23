@@ -669,6 +669,43 @@ describe AbuseReport do
     end
   end
 
+  describe "#reported_work_id" do
+    context "for a plain work URL" do
+      it "returns the work id" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/")
+        expect(subject.reported_work_id).to eq("123")
+      end
+    end
+
+    context "for a work URL with bookmark-form anchor" do
+      it "returns the work id" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123#bookmark-form")
+        expect(subject.reported_work_id).to eq("123")
+      end
+    end
+
+    context "for a work URL with comments" do
+      it "returns nil" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/comments/")
+        expect(subject.reported_work_id).to be_nil
+      end
+    end
+
+    context "for a work URL with bookmarks" do
+      it "returns nil" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/bookmarks/")
+        expect(subject.reported_work_id).to be_nil
+      end
+    end
+
+    context "for a work URL with a specific bookmark" do
+      it "returns nil" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/bookmarks/456/")
+        expect(subject.reported_work_id).to be_nil
+      end
+    end
+  end
+
   describe "#creator_ids" do
     it "returns no creator ids for non-work URLs" do
       allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/someone/")
