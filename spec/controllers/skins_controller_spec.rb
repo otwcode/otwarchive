@@ -576,7 +576,7 @@ describe SkinsController do
     shared_examples "user can set it" do
       it "redirects with success notice" do
         post :set, params: { id: skin.id }
-        it_redirects_to_with_notice(skin_path(skin), "The skin Cached Public Skin has been set. This will last for your current session.")
+        it_redirects_to_with_notice(skin_path(skin), "You're now using the #{skin.title} skin. This will last for 2 weeks even if you close your browser. If you'd like to keep it longer, go to the <a href=\"#{skin_path(skin)}\">#{skin.title} skin page</a> and select the \"Use\" button at the bottom of the page.")
       end
     end
 
