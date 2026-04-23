@@ -38,7 +38,7 @@
           <%= check_all_none("Approve All", "Approve None", "approve") %>
           <% if @paginations&.dig(tag_type) %>
             <%== pagy_nav(@paginations[tag_type],
-                   anchor_string: "id=\"#{tag_type}_nominations\"") %>
+                   fragment: "##{tag_type}_nominations") %>
           <% end %>
           <ol class="tags index group">
             <% if tag_type == "fandom" %>
@@ -53,7 +53,7 @@
           </ol>
           <% if @paginations&.dig(tag_type) %>
             <%== pagy_nav(@paginations[tag_type],
-                   anchor_string: "id=\"#{tag_type}_nominations\"") %>
+                   fragment: "##{tag_type}_nominations") %>
           <% end %>
         </fieldset>
       <% end %>
