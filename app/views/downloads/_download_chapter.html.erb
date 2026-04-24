@@ -2,13 +2,12 @@
 
 <div class="meta group">
   <h2 class="heading">
-    <% if @chapter.title.present? %>
-      <%= t(".full_chapter_title_with_title",
-            chapter_number: @chapter.position,
-            title: @chapter.title) %>
+    <% if @work.hide_chapter_numbering && @chapter.title.present? %>
+      <%= @chapter.title %>
+    <% elsif @chapter.title.present? %>
+      <%= t(".full_chapter_title_with_title", chapter_number: @chapter.position, title: @chapter.title) %>
     <% else %>
-      <%= t(".full_chapter_title_without_title",
-            chapter_number: @chapter.position) %>
+      <%= t(".full_chapter_title_without_title", chapter_number: @chapter.position) %>
     <% end %>
   </h2>
   <% if (!@chapter.pseuds.blank? && (@chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) %>

@@ -81,6 +81,28 @@ Feature: View a work with various options
   Then I should see "Chapter 1: "
     And I should see "cool chapter title"
 
+  Scenario: chapter title displays without "Chapter N:" prefix when hide chapter numbering is enabled
+  Given I am logged in as a random user
+    And I set my preferences to View Full Work mode by default
+  When I set up the draft "PrologueWork"
+    And I check "This work has multiple chapters"
+    And I fill in "Chapter Title" with "Prologue: The Beginning"
+    And I fill in "Chapter 1 of" with "?"
+    And I check "Hide chapter numbers (show only chapter titles)"
+    And I press "Post"
+  Then I should see "Prologue: The Beginning"
+    And I should not see "Chapter 1: Prologue: The Beginning"
+
+  Scenario: chapter title falls back to "Chapter N" when hide chapter numbering is enabled but no title is set
+  Given I am logged in as a random user
+    And I set my preferences to View Full Work mode by default
+  When I set up the draft "NoTitleWork"
+    And I check "This work has multiple chapters"
+    And I fill in "Chapter 1 of" with "?"
+    And I check "Hide chapter numbers (show only chapter titles)"
+    And I press "Post"
+  Then I should see "Chapter 1"
+
   Scenario: Works and chapters include the navigation, meta, work skin CSS, and
   preface, except in preview mode, which contains more limited information.
     Given the work skin "Flair" by "carbon"

@@ -875,7 +875,7 @@ class WorksController < ApplicationController
       :archive_warning_string, :category_string,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
       :backdate, :language_id, :work_skin_id, :restricted, :comment_permissions,
-      :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
+      :moderated_commenting_enabled, :hide_chapter_numbering, :title, :pseuds_to_add, :collections_to_add,
       current_user_pseud_ids: [],
       collections_to_remove: [],
       challenge_assignment_ids: [],

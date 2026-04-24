@@ -131,17 +131,23 @@ class Chapter < ApplicationRecord
     self.title.blank? ? self.chapter_header : self.title
   end
 
-  # Header plus title, used in subscriptions
+  # Header plus title, used in subscriptions and downloads
   def full_chapter_title
-    str = chapter_header
-    if title.present?
-      str += ": #{title}"
+    if work.hide_chapter_numbering && title.present?
+      title
+    else
+      str = chapter_header
+      str += ": #{title}" if title.present?
+      str
     end
-    str
   end
 
   def display_title
-    self.position.to_s + '. ' + self.chapter_title
+    if work.hide_chapter_numbering
+      title.presence || chapter_header
+    else
+      "#{position}. #{chapter_title}"
+    end
   end
 
   def abbreviated_display_title

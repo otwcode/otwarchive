@@ -3335,6 +3335,7 @@ en:
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
     permissions:
+      hide_chapter_numbering: Hide chapter numbers (show only chapter titles)
       privacy: Privacy
       visibility:
         import_works_restricted: Only show imported works to registered users

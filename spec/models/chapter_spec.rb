@@ -27,6 +27,63 @@ describe Chapter do
     end
   end
 
+  describe "title display methods" do
+    let(:work) { create(:work) }
+    let(:work_hidden) { create(:work, hide_chapter_numbering: true) }
+
+    describe "#full_chapter_title" do
+      context "when hide_chapter_numbering is false" do
+        it "returns 'Chapter N' when the chapter has no title" do
+          chapter = create(:chapter, work: work, title: "")
+          expect(chapter.full_chapter_title).to eq("Chapter #{chapter.position}")
+        end
+
+        it "returns 'Chapter N: Title' when the chapter has a title" do
+          chapter = create(:chapter, work: work, title: "My Title")
+          expect(chapter.full_chapter_title).to eq("Chapter #{chapter.position}: My Title")
+        end
+      end
+
+      context "when hide_chapter_numbering is true" do
+        it "falls back to 'Chapter N' when the chapter has no title" do
+          chapter = create(:chapter, work: work_hidden, title: "")
+          expect(chapter.full_chapter_title).to eq("Chapter #{chapter.position}")
+        end
+
+        it "returns just the title when the chapter has a title" do
+          chapter = create(:chapter, work: work_hidden, title: "My Title")
+          expect(chapter.full_chapter_title).to eq("My Title")
+        end
+      end
+    end
+
+    describe "#display_title" do
+      context "when hide_chapter_numbering is false" do
+        it "returns 'N. Chapter N' when the chapter has no title" do
+          chapter = create(:chapter, work: work, title: "")
+          expect(chapter.display_title).to eq("#{chapter.position}. Chapter #{chapter.position}")
+        end
+
+        it "returns 'N. Title' when the chapter has a title" do
+          chapter = create(:chapter, work: work, title: "My Title")
+          expect(chapter.display_title).to eq("#{chapter.position}. My Title")
+        end
+      end
+
+      context "when hide_chapter_numbering is true" do
+        it "falls back to 'Chapter N' when the chapter has no title" do
+          chapter = create(:chapter, work: work_hidden, title: "")
+          expect(chapter.display_title).to eq("Chapter #{chapter.position}")
+        end
+
+        it "returns just the title when the chapter has a title" do
+          chapter = create(:chapter, work: work_hidden, title: "My Title")
+          expect(chapter.display_title).to eq("My Title")
+        end
+      end
+    end
+  end
+
   describe "co-creator permissions" do
     let(:creator) { create(:user) }
     let(:co_creator) { create(:user) }

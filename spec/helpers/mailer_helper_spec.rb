@@ -38,6 +38,20 @@ describe MailerHelper do
       end
     end
 
+    context "when the creation is a chapter and hide_chapter_numbering is enabled" do
+      let(:work_hidden) { create(:work, hide_chapter_numbering: true) }
+
+      it "returns hyperlinked chapter title without chapter number and parenthetical word count" do
+        chapter = create(:chapter, title: "My Title", work: work_hidden)
+        expect(creation_link_with_word_count(chapter, chapter_url(chapter))).to eq("<i><b><a style=\"color:#990000\" href=\"#{chapter_url(chapter)}\">My Title</a></b></i> (#{chapter.word_count} words)")
+      end
+
+      it "falls back to 'Chapter N' when the chapter has no title" do
+        chapter = create(:chapter, title: "", work: work_hidden)
+        expect(creation_link_with_word_count(chapter, chapter_url(chapter))).to eq("<i><b><a style=\"color:#990000\" href=\"#{chapter_url(chapter)}\">Chapter #{chapter.position}</a></b></i> (#{chapter.word_count} words)")
+      end
+    end
+
     context "when the creation is a series" do
       it "returns hyperlinked series title and parenthetical word count" do
         expect(creation_link_with_word_count(series, series_url(series))).to eq("<i><b><a style=\"color:#990000\" href=\"#{series_url(series)}\">#{series.title}</a></b></i> (#{series.word_count} words)")

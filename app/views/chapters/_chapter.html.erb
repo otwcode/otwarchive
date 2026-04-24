@@ -22,7 +22,11 @@
 
   <div class="chapter<%= ' preface' unless @preview_mode %> group">
     <h3 class="title">
-      <%= link_to chapter.chapter_header, [chapter.work, chapter] %><% unless chapter.title.blank? %>: <%= chapter.title.html_safe %><% end %>
+      <% if chapter.work.hide_chapter_numbering && chapter.title.present? %>
+        <%= link_to chapter.title.html_safe, [chapter.work, chapter] %>
+      <% else %>
+        <%= link_to chapter.chapter_header, [chapter.work, chapter] %><% unless chapter.title.blank? %>: <%= chapter.title.html_safe %><% end %>
+      <% end %>
     </h3>
 
     <!-- only display byline if different from the main byline -->

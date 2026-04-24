@@ -220,6 +220,13 @@
           </fieldset>
         </dd>
 
+        <dt class="hide-chapter-numbering">
+          <%= f.check_box :hide_chapter_numbering %>
+        </dt>
+        <dd class="hide-chapter-numbering">
+          <%= f.label :hide_chapter_numbering, t("works.permissions.hide_chapter_numbering") %>
+        </dd>
+
         <!--backdate-->
         <dt class="backdate">
           <%= f.check_box :backdate, { id: "backdate-options-show", class: "toggle_formfield" } %>
