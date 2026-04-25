@@ -239,8 +239,10 @@ class BookmarkableQuery < Query
       range = SearchRange.parsed(options[:word_count])
     else
       range = {}
-      range[:gte] = options[:words_from].delete(",._").to_i if options[:words_from].present?
-      range[:lte] = options[:words_to].delete(",._").to_i if options[:words_to].present?
+      words_from = options[:words_from].delete(",._").to_i if options[:words_from].present?
+      words_to = options[:words_to].delete(",._").to_i if options[:words_to].present?
+      range[:gte] = words_from&.clamp(0, ArchiveConfig.MAX_SEARCH_INT_RANGE)
+      range[:lte] = words_to&.clamp(0, ArchiveConfig.MAX_SEARCH_INT_RANGE)
     end
 
     if include_restricted?
