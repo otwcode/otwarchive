@@ -104,6 +104,10 @@ class TagsController < ApplicationController
                 Work
               when "chapter"
                 Chapter
+              when "request"
+                Request
+              when "externalwork"
+                ExternalWork
               end
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
 
@@ -113,6 +117,13 @@ class TagsController < ApplicationController
           @display_tags = @display_creation.works.visible.collect(&:archive_warnings).flatten.compact.uniq.sort
         else
           @display_tags = @display_creation.works.visible.collect(&:freeforms).flatten.compact.uniq.sort
+        end
+      # Requests don't have the methods Taggables have, so we have to access their tags like this
+      elsif params[:creation_type] == 'Request'
+        if params[:tag_type] == 'warnings'
+          @display_tags = @display_creation.tag_groups["ArchiveWarning"]
+        else
+          @display_tags = @display_creation.tag_groups["Freeform"]
         end
       else
         @display_tags = case params[:tag_type]
