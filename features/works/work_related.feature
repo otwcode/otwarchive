@@ -802,3 +802,15 @@ Scenario: Notification emails for translations are translated
     And "encouragement" should receive 2 emails
     And the last email to "encouragement" should be non-translated
     And the last email should have "Related work notification" in the subject
+
+Scenario: A note appears on deleted inspirations and translations
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  When I view the work "Followup"
+  Then I should see "Inspired by a deleted work"
+  When I view the work "Worldbuilding Translated"
+  Then I should see "A translation of a deleted work"
