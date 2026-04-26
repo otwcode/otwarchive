@@ -1069,6 +1069,8 @@ en:
         other: Sign me up and give me my works!
   external_works:
     notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
+    new:
+      page_heading: Bookmark External Work
   fandoms:
     index:
       page_heading: Fandoms
