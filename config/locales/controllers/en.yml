@@ -200,6 +200,8 @@ en:
   external_works:
     update:
       successfully_updated: External work was successfully updated.
+    new:
+      page_title: Bookmark External Work
   fandoms:
     index:
       choose_media: Please choose a media category to start browsing fandoms.
