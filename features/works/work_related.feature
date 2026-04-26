@@ -330,7 +330,7 @@ Scenario: External work language
 # especially during posting / editing / previewing a work
 # especially from the related_works page, which works but redirects to a non-existant page right now
 
-Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
+Scenario: Restricted works listed as Inspiration show up [Restricted] for guests, but normally for admins
   Given I have related works setup
     And a related work has been posted and approved
   When I am logged in as "remixer"
@@ -338,6 +338,9 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   When I am logged out
     And I view the work "Worldbuilding"
   Then I should see "[Restricted Work] by remixer"
+  When I am logged in as an admin
+    And I view the work "Worldbuilding"
+  Then I should see "Followup by remixer"
   When I am logged in as "remixer"
     And I unlock the work "Followup"
   When I am logged out
@@ -348,6 +351,9 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   When I am logged out
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
+  When I am logged in as an admin
+    And I view the work "Followup"
+  Then I should see "Inspired by Worldbuilding by inspiration"
 
 Scenario: Anonymous works listed as inspiration should have links to the authors,
   but only for the authors themselves and admins
