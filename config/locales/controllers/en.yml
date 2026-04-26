@@ -198,10 +198,10 @@ en:
     timeout_error:
       browser_title: Timeout Error
   external_works:
-    update:
-      successfully_updated: External work was successfully updated.
     new:
       page_title: Bookmark External Work
+    update:
+      successfully_updated: External work was successfully updated.
   fandoms:
     index:
       choose_media: Please choose a media category to start browsing fandoms.
