@@ -1,7 +1,7 @@
 <!--descriptions-->
 <h2 class="heading">
   <% if @query %>
-    <%= search_header @challenge_signups, nil, t(".heading.for_search") %>
+    <%= search_header @challenge_signups, item_type: :challenge_signup, query_present: @query.present? %>
   <% else %>
     <%= t(".heading.for_collection", collection: @collection.title) %>
   <% end %>

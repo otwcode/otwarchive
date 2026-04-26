@@ -49,6 +49,122 @@ en:
   qr_code_helper:
     qr_code_as_svg:
       default_label: QR code
+  search_helper:
+    search_header:
+      default_html: "%{results}"
+      items:
+        bookmark:
+          count:
+            one: "%{count} Bookmark"
+            other: "%{count} Bookmarks"
+          range:
+            one: "%{start_number} - %{end_number} of %{total} Bookmark"
+            other: "%{start_number} - %{end_number} of %{total} Bookmarks"
+          recent:
+            one: Recent Bookmark
+            other: Recent Bookmarks
+        bookmarked_item:
+          count:
+            one: "%{count} Bookmarked Item"
+            other: "%{count} Bookmarked Items"
+          range:
+            one: "%{start_number} - %{end_number} of %{total} Bookmarked Item"
+            other: "%{start_number} - %{end_number} of %{total} Bookmarked Items"
+          recent:
+            one: Recent Bookmarked Item
+            other: Recent Bookmarked Items
+        challenge_signup:
+          count:
+            one: "%{count} Sign-up"
+            other: "%{count} Sign-ups"
+          range:
+            one: "%{start_number} - %{end_number} of %{total} Sign-up"
+            other: "%{start_number} - %{end_number} of %{total} Sign-ups"
+          recent:
+            one: Recent Sign-up
+            other: Recent Sign-ups
+        collection:
+          count:
+            one: "%{count} Collection"
+            other: "%{count} Collections"
+          range:
+            one: "%{start_number} - %{end_number} of %{total} Collection"
+            other: "%{start_number} - %{end_number} of %{total} Collections"
+          recent:
+            one: Recent Collection
+            other: Recent Collections
+        comment:
+          count:
+            one: "%{count} Comment"
+            other: "%{count} Comments"
+          range:
+            one: "%{start_number} - %{end_number} of %{total} Comment"
+            other: "%{start_number} - %{end_number} of %{total} Comments"
+          recent:
+            one: Recent Comment
+            other: Recent Comments
+        series:
+          count:
+            one: "%{count} Series"
+            other: "%{count} Series"
+          range:
+            one: "%{start_number} - %{end_number} of %{total} Series"
+            other: "%{start_number} - %{end_number} of %{total} Series"
+          recent:
+            one: Recent Series
+            other: Recent Series
+        tag_set:
+          count:
+            one: "%{count} Tag Set"
+            other: "%{count} Tag Sets"
+          range:
+            one: "%{start_number} - %{end_number} of %{total} Tag Set"
+            other: "%{start_number} - %{end_number} of %{total} Tag Sets"
+          recent:
+            one: Recent Tag Set
+            other: Recent Tag Sets
+        unposted_draft:
+          count:
+            one: "%{count} Unposted Draft"
+            other: "%{count} Unposted Drafts"
+          range:
+            one: "%{start_number} - %{end_number} of %{total} Unposted Draft"
+            other: "%{start_number} - %{end_number} of %{total} Unposted Drafts"
+          recent:
+            one: Recent Unposted Draft
+            other: Recent Unposted Drafts
+        user:
+          count:
+            one: "%{count} User"
+            other: "%{count} Users"
+          range:
+            one: "%{start_number} - %{end_number} of %{total} User"
+            other: "%{start_number} - %{end_number} of %{total} Users"
+          recent:
+            one: Recent User
+            other: Recent Users
+        work:
+          count:
+            one: "%{count} Work"
+            other: "%{count} Works"
+          range:
+            one: "%{start_number} - %{end_number} of %{total} Work"
+            other: "%{start_number} - %{end_number} of %{total} Works"
+          recent:
+            one: Recent Work
+            other: Recent Works
+      scope:
+        collection_html: in %{collection_link}
+        combined_html: "%{first_scope} %{second_scope}"
+        fandom_html: in %{fandom_link}
+        language: in %{language}
+        pseud: by %{byline}
+        tag_html: in %{tag_link}
+        user: by %{username}
+      with_query_and_scope_html: "%{results} found %{location}"
+      with_query_html: "%{results} found"
+      with_scope_html: "%{results} %{location}"
+    search_results_found: "%{count} Found"
   series_helper:
     series_description_html: Part %{index} of %{series_link}
   tags_helper:

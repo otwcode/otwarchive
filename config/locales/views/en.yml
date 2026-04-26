@@ -669,7 +669,6 @@ en:
         close_requests_html: Close Requests &#8593;
         heading:
           for_collection: Sign-ups for %{collection}
-          for_search: Sign-up
         navigation:
           download_csv: Download (CSV)
           search: Search
@@ -2482,6 +2481,8 @@ en:
     guest_header:
       one: "%{count} guest has also left kudos"
       other: "%{count} guests have also left kudos"
+    index:
+      page_heading_html: "%{users} Who Left Kudos on %{work_link}"
     user_links:
       more_link:
         one: "%{count} more user"
@@ -3309,7 +3310,6 @@ en:
       add_co-creators: Add co-creators
       show_co-creator_options: Add co-creators?
     drafts:
-      page_heading: Unposted Draft
       please_note: 'Please note:'
       unposted_drafts_get_deleted: Unposted drafts are only saved for 30 days from the day they are first created, and then deleted from %{app_name}.
     edit_tags:
