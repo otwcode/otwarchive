@@ -1,13 +1,13 @@
 class ChaptersController < ApplicationController
   include WorksHelper
 
-  # only registered users and NOT admin should be able to create new chapters
-  before_action :users_only, except: [:index, :show, :destroy, :confirm_delete]
+  # only registered users and NOT admin should be able to create and delete chapters
+  before_action :users_only, except: [:index, :show]
   before_action :check_user_status, only: [:new, :create, :update, :update_positions]
-  before_action :check_user_not_suspended, only: [:edit, :remove_user_creatorship, :confirm_delete, :destroy]
+  before_action :check_user_not_suspended, only: [:edit, :create, :update, :post, :remove_user_creatorship, :confirm_delete, :destroy]
   before_action :load_work
   # only authors of a work should be able to edit its chapters
-  before_action :check_ownership, except: [:index, :show]
+  before_action :check_ownership, except: [:index, :show, :destroy, :confirm_delete]
   before_action :check_visibility, only: [:show]
   before_action :load_chapter, only: [:show, :edit, :remove_user_creatorship, :update, :preview, :post, :confirm_delete, :destroy]
 
@@ -200,11 +200,13 @@ class ChaptersController < ApplicationController
 
   # GET /work/:work_id/chapters/1/confirm_delete
   def confirm_delete
+    check_ownership
   end
 
   # DELETE /work/:work_id/chapters/1
   # DELETE /work/:work_id/chapters/1.xml
   def destroy
+    check_ownership
     if @chapter.is_only_chapter? || @chapter.only_non_draft_chapter?
       flash[:error] = t(".only_chapter")
       redirect_to(edit_work_path(@work))
