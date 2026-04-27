@@ -488,3 +488,32 @@ Feature: Prompt Meme Challenge
     And I view prompts for "Battle 12"
     # TODO: Refactor this test once we have a new Capybara version so that we look for .exact(Claim)
   Then I should see "Drop Claim"
+
+  Scenario: HTML escape chars in prompt title display properly
+
+  Given I have single-prompt prompt meme fully set up
+  When I am logged in as "escapecharsfan"
+    And I sign up for "Battle 12" with combination ESCAPE_CHARS
+  When I view my signup for "Battle 12"
+  Then I should see "These & < > ' ? are some HTML escape chars"
+  When I view my signup for "Battle 12"
+    And I follow "Edit Sign-up"
+  Then I should see "These & < > ' ? are some HTML escape chars" in the "challenge_signup_requests_attributes_0_title" input
+    And I should see "Request 1"
+  When I view my signup for "Battle 12"
+    And I follow "Edit Prompt"
+  Then I should see "These & < > ' ? are some HTML escape chars" in the "prompt_title" input
+    And I should see "Request 1"
+
+  When I am logged in as "claimer"
+    And I view prompts for "Battle 12"
+  Then I should see "These & < > ' ? are some HTML escape chars"
+  When I claim a prompt from "Battle 12"
+    And I go to the "Battle 12" claims page for the current user
+  Then I should see "These & < > ' ? are some HTML escape chars"
+  When I go to claimer's claims page
+  Then I should see "These & < > ' ? are some HTML escape chars"
+
+  When I am logged in as "mod1"
+    And I view unposted claims for "Battle 12"
+  Then I should see "These & < > ' ? are some HTML escape chars"

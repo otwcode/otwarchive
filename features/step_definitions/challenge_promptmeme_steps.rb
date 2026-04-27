@@ -277,6 +277,14 @@ When /^I sign up for "([^\"]*)" many-fandom prompt meme$/ do |title|
     click_button "Submit"
 end
 
+When "I sign up for {string} with combination ESCAPE_CHARS" do |title|
+  step %{I start signing up for "#{title}"}
+  step %{I fill in the 1st field with id matching "title" with "These & < > ' ? are some HTML escape chars"}
+  click_button "Submit"
+  step %{I should see "Sign-up was successfully created"}
+  step %{I should see "These & < > ' ? are some HTML escape chars"}
+end
+
 When /^I add prompt (\d+)$/ do |number|
   step %{I add prompt #{number} with "Stargate Atlantis"}
 end
