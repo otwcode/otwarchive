@@ -597,17 +597,18 @@ Feature: Prompt Meme Challenge
   Scenario: When a prompt is filled with a restricted work, the work should only be visible to logged-in users
 
   Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  When I sign up for Battle 12
-  When I am logged in as "myname2"
+    And I am logged in as "myname1"
+    And I sign up for Battle 12
+    And I am logged in as "myname2"
     And I claim a prompt from "Battle 12"
     And I start to fulfill my claim with "Restricted Fill"
     And I lock the work
     And I press "Post"
-    And I go to "Battle 12" collection's page
-    And I follow "Prompts ("
+  When I view prompts for "Battle 12"
   Then I should see "Fulfilled By"
+    And I should see "Restricted Fill"
   When I log out
     And I go to "Battle 12" collection's page
     And I follow "Prompts ("
   Then I should not see "Fulfilled By"
+    And I should not see "Restricted Fill"
