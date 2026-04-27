@@ -723,6 +723,9 @@ en:
       heading: Sign-up Summary for %{collection}
       no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
+    chapter_form:
+      publication_date: Chapter Publication Date
+      works_backdating_help_title: Publication Date Options
     posting_fieldset:
       actions:
         cancel: Cancel
@@ -738,6 +741,10 @@ en:
       tos_faq: Terms of Service FAQ
     preview:
       page_heading: Preview
+  collectibles:
+    collectible_form:
+      add_to_collections: Add to collections
+      collectibles_add_to_collection_help_title: Adding To Collections
   collection_items:
     collection_item_form:
       add: Add
@@ -1129,6 +1136,12 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    collectibles_add_to_collection:
+      collection_names: Note that you need to use the collection's name, which gets used in the collection's URL, and not the collection's spiffy title (because different collections can have the same title). A collection's name is the equivalent of your user login. Names will be auto-completed for you if you have JavaScript turned on.
+      guidance: Enter collection names as a comma-separated list, and the item you are editing will be added to all the collections you specify.
+      moderated_and_anonymous_collections: 'Also note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically - it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
+      page_heading: Adding To Collections
+      removing_from_collection: If you change your mind about having an item in a collection, you can either edit the list of collections when editing it, or you can manage all your collected items under the "My Collections" page in your account.
     first_login:
       additional_info:
         header: Additional Browsing Information
@@ -1627,6 +1640,14 @@ en:
       underage_sex:
         description: This is for descriptions or depictions of sexual activity involving characters under the age of eighteen. (This doesn't include dating activity like kissing or vague references with no actual description or depiction.) This warning generally applies to humans; if you are creating a pornographic work about space aliens who only live for a month or thousand-year-old vampires with twelve-year-old bodies, please just use your best judgment. You are always free to specify characters' ages or to use "Choose Not to Use Archive Warnings".
         header: 'Underage Sex:'
+    works_assignment:
+      guidance: If you have any open challenge assignments, you can choose one of them here if the story you are posting is meant to fulfill one of them. This will automatically add your story to the challenge collection (or submit it for approval) and also mark your assignment as fulfilled for the challenge moderators.
+      moderated_and_anonymous_collections: 'Note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically — it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
+      page_heading: Fulfilling Assignments
+    works_backdating:
+      chapters: Any subsequent chapters you add will have that date pre-set on the form, though you will still have the option of overriding that date. This means that if you don't know or care exactly when each chapter was originally published, you can still backdate your work conveniently.
+      guidance: When posting a work, you have the option to set a different publication date — in other words, to backdate the work. You can also set publication dates for individual chapters. Please note that in both cases, this affects whether and where your work appears on your dashboard and the works page, etc. These pages which show the date when your work was last updated — the publication date of your work or of one of your chapters, whichever is the most recent date.
+      page_heading: Publication Date Options
   home:
     about:
       ao3:
@@ -3378,6 +3399,10 @@ en:
       no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
+    standard_form:
+      collectibles_add_to_collection_help_title: Adding To Collections
+      works_assignment_help_title: Fulfilling Assignments
+      works_backdating_help_title: Publication Date Options
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
