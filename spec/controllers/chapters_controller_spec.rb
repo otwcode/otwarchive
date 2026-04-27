@@ -1053,6 +1053,30 @@ describe ChaptersController do
       end
     end
 
+    context "when the logged in user is suspended" do
+      before do
+        fake_login_known_user(suspended_user)
+      end
+
+      it "errors and redirects to user page" do
+        post :post, params: { work_id: suspended_users_work.id, id: suspended_users_work_chapter2.id }
+        it_redirects_to_simple(suspended_user)
+        expect(flash[:error]).to include("Your account has been suspended")
+      end
+    end
+
+    context "when the logged in user is banned" do
+      before do
+        fake_login_known_user(banned_user)
+      end
+
+      it "errors and redirects to user page" do
+        post :post, params: { work_id: banned_users_work.id, id: banned_users_work_chapter2.id }
+        it_redirects_to_simple(banned_user)
+        expect(flash[:error]).to include("Your account has been banned")
+      end
+    end
+
     context "when other user is logged in" do
       before do
         fake_login
@@ -1067,9 +1091,9 @@ describe ChaptersController do
 
   describe "confirm_delete" do
     context "when user is logged out" do
-      it "errors and redirects to work" do
+      it "errors and redirects to login" do
         get :confirm_delete, params: { work_id: work.id, id: work.chapters.first.id }
-        it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -1105,7 +1129,6 @@ describe ChaptersController do
   describe "destroy" do
     context "when user is logged out" do
       it "errors and redirects to login" do
-        pending "clean up chapter filters"
         delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
         it_redirects_to_user_login_with_error
       end
