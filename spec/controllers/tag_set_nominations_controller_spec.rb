@@ -90,9 +90,18 @@ describe TagSetNominationsController do
                   context 'unreviewed freeform nominations <= 30' do
                     before do
                       # Create with non-alphabetical names so ordering by tagname vs created_at differs
-                      FreeformNomination.create(tag_set_nomination: tag_set_nomination, tagname: "Zebra Freeform")
-                      FreeformNomination.create(tag_set_nomination: tag_set_nomination, tagname: "Apple Freeform")
-                      FreeformNomination.create(tag_set_nomination: tag_set_nomination, tagname: "Mango Freeform")
+                      create(:tag_nomination, type: "FreeformNomination",
+                                              tag_set_nomination: tag_set_nomination,
+                                              owned_tag_set: tag_set_nomination.owned_tag_set,
+                                              tagname: "Zebra Freeform")
+                      create(:tag_nomination, type: "FreeformNomination",
+                                              tag_set_nomination: tag_set_nomination,
+                                              owned_tag_set: tag_set_nomination.owned_tag_set,
+                                              tagname: "Apple Freeform")
+                      create(:tag_nomination, type: "FreeformNomination",
+                                              tag_set_nomination: tag_set_nomination,
+                                              owned_tag_set: tag_set_nomination.owned_tag_set,
+                                              tagname: "Mango Freeform")
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
@@ -119,7 +128,10 @@ describe TagSetNominationsController do
 
                   def add_unreviewed_freeform_nominations(num)
                     num.times do |i|
-                      FreeformNomination.create(tag_set_nomination: tag_set_nomination, tagname: "New Freeform #{i}")
+                      create(:tag_nomination, type: "FreeformNomination",
+                                              tag_set_nomination: tag_set_nomination,
+                                              owned_tag_set: tag_set_nomination.owned_tag_set,
+                                              tagname: "New Freeform #{i}")
                     end
                   end
                 end
@@ -276,14 +288,19 @@ describe TagSetNominationsController do
                     unique_tagnames = noms_per_page * 3
                     unique_tagnames.times do |i|
                       nominator = create(:user)
-                      tsn = TagSetNomination.create!(owned_tag_set: owned_tag_set, pseud: nominator.default_pseud)
-                      FandomNomination.create!(tag_set_nomination: tsn, tagname: "Paginated Fandom #{i}")
+                      tsn = create(:tag_set_nomination, owned_tag_set: owned_tag_set, pseud: nominator.default_pseud)
+                      create(:tag_nomination, type: "FandomNomination",
+                                              tag_set_nomination: tsn,
+                                              owned_tag_set: owned_tag_set,
+                                              tagname: "Paginated Fandom #{i}")
                     end
-                    # Add duplicates of the first tagname from different nominators
                     2.times do
                       dup_user = create(:user)
-                      tsn = TagSetNomination.create!(owned_tag_set: owned_tag_set, pseud: dup_user.default_pseud)
-                      FandomNomination.create!(tag_set_nomination: tsn, tagname: "Paginated Fandom 0")
+                      tsn = create(:tag_set_nomination, owned_tag_set: owned_tag_set, pseud: dup_user.default_pseud)
+                      create(:tag_nomination, type: "FandomNomination",
+                                              tag_set_nomination: tsn,
+                                              owned_tag_set: owned_tag_set,
+                                              tagname: "Paginated Fandom 0")
                     end
                   end
 
@@ -325,14 +342,22 @@ describe TagSetNominationsController do
 
                 def add_fandom_nominations(num, status)
                   num.times do |i|
-                    fandom_nom = FandomNomination.create(tag_set_nomination: tag_set_nomination, tagname: "New Fandom #{i}")
+                    fandom_nom = create(:tag_nomination, type: "FandomNomination",
+                                                         tag_set_nomination: tag_set_nomination,
+                                                         owned_tag_set: tag_set_nomination.owned_tag_set,
+                                                         tagname: "New Fandom #{i}")
                     fandom_nom.update_column(status, true) if status != :unreviewed
                   end
                 end
               end
 
               context 'tag set fandom_nomination_limit is 0' do
-                let(:fandom_nom) { FandomNomination.create(tag_set_nomination: tag_set_nomination, tagname: 'New Fandom') }
+                let(:fandom_nom) do
+                  create(:tag_nomination, type: "FandomNomination",
+                                          tag_set_nomination: tag_set_nomination,
+                                          owned_tag_set: tag_set_nomination.owned_tag_set,
+                                          tagname: "New Fandom")
+                end
 
                 before do
                   owned_tag_set.update_column(:fandom_nomination_limit, 0)
@@ -401,15 +426,21 @@ describe TagSetNominationsController do
 
                 def add_unreviewed_character_nominations(num)
                   num.times do |i|
-                    CharacterNomination.create(tag_set_nomination: tag_set_nomination, fandom_nomination: fandom_nom,
-                                               tagname: "New Character #{i}")
+                    create(:tag_nomination, type: "CharacterNomination",
+                                            tag_set_nomination: tag_set_nomination,
+                                            owned_tag_set: tag_set_nomination.owned_tag_set,
+                                            fandom_nomination_id: fandom_nom.id,
+                                            tagname: "New Character #{i}")
                   end
                 end
 
                 def add_unreviewed_relationship_nominations(num)
                   num.times do |i|
-                    RelationshipNomination.create(tag_set_nomination: tag_set_nomination, fandom_nomination: fandom_nom,
-                                                  tagname: "New Relationship #{i}")
+                    create(:tag_nomination, type: "RelationshipNomination",
+                                            tag_set_nomination: tag_set_nomination,
+                                            owned_tag_set: tag_set_nomination.owned_tag_set,
+                                            fandom_nomination_id: fandom_nom.id,
+                                            tagname: "New Relationship #{i}")
                   end
                 end
               end
