@@ -179,7 +179,7 @@ describe SeriesController do
       work = create(:work, fandom_string: "Fandom", authors: [user.default_pseud])
       series_with_work = create(:series, works: [work])
       get :show, params: { id: series_with_work }
-      expect(assigns[:page_title]).to eq("#{series_with_work.title} - #{user.default_pseud.name} - Fandom [#{ArchiveConfig.APP_NAME}]")
+      expect(assigns[:page_title]).to eq("#{series_with_work.title} - #{user.default_pseud.name} - Fandom | #{ArchiveConfig.APP_NAME}")
     end
 
     it "assigns page title for anonymous series" do
@@ -187,7 +187,7 @@ describe SeriesController do
       anonymous_work = create(:work, fandom_string: "Fandom", collections: [anonymous_collection])
       series_with_work = create(:series, works: [anonymous_work])
       get :show, params: { id: series_with_work }
-      expect(assigns[:page_title]).to eq("#{series_with_work.title} - Anonymous - Fandom [#{ArchiveConfig.APP_NAME}]")
+      expect(assigns[:page_title]).to eq("#{series_with_work.title} - Anonymous - Fandom | #{ArchiveConfig.APP_NAME}")
     end
 
     it "assigns page subtitle for unrevealed series" do
