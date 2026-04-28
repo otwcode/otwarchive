@@ -180,11 +180,12 @@ describe TagSetNominationsController do
                   end
 
                   context "unreviewed fandom nominations within per page limit" do
-                    let(:fandom_nom_num) { 20 }
+                    let(:per_page) { ArchiveConfig.ITEMS_PER_PAGE }
+                    let(:fandom_nom_num) { per_page }
 
                     it "returns all fandom nominations ordered by creation date" do
-                      expect(assigns(:nominations_count)[:fandom]).to eq(20)
-                      expect(assigns(:nominations)[:fandom].count).to eq(20)
+                      expect(assigns(:nominations_count)[:fandom]).to eq(per_page)
+                      expect(assigns(:nominations)[:fandom].count).to eq(per_page)
                       ids = assigns(:nominations)[:fandom].map(&:id)
                       expect(ids).to eq(ids.sort)
                     end
@@ -370,19 +371,21 @@ describe TagSetNominationsController do
                   end
 
                   context "unreviewed character and relationship nominations within per page limit" do
+                    let(:per_page) { ArchiveConfig.ITEMS_PER_PAGE }
+
                     before do
-                      add_unreviewed_character_nominations(20)
-                      add_unreviewed_relationship_nominations(20)
+                      add_unreviewed_character_nominations(per_page)
+                      add_unreviewed_relationship_nominations(per_page)
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
                     it "returns all character and relationship nominations ordered by creation date" do
-                      expect(assigns(:nominations_count)[:character]).to eq(20)
-                      expect(assigns(:nominations)[:character].count).to eq(20)
+                      expect(assigns(:nominations_count)[:character]).to eq(per_page)
+                      expect(assigns(:nominations)[:character].count).to eq(per_page)
                       character_ids = assigns(:nominations)[:character].map(&:id)
                       expect(character_ids).to eq(character_ids.sort)
-                      expect(assigns(:nominations_count)[:relationship]).to eq(20)
-                      expect(assigns(:nominations)[:relationship].count).to eq(20)
+                      expect(assigns(:nominations_count)[:relationship]).to eq(per_page)
+                      expect(assigns(:nominations)[:relationship].count).to eq(per_page)
                       relationship_ids = assigns(:nominations)[:relationship].map(&:id)
                       expect(relationship_ids).to eq(relationship_ids.sort)
                     end
