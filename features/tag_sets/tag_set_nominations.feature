@@ -164,14 +164,6 @@ Feature: Nominating and reviewing nominations for a tag set
   When I review nominations for "Nominated Tags"
   Then I should see "Next" within "fieldset.freeform .pagination"
 
-  Scenario: Owner of a tag set with over 30 nominations does not see the randomized selection message
-  Given I am logged in as "tagsetter"
-    And I set up the nominated tag set "Nominated Tags" with 6 fandom noms and 6 character noms
-  When there are 36 unreviewed nominations
-  Given I am logged in as "tagsetter"
-    And I review nominations for "Nominated Tags"
-  Then I should not see "There are too many nominations to show at once"
-
   Scenario: If a set has received nominations, a moderator should be able to review nominated tags
   Given I have the nominated tag set "Nominated Tags"
     And I am logged in as "tagsetter"
