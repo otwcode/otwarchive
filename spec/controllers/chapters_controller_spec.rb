@@ -226,19 +226,19 @@ describe ChaptersController do
     end
 
     context "when work has two fandoms" do
-      it "assigns @page_title with the first fandom" do
+      it "assigns @page_title with the fandoms deliminated by commas" do
         first = create(:fandom, name: "The First")
         second = create(:fandom, name: "The Second")
         allow_any_instance_of(Work).to receive(:fandoms).and_return([first, second])
         get :show, params: { work_id: work.id, id: work.chapters.first.id }
         expect(response).to have_http_status(:ok)
-        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - The First [")
+        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - The First, The Second [")
       end
     end
 
     context "when work has many fandoms" do
       it "assigns @page_title with placeholder for the fandoms" do
-        fandoms = create_list(:fandom, 5)
+        fandoms = create_list(:fandom, 3)
         allow_any_instance_of(Work).to receive(:fandoms).and_return(fandoms)
         get :show, params: { work_id: work.id, id: work.chapters.first.id }
         expect(response).to have_http_status(:ok)
