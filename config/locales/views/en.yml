@@ -2378,6 +2378,7 @@ en:
       required_notice: Required information
       short: Abbreviation
       sortable_name: Name for alphabetical sorting
+      sortable_name_description: This should be the language name or (if applicable) its name transliterated into the Latin alphabet. If the language's first character has diacritics, remove the diacritics.
       submit:
         create: Create Language
         update: Update Language

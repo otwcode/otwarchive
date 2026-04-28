@@ -144,7 +144,7 @@ describe "API v2 WorksController - Create works", type: :request do
 
     describe "Provided API metadata should be used if present" do
       before do
-        Language.create(short: "es", name: "Español")
+        create(:language, short: "es", name: "Español")
 
         mock_external
 
