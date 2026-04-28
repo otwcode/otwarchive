@@ -85,7 +85,7 @@ describe Admin::BannersController do
 
     it "creates admin activity" do
       fake_login_admin(admin)
-      expect {subject}
+      expect { subject }
         .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target).to eq(assigns(:admin_banner))
@@ -119,7 +119,7 @@ describe Admin::BannersController do
 
     it "creates admin activity" do
       fake_login_admin(admin)
-      expect {subject}
+      expect { subject }
         .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target).to eq(assigns(:admin_banner))
@@ -161,7 +161,7 @@ describe Admin::BannersController do
 
     it "creates admin activity" do
       fake_login_admin(admin)
-      expect {subject}
+      expect { subject }
         .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target).to eq(nil)
