@@ -768,6 +768,8 @@ en:
   collections:
     collection_blurb:
       collection_tags: 'Collection Tags:'
+      signups_close_at: 'Sign-ups close at:'
+      summary: Summary
     filters:
       clear_filters: Clear Filters
       closed:
