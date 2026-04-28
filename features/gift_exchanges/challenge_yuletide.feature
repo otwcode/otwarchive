@@ -588,7 +588,7 @@ Feature: Collection
     And I should not see "myname6"
     And I should not see "pinchhitter"
   When I follow "Fulfilling Story 1"
-  Then I should see the page title "Fulfilling Story 1 - Anonymous - Stargate Atlantis [Example Archive]"
+  Then I should see the page title "Fulfilling Story 1 - Anonymous - Stargate Atlantis | Example Archive"
   Then I should see "Anonymous"
     And I should not see "myname1"
     And I should not see "myname3"
