@@ -8,18 +8,23 @@ class PreferencesController < ApplicationController
     @check_ownership_of = @user
   end
 
+  def available_skins
+    (@user.skins.site_skins.usable +
+    Skin.approved_skins.site_skins.usable).uniq
+  end
+
   def index
     @page_subtitle = t(".page_title", username: @user.login)
     @preference = @user.preference
     authorize @preference if logged_in_as_admin?
-    @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq
+    @available_skins = available_skins
     @available_locales = Locale.where(email_enabled: true)
   end
 
   def update
     @preference = @user.preference
     authorize @preference if logged_in_as_admin?
-    @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq
+    @available_skins = available_skins
     @available_locales = Locale.where(email_enabled: true)
 
     @user.preference.attributes = preference_params

@@ -25,6 +25,16 @@ describe PreferencesController do
 
         it_redirects_to_with_error(user_path(other_user), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
+
+      it "does not include parent-only skins in available site skins" do
+        usable_skin = create(:skin, author: user, unusable: false)
+        parent_only_skin = create(:skin, author: user, unusable: true)
+
+        get :index, params: { user_id: user.login }
+
+        expect(assigns(:available_skins)).to include(usable_skin)
+        expect(assigns(:available_skins)).not_to include(parent_only_skin)
+      end
     end
 
     context "as a guest" do
