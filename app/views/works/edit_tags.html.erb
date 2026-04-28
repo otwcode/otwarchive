@@ -1,10 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-  <% if logged_in_as_admin? %>
-    <%= t(".page_heading.edit_tags_and_language_html", title: @work.title) %>
-  <% else %>
-    <%= t(".page_heading.edit_tags_html", title: @work.title) %>
-  <% end %>
+  <%= t(".page_heading.edit_tags_html", title: @work.title) %>
 </h2>
 
 <%= error_messages_for :work %>
@@ -15,16 +11,6 @@
   <p class="required notice">* <%= ts('Required information') %></p>
 
   <%= render 'work_form_tags', include_blank: false %>
-
-  <% if logged_in_as_admin? %>
-    <fieldset role="article">
-      <legend><%= t("works.associations.title") %></legend>
-      <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
-      <dl>
-        <%= render 'work_form_associations_language', f: f %>
-      </dl>
-    </fieldset>
-  <% end %>
 
   <%= render "posting_fieldset" %>
 

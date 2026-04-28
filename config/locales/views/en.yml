@@ -157,7 +157,7 @@ en:
         work: Delete Work
       edit:
         external_work: Edit External Work
-      edit_tags: Edit Tags and Language
+      edit_work: Edit Work
       hide:
         bookmark: Hide Bookmark
         external_work: Hide External Work
@@ -3178,6 +3178,8 @@ en:
         related_works: Related Works (%{related_works_number})
         sign_ups: Sign-ups (%{signup_number})
   works:
+    admin_edit_form:
+      required_information: Required information
     adult:
       caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.
       footnote: If you accept cookies from our site and you choose "Yes, Continue", you will not be asked again during this session (that is, until you close your browser). If you log in you can store your preference and never be asked again.
@@ -3197,9 +3199,18 @@ en:
       page_heading: Unposted Draft
       please_note: 'Please note:'
       unposted_drafts_get_deleted: Unposted drafts are only saved for 30 days from the day they are first created, and then deleted from %{app_name}.
+    edit:
+      add_chapter: Add Chapter
+      delete_confirm: Are you sure you want to delete this work? This will destroy all comments and kudos on this work as well and CANNOT BE UNDONE!
+      delete_work: Delete Work
+      draft_label: " (Draft)"
+      edit_chapter: 'Edit Chapter:'
+      manage_chapters: Manage Chapters
+      orphan_work: Orphan Work
+      page_heading: Edit Work
+      remove_me_as_co_creator: Remove Me As Co-Creator
     edit_tags:
       page_heading:
-        edit_tags_and_language_html: Edit Work Tags and Language for %{title}
         edit_tags_html: Edit Work Tags for %{title}
     import:
       draft_work_title_html: "%{work_link} (Draft)"

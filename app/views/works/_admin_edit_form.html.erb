@@ -1,0 +1,16 @@
+<%= form_for(@work, html: { id: "work-form", class: "verbose work post" }, url: { action: "update" }) do |f| %>
+  <p class="required notice">* <%= t(".required_information") %></p>
+
+  <%= render "work_form_tags", include_blank: false %>
+
+  <fieldset role="article">
+    <legend><%= t("works.associations.title") %></legend>
+    <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
+    <dl>
+      <%= render "work_form_associations_language", f: f %>
+    </dl>
+  </fieldset>
+
+  <%= render "posting_fieldset" %>
+
+<% end %>
