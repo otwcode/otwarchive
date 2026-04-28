@@ -303,7 +303,6 @@ en:
     index:
       page_title: "%{username} - Series"
     show:
-      anonymous: Anonymous
       unrevealed_series: Mystery Series
   skins:
     default_skin: You are now using the default site skin again!
