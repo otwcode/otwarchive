@@ -788,3 +788,21 @@ Feature: Gift Exchange Challenge
     Then I should see "collection_1"
     When I follow "2" within ".pagination"
     Then I should see "collection_2"
+
+  Scenario: Mod can approve a posted assignment in a moderated gift exchange
+    Given everyone has their assignments for "Awesome Gift Exchange"
+      And I make the collection "Awesome Gift Exchange" moderated
+    When I am logged in as "myname1"
+      And I fulfill my assignment
+    When I am logged in as "mod1"
+      And I go to the "Awesome Gift Exchange" assignments page
+      And I follow "Open"
+    Then I should see "myname1"
+      And I should see "Approve"
+    When I check "Approve"
+      And I press "Submit"
+    Then I should see "Assignment updates complete!"
+    When I follow "Open"
+    Then I should not see "Approve"
+    When I follow "Complete"
+    Then I should see "Fulfilled Story" 
