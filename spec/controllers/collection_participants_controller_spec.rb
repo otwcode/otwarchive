@@ -202,7 +202,7 @@ describe CollectionParticipantsController do
         context "where the participant is updated successfully" do
           it "successfully updates and redirects to collection participants" do
             put :update, params: params
-            it_redirects_to_with_notice(collection_participants_path(collection), "Updated #{participant.pseud.name}.")
+            it_redirects_to_with_notice(collection_participants_path(collection), "Updated #{participant.pseud.byline}.")
           end
         end
 
@@ -213,7 +213,7 @@ describe CollectionParticipantsController do
 
           it "displays an error notice and and redirects to collection participants" do
             put :update, params: params
-            it_redirects_to_with_error(collection_participants_path(collection), "Couldn't update #{participant.pseud.name}.")
+            it_redirects_to_with_error(collection_participants_path(collection), "Couldn't update #{participant.pseud.byline}.")
           end
         end
       end
@@ -221,7 +221,7 @@ describe CollectionParticipantsController do
   end
 
   describe "destroy" do
-    let(:pseud_name) { user.default_pseud.name }
+    let(:pseud_byline) { user.default_pseud.byline }
     let(:user_participant_role) { CollectionParticipant::MEMBER }
     let!(:user_participant) do
       create(
@@ -254,7 +254,7 @@ describe CollectionParticipantsController do
         context "where the user is destroying their own participant" do
           it "destroys the participant successfully and redirects to index" do
             delete :destroy, params: params
-            it_redirects_to_with_notice(root_path, "Removed #{pseud_name} from collection.")
+            it_redirects_to_with_notice(root_path, "Removed #{pseud_byline} from collection.")
             expect(CollectionParticipant.find_by(pseud_id: user.default_pseud.id)).to_not be_present
           end
         end
@@ -275,7 +275,7 @@ describe CollectionParticipantsController do
               participant_role: CollectionParticipant::MEMBER
             )
           end
-          let(:pseud_name) { other_participant.pseud.name }
+          let(:pseud_byline) { other_participant.pseud.byline }
           let(:params) { { id: other_participant.id, collection_id: collection.name } }
 
           it "doesn't allow the destroy and redirects to the collection page" do
@@ -295,7 +295,7 @@ describe CollectionParticipantsController do
             participant_role: CollectionParticipant::MEMBER
           )
         end
-        let(:pseud_name) { other_participant.pseud.name }
+        let(:pseud_byline) { other_participant.pseud.byline }
         let(:params) do
           { id: other_participant.id, collection_id: collection.name }
         end
@@ -303,7 +303,7 @@ describe CollectionParticipantsController do
         context "where participant to be destroyed is not an owner" do
           it "destroys the participant successfully and redirects to index" do
             delete :destroy, params: params
-            it_redirects_to_with_notice(root_path, "Removed #{pseud_name} from collection.")
+            it_redirects_to_with_notice(root_path, "Removed #{pseud_byline} from collection.")
             expect(CollectionParticipant.find_by(pseud_id: other_participant.pseud_id)).to_not be_present
           end
         end
@@ -321,7 +321,7 @@ describe CollectionParticipantsController do
           end
 
           context "where there are other owners" do
-            let!(:pseud_name) { CollectionParticipant.find(delete_participant_id.id).pseud.name }
+            let!(:pseud_byline) { CollectionParticipant.find(delete_participant_id.id).pseud.byline }
             let!(:other_owner) do
               create(
                 :collection_participant,
@@ -332,7 +332,7 @@ describe CollectionParticipantsController do
 
             it "destroys the participant successfully and redirects to index" do
               delete :destroy, params: params
-              it_redirects_to_with_notice(root_path, "Removed #{pseud_name} from collection.")
+              it_redirects_to_with_notice(root_path, "Removed #{pseud_byline} from collection.")
               expect(CollectionParticipant.where(id: delete_participant_id)).to be_empty
             end
           end
