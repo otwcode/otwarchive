@@ -6,7 +6,7 @@
       <p class="important informational"><%= @pseud.name %></p>
       <p class="footnote"><%= t(".cannot_change_matching_pseud_html", change_username_link: link_to(t(".change_username"), change_username_user_path(@user))) %></p>
     <% else %>
-      <%= f.text_field :name, class: "observe_textlength", disabled: logged_in_as_admin? %>
+      <%= f.text_field :name, value: @textbox_name, class: "observe_textlength", disabled: logged_in_as_admin? %>
       <%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) %>
     <% end %>
   </dd>
