@@ -128,8 +128,11 @@ en:
       invited: invited
       invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
   collection_participants:
+    destroy:
+      success: Removed %{participant} from collection.
     update:
       failure: Couldn't update %{participant}.
+      success: Updated %{participant}.
     validation:
       owners_required: You can't remove the only owner!
   collection_profile:

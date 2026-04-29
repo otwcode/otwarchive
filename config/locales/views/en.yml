@@ -761,6 +761,10 @@ en:
         notice:
           unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
         page_heading: Items by %{username} in Collections
+  collection_participants:
+    participant_form:
+      remove:
+        confirm: Are you sure you want to remove %{participant}?
   collection_profile:
     show:
       meta:
