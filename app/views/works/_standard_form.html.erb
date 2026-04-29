@@ -94,7 +94,7 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), class: "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag "parent-options-show", ts("This work is a remix, a translation, a podfic, or was inspired by another work") %>
+        <%= label_tag "parent-options-show", t(".header") %>
         <%= link_to_help "parent-works-help" %>
 
         <!-- Toggles on with parent checkbox -->
@@ -137,20 +137,20 @@
             <% unless existing_parents.blank? %>
               <dt><%= ts("Current parent works") %></dt>
               <% existing_parents.each do |related_work| %>
-                <% if related_work.parent %>
-                  <dd>
-                    <ul class="actions" role="navigation">
-                      <li>
+                <dd>
+                  <ul class="actions" role="navigation">
+                    <li>
+                      <% if related_work.parent %>
                         <%= link_to related_work.parent.title, related_work.parent %>
-                      </li>
-                      <li>
-                        <%= link_to ts("Remove"), related_work,
-                                data: { confirm: ts("Are you sure you want to delete the connection to this work?") },
-                                method: :delete %>
-                      </li>
-                    </ul>
-                  </dd>
-                <% end %>
+                      <% else %>
+                        <%= t(".deleted_work") %>
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to t(".remove"), related_work, data: { confirm: t(".remove_confirm") }, method: :delete %>
+                    </li>
+                  </ul>
+                </dd>
               <% end %>
             <% end %>
           </dl>
