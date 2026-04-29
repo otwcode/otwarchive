@@ -96,7 +96,7 @@ class CommentMailer < ApplicationMailer
   def subject_for_commentable(comment)
     name = comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<").html_safe
     if comment.ultimate_parent.is_a?(Tag)
-      t(".subject.tag", app_name: ArchiveConfig.APP_SHORT_NAME, name: name)
+      t(".subject.tag", app_name: ArchiveConfig.APP_SHORT_NAME, name: name, category: t("comment_mailer.tag_category.#{comment.ultimate_parent.model_name.i18n_key}"))
     elsif comment.parent.is_a?(Chapter) && comment.parent.work.chaptered?
       t(".subject.chapter", app_name: ArchiveConfig.APP_SHORT_NAME, position: comment.parent.position, title: name)
     else
