@@ -1,0 +1,132 @@
+<%= form_for @search, as: :collection_search, url: request.path, html: { method: :get, class: "narrow-hidden filters", id: "collection-filters" } do |f| %>
+  <h3 class="landmark heading"><%= t("collections.filters.landmark") %></h3>
+  <%= field_set_tag t("collections.filters.legend") do %>
+    <dl>
+      <dt class="landmark"><%= t("collections.filters.submit.landmark") %></dt>
+      <dd class="submit actions"><%= submit_tag t("collections.filters.submit.button") %></dd>
+
+      <dt class="autocomplete search">
+        <%= f.label "title", t("collections.filters.title") %>
+      </dt>
+      <dd class="autocomplete search">
+        <%= f.text_field "title", autocomplete_options("collection_title", data: { autocomplete_token_limit: 1 }) %>
+      </dd>
+
+      <dt class="autocomplete search">
+        <%= f.label "tag", t("collections.filters.tag") %>
+      </dt>
+      <dd class="autocomplete search">
+        <%= f.text_field "tag", autocomplete_options("tag", data: { autocomplete_token_limit: 5 }) %>
+      </dd>
+
+      <dt><%= t("collections.filters.multifandom.label") %></dt>
+      <dd>
+        <ul>
+          <li>
+            <%= f.label "multifandom", value: true do %>
+              <%= f.radio_button "multifandom", true %>
+              <%= label_indicator_and_text(t("collections.filters.multifandom.only")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= f.label "multifandom", value: false do %>
+              <%= f.radio_button "multifandom", false %>
+              <%= label_indicator_and_text(t("collections.filters.multifandom.exclude")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= f.label "multifandom", value: "" do %>
+              <%= f.radio_button "multifandom", "" %>
+              <%= label_indicator_and_text(t("collections.filters.multifandom.include")) %>
+            <% end %>
+          </li>
+        </ul>
+      </dd>
+
+      <dt><%= t("collections.filters.closed.label") %></dt>
+      <dd>
+        <ul>
+          <li>
+            <%= f.label "closed", value: true do %>
+              <%= f.radio_button "closed", true %>
+              <%= label_indicator_and_text(t("collections.filters.closed.only")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= f.label "closed", value: false do %>
+              <%= f.radio_button "closed", false %>
+              <%= label_indicator_and_text(t("collections.filters.closed.exclude")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= f.label "closed", value: "" do %>
+              <%= f.radio_button "closed", "" %>
+              <%= label_indicator_and_text(t("collections.filters.closed.include")) %>
+            <% end %>
+          </li>
+        </ul>
+      </dd>
+
+      <dt><%= t("collections.filters.moderated.label") %></dt>
+      <dd>
+        <ul>
+          <li>
+            <%= f.label "moderated", value: true do %>
+              <%= f.radio_button "moderated", true %>
+              <%= label_indicator_and_text(t("collections.filters.moderated.only")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= f.label "moderated", value: false do %>
+              <%= f.radio_button "moderated", false %>
+              <%= label_indicator_and_text(t("collections.filters.moderated.exclude")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= f.label "moderated", value: "" do %>
+              <%= f.radio_button "moderated", "" %>
+              <%= label_indicator_and_text(t("collections.filters.moderated.include")) %>
+            <% end %>
+          </li>
+        </ul>
+      </dd>
+
+      <% if @show_type_filter %>
+        <dt><%= t("collections.filters.type.label") %></dt>
+        <dd>
+          <ul>
+            <li>
+              <%= f.label "challenge_type", value: "GiftExchange" do %>
+                <%= f.radio_button "challenge_type", "GiftExchange" %>
+                <%= label_indicator_and_text(t("collections.filters.type.gift_exchange")) %>
+              <% end %>
+            </li>
+            <li>
+              <%= f.label "challenge_type", value: "PromptMeme" do %>
+                <%= f.radio_button "challenge_type", "PromptMeme" %>
+                <%= label_indicator_and_text(t("collections.filters.type.prompt_meme")) %>
+              <% end %>
+            </li>
+            <li>
+              <%= f.label "challenge_type", value: "" do %>
+                <%= f.radio_button "challenge_type", "" %>
+                <%= label_indicator_and_text(t("collections.filters.type.any")) %>
+              <% end %>
+            </li>
+          </ul>
+        </dd>
+      <% end %>
+
+      <dt class="landmark"><%= t("collections.filters.submit.landmark") %></dt>
+      <dd class="submit actions"><%= submit_tag t("collections.filters.submit.button") %></dd>
+    </dl>
+    <p class="footnote">
+      <%= link_to t("collections.filters.clear_filters"), request.path %>
+    </p>
+  <% end %>
+  <p class="narrow-shown hidden">
+    <a href="#main" id="leave_filters" class="close">
+      <%= t("collections.filters.leave_filters") %>
+    </a>
+  </p>
+<% end %>

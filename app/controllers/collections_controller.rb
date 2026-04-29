@@ -60,19 +60,24 @@ class CollectionsController < ApplicationController
   def list_challenges
     @page_subtitle = "Open Challenges"
     @hide_dashboard = true
-
-    @challenge_collections = (CollectionSearchForm.new(challenge_type: "GiftExchange", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results.to_a +
-                             CollectionSearchForm.new(challenge_type: "PromptMeme", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results.to_a)
+    @sort_and_filter = true
+    @show_type_filter = true
+    @search = CollectionSearchForm.new(challenge_filter_params.merge(signup_open: true, sort_column: "signups_close_at", page: params[:page]))
+    @challenge_collections = @search.search_results
   end
 
   def list_ge_challenges
     @page_subtitle = "Open Gift Exchange Challenges"
-    @challenge_collections = CollectionSearchForm.new(challenge_type: "GiftExchange", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results
+    @sort_and_filter = true
+    @search = CollectionSearchForm.new(challenge_filter_params.merge(challenge_type: "GiftExchange", signup_open: true, sort_column: "signups_close_at", page: params[:page]))
+    @challenge_collections = @search.search_results
   end
 
   def list_pm_challenges
     @page_subtitle = "Open Prompt Meme Challenges"
-    @challenge_collections = CollectionSearchForm.new(challenge_type: "PromptMeme", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results
+    @sort_and_filter = true
+    @search = CollectionSearchForm.new(challenge_filter_params.merge(challenge_type: "PromptMeme", signup_open: true, sort_column: "signups_close_at", page: params[:page]))
+    @challenge_collections = @search.search_results
   end
 
   def show
@@ -214,5 +219,11 @@ class CollectionsController < ApplicationController
         :gift_exchange, :show_random, :prompt_meme, :email_notify
       ]
     )
+  end
+
+  def challenge_filter_params
+    params.permit(:commit, collection_search: [
+      :title, :tag, :challenge_type, :moderated, :multifandom, :closed
+    ])[:collection_search] || {}
   end
 end
