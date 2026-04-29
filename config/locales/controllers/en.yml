@@ -206,7 +206,7 @@ en:
       collection_page_title: "%{collection_title} - Fandoms"
   gifts:
     index:
-      page_subtitle: Gifts for %{name}
+      page_subtitle: "%{name} - Gifts"
       whose_gifts_error: Whose gifts did you want to see?
     toggle_rejected:
       now_hidden_notice: This work will no longer be listed among your gifts.
