@@ -514,6 +514,8 @@ class Comment < ApplicationRecord
   end
 
   def submit_spam
+    return unless approved && !is_deleted
+    
     Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
   end
 
@@ -522,9 +524,9 @@ class Comment < ApplicationRecord
   end
 
   def mark_as_spam!
+    submit_spam
     update_attribute(:approved, false)
     update_attribute(:spam, true)
-    submit_spam
   end
 
   def mark_as_ham!

@@ -17,7 +17,7 @@
       <%= span_if_current ts("Accepted Gifts"), user_gifts_path(@user), !(params[:refused]) %>
     </li>
     <li>
-      <%= span_if_current ts("Refused Gifts"), user_gifts_path(@user, refused: true) %>
+      <%= span_if_current ts("Refused Gifts"), user_gifts_path(@user, refused: true), params[:refused] %>
     </li>
   </ul>
 <% elsif !@user %>

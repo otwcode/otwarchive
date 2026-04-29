@@ -247,6 +247,13 @@ describe PseudsController do
           it_redirects_to_with_error(user_pseuds_path(user), "You cannot delete the pseud matching your username, sorry!")
         end
       end
+
+      context "when deleting a pseud that does not exist" do
+        it "errors and redirects to user_pseuds_path" do
+          post :destroy, params: { user_id: user, id: "nonexistent_pseud" }
+          it_redirects_to_with_error(user_pseuds_path(user), "What pseud did you want to delete?")
+        end
+      end
     end
   end
 

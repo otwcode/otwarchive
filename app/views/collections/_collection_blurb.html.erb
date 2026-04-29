@@ -1,7 +1,7 @@
 <li class="<% if collection.user_is_owner?(current_user) %>own <% end %>collection picture blurb group" role="article">
   <% logged_in = (logged_in_as_admin? || logged_in?) ? "logged-in" : "logged-out" %>
-  <%# remember to update Collection.expire_blurb_cache if you change this key %>
-  <% cache("collection-blurb-#{logged_in}-#{collection.id}-v5", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
+  <%# remember to update Collection.expire_blurb_cache if you change this key (or the similar summary and body keys below) %>
+  <% cache("collection-blurb-#{logged_in}-#{collection.id}-v5-header", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
     <div class="header module group">
       <h4 class="heading">
         <%= link_to collection.title, collection_path(collection) %>
@@ -21,17 +21,20 @@
         </h5>
       <% end %>
     </div>
+  <% end %> <!-- end blurb header cache -->
 
-    <!--summary/descriptions-->
-    <h6 class="landmark heading"><%= ts("Summary") %></h6>
-    <blockquote class="userstuff summary">
+  <!--summary/descriptions-->
+  <h6 class="landmark heading"><%= t(".summary") %></h6>
+  <blockquote class="userstuff summary">
+    <% cache("collection-blurb-#{logged_in}-#{collection.id}-v5-summary", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
       <%=raw strip_images(sanitize_field(collection, :description)) || "&nbsp;".html_safe %>
+    <% end %><!-- end blurb summary cache -->
+    <% if collection.challenge && collection.challenge.signup_open %>
+      <p><%= t(".signups_close_at") %> <%= time_in_zone(collection.challenge.signups_close_at, (collection.challenge.time_zone || Time.zone.name)) %></p>
+    <% end %>
+  </blockquote>
 
-      <% if collection.challenge && collection.challenge.signup_open %>
-        <p><%= ts("Sign-ups close at:") %> <%= time_in_zone(collection.challenge.signups_close_at, (collection.challenge.time_zone || Time.zone.name)) %></p>
-      <% end %>
-    </blockquote>
-
+  <% cache("collection-blurb-#{logged_in}-#{collection.id}-v5-body", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
     <p class="type">
       (<%= collection.closed? ? ts("Closed") : ts("Open") %>, <%= collection.moderated? ? ts("Moderated") : ts("Unmoderated") %><%= collection.unrevealed? ? ts(", Unrevealed") : "" %><%= collection.anonymous? ? ts(", Anonymous") : "" %><%= collection.gift_exchange? ? ts(", Gift Exchange Challenge") : "" %><%= collection.prompt_meme? ? ts(", Prompt Meme Challenge") : "" %>)
     </p>
@@ -54,7 +57,7 @@
       <% end %>
     </dl>
 
-  <% end %><!-- end cache -->
+  <% end %><!-- end blurb body cache -->
 
   <% if collection.user_is_owner?(current_user) || (collection.challenge && collection.challenge.signup_open && logged_in?) || (collection.moderated? && logged_in?) %>
     <h6 class="landmark heading"><%= ts("User Actions") %></h6>

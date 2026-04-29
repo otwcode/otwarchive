@@ -775,7 +775,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 // AO3-4976 skip empty strings
                 return;
             }
-            termbit = termbit.replace(/([.?*+^$[\]\\(){}-])/g, "\\$1");
+            termbit = termbit.replace(/[.*+?^${}()|[\]\\-]/g, "\\$&");
             newvalue = newvalue.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + termbit + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<b>$1</b>");
         });
         return newvalue;
