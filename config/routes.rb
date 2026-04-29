@@ -132,6 +132,7 @@ Rails.application.routes.draw do
     end
     resources :works
     resources :bookmarks
+    resources :collections
     resources :comments
     resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end

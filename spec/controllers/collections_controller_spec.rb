@@ -46,9 +46,9 @@ describe CollectionsController, collection_search: true do
       run_all_indexing_jobs
     end
 
-    it "assigns subtitle with collection title and subcollections" do
+    it "assigns title with collection title and subcollections" do
       get :index, params: { collection_id: gift_exchange_collection.name }
-      expect(assigns[:page_subtitle]).to eq("#{gift_exchange_collection.title} - Subcollections")
+      expect(assigns[:page_title]).to eq("#{gift_exchange_collection.title} - Subcollections")
     end
 
     context "collections index" do

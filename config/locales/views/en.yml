@@ -655,6 +655,7 @@ en:
       choose_fandom: choose a fandom
       navigation:
         bookmarks: Bookmarks
+        collections: Collections
         edit: Edit Bookmark
         new: Bookmark
         new_external_work: Bookmark External Work
@@ -817,11 +818,25 @@ en:
         footnote: Use this if your collection is not fandom-specific.
         label: Multifandom
     index:
+      landmark:
+        list_collections: List of Collections
+        navigation: Navigation
+      navigation:
+        all_collections: Collections
+        bookmarks: Bookmarks
+        collections: Collections
+        filters: Filters
+        manage_collection: Manage Collection Items
+        new_collection: New Collection
+        new_subcollection: New Subcollection
+        open_challenges: Open Challenges
+        user_collections: Collections
+        works: Works
       page_heading:
-        challenges_subcollections_in: Challenges/Subcollections in %{collection}
-        collections_in_the: Collections in the %{archive}
-        collections_including: Collections including %{work}
-        users_collections: "%{user}'s Collections"
+        collection: Collection
+        collections_in_the: "%{collections} in the %{archive}"
+        sorry: Sorry, there were no collections found.
+        subcollection: Subcollection
     sidebar:
       bookmarks: Bookmarked Items (%{count})
       challenge_settings: Challenge Settings
@@ -2880,15 +2895,22 @@ en:
       type: Type
       wrangling_status: Wrangling status
     show:
-      canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
+      canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}, as well as %{filter_collections_link}.
       canonical_tag: canonical tag
       children:
         heading: 'Child tags (displaying the first %{count} of each type):'
         more: and more
       fandom_relationship_tags: Relationship tags in this fandom
       filter_bookmarks: filter bookmarks
+      filter_collections: filter collections
       filter_works: filter works
       list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
+      navigation:
+        bookmarks: Bookmarks
+        collections: Collections
+        edit: Edit
+        troubleshoot: Troubleshoot
+        works: Works
       synonyms: 'Tags with the same meaning:'
     wrangle:
       manage:
@@ -3208,6 +3230,13 @@ en:
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
+      navigation:
+        tag_bookmarks: Bookmarks
+        tag_collections: Collections
+        tag_works: Works
+        user_collection_works: Works in Collections
+        user_edit_works: Edit Works
+        user_works: Works
       recent_works_html: These are some of the latest works posted to the Archive. To find more works, %{choose_fandom_link} or %{advanced_search_link}.
     meta:
       original_creators:

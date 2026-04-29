@@ -32,7 +32,7 @@ Feature: Basic collection navigation
   Then I should see "About My Collection (my_collection)"
     And I should see "Maintainers: mod"
   When I follow "Subcollections (0)"
-  Then I should see "Challenges/Subcollections in My Collection"
+  Then I should see "Subcollections in My Collection"
     And I should see "Sorry, there were no collections found."
   When I follow "Fandoms (1)"
   Then I should see "New Fandom (1)"
