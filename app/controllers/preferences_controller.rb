@@ -22,7 +22,7 @@ class PreferencesController < ApplicationController
     @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq
     @available_locales = Locale.where(email_enabled: true)
 
-    @user.preference.attributes = preference_params
+    @user.preference.attributes = permitted_attributes(@preference)
     
     if params[:preference][:skin_id].present?
       # unset session skin if user changed their skin
@@ -36,38 +36,5 @@ class PreferencesController < ApplicationController
       flash[:error] = t(".error")
       render action: :index
     end
-  end
-
-  private
-
-  def preference_params
-    params.require(:preference).permit(
-      :minimize_search_engines,
-      :disable_share_links,
-      :adult,
-      :view_full_works,
-      :hide_warnings,
-      :hide_freeform,
-      :disable_work_skins,
-      :skin_id,
-      :time_zone,
-      :preferred_locale,
-      :work_title_format,
-      :comment_emails_off,
-      :comment_inbox_off,
-      :comment_copy_to_self_off,
-      :kudos_emails_off,
-      :admin_emails_off,
-      :allow_collection_invitation,
-      :collection_emails_off,
-      :collection_inbox_off,
-      :recipient_emails_off,
-      :history_enabled,
-      :first_login,
-      :banner_seen,
-      :allow_cocreator,
-      :allow_gifts,
-      :guest_replies_off
-    )
   end
 end
