@@ -158,7 +158,7 @@ module MailerHelper
     if creation.anonymous?
       t("mailer.general.creation.attribution.anon")
     else
-      t("mailer.general.creation.attribution.named.html", creator_links: creator_links(creation))
+      t("mailer.general.creation.attribution.named.html", creator_links: creator_links(creation), count: creation.pseuds.size)
     end
   end
 
@@ -166,7 +166,7 @@ module MailerHelper
     if creation.anonymous?
       t("mailer.general.creation.attribution.anon")
     else
-      t("mailer.general.creation.attribution.named.text", creators: creator_text(creation))
+      t("mailer.general.creation.attribution.named.text", creators: creator_text(creation), count: creation.pseuds.size)
     end
   end
 
