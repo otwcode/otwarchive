@@ -213,5 +213,5 @@ Feature: Create bookmarks of external works
 
   Scenario: A user should see the correct title on the external bookmark page
     Given I am logged in as "bookmarker"
-      And I am on the new external work page
+    When I am on the new external work page
     Then I should see the page title "Bookmark External Work"
