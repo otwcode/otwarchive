@@ -174,7 +174,7 @@ module WorksHelper
     text = +"<p>by #{byline(work, { visibility: 'public', only_path: false })}</p>"
     text << work.summary if work.summary
     text << "<p>Words: #{work.word_count}, Chapters: #{chapter_total_display(work)}, Language: #{work.language ? work.language.name : 'English'}</p>"
-    text << "<p>Series: #{series_list_with_work_position(work)}</p>" unless work.series.count.zero?
+    text << "<p>Series: #{series_list_with_work_position(work)}</p>" unless work.series.size.zero?
     # Create list of tags
     text << "<ul>"
     %w(Fandom Rating ArchiveWarning Category Character Relationship Freeform).each do |type|

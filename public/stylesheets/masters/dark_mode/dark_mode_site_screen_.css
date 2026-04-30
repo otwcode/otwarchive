@@ -712,7 +712,7 @@ form.filters fieldset {
   border-bottom-color: #555;
 }
 
-.userstuff blockquote {
+.userstuff blockquote, .userstuff address {
   border-left-color: #555;
 }
 

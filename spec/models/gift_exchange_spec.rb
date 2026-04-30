@@ -43,6 +43,18 @@ describe GiftExchange do
     end
   end
 
+  describe "#destroy" do
+    let!(:challenge) { create(:gift_exchange) }
+    let!(:collection) { create(:collection, challenge: challenge) }
+
+    it "nullifies the collection's challenge references" do
+      challenge.destroy!
+      collection.reload
+      expect(collection.challenge_id).to be_nil
+      expect(collection.challenge_type).to be_nil
+    end
+  end
+
   describe "reindexing" do
     let!(:collection) { create(:collection) }
 

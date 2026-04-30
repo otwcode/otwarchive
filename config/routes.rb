@@ -697,7 +697,8 @@ Rails.application.routes.draw do
   get "tos" => "home#tos"
   get "tos_faq" => "home#tos_faq"
   get 'unicorn_test' => 'home#unicorn_test'
-  get 'dmca' => 'home#dmca'
+  get "dmca", to: redirect("/takedown#dmca_policy")
+  get "takedown" => "home#takedown"
   get 'diversity' => 'home#diversity'
   get 'site_map' => 'home#site_map'
   get 'site_pages' => 'home#site_pages'
