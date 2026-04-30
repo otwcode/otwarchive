@@ -190,6 +190,7 @@ class Tag < ApplicationRecord
       # admins can change tags with no restriction
       unless User.current_user.is_a?(Admin) || only_case_changed?
         self.errors.add(:name, "can only be changed by an admin.")
+        self.name = self.name_was
       end
     end
     if self.merger_id
