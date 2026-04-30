@@ -24,7 +24,7 @@ class Comment < ApplicationRecord
 
   delegate :user, to: :pseud, allow_nil: true
 
-  attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4
+  attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4, :recent_comments_of_user_on_work
 
   # Whether the writer of the comment this is replying to allows guest replies
   validate :guest_can_reply, if: :reply_comment?, unless: :pseud_id, on: :create
@@ -121,9 +121,25 @@ class Comment < ApplicationRecord
     if pseud_id.nil?
       user_role = "guest"
       comment_author = name
+      if (recent_comments_of_user_on_work = Comment.where(name: comment_author)
+                                                   .or(Comment.where(email: comment_owner_email))
+                                                   .or(Comment.where(ip_address: ip_address))
+                                                   .and(Comment.where(created_at: RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.ago...))
+                                                   .and(Comment.where(parent: parent))).any? # is using parent instead of ultimate_parent fine here? it is easier for sure.
+
+        comment_content += recent_comments_of_user_on_work.pluck(:comment_content).join
+      end
     else
       user_role = "user"
       comment_author = user.login
+      if (recent_comments_of_user_on_work = Comment.where(name: comment_author)
+                                                   .and(Comment.where(email: comment_owner_email))
+                                                   .and(Comment.where.not(pseud_id: nil))
+                                                   .and(Comment.where(created_at: RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.ago...))
+                                                   .and(Comment.where(parent: parent))).any? # is using parent instead of ultimate_parent fine here? it is easier for sure.
+
+        comment_content += recent_comments_of_user_on_work.pluck(:comment_content).join
+      end
     end
 
     attributes = {
@@ -144,7 +160,7 @@ class Comment < ApplicationRecord
     attributes[:cloudflare_ja3_hash] = cloudflare_ja3_hash if cloudflare_ja3_hash
     attributes[:cloudflare_ja4] = cloudflare_ja4 if cloudflare_ja4
 
-    attributes[:recheck_reason] = "edit" if will_save_change_to_edited_at? && will_save_change_to_comment_content?
+    attributes[:recheck_reason] = "edit" if (will_save_change_to_edited_at? && will_save_change_to_comment_content?) || recent_comments_of_user_on_work.any?
 
     attributes
   end
@@ -515,7 +531,7 @@ class Comment < ApplicationRecord
 
   def submit_spam
     return unless approved && !is_deleted
-    
+
     Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
   end
 
