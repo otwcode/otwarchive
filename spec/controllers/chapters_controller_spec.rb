@@ -191,7 +191,7 @@ describe ChaptersController do
 
     it "assigns @page_title with fandom, author name, work title, and chapter" do
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
-      expect(assigns[:page_title]).to start_with("My title is long enough - Chapter 1 - #{user.pseuds.first.name} - Testing [")
+      expect(assigns[:page_title]).to start_with("My title is long enough - Chapter 1 - #{user.pseuds.first.name} - Testing |")
     end
 
     it "assigns @page_subtitle with unrevealed work" do
@@ -203,7 +203,7 @@ describe ChaptersController do
     it "assigns @page_title with anonymous work" do
       allow_any_instance_of(Work).to receive(:anonymous?).and_return(true)
       get :show, params: { work_id: work.id, id: work.chapters.first.id }
-      expect(assigns[:page_title]).to start_with("My title is long enough - Chapter 1 - Anonymous - Testing [")
+      expect(assigns[:page_title]).to start_with("My title is long enough - Chapter 1 - Anonymous - Testing |")
     end
 
     context "when work has many authors" do
@@ -212,7 +212,7 @@ describe ChaptersController do
         allow_any_instance_of(Work).to receive(:pseuds).and_return(authors)
         get :show, params: { work_id: work.id, id: work.chapters.first.id }
         expect(response).to have_http_status(:ok)
-        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{authors.sort.map(&:byline).join(', ')} - #{work.fandoms.first.name} [")
+        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{authors.sort.map(&:byline).join(', ')} - #{work.fandoms.first.name} |")
       end
     end
 
@@ -221,7 +221,7 @@ describe ChaptersController do
         allow_any_instance_of(Work).to receive(:fandoms).and_return([])
         get :show, params: { work_id: work.id, id: work.chapters.first.id }
         expect(response).to have_http_status(:ok)
-        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - No fandom specified [")
+        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - No fandom specified |")
       end
     end
 
@@ -232,7 +232,7 @@ describe ChaptersController do
         allow_any_instance_of(Work).to receive(:fandoms).and_return([first, second])
         get :show, params: { work_id: work.id, id: work.chapters.first.id }
         expect(response).to have_http_status(:ok)
-        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - The First [")
+        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - The First |")
       end
     end
 
@@ -242,7 +242,7 @@ describe ChaptersController do
         allow_any_instance_of(Work).to receive(:fandoms).and_return(fandoms)
         get :show, params: { work_id: work.id, id: work.chapters.first.id }
         expect(response).to have_http_status(:ok)
-        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - Multifandom [")
+        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{user.pseuds.first.name} - Multifandom |")
       end
     end
 
@@ -265,7 +265,7 @@ describe ChaptersController do
       expect(assigns[:chapters]).to eq [work.chapters.first, second_chapter, third_chapter]
       expect(assigns[:previous_chapter]).to eq work.chapters.first
       expect(assigns[:next_chapter]).to eq third_chapter
-      expect(assigns[:page_title]).to start_with("My title is long enough - Chapter 2 - #{user.pseuds.first.name} - #{tag.name} [")
+      expect(assigns[:page_title]).to start_with("My title is long enough - Chapter 2 - #{user.pseuds.first.name} - #{tag.name} |")
       expect(assigns[:kudos]).to eq [kudo]
       expect(assigns[:subscription]).to be_nil
     end

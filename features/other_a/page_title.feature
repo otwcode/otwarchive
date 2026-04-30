@@ -33,7 +33,7 @@ Scenario: Work page title should respect user preference
     And I press "Update"
     And I post the work "New Story" with fandom "Stargate"
   When I view the work "New Story"
-  Then the page title should include "Stargate - author - New Story [Example Archive]"
+  Then the page title should include "Stargate - author - New Story | Example Archive"
 
 Scenario: Work page title should change when tags are edited
 
@@ -55,10 +55,10 @@ Scenario: Work page title should be informative on the adult content notice page
   When I am logged out
     And I view the work "New Story"
   Then I should see "This work could have adult content"
-    And the page title should include "New Story - author - Stargate [Example Archive]"
+    And the page title should include "New Story - author - Stargate | Example Archive"
   When I follow the recent chapter link for the work "New Story"
   Then I should see "This work could have adult content"
-    And the page title should include "New Story - Chapter 2 - author - Stargate [Example Archive]"
+    And the page title should include "New Story - Chapter 2 - author - Stargate | Example Archive"
 
 Scenario: Inbox has the expected browser page title
 

@@ -383,7 +383,7 @@ public
       page_title = "#{title} - #{author} - #{fandom}"
     end
 
-    page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
+    page_title += " | #{ArchiveConfig.APP_NAME}" unless options[:omit_archive_name]
     page_title.html_safe
   end
 
