@@ -765,18 +765,26 @@ describe Admin::AdminUsersController do
       authorized_roles.each do |role|
         context "with #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
-          let!(:user_comment) { create(:comment, pseud: user.default_pseud) }
-          let!(:other_comment) { create(:comment) }
-          let!(:user_work) { create(:work, authors: [user.default_pseud]) }
-          let!(:other_work) { create(:work) }
+          let!(:other_pseud) { create(:pseud, user: user) }
+          let!(:older_comment) { create(:comment, pseud: other_pseud) }
+          let!(:newer_comment) { create(:comment, pseud: user.default_pseud) }
+          let!(:older_work) { create(:work, authors: [other_pseud]) }
+          let!(:newer_work) { create(:work, authors: [user.default_pseud]) }
 
-          before { fake_login_admin(admin) }
+          before do
+            fake_login_admin(admin)
 
-          it "renders creations template and assigns comments and works" do
+            older_comment.update_columns(created_at: 2.days.ago)
+            newer_comment.update_columns(created_at: 1.day.ago)
+            older_work.update_columns(created_at: 2.days.ago)
+            newer_work.update_columns(created_at: 1.day.ago)
+          end
+
+          it "renders creations template and assigns comments and works in order by oldest first" do
             subject.call
             expect(response).to render_template(:creations)
-            expect(assigns[:comments]).to contain_exactly(user_comment)
-            expect(assigns[:works]).to contain_exactly(user_work)
+            expect(assigns(:comments).map(&:id)).to eq([older_comment.id, newer_comment.id])
+            expect(assigns(:works).map(&:id)).to eq([older_work.id, newer_work.id])
           end
 
           it "raises ActiveRecord::RecordNotFound when user does not exist" do
