@@ -3201,6 +3201,8 @@ en:
       page_heading:
         edit_tags_and_language_html: Edit Work Tags and Language for %{title}
         edit_tags_html: Edit Work Tags for %{title}
+    filters:
+      submit_landmark: Submit
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works
