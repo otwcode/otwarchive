@@ -37,6 +37,8 @@ class Admin::BannersController < Admin::BaseController
     else
       render action: 'new'
     end
+
+    AdminActivity.log_action(current_admin, @admin_banner, action: "create_admin_banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
   end
 
   # PUT /admin/banners/1
@@ -57,6 +59,8 @@ class Admin::BannersController < Admin::BaseController
       end
       redirect_to @admin_banner
     end
+
+    AdminActivity.log_action(current_admin, @admin_banner, action: "update_admin_banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
   end
 
   # GET /admin/banners/1/confirm_delete
@@ -79,6 +83,8 @@ class Admin::BannersController < Admin::BaseController
       flash[:notice] = t(".success")
       redirect_to admin_banners_path
     end
+
+    AdminActivity.log_action(current_admin, @admin_banner, action: "destroy_admin_banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}")
   end
 
   private
