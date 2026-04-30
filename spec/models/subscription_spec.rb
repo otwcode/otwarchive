@@ -156,6 +156,14 @@ describe Subscription do
         expect(subscription.valid_notification_entry?(create(:chapter, authors: [orphan_pseud]))).to be_falsey
       end
 
+      it "returns false when subscribed to orphan_account and the chapter's work is co-created by orphan_account" do
+        other_pseud = create(:pseud)
+        orphan_work = create(:work, authors: [other_pseud, orphan_pseud])
+        chapter = create(:chapter, work: orphan_work, authors: [other_pseud])
+        orphan_subscription = build(:subscription, subscribable: orphan_pseud.user)
+        expect(orphan_subscription.valid_notification_entry?(chapter)).to be_falsey
+      end
+
       it "returns false when the chapter is on a hidden work" do
         expect(subscription.valid_notification_entry?(build(:chapter, work: build(:work, hidden_by_admin: true)))).to be_falsey
       end
@@ -213,6 +221,14 @@ describe Subscription do
 
       it "returns true for a non-anonymous chapter" do
         expect(subscription.valid_notification_entry?(chapter)).to be_truthy
+      end
+
+      it "returns true for a chapter on a work co-created with orphan_account" do
+        other_pseud = create(:pseud)
+        orphan_work = create(:work, authors: [other_pseud, orphan_pseud])
+        chapter = create(:chapter, work: orphan_work, authors: [other_pseud])
+        user_subscription = build(:subscription, subscribable: other_pseud.user)
+        expect(user_subscription.valid_notification_entry?(chapter)).to be_truthy
       end
 
       it "returns false for an anonymous work" do
