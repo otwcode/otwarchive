@@ -304,3 +304,27 @@ Feature: User dashboard
   Then I should see "Here are some tips to help you get started" within "#modal"
     And I should see "First login help" within "#modal"
     And I should see "Close" within "#modal"
+
+  Scenario: The user dashboard should list the user's most recently created bookmarks
+  Given dashboard counts expire after 10 seconds
+    And I am logged in as "fruitpie"
+    And I post the works "Work One, Work Two, Work Three, Work Four, Work Five, Work Six"
+  When I am logged in as "meatloaf"
+    And I bookmark the works "Work One, Work Two, Work Three, Work Four, Work Five, Work Six"
+  When I go to meatloaf's user page
+  Then I should see "Recent bookmarks"
+    And I should not see "Work One" within "#user-bookmarks"
+    And I should see "Work Six" within "#user-bookmarks"
+  When I edit the bookmark for "Work One"
+    And I check "bookmark_rec"
+    And I press "Update"
+  When I go to meatloaf's user page
+  Then I should see "Recent bookmarks"
+    And I should not see "Work One" within "#user-bookmarks"
+    And I should see "Work Six" within "#user-bookmarks"
+  When I am on meatloaf's pseuds page
+    And I follow "meatloaf" within "ul.pseud.index"
+  Then I should be on the dashboard page for user "meatloaf" with pseud "meatloaf"
+    And I should see "Recent bookmarks"
+    And I should not see "Work One" within "#user-bookmarks"
+    And I should see "Work Six" within "#user-bookmarks"
