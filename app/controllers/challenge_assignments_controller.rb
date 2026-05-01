@@ -72,7 +72,7 @@ class ChallengeAssignmentsController < ApplicationController
   def index
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
-        @page_subtitle = ts('%{username} - Challenge Assignments', username: @user.login)
+        @page_subtitle = t(".page_title", username: @user.login)
         @challenge_assignments = @user.assignments.undefaulted
         @challenge_assignments = @challenge_assignments.in_collection(@collection) if params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
         @challenge_assignments = if params[:posted] == "true"
