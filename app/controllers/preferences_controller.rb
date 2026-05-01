@@ -8,11 +8,6 @@ class PreferencesController < ApplicationController
     @check_ownership_of = @user
   end
 
-  def available_skins
-    (@user.skins.site_skins.usable +
-    Skin.approved_skins.site_skins.usable).uniq
-  end
-
   def index
     @page_subtitle = t(".page_title", username: @user.login)
     @preference = @user.preference
@@ -44,6 +39,11 @@ class PreferencesController < ApplicationController
   end
 
   private
+
+  def available_skins
+    (@user.skins.site_skins.usable +
+    Skin.approved_skins.site_skins.usable).uniq
+  end
 
   def preference_params
     params.require(:preference).permit(
