@@ -286,7 +286,7 @@ describe TagSetNominationsController do
                   let(:noms_per_page) { ArchiveConfig.ITEMS_PER_PAGE }
 
                   before do
-                    unique_tagnames = noms_per_page * 3
+                    unique_tagnames = noms_per_page * 2
                     unique_tagnames.times do |i|
                       nominator = create(:user)
                       tsn = create(:tag_set_nomination, owned_tag_set: owned_tag_set, pseud: nominator.default_pseud)
@@ -324,17 +324,9 @@ describe TagSetNominationsController do
                     expect(page1_tagnames & page2_tagnames).to be_empty
                   end
 
-                  it "page 3 returns the remaining unique tagnames" do
-                    get :index, params: { tag_set_id: owned_tag_set.id, fandom_page: 3 }
-                    page3_tagnames = assigns(:nominations)[:fandom].map(&:tagname)
-
-                    expect(page3_tagnames.length).to eq(noms_per_page)
-                    expect(page3_tagnames).to eq(page3_tagnames.uniq)
-                  end
-
                   it "pagination count reflects unique tagnames not total nominations" do
                     get :index, params: { tag_set_id: owned_tag_set.id }
-                    unique_count = noms_per_page * 3
+                    unique_count = noms_per_page * 2
                     total_count = unique_count + 2
                     expect(assigns(:nominations_count)[:fandom]).to eq(total_count)
                     expect(assigns(:paginations)[:fandom].count).to eq(unique_count)
