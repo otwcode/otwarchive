@@ -259,6 +259,21 @@ describe CollectionsController, collection_search: true do
         expect(assigns(:challenge_collections)).to include prompt_meme_collection
         expect(assigns(:challenge_collections)).to include gift_exchange_collection
       end
+
+      context "pagination" do
+        before { allow(ArchiveConfig).to receive(:ITEMS_PER_PAGE).and_return(1) }
+
+        let!(:second_pm) { create(:prompt_meme, signup_open: true, signups_open_at: Time.zone.now - 1.day, signups_close_at: Time.zone.now + 2.weeks) }
+        let!(:second_pm_collection) { create(:collection, challenge: second_pm, challenge_type: "PromptMeme") }
+
+        before { run_all_indexing_jobs }
+
+        it "paginates results" do
+          get :list_challenges
+          expect(assigns(:challenge_collections).total_entries).to be > 1
+          expect(assigns(:challenge_collections).size).to eq(1)
+        end
+      end
     end
 
     context "displays all open gift exchange challenges on list_ge_challenges index" do
