@@ -76,7 +76,7 @@ Given /^"([^\"]*)" has claimed a prompt from Battle 12$/ do |username|
   step %{I claim a prompt from "Battle 12"}
 end
 
-When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/ do |type, title, name|
+When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?(?: that is ([^\"]*))?$/ do |type, title, name, semianon|
   step %{I am logged in as "mod1"}
   visit new_collection_path
   if name.nil?
@@ -100,6 +100,9 @@ When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_allowed", with: 2)
   fill_in("Sign-up opens:", with: Date.yesterday)
   fill_in("Sign-up closes:", with: Date.tomorrow)
+  if semianon == "semi-anon"
+    check("Prompts anonymous by default?")
+  end
   step %{I submit}
   step "I should see \"Challenge was successfully created\""
 end
