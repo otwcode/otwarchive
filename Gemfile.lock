@@ -276,7 +276,7 @@ GEM
     email_spec (1.6.0)
       launchy (~> 2.1)
       mail (~> 2.2)
-    erb (5.1.1)
+    erb (6.0.1.1)
     erb_lint (0.4.0)
       activesupport
       better_html (>= 2.0.1)

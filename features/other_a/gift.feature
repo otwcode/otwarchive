@@ -49,6 +49,7 @@ Feature: Create Gifts
       And I press "Post"
     When I go to giftee1's gifts page
     Then I should see "GiftStory1 by gifter for g1 (giftee1)"
+      And the page title should include "giftee1 - Gifts"
 
   Scenario: Gifts page for recipient without account should show their gifts
     Given I give the work to "g1"

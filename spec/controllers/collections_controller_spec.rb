@@ -109,6 +109,38 @@ describe CollectionsController, collection_search: true do
         expect(response).to have_http_status(:success)
         expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
       end
+
+      it "sorts collections by Works, DESC by default" do
+        sorted_collection_titles = Collection.all.sort_by(&:public_works_count).reverse.map(&:title)
+
+        get :index, params: { collection_search: { sort_column: "public_works_count" } }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
+      end
+
+      it "sorts collections by Works" do
+        sorted_collection_titles = Collection.all.sort_by(&:public_works_count).map(&:title)
+
+        get :index, params: { collection_search: { sort_column: "public_works_count", sort_direction: "ASC" } }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
+      end
+
+      it "sorts collections by Bookmarks, DESC by default" do
+        sorted_collection_titles = Collection.all.sort_by(&:public_bookmarked_items_count).reverse.map(&:title)
+
+        get :index, params: { collection_search: { sort_column: "public_bookmarked_items_count" } }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
+      end
+
+      it "sorts collections by Bookmarks" do
+        sorted_collection_titles = Collection.all.sort_by(&:public_bookmarked_items_count).map(&:title)
+
+        get :index, params: { collection_search: { sort_column: "public_bookmarked_items_count", sort_direction: "ASC" } }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
+      end
     end
 
     context "collections index for user collections" do
