@@ -3198,8 +3198,7 @@ en:
       page_heading: Edit Work
       remove_me_as_co_creator: Remove Me As Co-Creator
     edit_tags:
-      page_heading:
-        edit_tags_html: Edit Work Tags for %{title}
+      page_heading_html: Edit Work Tags for %{title}
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works

@@ -1,21 +1,15 @@
 class WorkPolicy < UserCreationPolicy
-  WORK_TAG_ACCESS = %w[superadmin policy_and_abuse support].freeze
+  EDIT_TAG_ROLES = %w[superadmin policy_and_abuse support].freeze
 
   def show_admin_options?
-    super || edit_tags? || set_spam?
+    super || edit? || set_spam?
   end
 
   # Allow admins to edit works (tags, language, and more in the future).
   # Include support admins due to AO3-4932.
   def update?
-    user_has_roles?(WORK_TAG_ACCESS)
+    user_has_roles?(EDIT_TAG_ROLES)
   end
-
-  def update_tags?
-    user_has_roles?(WORK_TAG_ACCESS)
-  end
-
-  alias edit_tags? update_tags?
 
   # Support admins need to be able to delete duplicate works.
   def destroy?
