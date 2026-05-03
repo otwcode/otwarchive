@@ -231,6 +231,9 @@ en:
     update:
       must_select_item: Please select at least one comment first.
       success: Inbox successfully updated.
+  invitations:
+    manage:
+      page_title: "%{username} - Manage Invitations"
   invite_requests:
     create:
       queue_disabled:
