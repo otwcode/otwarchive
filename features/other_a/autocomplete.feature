@@ -260,3 +260,11 @@ Feature: Display autocomplete for tags
     Then I should see "No suggestions found" in the autocomplete
     When I enter "Taylor|Skitter" in the "Characters" autocomplete field
     Then I should see "Taylor Hebert | Skitter | Weaver" in the autocomplete
+
+  @javascript
+  Scenario: Relationship autocomplete does not add stray semicolons after ampersands when the query includes a pipe
+    Given I am logged in
+      And a canonical relationship "Evil Queen | Regina Mills & Henry Mills"
+      And I go to the new work page
+    When I enter "Evil Queen |" in the "Relationships" autocomplete field
+    Then I should see "Evil Queen | Regina Mills & Henry Mills" in the autocomplete
