@@ -329,8 +329,11 @@ Feature: Gift Exchange Challenge
       And I should not see "No Potential Recipients"
       And I should see "Complete"
 
-  Scenario: Assignments can be sent
-    Given the gift exchange "Awesome Gift Exchange" is ready for matching
+  Scenario: Assignments can be sent, with custom labels too
+    Given I am logged in as "mod1"
+      And I have created the standard-labels gift exchange "Awesome Gift Exchange"
+      And I open signups for "Awesome Gift Exchange"
+      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
       And I have generated matches for "Awesome Gift Exchange"
     When I press "Send Assignments"
     Then I should see "Assignments are now being sent out"
@@ -352,6 +355,10 @@ Feature: Gift Exchange Challenge
       And the email should contain "Additional Tag"
       And the email should contain "Something else weird"
       And the email should not contain "translation missing"
+      # Custom labels should be used
+      And the email should contain "Custom Request URL Label"
+      And the email should contain "Custom Description URL Label"
+      # Check the other emails
       And 1 email should be delivered to "myname2"
       And 1 email should be delivered to "myname3"
       And 1 email should be delivered to "myname4"
