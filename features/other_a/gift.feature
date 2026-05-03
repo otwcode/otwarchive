@@ -49,6 +49,7 @@ Feature: Create Gifts
       And I press "Post"
     When I go to giftee1's gifts page
     Then I should see "GiftStory1 by gifter for g1 (giftee1)"
+      And the page title should include "giftee1 - Gifts"
 
   Scenario: Gifts page for recipient without account should show their gifts
     Given I give the work to "g1"
@@ -456,3 +457,9 @@ Feature: Create Gifts
     Then "giftee2" should be emailed
       And the email should have "\[Hidden Treasury\] A gift work for you from Hidden Treasury" in the subject
       And the email to "giftee2" should be non-translated
+
+  Scenario: Gifts page for non-user recipient shouldn't show escaped HTML
+    Given I give the work to "Someone Who Isn't A User"
+      And I press "Post"
+    When I go to the gifts page for the recipient Someone Who Isn't A User
+    Then I should see "Gifts for Someone Who Isn't A User"

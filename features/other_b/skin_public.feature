@@ -17,7 +17,7 @@ Feature: Public skins
   Then I should see "The skin public skin has been set. This will last for your current session."
     And the page should have the cached skin "public skin"
   When I press "Default"
-  Then I should see "You are now using the default Archive skin again!"
+  Then I should see "You are now using the default site skin again!"
     And the page should not have the cached skin "public skin"
 
   Scenario: Only public skins should be on the main skins page

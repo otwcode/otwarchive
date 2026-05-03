@@ -272,39 +272,4 @@ describe ChallengeSignupsController do
       end
     end
   end
-
-  describe "admin access to signups pages" do
-    authorized_roles = %w[support policy_and_abuse superadmin].freeze
-
-    describe "GET #index" do
-      subject { get :index, params: { collection_id: closed_collection.name } }
-
-      let(:success) do
-        expect(response).to have_http_status(:success)
-        expect(response).to render_template(:index)
-      end
-
-      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
-    end
-
-    describe "GET #show" do
-      subject { get :show, params: { id: closed_signup.id, collection_id: closed_collection.name } }
-
-      let(:success) do
-        expect(response).to have_http_status(:success)
-        expect(response).to render_template(:show)
-      end
-
-      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
-    end
-
-    it "allows support admins to download CSV" do
-      fake_login_admin(create(:support_admin))
-
-      get :index, params: { collection_id: closed_collection.name, format: :csv }
-
-      expect(response).to have_http_status(:success)
-      expect(response.content_type).to include("text/csv")
-    end
-  end
 end

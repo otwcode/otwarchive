@@ -114,18 +114,4 @@ describe Challenge::PromptMemeController do
       expect(response).to redirect_to(collection)
     end
   end
-
-  describe "admin access to challenge settings" do
-    authorized_roles = %w[support policy_and_abuse superadmin].freeze
-    before { fake_logout }
-
-    subject { get :edit, params: { collection_id: collection.name } }
-
-    let(:success) do
-      expect(response).to have_http_status(:success)
-      expect(response).to render_template(:edit)
-    end
-
-    it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
-  end
 end

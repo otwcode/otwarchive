@@ -1,12 +1,11 @@
 class CollectionParticipantsController < ApplicationController
-  before_action :users_only, except: [:index]
+  before_action :users_only
   before_action :load_collection
   before_action :load_participant, only: [:update, :destroy]
   before_action :allowed_to_promote, only: [:update]
   before_action :allowed_to_destroy, only: [:destroy]
   before_action :has_other_owners, only: [:update, :destroy]
-  before_action :collection_maintainers_or_privileged_admins_only, only: [:index]
-  before_action :collection_maintainers_only, only: [:add, :update]
+  before_action :collection_maintainers_only, only: [:index, :add, :update]
 
   cache_sweeper :collection_sweeper
 
@@ -74,16 +73,16 @@ class CollectionParticipantsController < ApplicationController
 
   def update
     if @participant.update(collection_participant_params)
-      flash[:notice] = t('collection_participants.update_success', default: "Updated %{participant}.", participant: @participant.pseud.name)
+      flash[:notice] = t(".success", participant: @participant.pseud.byline)
     else
-      flash[:error] = t(".failure", participant: @participant.pseud.name)
+      flash[:error] = t(".failure", participant: @participant.pseud.byline)
     end
     redirect_to collection_participants_path(@collection)
   end
 
   def destroy
     @participant.destroy
-    flash[:notice] = t('collection_participants.destroy', default: "Removed %{participant} from collection.", participant: @participant.pseud.name)
+    flash[:notice] = t(".success", participant: @participant.pseud.byline)
     redirect_back_or_to root_path
   end
 

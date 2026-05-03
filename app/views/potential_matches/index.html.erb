@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts('Matching for %{collection_title}', :collection_title => @collection.title) %></h2>
+<h2 class="heading"><%= t(".page_heading", collection_title: @collection.title) %></h2>
 <!--/description-->
 
 <!--subnav-->
@@ -8,26 +8,36 @@
 <!--main content-->
 <% if @challenge.signup_open %>
   <p class="note">
-    <%= ts("You can't generate matches while sign-up is still open. After you have closed sign-ups in Challenge Settings,
-    you will be able to generate potential matches here.") %>
+    <%= t(".cant_generate_matches") %>
   </p>
 <% elsif @collection.signups.count < 2 %>
   <p class="note">
-    <%= ts("You need at least two people to sign up before you can make assignments.") %>
+    <%= t(".need_two_people") %>
   </p>
 <% elsif @in_progress %>
   <%= render "in_progress"%>
 <% elsif @assignment_in_progress %>
-  <h3><%= ts("Assignments Generating") %> <%= link_to_help "challenge-matching" %></h3>
+  <h3><%= t(".assignments_generating.heading") %> <%= link_to_help "challenge-matching" %></h3>
   <p class="note">
-    <%= ts("We're now in the process of generating assignments. This should take less time than potential matching.") %>
+    <%= t(".assignments_generating.in_the_process") %>
   </p>
+<% elsif @no_potential_matches_found %>
+  <h3><%= t(".no_potential_matches.heading") %> <%= link_to_help "challenge-matching" %></h3>
+
+  <p class="note">
+    <%= t(".no_potential_matches.no_matches_found") %>
+  </p>
+
+  <p>
+    <%= t(".no_potential_matches.please_try_again_html", match_settings_link: link_to(t(".no_potential_matches.match_settings"), edit_collection_gift_exchange_path(@collection, anchor: "match_settings"))) %>
+  </p>
+
 <% elsif @collection.potential_matches.empty? %>
-  <h3><%= ts("Potential Match Generation") %> <%= link_to_help "challenge-matching" %></h3>
+  <h3><%= t(".no_matches_yet.heading") %> <%= link_to_help "challenge-matching" %></h3>
 
   <%= render "match_navigation" %>
   <p class="note">
-    <%= ts("No potential matches yet!") %>
+    <%= t(".no_matches_yet.no_matches_yet") %>
   </p>
 
   <% if !@settings || @settings.no_match_required? %>
