@@ -34,10 +34,10 @@ module WorksHelper
     fandoms = work.fandoms
     title_fandom = if fandoms.empty?
                      t("works_helper.work_page_title.unspecified_fandom")
-                   elsif fandoms.size > 3
+                   elsif fandoms.size > 2
                      t("works_helper.work_page_title.multifandom")
                    else
-                     fandoms.first.name
+                     fandoms.pluck(:name).join(t("support.array.words_connector"))
                    end
     author = work.anonymous? ? t("works_helper.work_page_title.anonymous") : work.pseuds.sort.collect(&:byline).join(t("support.array.words_connector"))
 

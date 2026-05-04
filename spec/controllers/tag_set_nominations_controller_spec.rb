@@ -89,44 +89,49 @@ describe TagSetNominationsController do
                 context 'unreviewed freeform_nominations' do
                   context 'unreviewed freeform nominations <= 30' do
                     before do
-                      add_unreviewed_freeform_nominations(30)
+                      # Create with non-alphabetical names so ordering by tagname vs created_at differs
+                      create(:tag_nomination, type: "FreeformNomination",
+                                              tag_set_nomination: tag_set_nomination,
+                                              owned_tag_set: tag_set_nomination.owned_tag_set,
+                                              tagname: "Zebra Freeform")
+                      create(:tag_nomination, type: "FreeformNomination",
+                                              tag_set_nomination: tag_set_nomination,
+                                              owned_tag_set: tag_set_nomination.owned_tag_set,
+                                              tagname: "Apple Freeform")
+                      create(:tag_nomination, type: "FreeformNomination",
+                                              tag_set_nomination: tag_set_nomination,
+                                              owned_tag_set: tag_set_nomination.owned_tag_set,
+                                              tagname: "Mango Freeform")
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns all freeform nominations in order' do
-                      expect(assigns(:nominations_count)[:freeform]).to eq(30)
-                      expect(assigns(:nominations)[:freeform].count).to eq(30)
-                      expect(assigns(:nominations)[:freeform].first.tagname).to eq('New Freeform 0')
-                    end
-
-                    it 'does not return a flash notice about too many nominations' do
-                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " \
-                                                         "randomized selection! Additional nominations will appear " \
-                                                         "after you approve or reject some.")
+                    it "returns all freeform nominations ordered by creation date" do
+                      expect(assigns(:nominations)[:freeform].map(&:tagname)).to eq(
+                        ["Zebra Freeform", "Apple Freeform", "Mango Freeform"]
+                      )
                     end
                   end
 
-                  context 'unreviewed freeform nominations > 30' do
+                  context "unreviewed freeform nominations exceed per page limit" do
+                    let(:per_page) { ArchiveConfig.ITEMS_PER_PAGE }
+
                     before do
-                      add_unreviewed_freeform_nominations(31)
+                      add_unreviewed_freeform_nominations(per_page + 1)
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns 30 freeform nominations' do
-                      expect(assigns(:nominations_count)[:freeform]).to eq(31)
-                      expect(assigns(:nominations)[:freeform].count).to eq(30)
-                    end
-
-                    it 'returns a flash notice about too many nominations' do
-                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " \
-                                                     "randomized selection! Additional nominations will appear " \
-                                                     "after you approve or reject some.")
+                    it "returns one page of freeform nominations" do
+                      expect(assigns(:nominations_count)[:freeform]).to eq(per_page + 1)
+                      expect(assigns(:nominations)[:freeform].count).to eq(per_page)
                     end
                   end
 
                   def add_unreviewed_freeform_nominations(num)
                     num.times do |i|
-                      FreeformNomination.create(tag_set_nomination: tag_set_nomination, tagname: "New Freeform #{i}")
+                      create(:tag_nomination, type: "FreeformNomination",
+                                              tag_set_nomination: tag_set_nomination,
+                                              owned_tag_set: tag_set_nomination.owned_tag_set,
+                                              tagname: "New Freeform #{i}")
                     end
                   end
                 end
@@ -174,38 +179,29 @@ describe TagSetNominationsController do
                     get :index, params: { tag_set_id: owned_tag_set.id }
                   end
 
-                  context 'unreviewed fandom nominations <= 30' do
-                    let(:fandom_nom_num) { 30 }
+                  context "unreviewed fandom nominations within per page limit" do
+                    let(:per_page) { ArchiveConfig.ITEMS_PER_PAGE }
+                    let(:fandom_nom_num) { per_page }
 
-                    it 'returns all fandom nominations in order' do
-                      expect(assigns(:nominations_count)[:fandom]).to eq(30)
-                      expect(assigns(:nominations)[:fandom].count).to eq(30)
-                      expect(assigns(:nominations)[:fandom].first.tagname).to eq('New Fandom 0')
+                    it "returns all fandom nominations ordered by creation date" do
+                      expect(assigns(:nominations_count)[:fandom]).to eq(per_page)
+                      expect(assigns(:nominations)[:fandom].count).to eq(per_page)
+                      ids = assigns(:nominations)[:fandom].map(&:id)
+                      expect(ids).to eq(ids.sort)
                     end
 
                     it 'does not return associated character and relationship nominations' do
                       expect(assigns(:nominations)[:cast]).to be_empty
                     end
-
-                    it 'does not return a flash notice about too many nominations' do
-                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " \
-                                                         "randomized selection! Additional nominations will appear " \
-                                                         "after you approve or reject some.")
-                    end
                   end
 
-                  context 'unreviewed fandom nominations > 30' do
-                    let(:fandom_nom_num) { 31 }
+                  context "unreviewed fandom nominations exceed per page limit" do
+                    let(:per_page) { ArchiveConfig.ITEMS_PER_PAGE }
+                    let(:fandom_nom_num) { per_page + 1 }
 
-                    it 'returns 30 fandom nominations' do
-                      expect(assigns(:nominations_count)[:fandom]).to eq(31)
-                      expect(assigns(:nominations)[:fandom].count).to eq(30)
-                    end
-
-                    it 'returns a flash notice about too many nominations' do
-                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " \
-                                                     "randomized selection! Additional nominations will appear " \
-                                                     "after you approve or reject some.")
+                    it "returns one page of fandom nominations" do
+                      expect(assigns(:nominations_count)[:fandom]).to eq(per_page + 1)
+                      expect(assigns(:nominations)[:fandom].count).to eq(per_page)
                     end
                   end
                 end
@@ -284,16 +280,77 @@ describe TagSetNominationsController do
                   end
                 end
 
+                context "duplicate tagnames across multiple nominators are paginated by unique tagname" do
+                  let(:fandom_nom_num) { 0 }
+                  let(:fandom_nom_status) { :unreviewed }
+                  let(:noms_per_page) { ArchiveConfig.ITEMS_PER_PAGE }
+
+                  before do
+                    unique_tagnames = noms_per_page * 2
+                    unique_tagnames.times do |i|
+                      nominator = create(:user)
+                      tsn = create(:tag_set_nomination, owned_tag_set: owned_tag_set, pseud: nominator.default_pseud)
+                      create(:tag_nomination, type: "FandomNomination",
+                                              tag_set_nomination: tsn,
+                                              owned_tag_set: owned_tag_set,
+                                              tagname: "Paginated Fandom #{i}")
+                    end
+                    2.times do
+                      dup_user = create(:user)
+                      tsn = create(:tag_set_nomination, owned_tag_set: owned_tag_set, pseud: dup_user.default_pseud)
+                      create(:tag_nomination, type: "FandomNomination",
+                                              tag_set_nomination: tsn,
+                                              owned_tag_set: owned_tag_set,
+                                              tagname: "Paginated Fandom 0")
+                    end
+                  end
+
+                  it "page 1 returns exactly one page of unique tagnames" do
+                    get :index, params: { tag_set_id: owned_tag_set.id, fandom_page: 1 }
+                    tagnames = assigns(:nominations)[:fandom].map(&:tagname)
+                    expect(tagnames.length).to eq(noms_per_page)
+                    expect(tagnames).to eq(tagnames.uniq)
+                  end
+
+                  it "page 2 returns the next page of unique tagnames without repeats from page 1" do
+                    get :index, params: { tag_set_id: owned_tag_set.id, fandom_page: 1 }
+                    page1_tagnames = assigns(:nominations)[:fandom].map(&:tagname)
+
+                    get :index, params: { tag_set_id: owned_tag_set.id, fandom_page: 2 }
+                    page2_tagnames = assigns(:nominations)[:fandom].map(&:tagname)
+
+                    expect(page2_tagnames.length).to eq(noms_per_page)
+                    expect(page2_tagnames).to eq(page2_tagnames.uniq)
+                    expect(page1_tagnames & page2_tagnames).to be_empty
+                  end
+
+                  it "pagination count reflects unique tagnames not total nominations" do
+                    get :index, params: { tag_set_id: owned_tag_set.id }
+                    unique_count = noms_per_page * 2
+                    total_count = unique_count + 2
+                    expect(assigns(:nominations_count)[:fandom]).to eq(total_count)
+                    expect(assigns(:paginations)[:fandom].count).to eq(unique_count)
+                  end
+                end
+
                 def add_fandom_nominations(num, status)
                   num.times do |i|
-                    fandom_nom = FandomNomination.create(tag_set_nomination: tag_set_nomination, tagname: "New Fandom #{i}")
+                    fandom_nom = create(:tag_nomination, type: "FandomNomination",
+                                                         tag_set_nomination: tag_set_nomination,
+                                                         owned_tag_set: tag_set_nomination.owned_tag_set,
+                                                         tagname: "New Fandom #{i}")
                     fandom_nom.update_column(status, true) if status != :unreviewed
                   end
                 end
               end
 
               context 'tag set fandom_nomination_limit is 0' do
-                let(:fandom_nom) { FandomNomination.create(tag_set_nomination: tag_set_nomination, tagname: 'New Fandom') }
+                let(:fandom_nom) do
+                  create(:tag_nomination, type: "FandomNomination",
+                                          tag_set_nomination: tag_set_nomination,
+                                          owned_tag_set: tag_set_nomination.owned_tag_set,
+                                          tagname: "New Fandom")
+                end
 
                 before do
                   owned_tag_set.update_column(:fandom_nomination_limit, 0)
@@ -305,47 +362,41 @@ describe TagSetNominationsController do
                     owned_tag_set.update_column(:relationship_nomination_limit, 1)
                   end
 
-                  context 'unreviewed character and relationship nominations <= 30' do
+                  context "unreviewed character and relationship nominations within per page limit" do
+                    let(:per_page) { ArchiveConfig.ITEMS_PER_PAGE }
+
                     before do
-                      add_unreviewed_character_nominations(30)
-                      add_unreviewed_relationship_nominations(30)
+                      add_unreviewed_character_nominations(per_page)
+                      add_unreviewed_relationship_nominations(per_page)
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns all ordered character and relationship nominations' do
-                      expect(assigns(:nominations_count)[:character]).to eq(30)
-                      expect(assigns(:nominations)[:character].count).to eq(30)
-                      expect(assigns(:nominations)[:character].first.tagname).to eq('New Character 0')
-                      expect(assigns(:nominations_count)[:relationship]).to eq(30)
-                      expect(assigns(:nominations)[:relationship].count).to eq(30)
-                      expect(assigns(:nominations)[:relationship].first.tagname).to eq('New Relationship 0')
-                    end
-
-                    it 'does not return a flash notice about too many nominations' do
-                      expect(flash[:notice]).not_to eq("There are too many nominations to show at once, so here's a " \
-                                                         "randomized selection! Additional nominations will appear " \
-                                                         "after you approve or reject some.")
+                    it "returns all character and relationship nominations ordered by creation date" do
+                      expect(assigns(:nominations_count)[:character]).to eq(per_page)
+                      expect(assigns(:nominations)[:character].count).to eq(per_page)
+                      character_ids = assigns(:nominations)[:character].map(&:id)
+                      expect(character_ids).to eq(character_ids.sort)
+                      expect(assigns(:nominations_count)[:relationship]).to eq(per_page)
+                      expect(assigns(:nominations)[:relationship].count).to eq(per_page)
+                      relationship_ids = assigns(:nominations)[:relationship].map(&:id)
+                      expect(relationship_ids).to eq(relationship_ids.sort)
                     end
                   end
 
-                  context 'unreviewed character or relationship nominations > 30' do
+                  context "unreviewed relationship nominations exceed per page limit" do
+                    let(:per_page) { ArchiveConfig.ITEMS_PER_PAGE }
+
                     before do
                       add_unreviewed_character_nominations(1)
-                      add_unreviewed_relationship_nominations(31)
+                      add_unreviewed_relationship_nominations(per_page + 1)
                       get :index, params: { tag_set_id: owned_tag_set.id }
                     end
 
-                    it 'returns 30 character and relationship nominations' do
+                    it "returns one page of relationship nominations" do
                       expect(assigns(:nominations_count)[:character]).to eq(1)
                       expect(assigns(:nominations)[:character].count).to eq(1)
-                      expect(assigns(:nominations_count)[:relationship]).to eq(31)
-                      expect(assigns(:nominations)[:relationship].count).to eq(30)
-                    end
-
-                    it 'returns a flash notice about too many nominations' do
-                      expect(flash[:notice]).to eq("There are too many nominations to show at once, so here's a " \
-                                                     "randomized selection! Additional nominations will appear " \
-                                                     "after you approve or reject some.")
+                      expect(assigns(:nominations_count)[:relationship]).to eq(per_page + 1)
+                      expect(assigns(:nominations)[:relationship].count).to eq(per_page)
                     end
                   end
                 end
@@ -370,15 +421,21 @@ describe TagSetNominationsController do
 
                 def add_unreviewed_character_nominations(num)
                   num.times do |i|
-                    CharacterNomination.create(tag_set_nomination: tag_set_nomination, fandom_nomination: fandom_nom,
-                                               tagname: "New Character #{i}")
+                    create(:tag_nomination, type: "CharacterNomination",
+                                            tag_set_nomination: tag_set_nomination,
+                                            owned_tag_set: tag_set_nomination.owned_tag_set,
+                                            fandom_nomination_id: fandom_nom.id,
+                                            tagname: "New Character #{i}")
                   end
                 end
 
                 def add_unreviewed_relationship_nominations(num)
                   num.times do |i|
-                    RelationshipNomination.create(tag_set_nomination: tag_set_nomination, fandom_nomination: fandom_nom,
-                                                  tagname: "New Relationship #{i}")
+                    create(:tag_nomination, type: "RelationshipNomination",
+                                            tag_set_nomination: tag_set_nomination,
+                                            owned_tag_set: tag_set_nomination.owned_tag_set,
+                                            fandom_nomination_id: fandom_nom.id,
+                                            tagname: "New Relationship #{i}")
                   end
                 end
               end

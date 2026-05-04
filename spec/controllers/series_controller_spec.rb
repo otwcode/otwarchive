@@ -177,7 +177,7 @@ describe SeriesController do
 
     it "assigns page title for series" do
       work = create(:work, fandom_string: "Fandom", authors: [user.default_pseud])
-      series_with_work = create(:series, works: [work])
+      series_with_work = create(:series, works: [work], authors: [user.default_pseud])
       get :show, params: { id: series_with_work }
       expect(assigns[:page_title]).to eq("#{series_with_work.title} - #{user.default_pseud.name} - Fandom [#{ArchiveConfig.APP_NAME}]")
     end

@@ -649,25 +649,7 @@ Rails.application.routes.draw do
   end
   resources :orphans, only: [:index, :new, :create]
 
-  %w[
-    first_login
-    html
-    preferences_collection
-    preferences_comment
-    preferences_display
-    preferences_locale
-    preferences_misc
-    preferences_privacy
-    preferences_work_title_format
-    rte
-    skins_basics
-    skins_creating
-    skins_parents
-    symbols_key
-    tags_fandoms
-    tags_ratings
-    tags_warnings
-  ].each do |action|
+  HelpController::HELP_ACTIONS.each do |action|
     get "/help/#{action}", to: "help##{action}"
   end
 
@@ -688,6 +670,11 @@ Rails.application.routes.draw do
   get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
   get "/help/rating-help.html", to: redirect("/help/tags_ratings")
   get "/help/warning-help.html", to: redirect("/help/tags_warnings")
+  get "/help/languages-help.html", to: redirect("/help/works_languages")
+  get "/help/parent-works-help.html", to: redirect("/help/works_parents")
+  get "/help/recipients.html", to: redirect("/help/works_recipients")
+  get "/help/choosing-series.html", to: redirect("/help/works_series")
+  get "/help/translation-link.html", to: redirect("/help/works_translation_link")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'

@@ -164,11 +164,6 @@ class Series < ApplicationRecord
     serial_works.where(work_id: work.id).pluck(:position).first
   end
 
-  # return list of pseuds on this series
-  def allpseuds
-    works.collect(&:pseuds).flatten.compact.uniq.sort
-  end
-
   # Remove a user (and all their pseuds) as an author of this series.
   #
   # We call Work#remove_author before destroying the series creatorships to
