@@ -2798,7 +2798,20 @@ en:
         page_heading: Marked for Later
   related_works:
     index:
+      inspired:
+        restricted: inspired [Restricted Work] (Log in to access.)
+        revealed_html: inspired %{work_link}
+        unrevealed: inspired a work in an unrevealed collection
+      inspired_by:
+        restricted: was inspired by [Restricted Work] (Log in to access.)
+        revealed_html: was inspired by %{work_link}
+        unrevealed: was inspired by a work in an unrevealed collection
+      other_relations:
+        restricted: "[Restricted Work] (Log in to access.)"
+        restricted_by_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
+        revealed_html: "%{work_link} by %{creator_link}"
       page_heading: "%{login}'s Related Works"
+      unrevealed: A work in an unrevealed collection
   series:
     series_module:
       hidden_by_admin_alt: "(Hidden by Admin)"

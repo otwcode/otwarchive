@@ -330,7 +330,7 @@ Scenario: External work language
 # especially during posting / editing / previewing a work
 # especially from the related_works page, which works but redirects to a non-existant page right now
 
-Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
+Scenario: Restricted works listed as Inspiration show up [Restricted] for guests on work pages
   Given I have related works setup
     And a related work has been posted and approved
   When I am logged in as "remixer"
@@ -348,6 +348,34 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   When I am logged out
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
+
+Scenario: Restricted works show up [Restricted] for guests on Related Works pages
+  Given I have related works setup
+    And a related work has been posted and approved
+    And a translation has been posted and approved
+  When I am logged in as "inspiration"
+    And I lock the work "Worldbuilding"
+  When I am logged in as "remixer"
+    And I lock the work "Followup"
+  When I am logged in as "translator"
+    And I lock the work "Worldbuilding Translated"
+  When I am logged out
+    And I go to inspiration's related works page
+  Then I should see "[Restricted Work] by remixer"
+    And I should see "[Restricted Work] by translator"
+    And I should see "[Restricted Work] (Log in to access.)" within "table#translationsofme"
+    And I should see "was inspired by [Restricted Work]"
+    And I should not see "Worldbuilding"
+    And I should not see "Followup"
+  When I go to remixer's related works page
+  Then I should see "[Restricted Work] by inspiration"
+    And I should see "inspired [Restricted Work]"
+    And I should not see "Worldbuilding"
+    And I should not see "Followup"
+  When I go to translator's related works page
+  Then I should see "[Restricted Work] by inspiration"
+    And I should see "[Restricted Work] (Log in to access.)" within "table#translationsbyme"
+    And I should not see "Worldbuilding"
 
 Scenario: Anonymous works listed as inspiration should have links to the authors,
   but only for the authors themselves and admins
