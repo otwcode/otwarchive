@@ -772,8 +772,8 @@ en:
   collections:
     collection_blurb:
       bookmarked_items: 'Bookmarked Items:'
-      collection_tags: 'Collection Tags:'
       challenges_subcollections: 'Challenges/Subcollections:'
+      collection_tags: 'Collection Tags:'
       prompts: 'Prompts:'
       signups_close_at: 'Sign-ups close at:'
       summary: Summary
