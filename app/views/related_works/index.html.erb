@@ -36,12 +36,9 @@
       <% if related_work.parent && related_work.work %>
       <tr>
         <% if related_work.work.unrevealed? %>
-          <td><%= t(".unrevealed") %></td>
+          <td><%= t(".unrevealed_work") %></td>
         <% else %>
-          <%# i18n-tasks-use t("related_works.index.other_relations.restricted_by_html") %>
-          <%# i18n-tasks-use t("related_works.index.other_relations.revealed_html") %>
-          <td scope="row"><%= related_work_title(related_work.work, with_byline: true) %></td>
-          <%# i18n-tasks-use t("related_works.index.other_relations.restricted") %>
+          <td scope="row"><%= related_work_title_with_byline(related_work.work) %></td>
           <td><%= related_work_title(related_work.parent) %></td>
           <td>
             <%= ts("From") %> <%= language_link(related_work.parent) %> <%= ts("to") %> <%= language_link(related_work.work) %>
@@ -81,10 +78,7 @@
     <% @translations_by_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
         <tr>
-          <%# i18n-tasks-use t("related_works.index.other_relations.restricted_by_html") %>
-          <%# i18n-tasks-use t("related_works.index.other_relations.revealed_html") %>
-          <td scope="row"><%= related_work_title(related_work.parent, with_byline: true) %></td>
-          <%# i18n-tasks-use t("related_works.index.other_relations.restricted") %>
+          <td scope="row"><%= related_work_title_with_byline(related_work.parent) %></td>
           <td><%= related_work_title(related_work.work) %></td>
           <td>
             <%= ts("From") %> <%= language_link(related_work.parent) %> <%= ts("to") %> <%= language_link(related_work.work) %>
@@ -106,16 +100,14 @@
       <% if related_work.parent && related_work.work %>
         <dt class="child">
           <% if related_work.work.unrevealed? %>
-            <%= t(".unrevealed") %>
+            <%= t(".unrevealed_work") %>
           <% else %>
-            <%# i18n-tasks-use t("related_works.index.other_relations.restricted_by_html") %>
-            <%# i18n-tasks-use t("related_works.index.other_relations.revealed_html") %>
-            <%= related_work_title(related_work.work, with_byline: true) %>
+            <%= related_work_title_with_byline(related_work.work) %>
           </dt>
           <%# i18n-tasks-use t("related_works.index.inspired_by.restricted") %>
           <%# i18n-tasks-use t("related_works.index.inspired_by.revealed_html") %>
           <%# i18n-tasks-use t("related_works.index.inspired_by.unrevealed") %>
-          <dd class="parent"><%= related_work_title(related_work.parent, relation: "inspired_by") %>
+          <dd class="parent"><%= related_work_relation(related_work.parent, "inspired_by") %>
             <% if current_user == @user %>
               <span class="submit actions">
                 <% if related_work.reciprocal? %>
@@ -139,15 +131,13 @@
       <% unless related_work.translation? %>
         <% if related_work.parent && related_work.work %>
           <dt class="parent">
-            <%# i18n-tasks-use t("related_works.index.other_relations.restricted_by_html") %>
-            <%# i18n-tasks-use t("related_works.index.other_relations.revealed_html") %>
-            <%= related_work_title(related_work.parent, with_byline: true) %>
+            <%= related_work_title_with_byline(related_work.parent) %>
           </dt>
           <dd class="child">
             <%# i18n-tasks-use t("related_works.index.inspired.restricted") %>
             <%# i18n-tasks-use t("related_works.index.inspired.revealed_html") %>
             <%# i18n-tasks-use t("related_works.index.inspired.unrevealed") %>
-            <%= related_work_title(related_work.work, relation: "inspired") %>
+            <%= related_work_relation(related_work.work, "inspired") %>
             <% if current_user == @user %>
               <span class="actions"><%= button_to ts("Remove"), related_work_path(related_work), data: { confirm: ts("Are you sure?") }, method: :delete %></span>
             <% end %>
