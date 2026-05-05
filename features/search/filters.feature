@@ -364,15 +364,20 @@ Feature: Filters
       And I press "Sort and Filter"
     Then I should see "Your search failed because of a syntax error"
 
-  @javascript
   @collections
   Scenario: Filtering on a user collection page should only return collections by that user.
     Given a collection "Duplicate Name" with name "collection1" owned by "meatloaf"
       And a collection "Duplicate Name" with name "collection2" owned by "recengine"
       And a collection "The Hobbits" with name "collectionhobbit" owned by "recengine"
+      And a collection "Not Mine!" with name "yours" owned by "iminvisible"
       And all indexing jobs have been run
-    When I go to recengine's user page
-      And I follow "Collections (2)"
+    When I go to recengine's collections page
       And I fill in "Filter by title" with "Duplicate Name"
       And I press "Sort and Filter"
     Then I should see "1 Collection"
+    When I follow "Clear Filters"
+    Then I should see "2 Collections"
+    When I fill in "Filter by title" with "Not Mine!"
+      And I press "Sort and Filter"
+    Then I should not see "iminvisible"
+      And I should see "Sorry, there were no collections found."
