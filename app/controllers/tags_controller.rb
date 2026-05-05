@@ -115,19 +115,12 @@ class TagsController < ApplicationController
         else
           @display_tags = @display_creation.works.visible.collect(&:freeforms).flatten.compact.uniq.sort
         end
-      # Requests don't have the methods Taggables have, so we have to access their tags like this
-      elsif params[:creation_type] == 'Request'
-        if params[:tag_type] == 'warnings'
-          @display_tags = @display_creation.tag_groups["ArchiveWarning"]
-        else
-          @display_tags = @display_creation.tag_groups["Freeform"]
-        end
       else
         @display_tags = case params[:tag_type]
                         when 'warnings'
-                          @display_creation.archive_warnings
+                          @display_creation.tag_groups["ArchiveWarning"]
                         when 'freeforms'
-                          @display_creation.freeforms
+                          @display_creation.tag_groups["Freeform"]
                         end
       end
 
