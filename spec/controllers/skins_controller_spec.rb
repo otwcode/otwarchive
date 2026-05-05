@@ -726,7 +726,7 @@ describe SkinsController do
       end
 
       context "when site skin is public" do
-        let(:skin) { create(:skin, :public, title: "Accessible Site Skin", author: skin_creator)}
+        let(:skin) { create(:skin, :public, title: "Accessible Site Skin", author: skin_creator) }
 
         context "when logged in as the skin creator" do
           it "succeeds" do
@@ -753,7 +753,7 @@ describe SkinsController do
       end
 
       context "when site skin is not public" do
-        let(:skin) { create(:skin, title: "Accessible Site Skin", author: skin_creator)}
+        let(:skin) { create(:skin, title: "Accessible Site Skin", author: skin_creator) }
         
         context "when logged in as the skin author" do
           it "succeeds" do
