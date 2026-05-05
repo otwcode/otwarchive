@@ -713,7 +713,7 @@ describe SkinsController do
     end
 
     context "with accessible site skin" do
-      let(:notice) { ["You are previewing the skin #{skin.title}. This is a randomly chosen page.", "Go back or click any link to remove the skin.", "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above.", "#{"<a href='#{skin_path(skin)}' class='action' role='button'>".html_safe}Return To Skin To Use#{"</a>".html_safe}"] }
+      let(:notice) { ["You are previewing the skin #{skin.title}. This is a randomly chosen page.", "Go back or click any link to remove the skin.", "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above.", "<a href='#{skin_path(skin)}' class='action' role='button'>Return To Skin To Use</a>"] }
       let(:success) { it_redirects_to_with_notice(tag_works_path(tag, site_skin: skin.id), notice) }
       let(:tag) { create(:canonical_fandom) }
 
