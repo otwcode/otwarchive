@@ -55,7 +55,7 @@ module TagsHelper
     display_name = tag.errors.has_key?(:name) ? tag.name_was : tag.display_name
     link_to_tag_with_text(tag, display_name, options)
   end
-  
+
   def link_to_tag_works(tag, options = {})
     link_to_tag_works_with_text(tag, tag.display_name, options)
   end
