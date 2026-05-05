@@ -135,7 +135,6 @@ class SkinsController < ApplicationController
       redirect_to skins_path(skin_type: "Site") and return if current_user.nil?
 
       redirect_to user_skins_path(current_user) and return
-      end
     end
 
     flash[:notice] = []
