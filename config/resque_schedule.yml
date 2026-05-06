@@ -122,3 +122,9 @@ disable_admin_post_comments:
   description: >-
     Disables all comments on admin (news) posts older than the
     configured window.
+
+cleanup_audits:
+  cron: "0 0 1 * *"
+  class: AuditsCleanupJob
+  queue: utilities
+  description: Deletes user audit records older than the configured limit.
