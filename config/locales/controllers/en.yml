@@ -107,6 +107,8 @@ en:
     index:
       access_denied_user: You aren't allowed to see that user's assignments.
       page_title: "%{username} - Challenge Assignments"
+    update_multiple:
+      approve_error: We couldn't approve the assignment for %{request}.
     validation:
       not_owner: You aren't the owner of that assignment.
   challenge_claims:
@@ -129,8 +131,11 @@ en:
       invited: invited
       invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
   collection_participants:
+    destroy:
+      success: Removed %{participant} from collection.
     update:
       failure: Couldn't update %{participant}.
+      success: Updated %{participant}.
     validation:
       owners_required: You can't remove the only owner!
   collection_profile:
@@ -207,7 +212,7 @@ en:
       collection_page_title: "%{collection_title} - Fandoms"
   gifts:
     index:
-      page_subtitle: Gifts for %{name}
+      page_subtitle: "%{name} - Gifts"
       whose_gifts_error: Whose gifts did you want to see?
     toggle_rejected:
       now_hidden_notice: This work will no longer be listed among your gifts.
@@ -304,7 +309,6 @@ en:
     index:
       page_title: "%{username} - Series"
     show:
-      anonymous: Anonymous
       unrevealed_series: Mystery Series
   skins:
     default_skin: You are now using the default site skin again!
