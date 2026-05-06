@@ -6,7 +6,7 @@ test note: these files could certainly be reduced but I have no IE to test with
 
 /* emphasis */
 
-.navigation a:hover, .submit a:hover, .actions a:hover {
+.navigation a:hover, .submit a:hover, .action a:hover {
   background: #bbb;
 }
 
