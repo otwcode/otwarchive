@@ -132,7 +132,6 @@ describe Subscription do
         expect(subscription.valid_notification_entry?(draft)).to be_falsey
       end
 
-      # TODO: AO3-3620 & AO3-5696: Allow subscriptions to orphan_account to receive notifications
       it "returns false when the creation is by orphan_account" do
         expect(subscription.valid_notification_entry?(create(:work, authors: [orphan_pseud]))).to be_falsey
       end
@@ -151,7 +150,6 @@ describe Subscription do
         expect(subscription.valid_notification_entry?(build(:chapter, work: draft))).to be_falsey
       end
 
-      # TODO: AO3-3620 & AO3-5696: Allow subscriptions to orphan_account to receive notifications
       it "returns false when the creation is by orphan_account" do
         expect(subscription.valid_notification_entry?(create(:chapter, authors: [orphan_pseud]))).to be_falsey
       end
@@ -223,7 +221,7 @@ describe Subscription do
         expect(subscription.valid_notification_entry?(chapter)).to be_truthy
       end
 
-      it "returns true for a chapter on a work co-created with orphan_account" do
+      it "returns true for a chapter by only the user, on a work co-created with orphan_account" do
         other_pseud = create(:pseud)
         orphan_work = create(:work, authors: [other_pseud, orphan_pseud])
         chapter = create(:chapter, work: orphan_work, authors: [other_pseud])
