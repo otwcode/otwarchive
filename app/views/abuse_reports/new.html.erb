@@ -26,7 +26,7 @@
   <p>
     <%= t(".purview.dmca_takedown_html",
           dmca_abbreviation: tag.abbr(t(".purview.dmca.abbreviated"), title: t(".purview.dmca.full")),
-          legal_link: link_to(t(".purview.legal"), dmca_path)) %>
+          legal_link: link_to(t(".purview.legal"), takedown_path(anchor: "dmca_policy"))) %>
   </p>
 
   <p id="reportwhy">

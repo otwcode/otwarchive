@@ -25,6 +25,16 @@ describe PreferencesController do
 
         it_redirects_to_with_error(user_path(other_user), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
+
+      it "does not include parent-only skins in available site skins" do
+        usable_skin = create(:skin, author: user, unusable: false)
+        parent_only_skin = create(:skin, author: user, unusable: true)
+
+        get :index, params: { user_id: user.login }
+
+        expect(assigns(:available_skins)).to include(usable_skin)
+        expect(assigns(:available_skins)).not_to include(parent_only_skin)
+      end
     end
 
     context "as a guest" do
@@ -48,6 +58,14 @@ describe PreferencesController do
       read_roles = %w[superadmin policy_and_abuse support]
 
       it_behaves_like "an action only authorized admins can access", authorized_roles: read_roles
+    end
+
+    context "for a nonexistent user" do
+      it "raises a 404 error" do
+        expect do
+          get :index, params: { user_id: "deleted_user" }
+        end.to raise_exception(ActiveRecord::RecordNotFound)
+      end
     end
   end
 

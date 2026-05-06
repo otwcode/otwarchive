@@ -35,7 +35,10 @@
     <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
     <dl>
       <%= render "collectibles/collectible_form", form: form, collectibles: @works %>
-      <dt><%= form.label :language_id, t("works.associations.language.choose") %> <%= link_to_help "languages-help" %></dt>
+      <dt>
+        <%= form.label :language_id, t("works.associations.language.choose") %>
+        <%= link_to_help_modal(help_works_languages_path, t(".works_languages_help_title")) %>
+      </dt>
       <dd>
         <%= form.select :language_id, language_options_for_select(sorted_languages, "id"), { include_blank: true } %>
       </dd>
