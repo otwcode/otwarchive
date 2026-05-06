@@ -118,27 +118,27 @@ class Comment < ApplicationRecord
       comment_post_modified_gmt = ultimate_parent.created_at.iso8601
     end
 
+    combined_comment_content = comment_content
+
     if pseud_id.nil?
       user_role = "guest"
       comment_author = name
       if (recent_comments_of_user_on_work = Comment.where(name: comment_author)
                                                    .or(Comment.where(email: comment_owner_email))
                                                    .or(Comment.where(ip_address: ip_address))
-                                                   .and(Comment.where(created_at: RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.ago...))
+                                                   .and(Comment.where(created_at: 10.days.ago...))
                                                    .and(Comment.where(parent: parent))).any? # is using parent instead of ultimate_parent fine here? it is easier for sure.
 
-        comment_content += recent_comments_of_user_on_work.pluck(:comment_content).join
+        combined_comment_content += recent_comments_of_user_on_work.pluck(:comment_content).join
       end
     else
       user_role = "user"
       comment_author = user.login
-      if (recent_comments_of_user_on_work = Comment.where(name: comment_author)
-                                                   .and(Comment.where(email: comment_owner_email))
-                                                   .and(Comment.where.not(pseud_id: nil))
-                                                   .and(Comment.where(created_at: RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.ago...))
+      if (recent_comments_of_user_on_work = Comment.where(pseud_id: pseud_id) # well this means you can bypass it via new pseuds, is there a way to check pseud.user without another query?
+                                                   .and(Comment.where(created_at: 10.days.ago...))
                                                    .and(Comment.where(parent: parent))).any? # is using parent instead of ultimate_parent fine here? it is easier for sure.
 
-        comment_content += recent_comments_of_user_on_work.pluck(:comment_content).join
+        combined_comment_content += recent_comments_of_user_on_work.pluck(:comment_content).join
       end
     end
 
@@ -151,7 +151,7 @@ class Comment < ApplicationRecord
       user_role: user_role,
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
-      comment_content: comment_content,
+      comment_content: combined_comment_content,
       comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
       comment_post_modified_gmt: comment_post_modified_gmt
     }

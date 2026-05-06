@@ -443,8 +443,8 @@ class CommentsController < ApplicationController
       else
         flash[:error] = ts("Couldn't save comment!")
         # this place looks nice to spam check old ones
-        if recent_comments_of_user_on_work.any?
-          recent_comments_of_user_on_work.each do |comment|
+        if @comment.recent_comments_of_user_on_work&.any?
+          @comment.recent_comments_of_user_on_work.each do |comment|
             comment.mark_as_spam!
           end
         end
