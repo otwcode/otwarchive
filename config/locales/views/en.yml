@@ -409,6 +409,7 @@ en:
           request_invite_enabled: Users can request invitations
           suspend_filter_counts: Suspend some filter tracking due to high posting volume
           tag_wrangling_off: Turn off tag wrangling for non-admins
+          preserve_audit_records_usernames: Preserve audit records for these usernames (comma separated)
         heading: Archive Settings
         last_updated_by_admin: Settings last updated on %{updated_at} by %{admin_name}.
         legend:
