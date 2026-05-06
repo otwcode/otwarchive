@@ -6,11 +6,11 @@ test note: these files could certainly be reduced but I have no IE to test with
 
 /* emphasis */
 
-.navigation a:hover, .submit a:hover, .action a:hover {
+.navigation a:hover, .submit a:hover, .actions a:hover {
   background: #bbb;
 }
 
-span.replied. span.unreviewed, .actions a, .action {
+span.replied, span.unreviewed, .actions a, .action {
   font-family: "Arial Unicode MS", "Lucida Grande Unicode", Arial, sans-serif;
 }
 
