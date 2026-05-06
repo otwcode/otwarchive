@@ -24,7 +24,7 @@ class Comment < ApplicationRecord
 
   delegate :user, to: :pseud, allow_nil: true
 
-  attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4, :recent_comments_of_user_on_work
+  attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4
 
   # Whether the writer of the comment this is replying to allows guest replies
   validate :guest_can_reply, if: :reply_comment?, unless: :pseud_id, on: :create
@@ -118,28 +118,14 @@ class Comment < ApplicationRecord
       comment_post_modified_gmt = ultimate_parent.created_at.iso8601
     end
 
-    combined_comment_content = comment_content
+    combined_comment_content = comment_content + recent_comments_of_user_on_work.pluck(:comment_content).join
 
     if pseud_id.nil?
       user_role = "guest"
       comment_author = name
-      if (recent_comments_of_user_on_work = Comment.where(name: comment_author)
-                                                   .or(Comment.where(email: comment_owner_email))
-                                                   .or(Comment.where(ip_address: ip_address))
-                                                   .and(Comment.where(created_at: 10.days.ago...))
-                                                   .and(Comment.where(parent: parent))).any? # is using parent instead of ultimate_parent fine here? it is easier for sure.
-
-        combined_comment_content += recent_comments_of_user_on_work.pluck(:comment_content).join
-      end
     else
       user_role = "user"
       comment_author = user.login
-      if (recent_comments_of_user_on_work = Comment.where(pseud_id: pseud_id) # well this means you can bypass it via new pseuds, is there a way to check pseud.user without another query?
-                                                   .and(Comment.where(created_at: 10.days.ago...))
-                                                   .and(Comment.where(parent: parent))).any? # is using parent instead of ultimate_parent fine here? it is easier for sure.
-
-        combined_comment_content += recent_comments_of_user_on_work.pluck(:comment_content).join
-      end
     end
 
     attributes = {
@@ -160,9 +146,25 @@ class Comment < ApplicationRecord
     attributes[:cloudflare_ja3_hash] = cloudflare_ja3_hash if cloudflare_ja3_hash
     attributes[:cloudflare_ja4] = cloudflare_ja4 if cloudflare_ja4
 
-    attributes[:recheck_reason] = "edit" if (will_save_change_to_edited_at? && will_save_change_to_comment_content?) || recent_comments_of_user_on_work.any?
+    attributes[:recheck_reason] = "edit" if (will_save_change_to_edited_at? && will_save_change_to_comment_content?) || recent_comments_of_user_on_work.any? # are we double querying? we can also compare combined_comment_content with comment_content
 
     attributes
+  end
+
+  def recent_comments_of_user_on_work
+    # we're doing the query two (or four with the ones in controller when spam) times and i don't love that.
+    pseud_id.nil? ? Comment.where(name: name)
+                           .or(Comment.where(email: comment_owner_email))
+                           .or(Comment.where(ip_address: ip_address))
+                           .and(Comment.where(created_at: 10.days.ago...))
+                           .and(Comment.where(parent: parent))
+                            # is using parent instead of ultimate_parent fine here? it is easier for sure.
+                  : Comment.where(pseud_id: pseud_id)
+                            # well this means you can bypass it via new pseuds, is there a way to check pseud.user without another query?
+                            # i also need to check account newness
+                           .and(Comment.where(created_at: 10.days.ago...))
+                           .and(Comment.where(parent: parent))
+                            # is using parent instead of ultimate_parent fine here? it is easier for sure.
   end
 
   after_create :expire_parent_comments_count
