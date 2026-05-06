@@ -175,6 +175,13 @@ class Prompt < ApplicationRecord
 
       # tag_type is one of a set set so we know it is safe for constantize
       allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
+
+      if restriction.send("#{tag_type}_restrict_to_tag_set")
+        allowed_tags = allowed_tags.where(
+          id: tag_set_associations.where(parent_tag_id: tag_set.fandom_taglist).select(:tag_id)
+        )
+      end
+
       disallowed_taglist = tag_set ? tag_set.send("#{tag_type}_taglist") - allowed_tags : []
 
       # check for tag set associations

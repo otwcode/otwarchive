@@ -62,20 +62,22 @@ describe Prompt do
       end
 
       it "marks the prompt as valid when the character is in the tag set" do
+        signup = build(:challenge_signup, collection: collection)
         prompt = build(:offer,
                        tag_set: create(:tag_set, tags: [fandom, fandom_character]),
                        collection_id: collection.id,
-                       challenge_signup: create(:challenge_signup))
+                       challenge_signup: signup)
         expect(prompt).to be_valid
       end
 
       it "marks the prompt as invalid when the character is canonical in the fandom but not in the tag set" do
         other_character = create(:character, canonical: true)
         create(:common_tagging, filterable: fandom, common_tag: other_character)
+        signup = build(:challenge_signup, collection: collection)
         prompt = build(:offer,
                        tag_set: create(:tag_set, tags: [fandom, other_character]),
                        collection_id: collection.id,
-                       challenge_signup: create(:challenge_signup))
+                       challenge_signup: signup)
         expect(prompt).not_to be_valid
       end
     end
@@ -96,10 +98,11 @@ describe Prompt do
       end
 
       it "marks the prompt as valid when the character is canonical in the fandom even if not in the tag set" do
+        signup = build(:challenge_signup, collection: collection)
         prompt = build(:offer,
                        tag_set: create(:tag_set, tags: [fandom, fandom_character]),
                        collection_id: collection.id,
-                       challenge_signup: create(:challenge_signup))
+                       challenge_signup: signup)
         expect(prompt).to be_valid
       end
     end
