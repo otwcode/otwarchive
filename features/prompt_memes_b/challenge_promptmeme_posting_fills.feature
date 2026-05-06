@@ -151,7 +151,7 @@ Feature: Prompt Meme Challenge
   When I am on myname4's user page
   Then I should see "Claims (0)"
   When I follow "Claims"
-		And I follow "Fulfilled Claims"
+    And I follow "Fulfilled Claims"
   Then I should see "Fulfilled Story"
   When I am on myname4's user page
     And I follow "Claims"
@@ -161,7 +161,7 @@ Feature: Prompt Meme Challenge
   When I am on myname4's user page
   Then I should see "Claims (1)"
   When I follow "Claims"
-		And I follow "Fulfilled Claims"
+    And I follow "Fulfilled Claims"
   Then I should not see "Fulfilled Story"
   When I am on myname4's user page
     And I follow "Claims"
