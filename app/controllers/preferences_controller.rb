@@ -4,7 +4,7 @@ class PreferencesController < ApplicationController
 
   # Ensure that the current user is authorized to view and change this information
   def load_user
-    @user = User.find_by(login: params[:user_id])
+    @user = User.find_by!(login: params[:user_id])
     @check_ownership_of = @user
   end
 
@@ -12,14 +12,14 @@ class PreferencesController < ApplicationController
     @page_subtitle = t(".page_title", username: @user.login)
     @preference = @user.preference
     authorize @preference if logged_in_as_admin?
-    @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq
+    @available_skins = available_skins
     @available_locales = Locale.where(email_enabled: true)
   end
 
   def update
     @preference = @user.preference
     authorize @preference if logged_in_as_admin?
-    @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq
+    @available_skins = available_skins
     @available_locales = Locale.where(email_enabled: true)
 
     @user.preference.attributes = preference_params
@@ -39,6 +39,11 @@ class PreferencesController < ApplicationController
   end
 
   private
+
+  def available_skins
+    (@user.skins.site_skins.usable +
+    Skin.approved_skins.site_skins.usable).uniq
+  end
 
   def preference_params
     params.require(:preference).permit(
