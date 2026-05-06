@@ -5,7 +5,7 @@
   <% end %>
   <% if params[:id] %>
     <li><%= span_if_current t(".edit"), edit_admin_banner_path(@admin_banner) %></li>
-    <% if policy(AdminBanner).destroy? %>
+    <% if policy(AdminBanner).destroy? && !@admin_banner.active? %>
       <li><%= link_to t(".delete"), confirm_delete_admin_banner_path(@admin_banner), data: { confirm: t(".confirm_delete") } %></li>
     <% end %>
   <% end %>

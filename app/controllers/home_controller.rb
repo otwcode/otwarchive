@@ -25,9 +25,10 @@ class HomeController < ApplicationController
     render action: "tos_faq", layout: "application"
   end
 
-  # dmca policy
-  def dmca
-    render action: "dmca", layout: "application"
+  # takedown policies
+  def takedown
+    @page_subtitle = t(".page_title")
+    render action: "takedown", layout: "application"
   end
 
   # lost cookie
