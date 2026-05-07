@@ -7,10 +7,10 @@ class CreateImportedUrls < ActiveRecord::Migration[8.0]
       t.string :minimal, null: false
       t.string :minimal_no_protocol_no_www, null: false
       t.string :no_www, null: false
-      t.string :with_www, null: false
+      t.string :with_www, null: false, limit: 300
       t.string :with_http, null: false
       t.string :with_https, null: false
-      t.string :encoded, null: false
+      t.string :encoded, null: false, limit: 2080
       t.string :decoded, null: false
 
       t.timestamps
