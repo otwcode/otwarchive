@@ -41,17 +41,17 @@ describe WorksController do
         expect(controller).to receive(:render).with(:new_import)
         controller.send(:import_multiple, urls, {})
         expect(flash[:error]).to eq(
-          "<h3>Failed Imports</h3>" +
-          "<dl>" +
-          "<dt>https://www.failedurl1.com</dt>" +
-          "<ul>" +
-          "<li>failedurl1 first error</li>\n" +
-          "<li>failedurl1 second error</li>" +
-          "</ul>\n" +
-          "<dt>https://www.failedurl2.com</dt>" +
-          "<ul>" +
-          "<li>failedurl2 first error</li>" +
-          "</ul>" +
+          "<h3>Failed Imports</h3>" \
+          "<dl>" \
+          "<dt>https://www.failedurl1.com</dt>" \
+          "<ul>" \
+          "<li>failedurl1 first error</li>\n" \
+          "<li>failedurl1 second error</li>" \
+          "</ul>\n" \
+          "<dt>https://www.failedurl2.com</dt>" \
+          "<ul>" \
+          "<li>failedurl2 first error</li>" \
+          "</ul>" \
           "</dl>"
        )
       end
