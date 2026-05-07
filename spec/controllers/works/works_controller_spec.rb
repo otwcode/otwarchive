@@ -37,7 +37,7 @@ describe WorksController do
       end
       let(:urls) { ["https://www.failedurl1.com", "https://www.failedurl2.com"] }
 
-      it 'returns a well-formatted error message' do
+      it "returns a well-formatted error message" do
         expect(controller).to receive(:render).with(:new_import)
         controller.send(:import_multiple, urls, {})
         expect(flash[:error]).to eq(
@@ -53,7 +53,7 @@ describe WorksController do
           "<li>failedurl2 first error</li>" \
           "</ul>" \
           "</dl>"
-       )
+        )
       end
     end
   end
