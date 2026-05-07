@@ -627,6 +627,43 @@ describe SkinsController do
     let(:skin_creator) { create(:user) }
     let(:other_user) { create(:user) }
     subject { get :preview, params: { id: skin.id } }
+
+    shared_examples "a skin admins cannot preview" do
+      before do
+        fake_login_admin(admin)
+      end
+
+      context "when logged in as an admin with no role" do
+        let(:admin) { create(:admin, roles: []) }
+
+        it "redirects with an error" do
+          subject
+          # This actually redirects to the root path
+          it_redirects_to_user_login_with_error
+        end
+      end
+
+      Admin::VALID_ROLES.each do |role|
+        context "when logged in as an admin with role #{role}" do
+          let(:admin) { create(:admin, roles: [role]) }
+
+          it "redirects with an error" do
+            subject
+            # This actually redirects to the root path
+            it_redirects_to_user_login_with_error
+          end
+        end
+      end
+    end
+  
+    shared_examples "a skin guests cannot preview" do
+      context "when not logged in" do
+        it "errors and redirects to user_login" do
+          subject
+          it_redirects_to_user_login_with_error
+        end
+      end
+    end
   
     shared_examples "a public skin that cannot be previewed" do
       context "when logged in as the skin creator" do
@@ -647,12 +684,12 @@ describe SkinsController do
         end
       end
 
-      context "when not logged in" do
-        it "errors and redirects to skins_path" do
-          subject
+      context "when logged in as an admin" do
+        it_behaves_like "a skin admins cannot preview"
+      end
 
-          it_redirects_to_with_error(skins_path(skin_type: "Site"), "Sorry, you can't preview that skin.")
-        end
+      context "when not logged in" do
+        it_behaves_like "a skin guests cannot preview"
       end
     end
 
@@ -675,12 +712,12 @@ describe SkinsController do
         end
       end
 
-      context "when not logged in" do
-        it "errors and redirects to new_user_session_path" do
-          subject
+      context "when logged in as an admin" do
+        it_behaves_like "a skin admins cannot preview"
+      end
 
-          it_redirects_to_user_login_with_error
-        end
+      context "when not logged in" do
+        it_behaves_like "a skin guests cannot preview"
       end
     end
 
@@ -713,8 +750,7 @@ describe SkinsController do
     end
 
     context "with accessible site skin" do
-      let(:notice) { ["You are previewing the skin #{skin.title}. This is a randomly chosen page.", "Go back or click any link to remove the skin.", "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above.", "<a href='#{skin_path(skin)}' class='action' role='button'>Return To Skin To Use</a>"] }
-      let(:success) { it_redirects_to_with_notice(tag_works_path(tag, site_skin: skin.id), notice) }
+      let(:success) { it_redirects_to_simple(tag_works_path(tag, site_skin: skin.id)) }
       let(:tag) { create(:canonical_fandom) }
 
       before do
@@ -744,11 +780,12 @@ describe SkinsController do
           end
         end
 
+        context "when logged in as an admin" do
+          it_behaves_like "a skin admins cannot preview"
+        end
+
         context "when not logged in" do
-          it "succeeds" do
-            subject
-            success
-          end
+          it_behaves_like "a skin guests cannot preview"
         end
       end
 
@@ -772,13 +809,13 @@ describe SkinsController do
           end
         end
 
-        context "when logged out" do
-          it "redirects with an error" do
-            subject
+        context "when logged in as an admin" do
+          it_behaves_like "a skin admins cannot preview"
+        end
 
-            it_redirects_to_user_login_with_error
-          end
-        end    
+        context "when not logged in" do
+          it_behaves_like "a skin guests cannot preview"
+        end
       end
     end
   end

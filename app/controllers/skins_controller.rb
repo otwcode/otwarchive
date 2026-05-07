@@ -1,5 +1,5 @@
 class SkinsController < ApplicationController
-  before_action :users_only, only: [:new, :create, :destroy]
+  before_action :users_only, only: [:new, :create, :destroy, :preview]
   before_action :load_skin, except: [:index, :new, :create, :unset]
   before_action :check_ownership_or_admin, only: [:edit, :update]
   before_action :check_ownership, only: [:confirm_delete, :destroy]
@@ -131,9 +131,6 @@ class SkinsController < ApplicationController
   def preview
     if @skin.is_a?(WorkSkin) || @skin.unusable?
       flash[:error] = t(".cannot_preview")
-
-      redirect_to skins_path(skin_type: "Site") and return if current_user.nil?
-
       redirect_to user_skins_path(current_user) and return
     end
 
