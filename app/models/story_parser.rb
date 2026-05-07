@@ -178,7 +178,7 @@ class StoryParser
           works << work
         else
           failed_urls << url
-          errors << work.errors.values.join(", ")
+          errors << work.errors.full_messages
           work.delete if work
         end
       rescue Timeout::Error
