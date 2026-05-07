@@ -540,7 +540,7 @@ class WorksController < ApplicationController
       error_msgs = (0...failed_urls.length).map do |index|
         # each failed url may have multiple errors, so show them in a bulleted list underneath the url
         errors_per_url = errors[index].map { |error| "<li>#{error}</li>" }
-                                      .join("\n")
+          .join("\n")
         "<dt>#{failed_urls[index]}</dt><ul>#{errors_per_url}</ul>"
       end.join("\n")
       flash.now[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
