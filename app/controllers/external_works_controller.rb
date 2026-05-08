@@ -4,7 +4,7 @@ class ExternalWorksController < ApplicationController
   before_action :check_user_status, only: [:new]
 
   def new
-    @page_subtitle = ts("Bookmark External Work")
+    @page_subtitle = t(".page_title")
     @bookmarkable = ExternalWork.new
     @bookmark = Bookmark.new
   end

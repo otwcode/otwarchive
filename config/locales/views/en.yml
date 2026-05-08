@@ -1077,6 +1077,9 @@ en:
     edit:
       works_languages_help_title: Languages help
     notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
+    new:
+      page_title: Bookmark External Work
+      page_heading: Bookmark External Work
   fandoms:
     index:
       page_heading: Fandoms
