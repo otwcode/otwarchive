@@ -200,7 +200,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    css_parser (1.16.0)
+    css_parser (1.22.0)
       addressable
     csv (3.3.5)
     cucumber (9.2.1)
@@ -458,7 +458,7 @@ GEM
     psych (5.2.6)
       date
       stringio
-    public_suffix (6.0.2)
+    public_suffix (7.0.5)
     puma (6.5.0)
       nio4r (~> 2.0)
     puma_worker_killer (1.0.0)
