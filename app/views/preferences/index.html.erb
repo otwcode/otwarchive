@@ -21,7 +21,7 @@
 <%= form_for(@preference, url: user_preference_path(@user, @preference), autocomplete: "off") do |f| %>
   <fieldset>
     <legend><%= t(".privacy.legend") %></legend>
-    <h4 class="heading"><%= t(".privacy.heading") %> <%= link_to_help "privacy-preferences" %></h4>
+    <h4 class="heading"><%= t(".privacy.heading") %> <%= link_to_help_modal(help_preferences_privacy_path, t(".privacy.help_title")) %></h4>
     <ul>
       <li>
         <%= f.check_box :minimize_search_engines %>
@@ -39,7 +39,7 @@
   </fieldset>
   <fieldset>
     <legend><%= t(".display.legend") %></legend>
-    <h4 class="heading"><%= t(".display.heading") %> <%= link_to_help "display-preferences" %></h4>
+    <h4 class="heading"><%= t(".display.heading") %> <%= link_to_help_modal(help_preferences_display_path, t(".display.help_title")) %></h4>
     <ul>
       <li>
         <%= f.check_box :adult %>
@@ -77,13 +77,13 @@
         <dd><%= f.select :preferred_locale, locale_options_for_select(@available_locales, "id"),
                   default: @preference.preferred_locale %></dd>
       <% end %>
-      <dt><%= f.label :work_title_format, t(".browser_page_title_format") %> <%= link_to_help "work_title_format" %></dt>
+      <dt><%= f.label :work_title_format, t(".browser_page_title_format") %> <%= link_to_help_modal(help_preferences_work_title_format_path, t(".work_title_format_help_title")) %></dt>
       <dd><%= f.text_field :work_title_format %></dd>
     </dl>
   </fieldset>
   <fieldset>
    <legend><%= t(".comments.legend") %></legend>
-    <h4 class="heading"><%= t(".comments.heading") %> <%= link_to_help "comment-preferences" %></h4>
+    <h4 class="heading"><%= t(".comments.heading") %> <%= link_to_help_modal(help_preferences_comment_path, t(".comments.help_title")) %></h4>
     <ul>
       <li>
         <%= f.check_box :comment_emails_off %>
@@ -109,7 +109,7 @@
   </fieldset>
   <fieldset>
     <legend><%= t(".collections_challenges_gifts.legend") %></legend>
-    <h4 class="heading"><%= t(".collections_challenges_gifts.heading") %> <%= link_to_help "collection-preferences" %></h4>
+    <h4 class="heading"><%= t(".collections_challenges_gifts.heading") %> <%= link_to_help_modal(help_preferences_collection_path, t(".collections_challenges_gifts.help_title")) %></h4>
     <ul>
       <li>
         <%= f.check_box :allow_collection_invitation %>
@@ -135,7 +135,7 @@
   </fieldset>
   <fieldset>
     <legend><%= t(".misc.legend") %></legend>
-    <h4 class="heading"><%= t(".misc.heading") %> <%= link_to_help "misc-preferences" %></h4>
+    <h4 class="heading"><%= t(".misc.heading") %> <%= link_to_help_modal(help_preferences_misc_path, t(".misc.help_title")) %></h4>
     <ul>
       <li>
         <%= f.check_box :history_enabled %>

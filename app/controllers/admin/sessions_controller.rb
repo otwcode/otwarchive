@@ -37,19 +37,24 @@ class Admin
       @admin = admin
   
       session[:otp_admin_id] = admin.id
+      session[:pwned] = admin.respond_to?(:password_pwned?) && admin.password_pwned?(admin_params[:password])
 
       render "admin/sessions/totp"
     end
   
     def authenticate_admin_with_otp_two_factor(admin)
       if valid_totp_attempt?(admin)
+        pwned = session[:pwned]
         # Remove any lingering admin data from login
         session.delete(:otp_admin_id)
+        session.delete(:pwned)
   
         admin.save!
 
         flash[:notice] = t("devise.sessions.signed_in")
         sign_in(admin, event: :authentication)
+
+        set_flash_message! :alert, :warn_pwned if pwned
         
         redirect_to admins_path
       else

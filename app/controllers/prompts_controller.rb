@@ -57,10 +57,6 @@ class PromptsController < ApplicationController
     not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)))
   end
 
-  def maintainer_or_signup_owner_only
-    not_allowed(@collection) and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
-  end
-
   def not_signup_owner
     flash[:error] = ts("You can't edit someone else's sign-up!")
     redirect_to @collection

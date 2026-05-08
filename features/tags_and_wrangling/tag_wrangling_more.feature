@@ -13,6 +13,16 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       | Enigel      | wrangulator   |
       | dizmo       | wrangulator   |
 
+    # default wrangler selection to current user for non-admins
+    When I am logged in as "dizmo" with password "wrangulator"
+      And I follow "Tag Wrangling"
+      And I follow "Wranglers"
+    Then "dizmo" should be selected within "wrangler_id"
+    When I am logged in as a "tag_wrangling" admin
+      And I follow "Tag Wrangling"
+      And I follow "Wranglers"
+    Then "" should be selected within "wrangler_id"
+
     # accessing tag wrangling pages
     When I am logged in as "dizmo" with password "wrangulator"
       And I follow "Tag Wrangling"
@@ -60,6 +70,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
 
     # assigning another wrangler to a fandom
     When I follow "Wranglers"
+      And I select "" from "wrangler_id"
       And I fill in "fandom_string" with "Ghost"
       And I press "Filter"
     Then I should see "Ghost Soup"
@@ -90,7 +101,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
       And I am logged in as "tangler" with password "wr@ngl3r"
     When I am on the wranglers page
-      And I follow "x"
+      And I follow "×"
     Then I should see "Wranglers were successfully unassigned!"
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
@@ -104,7 +115,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       | wranglerette   |
     When I am logged in as "wranglerette"
       And I am on the wranglers page
-      And I follow "x"
+      And I follow "×"
     Then I should see "Wranglers were successfully unassigned!"
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
@@ -394,3 +405,15 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I am logged in as a tag wrangler
     When I view the unwrangled character bin for "Testing"
     Then I should see "hidden char"
+
+  Scenario: Unwrangleable tags should not appear in wrangler tag counts
+    Given the tag wrangler "wrangler" with password "wrangulator" is wrangler of "Canonical Fandom"
+      And a character exists with name: "Unwrangled Character"
+      And a freeform exists with name: "Unwrangleable Freeform", unwrangleable: true
+      And I post the work "My Plan" with fandom "Canonical Fandom" with character "Unwrangled Character" with freeform "Unwrangleable Freeform"
+      And all indexing jobs have been run
+    When I go to the wrangling page for "wrangler"
+    Then I should not see "1" within "td[title='unwrangled freeforms']"
+      And I should see "1" within "td[title='unwrangled characters']"
+      And I should see "Freeforms by fandom (0)"
+      And I should see "Characters by fandom (1)"

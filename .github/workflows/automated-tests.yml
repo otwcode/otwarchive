@@ -10,6 +10,10 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   automated-tests:
     name: ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
@@ -169,7 +173,7 @@ jobs:
         run: bundle exec ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           # Optional for public repos. However, individual forks can set this
           # secret to reduce the chance of being rate-limited by GitHub.

@@ -23,7 +23,7 @@
           <li>
             <%= link_to t(".actions.edit"), edit_admin_banner_path(admin_banner) %>
           </li>
-          <% if policy(AdminBanner).destroy? %>
+          <% if policy(AdminBanner).destroy? && !admin_banner.active? %>
             <li>
               <%= link_to t(".actions.delete"), confirm_delete_admin_banner_path(admin_banner), data: { confirm: t(".actions.confirm_delete") } %>
             </li>

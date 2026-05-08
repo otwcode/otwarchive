@@ -1,0 +1,17 @@
+<h4><%= t(".page_heading") %></h4>
+
+<dl id="help">
+  <dt><%= t(".turn_off_emails.header") %></dt>
+  <dd><%= t(".turn_off_emails.description") %></dd>
+  <dt><%= t(".turn_off_inbox.header") %></dt>
+  <dd><%= t(".turn_off_inbox.description") %></dd>
+  <dt><%= t(".turn_off_copies_own_comments.header") %></dt>
+  <dd><%= t(".turn_off_copies_own_comments.description") %></dd>
+  <dt><%= t(".turn_off_kudos_emails.header") %></dt>
+  <dd><%= t(".turn_off_kudos_emails.description") %></dd>
+  <dt><%= t(".guest_replies_off.header") %></dt>
+  <dd>
+    <%= t(".guest_replies_off.description_html",
+          posting_and_editing_faq_link: link_to(t(".guest_replies_off.posting_and_editing_faq"), archive_faq_path("posting-and-editing", anchor: "controlaccess"))) %>
+  </dd>
+</dl>

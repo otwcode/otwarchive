@@ -1,0 +1,63 @@
+<h2><%= t(".page_heading") %></h2>
+
+<h3><%= t(".allowed_html.header") %></h3>
+<p>
+  <code>a, abbr, acronym, address, [align], [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code,
+    col, colgroup, dd, del, details, dfn, div, dl, dt, em, figcaption, figure, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img,
+    ins, kbd, li, [name], ol, p, pre, q, rp, rt, ruby, s, samp, small, span, [src], strike, strong, sub, summary, sup, table, tbody, td,
+    tfoot, th, thead, [title], tr, tt, u, ul, var, [width]
+  </code>
+</p>
+
+<h3><%= t(".formatting.header") %></h3>
+
+<p><%= t(".formatting.description") %></p>
+
+<ul>
+  <li><%= t(".formatting.a_blank_line") %></li>
+  <li><%= t(".formatting.single_carriage_return") %></li>
+  <li><%= t(".formatting.two_break_tags") %></li>
+  <li><%= t(".formatting.two_blank_lines") %></li>
+  <li><%= t(".formatting.misnested_tags.description_html", text_bold_italic: tag.em(tag.strong(t(".formatting.misnested_tags.text"))), corrected_text_bold_italic: tag.em(tag.strong(t(".formatting.misnested_tags.corrected_text")))) %></li>
+  <li><%= t(".formatting.forgotten_open_tags") %></li>
+  <li><%= t(".formatting.tags_spanning_paragraphs") %></li>
+  <li><%= t(".formatting.unwilling_to_break") %></li>
+  <li><%= t(".formatting.unwanted_larger_text") %></li>
+</ul>
+
+<p class="note"><%= t(".formatting.after_first_put_note") %></p>
+
+<p class="note"><%= t(".formatting.good_html_note_html", negation_italic: tag.em(t(".formatting.negation"))) %></p>
+
+<p class="note"><%= t(".formatting.not_satisfied_note") %><p>
+
+<p><%= t(".formatting.recommendations.lead_in") %></p>
+
+<dl id="help">
+  <dt><%= t(".formatting.recommendations.headings_html", heading_tags_code: tag.code("h1, h2, h3, h4, h5, h6")) %></dt>
+  <dd id="headings">
+    <ul>
+      <li><h1><%= t(".formatting.example.title") %></h1></li>
+      <li><h2><%= t(".formatting.example.subtitle_h2") %></h2></li>
+      <li><h3><%= t(".formatting.example.chapter_title") %></h3></li>
+      <li><h4><%= t(".formatting.example.scene_title") %></h4></li>
+      <li><h5><%= t(".formatting.example.subtitle_h5") %></h5></li>
+      <li><h6><%= t(".formatting.example.footnote_title") %></h6></li>
+    </ul>
+  </dd>
+  <dt><%= t(".formatting.recommendations.emphasis_html", emphasis_tags_code: tag.code("em, strong")) %></dt>
+  <dd id="emphasis">
+    <ul>
+      <li><p><%= t(".formatting.example.em.description_html", rodney_italic: tag.em(t(".formatting.example.em.rodney"))) %></p></li>
+      <li><p><%= t(".formatting.example.strong.description_html", never_bold: tag.strong(t(".formatting.example.strong.never"))) %></p></li>
+    </ul>
+  </dd>
+  <dt><%= t(".formatting.recommendations.quote_html", quote_tags_code: tag.code("blockquote, q, cite")) %></dt>
+  <dd id="quotes">
+    <ul>
+      <li><%= t(".formatting.example.blockquote.description_html", text_blockquote: tag.blockquote(tag.p(t(".formatting.example.blockquote.text")))) %></li>
+      <li><p><%= t(".formatting.example.inline_quote.description_html", phrase_inline_quote: tag.q(t(".formatting.example.inline_quote.phrase"))) %></p></li>
+      <li><p><%= t(".formatting.example.cite.description_html", phrase_or_title_cite: tag.cite(t(".formatting.example.cite.phrase_or_title"))) %></p></li>
+    </ul>
+  </dd>
+</dl>
