@@ -138,7 +138,7 @@
               <dt><%= ts("Current parent works") %></dt>
               <% existing_parents.each do |related_work| %>
                 <dd>
-                  <ul class="actions" role="navigation">
+                  <ul class="actions">
                     <li>
                       <% if related_work.parent %>
                         <%= link_to related_work.parent.title, related_work.parent %>
