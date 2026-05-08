@@ -20,11 +20,14 @@ describe ImportedUrl do
 
   it "handles longer urls where the encoded column will be much larger gracefully" do
     # default string column max is 255 so we create an url with exactly 255 chars
-    # and encoding that will extend the url to over 500 chars
-    longUrl = "http://www.faikes.org/" + "#() {}" * 38 + ".html"
-    formatter = UrlFormatter.new(longUrl)
+    # and encoding that will extend the
+    repeated_string = "#() {}" * 38
+    long_url = "http://www.faikes.org/#{repeated_string}.html"
+
+    formatter = UrlFormatter.new(long_url)
     url.original = formatter.original
 
-    expect {url.save}.not_to raise_error
+    expect { url.save }
+      .not_to raise_error
   end
 end

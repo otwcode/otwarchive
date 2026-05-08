@@ -16,8 +16,8 @@ namespace :work_import_urls do
 
       begin
         work.imported_url = ImportedUrl.create(original: work.imported_from_url)
-      rescue => exception
-        puts "------- Error on import for work_id #{work.id}: #{exception.inspect}"
+      rescue StandardError => e
+        puts "------- Error on import for work_id #{work.id}: #{e.inspect}"
         failed += 1
         next
       end
