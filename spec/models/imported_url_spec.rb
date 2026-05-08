@@ -18,7 +18,7 @@ describe ImportedUrl do
     expect(url.decoded).to eq("http://www.trickster.org/llwyden/misc/cracked.html")
   end
 
-  it "handles longer urls where the encoding column will be much larger gracefully" do
+  it "handles longer urls where the encoded column will be much larger gracefully" do
     # default string column max is 255 so we create an url with exactly 255 chars
     # and encoding that will extend the url to over 500 chars
     longUrl = "http://www.faikes.org/" + "#() {}" * 38 + ".html"
