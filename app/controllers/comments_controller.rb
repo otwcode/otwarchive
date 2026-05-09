@@ -436,7 +436,7 @@ class CommentsController < ApplicationController
             elsif @comment.unreviewed?
               redirect_to_all_comments(@commentable)
             else
-              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
+              redirect_to_comment(@comment, {  page: params[:page] })
             end
           end
         end
@@ -733,6 +733,10 @@ class CommentsController < ApplicationController
   def redirect_to_all_comments(commentable, options = {})
     default_options = {anchor: "comments"}
     options = default_options.merge(options)
+    # If the user is coming from the chapter view (i.e. referrer is /chapters/:id)
+    # then stay in chapter view. Otherwise, go to user preference
+    is_coming_from_chapter_view = request.referer&.match(/chapter/).present?
+    view_full_work = !is_coming_from_chapter_view || current_user.try(:preference).try(:view_full_work)
 
     if commentable.is_a?(Tag)
       redirect_to comments_path(tag_id: commentable.to_param,
@@ -741,16 +745,16 @@ class CommentsController < ApplicationController
                   page: options[:page],
                   anchor: options[:anchor])
     else
-      if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
+      if commentable.is_a?(Chapter) && view_full_work
         commentable = commentable.work
       end
       redirect_to polymorphic_path(commentable,
                                    options.slice(:show_comments,
                                                  :add_comment_reply_id,
                                                  :delete_comment_id,
-                                                 :view_full_work,
                                                  :anchor,
-                                                 :page))
+                                                 :page)
+                                          .merge({view_full_work:}))
     end
   end
 
