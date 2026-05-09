@@ -203,6 +203,8 @@ en:
     timeout_error:
       browser_title: Timeout Error
   external_works:
+    new:
+      page_title: Bookmark External Work
     update:
       successfully_updated: External work was successfully updated.
   fandoms:
