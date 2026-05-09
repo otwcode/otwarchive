@@ -1,5 +1,4 @@
 class GiftExchangeMailer < ApplicationMailer
-
   def assignment_default_notification(collection_id, assignment_id, email)
     @assignment = ChallengeAssignment.find(assignment_id)
 
