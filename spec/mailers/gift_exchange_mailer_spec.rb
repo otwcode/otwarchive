@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe GiftExchangeMailer do
   describe "#assignment_default_notification" do
-    subject(:email) { UserMailer.assignment_default_notification(collection.id, challenge_assignment.id, "test@example.com") }
+    subject(:email) { GiftExchangeMailer.assignment_default_notification(collection.id, challenge_assignment.id, "test@example.com") }
 
     let(:collection) { create(:collection) }
     let(:challenge_assignment) { create(:challenge_assignment) }
@@ -36,7 +36,7 @@ describe GiftExchangeMailer do
   end
 
   describe "#assignment_default_notification sent to collection_email" do
-    subject(:email) { UserMailer.assignment_default_notification(collection.id, challenge_assignment.id, collection.collection_email) }
+    subject(:email) { GiftExchangeMailer.assignment_default_notification(collection.id, challenge_assignment.id, collection.collection_email) }
 
     let(:collection) { create(:collection) }
     let(:challenge_assignment) { create(:challenge_assignment) }
@@ -57,7 +57,7 @@ describe GiftExchangeMailer do
   end
 
   describe "#assignments_sent_notification" do
-    subject(:email) { UserMailer.assignments_sent_notification(collection.id, "test@example.com") }
+    subject(:email) { GiftExchangeMailer.assignments_sent_notification(collection.id, "test@example.com") }
 
     let(:collection) { create(:collection) }
 
@@ -88,7 +88,7 @@ describe GiftExchangeMailer do
   end
 
   describe "#assignments_sent_notification sent to collection_email" do
-    subject(:email) { UserMailer.assignments_sent_notification(collection.id, collection.collection_email) }
+    subject(:email) { GiftExchangeMailer.assignments_sent_notification(collection.id, collection.collection_email) }
 
     let(:collection) { create(:collection) }
     let(:signup) { create(:challenge_signup) }
@@ -109,7 +109,7 @@ describe GiftExchangeMailer do
   end
 
   describe "#invalid_signup_notification" do
-    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], "test@example.com") }
+    subject(:email) { GiftExchangeMailer.invalid_signup_notification(collection.id, [signup.id], "test@example.com") }
 
     let(:collection) { create(:collection) }
     let(:signup) { create(:challenge_signup) }
@@ -141,7 +141,7 @@ describe GiftExchangeMailer do
   end
 
   describe "#invalid_signup_notification sent to collection_email" do
-    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], collection.collection_email) }
+    subject(:email) { GiftExchangeMailer.invalid_signup_notification(collection.id, [signup.id], collection.collection_email) }
 
     let(:collection) { create(:collection) }
     let(:signup) { create(:challenge_signup) }
@@ -215,7 +215,7 @@ describe GiftExchangeMailer do
   end
 
   describe "#potential_match_generation_notification" do
-    subject(:email) { UserMailer.potential_match_generation_notification(collection.id, "test@example.com") }
+    subject(:email) { GiftExchangeMailer.potential_match_generation_notification(collection.id, "test@example.com") }
 
     let(:collection) { create(:collection) }
 
@@ -248,7 +248,7 @@ describe GiftExchangeMailer do
   end
 
   describe "#potential_match_generation_notification sent to collection_email" do
-    subject(:email) { UserMailer.potential_match_generation_notification(collection.id, collection.collection_email) }
+    subject(:email) { GiftExchangeMailer.potential_match_generation_notification(collection.id, collection.collection_email) }
 
     let(:collection) { create(:collection) }
 
