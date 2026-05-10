@@ -89,7 +89,7 @@ describe Admin::BannersController do
         .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target).to eq(assigns(:admin_banner))
-      expect(AdminActivity.last.action).to eq("create_admin_banner")
+      expect(AdminActivity.last.action).to eq("create admin banner")
       expect(AdminActivity.last.admin).to eq(admin)
       expect(AdminActivity.last.summary).to include(admin_banner_params[:content])
     end
@@ -123,7 +123,7 @@ describe Admin::BannersController do
         .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target).to eq(assigns(:admin_banner))
-      expect(AdminActivity.last.action).to eq("update_admin_banner")
+      expect(AdminActivity.last.action).to eq("update admin banner")
       expect(AdminActivity.last.admin).to eq(admin)
       expect(AdminActivity.last.summary).to include(admin_banner_params[:content])
     end
@@ -165,7 +165,7 @@ describe Admin::BannersController do
         .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target).to eq(nil)
-      expect(AdminActivity.last.action).to eq("destroy_admin_banner")
+      expect(AdminActivity.last.action).to eq("destroy admin banner")
       expect(AdminActivity.last.admin).to eq(admin)
       expect(AdminActivity.last.summary).to include(admin_banner.content)
     end

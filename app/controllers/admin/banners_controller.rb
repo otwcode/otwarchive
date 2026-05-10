@@ -33,12 +33,11 @@ class Admin::BannersController < Admin::BaseController
       else
         flash[:notice] = t(".success")
       end
+      AdminActivity.log_action(current_admin, @admin_banner, action: "create admin banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
       redirect_to @admin_banner
     else
       render action: 'new'
     end
-
-    AdminActivity.log_action(current_admin, @admin_banner, action: "create_admin_banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
   end
 
   # PUT /admin/banners/1
@@ -49,6 +48,7 @@ class Admin::BannersController < Admin::BaseController
       render action: 'edit'
     elsif params[:admin_banner_minor_edit]
       flash[:notice] = t(".minor_edit")
+      AdminActivity.log_action(current_admin, @admin_banner, action: "update admin banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
       redirect_to @admin_banner
     else
       if @admin_banner.active?
@@ -57,10 +57,9 @@ class Admin::BannersController < Admin::BaseController
       else
         flash[:notice] = t(".success")
       end
+      AdminActivity.log_action(current_admin, @admin_banner, action: "update admin banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
       redirect_to @admin_banner
     end
-
-    AdminActivity.log_action(current_admin, @admin_banner, action: "update_admin_banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
   end
 
   # GET /admin/banners/1/confirm_delete
@@ -81,10 +80,9 @@ class Admin::BannersController < Admin::BaseController
     else
       @admin_banner.destroy
       flash[:notice] = t(".success")
+      AdminActivity.log_action(current_admin, @admin_banner, action: "destroy admin banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}")
       redirect_to admin_banners_path
     end
-
-    AdminActivity.log_action(current_admin, @admin_banner, action: "destroy_admin_banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}")
   end
 
   private
