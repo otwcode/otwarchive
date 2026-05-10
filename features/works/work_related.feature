@@ -814,3 +814,15 @@ Scenario: A note appears on deleted inspirations and translations
   Then I should see "Inspired by a deleted work"
   When I view the work "Worldbuilding Translated"
   Then I should see "A translation of a deleted work"
+
+Scenario: Downloaded works with a deleted inspiration display the correct note when downloaded
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  Then I should be able to download all versions of "Followup"
+  When I view the work "Followup" 
+    And I follow "HTML"
+  Then I should see "Inspired by a deleted work"
