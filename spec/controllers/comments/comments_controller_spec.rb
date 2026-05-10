@@ -388,7 +388,8 @@ describe CommentsController do
         delete :destroy, params: { id: comment.id }
         expect(flash[:comment_notice]).to eq "Comment deleted."
         it_redirects_to_simple(work_path(work, show_comments: true, anchor: :comments))
-        expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect { comment.reload }
+          .to raise_exception(ActiveRecord::RecordNotFound)
       end
 
       it "GET #add_comment_reply redirects to the work with an error" do
@@ -472,7 +473,8 @@ describe CommentsController do
             delete :destroy, params: { id: comment.id }
             expect(flash[:comment_notice]).to eq "Comment deleted."
             it_redirects_to_simple(work_path(work, show_comments: true, anchor: :comments))
-            expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+            expect { comment.reload }
+              .to raise_exception(ActiveRecord::RecordNotFound)
           end
         end
       end

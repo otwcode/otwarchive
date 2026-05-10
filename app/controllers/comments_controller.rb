@@ -93,8 +93,10 @@ class CommentsController < ApplicationController
 
   def check_pseud_ownership
     return unless params[:comment][:pseud_id]
+
     pseud = Pseud.find(params[:comment][:pseud_id])
     return if pseud && current_user && current_user.pseuds.include?(pseud)
+
     flash[:error] = ts("You can't comment with that pseud.")
     redirect_to root_path
   end
@@ -218,14 +220,17 @@ class CommentsController < ApplicationController
   def check_permission_to_review
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent)
+
     flash[:error] = ts("Sorry, you don't have permission to see those unreviewed comments.")
     redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
 
   def check_permission_to_access_single_unreviewed
     return unless @comment.unreviewed?
+
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
+
     flash[:error] = ts("Sorry, that comment is currently in moderation.")
     redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
@@ -337,7 +342,7 @@ class CommentsController < ApplicationController
   def index
     return raise_not_found if @commentable.blank?
 
-    return unless @commentable.class == Comment
+    return unless @commentable.instance_of?(Comment)
 
     # we link to the parent object at the top
     @commentable = @commentable.ultimate_parent
@@ -436,7 +441,7 @@ class CommentsController < ApplicationController
             elsif @comment.unreviewed?
               redirect_to_all_comments(@commentable)
             else
-              redirect_to_comment(@comment, { page: params[:page] })
+              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] && params[:view_full_work] == "true"), page: params[:page] })
             end
           end
         end
@@ -452,10 +457,11 @@ class CommentsController < ApplicationController
   def update
     updated_comment_params = comment_params.merge(edited_at: Time.current)
     if @comment.update(updated_comment_params)
-      flash[:comment_notice] = ts('Comment was successfully updated.')
+      flash[:comment_notice] = ts("Comment was successfully updated.")
       respond_to do |format|
         format.html do
           redirect_to comment_path(@comment) and return if @comment.unreviewed?
+
           redirect_to_comment(@comment)
         end
         format.js # updating the comment in place
@@ -487,7 +493,7 @@ class CommentsController < ApplicationController
       redirect_to_comment(parent_comment)
     else
       flash[:comment_notice] = ts("Comment deleted.")
-      redirect_to_all_comments(parent, {show_comments: true})
+      redirect_to_all_comments(parent, { show_comments: true })
     end
   end
 
@@ -612,9 +618,10 @@ class CommentsController < ApplicationController
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
         # so we're being extra-nice and preserving any intention to comment along with the show comments option
-        options = {show_comments: true}
+        options = { show_comments: true }
         options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
         options[:page] = params[:page]
+        options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
         redirect_to_all_comments(@commentable, options)
       end
 
@@ -639,10 +646,11 @@ class CommentsController < ApplicationController
     @comment = Comment.new
     respond_to do |format|
       format.html do
-        options = {show_comments: true}
+        options = { show_comments: true }
         options[:controller] = @commentable.class.to_s.underscore.pluralize
         options[:anchor] = "comment_#{params[:id]}"
         options[:page] = params[:page]
+        options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
         if @thread_view
           options[:id] = @thread_root
           options[:add_comment_reply_id] = params[:id]
@@ -744,7 +752,13 @@ class CommentsController < ApplicationController
       view_full_work = if is_coming_from_chapter_view
                          false
                        elsif is_not_coming_from_work_view
-                         current_user.try(:preference).try(:view_full_works).present?
+                         if params[:view_full_work] == "true"
+                           true
+                         elsif params[:view_full_work] == "false"
+                           false
+                         else
+                           current_user.try(:preference).try(:view_full_works).present?
+                         end
                        else
                          true
                        end
@@ -753,12 +767,9 @@ class CommentsController < ApplicationController
                                    options.slice(:show_comments,
                                                  :add_comment_reply_id,
                                                  :delete_comment_id,
+                                                 :view_full_work,
                                                  :anchor,
-                                                 :page)
-                                          # we don't actually use params[:view_full_work] within
-                                          # the comments controller anymore.
-                                          # still pass to the redirect since it is referred to elsewhere
-                                          .merge({ view_full_work: params[:view_full_work] }))
+                                                 :page))
     end
   end
 
