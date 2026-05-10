@@ -11,6 +11,29 @@ Scenario: Posting a remix / related work emails the creator of the original work
   Then a parent related work should be seen
     And the original author should be emailed
 
+Scenario: Posting a remix in a variatey of ways should always send related work emails the creator of the original work and list the parent work in the proper location on the remix / related work
+
+  Given I have related works setup
+    And all emails have been delivered
+  When I post a related work as remixer without previewing it
+  Then a parent related work should be seen
+    And the original author should be emailed
+
+  Given all emails have been delivered
+  When I post a related work as remixer after saving it as a draft
+  Then a parent related work should be seen
+    And the original author should be emailed
+
+  Given all emails have been delivered
+  When I post a related work as remixer after saving it as a draft and then editing it
+  Then a parent related work should be seen
+    And the original author should be emailed
+    
+  Given all emails have been delivered
+  When I post a related work as remixer after previewing it and then editing it
+  Then a parent related work should be seen
+    And the original author should be emailed
+
 Scenario: Remixer can see their remix / related work on their related works page
 
   Given I have related works setup
