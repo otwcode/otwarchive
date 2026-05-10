@@ -733,10 +733,6 @@ class CommentsController < ApplicationController
   def redirect_to_all_comments(commentable, options = {})
     default_options = {anchor: "comments"}
     options = default_options.merge(options)
-    # If the user is coming from the chapter view (i.e. referrer is /chapters/:id)
-    # then stay in chapter view. Otherwise, go to user preference
-    is_coming_from_chapter_view = request.referer&.match(/chapter/).present?
-    view_full_work = !is_coming_from_chapter_view || current_user.try(:preference).try(:view_full_work)
 
     if commentable.is_a?(Tag)
       redirect_to comments_path(tag_id: commentable.to_param,
@@ -745,6 +741,15 @@ class CommentsController < ApplicationController
                   page: options[:page],
                   anchor: options[:anchor])
     else
+      is_coming_from_chapter_view = request.referer&.match(/chapters/).present?
+      is_not_coming_from_work_view = request.referer&.match(/works/).nil?
+      view_full_work = if is_coming_from_chapter_view
+                         false
+                       elsif is_not_coming_from_work_view
+                         current_user.try(:preference).try(:view_full_works).present?
+                       else
+                         true
+                       end
       if commentable.is_a?(Chapter) && view_full_work
         commentable = commentable.work
       end
@@ -754,7 +759,10 @@ class CommentsController < ApplicationController
                                                  :delete_comment_id,
                                                  :anchor,
                                                  :page)
-                                          .merge({view_full_work:}))
+                                   # we don't actually use params[:view_full_work] within
+                                   # the comments controller anymore.
+                                   # still pass to the redirect since it is referred to elsewhere
+                                          .merge({view_full_work: params[:view_full_work]}))
     end
   end
 
