@@ -99,7 +99,7 @@ describe CommentsController do
       it "redirects to the comment on the work view without an error" do
         get :cancel_comment_delete, params: { id: comment.id }
         expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(work_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+        expect(response).to redirect_to(work_path(comment.commentable.work, show_comments: true, anchor: "comment_#{comment.id}"))
       end
     end
 
@@ -118,7 +118,7 @@ describe CommentsController do
         it "redirects to the comment on the work view without an error" do
           get :cancel_comment_delete, params: { id: comment.id }
           expect(flash[:error]).to be_nil
-          expect(response).to redirect_to(work_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+          expect(response).to redirect_to(work_path(comment.commentable.work, show_comments: true, anchor: "comment_#{comment.id}"))
         end
       end
 
@@ -157,7 +157,7 @@ describe CommentsController do
           it "redirects to the comment on the full work view without error" do
             get :cancel_comment_edit, params: { id: comment.id }
             expect(flash[:error]).to be_nil
-            expect(response).to redirect_to(work_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+            expect(response).to redirect_to(work_path(comment.commentable.work, show_comments: true, anchor: "comment_#{comment.id}"))
           end
         end
 
@@ -174,7 +174,7 @@ describe CommentsController do
             it "redirects to the comment on the full work view without error" do
               get :cancel_comment_edit, params: { id: comment.id }
               expect(flash[:error]).to be_nil
-              expect(response).to redirect_to(work_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+              expect(response).to redirect_to(work_path(comment.commentable.work, show_comments: true, anchor: "comment_#{comment.id}"))
             end
           end
 
