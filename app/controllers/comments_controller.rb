@@ -614,7 +614,6 @@ class CommentsController < ApplicationController
         # so we're being extra-nice and preserving any intention to comment along with the show comments option
         options = {show_comments: true}
         options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
-        options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
         options[:page] = params[:page]
         redirect_to_all_comments(@commentable, options)
       end
@@ -644,7 +643,6 @@ class CommentsController < ApplicationController
         options[:controller] = @commentable.class.to_s.underscore.pluralize
         options[:anchor] = "comment_#{params[:id]}"
         options[:page] = params[:page]
-        options[:view_full_work] = params[:view_full_work]
         if @thread_view
           options[:id] = @thread_root
           options[:add_comment_reply_id] = params[:id]
