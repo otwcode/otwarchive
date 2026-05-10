@@ -457,7 +457,7 @@ class CommentsController < ApplicationController
   def update
     updated_comment_params = comment_params.merge(edited_at: Time.current)
     if @comment.update(updated_comment_params)
-      flash[:comment_notice] = ts("Comment was successfully updated.")
+      flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
         format.html do
           redirect_to comment_path(@comment) and return if @comment.unreviewed?
