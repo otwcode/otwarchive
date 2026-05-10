@@ -436,7 +436,7 @@ class CommentsController < ApplicationController
             elsif @comment.unreviewed?
               redirect_to_all_comments(@commentable)
             else
-              redirect_to_comment(@comment, {  page: params[:page] })
+              redirect_to_comment(@comment, { page: params[:page] })
             end
           end
         end
@@ -704,40 +704,40 @@ class CommentsController < ApplicationController
   # if necessary to display it
   def redirect_to_comment(comment, options = {})
     if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
-      if comment.ultimate_parent.is_a?(Tag)
-        default_options = {
-           controller: :comments,
-           action: :show,
-           id: comment.commentable.id,
-           tag_id: comment.ultimate_parent.to_param,
-           anchor: "comment_#{comment.id}"
-        }
-      else
-        default_options = {
-           controller: comment.commentable.class.to_s.underscore.pluralize,
-           action: :show,
-           id: (comment.commentable.is_a?(Tag) ? comment.commentable.to_param : comment.commentable.id),
-           anchor: "comment_#{comment.id}"
-        }
-      end
+      default_options = if comment.ultimate_parent.is_a?(Tag)
+                          {
+                            controller: :comments,
+                            action: :show,
+                            id: comment.commentable.id,
+                            tag_id: comment.ultimate_parent.to_param,
+                            anchor: "comment_#{comment.id}"
+                          }
+                        else
+                          {
+                            controller: comment.commentable.class.to_s.underscore.pluralize,
+                            action: :show,
+                            id: (comment.commentable.is_a?(Tag) ? comment.commentable.to_param : comment.commentable.id),
+                            anchor: "comment_#{comment.id}"
+                          }
+                        end
       # display the comment's direct parent (and its associated thread)
       redirect_to(url_for(default_options.merge(options)))
     else
       # need to redirect to the specific chapter; redirect_to_all will then retrieve full work view if applicable
-      redirect_to_all_comments(comment.parent, options.merge({show_comments: true, anchor: "comment_#{comment.id}"}))
+      redirect_to_all_comments(comment.parent, options.merge({ show_comments: true, anchor: "comment_#{comment.id}" }))
     end
   end
 
   def redirect_to_all_comments(commentable, options = {})
-    default_options = {anchor: "comments"}
+    default_options = { anchor: "comments" }
     options = default_options.merge(options)
 
     if commentable.is_a?(Tag)
       redirect_to comments_path(tag_id: commentable.to_param,
-                  add_comment_reply_id: options[:add_comment_reply_id],
-                  delete_comment_id: options[:delete_comment_id],
-                  page: options[:page],
-                  anchor: options[:anchor])
+                                add_comment_reply_id: options[:add_comment_reply_id],
+                                delete_comment_id: options[:delete_comment_id],
+                                page: options[:page],
+                                anchor: options[:anchor])
     else
       is_coming_from_chapter_view = request.referer&.match(/chapters/).present?
       is_not_coming_from_work_view = request.referer&.match(/works/).nil?
@@ -748,19 +748,17 @@ class CommentsController < ApplicationController
                        else
                          true
                        end
-      if commentable.is_a?(Chapter) && view_full_work
-        commentable = commentable.work
-      end
+      commentable = commentable.work if commentable.is_a?(Chapter) && view_full_work
       redirect_to polymorphic_path(commentable,
                                    options.slice(:show_comments,
                                                  :add_comment_reply_id,
                                                  :delete_comment_id,
                                                  :anchor,
                                                  :page)
-                                   # we don't actually use params[:view_full_work] within
-                                   # the comments controller anymore.
-                                   # still pass to the redirect since it is referred to elsewhere
-                                          .merge({view_full_work: params[:view_full_work]}))
+                                          # we don't actually use params[:view_full_work] within
+                                          # the comments controller anymore.
+                                          # still pass to the redirect since it is referred to elsewhere
+                                          .merge({ view_full_work: params[:view_full_work] }))
     end
   end
 
