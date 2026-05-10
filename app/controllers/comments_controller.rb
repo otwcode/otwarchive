@@ -752,9 +752,10 @@ class CommentsController < ApplicationController
       view_full_work = if is_coming_from_chapter_view
                          false
                        elsif is_not_coming_from_work_view
-                         if params[:view_full_work] == "true"
+                         case params[:view_full_work]
+                         when "true"
                            true
-                         elsif params[:view_full_work] == "false"
+                         when "false"
                            false
                          else
                            current_user.try(:preference).try(:view_full_works).present?
