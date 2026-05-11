@@ -52,6 +52,21 @@ Feature: Edit tags on a work
     And I should see "Anthropomorphic"
     And I should see "The cooler version of tag"
 
+  Scenario: See correct word count when posting draft from Edit Tags
+  Given I am logged in as "imit" with password "tagyoure"
+    And the draft "Freeze Tag"
+  When I am on imit's works page
+  Then I should see "Drafts (1)"
+  When I follow "Drafts (1)"
+  Then I should see "Freeze Tag"
+    And I should see "Edit Tags" within "#main .own.work.blurb .actions"
+  When I follow "Edit Tags"
+  Then I should see "Post"
+  When I press "Post"
+  Then I should see "Work was successfully updated."
+    And I should not see "This work is a draft and has not been posted"
+    And I should see "Words:6"
+
   Scenario: Ampersands and angle brackets should display in work titles on Edit Tags page
   Given the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies" by "testuser2"
     And I am logged in as "testuser2"
