@@ -46,14 +46,12 @@ class Admin::BannersController < Admin::BaseController
 
     if !@admin_banner.update(admin_banner_params)
       render action: 'edit'
-    elsif params[:admin_banner_minor_edit]
-      flash[:notice] = t(".minor_edit")
-      AdminActivity.log_action(current_admin, @admin_banner, action: "update admin banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
-      redirect_to @admin_banner
     else
-      if @admin_banner.active?
-        AdminBanner.banner_on
-        flash[:notice] = t(".banner_on")
+      if params[:admin_banner_minor_edit]
+        flash[:notice] = t(".minor_edit")
+      elsif @admin_banner.active?
+          AdminBanner.banner_on
+          flash[:notice] = t(".banner_on")
       else
         flash[:notice] = t(".success")
       end
