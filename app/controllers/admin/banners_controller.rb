@@ -56,7 +56,7 @@ class Admin::BannersController < Admin::BaseController
       AdminActivity.log_action(current_admin, @admin_banner, action: "update admin banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
       redirect_to @admin_banner
     else
-      render action: 'edit'
+      render action: "edit"
     end
   end
 
