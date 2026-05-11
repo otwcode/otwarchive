@@ -13,7 +13,7 @@ module CssCleaner
   PAREN_NUMBER_REGEX = Regexp.new('\(\s*' + NUMBER_WITH_UNIT_REGEX.to_s + '+\s*\)')
   PREFIX_REGEX = Regexp.new('moz|ms|o|webkit')
 
-  GLOBAL_VALUE_REGEX = Regexp.new('inherit|initial|revert|revert-layer|unset', Regexp::IGNORECASE)
+  GLOBAL_VALUE_REGEX = Regexp.new("inherit|initial|revert|revert-layer|unset", Regexp::IGNORECASE)
 
   FUNCTION_NAME_REGEX = Regexp.new('scalex?y?|translatex?y?|skewx?y?|rotatex?y?|matrix', Regexp::IGNORECASE)
   TRANSFORM_FUNCTION_REGEX = Regexp.new("#{FUNCTION_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
