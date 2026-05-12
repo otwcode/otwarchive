@@ -622,4 +622,201 @@ describe SkinsController do
       end
     end
   end
+
+  describe "GET #preview" do
+    let(:skin_creator) { create(:user) }
+    let(:other_user) { create(:user) }
+    subject { get :preview, params: { id: skin.id } }
+
+    shared_examples "a skin admins cannot preview" do
+      before do
+        fake_login_admin(admin)
+      end
+
+      context "when logged in as an admin with no role" do
+        let(:admin) { create(:admin, roles: []) }
+
+        it "redirects with an error" do
+          subject
+          # This actually redirects to the root path
+          it_redirects_to_user_login_with_error
+        end
+      end
+
+      Admin::VALID_ROLES.each do |role|
+        context "when logged in as an admin with role #{role}" do
+          let(:admin) { create(:admin, roles: [role]) }
+
+          it "redirects with an error" do
+            subject
+            # This actually redirects to the root path
+            it_redirects_to_user_login_with_error
+          end
+        end
+      end
+    end
+  
+    shared_examples "a skin guests cannot preview" do
+      context "when not logged in" do
+        it "errors and redirects to user_login" do
+          subject
+          it_redirects_to_user_login_with_error
+        end
+      end
+    end
+  
+    shared_examples "a public skin that cannot be previewed" do
+      context "when logged in as the skin creator" do
+        it "errors and redirects to user_skins_path" do
+          fake_login_known_user(skin.author)
+          subject
+
+          it_redirects_to_with_error(user_skins_path(skin.author), "Sorry, you can't preview that skin.")
+        end
+      end
+        
+      context "when logged in as a user who isn't the skin author" do
+        it "errors and redirects to user_skins_path" do
+          fake_login_known_user(other_user)
+          subject
+
+          it_redirects_to_with_error(user_skins_path(other_user), "Sorry, you can't preview that skin.")
+        end
+      end
+
+      context "when logged in as an admin" do
+        it_behaves_like "a skin admins cannot preview"
+      end
+
+      context "when not logged in" do
+        it_behaves_like "a skin guests cannot preview"
+      end
+    end
+
+    shared_examples "a non-public skin that cannot be previewed" do
+      context "when logged in as the skin creator" do
+        it "errors and redirects to user_skins_path" do
+          fake_login_known_user(skin.author)
+          subject
+
+          it_redirects_to_with_error(user_skins_path(skin.author), "Sorry, you can't preview that skin.")
+        end
+      end
+        
+      context "when logged in as a user who isn't the skin author" do
+        it "errors and redirects to user_path" do
+          fake_login_known_user(other_user)
+          subject
+
+          it_redirects_to_with_error(user_path(other_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+        end
+      end
+
+      context "when logged in as an admin" do
+        it_behaves_like "a skin admins cannot preview"
+      end
+
+      context "when not logged in" do
+        it_behaves_like "a skin guests cannot preview"
+      end
+    end
+
+    context "with workskin" do
+      context "when workskin is public" do
+        let(:skin) { create(:work_skin, :public, title: "Work Skin", author: skin_creator) }   
+
+        it_behaves_like "a public skin that cannot be previewed"
+      end
+
+      context "when workskin is not public" do
+        let(:skin) { create(:work_skin, title: "Work Skin", author: skin_creator) }   
+        
+        it_behaves_like "a non-public skin that cannot be previewed"
+      end
+    end
+
+    context "with parent only site skin" do
+      context "when site skin is public" do
+        let(:skin) { create(:skin, :public, title: "Parent Only Site Skin", unusable: true, author: skin_creator) }
+          
+        it_behaves_like "a public skin that cannot be previewed"
+      end
+
+      context "when site skin is not public" do
+        let(:skin) { create(:skin, title: "Parent Only Site Skin", unusable: true, author: skin_creator) }
+
+        it_behaves_like "a non-public skin that cannot be previewed"
+      end
+    end
+
+    context "with accessible site skin" do
+      let(:success) { it_redirects_to_simple(tag_works_path(tag, site_skin: skin.id)) }
+      let(:tag) { create(:canonical_fandom) }
+
+      before do
+        FilterCount.create!(
+          filter: tag,
+          public_works_count: 10,
+          unhidden_works_count: 10
+        )
+      end
+
+      context "when site skin is public" do
+        let(:skin) { create(:skin, :public, title: "Accessible Site Skin", author: skin_creator) }
+
+        context "when logged in as the skin creator" do
+          it "succeeds" do
+            fake_login_known_user(skin.author)
+            subject
+            success
+          end
+        end
+        
+        context "when logged in as a user who isn't the skin author" do
+          it "succeeds" do
+            fake_login
+            subject
+            success
+          end
+        end
+
+        context "when logged in as an admin" do
+          it_behaves_like "a skin admins cannot preview"
+        end
+
+        context "when not logged in" do
+          it_behaves_like "a skin guests cannot preview"
+        end
+      end
+
+      context "when site skin is not public" do
+        let(:skin) { create(:skin, title: "Accessible Site Skin", author: skin_creator) }
+        
+        context "when logged in as the skin author" do
+          it "succeeds" do
+            fake_login_known_user(skin.author)
+            subject
+            success
+          end
+        end
+
+        context "when logged in as a user who isn't the skin author" do
+          it "redirects with an error" do
+            fake_login_known_user(other_user)
+            subject
+
+            it_redirects_to_with_error(user_path(other_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+          end
+        end
+
+        context "when logged in as an admin" do
+          it_behaves_like "a skin admins cannot preview"
+        end
+
+        context "when not logged in" do
+          it_behaves_like "a skin guests cannot preview"
+        end
+      end
+    end
+  end
 end
