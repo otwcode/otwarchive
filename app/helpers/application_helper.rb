@@ -58,7 +58,7 @@ module ApplicationHelper
   end
 
   def page_has_filters?
-    @facets.present? || (controller.controller_name == "collections" && @sort_and_filter) || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms')
+    @facets.present? || (controller.controller_name == "collections" && @sort_and_filter) || (controller.action_name == "unassigned" && controller.controller_name == "fandoms")
   end
 
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
