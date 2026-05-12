@@ -63,6 +63,8 @@ class Work < ApplicationRecord
   end
   # moderation
   has_one :moderated_work, dependent: :destroy
+  # imported url
+  has_one :imported_url, dependent: :destroy
 
   ########################################################################
   # VIRTUAL ATTRIBUTES

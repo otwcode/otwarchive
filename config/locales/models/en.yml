@@ -207,6 +207,7 @@ en:
           attributes:
             base:
               format: "%{message}"
+              inaccessible_parent: You don't have permission to use %{title} as a parent skin.
               site_parent: You can't use %{title} as a parent unless replacing the default archive skin.
         subscription:
           attributes:

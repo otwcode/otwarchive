@@ -565,7 +565,7 @@ function thermometer() {
                 });
 
   banners.has('.goal').each(function(){
-    var banner_content = $j(this).find('blockquote');
+    var banner_content = $j(this).find('.userstuff');
         banner_goal_text = banner_content.find('span.goal').html();
         banner_progress_text = banner_content.find('span.progress').html();
         if ($j(this).find('span.goal').hasClass('stretch')){

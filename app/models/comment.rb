@@ -518,9 +518,9 @@ class Comment < ApplicationRecord
   end
 
   def mark_as_spam!
+    submit_spam
     update_attribute(:approved, false)
     update_attribute(:spam, true)
-    submit_spam
   end
 
   def mark_as_ham!
