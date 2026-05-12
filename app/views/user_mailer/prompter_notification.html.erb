@@ -1,4 +1,5 @@
 <% content_for :message do %>
+
   <p>
     <% if @collection %>
       <%= t(".a_response_to_your_prompt.collection.html",
@@ -13,16 +14,9 @@
     <%= creation_link_with_word_count(@work, url) %>
     <br>
     <%= creation_attribution_links(@work) %>
-    <br>
-    <% if @work.fandom_string.present? %>
-      <%= style_work_tag_metadata(@work.fandoms) %>
-    <% end %>
   </p>
 
-  <% if @work.summary.present? %>
-    <%= style_metadata_label(Work.human_attribute_name("summary")) %>
-    <%= style_quote(raw sanitize_field(@work, :summary)) %>
-  <% end %>
+  <%= render "work_info", work: @work %>
 
   <% if @collection && @collection.gift_notification.present? %>
     <p><%= @collection.gift_notification %></p>

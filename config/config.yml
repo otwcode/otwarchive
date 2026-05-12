@@ -468,6 +468,7 @@ SUPPORTED_CSS_PROPERTIES:
 - drop-initial-value
 - elevation
 - empty-cells
+- fill
 - filter
 - fit
 - fit-position
@@ -564,6 +565,8 @@ SUPPORTED_CSS_PROPERTIES:
 - speech-rate
 - stress
 - string-set
+- stroke
+- stroke-width
 - tab-side
 - table-layout
 - target
