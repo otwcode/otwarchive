@@ -150,9 +150,6 @@ module Otwarchive
 
     config.active_storage.web_image_content_types = %w[image/png image/jpeg image/gif]
 
-    # Do not enable YJIT automatically once we upgrade to Ruby 3.3
-    config.yjit = false
-
     # Use secret from archive config
     config.secret_key_base = ArchiveConfig.SESSION_SECRET
   end
