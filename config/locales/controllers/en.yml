@@ -314,6 +314,8 @@ en:
     index:
       public_site_page_title: Public Site Skins
       public_work_page_title: Public Work Skins
+    preview:
+      cannot_preview: Sorry, you can't preview that skin.
   stats:
     index:
       page_title: "%{username} - Stats"
