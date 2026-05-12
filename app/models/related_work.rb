@@ -24,35 +24,27 @@ class RelatedWork < ActiveRecord::Base
 
   def self.visible_on_user_page(user)
     if User.current_user.is_a?(Admin) || user == User.current_user
-      posted
+      posted.merge(Work.unhidden)
     else
       posted.reciprocal.merge(Work.revealed.non_anon.unhidden)
     end
   end
 
-  scope :visible, -> { unhidden unless User.current_user.is_a?(Admin) }
+  scope :visible_works, -> { unhidden }
 
   scope :of_local_works, -> { where(parent_type: Work) }
   scope :of_external_works, -> { where(parent_type: ExternalWork) }
 
   scope :of_visible_local_works, lambda {
-    if User.current_user.is_a? Admin
-      of_local_works
-    else
-      of_local_works
-        .joins("INNER JOIN works parent_works ON parent_works.id = related_works.parent_id")
-        .where("parent_works.hidden_by_admin = false")
-    end
+    of_local_works
+      .joins("INNER JOIN works parent_works ON parent_works.id = related_works.parent_id")
+      .where("parent_works.hidden_by_admin = false")
   }
 
   scope :of_visible_external_works, lambda {
-    if User.current_user.is_a? Admin
-      of_external_works
-    else
-      of_external_works
-        .joins("INNER JOIN external_works parent_works ON parent_works.id = related_works.parent_id")
-        .where("parent_works.hidden_by_admin = false")
-    end
+    of_external_works
+      .joins("INNER JOIN external_works parent_works ON parent_works.id = related_works.parent_id")
+      .where("parent_works.hidden_by_admin = false")
   }
 
   before_validation :set_parent, if: :new_record?

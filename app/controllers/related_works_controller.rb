@@ -7,14 +7,15 @@ class RelatedWorksController < ApplicationController
   def index
     @page_subtitle = t(".page_title", login: @user.login)
 
-    @translations_of_user = @user.related_works.translations.visible_on_user_page(@user).visible
-    @remixes_of_user = @user.related_works.remixes.visible_on_user_page(@user).visible
+    related_works = @user.related_works.visible_on_user_page(@user).visible_works
+    parent_work_relationships = @user.parent_work_relationships.visible_on_user_page(@user)
+    local_parent_work_relationships = parent_work_relationships.of_visible_local_works
+    external_parent_work_relationships = parent_work_relationships.of_visible_external_works
 
-    translations_by_user = @user.parent_work_relationships.translations.visible_on_user_page(@user)
-    remixes_by_user = @user.parent_work_relationships.remixes.visible_on_user_page(@user)
-
-    @translations_by_user = (translations_by_user.of_visible_local_works + translations_by_user.of_visible_external_works).sort
-    @remixes_by_user = (remixes_by_user.of_visible_local_works + remixes_by_user.of_visible_external_works).sort
+    @translations_of_user = related_works.translations
+    @remixes_of_user = related_works.remixes
+    @translations_by_user = (local_parent_work_relationships.translations + external_parent_work_relationships.translations).sort
+    @remixes_by_user = (local_parent_work_relationships.remixes + external_parent_work_relationships.remixes).sort
   end
 
   # GET /related_works/1
