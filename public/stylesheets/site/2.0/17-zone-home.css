@@ -65,10 +65,6 @@ user home, collections and challenges home, tag home, admin comms home
 
 /* (no filters) */
 
-.collections-index .index.no-filter {
-  width: 100%;
-}
-
 .dashboard.works-index h4.landmark, .dashboard.works-index ol.pagination {
 	float: right;
 	width: 100%;

@@ -71,7 +71,7 @@ class CollectionSearchForm
   end
 
   def default_sort_column
-    "created_at"
+    @options[:default_sort_column] ||= "created_at"
   end
 
   def default_sort_direction
