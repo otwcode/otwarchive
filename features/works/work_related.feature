@@ -349,6 +349,52 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
 
+Scenario: Restricted inspired and inspiring works should not be listed on related work pages for guests
+  Given I have related works setup
+    And a related work has been posted and approved
+  When I am logged in as "remixer"
+    And I lock the work "Followup"
+  When I am logged out
+    And I go to inspiration's related works page
+  Then I should not see "Followup"
+    And I should not see "Worldbuilding"
+  When I go to remixer's related works page
+  Then I should not see "Followup"
+    And I should not see "Worldbuilding"
+
+  When I am logged in as "remixer"
+    And I unlock the work "Followup"
+  When I am logged in as "inspiration"
+    And I lock the work "Worldbuilding"
+  When I am logged out
+    And I go to inspiration's related works page
+  Then I should not see "Followup"
+    And I should not see "Worldbuilding"
+  When I go to remixer's related works page
+  Then I should not see "Followup"
+    And I should not see "Worldbuilding"
+
+Scenario: Restricted inspired and inspiring works should not be listed on related work pages for guests
+  Given I have related works setup
+    And a translation has been posted and approved
+  When I am logged in as "translator"
+    And I lock the work "Worldbuilding Translated"
+  When I am logged out
+    And I go to inspiration's related works page
+  Then I should not see "Worldbuilding"
+  When I go to translator's related works page
+  Then I should not see "Worldbuilding"
+
+  When I am logged in as "translator"
+    And I unlock the work "Worldbuilding Translated"
+  When I am logged in as "inspiration"
+    And I lock the work "Worldbuilding"
+  When I am logged out
+    And I go to inspiration's related works page
+  Then I should not see "Worldbuilding"
+  When I go to translator's related works page
+  Then I should not see "Worldbuilding"
+
 Scenario: Anonymous works listed as inspiration should have links to the authors,
   but only for the authors themselves and admins
   Given I have related works setup

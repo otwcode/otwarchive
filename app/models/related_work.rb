@@ -19,8 +19,10 @@ class RelatedWork < ActiveRecord::Base
   def self.visible_on_user_page(user)
     if User.current_user.is_a?(Admin) || user == User.current_user
       posted.merge(Work.unhidden)
-    else
+    elsif User.current_user.is_a?(User)
       posted.reciprocal.merge(Work.revealed.non_anon.unhidden)
+    else
+      posted.reciprocal.merge(Work.revealed.non_anon.unhidden.unrestricted)
     end
   end
 
@@ -29,19 +31,38 @@ class RelatedWork < ActiveRecord::Base
       .where("child_works.hidden_by_admin = false")
   }
 
-  scope :visible_works, -> { unhidden }
+  scope :unrestricted, lambda {
+    joins("INNER JOIN works child_works ON child_works.id = related_works.work_id")
+      .where("child_works.restricted = false")
+  }
 
-  # Separate scopes for local and external works to make tests work
-  # (the join in of_visible_local_works gets both local and external works
+  scope :visible_works, -> {
+    if User.current_user.present?
+      unhidden
+    else
+      unhidden.unrestricted
+    end
+  }
+
+  # Separate scopes for local and external parent works to make tests work
+  # (the join in of_unhidden_local_works gets both local and external works
   # in web environments, but only local ones in automated tests)
 
   scope :of_local_works, -> { where(parent_type: Work) }
   scope :of_external_works, -> { where(parent_type: ExternalWork) }
 
-  scope :of_visible_local_works, lambda {
+  scope :of_unhidden_local_works, lambda {
     of_local_works
       .joins("INNER JOIN works parent_works ON parent_works.id = related_works.parent_id")
       .where("parent_works.hidden_by_admin = false")
+  }
+
+  scope :of_visible_local_works, lambda {
+    if User.current_user.present?
+      of_unhidden_local_works
+    else 
+      of_unhidden_local_works.where("parent_works.restricted = false")
+    end
   }
 
   scope :of_visible_external_works, lambda {
