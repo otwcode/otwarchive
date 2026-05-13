@@ -314,8 +314,6 @@ en:
     index:
       public_site_page_title: Public Site Skins
       public_work_page_title: Public Work Skins
-    preview:
-      cannot_preview: Sorry, you can't preview that skin.
     set:
       failure: Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{skin_title} to be added!
       skin_page: "%{skin_title} skin page"
