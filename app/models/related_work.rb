@@ -9,17 +9,11 @@ class RelatedWork < ActiveRecord::Base
 
   scope :translations, -> { where(translation: true) }
   scope :remixes, -> { where(translation: false) }
+  scope :reciprocal, -> { where(reciprocal: true) }
 
   scope :posted, lambda {
     joins("INNER JOIN works child_works ON child_works.id = related_works.work_id")
       .where("child_works.posted = 1")
-  }
-
-  scope :reciprocal, -> { where(reciprocal: true) }
-
-  scope :unhidden, lambda {
-    joins("INNER JOIN works child_works ON child_works.id = related_works.work_id")
-      .where("child_works.hidden_by_admin = false")
   }
 
   def self.visible_on_user_page(user)
@@ -30,7 +24,16 @@ class RelatedWork < ActiveRecord::Base
     end
   end
 
+  scope :unhidden, lambda {
+    joins("INNER JOIN works child_works ON child_works.id = related_works.work_id")
+      .where("child_works.hidden_by_admin = false")
+  }
+
   scope :visible_works, -> { unhidden }
+
+  # Separate scopes for local and external works to make tests work
+  # (the join in of_visible_local_works gets both local and external works
+  # in web environments, but only local ones in automated tests)
 
   scope :of_local_works, -> { where(parent_type: Work) }
   scope :of_external_works, -> { where(parent_type: ExternalWork) }
