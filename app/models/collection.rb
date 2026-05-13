@@ -488,5 +488,4 @@ class Collection < ApplicationRecord
     IndexQueue.enqueue_ids(Work, work_ids.uniq, :background) if work_ids.present?
     IndexQueue.enqueue_ids(Bookmark, bookmark_ids.uniq, :background) if bookmark_ids.present?
   end
-
 end
