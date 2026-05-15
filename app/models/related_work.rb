@@ -17,12 +17,13 @@ class RelatedWork < ActiveRecord::Base
   }
 
   def self.visible_on_user_page(user)
-    if User.current_user.is_a?(Admin) || user == User.current_user
+    case User.current_user
+    when user || is_a?(Admin)
       posted.merge(Work.unhidden)
-    elsif User.current_user.is_a?(User)
-      posted.reciprocal.merge(Work.revealed.non_anon.unhidden)
+    when is_a?(User)
+      posted.reciprocal.merge(Work.unhidden.revealed.non_anon)
     else
-      posted.reciprocal.merge(Work.revealed.non_anon.unhidden.unrestricted)
+      posted.reciprocal.merge(Work.unhidden.revealed.non_anon.unrestricted)
     end
   end
 
@@ -36,7 +37,7 @@ class RelatedWork < ActiveRecord::Base
       .where("child_works.restricted = false")
   }
 
-  scope :visible_works, -> {
+  scope :visible_works, lambda {
     if User.current_user.present?
       unhidden
     else

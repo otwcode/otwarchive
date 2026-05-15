@@ -5,6 +5,6 @@ module RelatedWorksHelper
     local_parent_work_relationships = parent_work_relationships.of_visible_local_works
     external_parent_work_relationships = parent_work_relationships.of_visible_external_works
 
-    return related_works.count + local_parent_work_relationships.count + external_parent_work_relationships.count
+    related_works.count + local_parent_work_relationships.count + external_parent_work_relationships.count
   end
 end
