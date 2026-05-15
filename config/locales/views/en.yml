@@ -2240,7 +2240,8 @@ en:
         making_available_any_advertising: making available any advertising
         position_on_fanwork_legality: position on fanwork legality
         resident_embargo_country_html: to create an account if you are a resident or national of any country with which the U.S. has prohibited transactions by mandating a %{comprehensive_trade_embargo_link}, as detailed by the Office of Foreign Assets Control; or
-        software_viruses: to make available any material that contains software viruses or other computer code, files, or programs designed to interrupt, destroy, or limit the functionality of any computer, hardware, or telecommunications equipment;
+        software_viruses_html: to make available any material that contains software viruses or other computer code, files, or programs designed to %{technical_integrity_link}, as detailed by the Office of Foreign Assets Control; or
+        technical_integrity: interrupt, destroy, or limit the functionality
         you_agree_not_to: 'You agree not to use AO3 (as well as the email addresses and URLs of OTW sites):'
     tos_navigation:
       content: Content Policy

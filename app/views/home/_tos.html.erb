@@ -195,7 +195,12 @@
             making_available_any_advertising_link: link_to(t(".what_you_cant_do.making_available_any_advertising"), content_path(anchor: "II.C"))) %>
     </p>
   </li>
-  <li id="I.F.6"><p><%= t(".what_you_cant_do.software_viruses") %></p></li>
+  <li id="I.F.6">
+    <p>
+      <%= t(".what_you_cant_do.software_viruses_html",
+            technical_integrity_link: link_to(t(".what_you_cant_do.technical_integrity"), tos_faq_path(anchor: "technical_integrity"))) %>
+    </p>
+  </li>
   <li id="I.F.7">
     <p>
       <%= t(".what_you_cant_do.interfere_disrupt_ao3_html",
