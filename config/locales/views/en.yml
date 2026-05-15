@@ -937,7 +937,7 @@ en:
       comment: drop by the Archive and comment
       end_notes: End Notes
       inspired_by:
-        hidden_by_admin_html: "[Hidden Work] by %{creator_link}"
+        hidden_html: "[Hidden Work] by %{creator_link}"
         restricted_html: "[Restricted Work] by %{creator_link}"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
@@ -961,7 +961,7 @@ en:
       end_notes_with_work_notes: more notes
       end_notes_without_work_notes: notes
       inspired_by:
-        hidden_by_admin_html: Inspired by [Hidden Work] by %{creator_link}
+        hidden_html: Inspired by [Hidden Work] by %{creator_link}
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
@@ -977,12 +977,12 @@ en:
       summary: Summary
       tag_type: "%{tag_type}:"
       translated_to:
-        hidden_by_admin_html: 'Translation into %{language} available: [Hidden Work] by %{creator_link}'
+        hidden_html: 'Translation into %{language} available: [Hidden Work] by %{creator_link}'
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
         unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
       translation_of:
-        hidden_by_admin_html: A translation of [Hidden Work] by %{creator_link}
+        hidden_html: A translation of [Hidden Work] by %{creator_link}
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
@@ -3331,7 +3331,7 @@ en:
       works_translation_link_help_title: Translation link
     work_approved_children:
       inspired_by:
-        hidden_by_admin_html: "[Hidden Work] by %{creator_link}"
+        hidden_html: "[Hidden Work] by %{creator_link}"
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
@@ -3353,7 +3353,7 @@ en:
         heading: Download
     work_header_notes:
       inspired_by:
-        hidden_by_admin_html: Inspired by [Hidden Work] by %{creator_link}
+        hidden_html: Inspired by [Hidden Work] by %{creator_link}
         other_works_inspired_by_this_one: other works inspired by this one
         restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: Inspired by %{work_link} by %{creator_link}
@@ -3365,12 +3365,12 @@ en:
         notes: notes
         related_works_html: "(See the end of the work for %{related_works_link}.)"
       translated_to:
-        hidden_by_admin_html: 'Translation into %{language} available: [Hidden Work] by %{creator_link}'
+        hidden_html: 'Translation into %{language} available: [Hidden Work] by %{creator_link}'
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link} (Log in to access.)'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
         unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
       translation_of:
-        hidden_by_admin_html: A translation of [Hidden Work] by %{creator_link}
+        hidden_html: A translation of [Hidden Work] by %{creator_link}
         restricted_html: A translation of [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
