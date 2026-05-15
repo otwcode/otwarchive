@@ -436,6 +436,41 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "[Restricted Work] by translator"
 
+  Scenario: Hidden inspired and inspiring works' titles should be hidden in downloads
+    Given I have related works setup
+      And a related work has been posted and approved
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the work "Followup"
+    When I am logged out
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should see "[Hidden Work] by remixer"
+    When I am logged in as a "policy_and_abuse" admin
+      And I unhide the work "Followup"
+      And I hide the work "Worldbuilding"
+    When I am logged out
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should see "[Hidden Work] by inspiration"
+
+  Scenario: Hidden translations and translated works' titles should be hidden in downloads
+    Given I have related works setup
+      And a translation has been posted and approved
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the work "Worldbuilding Translated"
+    When I am logged out
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should see "[Hidden Work] by translator"
+    When I am logged in as a "policy_and_abuse" admin
+      And I unhide the work "Worldbuilding Translated"
+      And I hide the work "Worldbuilding"
+    When I am logged out
+      And I view the work "Worldbuilding Translated"
+      And I follow "HTML"
+    Then I should see "[Hidden Work] by inspiration"
+
+
   Scenario: Download multi-chapter work with mixed chapter titles (one without, one with)
   
   Given I am logged in as "myname"
