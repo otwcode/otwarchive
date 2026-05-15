@@ -18,7 +18,7 @@
           <% if chapter.posted? %>
             <%= link_to h(chapter.position), edit_work_chapter_path(@work, chapter) %>
           <% else %>
-            <%= link_to h(chapter.position) + t(".draft_label"), edit_work_chapter_path(@work, chapter) %>
+            <%= link_to t(".draft_chapter_position", position: chapter.position), edit_work_chapter_path(@work, chapter) %>
           <% end %>
         <% end %></li>
       <li><%= link_to t(".manage_chapters"), manage_work_chapters_path(@work) %></li>

@@ -3229,6 +3229,7 @@ en:
         sign_ups: Sign-ups (%{signup_number})
   works:
     admin_edit_form:
+      associations_title: Associations
       required_information: Required information
     adult:
       caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.
@@ -3253,7 +3254,7 @@ en:
       add_chapter: Add Chapter
       delete_confirm: Are you sure you want to delete this work? This will destroy all comments and kudos on this work as well and CANNOT BE UNDONE!
       delete_work: Delete Work
-      draft_label: " (Draft)"
+      draft_chapter_position: "%{position} (Draft)"
       edit_chapter: 'Edit Chapter:'
       manage_chapters: Manage Chapters
       orphan_work: Orphan Work

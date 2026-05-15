@@ -857,8 +857,8 @@ class WorksController < ApplicationController
       redirect_to(@work)
     else
       @work.posted = true
-      @work.minor_version = @work.minor_version + 1
-      @work.save
+      @work.minor_version += 1
+      @work.save!
       flash[:notice] = t("works.update.work_updated")
       redirect_to(@work)
     end
