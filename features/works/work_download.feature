@@ -470,6 +470,25 @@ Feature: Download a work
       And I follow "HTML"
     Then I should see "[Hidden Work] by inspiration"
 
+  Scenario: Downloads should update when works get hidden and unhidden
+    Given I have related works setup
+      And a related work has been posted and approved
+    When I am logged out
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should see "Followup by remixer"
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the work "Followup"
+    When I am logged out
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should see "[Hidden Work] by remixer"
+    When I am logged in as a "policy_and_abuse" admin
+      And I unhide the work "Followup"
+    When I am logged out
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should see "Followup by remixer"
 
   Scenario: Download multi-chapter work with mixed chapter titles (one without, one with)
   
