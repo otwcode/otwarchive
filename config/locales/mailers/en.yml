@@ -817,7 +817,9 @@ en:
         html: There's lots of information and advice on how to use the Archive in our %{faq_link}. You'll find the latest news about site developments on %{admin_posts_link}. If you need more help, run into a bug, or have questions or comments, please %{contact_support_link}, who are always happy to help out.
         text: 'There''s lots of information and advice on how to use the Archive in our FAQ at %{faq_url}. You''ll find the latest news about site developments on AO3 News at %{admin_posts_url}. If you need more help, run into a bug, or have questions or comments, please contact Support, who are always happy to help out: %{contact_support_url}.'
       subject: "[%{app_name}] Activate your account"
-      welcome: Welcome to the Archive of Our Own, %{login}!
+      welcome:
+        html: Welcome to the Archive of Our Own, %{login}!
+        text: Welcome to the Archive of Our Own, %{login}!
   users:
     mailer:
       confirmation_instructions:

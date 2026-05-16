@@ -473,6 +473,12 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.related_work_notification(user.id, related_work.id)
   end
 
+  # URL: /rails/mailers/user_mailer/signup_notification
+  def signup_notification
+    user = create(:user, :for_mailer_preview, confirmed_at: nil)
+    UserMailer.signup_notification(user.id)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)
