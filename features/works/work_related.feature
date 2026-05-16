@@ -335,17 +335,17 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And a related work has been posted and approved
   When I am logged in as "remixer"
     And I lock the work "Followup"
-  When I log out
+  When I am logged out
     And I view the work "Worldbuilding"
   Then I should see "[Restricted Work] by remixer"
   When I am logged in as "remixer"
     And I unlock the work "Followup"
-  When I log out
+  When I am logged out
     And I view the work "Followup"
   Then I should see "Inspired by Worldbuilding by inspiration"
   When I am logged in as "inspiration"
     And I lock the work "Worldbuilding"
-  When I log out
+  When I am logged out
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
 
@@ -416,7 +416,7 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
   When I follow "remixer" within ".afterword .children"
   Then I should be on the dashboard page for user "remixer" with pseud "remixer"
 
-  When I log out
+  When I am logged out
     And I view the work "Worldbuilding"
   Then I should see "Works inspired by this one: Followup by Anonymous"
     And I should not see "remixer" within ".afterword .children"
