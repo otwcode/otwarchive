@@ -73,11 +73,15 @@ Feature: Prompt Meme Challenge
     And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "GhostSoup"
     And I fill in "Work Title" with "Kinky Story"
+    And I fill in "Additional Tags" with "yourkink1, yourkink2"
     And I fill in "content" with "Story written for your kinks, oh mystery reader!"
   When all emails have been delivered
     And I press "Post"
   Then 1 email should be delivered to "my1@e.org"
     And the email should have "A response to your prompt" in the subject
+    And the email should contain "Additional Tags:"
+    And the email should contain "yourkink1"
+    And the email should contain "yourkink2"
     And the email to "myname1" should be translated
 
   Scenario: Fulfilling a claim ticks the right boxes automatically
