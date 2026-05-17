@@ -899,4 +899,4 @@ describe Comment do
       expect(comment.spam).to be_falsey
     end
   end
-
+end
