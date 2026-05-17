@@ -2969,6 +2969,7 @@ en:
       download:
         button: Download
         heading: Download
+        unreviewed_comments: "Unreviewed Comments (%{count})"
     work_header_notes:
       inspired_by:
         other_works_inspired_by_this_one: other works inspired by this one

@@ -330,7 +330,7 @@ Feature: Comment Moderation
       And I follow "Unreviewed Comments (1)"
     Then I should not see "Parent Thread"
 
- Scenario: Creator marks an unreviewed comment as spam and the count updates
+  Scenario: Creator marks an unreviewed comment as spam and the count updates
     Given I have a work "Spam Trap"
     And I have "Enable comment moderation" checked on "Spam Trap"
     And I am logged in as "spammer"
