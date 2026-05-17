@@ -683,7 +683,7 @@ describe AbuseReport do
           expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX)
         end
 
-        # does not prevent the bookmark from being reportable
+        # does not prevent the work from being reportable
         it_behaves_like "alright", "https://archiveofourown.org/works/123"
       end
 
