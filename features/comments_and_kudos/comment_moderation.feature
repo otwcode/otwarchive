@@ -334,7 +334,7 @@ Feature: Comment Moderation
     Given I am logged in as "spam_catcher"
     And I have a work "Spam Trap"
     And I edit the work "Spam Trap"
-    And I check "Enable comment moderation"
+    And I check "Enable comment moderation on this work"
     And I press "Post Without Preview"
     And I am logged out
     When I view the work "Spam Trap"
