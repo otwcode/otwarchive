@@ -108,24 +108,25 @@ en:
             blocked_id:
               taken: You have already blocked that user.
           format: "%{message}"
-        bookmark/collection_items:
-          format: "%{message}"
-        collection_item:
-          attributes:
-            collection_id:
-              taken: "The collection already contains this item."
-            collection:
-              blank: "The collection can't be blank."
-              not_found: "We couldn't find the collection %{name}."
-              closed: "The collection %{title} is not currently open."
         bookmark:
           attributes:
             pseud:
               required: can't be blank
+        bookmark/collection_items:
+          format: "%{message}"
         collection:
           attributes:
             header_image_url:
               file_format: can only point to a gif, jpg, jpeg, or png file.
+        collection_item:
+          attributes:
+            collection:
+              blank: The collection can't be blank.
+              closed: The collection %{title} is not currently open.
+              not_found: We couldn't find the collection %{name}.
+            collection_id:
+              taken: The collection already contains this item.
+          format: "%{message}"
         comment:
           attributes:
             comment_content:

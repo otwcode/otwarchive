@@ -209,7 +209,7 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1.xml
   def update
     if @bookmark.update(bookmark_params)
-      flash[:notice] = ts("Bookmark was successfully updated.")
+      flash[:notice] = t("bookmarks.update.bookmark_updated")
       new_moderated_collections_message
       redirect_to(@bookmark)
     else
@@ -320,7 +320,7 @@ class BookmarksController < ApplicationController
 
     message = t("bookmarks.new_moderated_collections_message_html",
                 count: new_moderated_collections.length,
-                collections: view_context.safe_join(links, ", ")).html_safe
+                collections: view_context.safe_join(links, ", "))
 
     flash[:notice] = view_context.safe_join([flash[:notice], message].compact, " ")
   end

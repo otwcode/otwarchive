@@ -62,60 +62,6 @@ class CollectionItem < ApplicationRecord
     self.anonymous = collection.anonymous?
   end
 
-  def destroyed_by_item?
-    item && destroyed_by_association &&
-      item.association(:collection_items).reflection == destroyed_by_association
-  end
-
-  after_save :update_work
-  after_destroy :update_work, unless: :destroyed_by_item?
-
-  # Set associated works to anonymous or unrevealed as appropriate.
-  def update_work
-    return unless item.is_a?(Work) && item.persisted?
-
-    item.set_anon_unrevealed
-
-    item.save!(validate: false) if item.will_save_change_to_anonymous? ||
-                                   item.will_save_change_to_unrevealed?
-  end
-
-  # Poke the item if it's just been approved or unapproved so it gets picked up by the search index
-  after_save :reindex_item
-  after_destroy :reindex_item, unless: :destroyed_by_item?
-  def reindex_item
-    item&.enqueue_to_index
-  end
-
-  after_create_commit :notify_of_association
-  def notify_of_association
-    email_notify = self.collection.collection_preference &&
-                    self.collection.collection_preference.email_notify
-
-    if email_notify && !self.collection.email.blank?
-      CollectionMailer.item_added_notification(item_id, collection_id, item_type).deliver_later
-    end
-  end
-
-  after_create_commit :notify_archivist_added
-  # Sends emails to item creator(s) in the case that an archivist
-  # has added them to the collection.
-  def notify_archivist_added
-    return unless item.is_a?(Work) && User.current_user&.archivist && collection.user_is_maintainer?(User.current_user)
-
-    item.users.each do |email_recipient|
-      next if email_recipient.preference.collection_emails_off
-
-      I18n.with_locale(email_recipient.preference.locale_for_mails) do
-        UserMailer.archivist_added_to_collection_notification(
-          email_recipient.id,
-          item.id,
-          collection.id
-        ).deliver_later
-      end
-    end
-  end
-
   before_validation :approve_automatically, on: :create
   def approve_automatically
     return unless item && collection
@@ -147,12 +93,112 @@ class CollectionItem < ApplicationRecord
     end
   end
 
+  def destroyed_by_item?
+    item && destroyed_by_association &&
+      item.association(:collection_items).reflection == destroyed_by_association
+  end
+
+  after_update :notify_of_unrevealed_or_anonymous
+  def notify_of_unrevealed_or_anonymous
+    # This CollectionItem's anonymous/unrevealed status can only affect the
+    # item's status if (a) the CollectionItem is approved by the user and (b)
+    # the item is a work. (Bookmarks can't be anonymous/unrevealed at the
+    # moment.)
+    return unless approved_by_user? && item.is_a?(Work)
+
+    # Check whether anonymous/unrevealed is becoming true, when the work
+    # currently has it set to false:
+    newly_anonymous = (saved_change_to_anonymous?(to: true) && !item.anonymous?)
+    newly_unrevealed = (saved_change_to_unrevealed?(to: true) && !item.unrevealed?)
+
+    return unless newly_unrevealed || newly_anonymous
+
+    # Don't notify if it's one of the work creators who is changing the work's
+    # status.
+    return if item.users.include?(User.current_user)
+
+    item.users.each do |user|
+      I18n.with_locale(user.preference.locale_for_mails) do
+        UserMailer.anonymous_or_unrevealed_notification(
+          user.id, item.id, collection.id,
+          anonymous: newly_anonymous, unrevealed: newly_unrevealed
+        ).deliver_after_commit
+      end
+    end
+  end
+
+  after_destroy :update_work, unless: :destroyed_by_item?
+  after_destroy :reindex_item, unless: :destroyed_by_item?
   after_destroy :expire_caches
   def expire_caches
-    if self.item.respond_to?(:expire_caches)
-      self.item.expire_caches
-      CacheMaster.record(item_id, 'collection', collection_id)
+    return unless self.item.respond_to?(:expire_caches)
+
+    self.item.expire_caches
+    CacheMaster.record(item_id, "collection", collection_id)
+  end
+
+  after_save :update_work
+
+  # Set associated works to anonymous or unrevealed as appropriate.
+  def update_work
+    return unless item.is_a?(Work) && item.persisted?
+
+    item.set_anon_unrevealed
+
+    item.save!(validate: false) if item.will_save_change_to_anonymous? ||
+                                   item.will_save_change_to_unrevealed?
+  end
+
+  after_save :reindex_item
+  def reindex_item
+    item&.enqueue_to_index
+  end
+
+  # reindex collection after creation, deletion, and approval_status update
+  # (we only index approved items, which is why changes there trigger the reindex-index)
+  after_commit :update_collection_index, if: :should_update_collection_index?
+
+  after_create_commit :notify_of_association
+  def notify_of_association
+    email_notify = self.collection.collection_preference &&
+                    self.collection.collection_preference.email_notify
+
+    if email_notify && !self.collection.email.blank?
+      CollectionMailer.item_added_notification(item_id, collection_id, item_type).deliver_later
     end
+  end
+
+  after_create_commit :notify_archivist_added
+  # Sends emails to item creator(s) in the case that an archivist
+  # has added them to the collection.
+  def notify_archivist_added
+    return unless item.is_a?(Work) && User.current_user&.archivist && collection.user_is_maintainer?(User.current_user)
+
+    item.users.each do |email_recipient|
+      next if email_recipient.preference.collection_emails_off
+
+      I18n.with_locale(email_recipient.preference.locale_for_mails) do
+        UserMailer.archivist_added_to_collection_notification(
+          email_recipient.id,
+          item.id,
+          collection.id
+        ).deliver_later
+      end
+    end
+  end
+
+  def update_collection_index
+    ids = [collection_id]
+    ids.push(collection.parent_id) if collection.parent.present?
+    IndexQueue.enqueue_ids(Collection, ids, :background)
+  end
+
+  # reindex collection after creation, deletion, and certain attribute updates
+  def should_update_collection_index?
+    return true if destroyed?
+
+    pertinent_attributes = %w[collection_approval_status user_approval_status]
+    (self.saved_changes.keys & pertinent_attributes).present?
   end
 
   attr_writer :remove
@@ -205,14 +251,11 @@ class CollectionItem < ApplicationRecord
       approve_by_user
       approve_by_collection
     else
-      author_of_item = user.is_author_of?(item) ||
-                       (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?)
+      author_of_item = user.is_author_of?(item) || (user == User.current_user && item.new_record?)
       archivist_maintainer = user.archivist && self.collection.user_is_maintainer?(user)
       approve_by_user if author_of_item || archivist_maintainer
       approve_by_collection if self.collection.user_is_maintainer?(user)
     end
-    approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.new_record?))
-    approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end
 
   def posted?
@@ -249,52 +292,5 @@ class CollectionItem < ApplicationRecord
         end
       end
     end
-  end
-
-  after_update :notify_of_unrevealed_or_anonymous
-  def notify_of_unrevealed_or_anonymous
-    # This CollectionItem's anonymous/unrevealed status can only affect the
-    # item's status if (a) the CollectionItem is approved by the user and (b)
-    # the item is a work. (Bookmarks can't be anonymous/unrevealed at the
-    # moment.)
-    return unless approved_by_user? && item.is_a?(Work)
-
-    # Check whether anonymous/unrevealed is becoming true, when the work
-    # currently has it set to false:
-    newly_anonymous = (saved_change_to_anonymous?(to: true) && !item.anonymous?)
-    newly_unrevealed = (saved_change_to_unrevealed?(to: true) && !item.unrevealed?)
-
-    return unless newly_unrevealed || newly_anonymous
-
-    # Don't notify if it's one of the work creators who is changing the work's
-    # status.
-    return if item.users.include?(User.current_user)
-
-    item.users.each do |user|
-      I18n.with_locale(user.preference.locale_for_mails) do
-        UserMailer.anonymous_or_unrevealed_notification(
-          user.id, item.id, collection.id,
-          anonymous: newly_anonymous, unrevealed: newly_unrevealed
-        ).deliver_after_commit
-      end
-    end
-  end
-
-  # reindex collection after creation, deletion, and approval_status update
-  # (we only index approved items, which is why changes there trigger the reindex-index)
-  after_commit :update_collection_index, if: :should_update_collection_index?
-
-  def update_collection_index
-    ids = [collection_id]
-    ids.push(collection.parent_id) if collection.parent.present?
-    IndexQueue.enqueue_ids(Collection, ids, :background)
-  end
-
-  # reindex collection after creation, deletion, and certain attribute updates
-  def should_update_collection_index?
-    return true if destroyed?
-
-    pertinent_attributes = %w[collection_approval_status user_approval_status]
-    (self.saved_changes.keys & pertinent_attributes).present?
   end
 end

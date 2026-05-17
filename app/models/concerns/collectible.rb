@@ -1,5 +1,6 @@
 module Collectible
   extend ActiveSupport::Concern
+  include AssociationAssignment
 
   included do
     has_many :collection_items, as: :item, inverse_of: :item, autosave: true, dependent: :destroy
@@ -11,6 +12,8 @@ module Collectible
 
     has_many :collections,
              through: :collection_items,
+             after_add: :recalculate_anon_unrevealed,
+             after_remove: :recalculate_anon_unrevealed,
              dependent: :destroy
     has_many :approved_collections,
              through: :approved_collection_items,
@@ -26,12 +29,12 @@ module Collectible
              source: :collection,
              dependent: :destroy
 
-    # Note: this scope includes the items in the children of the specified collection
+    # NOTE: this scope includes the items in the children of the specified collection
     scope :in_collection, lambda { |collection|
       distinct.joins(:approved_collection_items).merge(collection.all_items)
     }
 
-    after_validation :set_anon_unrevealed
+    after_validation :set_anon_unrevealed, if: -> { collection_items.loaded? }
   end
 
   # The collection items that will remain after this item has been saved.
@@ -117,22 +120,31 @@ module Collectible
 
   #### UNREVEALED/ANONYMOUS
 
+  def recalculate_anon_unrevealed(_collection)
+    set_anon_unrevealed
+  end
+
   # Set the anonymous/unrevealed status of the collectible based on its
   # collection items.
   def set_anon_unrevealed
     return unless has_attribute?(:anonymous) && has_attribute?(:unrevealed)
 
     if collection_items.target.empty?
-      relevant = user_approved_collection_items
+      if new_record?
+        self.anonymous = collections.target.any?(&:anonymous?)
+        self.unrevealed = collections.target.any?(&:unrevealed?)
+      else
+        relevant = user_approved_collection_items
 
-      self.anonymous = relevant.anonymous.exists?
-      self.unrevealed = relevant.unrevealed.exists?
+        self.anonymous = relevant.anonymous.exists?
+        self.unrevealed = relevant.unrevealed.exists?
+      end
     else
       relevant = collection_items_after_saving
         .select(&:approved_by_user?)
 
-      self.anonymous = relevant.any?(&:anonymous?)
-      self.unrevealed = relevant.any?(&:unrevealed?)
+      self.anonymous = relevant.any? { |ci| ci.anonymous? || (ci.new_record? && ci.collection&.anonymous?) }
+      self.unrevealed = relevant.any? { |ci| ci.unrevealed? || (ci.new_record? && ci.collection&.unrevealed?) }
     end
   end
 

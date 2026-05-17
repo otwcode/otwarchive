@@ -1,5 +1,6 @@
 module Taggable
   extend ActiveSupport::Concern
+  include AssociationAssignment
 
   included do
     has_many :taggings, as: :taggable, inverse_of: :taggable, dependent: :destroy, autosave: true

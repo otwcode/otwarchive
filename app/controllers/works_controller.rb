@@ -580,7 +580,7 @@ class WorksController < ApplicationController
 
     message = t("works.moderated_collections_message_html",
                 count: moderated_collections.length,
-                collections: view_context.safe_join(links, ", ")).html_safe
+                collections: view_context.safe_join(links, ", "))
 
     flash[:notice] = view_context.safe_join([flash[:notice], message].compact, " ")
   end
