@@ -1,0 +1,21 @@
+<div class="news admin home">
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= ts("AO3 News Drafts") %></h2>
+  <!--/descriptions-->
+  <!--subnav-->
+  <%= render "filters" %>
+  <%= render partial: "admin/admin_nav" %>
+  <!--/subnav-->
+
+  <!--main content-->
+  <h3 class="landmark heading"><%= ts("Manage News Drafts") %></h3>
+  <dl class="news index group">
+    <% @admin_posts.each do |admin_post| %>
+      <%= render "admin_post_blurb", admin_post: admin_post %>
+    <% end %>
+  </dl>
+  <!--/content-->
+  <!--subnav-->
+  <%== pagy_nav(@pagy) %>
+  <!--/subnav-->
+</div>

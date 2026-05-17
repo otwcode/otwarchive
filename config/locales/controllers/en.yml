@@ -78,6 +78,14 @@ en:
         success:
           one: Successfully removed pseud %{pseuds} from this work.
           other: Successfully removed pseuds %{pseuds} from this work.
+  admin_posts:
+    create:
+      success: Admin Post was successfully created.
+    post:
+      error: Sorry, that Admin Post could not be posted.
+      success: Admin Post was successfully posted.
+    update:
+      success: Admin Post was successfully updated.
   application:
     access_denied:
       access_denied:

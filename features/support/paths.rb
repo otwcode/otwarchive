@@ -282,6 +282,8 @@ module NavigationHelpers
     # Admin Pages
     when /^the admin-posts page$/i
       admin_posts_path
+    when /^the admin-post drafts page$/i
+      drafts_admin_posts_path
     when /^the "(.*)" admin post page$/i
       admin_post_path(AdminPost.find_by(title: Regexp.last_match(1)))
     when /^the unreviewed comments page for the admin post "(.*)"$/i

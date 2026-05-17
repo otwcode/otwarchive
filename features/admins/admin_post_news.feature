@@ -277,3 +277,22 @@ Feature: Admin Actions to Post News
       And I should see "Comments (2)"
       And I should not see "Unreviewed Comments"
 
+  Scenario: Admin posts are sorted by publication date, newest first
+    Given time is frozen at "2026-05-16 03:30:00"
+      And the draft admin post "First News Post"
+      And time is frozen at "2026-05-17 04:30:00"
+      And the admin post "Second News Post"
+      And time is frozen at "2026-05-18 05:30:00"
+      And I am logged in as a "communications" admin
+      And I am on the admin-post drafts page
+    Then I should see "First News Post"
+      And I should not see "Second News Post"
+    When I follow "Post Draft"
+    Then I should see "Admin Post was successfully posted."
+    When I follow "Back to AO3 News Index"
+    Then "First News Post" should appear before "Second News Post"
+      And I should see "Published at 2026-05-18 05:30:00 UTC (Created at 2026-05-16 03:30:00 UTC and updated at 2026-05-18 05:30:00 UTC)"
+    When I log out
+      And I am on the homepage
+    Then "First News Post" should appear before "Second News Post"
+      And I should see "Published: Mon 18 May 2026 05:30AM UTC"

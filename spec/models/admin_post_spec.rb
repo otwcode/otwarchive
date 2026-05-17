@@ -46,4 +46,30 @@ describe AdminPost do
       expect(new_post.reload.disable_all_comments?).to be(false)
     end
   end
+
+  describe "#set_published_at" do
+    before { freeze_time }
+
+    let(:admin_post) { create(:admin_post, :draft) }
+
+    it "sets the publication date to now" do
+      admin_post.update!(posted: true)
+      expect(admin_post.published_at).to eq(Time.current)
+    end
+    
+    it "keeps existing publication dates" do
+      admin_post.update!(posted: true, published_at: 1.day.ago)
+      expect(admin_post.published_at).to eq(1.day.ago)
+    end
+  end
+
+  describe "#post_translations" do
+    let(:admin_post) { create(:admin_post, :draft) }
+    let!(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:language).id) }
+
+    it "posts draft translations" do
+      admin_post.reload.update!(posted: true)
+      expect(translation.reload.posted?).to be_truthy
+    end
+  end
 end

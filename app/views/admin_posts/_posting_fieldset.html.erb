@@ -1,0 +1,26 @@
+<%# expects form %>
+<fieldset>
+  <legend><%= t(".legend") %></legend>
+
+  <ul class="actions">
+    <% unless @admin_post.persisted? && @admin_post.posted? %>
+      <li><%= form.submit t(".actions.save_draft"), name: "save_button" %></li>
+    <% end %>
+
+    <% if @preview_mode %>
+      <li><%= submit_tag t(".actions.edit"), name: "edit_button" %>
+    <% else %>
+      <li><%= form.submit t(".actions.preview"), name: "preview_button" %></li>
+    <% end %>
+
+    <% if policy(@admin_post).can_post? %>
+      <li><%= form.submit t(".actions.post"), name: "post_button" %></li>
+    <% end %>
+
+    <li><%= link_to t(".actions.cancel"), if @admin_post.new_record?
+                                            policy(AdminPost).can_post? ? admin_posts_path : drafts_admin_posts_path
+                                          else
+                                            admin_post_path(@admin_post)
+                                          end %></li>
+  </ul>
+</fieldset>

@@ -7,20 +7,25 @@
 <h4 class="landmark heading"><%= ts("Post Header") %></h4>
 <div class="wrapper">
   <dl class="meta">
-    <dt class="published"><%= ts("Published:") %></dt>
-    <dd class="published"><%= admin_post.created_at %></dd>
+    <% if admin_post.posted? %>
+      <dt class="published"><%= ts("Published:") %></dt>
+      <dd class="published"><%= admin_post.published_at %></dd>
+    <% end %>
     <% if admin_post.translated_post %>
       <dt class="original translations"><%= ts("Original:") %></dt>
       <dd class="original translations"><%= link_to admin_post.translated_post.title, admin_post.translated_post %></dd>
-    <% elsif !admin_post.translations.empty? %>
+    <% else %>
+      <% translations = sorted_translations(admin_post) %>
+      <% unless translations.blank? %>
       <dt class="translations"><%= ts("Translations:") %></dt>
       <dd class="translations">
         <ul class="languages commas">
-          <% for translation in sorted_translations(admin_post) %>
+          <% translations.each do |translation| %>
             <li><%= link_to translation.language.name, translation, lang: translation.language.short %></li>
           <% end %>
         </ul>
       </dd>
+      <% end %>
     <% end %>
     <% if admin_post.tags.length > 0 %>
       <dt class="tags"><%= ts("Tags:") %></dt>

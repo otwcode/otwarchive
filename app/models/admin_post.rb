@@ -36,22 +36,32 @@ class AdminPost < ApplicationRecord
 
   scope :non_translated, -> { where("translated_post_id IS NULL") }
 
-  scope :for_homepage, -> { order("created_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE) }
+  scope :for_homepage, -> { posted.order(published_at: :desc).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE) }
+
+  scope :unposted, -> { where(posted: false) }
+  scope :posted, -> { where(posted: true) }
 
   before_save :inherit_translated_post_comment_permissions, :inherit_translated_post_tags
+  before_save :set_published_at, if: :posted_changed?
   after_save :expire_cached_home_admin_posts, :update_translation_comment_permissions, :update_translation_tags
+  after_save :post_translations, if: :saved_change_to_posted?
   after_destroy :expire_cached_home_admin_posts
 
   # Return the name to link comments to for this object
   def commentable_name
     self.title
   end
+
   def commentable_owners
     begin
         [Admin.find(self.admin_id)]
     rescue
       []
     end
+  end
+
+  def draft?
+    !self.posted?
   end
 
   def tag_list
@@ -134,6 +144,20 @@ class AdminPost < ApplicationRecord
       translations.find_each do |post|
         post.tags = self.tags
         post.save
+      end
+    end
+  end
+
+  def set_published_at
+    self.published_at = Time.current if self.posted && !self.published_at
+  end
+
+  def post_translations
+    return if translations.blank? || !self.posted
+
+    transaction do
+      translations.find_each do |post|
+        post.update(posted: true, published_at: self.published_at)
       end
     end
   end

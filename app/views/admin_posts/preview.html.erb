@@ -1,0 +1,21 @@
+<div class="admin">
+  <h2 class="heading"><%= t(".page_heading") %></h2>
+  <div class="draft news">
+    <%= render "admin_post", admin_post: @admin_post %>
+  </div>
+  <div class="clear"><!-- presentational --></div>
+
+  <%= form_for(@admin_post) do |f| %>
+    <%= f.hidden_field :title, value: @admin_post.title.to_s %>
+    <%= f.hidden_field :content, value: @admin_post.content.to_s %>
+    <% unless @admin_post.translated_post %>
+      <%= f.hidden_field :tag_list, value: @admin_post.tag_list.to_s %>
+    <% end %>
+    <%= f.hidden_field :language_id, value: @admin_post.language_id.to_s %>
+    <%= f.hidden_field :translated_post_id, value: @admin_post.translated_post_id.to_s %>
+    <%= f.hidden_field :moderated_commenting_enabled, value: @admin_post.moderated_commenting_enabled.to_s %>
+    <%= f.hidden_field :comment_permissions, value: @admin_post.comment_permissions.to_s %>
+
+    <%= render "posting_fieldset", form: f %>
+  <% end %>
+</div>
