@@ -89,7 +89,7 @@
             cookie need the popup.
             We have to use JavaScript to remember their choice or risk issues
             when full page caching is enabled. %>
-        if (localStorage.getItem("accepted_tos") !== "<%= @current_tos_version %>" && Cookies.get("accepted_tos") !== "<%= @current_tos_version %>") {
+        if ((!isSupported() || localStorage.getItem("accepted_tos") !== "<%= @current_tos_version %>") && Cookies.get("accepted_tos") !== "<%= @current_tos_version %>") {
           $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
         }
       <% end %>

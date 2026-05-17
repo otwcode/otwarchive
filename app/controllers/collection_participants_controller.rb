@@ -73,16 +73,16 @@ class CollectionParticipantsController < ApplicationController
 
   def update
     if @participant.update(collection_participant_params)
-      flash[:notice] = t('collection_participants.update_success', default: "Updated %{participant}.", participant: @participant.pseud.name)
+      flash[:notice] = t(".success", participant: @participant.pseud.byline)
     else
-      flash[:error] = t(".failure", participant: @participant.pseud.name)
+      flash[:error] = t(".failure", participant: @participant.pseud.byline)
     end
     redirect_to collection_participants_path(@collection)
   end
 
   def destroy
     @participant.destroy
-    flash[:notice] = t('collection_participants.destroy', default: "Removed %{participant} from collection.", participant: @participant.pseud.name)
+    flash[:notice] = t(".success", participant: @participant.pseud.byline)
     redirect_back_or_to root_path
   end
 

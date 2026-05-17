@@ -270,7 +270,7 @@
     <p>
       <%= t(".abuse_policy.submitting_a_complaint.html",
             policy_and_abuse_form_link: link_to(t(".abuse_policy.submitting_a_complaint.policy_and_abuse_form"), new_abuse_report_path),
-            dmca_policy_link: link_to(t(".abuse_policy.submitting_a_complaint.dmca_policy"), dmca_path)) %>
+            dmca_policy_link: link_to(t(".abuse_policy.submitting_a_complaint.dmca_policy"), takedown_path(anchor: "dmca_policy"))) %>
     </p>
   </li>
   <li id="I.I.2">

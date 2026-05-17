@@ -1,9 +1,9 @@
 class SkinsController < ApplicationController
-  before_action :users_only, only: [:new, :create, :destroy]
+  before_action :users_only, only: [:new, :create, :destroy, :preview]
   before_action :load_skin, except: [:index, :new, :create, :unset]
   before_action :check_ownership_or_admin, only: [:edit, :update]
   before_action :check_ownership, only: [:confirm_delete, :destroy]
-  before_action :check_visibility, only: [:show]
+  before_action :check_visibility, only: [:show, :preview]
   before_action :check_editability, only: [:edit, :update, :confirm_delete, :destroy]
 
   #### ACTIONS
@@ -129,6 +129,11 @@ class SkinsController < ApplicationController
 
   # Get /skins/1/preview
   def preview
+    if @skin.is_a?(WorkSkin) || @skin.unusable?
+      flash[:error] = t(".cannot_preview")
+      redirect_to user_skins_path(current_user) and return
+    end
+
     flash[:notice] = []
     flash[:notice] << ts("You are previewing the skin %{title}. This is a randomly chosen page.", title: @skin.title)
     flash[:notice] << ts("Go back or click any link to remove the skin.")
@@ -140,10 +145,10 @@ class SkinsController < ApplicationController
 
   def set
     if @skin.cached?
-      flash[:notice] = ts("The skin %{title} has been set. This will last for your current session.", title: @skin.title)
+      flash[:notice] = t(".success_html", skin_title: @skin.title, skin_page_link: helpers.link_to(t(".skin_page", skin_title: @skin.title), skin_path(@skin)))
       session[:site_skin] = @skin.id
     else
-      flash[:error] = ts("Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{title} to be added!", title: @skin.title)
+      flash[:error] = t(".failure", skin_title: @skin.title)
     end
     redirect_back_or_to @skin
   end
