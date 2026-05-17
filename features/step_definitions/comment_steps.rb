@@ -273,6 +273,7 @@ end
 
 Given "the moderated work {string} by {string}" do |title, login|
   user = ensure_user(login)
+  user.preference.update!(allow_co_creator_invite: true)
   w = FactoryBot.create(:work, title: title, authors: [user.default_pseud])
   w.update_attribute(:moderated_commenting_enabled, true)
 end

@@ -81,7 +81,7 @@
                             else
                               @work.find_all_comments.unreviewed_only.not_spam.count
                             end %>
-      <%= link_to t(".unreviewed_comments", count: unreviewed_count), unreviewed_comments_work_path(@work) %>
+      <%= link_to t("works.work_header_navigation.unreviewed_comments", count: unreviewed_count), unreviewed_work_comments_path(@work) %>
     </li>
   <% end %>
 
