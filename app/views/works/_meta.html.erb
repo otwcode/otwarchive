@@ -49,15 +49,7 @@
       </dd>
     <% end %>
 
-    <% collections_data = show_collections_data(@work.approved_collections_after_saving) %>
-    <% if collections_data.present? %>
-      <dt class="collections">
-        <%= ts('Collections:') %>
-      </dt>
-      <dd class="collections">
-        <%= collections_data %>
-      </dd>
-    <% end %>
+    <%= collections_meta_tag(@work) %>
 
     <dt class="stats"><%= ts("Stats:") %></dt>
     <dd class="stats">
