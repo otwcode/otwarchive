@@ -371,11 +371,8 @@ Feature: Collection
     Then I should see "Anonymous Collection"
       And I should see "Anonymous [creator]"
 
-    When I press "Cancel"
-
-    Then I should see "The work was not updated."
-
-    When I view the work "My Work"
+    When I follow "Cancel"
+      And I view the work "My Work"
 
     Then I should not see "Anonymous Collection"
       And I should not see "Anonymous [creator]"

@@ -687,7 +687,7 @@ describe "rake After:add_collection_tags" do
 
     it "tags the collection with the work's fandoms" do
       subject.invoke
-      expect(collection.tags).to include(*items.flat_map(&:fandoms))
+      expect(collection.reload.tags).to include(*items.flat_map(&:fandoms))
     end
 
     shared_examples "does not tag the collection" do
@@ -728,6 +728,7 @@ describe "rake After:add_collection_tags" do
 
     it "tags the collection with the bookmark's AND bookmarked item's fandoms" do
       subject.invoke
+      collection.reload
       expect(collection.tags).to include(*items.flat_map(&:fandoms))
       expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
     end
@@ -778,6 +779,7 @@ describe "rake After:add_collection_tags" do
 
     it "includes the bookmark's and series's fandoms" do
       subject.invoke
+      collection.reload
       expect(collection.tags).to include(*bookmark.fandoms)
       expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map { |s| s.work_tags.where(type: "Fandom") })
     end

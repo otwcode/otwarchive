@@ -15,7 +15,7 @@ Feature: Previewing collection changes on works
     When I edit the work "Collectible"
       And I fill in "Post to Collections / Challenges" with "Assortment"
       And I press "Preview"
-      And I press "Cancel"
+      And I follow "Cancel"
       And I view the work "Collectible"
     Then I should not see "Assortment"
 
@@ -40,7 +40,7 @@ Feature: Previewing collection changes on works
     When I edit the work "Collectible"
       And I fill in "Post to Collections / Challenges" with ""
       And I press "Preview"
-      And I press "Cancel"
+      And I follow "Cancel"
       And I view the work "Collectible"
     Then I should see "Assortment"
 
