@@ -2593,6 +2593,7 @@ en:
         enable_two_step_verification: Enable two-step verification
         heading: Account Security
         legend: Account Security
+        regenerate_backup_codes: Re-generate two-step verification backup codes
       browser_page_title_format: Browser page title format
       collections_challenges_gifts:
         allow_collection_invitation: Allow others to invite my works to collections.

@@ -37,7 +37,7 @@ class Users::SessionsController < Devise::SessionsController
   def authenticate_with_totp_two_factor
     user = self.resource = find_user
 
-    if params[:totp_attempt].present? && session[:otp_user_id]
+    if params.key?(:totp_attempt) && session[:otp_user_id]
       authenticate_user_with_otp_two_factor(user)
     elsif user&.valid_password?(user_params[:password])
       prompt_for_otp_two_factor(user)
@@ -74,7 +74,7 @@ class Users::SessionsController < Devise::SessionsController
       sign_in(user, event: :authentication)
 
       # Set the user_credentials flag cookie
-      # because this login flow bypasses ensure_user_credentials#ensure_user_credentials
+      # because this login flow bypasses ApplicationController#ensure_user_credentials
       cookies[:user_credentials] = { value: 1, expires: 1.year.from_now } unless cookies[:user_credentials]
 
       if pwned

@@ -32,7 +32,7 @@
     <ul>
       <% if current_user.totp_enabled? %>
         <li><%= link_to t(".account_security.disable_two_step_verification"), confirm_disable_user_totp_path %></li>
-        <li><%= link_to ts("Re-generate two-step verification backup codes"), show_backup_codes_user_totp_path %></li>
+        <li><%= link_to t(".account_security.regenerate_backup_codes"), show_backup_codes_user_totp_path %></li>
       <% else %>
         <li><%= link_to t(".account_security.enable_two_step_verification"), new_user_totp_path %></li>
       <% end %>
