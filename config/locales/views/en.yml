@@ -2137,7 +2137,8 @@ en:
           agreement: 'Agreement:'
           any_other_form: any other form of content
           content_policy: Content Policy
-          html: '%{agreement} AO3 hosts and shares content created by fans, for fans. Our %{content_policy_link} and %{privacy_policy_link} are part of these Terms of Service (TOS). By submitting a work; bookmark; comment; tag; link; text, image, audio, or video file; username; fannish next-of-kin; %{personal_information_link} (such as an email address); or %{any_other_form_link} ("Content") to the Archive of Our Own service (hereinafter "Service", "AO3", or "Archive"), or by creating an account and/or accessing Content on AO3, you affirm, confirm, and state that you comply with and assent to the TOS.'
+          fnok: fannish next-of-kin
+          html: '%{agreement} AO3 hosts and shares content created by fans, for fans. Our %{content_policy_link} and %{privacy_policy_link} are part of these Terms of Service (TOS). By submitting a work; bookmark; comment; tag; link; text, image, audio, or video file; username; %{fannish_next_of_kin_link}; %{personal_information_link} (such as an email address); or %{any_other_form_link} ("Content") to the Archive of Our Own service (hereinafter "Service", "AO3", or "Archive"), or by creating an account and/or accessing Content on AO3, you affirm, confirm, and state that you comply with and assent to the TOS.'
           personal_information: Personal Information
           privacy_policy: Privacy Policy
         entirety_of_agreement:
