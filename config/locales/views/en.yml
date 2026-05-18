@@ -3261,8 +3261,10 @@ en:
           heading: About Two-Step Verification
         app_setup:
           heading: 'Step 1: Set up your authenticator app'
-          instructions: Use your authenticator app to scan the QR code or enter the manual setup key. If you are using the mobile device the app is already installed on, click the setup link. The app will give you a 6-digit code, which you'll use in the next step.
+          instructions: Use your authenticator app to scan the QR code or enter the manual setup key. If you are using the mobile device the app is already installed on, click the import settings button. The app will give you a 6-digit code, which you'll use in the next step.
           key:
+            copied: Copied!
+            copy_to_clipboard: Copy
             format_note: Spaces and capitalization don't matter
             heading: Setup Key
         enter_code:
