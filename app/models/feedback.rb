@@ -14,7 +14,7 @@ class Feedback < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
-    approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
+    approved = logged_in_with_matching_email? || !AkismetClient.spam?(akismet_attributes)
     errors.add(:base, ts("This report looks like spam to our system!")) unless approved
   end
 
@@ -28,8 +28,6 @@ class Feedback < ApplicationRecord
     role = User.current_user.present? ? "user-with-nonmatching-email" : "guest"
     {
       comment_type: "contact-form",
-      key: ArchiveConfig.AKISMET_KEY,
-      blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_agent: user_agent,
       user_role: role,
@@ -39,13 +37,11 @@ class Feedback < ApplicationRecord
   end
 
   def mark_as_spam!
-    # don't submit spam reports unless in production mode
-    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+    AkismetClient.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
-    # don't submit ham reports unless in production mode
-    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+    AkismetClient.submit_ham(akismet_attributes)
   end
 
   def email_and_send
