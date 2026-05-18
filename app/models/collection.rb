@@ -10,7 +10,7 @@ class Collection < ApplicationRecord
   # i18n-tasks-use t("errors.attributes.icon.invalid_format")
   # i18n-tasks-use t("errors.attributes.icon.too_large")
   validates :icon, attachment: {
-    allowed_formats: %r{image/\S+},
+    allowed_formats: %w[image/gif image/jpeg image/png],
     maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
   }
 
