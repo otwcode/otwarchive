@@ -307,6 +307,7 @@ Scenario: Sort collections by Works and Bookmarks from user's collection
     And I change my username to "Owner"
     And I go to Owner's collections page
     And I select "Works" from "Sort by"
+    And I select "Descending" from "Sort direction"
     And I press "Sort and Filter"
   Then the 1st collection result should contain "Privates"
     And the 1st collection result should contain "Works: 2"
@@ -322,6 +323,7 @@ Scenario: Sort collections by Works and Bookmarks from user's collection
   When I am logged in as a super admin
     And I go to Owner's collections page
     And I select "Works" from "Sort by"
+    And I select "Descending" from "Sort direction"
     And I press "Sort and Filter"
   Then the 1st collection result should contain "Privates"
     And the 1st collection result should contain "Works: 2"
@@ -330,6 +332,7 @@ Scenario: Sort collections by Works and Bookmarks from user's collection
     And I should see "2 Collections"
   When I go to Owner's collections page
     And I select "Bookmarked Items" from "Sort by"
+    And I select "Descending" from "Sort direction"
     And I press "Sort and Filter"
   Then the 1st collection result should contain "Publics"
     And the 1st collection result should contain "Bookmarked Items: 2"
@@ -339,6 +342,7 @@ Scenario: Sort collections by Works and Bookmarks from user's collection
   When I log out
     And I go to Owner's collections page
     And I select "Bookmarked Items" from "Sort by"
+    And I select "Descending" from "Sort direction"
     And I press "Sort and Filter"
   Then the 1nd collection result should contain "Privates"
     And the 1st collection result should contain "Bookmarked Items: 1"
@@ -348,6 +352,7 @@ Scenario: Sort collections by Works and Bookmarks from user's collection
   When I am logged in as a super admin
     And I go to Owner's collections page
     And I select "Bookmarked Items" from "collection_search_sort_column"
+    And I select "Descending" from "collection_search_sort_direction"
     And I press "Sort and Filter"
   Then the 1st collection result should contain "Publics"
     And the 1st collection result should contain "Bookmarked Items: 2"

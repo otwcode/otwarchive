@@ -19,10 +19,11 @@ module ApplicationHelper
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
 
-    show_sidebar = (!@hide_dashboard && (@user || @admin_posts || @collection || show_wrangling_dashboard))
-    class_names += " dashboard" if show_sidebar
-
-    class_names += " filtered" if page_has_filters?
+    # Rails/HelperInstanceVariable is disabled for the two following lines given this warning is raised for reusing helpers. This function is only used once in application.html.erb
+    # Whether or not the sidebar should be shown
+    class_names += " dashboard" if !@hide_dashboard && (@user || @admin_posts || @collection || show_wrangling_dashboard) # rubocop:disable Rails/HelperInstanceVariable
+    # Whether or not the page will have filters
+    class_names += " filtered" if @facets.present? || (controller.controller_name == "collections" && @sort_and_filter) || (controller.action_name == "unassigned" && controller.controller_name == "fandoms") # rubocop:disable Rails/HelperInstanceVariable
 
     case controller.controller_name
     when "abuse_reports", "feedbacks", "known_issues"
@@ -55,10 +56,6 @@ module ApplicationHelper
     end
 
     class_names
-  end
-
-  def page_has_filters?
-    @facets.present? || (controller.controller_name == "collections" && @sort_and_filter) || (controller.action_name == "unassigned" && controller.controller_name == "fandoms")
   end
 
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
