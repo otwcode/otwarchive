@@ -218,7 +218,7 @@ public
   end
 
   include PathCleaner
-  # Warning: Admin 2FA bypasses this method in SessionsController#authenticate_admin_with_otp_two_factor
+  # Warning: The User and Admin 2FA login flows bypass this method
   def after_sign_in_path_for(resource)
     if resource.respond_to?(:pwned?) && resource.pwned?
       set_flash_message! :alert, :warn_pwned
