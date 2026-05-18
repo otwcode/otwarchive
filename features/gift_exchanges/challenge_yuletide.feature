@@ -19,6 +19,7 @@ Feature: Collection
     | myname4        | password   |
     | pinchhitter    | password    |
     And I am logged in as "mod1"
+    And the app name is "Example Archive"
     And I have no collections
     And I have Yuletide challenge tags setup
     And I add the fandom "Stargate Atlantis" to the character "John Sheppard"
