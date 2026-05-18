@@ -1,6 +1,13 @@
 class Users::TotpController < ApplicationController
+  before_action :load_user
+  before_action :check_ownership_or_admin
   before_action :check_totp_disabled, only: [:new, :reauthenticate_create, :create]
   before_action :check_totp_enabled, only: [:confirm_disable, :disable]
+
+  def load_user
+    @user = User.find_by!(login: params[:user_id])
+    @check_ownership_of = @user
+  end
 
   def new
     @page_subtitle = t(".page_title")
