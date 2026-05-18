@@ -1,4 +1,4 @@
-@admin
+@users
 Feature: Authenticate Users With TOTP 2FA
   Scenario: Users can enable TOTP 2FA
     Given the following activated users exist
@@ -65,7 +65,7 @@ Feature: Authenticate Users With TOTP 2FA
       And I press "Disable"
     Then I should see "Successfully disabled two-step verification."
 
-  Scenario: Admins cannot disable TOTP 2FA if they provide a wrong password
+  Scenario: Users cannot disable TOTP 2FA if they provide a wrong password
     Given the following activated users exist
       | login | password     |
       | user  | testpassword |
@@ -110,7 +110,7 @@ Feature: Authenticate Users With TOTP 2FA
       | login | password     |
       | user  | testpassword |
       And user "user" has TOTP 2FA enabled
-    When I go to the admin login page
+    When I go to the login page
       And I fill in "Username or email" with "user"
       And I fill in "Password" with "testpassword"
       And I press "Log In"
@@ -133,7 +133,7 @@ Feature: Authenticate Users With TOTP 2FA
       And I press "Log In" within "div#main"
     Then I should see "Successfully logged in"
     When I log out
-      And I go to the admin login page
+      And I go to the login page
       And I fill in "Username or email" with "user"
       And I fill in "Password" with "testpassword"
       And I press "Log In"
