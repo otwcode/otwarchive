@@ -60,7 +60,7 @@ module ApplicationHelper
 
   def page_has_filters?
     # This function is currently only used for classes_for_main, the linting error is disabled for the same reason
-    @facets.present? || (@sort_and_filter && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms') # rubocop:disable Rails/HelperInstanceVariable
+    @facets.present? || (@sort_and_filter && controller.controller_name == "collections") || (controller.action_name == "unassigned" && controller.controller_name == "fandoms") # rubocop:disable Rails/HelperInstanceVariable
   end
 
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
