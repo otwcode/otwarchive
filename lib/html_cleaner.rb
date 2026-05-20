@@ -21,8 +21,7 @@ module HtmlCleaner
     sanitized_field
   end
 
-  # yank out bad end-of-line characters and evil msword curly quotes
-  def fix_bad_characters(text)
+  def clean_html_and_characters(text)
     return "" if text.nil?
 
     # get the text into UTF-8 and get rid of invalid characters
@@ -36,7 +35,14 @@ module HtmlCleaner
     # argh, get rid of ____spacer____ inserts
     text.gsub! "____spacer____", ""
 
-    return text
+    # fix unclosed attribute quotes
+    # find all HTML opening tags; then within those, searches for any unclosed quotes with look ahead; adds the closing quote before lookahead
+    # pattern: ="value without closing tag before another attribute= or >
+    text.gsub!(/<[a-zA-Z][^>]*>/i) do |tag|
+      tag.gsub(/="([^"]*?)(?=\s+[a-zA-Z]+=|>)/, '="\1"')
+    end
+
+    text
   end
 
   def sanitize_value(field, value)
@@ -70,10 +76,10 @@ module HtmlCleaner
       end
       # Now that we know what transformers we need, let's sanitize the unfrozen value
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
+        unfrozen_value = Sanitize.clean(add_paragraphs_to_text(clean_html_and_characters(unfrozen_value)),
                                         Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers))
       else
-        unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
+        unfrozen_value = Sanitize.clean(add_paragraphs_to_text(clean_html_and_characters(unfrozen_value)),
                                         Sanitize::Config::ARCHIVE.merge(transformers: transformers))
       end
       doc = Nokogiri::HTML5::Document.new
@@ -81,7 +87,7 @@ module HtmlCleaner
       unfrozen_value = doc.fragment(unfrozen_value).to_html
     else
       # clean out all tags
-      unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
+      unfrozen_value = Sanitize.clean(clean_html_and_characters(unfrozen_value))
     end
 
     # Plain text fields can't contain &amp; entities:
