@@ -1358,8 +1358,6 @@ describe HtmlCleaner do
     end
   end
 
-
-
   describe "sanitize_value with unclosed quotes" do
     [:content, :endnotes, :notes].each do |field|
       context "#{field} field with unclosed attribute quotes" do
@@ -1399,8 +1397,6 @@ describe HtmlCleaner do
         it "preserves multi-class values in CSS-allowing fields" do
           input = '<p class="col-6 text-center>Some content</p>'
           result = sanitize_value(field, input)
-          doc = Nokogiri::HTML5.fragment(result)
-          # Both classes should be present (or at least the text should be preserved)
           expect(result).to include("Some content")
         end
       end
