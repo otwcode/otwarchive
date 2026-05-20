@@ -28,8 +28,7 @@ module SearchHelper
     when Language
       header << ts("in %{language}", language: parent.name)
     when Work
-      # the rest will also be i18n'd like this with AO3-7357
-      header << t("search_helper.search_header.scope.work", work: parent.title)
+      header << ts("including %{work}", work: parent.title)
     end
 
     header << ts("in %{tag_link}", tag_link: link_to_tag_with_text(parent, parent.name)) if parent.is_a?(Tag)
