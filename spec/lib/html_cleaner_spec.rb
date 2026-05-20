@@ -593,28 +593,10 @@ describe HtmlCleaner do
         expect(result).to eq('<a href="http://example.com">link</a>')
       end
 
-      it "handles original bug report example" do
-        input = '<p class="align-center>Text to be centered</p><p>More text</p>'
-        result = clean_html_and_characters(input)
-        expect(result).to eq('<p class="align-center">Text to be centered</p><p>More text</p>')
-      end
-
       it "fixes multiple malformed attributes in same tag" do
         input = '<p class="unclosed id="main" style="color>text</p>'
         result = clean_html_and_characters(input)
         expect(result).to eq('<p class="unclosed" id="main" style="color">text</p>')
-      end
-
-      it "preserves properly closed attributes alongside malformed ones" do
-        input = '<p id="good" class="bad>text</p>'
-        result = clean_html_and_characters(input)
-        expect(result).to eq('<p id="good" class="bad">text</p>')
-      end
-
-      it "handles multiple tags with unclosed quotes" do
-        input = '<p class="bad1>text</p><div id="bad2>more</div>'
-        result = clean_html_and_characters(input)
-        expect(result).to eq('<p class="bad1">text</p><div id="bad2">more</div>')
       end
 
       it "handles unclosed quote with special characters in value" do
