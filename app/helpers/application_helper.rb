@@ -256,7 +256,7 @@ module ApplicationHelper
     localized_time = time.in_time_zone(zone)
     unabbreviated_zone_name = TZInfo::Timezone.get(zone).friendly_identifier(true) rescue zone
     
-    time_pieces = [
+    time_parts = [
       localized_time.strftime('<abbr class="day" title="%A">%a</abbr> %d <abbr class="month" title="%B">%b</abbr> %Y %I:%M%p'),
       " ",
       content_tag(:abbr, localized_time.zone, class: "timezone", title: unabbreviated_zone_name)
@@ -274,7 +274,7 @@ module ApplicationHelper
       ]
     end
 
-    safe_join(time_pieces + (user_time_parts || [])).strip.html_safe
+    safe_join(time_parts + (user_time_parts || [])).strip.html_safe
   end
 
   def mailto_link(user, options={})
