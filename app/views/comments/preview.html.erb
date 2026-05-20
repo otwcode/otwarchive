@@ -39,7 +39,7 @@
 
   <%= form_for @comment, url: comments_path, method: :post, local: true, html: { id: "post_comment_from_preview" } do |f| %>
     <%= f.hidden_field :comment_content %>
-    
+
     <% if @comment.pseud_id %>
       <%= f.hidden_field :pseud_id %>
     <% elsif @comment.name %>
@@ -48,8 +48,14 @@
     <% end %>
 
     <% @context_params.each do |key, value| %>
-      <% next if key.in?(:comment_content, :pseud_id, :name, :email) %>
-      <%= hidden_field_tag key, value %>
+      <% next if key.in?([:comment_content, :pseud_id, :name, :email]) %>
+      <% if value.is_a?(Hash) %>
+        <% value.each do |sub_key, sub_value| %>
+          <%= hidden_field_tag "#{key}[#{sub_key}]", sub_value %>
+        <% end %>
+      <% else %>
+        <%= hidden_field_tag key, value %>
+      <% end %>
     <% end %>
 
     <%= f.submit t(".post_comment"), class: "button submit" %>

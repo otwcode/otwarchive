@@ -426,37 +426,6 @@ class CommentsController < ApplicationController
     render :preview
   end
 
-  private
-
-  def build_context_params
-    params = { comment_content: @comment.comment_content }
-    params[:pseud_id] = @comment.pseud_id if @comment.pseud_id
-    params[:name] = @comment.name if @comment.name
-    params[:email] = @comment.email if @comment.email
-    params[:view_full_work] = request.parameters[:view_full_work] if request.parameters[:view_full_work]
-    params[:page] = request.parameters[:page] if request.parameters[:page]
-    params[:controller_name] = request.parameters[:controller_name] if request.parameters[:controller_name]
-    
-    case @commentable
-    when Work
-      params[:work_id] = @commentable.id
-    when Chapter
-      params[:chapter_id] = @commentable.id
-    when AdminPost
-      params[:admin_post_id] = @commentable.id
-    when Tag
-      params[:tag_id] = @commentable.name
-    when Comment
-      params[:comment_id] = @commentable.id
-    end
-
-    if controller_name == "inbox" && request.parameters[:filters]
-      params[:filters] = request.parameters[:filters]
-    end
-
-    params
-  end
-
   # POST /comments
   # POST /comments.xml
   def create
@@ -832,6 +801,35 @@ class CommentsController < ApplicationController
   end
 
   private
+
+  def build_context_params
+    context = { comment_content: @comment.comment_content }
+    context[:pseud_id] = @comment.pseud_id if @comment.pseud_id
+    context[:name] = @comment.name if @comment.name
+    context[:email] = @comment.email if @comment.email
+    context[:view_full_work] = params[:view_full_work] if params[:view_full_work]
+    context[:page] = params[:page] if params[:page]
+    context[:controller_name] = params[:controller_name] if params[:controller_name]
+
+    case @commentable
+    when Work
+      context[:work_id] = @commentable.id
+    when Chapter
+      context[:chapter_id] = @commentable.id
+    when AdminPost
+      context[:admin_post_id] = @commentable.id
+    when Tag
+      context[:tag_id] = @commentable.name
+    when Comment
+      context[:comment_id] = @commentable.id
+    end
+
+    if controller_name == "inbox" && params[:filters]
+      context[:filters] = filter_params.to_h
+    end
+
+    context
+  end
 
   def comment_params
     params.require(:comment).permit(
