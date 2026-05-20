@@ -46,19 +46,18 @@ describe Prompt do
 
     context "when restrict_to_fandom and restrict_to_tag_set are both enabled" do
       let(:fandom_character) { create(:character, canonical: true) }
-
-      before do
-        create(:common_tagging, filterable: fandom, common_tag: fandom_character)
-        create(:common_tagging, filterable: fandom, common_tag: non_fandom_character)
-        create(:tag_set_association, tag: fandom_character, parent_tag: fandom, owned_tag_set: owned_tag_set)
-      end
-
       let!(:challenge) do
         create(:gift_exchange,
                offer_restriction: create(:prompt_restriction,
                                          character_restrict_to_fandom: true,
                                          character_restrict_to_tag_set: true,
                                          owned_tag_sets: [owned_tag_set]))
+      end
+
+      before do
+        create(:common_tagging, filterable: fandom, common_tag: fandom_character)
+        create(:common_tagging, filterable: fandom, common_tag: non_fandom_character)
+        create(:tag_set_association, tag: fandom_character, parent_tag: fandom, owned_tag_set: owned_tag_set)
       end
 
       it "marks the prompt as valid when the character is in the tag set" do
@@ -84,17 +83,16 @@ describe Prompt do
 
     context "when only restrict_to_fandom is enabled (not restrict_to_tag_set)" do
       let(:fandom_character) { create(:character, canonical: true) }
-
-      before do
-        create(:common_tagging, filterable: fandom, common_tag: fandom_character)
-      end
-
       let!(:challenge) do
         create(:gift_exchange,
                offer_restriction: create(:prompt_restriction,
                                          character_restrict_to_fandom: true,
                                          character_restrict_to_tag_set: false,
                                          owned_tag_sets: [owned_tag_set]))
+      end
+
+      before do
+        create(:common_tagging, filterable: fandom, common_tag: fandom_character)
       end
 
       it "marks the prompt as valid when the character is canonical in the fandom even if not in the tag set" do
