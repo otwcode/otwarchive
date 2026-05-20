@@ -1,5 +1,5 @@
 class ErrorsController < ApplicationController
-  %w[403 404 422 500].each do |error_code|
+  %w[403 404 422 429 500].each do |error_code|
     define_method error_code.to_sym do
       render error_code, status: error_code.to_i, formats: :html
     end

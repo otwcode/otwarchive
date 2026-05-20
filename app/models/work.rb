@@ -63,6 +63,8 @@ class Work < ApplicationRecord
   end
   # moderation
   has_one :moderated_work, dependent: :destroy
+  # imported url
+  has_one :imported_url, dependent: :destroy
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -165,7 +167,8 @@ class Work < ApplicationRecord
   end
 
   validates :user_defined_tags_count,
-            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
+            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } },
+            unless: -> { User.current_user.is_a?(Admin) }
 
   # If the recipient doesn't allow gifts, it should not be possible to give them
   # a gift work unless it fulfills a gift exchange assignment or non-anonymous
@@ -406,7 +409,7 @@ class Work < ApplicationRecord
 
   def self.find_by_url_cache_key(url)
     url = UrlFormatter.new(url)
-    "/v1/find_by_url/#{Work.find_by_url_generation}/#{url.encoded}"
+    "/v2/find_by_url/#{Work.find_by_url_generation}/#{url.encoded}"
   end
 
   # Match `url` to a work's imported_from_url field using progressively fuzzier matching:
@@ -1120,8 +1123,6 @@ class Work < ApplicationRecord
     user = users.first
     {
       comment_type: "fanwork-post",
-      key: ArchiveConfig.AKISMET_KEY,
-      blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_role: "user",
       comment_date_gmt: created_at.to_time.iso8601,
@@ -1137,8 +1138,7 @@ class Work < ApplicationRecord
   end
 
   def check_for_spam
-    return unless %w(staging production).include?(Rails.env)
-    self.spam = Akismetor.spam?(akismet_attributes)
+    self.spam = AkismetClient.spam?(akismet_attributes)
     self.spam_checked_at = Time.now
     save
   end
@@ -1161,15 +1161,13 @@ class Work < ApplicationRecord
   def mark_as_spam!
     update_attribute(:spam, true)
     ModeratedWork.mark_reviewed(self)
-    # don't submit spam reports unless in production mode
-    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+    AkismetClient.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
     update(spam: false, hidden_by_admin: false)
     ModeratedWork.mark_approved(self)
-    # don't submit ham reports unless in production mode
-    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+    AkismetClient.submit_ham(akismet_attributes)
   end
 
   def notify_of_hiding
@@ -1203,6 +1201,16 @@ class Work < ApplicationRecord
   end
 
   def bookmarkable_json
+    # If the work is unrevealed, it should not have any information that can be searched on
+    if unrevealed?
+      return as_json(
+        root: false,
+        bookmarkable_type: "Work",
+        unrevealed: true,
+        bookmarkable_join: { name: "bookmarkable" }
+      ) 
+    end
+
     methods = %i[collection_ids work_types]
     %w[general public].each do |visibility|
       methods << :"#{visibility}_tags"
@@ -1225,8 +1233,8 @@ class Work < ApplicationRecord
       anonymous: anonymous?,
       creators: indexed_creators,
       unrevealed: unrevealed?,
-      pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
-      user_ids: anonymous? || unrevealed? ? nil : user_ids,
+      pseud_ids: anonymous? ? nil : pseud_ids,
+      user_ids: anonymous? ? nil : user_ids,
       bookmarkable_type: "Work",
       bookmarkable_join: { name: "bookmarkable" },
       public_word_count: word_count,

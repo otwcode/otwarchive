@@ -512,6 +512,19 @@ namespace :After do
     puts "Finished reindexing tags on hidden and unrevealed works"
   end
 
+  desc "Reindex unrevealed bookmarks of unrevealed works"
+  task(reindex_unrevealed_bookmarkable: :environment) do
+    unrevealed_count = Work.unrevealed.count
+    unrevealed_batches = (unrevealed_count + 999) / 1_000
+    puts "Inspecting #{unrevealed_count} unrevealed works in #{unrevealed_batches} batches"
+    Work.unrevealed.find_in_batches.with_index do |batch, index|
+      batch.each(&:update_bookmarks_index)
+      puts "Finished batch #{index + 1} of #{unrevealed_count}"
+    end
+
+    puts "Finished reindexing bookmarks of unrevealed works"
+  end
+
   desc "Convert user kudos from users with the official role to guest kudos"
   task(convert_official_kudos: :environment) do
     official_users = Role.find_by(name: "official")&.users
@@ -622,6 +635,31 @@ namespace :After do
     Comment.find_in_batches.with_index do |batch, index|
       batch.each do |comment|
         comment.update_attribute(:spam, !comment.approved)
+      end
+
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    puts "Job complete."
+  end
+
+  desc "Run backfill for user_past_emails and user_past_usernames"
+  task(backfill: :environment) do
+    User.find_in_batches.with_index do |batch, index|
+      REDIS_GENERAL.sadd?("audits_backfill", batch.map(&:id))
+      
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    AuditsBackfillJob.spawn_jobs
+    puts "Backfill started and running on resque in background"
+  end
+
+  desc "Backfill canonical_email for existing users"
+  task(add_canonical_email: :environment) do
+    User.find_in_batches.with_index do |batch, index|
+      batch.each do |user|
+        user.update_attribute(:canonical_email, EmailCanonicalizer.canonicalize(user.email)) if user.email
       end
 
       batch_number = index + 1

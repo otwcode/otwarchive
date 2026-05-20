@@ -1,6 +1,4 @@
 class UsersController < ApplicationController
-  cache_sweeper :pseud_sweeper
-
   before_action :check_user_status, only: [:change_username, :changed_username]
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
   before_action :check_ownership, except: [:activate, :change_username, :changed_username, :delete_confirmation, :index, :show]

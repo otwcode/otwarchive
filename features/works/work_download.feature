@@ -128,16 +128,31 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "Chapter 2"
 
-  Scenario: Download of chaptered work without posted chapters does not include chapters
+  Scenario: Download of single-chapter work does not include chapter title or notes
 
-  Given the work "Bazinga"
-    And a draft chapter is added to "Bazinga"
-    And I delete chapter 1 of "Bazinga"
-  When I view the work "Bazinga"
+  Given the work "Single Chapter Work"
+  When I view the work "Single Chapter Work"
     And I follow "HTML"
   Then I should not see "Chapter 1"
-    And I should not see "Chapter 2"
-    And I should be able to download all versions of "Bazinga"
+
+  Scenario: Download of chaptered work without posted chapters does not include chapters
+
+  Given I am logged in
+    And I set up the draft "Allons-sy"
+    And I fill in "content" with "Run! Rose, run!"
+    And I press "Post"
+    And I follow "Add Chapter"
+    And I fill in "content" with "Remember, remember the 5th of November"
+    And I press "Save Draft"
+    And I force delete chapter 1 of "Allons-sy"
+  When I view the work "Allons-sy"
+    And I follow "HTML"
+  # Content of the deleted chapter and the drafted chapter shouldn't appear
+  Then I should not see "Run! Rose, run!"
+    And I should not see "Remember, remember the 5th of November"
+    # Confrim that the skeleton of the work is still downloaded 
+    And I should see "Allons-sy" 
+    And I should be able to download all versions of "Allons-sy"
 
   Scenario: Download chaptered works
 
@@ -437,4 +452,37 @@ Feature: Download a work
   Then I should receive a file of type "html"
     And I should see "Chapter 1"
     And I should see "Chapter 2: Chapter Two Title"
+
+  Scenario: Download work with only one chapter expecting more chapters include chapter title and notes
+  
+  Given I am logged in as "myname"
+    And I set up the draft "Download"
+    And I fill in "Work Title" with "Download"
+    And I fill in "content" with "Content for chapter one."
+    And I check "This work has multiple chapters"
+    And I fill in "Chapter 1 of" with "?"
+    And I check "at the beginning"
+    And I fill in "Notes" with "Overall start notes"
+    And I check "at the end"
+    And I fill in "End Notes" with "Overall end notes"
+    And I press "Post"
+  When I go to the 1st chapter of the work "Download"
+    And I follow "Edit Chapter"
+    And I fill in "Chapter Title" with "Chapter One Title"
+    And I check "at the beginning"
+    And I fill in "Notes" with "Text of notes at chapter start"
+    And I check "at the end"
+    And I fill in "End Notes" with "Text of notes at chapter end"
+    And I press "Update"
+  When I view the work "Download" 
+    And I follow "HTML"
+  Then I should receive a file of type "html"
+    And I should see "Overall start notes"
+    And I should see "Overall end notes"
+    And I should see "Chapter 1: Chapter One Title"
+    And I should see "Chapter Notes"
+    And I should see "Text of notes at chapter start"
+    And I should see "See the end of the chapter for more notes"
+    And I should see "Chapter End Notes"
+    And I should see "Text of notes at chapter end"
 

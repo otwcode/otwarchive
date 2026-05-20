@@ -29,6 +29,7 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
   before_action :check_permission_to_modify_hidden_status, only: [:hide, :unhide]
+  before_action :check_guest_email_is_from_suspended_or_banned_user, only: [:create]
   before_action :admin_logout_required, only: [:new, :create, :add_comment_reply]
   before_action :set_page_subtitle, only: [:index, :new, :show, :unreviewed]
 
@@ -50,6 +51,43 @@ class CommentsController < ApplicationController
       # new, create, and add_comment_reply don't set @comment, but do set @commentable
       flash[:comment_error] = t("comments.check_blocked.reply")
       redirect_to_all_comments(parent, show_comments: true)
+    end
+  end
+
+  RATE_LIMIT_STORE = ActiveSupport::Cache::RedisCacheStore.new(redis: REDIS_RATELIMITS, pool: false)
+
+  rate_limit to: ArchiveConfig.RATE_LIMIT_USER_COMMENTING_NUMBER,
+             within: ArchiveConfig.RATE_LIMIT_USER_COMMENTING_PERIOD.seconds,
+             by: -> { current_user.id },
+             if: -> { should_rate_limit },
+             with: -> { rate_limited },
+             store: RATE_LIMIT_STORE
+
+  def should_rate_limit
+    return false unless action_name == "create" || action_name == "update"
+
+    return false unless logged_in? # Guest comment rate limits are not handled here
+
+    return false unless current_user.should_spam_check_comments?
+
+    parent = find_parent
+    return false if parent.is_a?(Tag)
+
+    return false if current_user.is_author_of?(parent)
+
+    true
+  end
+
+  def rate_limited
+    respond_to do |format|
+      format.html do
+        redirect_to controller: "errors", action: "429"
+      end
+      format.js do
+        render json: {
+          error_message: t("comments.rate_limited.error")
+        }, status: :too_many_requests
+      end
     end
   end
 
@@ -244,6 +282,17 @@ class CommentsController < ApplicationController
     redirect_back_or_to @comment
   end
 
+  def check_guest_email_is_from_suspended_or_banned_user
+    return unless guest?
+
+    canonical_email = EmailCanonicalizer.canonicalize(params[:comment][:email])
+
+    return unless User.where(canonical_email: canonical_email).where("banned OR suspended").exists?
+
+    flash[:error] = t("comments.check_guest_email_is_from_suspended_or_banned_user.error")
+    redirect_back_or_to @comment
+  end
+
   # Get the thing the user is trying to comment on
   def load_commentable
     @thread_view = false
@@ -354,6 +403,9 @@ class CommentsController < ApplicationController
       @comment = Comment.new(comment_params)
       @comment.ip_address = request.remote_ip
       @comment.user_agent = request.env["HTTP_USER_AGENT"]&.to(499)
+      @comment.cloudflare_bot_score = request.env["HTTP_CF_BOT_SCORE"]
+      @comment.cloudflare_ja3_hash = request.env["HTTP_CF_JA3_HASH"]
+      @comment.cloudflare_ja4 = request.env["HTTP_CF_JA4"]
       @comment.commentable = Comment.commentable_object(@commentable)
       @controller_name = params[:controller_name]
 
@@ -369,7 +421,7 @@ class CommentsController < ApplicationController
         respond_to do |format|
           format.html do
             if request.referer&.match(/inbox/)
-              redirect_to user_inbox_path(current_user, filters: filter_params[:filters], page: params[:page])
+              redirect_to user_inbox_path(current_user, filters: filter_params, page: params[:page])
             elsif request.referer&.match(/new/) || (@comment.unreviewed? && current_user)
               # If the referer is the new comment page, go to the comment's page
               # instead of reloading the full work.
@@ -455,7 +507,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html do
         if params[:approved_from] == "inbox"
-          redirect_to user_inbox_path(current_user, page: params[:page], filters: filter_params[:filters])
+          redirect_to user_inbox_path(current_user, page: params[:page], filters: filter_params)
         elsif params[:approved_from] == "home"
           redirect_to root_path
         elsif @comment.ultimate_parent.is_a?(AdminPost)
@@ -719,6 +771,6 @@ class CommentsController < ApplicationController
   end
 
   def filter_params
-    params.permit!
+    params.slice(:filters).permit(filters: [:date, :read, :replied_to])[:filters]
   end
 end

@@ -20,7 +20,7 @@ namespace :resque do
 
     # The schedule doesn't need to be stored in a YAML, it just needs to
     # be a hash.  YAML is usually the easiest.
-    Resque.schedule = YAML.load_file("#{Rails.root}/config/resque_schedule.yml")
+    Resque.schedule = YAML.safe_load_file(Rails.root.join("config/resque_schedule.yml"))
 
     # If your schedule already has +queue+ set for each job, you don't
     # need to require your jobs.  This can be an advantage since it's

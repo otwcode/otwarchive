@@ -34,10 +34,10 @@ module WorksHelper
     fandoms = work.fandoms
     title_fandom = if fandoms.empty?
                      t("works_helper.work_page_title.unspecified_fandom")
-                   elsif fandoms.size > 3
+                   elsif fandoms.size > 2
                      t("works_helper.work_page_title.multifandom")
                    else
-                     fandoms.first.name
+                     fandoms.pluck(:name).join(t("support.array.words_connector"))
                    end
     author = work.anonymous? ? t("works_helper.work_page_title.anonymous") : work.pseuds.sort.collect(&:byline).join(t("support.array.words_connector"))
 
@@ -171,10 +171,10 @@ module WorksHelper
   # Generates a list of a work's tags and details for use in feeds
   def feed_summary(work)
     tags = work.tags.group_by(&:type)
-    text = +"<p>by #{byline(work, { visibility: 'public', full_path: true })}</p>"
+    text = +"<p>by #{byline(work, { visibility: 'public', only_path: false })}</p>"
     text << work.summary if work.summary
     text << "<p>Words: #{work.word_count}, Chapters: #{chapter_total_display(work)}, Language: #{work.language ? work.language.name : 'English'}</p>"
-    text << "<p>Series: #{series_list_with_work_position(work)}</p>" unless work.series.count.zero?
+    text << "<p>Series: #{series_list_with_work_position(work)}</p>" unless work.series.size.zero?
     # Create list of tags
     text << "<ul>"
     %w(Fandom Rating ArchiveWarning Category Character Relationship Freeform).each do |type|

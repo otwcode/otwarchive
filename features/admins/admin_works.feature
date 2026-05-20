@@ -522,6 +522,24 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     When I view the work "Over the Limit"
     Then I should see "Over Tag Limit: Yes"
 
+  Scenario Outline: Certain admins can edit a work that has too many tags
+    Given the user-defined tag limit is 2
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 3 fandom tags
+    When I am logged in as a "<role>" admin
+      And I view the work "Over the Limit"
+      And I follow "Edit Tags and Language"
+      And I select "Mature" from "Rating"
+      And I press "Update"
+    Then I should see "Work was successfully updated."
+      And I should see "Mature"
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
+
   Scenario Outline: Certain admins can see original work creators
     Given a work "Orphaned" with the original creator "orphaneer"
     When I am logged in as a "<role>" admin

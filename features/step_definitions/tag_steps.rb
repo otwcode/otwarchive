@@ -256,6 +256,11 @@ Given "I recategorize the {string} fandom as a {string} tag" do |name, tag_type|
   click_button("Save changes")
 end
 
+Given "the tag list limit is {int}" do |limit|
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.TAG_LIST_LIMIT = limit
+end
+
 ### WHEN
 
 When /^the periodic tag count task is run$/i do

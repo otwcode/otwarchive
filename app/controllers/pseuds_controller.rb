@@ -1,6 +1,4 @@
 class PseudsController < ApplicationController
-  cache_sweeper :pseud_sweeper
-
   before_action :load_user
   before_action :check_ownership, only: [:create, :destroy, :new]
   before_action :check_ownership_or_admin, only: [:edit, :update]
@@ -124,7 +122,9 @@ class PseudsController < ApplicationController
     end
 
     @pseud = @user.pseuds.find_by(name: params[:id])
-    if @pseud.is_default
+    if @pseud.nil?
+      flash[:error] = t(".cannot_delete_nonexisting")
+    elsif @pseud.is_default
       flash[:error] = t(".cannot_delete_default")
     elsif @pseud.name == @user.login
       flash[:error] = t(".cannot_delete_matching_username")

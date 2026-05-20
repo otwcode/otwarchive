@@ -23,7 +23,7 @@ module Muted
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
 
-      @page_subtitle = t(".title")
+      @page_subtitle = t(".page_title", username: @user.login)
     end
 
     # GET /users/:user_id/muted/users/confirm_mute

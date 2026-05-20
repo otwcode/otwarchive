@@ -29,7 +29,19 @@ class AdminMailer < ApplicationMailer
 
     mail(
       to: @admin.email,
-      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME) 
+    )
+  end
+
+  # Sends an email to the admin who lost their 2FA device when a sysadmin runs
+  # the script in script/send_backup_codes_to_admin.rb
+  def totp_2fa_backup_codes(admin, codes)
+    @admin = admin
+    @codes = codes
+
+    mail(
+      to: @admin.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME) 
     )
   end
 end

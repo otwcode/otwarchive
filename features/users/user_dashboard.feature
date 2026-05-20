@@ -87,6 +87,11 @@ Feature: User dashboard
     And I go to meatloaf's user page
   Then I should see "Recent works"
     And I should not see "Anon Work" within "#user-works"
+  When I am logged in as an admin
+    And I go to meatloaf's user page
+  Then I should see "Recent works"
+    And I should not see "Anon Work" within "#user-works"
+
 
   Scenario: The user dashboard should list up to five of the user's series and link to more
   Given I am logged in as "meatloaf"

@@ -24,8 +24,8 @@ class TagWranglingsController < ApplicationController
     type = params[:show].singularize.capitalize
     @tags = TagQuery.new({
                            type: type,
+                           wrangling_status: "wrangleable",
                            in_use: true,
-                           unwrangleable: false,
                            unwrangled: true,
                            has_posted_works: true,
                            sort_column: params[:sort_column],

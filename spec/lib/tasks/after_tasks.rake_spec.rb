@@ -461,6 +461,35 @@ describe "rake After:reindex_hidden_unrevealed_tags" do
   end
 end
 
+describe "rake After:reindex_unrevealed_bookmarkable" do
+  context "with a regular bookmark" do
+    let(:work) { create(:work) }
+    let(:bookmark) { create(:bookmark, bookmarkable: work) }
+
+    it "does not reindex the bookmark" do
+      expect do
+        subject.invoke
+      end.not_to add_to_reindex_queue(bookmark, :background)
+    end
+  end
+
+  context "with a bookmark of an unrevealed work" do
+    let(:work) { create(:work) }
+
+    before do
+      work.update!(in_unrevealed_collection: true)
+    end
+
+    let(:bookmark) { create(:bookmark, bookmarkable: work) }
+
+    it "reindexes the bookmark" do
+      expect do
+        subject.invoke
+      end.to add_to_reindex_queue(bookmark, :background)
+    end
+  end
+end
+
 describe "rake After:convert_official_kudos" do
   context "when there is no official role" do
     it "outputs completion message" do
@@ -818,5 +847,21 @@ describe "rake After:sync_approved_to_spam" do
 
     expect(synced_spam_comment.approved).to be_falsey
     expect(synced_spam_comment.spam).to be_truthy
+  end
+end
+
+describe "rake After:add_canonical_email" do
+  let(:user1) { create(:user, email: "A@example.com") }
+  let(:user2) { create(:user, email: "b@googlemail.com") }
+  let(:user3) { create(:user, email: "c+tag@example.com") }
+  let(:user4) { create(:user, email: "d.lastname@gmail.com") }
+
+  it "backfills the canonical_email column for existing users" do
+    subject.invoke
+    
+    expect(user1.canonical_email).to eq("a@example.com")
+    expect(user2.canonical_email).to eq("b@gmail.com")
+    expect(user3.canonical_email).to eq("c@example.com")
+    expect(user4.canonical_email).to eq("dlastname@gmail.com")
   end
 end

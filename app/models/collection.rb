@@ -32,23 +32,13 @@ class Collection < ApplicationRecord
   end
 
   belongs_to :challenge, dependent: :destroy, polymorphic: true
+
   has_many :prompts, dependent: :destroy
 
   has_many :signups, class_name: "ChallengeSignup", dependent: :destroy
   has_many :potential_matches, dependent: :destroy
   has_many :assignments, class_name: "ChallengeAssignment", dependent: :destroy
   has_many :claims, class_name: "ChallengeClaim", dependent: :destroy
-
-  # We need to get rid of all of these if the challenge is destroyed
-  after_save :clean_up_challenge
-  def clean_up_challenge
-    return if self.challenge_id
-
-    assignments.each(&:destroy)
-    potential_matches.each(&:destroy)
-    signups.each(&:destroy)
-    prompts.each(&:destroy)
-  end
 
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
@@ -364,19 +354,23 @@ class Collection < ApplicationRecord
   @queue = :collection
 
   def reveal!
-    async(:reveal_collection_items)
+    async_after_commit(:reveal_collection_items)
   end
 
   def reveal_authors!
-    async(:reveal_collection_item_authors)
+    async_after_commit(:reveal_collection_item_authors)
   end
 
   def reveal_collection_items
+    return if unrevealed?
+
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:unrevealed, false) }
     send_reveal_notifications
   end
 
   def reveal_collection_item_authors
+    return if anonymous?
+
     approved_collection_items.each { |collection_item| collection_item.update_attribute(:anonymous, false) }
   end
 
@@ -400,6 +394,33 @@ class Collection < ApplicationRecord
     self.icon.purge
     self.icon_alt_text = nil
     self.icon_comment_text = nil
+  end
+
+  def self.expire_blurb_cache(id)
+    # Expire both versions of the blurb, whether the user is logged in or not.
+    %w[logged-in logged-out].each do |logged_in|
+      [
+        "collection-blurb-#{logged_in}-#{id}-v5-header",
+        "collection-blurb-#{logged_in}-#{id}-v5-summary",
+        "collection-blurb-#{logged_in}-#{id}-v5-body"
+      ].each do |cache_key|
+        ActionController::Base.new.expire_fragment(cache_key)
+      end
+    end
+  end
+
+  def self.expire_profile_cache(id)
+    ActionController::Base.new.expire_fragment("collection-profile-#{id}")
+  end
+
+  def self.expire_caches(id)
+    Collection.expire_blurb_cache(id)
+    Collection.expire_profile_cache(id)
+  end
+
+  # Blurbs use data from Elasticsearch via CollectionDecorator, so we need to refresh the blurb cache on reindex
+  def self.successful_reindex(ids)
+    ids.each { |id| Collection.expire_blurb_cache(id) }
   end
 
   # Work and bookmark counts for indexing; these come from the database.

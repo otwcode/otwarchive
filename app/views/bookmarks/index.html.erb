@@ -14,23 +14,23 @@
 <% if current_user.is_a?(User) || @tag || @facets.present? %>
   <ul class="navigation actions" role="navigation">
     <% if logged_in? && (@user == current_user || (@owner.blank? && @bookmarkable.blank?) || @collection) %>
-      <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
+      <li><%= link_to t(".navigation.new_external_work"), new_external_work_path %></li>
     <% elsif params[:work_id] || params[:series_id] || params[:external_work_id] %>
       <% bookmark_form_id = (@bookmarkable.blank? ? "#{@bookmark.id}" : "#{@bookmarkable.id}") %>
       <% # let the user reading this bookmark save a copy for themselves %>
       <% if logged_in? && !is_author_of?(@bookmark) %>
         <li>
           <% if (current_user_bookmark ||= bookmark_if_exists(@bookmarkable)) %>
-            <%= link_to ts("Edit Bookmark"), edit_bookmark_path(current_user_bookmark), :id => "bookmark_form_trigger_for_#{bookmark_form_id}", :remote => true %>
+            <%= link_to t(".navigation.edit"), edit_bookmark_path(current_user_bookmark), data: { path: edit_bookmark_path(current_user_bookmark) }, class: "bookmark_form_trigger_for_#{bookmark_form_id}", remote: true %>
           <% else %>
-            <%= link_to ts("Bookmark"), get_new_bookmark_path(@bookmarkable), :id => "bookmark_form_trigger_for_#{bookmark_form_id}", :remote => true %>
+            <%= link_to t(".navigation.new"), get_new_bookmark_path(@bookmarkable), class: "bookmark_form_trigger_for_#{bookmark_form_id}", remote: true %>
           <% end %>
         </li>
       <% end %>
     <% end %>
     <% if @tag %>
-      <li><%= span_if_current ts('Works'), tag_works_path(@tag) %></li>
-      <li><%= span_if_current ts('Bookmarks'), tag_bookmarks_path(@tag) %></li>
+      <li><%= span_if_current t(".navigation.works"), tag_works_path(@tag) %></li>
+      <li><%= span_if_current t(".navigation.bookmarks"), tag_bookmarks_path(@tag) %></li>
     <% end %>
     <% if @facets.present? %>
       <% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>

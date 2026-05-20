@@ -359,6 +359,12 @@ When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
   step %{all indexing jobs have been run}
 end
 
+When "I force delete chapter {int} of {string}" do |chapter, title|
+  work = Work.find_by(title: title)
+  work.chapters.where(position: chapter).first.destroy!
+  step %{all indexing jobs have been run}
+end
+
 # Posts a chapter for the current user
 When /^I post a chapter for the work "([^"]*)"(?: as "(.*?)")?$/ do |work_title, pseud|
   work = Work.find_by(title: work_title)
@@ -551,6 +557,7 @@ When /^I list an external work as inspiration$/ do
   end
 end
 
+# Format is "DD [Month, english] YYYY"
 When /^I set the publication date to (\d+) (.*) (\d+)$/ do |day, month, year|
   if page.has_selector?("#backdate-options-show")
     check("backdate-options-show") if page.find("#backdate-options-show")

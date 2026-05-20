@@ -45,6 +45,10 @@ https://otwcode.github.io/docs/patterns/regions.html#main-region
   background: url("/images/logo.png") 0.5em 3em no-repeat;
 }
 
+#main.authentication {
+  background: none;
+}
+
 #main.errors h2 {
   display: block;
   margin-top: 0;

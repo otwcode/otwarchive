@@ -1,5 +1,6 @@
 class FeedbacksController < ApplicationController
   before_action :load_support_languages
+  before_action :load_support_notice
 
   def new
     @admin_setting = AdminSetting.current
@@ -37,6 +38,10 @@ class FeedbacksController < ApplicationController
 
   def load_support_languages
     @support_languages = Language.where(support_available: true).default_order
+  end
+
+  def load_support_notice
+    @support_notice = SupportNotice.where(active: true).first
   end
 
   def feedback_params

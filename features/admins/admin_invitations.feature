@@ -377,6 +377,17 @@ Feature: Admin Actions to Manage Invitations
     When I follow the first invitation token url
     Then I should see "Sender testadmin-policy_and_abuse"
 
+  Scenario: An admin with open_doors role can see and use the Track invitations form
+    Given the user "dax" exists and is activated
+      And "dax" has "2" invitations
+      And I am logged in as a "open_doors" admin
+    When I follow "Invite New Users"
+    Then I should see "Track invitations"
+    When I fill in "Username" with "dax"
+      And I press "Search" within "form.invitation.simple.search"
+    Then I should see "Copy and use"
+      And I should see "Delete"
+
   Scenario: An admin can edit an invitation
     Given the user "dax" exists and is activated
       And "dax" has "2" invitations

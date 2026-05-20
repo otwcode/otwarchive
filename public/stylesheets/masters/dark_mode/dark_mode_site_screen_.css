@@ -534,6 +534,10 @@ dl.meta {
   border-color: #555;
 }
 
+dl.meta .wrapper {
+  border-bottom-color: #2a2a2a;
+}
+
 /* 13-GROUP-BLURB */
 
 li.blurb,
@@ -624,6 +628,12 @@ li.comment {
   border-bottom-color: #2a2a2a;
 }
 
+/* 2. ZONE: SYSTEM: SESSIONS */
+
+.authentication fieldset {
+  border-color: #555;
+}
+
 /* 6. ZONE: SYSTEM: FAQS */
 
 .faq .categories h3 {
@@ -702,7 +712,7 @@ form.filters fieldset {
   border-bottom-color: #555;
 }
 
-.userstuff blockquote {
+.userstuff blockquote, .userstuff address {
   border-left-color: #555;
 }
 
@@ -756,6 +766,11 @@ ul.notes,
 form .notice,
 form ul.notes {
     box-shadow: none;
+}
+
+.annotation {
+  background: #2a2a2a;
+  border-color: #555;
 }
 
 /* symbols */

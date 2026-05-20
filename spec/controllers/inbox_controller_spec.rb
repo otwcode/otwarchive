@@ -6,6 +6,14 @@ describe InboxController do
   let(:user) { create(:user) }
 
   describe "GET #show" do
+    context "when the target user does not exist" do
+      it "raises a 404 error" do
+        expect do
+          get :show, params: { user_id: "nonexistent_user" }
+        end.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+  
     it "redirects to user page when not logged in and displays an error" do
       get :show, params: { user_id: user.login }
       it_redirects_to_with_error(user_path(user),

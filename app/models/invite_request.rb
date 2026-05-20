@@ -10,7 +10,7 @@ class InviteRequest < ApplicationRecord
   def set_simplified_email
     return if email.blank?
 
-    simplified = AdminBlacklistedEmail.canonical_email(email).split('@')
+    simplified = EmailCanonicalizer.canonicalize(email).split("@")
     self.simplified_email = simplified.first.delete(".").gsub(/\+.+$/, "") + "@#{simplified.last}"
   end
 
@@ -53,8 +53,7 @@ class InviteRequest < ApplicationRecord
   def invite_and_remove(creator=nil)
     invitation = creator ? creator.invitations.build(invitee_email: self.email, from_queue: true) :
                                        Invitation.new(invitee_email: self.email, from_queue: true)
-    if invitation.save
-      self.destroy
-    end
+    invitation.save
+    self.destroy
   end
 end

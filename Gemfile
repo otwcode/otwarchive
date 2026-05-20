@@ -6,8 +6,8 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 7.2"
-gem "rails-i18n"
+gem "rails", "~> 8.1.0"
+gem "rails-i18n", "~> 8.0", git: "https://github.com/svenfuchs/rails-i18n", ref: "54c1c7c2fdcc311427ec6f1dadd298a60db1ddef"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
 
@@ -37,7 +37,6 @@ gem "lograge" # https://github.com/roidrage/lograge
 gem 'will_paginate', '>=3.0.2'
 gem "pagy", "~> 9.3"
 gem 'acts_as_list', '~> 0.9.7'
-gem 'akismetor'
 
 gem 'httparty'
 gem "csv", "~> 3.3.5"
@@ -51,7 +50,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem "elasticsearch", "8.18.0"
+gem "elasticsearch", "9.3.0"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
@@ -61,10 +60,12 @@ gem "terrapin"
 gem 'fastimage'
 
 # Gems for authentication
-gem "devise"
+gem "devise", git: "https://github.com/otwcode/devise", ref: "5dd846e"
 gem "devise-async" # To mails through queues
 gem "bcrypt"
 gem "devise-pwned_password"
+gem "devise-two-factor"
+gem "rqrcode"
 
 # Needed for modern ssh
 gem "ed25519", ">= 1.2", "< 2.0"
@@ -107,13 +108,13 @@ gem 'kgio', '2.10.0'
 gem "marcel", "1.0.2"
 
 # Library for helping run pt-online-schema-change commands:
-gem "departure", "~> 6.8"
+gem "departure", "~> 8.0"
 
 gem "rack-timeout"
 gem "puma_worker_killer"
 
 group :test do
-  gem "rspec-rails", "~> 6.0"
+  gem "rspec-rails", "~> 8.0"
   gem 'pickle'
   gem "shoulda-matchers"
   gem "capybara"
@@ -182,5 +183,5 @@ group :staging, :production do
   gem "sentry-resque"
 end
 
-gem "image_processing", "~> 1.12"
+gem "image_processing", "~> 1.14"
 gem "ostruct"
