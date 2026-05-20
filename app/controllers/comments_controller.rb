@@ -724,7 +724,7 @@ class CommentsController < ApplicationController
         redirect_to_comment(@comment, options)
       end
       format.js
-    end# Allow pre-populating from preview or edit forms
+    end
   end
 
   def cancel_comment_delete
