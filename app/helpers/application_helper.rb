@@ -19,11 +19,11 @@ module ApplicationHelper
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
 
-    # Rails/HelperInstanceVariable is disabled for the two following lines given this warning is raised for reusing helpers. This function is only used once in application.html.erb
+    # Rails/HelperInstanceVariable is disabled for the the following line given this warning is raised for reusing helpers. This function is only used once in application.html.erb
     # Whether or not the sidebar should be shown
     class_names += " dashboard" if !@hide_dashboard && (@user || @admin_posts || @collection || show_wrangling_dashboard) # rubocop:disable Rails/HelperInstanceVariable
     # Whether or not the page will have filters
-    class_names += " filtered" if @facets.present? || (controller.controller_name == "collections" && @sort_and_filter) || (controller.action_name == "unassigned" && controller.controller_name == "fandoms") # rubocop:disable Rails/HelperInstanceVariable
+    class_names += " filtered" if page_has_filters?
 
     case controller.controller_name
     when "abuse_reports", "feedbacks", "known_issues"
@@ -56,6 +56,11 @@ module ApplicationHelper
     end
 
     class_names
+  end
+
+  def page_has_filters?
+    # This function is currently only used for classes_for_main, the linting error is disabled for the same reason
+    @facets.present? || (@sort_and_filter && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms') # rubocop:disable Rails/HelperInstanceVariable
   end
 
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
