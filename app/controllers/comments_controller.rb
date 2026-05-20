@@ -365,8 +365,6 @@ class CommentsController < ApplicationController
       flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_to root_path
     else
-      # Allow pre-populating from preview or edit forms
-      # Handle both flat params (from GET) and nested params (from POST)
       if params[:comment_content].present? || params[:comment].present?
         comment_attrs = {
           comment_content: params[:comment_content] || params.dig(:comment, :comment_content),
@@ -416,23 +414,52 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
     @comment.commentable = Comment.commentable_object(@commentable)
 
-    # Set parent and unreviewed status for nested comments
     @comment.set_parent_and_unreviewed
 
-    # Validate to catch errors early
     unless @comment.valid?
       render :new, locals: { show_errors: true }
       return
     end
 
     @preview_mode = true
+    @context_params = build_context_params
     render :preview
+  end
+
+  private
+
+  def build_context_params
+    params = { comment_content: @comment.comment_content }
+    params[:pseud_id] = @comment.pseud_id if @comment.pseud_id
+    params[:name] = @comment.name if @comment.name
+    params[:email] = @comment.email if @comment.email
+    params[:view_full_work] = request.parameters[:view_full_work] if request.parameters[:view_full_work]
+    params[:page] = request.parameters[:page] if request.parameters[:page]
+    params[:controller_name] = request.parameters[:controller_name] if request.parameters[:controller_name]
+    
+    case @commentable
+    when Work
+      params[:work_id] = @commentable.id
+    when Chapter
+      params[:chapter_id] = @commentable.id
+    when AdminPost
+      params[:admin_post_id] = @commentable.id
+    when Tag
+      params[:tag_id] = @commentable.name
+    when Comment
+      params[:comment_id] = @commentable.id
+    end
+
+    if controller_name == "inbox" && request.parameters[:filters]
+      params[:filters] = request.parameters[:filters]
+    end
+
+    params
   end
 
   # POST /comments
   # POST /comments.xml
   def create
-    # Check if this is a preview request
     if params[:preview_button]
       preview
       return
@@ -728,7 +755,7 @@ class CommentsController < ApplicationController
         redirect_to_comment(@comment, options)
       end
       format.js
-    end
+    end# Allow pre-populating from preview or edit forms
   end
 
   def cancel_comment_delete
