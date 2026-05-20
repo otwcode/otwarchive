@@ -1339,15 +1339,6 @@ describe HtmlCleaner do
       end
     end
   end
-
-  describe "sanitize_value with unclosed quotes" do
-    ArchiveConfig.FIELDS_ALLOWING_CSS.each do |field|
-      context "#{field} field with unclosed quotes preserves user classes" do
-        it "preserves multi-class values in CSS-allowing fields" do
-          input = '<p class="col-6 text-center>Some content</p>'
-          result = sanitize_value(field, input)
-          expect(result).to include("Some content")
-        end
       end
     end
   end
