@@ -1,8 +1,8 @@
 @users
 Feature: Filters
-  In order to ensure filtering works on works, bookmarks and collections
+  In order to ensure filtering works on works and bookmarks
   As a humble user
-  I want to filter on a user's works, bookmarks and collections
+  I want to filter on a user's works and bookmarks
 
   Background:
     Given a canonical fandom "The Hobbit"
