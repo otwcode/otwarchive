@@ -75,10 +75,7 @@ module HtmlCleaner
         transformers << OtwSanitize::UserClassSanitizer.transformer
       end
       # Now that we know what transformers we need, let's sanitize the unfrozen value
-      config = ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s) ? 
-        Sanitize::Config::CSS_ALLOWED : 
-        Sanitize::Config::ARCHIVE
-
+      config = ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s) ? Sanitize::Config::CSS_ALLOWED : Sanitize::Config::ARCHIVE
       unfrozen_value = Sanitize.clean(add_paragraphs_to_text(clean_html_and_characters(unfrozen_value)),
                                       config.merge(transformers: transformers))
       doc = Nokogiri::HTML5::Document.new
