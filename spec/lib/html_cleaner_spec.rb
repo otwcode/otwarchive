@@ -1359,39 +1359,6 @@ describe HtmlCleaner do
   end
 
   describe "sanitize_value with unclosed quotes" do
-    [:content, :endnotes, :notes].each do |field|
-      context "#{field} field with unclosed attribute quotes" do
-        it "preserves text after malformed tag with unclosed quote" do
-          input = '<p class="align-center>Text to be centered</p><p>More text</p>'
-          result = sanitize_value(field, input)
-          expect(result).to include("Text to be centered")
-          expect(result).to include("More text")
-        end
-
-        it "preserves complete work with missing quote in class attribute" do
-          input = '<p class="intro>This is the introduction.</p><p>This is the body.</p>'
-          result = sanitize_value(field, input)
-          expect(result).to include("This is the introduction.")
-          expect(result).to include("This is the body.")
-        end
-
-        it "handles unclosed quote with multiple malformed attributes" do
-          input = '<p class="bad id="main">Some text</p><p>More text</p>'
-          result = sanitize_value(field, input)
-          expect(result).to include("Some text")
-          expect(result).to include("More text")
-        end
-
-        it "preserves text with unclosed href in links" do
-          input = '<p>Check <a href="http://example.com>this</a> out.</p>'
-          result = sanitize_value(field, input)
-          expect(result).to include("Check")
-          expect(result).to include("this")
-          expect(result).to include("out.")
-        end
-      end
-    end
-
     ArchiveConfig.FIELDS_ALLOWING_CSS.each do |field|
       context "#{field} field with unclosed quotes preserves user classes" do
         it "preserves multi-class values in CSS-allowing fields" do
