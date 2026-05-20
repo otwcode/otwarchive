@@ -1,0 +1,123 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".page_heading") %></h2>
+<%# error_messages_for :comment %>
+<!--/descriptions-->
+
+<!--main content-->
+<div id="previewpane">
+  <ul class="comment-list">
+    <li class="<%= cycle :odd, :even %> <%= css_classes_for_comment(@comment) %> preview" id="comment_preview" role="article">
+      <h4 class="heading byline">
+        <% if @comment.by_anonymous_creator? %>
+          <%= ts("Anonymous Creator") %>
+        <% else %>
+          <%= get_commenter_pseud_or_name(@comment) %>
+        <% end %>
+        <span class="posted datetime">
+          <%= time_in_zone(Time.current) %>
+        </span>
+      </h4>
+      <div class="icon">
+        <% if !@comment.pseud.nil? %>
+          <% if @comment.by_anonymous_creator? %>
+            <span class="anonymous icon"><!-- anonymous creator icon holder --></span>
+          <% else %>
+            <%= icon_display(@comment.pseud.user, @comment.pseud) %>
+          <% end %>
+        <% else %>
+          <span class="visitor icon"><!-- visitor icon holder --></span>
+        <% end %>
+      </div>
+      <blockquote class="userstuff">
+        <%= raw sanitize_field(@comment, :comment_content) %>
+      </blockquote>
+    </li>
+  </ul>
+</div>
+<!--/content-->
+
+<!-- Action buttons -->
+<div class="actions right">
+  <%# Back to Edit - submit form with all data to repopulate the form %>
+  <%= form_with url: new_comment_path, method: :get, local: true, html: { id: "back_to_edit_form" } do |f| %>
+    <%# Use hidden_field_tag for all fields to ensure flat params %>
+    <%= hidden_field_tag :comment_content, @comment.comment_content %>
+    
+    <% if @comment.pseud_id %>
+      <%= hidden_field_tag :pseud_id, @comment.pseud_id %>
+    <% elsif @comment.name %>
+      <%= hidden_field_tag :name, @comment.name %>
+      <%= hidden_field_tag :email, @comment.email %>
+    <% end %>
+
+    <%# Preserve commentable context - use hidden_field_tag for non-nested params %>
+    <% if @commentable.is_a?(Work) %>
+      <%= hidden_field_tag :work_id, @commentable.id %>
+    <% elsif @commentable.is_a?(Chapter) %>
+      <%= hidden_field_tag :chapter_id, @commentable.id %>
+    <% elsif @commentable.is_a?(AdminPost) %>
+      <%= hidden_field_tag :admin_post_id, @commentable.id %>
+    <% elsif @commentable.is_a?(Tag) %>
+      <%= hidden_field_tag :tag_id, @commentable.name %>
+    <% elsif @commentable.is_a?(Comment) %>
+      <%= hidden_field_tag :comment_id, @commentable.id %>
+    <% end %>
+
+    <%# Preserve contextual params %>
+    <% if params[:view_full_work] %>
+      <%= hidden_field_tag :view_full_work, params[:view_full_work] %>
+    <% end %>
+    <% if params[:page] %>
+      <%= hidden_field_tag :page, params[:page] %>
+    <% end %>
+    <% if controller.controller_name == "inbox" && params[:filters] %>
+      <%= hidden_field_tag "filters[read]", params[:filters][:read] %>
+      <%= hidden_field_tag "filters[replied_to]", params[:filters][:replied_to] %>
+      <%= hidden_field_tag "filters[date]", params[:filters][:date] %>
+    <% end %>
+    <%= hidden_field_tag :controller_name, @controller_name if @controller_name %>
+
+    <%= submit_tag t(".back_to_edit"), class: "button" %>
+  <% end %>
+
+  <%= form_for @comment, url: comments_path, method: :post, local: true, html: { id: "post_comment_from_preview" } do |f| %>
+    <%= f.hidden_field :comment_content %>
+    
+    <% if @comment.pseud_id %>
+      <%= f.hidden_field :pseud_id %>
+    <% elsif @comment.name %>
+      <%= f.hidden_field :name %>
+      <%= f.hidden_field :email %>
+    <% end %>
+
+    <%# Preserve commentable context - use hidden_field_tag for non-nested params %>
+    <% if @commentable.is_a?(Work) %>
+      <%= hidden_field_tag :work_id, @commentable.id %>
+    <% elsif @commentable.is_a?(Chapter) %>
+      <%= hidden_field_tag :chapter_id, @commentable.id %>
+    <% elsif @commentable.is_a?(AdminPost) %>
+      <%= hidden_field_tag :admin_post_id, @commentable.id %>
+    <% elsif @commentable.is_a?(Tag) %>
+      <%= hidden_field_tag :tag_id, @commentable.name %>
+    <% elsif @commentable.is_a?(Comment) %>
+      <%= hidden_field_tag :comment_id, @commentable.id %>
+    <% end %>
+
+    <%# Preserve contextual params %>
+    <% if params[:view_full_work] %>
+      <%= hidden_field_tag :view_full_work, params[:view_full_work] %>
+    <% end %>
+    <% if params[:page] %>
+      <%= hidden_field_tag :page, params[:page] %>
+    <% end %>
+    <% if controller.controller_name == "inbox" && params[:filters] %>
+      <%= hidden_field_tag "filters[read]", params[:filters][:read] %>
+      <%= hidden_field_tag "filters[replied_to]", params[:filters][:replied_to] %>
+      <%= hidden_field_tag "filters[date]", params[:filters][:date] %>
+    <% end %>
+    <%= hidden_field_tag :controller_name, @controller_name if @controller_name %>
+
+    <%= f.submit t(".post_comment"), class: "button submit" %>
+  <% end %>
+</div>
+<!--/actions-->

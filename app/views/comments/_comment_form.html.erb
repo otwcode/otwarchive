@@ -102,6 +102,7 @@
             maximum_length: ArchiveConfig.COMMENT_MAX,
             tooLongMessage: t(".comment_too_long", count: ArchiveConfig.COMMENT_MAX) %>
       <p class="submit actions">
+          <%= f.submit t(".preview_button"), name: "preview_button", id: "comment_preview_for_#{commentable.id}" %>
           <%= f.submit button_name, id: "comment_submit_for_#{commentable.id}", data: { disable_with: t(".processing_message") } %>
           <% if controller.controller_name == 'inbox' %>
             <a name="comment_cancel" id="comment_cancel"><%= t(".cancel_action") %></a>

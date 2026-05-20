@@ -60,7 +60,7 @@ input[type="submit"] {
   white-space: normal;
 }
 
-p.submit, input.submit, dd.submit {
+p.submit, input.submit, dd.submit, div.actions.right {
   text-align: right;
 }
 

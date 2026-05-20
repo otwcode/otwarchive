@@ -874,6 +874,7 @@ en:
         comment: Comment
         note: Note
       legend: Post Comment
+      preview_button: Preview
       processing_message: Please wait...
     commentable:
       actions:
@@ -920,6 +921,11 @@ en:
       page_heading: Editing comment
       show: Show
       update: Update
+    preview:
+      back_to_edit: Back to Edit
+      commenting_on: "Commenting on: %{commentable_link}"
+      page_heading: Preview Comment
+      post_comment: Post Comment
     show:
       comment_on_html: Comment on %{commentable_link}
     single_comment:
