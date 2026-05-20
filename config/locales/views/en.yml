@@ -3315,7 +3315,7 @@ en:
       content_policy: Content Policy
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       privacy_moderated_commenting_help_title: Comments moderated
-      privacy_restricted_commenting_help_title: Who can comment on these works
+      privacy_restricted_commenting_help_title: Who can comment on this work
       privacy_restricted_work_help_title: Registered users
       tos_faq: Terms of Service FAQ
       works_languages_help_title: Languages help
@@ -3365,7 +3365,7 @@ en:
       select: Select work skin
     standard_form:
       privacy_moderated_commenting_help_title: Comments moderated
-      privacy_restricted_commenting_help_title: Who can comment on these works
+      privacy_restricted_commenting_help_title: Who can comment on this work
       privacy_restricted_work_help_title: Registered users
       works_languages_help_title: Languages help
       works_parents_help_title: Parent works help
