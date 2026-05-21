@@ -45,8 +45,8 @@ Feature: Favorite Tags
     And I am a visitor
   When I view the "Dallas (TV 2012)" works index
     And I follow "Log In" within "#header"
-    And I fill in "user_session_login_small" with "bourbon" within "#login"
-    And I fill in "user_session_password_small" with "password" within "#login"
+    And I fill in "Username or email:" with "bourbon" within "#login"
+    And I fill in "Password:" with "password" within "#login"
     And I press "Log In" within "#login"
   Then I should see "Successfully logged in"
     And I should see a "Favorite Tag" button

@@ -1,5 +1,4 @@
 <% if @user == current_user && @user.preference.try(:first_login) %>
-  <!-- pseudoflash because putting it in a real one was making for some ugly code -->
   <div class="notice" id="first-login-help-banner">
     <p>
       <%= t(".login_banner.welcome_html",
