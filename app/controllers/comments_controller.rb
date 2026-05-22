@@ -1,29 +1,29 @@
 class CommentsController < ApplicationController
   before_action :load_commentable,
-                only: [:index, :new, :create, :preview, :edit, :update, :show_comments,
+                only: [:index, :new, :back_to_edit, :create, :preview, :edit, :update, :show_comments,
                        :hide_comments, :add_comment_reply,
                        :cancel_comment_reply, :delete_comment,
                        :cancel_comment_delete, :unreviewed, :review_all]
-  before_action :check_user_status, only: [:new, :create, :preview, :edit, :update, :destroy]
+  before_action :check_user_status, only: [:new, :back_to_edit, :create, :preview, :edit, :update, :destroy]
   before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject, :freeze, :unfreeze, :hide, :unhide]
   before_action :check_visibility, only: [:show]
   before_action :check_if_restricted
   before_action :check_tag_wrangler_access
   before_action :check_parent_visible
   before_action :check_modify_parent,
-                only: [:new, :create, :preview, :edit, :update, :add_comment_reply,
+                only: [:new, :back_to_edit, :create, :preview, :edit, :update, :add_comment_reply,
                        :cancel_comment_reply, :cancel_comment_edit]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_action :check_permission_to_edit, only: [:edit, :update]
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
-  before_action :check_guest_comment_admin_setting, only: [:new, :create, :preview, :add_comment_reply]
-  before_action :check_parent_comment_permissions, only: [:new, :create, :preview, :add_comment_reply]
+  before_action :check_guest_comment_admin_setting, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
+  before_action :check_parent_comment_permissions, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
-  before_action :check_frozen, only: [:new, :create, :preview, :add_comment_reply]
-  before_action :check_hidden_by_admin, only: [:new, :create, :preview, :add_comment_reply]
-  before_action :check_not_replying_to_spam, only: [:new, :create, :preview, :add_comment_reply]
-  before_action :check_guest_replies_preference, only: [:new, :create, :preview, :add_comment_reply]
+  before_action :check_frozen, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
+  before_action :check_hidden_by_admin, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
+  before_action :check_not_replying_to_spam, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
+  before_action :check_guest_replies_preference, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
@@ -36,7 +36,7 @@ class CommentsController < ApplicationController
   include WorksHelper
   include BlockHelper
 
-  before_action :check_blocked, only: [:new, :create, :preview, :add_comment_reply, :edit, :update]
+  before_action :check_blocked, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply, :edit, :update]
   def check_blocked
     parent = find_parent
 
@@ -361,38 +361,13 @@ class CommentsController < ApplicationController
 
   # GET /comments/new
   def new
-    if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
-      redirect_back_or_to root_path
-    else
-      if params[:comment_content].present? || params[:comment].present?
-        comment_attrs = {
-          comment_content: params[:comment_content] || params.dig(:comment, :comment_content),
-          pseud_id: params[:pseud_id] || params.dig(:comment, :pseud_id),
-          name: params[:name] || params.dig(:comment, :name),
-          email: params[:email] || params.dig(:comment, :email)
-        }
-        @comment = Comment.new(comment_attrs.compact)
-      else
-        @comment = Comment.new
-      end
-      @controller_name = params[:controller_name] if params[:controller_name]
-      @name =
-        case @commentable.class.name
-        when /Work/
-          @commentable.title
-        when /Chapter/
-          @commentable.work.title
-        when /Tag/
-          @commentable.name
-        when /AdminPost/
-          @commentable.title
-        when /Comment/
-          ts("Previous Comment")
-        else
-          @commentable.class.name
-        end
-    end
+    render_comment_form
+  end
+
+  # POST /comments/back_to_edit
+  def back_to_edit
+    render_comment_form
+    render :new unless performed?
   end
 
   # GET /comments/1/edit
@@ -801,6 +776,41 @@ class CommentsController < ApplicationController
   end
 
   private
+
+  def render_comment_form
+    if @commentable.nil?
+      flash[:error] = ts("What did you want to comment on?")
+      redirect_back_or_to root_path
+    else
+      if params[:comment_content].present? || params[:comment].present?
+        comment_attrs = {
+          comment_content: params[:comment_content] || params.dig(:comment, :comment_content),
+          pseud_id: params[:pseud_id] || params.dig(:comment, :pseud_id),
+          name: params[:name] || params.dig(:comment, :name),
+          email: params[:email] || params.dig(:comment, :email)
+        }
+        @comment = Comment.new(comment_attrs.compact)
+      else
+        @comment = Comment.new
+      end
+      @controller_name = params[:controller_name] if params[:controller_name]
+      @name =
+        case @commentable.class.name
+        when /Work/
+          @commentable.title
+        when /Chapter/
+          @commentable.work.title
+        when /Tag/
+          @commentable.name
+        when /AdminPost/
+          @commentable.title
+        when /Comment/
+          ts("Previous Comment")
+        else
+          @commentable.class.name
+        end
+    end
+  end
 
   def build_context_params
     context = { comment_content: @comment.comment_content }
