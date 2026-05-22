@@ -406,7 +406,7 @@ class CommentsController < ApplicationController
   # GET /comments/preview
   def preview
     if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = t(".missing_commentable")
       redirect_back_or_to root_path
       return
     end
@@ -824,9 +824,7 @@ class CommentsController < ApplicationController
       context[:comment_id] = @commentable.id
     end
 
-    if controller_name == "inbox" && params[:filters]
-      context[:filters] = filter_params.to_h
-    end
+    context[:filters] = filter_params.to_h if controller_name == "inbox" && params[:filters]
 
     context
   end

@@ -924,6 +924,7 @@ en:
     preview:
       back_to_edit: Back to Edit
       commenting_on: 'Commenting on: %{commentable_link}'
+      missing_commentable: What did you want to comment on?
       page_heading: Preview Comment
       post_comment: Post Comment
     show:
