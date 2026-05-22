@@ -410,3 +410,31 @@ end
 When "I reply on a new page" do
   visit find(:link, "Reply")["href"]
 end
+
+Then 'I should see {string} in the comment byline' do |text|
+  step %{I should see "#{text}" within ".byline"}
+end
+
+Then 'I should see a button {string}' do |text|
+  expect(page).to have_button(text)
+end
+
+Then 'I should see a link {string}' do |text|
+  expect(page).to have_link(text)
+end
+
+Then 'I should see {string} in the comment field' do |text|
+  expect(find('textarea[name="comment[comment_content]"]').value).to include(text)
+end
+
+Then 'I should see the {string} button' do |text|
+  expect(page).to have_button(text)
+end
+
+Then 'I should see {string} in the guest name field' do |text|
+  expect(find('input[name="comment[name]"]').value).to eq(text)
+end
+
+Given 'the anonymous work {string}' do |title|
+  FactoryBot.create(:no_authors, title: title)
+end
