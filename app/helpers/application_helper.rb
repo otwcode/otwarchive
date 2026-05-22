@@ -257,7 +257,7 @@ module ApplicationHelper
     unabbreviated_zone_name = TZInfo::Timezone.get(zone).friendly_identifier(true) rescue zone
     
     time_parts = [
-      localized_time.strftime('<abbr class="day" title="%A">%a</abbr> %d <abbr class="month" title="%B">%b</abbr> %Y %I:%M%p'),
+      localized_time.strftime('<abbr class="day" title="%A">%a</abbr> %d <abbr class="month" title="%B">%b</abbr> %Y %I:%M%p').html_safe,
       " ",
       content_tag(:abbr, localized_time.zone, class: "timezone", title: unabbreviated_zone_name)
     ]
