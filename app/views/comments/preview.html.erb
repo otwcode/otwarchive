@@ -2,7 +2,7 @@
 
 <!--main content-->
 <div id="previewpane">
-  <ul class="comment-list">
+  <ol class="thread">
     <li class="<%= cycle :odd, :even %> <%= css_classes_for_comment(@comment) %> preview" id="comment_preview" role="article">
       <h4 class="heading byline">
         <% if @comment.by_anonymous_creator? %>
@@ -15,7 +15,7 @@
         </span>
       </h4>
       <div class="icon">
-        <% if !@comment.pseud.nil? %>
+        <% if @comment.pseud %>
           <% if @comment.by_anonymous_creator? %>
             <span class="anonymous icon"></span>
           <% else %>
@@ -29,12 +29,12 @@
         <%= raw sanitize_field(@comment, :comment_content) %>
       </blockquote>
     </li>
-  </ul>
+  </ol>
 </div>
 <!--/content-->
 
 <!--action buttons-->
-<div class="actions right">
+<ul class="actions">
   <%= link_to t(".back_to_edit"), new_comment_path(@context_params), class: "button" %>
 
   <%= form_for @comment, url: comments_path, method: :post, local: true, html: { id: "post_comment_from_preview" } do |f| %>
@@ -60,5 +60,5 @@
 
     <%= f.submit t(".post_comment"), class: "button submit" %>
   <% end %>
-</div>
+</ul>
 <!--/actions-->
