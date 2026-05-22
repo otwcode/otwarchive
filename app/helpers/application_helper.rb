@@ -254,7 +254,11 @@ module ApplicationHelper
 
     zone ||= (user&.is_a?(User) && user.preference.time_zone) ? user.preference.time_zone : Time.zone.name
     localized_time = time.in_time_zone(zone)
-    unabbreviated_zone_name = TZInfo::Timezone.get(zone).friendly_identifier(true) rescue zone
+    unabbreviated_zone_name = begin
+      TZInfo::Timezone.get(zone).friendly_identifier(true)
+    rescue TZInfo::InvalidTimezoneIdentifier
+      zone
+    end
     
     time_parts = [
       localized_time.strftime('<abbr class="day" title="%A">%a</abbr> %d <abbr class="month" title="%B">%b</abbr> %Y %I:%M%p').html_safe,
@@ -264,10 +268,14 @@ module ApplicationHelper
 
     user_time_parts = if user.is_a?(User) && user.preference.time_zone && user.preference.time_zone != zone
       user_localized_time = time.in_time_zone(user.preference.time_zone)
-      unabbreviated_user_zone_name = TZInfo::Timezone.get(user.preference.time_zone).friendly_identifier(true) rescue user.preference.time_zone
+      unabbreviated_user_zone_name = begin
+        TZInfo::Timezone.get(user.preference.time_zone).friendly_identifier(true)
+      rescue TZInfo::InvalidTimezoneIdentifier
+        user.preference.time_zone
+      end
       [
         " (",
-        user_localized_time.strftime('%I:%M%p'),
+        user_localized_time.strftime("%I:%M%p"),
         " ",
         content_tag(:abbr, user_localized_time.zone, class: "timezone", title: unabbreviated_user_zone_name),
         ")"
