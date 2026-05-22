@@ -614,6 +614,8 @@ class WorksController < ApplicationController
     # Instead, as the work in this context is reduced its first chapter, we copy the value directly
     @work.word_count = @work.first_chapter.word_count
     @work.save
+    # AO3-6272: write chapter count to cache after save to avoid stale replica data
+    Rails.cache.write(@work.key_for_chapter_posted_counting(@work), 1)
 
     if !@collection.nil? && @collection.moderated?
       redirect_to work_path(@work), notice: ts('Work was submitted to a moderated collection. It will show up in the collection once approved.')

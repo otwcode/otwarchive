@@ -132,6 +132,31 @@ describe WorksController do
       )
     end
 
+    # AO3-6272: In production, a read replica may return stale data
+    # right after posting, causing the chapter count to cache as 0.
+    it "should show the correct chapter count after posting the draft" do
+      draft = create(:draft, authors: [drafts_user.default_pseud])
+
+      original_cache = Rails.cache
+      Rails.cache = ActiveSupport::Cache::MemoryStore.new
+
+      begin
+        put :post_draft, params: { id: draft.id }
+
+        draft.reload
+        expect(draft.first_chapter.posted).to be true
+
+        # Simulate a stale read replica returning 0 posted chapters.
+        # The cache should already hold the correct value from post_draft.
+        stale_relation = double(count: 0)
+        allow(draft).to receive(:chapters).and_return(double(posted: stale_relation))
+
+        expect(draft.number_of_posted_chapters).to eq(1)
+      ensure
+        Rails.cache = original_cache
+      end
+    end
+
     it "should only count the words of the first, published, chapter after posting the draft" do
       draft = create(:draft, authors: [drafts_user.default_pseud])
       create(:chapter, :draft, work: draft)
