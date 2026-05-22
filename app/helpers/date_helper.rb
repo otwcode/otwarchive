@@ -6,7 +6,7 @@ module DateHelper
     if datetime > 30.days.ago && !AdminSetting.enable_test_caching?
       time_ago_in_words(datetime)
     else
-      date_in_zone(date_in_user_time_zone(datetime), format: :date_html)
+      date_in_zone(date_in_user_time_zone(datetime), format: :date_blurb_html)
     end
   end
 
@@ -32,6 +32,6 @@ module DateHelper
     time_in_zone = time.in_time_zone(zone)
     I18n.l(time_in_zone, format: format).html_safe
     # i18n-tasks-use t('time.formats.date_short_html')
-    # i18n-tasks-use t('time.formats.date_html')
+    # i18n-tasks-use t('time.formats.date_blurb_html')
   end
 end
