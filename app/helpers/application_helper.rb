@@ -266,14 +266,15 @@ module ApplicationHelper
       content_tag(:abbr, localized_time.zone, class: "timezone", title: unabbreviated_zone_name)
     ]
 
-    user_time_parts = if user.is_a?(User) && user.preference.time_zone && user.preference.time_zone != zone
+    if user.is_a?(User) && user.preference.time_zone && user.preference.time_zone != zone
       user_localized_time = time.in_time_zone(user.preference.time_zone)
       unabbreviated_user_zone_name = begin
         TZInfo::Timezone.get(user.preference.time_zone).friendly_identifier(true)
       rescue TZInfo::InvalidTimezoneIdentifier
         user.preference.time_zone
       end
-      [
+      
+      user_time_parts = [
         " (",
         user_localized_time.strftime("%I:%M%p"),
         " ",
