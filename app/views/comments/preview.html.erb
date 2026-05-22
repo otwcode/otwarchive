@@ -7,7 +7,7 @@
     <li class="<%= cycle :odd, :even %> <%= css_classes_for_comment(@comment) %> preview" id="comment_preview" role="article">
       <h4 class="heading byline">
         <% if @comment.by_anonymous_creator? %>
-          <%= ts("Anonymous Creator") %>
+          <%= t(".anonymous_creator") %>
         <% else %>
           <%= get_commenter_pseud_or_name(@comment) %>
         <% end %>
