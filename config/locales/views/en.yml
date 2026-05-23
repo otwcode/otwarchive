@@ -518,7 +518,6 @@ en:
       landmark: Manage News Postings
       page_heading: AO3 News
     admin_post:
-      original: 'Original:'
       published: 'Published:'
     admin_post_form:
       comment_permissions:
