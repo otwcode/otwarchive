@@ -156,6 +156,8 @@ GEM
       parser (>= 2.4)
       smart_properties
     bigdecimal (3.3.1)
+    bootsnap (1.24.5)
+      msgpack (~> 1.2)
     brakeman (7.0.2)
       racc
     builder (3.3.0)
@@ -243,10 +245,6 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     date (3.5.1)
-    departure (8.0.0)
-      activerecord (>= 7.2.0)
-      mysql2 (>= 0.4.0, < 0.6.0)
-      railties (>= 7.2.0)
     devise-async (1.0.0)
       activejob (>= 5.0)
       devise (>= 4.0)
@@ -392,6 +390,7 @@ GEM
     mini_portile2 (2.8.9)
     minitest (5.27.0)
     mono_logger (1.1.2)
+    msgpack (1.8.0)
     multi_json (1.19.1)
     multi_test (1.1.0)
     multi_xml (0.8.1)
@@ -657,6 +656,7 @@ GEM
     test-unit (3.6.2)
       power_assert
     thor (1.4.0)
+    thruster (0.1.21-x86_64-linux)
     tilt (2.6.1)
     timecop (0.9.10)
     timeliness (0.4.5)
@@ -700,7 +700,7 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-page_caching
@@ -713,6 +713,7 @@ DEPENDENCIES
   aws-sdk-s3
   bcrypt
   bcrypt_pbkdf (>= 1.0, < 2.0)
+  bootsnap
   brakeman
   bullet (>= 5.7.3)
   bundler
@@ -728,7 +729,6 @@ DEPENDENCIES
   cucumber-timecop
   dalli
   database_cleaner
-  departure (~> 8.0)
   devise!
   devise-async
   devise-pwned_password
@@ -799,6 +799,7 @@ DEPENDENCIES
   stackprof
   terrapin
   test-unit (~> 3.2)
+  thruster
   timecop
   timeliness
   unicode
