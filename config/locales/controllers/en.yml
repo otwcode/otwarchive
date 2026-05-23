@@ -79,6 +79,17 @@ en:
           one: Successfully removed pseud %{pseuds} from this work.
           other: Successfully removed pseuds %{pseuds} from this work.
   admin_posts:
+    admin_post_blurb:
+      confirm_delete: Are you sure?
+      delete: Delete
+      draft:
+        delete: Delete Draft
+        post: Post Draft
+      edit: Edit
+      meta:
+        draft: Created at %{created_date} and updated at %{updated_date}
+        published: Published at %{publication_date} (Created at %{created_date} and updated at %{updated_date})
+      show: Show
     create:
       success: Admin Post was successfully created.
     post:

@@ -8,7 +8,7 @@
 <div class="wrapper">
   <dl class="meta">
     <% if admin_post.posted? %>
-      <dt class="published"><%= ts("Published:") %></dt>
+      <dt class="published"><%= t(".published") %></dt>
       <dd class="published"><%= admin_post.published_at %></dd>
     <% end %>
     <% if admin_post.translated_post %>

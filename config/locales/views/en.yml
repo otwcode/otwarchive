@@ -514,6 +514,12 @@ en:
         submit_multiple: Remove Pseuds
         submit_one: Yes, Remove Pseud
   admin_posts:
+    admin_index:
+      landmark: Manage News Postings
+      page_heading: AO3 News
+    admin_post:
+      original: 'Original:'
+      published: 'Published:'
     admin_post_form:
       comment_permissions:
         label: Who can comment on this news post
@@ -526,6 +532,8 @@ en:
         footnote_tags: Tags from the selected post will replace any tags entered on this page.
         label: Translation of
     drafts:
+      landmark: Manage News Drafts
+      page_heading: AO3 News Drafts
       page_title: AO3 News Drafts
     index:
       page_title: AO3 News
@@ -1917,6 +1925,9 @@ en:
       intro_description: A non-profit, non-commercial archive for transformative fanworks; created by and for fans of books, music, art, games, shows, movies, real-person fiction (RPF), and other fandoms.
       parent_org: Organization for Transformative Works
       parent_org_intro_html: The Archive of Our Own (AO3) is a project of the %{parent_org_link}.
+    news_module:
+      news:
+        published_html: 'Published: %{publication_date}'
     privacy:
       account_termination:
         backup_copies_html: '"Active records" do not include the backup copies of Content created for legal and/or disaster recovery purposes (refer to the %{general_principles_link}).'

@@ -8,7 +8,7 @@
     <% end %>
 
     <% if @preview_mode %>
-      <li><%= submit_tag t(".actions.edit"), name: "edit_button" %>
+      <li><%= form.submit t(".actions.edit"), name: "edit_button" %>
     <% else %>
       <li><%= form.submit t(".actions.preview"), name: "preview_button" %></li>
     <% end %>

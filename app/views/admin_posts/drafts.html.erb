@@ -1,6 +1,6 @@
 <div class="news admin home">
   <!--Descriptive page name, messages and instructions-->
-  <h2 class="heading"><%= ts("AO3 News Drafts") %></h2>
+  <h2 class="heading"><%= t(".page_heading") %></h2>
   <!--/descriptions-->
   <!--subnav-->
   <%= render "filters" %>
@@ -8,11 +8,9 @@
   <!--/subnav-->
 
   <!--main content-->
-  <h3 class="landmark heading"><%= ts("Manage News Drafts") %></h3>
+  <h3 class="landmark heading"><%= t(".landmark") %></h3>
   <dl class="news index group">
-    <% @admin_posts.each do |admin_post| %>
-      <%= render "admin_post_blurb", admin_post: admin_post %>
-    <% end %>
+    <%= render partial: "admin_post_blurb", collection: @admin_posts, as: :admin_post %>
   </dl>
   <!--/content-->
   <!--subnav-->

@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("AO3 News") %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 <!--/descriptions-->
 <!--subnav-->
 <%= render 'filters' %>
@@ -7,11 +7,11 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark heading"><%= ts("Manage News Postings") %></h3>
+<h3 class="landmark heading"><%= t(".landmark") %></h3>
 <dl class="news index group">
-	<%= render partial: "admin_post_blurb", collection: @admin_posts, as: :admin_post %>
+  <%= render partial: "admin_post_blurb", collection: @admin_posts, as: :admin_post %>
 </dl>
 <!--/content-->
 <!--subnav-->
-  <%= will_paginate @admin_posts %>
+<%= will_paginate @admin_posts %>
 <!--/subnav-->

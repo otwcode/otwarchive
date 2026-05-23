@@ -343,7 +343,9 @@ describe AdminPostsController do
     context "when post is a draft" do
       let(:admin_post) { create(:admin_post, :draft) }
       let(:success) do
-        expect { admin_post.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect do
+          admin_post.reload
+        end.to raise_exception(ActiveRecord::RecordNotFound)
         it_redirects_to(drafts_admin_posts_path)
       end
 
@@ -353,8 +355,12 @@ describe AdminPostsController do
       context "with translated post" do
         let!(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:language).id) }
         let(:success) do
-          expect { admin_post.reload }.to raise_exception(ActiveRecord::RecordNotFound)
-          expect { translation.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+          expect do
+            admin_post.reload
+          end.to raise_exception(ActiveRecord::RecordNotFound)
+          expect do
+            translation.reload
+          end.to raise_exception(ActiveRecord::RecordNotFound)
           it_redirects_to(drafts_admin_posts_path)
         end
 
@@ -366,15 +372,21 @@ describe AdminPostsController do
     context "when post is not a draft" do
       let(:admin_post) { create(:admin_post) }
       let(:success) do
-        expect { admin_post.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect do
+          admin_post.reload
+        end.to raise_exception(ActiveRecord::RecordNotFound)
         it_redirects_to(admin_posts_path)
       end
 
       context "with translated post" do
         let!(:translation) { create(:admin_post, translated_post_id: admin_post.id, language_id: create(:language).id) }
         let(:success) do
-          expect { admin_post.reload }.to raise_exception(ActiveRecord::RecordNotFound)
-          expect { translation.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+          expect do
+            admin_post.reload
+          end.to raise_exception(ActiveRecord::RecordNotFound)
+          expect do
+            translation.reload
+          end.to raise_exception(ActiveRecord::RecordNotFound)
           it_redirects_to(admin_posts_path)
         end
 

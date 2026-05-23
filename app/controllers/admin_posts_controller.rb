@@ -1,5 +1,4 @@
 class AdminPostsController < Admin::BaseController
-
   before_action :admin_only, except: [:index, :show]
   before_action :load_languages, except: [:show, :destroy]
   before_action :load_admin_posts, only: [:index, :drafts]

@@ -43,9 +43,9 @@ class AdminPost < ApplicationRecord
 
   before_save :inherit_translated_post_comment_permissions, :inherit_translated_post_tags
   before_save :set_published_at, if: :posted_changed?
+  after_destroy :expire_cached_home_admin_posts
   after_save :expire_cached_home_admin_posts, :update_translation_comment_permissions, :update_translation_tags
   after_save :post_translations, if: :saved_change_to_posted?
-  after_destroy :expire_cached_home_admin_posts
 
   # Return the name to link comments to for this object
   def commentable_name

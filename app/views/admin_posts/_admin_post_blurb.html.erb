@@ -3,22 +3,22 @@
 <dd>
   <p class="datetime">
     <% if admin_post.posted? %>
-      <%= ts("Published at %{publication_date} (Created at %{created_date} and updated at %{updated_date})", publication_date: admin_post.published_at, created_date: admin_post.created_at, updated_date: admin_post.updated_at) %>
+      <%= t(".meta.published", publication_date: admin_post.published_at, created_date: admin_post.created_at, updated_date: admin_post.updated_at) %>
     <% else %>
-      <%= ts("Created at %{created_date} and updated at %{updated_date}", created_date: admin_post.created_at, updated_date: admin_post.updated_at) %>
+      <%= t(".meta.draft", created_date: admin_post.created_at, updated_date: admin_post.updated_at) %>
     <% end %>
   </p>
   <ul class="actions">
-    <li><%= link_to ts("Show"), admin_post %></li>
+    <li><%= link_to t(".show"), admin_post %></li>
     <% if policy(admin_post).edit? %>
-      <li><%= link_to ts("Edit"), edit_admin_post_path(admin_post) %></li>
+      <li><%= link_to t(".edit"), edit_admin_post_path(admin_post) %></li>
       <% if admin_post.posted %>
-        <li><%= link_to ts("Delete"), admin_post, data: { confirm: ts("Are you sure?") }, method: :delete %></li>
+        <li><%= link_to t(".delete"), admin_post, data: { confirm: t(".confirm_delete") }, method: :delete %></li>
       <% else %>
         <% if policy(AdminPost).can_post? && (admin_post.translated_post.blank? || admin_post.translated_post.posted?) %>
-          <li><%= link_to ts("Post Draft"), post_admin_post_path(admin_post), method: :put %></li>
+          <li><%= link_to t(".draft.post"), post_admin_post_path(admin_post), method: :put %></li>
         <% end %>
-        <li><%= link_to ts("Delete Draft"), admin_post, data: { confirm: ts("Are you sure?") }, method: :delete %></li>
+        <li><%= link_to t(".draft.delete"), admin_post, data: { confirm: t(".confirm_delete") }, method: :delete %></li>
       <% end %>
     <% end %>
   </ul>

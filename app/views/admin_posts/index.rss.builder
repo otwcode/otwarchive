@@ -4,7 +4,7 @@ xml.rss :version => "2.0" do
     xml.title "AO3 News"
     xml.description "Latest updates from archiveofourown.org"
     xml.link admin_posts_url
-    
+
     @admin_posts.each do |post|
       xml.item do
         xml.title post.title
@@ -16,4 +16,3 @@ xml.rss :version => "2.0" do
     end
   end
 end
-
