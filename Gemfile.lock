@@ -519,7 +519,6 @@ GEM
       tsort (>= 0.2)
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
-    raindrops (0.20.1)
     rake (13.3.0)
     rdoc (6.15.0)
       erb
@@ -656,7 +655,6 @@ GEM
     test-unit (3.6.2)
       power_assert
     thor (1.4.0)
-    thruster (0.1.21-x86_64-linux)
     tilt (2.6.1)
     timecop (0.9.10)
     timeliness (0.4.5)
@@ -666,9 +664,6 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode (0.4.4.5)
     unicode-display_width (2.6.0)
-    unicorn (5.8.0)
-      kgio (~> 2.6)
-      raindrops (~> 0.7)
     unidecoder (1.1.2)
     uniform_notifier (1.17.0)
     uri (1.1.1)
@@ -700,7 +695,7 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   actionpack-page_caching
@@ -799,11 +794,9 @@ DEPENDENCIES
   stackprof
   terrapin
   test-unit (~> 3.2)
-  thruster
   timecop
   timeliness
   unicode
-  unicorn (~> 5.5)
   unidecoder
   vcr (~> 6.2)
   webmock
