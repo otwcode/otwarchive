@@ -40,6 +40,8 @@ en:
         requests_num_required: Number of requests required per sign-up
       language:
         short: Abbreviation
+      locale:
+        interface_enabled: Use for interface
       meta_tagging:
         meta_tag: Metatag
         meta_tag_id: Metatag
@@ -162,6 +164,10 @@ en:
               official: Please log out of your official account!
           format: "%{message}"
           taken: You have already left kudos here. :)
+        locale:
+          attributes:
+            interface_enabled:
+              only_if_email_enabled: can only be enabled if use for emails is also enabled.
         mute:
           attributes:
             muted:
