@@ -160,7 +160,6 @@ class Comment < ApplicationRecord
                             # is using parent instead of ultimate_parent fine here? it is easier for sure.
                   : Comment.where(pseud_id: pseud_id)
                             # well this means you can bypass it via new pseuds, is there a way to check pseud.user without another query?
-                            # i also need to check account newness
                            .and(Comment.where(created_at: 10.days.ago...))
                            .and(Comment.where(parent: parent))
                             # is using parent instead of ultimate_parent fine here? it is easier for sure.
