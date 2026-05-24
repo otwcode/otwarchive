@@ -118,7 +118,7 @@ class Comment < ApplicationRecord
       comment_post_modified_gmt = ultimate_parent.created_at.iso8601
     end
 
-    recent_comment_content = recent_comments_of_user_on_work.pluck(:comment_content).join
+    recent_comment_content = recent_comments_of_user_on_work&.pluck(:comment_content)&.join || ""
 
     if pseud_id.nil?
       user_role = "guest"
@@ -135,7 +135,7 @@ class Comment < ApplicationRecord
       user_role: user_role,
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
-      comment_content: comment_content + recent_comment_content,
+      comment_content: recent_comment_content || comment_content,
       comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
       comment_post_modified_gmt: comment_post_modified_gmt
     }
