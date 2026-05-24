@@ -1,29 +1,29 @@
 class CommentsController < ApplicationController
   before_action :load_commentable,
-                only: [:index, :new, :back_to_edit, :create, :preview, :edit, :update, :show_comments,
+                only: [:index, :new, :create, :preview, :edit, :update, :show_comments,
                        :hide_comments, :add_comment_reply,
                        :cancel_comment_reply, :delete_comment,
                        :cancel_comment_delete, :unreviewed, :review_all]
-  before_action :check_user_status, only: [:new, :back_to_edit, :create, :preview, :edit, :update, :destroy]
+  before_action :check_user_status, only: [:new, :create, :preview, :edit, :update, :destroy]
   before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject, :freeze, :unfreeze, :hide, :unhide]
   before_action :check_visibility, only: [:show]
   before_action :check_if_restricted
   before_action :check_tag_wrangler_access
   before_action :check_parent_visible
   before_action :check_modify_parent,
-                only: [:new, :back_to_edit, :create, :preview, :edit, :update, :add_comment_reply,
+                only: [:new, :create, :preview, :edit, :update, :add_comment_reply,
                        :cancel_comment_reply, :cancel_comment_edit]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_action :check_permission_to_edit, only: [:edit, :update]
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
-  before_action :check_guest_comment_admin_setting, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
-  before_action :check_parent_comment_permissions, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
+  before_action :check_guest_comment_admin_setting, only: [:new, :create, :preview, :add_comment_reply]
+  before_action :check_parent_comment_permissions, only: [:new, :create, :preview, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
-  before_action :check_frozen, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
-  before_action :check_hidden_by_admin, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
-  before_action :check_not_replying_to_spam, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
-  before_action :check_guest_replies_preference, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply]
+  before_action :check_frozen, only: [:new, :create, :preview, :add_comment_reply]
+  before_action :check_hidden_by_admin, only: [:new, :create, :preview, :add_comment_reply]
+  before_action :check_not_replying_to_spam, only: [:new, :create, :preview, :add_comment_reply]
+  before_action :check_guest_replies_preference, only: [:new, :create, :preview, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
@@ -36,7 +36,7 @@ class CommentsController < ApplicationController
   include WorksHelper
   include BlockHelper
 
-  before_action :check_blocked, only: [:new, :back_to_edit, :create, :preview, :add_comment_reply, :edit, :update]
+  before_action :check_blocked, only: [:new, :create, :preview, :add_comment_reply, :edit, :update]
   def check_blocked
     parent = find_parent
 
@@ -359,7 +359,8 @@ class CommentsController < ApplicationController
     params[:comment_id] = params[:id]
   end
 
-  # GET /comments/new
+  # GET /comments/new (blank form)
+  # POST /comments/new (form with preview data)
   def new
     if @commentable.nil?
       flash[:error] = t("comments.new.missing_commentable")
@@ -381,32 +382,6 @@ class CommentsController < ApplicationController
           @commentable.class.name
         end
     end
-  end
-
-  # POST /comments/preview/edit
-  def back_to_edit
-    if @commentable.nil?
-      flash[:error] = t("comments.new.missing_commentable")
-      redirect_back_or_to root_path
-    else
-      @comment = build_comment_for_form
-      @controller_name = params[:controller_name] if params[:controller_name]
-      @name =
-        case @commentable.class.name
-        when /Work/, /AdminPost/
-          @commentable.title
-        when /Chapter/
-          @commentable.work.title
-        when /Tag/
-          @commentable.name
-        when /Comment/
-          t("comments.new.previous_comment")
-        else
-          @commentable.class.name
-        end
-    end
-
-    render :new unless performed?
   end
 
   # GET /comments/1/edit
@@ -436,7 +411,29 @@ class CommentsController < ApplicationController
     end
 
     @preview_mode = true
-    @form_state = build_comment_form_state
+    @form_state = { comment_content: @comment.comment_content }
+    @form_state[:pseud_id] = @comment.pseud_id if @comment.pseud_id
+    @form_state[:name] = @comment.name if @comment.name
+    @form_state[:email] = @comment.email if @comment.email
+    @form_state[:view_full_work] = params[:view_full_work] if params[:view_full_work]
+    @form_state[:page] = params[:page] if params[:page]
+    @form_state[:controller_name] = params[:controller_name] if params[:controller_name]
+
+    case @commentable
+    when Work
+      @form_state[:work_id] = @commentable.id
+    when Chapter
+      @form_state[:chapter_id] = @commentable.id
+    when AdminPost
+      @form_state[:admin_post_id] = @commentable.id
+    when Tag
+      @form_state[:tag_id] = @commentable.name
+    when Comment
+      @form_state[:comment_id] = @commentable.id
+    end
+
+    @form_state[:filters] = filter_params.to_h if controller_name == "inbox" && params[:filters]
+
     render :preview
   end
 
@@ -829,33 +826,6 @@ class CommentsController < ApplicationController
     else
       Comment.new
     end
-  end
-
-  def build_comment_form_state
-    state = { comment_content: @comment.comment_content }
-    state[:pseud_id] = @comment.pseud_id if @comment.pseud_id
-    state[:name] = @comment.name if @comment.name
-    state[:email] = @comment.email if @comment.email
-    state[:view_full_work] = params[:view_full_work] if params[:view_full_work]
-    state[:page] = params[:page] if params[:page]
-    state[:controller_name] = params[:controller_name] if params[:controller_name]
-
-    case @commentable
-    when Work
-      state[:work_id] = @commentable.id
-    when Chapter
-      state[:chapter_id] = @commentable.id
-    when AdminPost
-      state[:admin_post_id] = @commentable.id
-    when Tag
-      state[:tag_id] = @commentable.name
-    when Comment
-      state[:comment_id] = @commentable.id
-    end
-
-    state[:filters] = filter_params.to_h if controller_name == "inbox" && params[:filters]
-
-    state
   end
 
   def comment_params
