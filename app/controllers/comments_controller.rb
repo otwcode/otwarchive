@@ -361,12 +361,51 @@ class CommentsController < ApplicationController
 
   # GET /comments/new
   def new
-    render_comment_form
+    if @commentable.nil?
+      flash[:error] = t("comments.new.missing_commentable")
+      redirect_back_or_to root_path
+    else
+      @comment = build_comment_for_form
+      @controller_name = params[:controller_name] if params[:controller_name]
+      @name =
+        case @commentable.class.name
+        when /Work/, /AdminPost/
+          @commentable.title
+        when /Chapter/
+          @commentable.work.title
+        when /Tag/
+          @commentable.name
+        when /Comment/
+          t("comments.new.previous_comment")
+        else
+          @commentable.class.name
+        end
+    end
   end
 
   # POST /comments/preview/edit
   def back_to_edit
-    render_comment_form
+    if @commentable.nil?
+      flash[:error] = t("comments.new.missing_commentable")
+      redirect_back_or_to root_path
+    else
+      @comment = build_comment_for_form
+      @controller_name = params[:controller_name] if params[:controller_name]
+      @name =
+        case @commentable.class.name
+        when /Work/, /AdminPost/
+          @commentable.title
+        when /Chapter/
+          @commentable.work.title
+        when /Tag/
+          @commentable.name
+        when /Comment/
+          t("comments.new.previous_comment")
+        else
+          @commentable.class.name
+        end
+    end
+
     render :new unless performed?
   end
 
@@ -777,29 +816,6 @@ class CommentsController < ApplicationController
   end
 
   private
-
-  def load_comment_form
-    if @commentable.nil?
-      flash[:error] = t("comments.new.missing_commentable")
-      redirect_back_or_to root_path
-    else
-      @comment = build_comment_for_form
-      @controller_name = params[:controller_name] if params[:controller_name]
-      @name =
-        case @commentable.class.name
-        when /Work/, /AdminPost/
-          @commentable.title
-        when /Chapter/
-          @commentable.work.title
-        when /Tag/
-          @commentable.name
-        when /Comment/
-          t("comments.new.previous_comment")
-        else
-          @commentable.class.name
-        end
-    end
-  end
 
   def build_comment_for_form
     if params[:comment_content].present? || params[:comment].present?
