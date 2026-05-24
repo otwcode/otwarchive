@@ -14,7 +14,7 @@ Feature: Public skins
     And the skin "public skin" is in the chooser
   When I am logged in as "skinner"
     And I press "public skin"
-  Then I should see "The skin public skin has been set. This will last for your current session."
+  Then I should see "You're now using the public skin skin. This will last for 2 weeks"
     And the page should have the cached skin "public skin"
   When I press "Default"
   Then I should see "You are now using the default site skin again!"

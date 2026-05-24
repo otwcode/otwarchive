@@ -410,15 +410,17 @@ Scenario: When guest comments are disabled, display comment actions to admin/gue
 Scenario: Guest comments with an email from a banned or suspended user should be blocked
   Given the work "Generic Work" by "creator" with guest comments enabled
     And the following users exist
-      | login          | email                 |
-      | suspended_user | suspended@example.com |
-      | banned_user    | banned@example.com    |
+      | login              | email                      |
+      | suspended_user_alt | suspended+tag@example.com  |
+      | suspended_user     | suspended@example.com      |
+      | banned_user        | banneduser@gmail.com       |
+      | banned_user_alt    | banned.user@googlemail.com |
     And the user "suspended_user" is suspended
     And the user "banned_user" is banned
-  When I post the comment "I loved this" on the work "Generic Work" as a guest with email "suspended@example.com"
+  When I post the comment "I loved this" on the work "Generic Work" as a guest with email "suspended+tag2@example.com"
   Then I should see "Sorry, you have been blocked from commenting."
     And I should not see "Comment created!"
-  When I post the comment "I loved this" on the work "Generic Work" as a guest with email "banned@example.com"
+  When I post the comment "I loved this" on the work "Generic Work" as a guest with email "banneduser@googlemail.com"
   Then I should see "Sorry, you have been blocked from commenting."
     And I should not see "Comment created!"
 
