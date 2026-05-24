@@ -49,7 +49,7 @@ describe GiftExchange do
         TagSet::TAG_TYPES.each { |type| r.send("#{type}_num_allowed=", 0) }
       end
 
-      it "fails" do
+      it "raises a validation error" do
         challenge.save
         expect(challenge.errors[:base]).to include("Request Settings must allow at least one field.")
       end
@@ -62,7 +62,7 @@ describe GiftExchange do
         TagSet::TAG_TYPES.each { |type| r.send("#{type}_num_allowed=", 0) }
       end
 
-      it "fails" do
+      it "raises a validation error" do
         challenge.save
         expect(challenge.errors[:base]).to include("Offer Settings must allow at least one field.")
       end
