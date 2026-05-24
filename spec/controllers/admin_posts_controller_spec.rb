@@ -172,6 +172,17 @@ describe AdminPostsController do
             expect(AdminPostTag.find_by(name: "badtag")).to be_nil
           end
         end
+
+        context "when the post is previewed" do
+          let(:params) { super().merge(preview_button: "Preview") }
+
+          it "renders the new template with error message" do
+            subject
+
+            expect(response).to render_template(:new)
+            expect(assigns[:admin_post].errors.full_messages).to include("Translated post does not exist")
+          end
+        end
       end
 
       context "with invalid comment permissions" do

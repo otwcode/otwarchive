@@ -65,15 +65,17 @@ class AdminPostsController < Admin::BaseController
     @admin_post.posted = true if params[:post_button] && !@admin_post&.translated_post&.draft?
 
     authorize @admin_post
-    if params[:preview_button]
-      @preview_mode = true
-      render action: "preview"
-    elsif !params[:edit_button] && @admin_post.save
-      flash[:notice] = t(".success")
-      redirect_to(admin_post_path(@admin_post))
-    else
-      render action: "new"
+    if !params[:edit_button] && @admin_post.valid?
+      if params[:preview_button]
+        @preview_mode = true
+        render action: "preview" and return
+      elsif !params[:edit_button] && @admin_post.save
+        flash[:notice] = t(".success")
+        redirect_to(admin_post_path(@admin_post)) and return
+      end
     end
+
+    render action: "new"
   end
 
   # PUT /admin_posts/1
