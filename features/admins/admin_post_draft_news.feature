@@ -1,7 +1,7 @@
 @admin @comments
 Feature: Admin Actions to Draft News
   In order to post news items
-  As an an admin
+  As an admin
   I want to be able to create drafts and preview my changes
 
   Scenario: Draft admin posts are only visible in the drafts index

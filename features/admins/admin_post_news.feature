@@ -1,7 +1,7 @@
 @admin @comments
 Feature: Admin Actions to Post News
   In order to post news items
-  As an an admin
+  As an admin
   I want to be able to use the Admin Posts screen
 
   Scenario: Must be authorized to post
