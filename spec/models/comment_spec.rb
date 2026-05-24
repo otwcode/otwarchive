@@ -315,6 +315,37 @@ describe Comment do
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
         end
+
+        context "when they comment again in a short timeframe" do
+          context "when the comment is from a guest" do
+            let(:previous_comment) { create(:comment, :by_guest, :on_admin_post, name: "sus_user", comment_content: "lorem") }
+
+            subject { create(:comment, :by_guest, commentable: previous_comment.ultimate_parent, name: "sus_user", comment_content: "ipsum") }
+
+            it "has comment_content as combined content of both of the comments" do
+              expect(subject.akismet_attributes[:comment_content]).to eq("loremipsum")
+            end
+
+            it "sets recheck_reason to 'edit'" do
+              expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
+            end
+          end
+
+          context "when the comment is from a new user" do
+            let(:user) { create(:user) }
+            let(:previous_comment) { create(:comment, :on_admin_post, pseud: user.default_pseud, comment_content: "lorem") }
+            subject { create(:comment, commentable: previous_comment.ultimate_parent, pseud: user.default_pseud, comment_content: "ipsum") }
+
+            it "has comment_content as combined content of both of the comments" do
+              require 'pry'; binding.pry
+              expect(subject.akismet_attributes[:comment_content]).to eq("loremipsum")
+            end
+
+            it "sets recheck_reason to 'edit'" do
+              expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
+            end
+          end
+        end
       end
 
       context "when the commentable is an admin post" do
