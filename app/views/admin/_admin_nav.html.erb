@@ -3,9 +3,11 @@
   <li>
     <%= span_if_current t(".ao3_news"), admin_posts_path %>
   </li>
-  <li>
-    <%= span_if_current t(".ao3_news_drafts"), drafts_admin_posts_path %>
-  </li>
+  <% if policy(AdminPost).can_draft? %>
+    <li>
+      <%= span_if_current t(".ao3_news_drafts"), drafts_admin_posts_path %>
+    </li>
+  <% end %>
   <% if policy(AdminPost).can_post? %>
     <li>
       <%= span_if_current t(".post_ao3_news"), new_admin_post_path %>
