@@ -874,6 +874,7 @@ en:
         comment: Comment
         note: Note
       legend: Post Comment
+      preview_button: Preview
       processing_message: Please wait...
     commentable:
       actions:
