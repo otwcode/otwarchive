@@ -11,6 +11,8 @@ class AdminSetting < ApplicationRecord
 
   belongs_to :default_skin, class_name: 'Skin'
 
+  CACHE_KEY = "admin_settings-v4"
+
   DEFAULT_SETTINGS = {
     invite_from_queue_enabled?: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
     request_invite_enabled?: false,
@@ -46,7 +48,7 @@ class AdminSetting < ApplicationRecord
   end
 
   def self.current
-    Rails.cache.fetch("admin_settings-v3", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
+    Rails.cache.fetch(CACHE_KEY, race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
   end
 
   class << self
@@ -80,7 +82,7 @@ class AdminSetting < ApplicationRecord
     self.reload
 
     # However, we only cache it if the transaction is successful.
-    after_commit { Rails.cache.write("admin_settings-v3", self) }
+    after_commit { Rails.cache.write(CACHE_KEY, self) }
   end
 
   private
