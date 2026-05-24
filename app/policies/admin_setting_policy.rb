@@ -34,7 +34,7 @@ class AdminSettingPolicy < ApplicationPolicy
     ],
     "support" => %i[disable_support_form disabled_support_form_text],
     "tag_wrangling" => %i[tag_wrangling_off],
-    "legal" => %i[preserve_audit_records_usernames],
+    "legal" => %i[preserve_audit_records_usernames]
   }.freeze
 
   def can_view_settings?
