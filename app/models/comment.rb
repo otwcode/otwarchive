@@ -118,7 +118,7 @@ class Comment < ApplicationRecord
       comment_post_modified_gmt = ultimate_parent.created_at.iso8601
     end
 
-    combined_comment_content = comment_content + recent_comments_of_user_on_work.pluck(:comment_content).join
+    recent_comment_content = recent_comments_of_user_on_work.pluck(:comment_content).join
 
     if pseud_id.nil?
       user_role = "guest"
@@ -135,7 +135,7 @@ class Comment < ApplicationRecord
       user_role: user_role,
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
-      comment_content: combined_comment_content,
+      comment_content: comment_content + recent_comment_content,
       comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
       comment_post_modified_gmt: comment_post_modified_gmt
     }
@@ -144,13 +144,14 @@ class Comment < ApplicationRecord
     attributes[:cloudflare_ja3_hash] = cloudflare_ja3_hash if cloudflare_ja3_hash
     attributes[:cloudflare_ja4] = cloudflare_ja4 if cloudflare_ja4
 
-    attributes[:recheck_reason] = "edit" if (will_save_change_to_edited_at? && will_save_change_to_comment_content?) || recent_comments_of_user_on_work.any? # are we double querying? we can also compare combined_comment_content with comment_content
+    attributes[:recheck_reason] = "edit" if (will_save_change_to_edited_at? && will_save_change_to_comment_content?) || !recent_comment_content.empty?
 
     attributes
   end
 
   def recent_comments_of_user_on_work
-    # we're doing the query two (or four with the ones in controller when spam) times and i don't love that.
+    return if skip_spamcheck?
+
     pseud_id.nil? ? Comment.where(name: name)
                            .or(Comment.where(email: comment_owner_email))
                            .or(Comment.where(ip_address: ip_address))
