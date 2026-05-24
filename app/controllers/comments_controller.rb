@@ -445,7 +445,7 @@ class CommentsController < ApplicationController
       return
     end
 
-    unless @commentable.present?
+    if @commentable.blank?
       flash[:error] = t("comments.create.missing_commentable")
       redirect_back_or_to root_path
       return
