@@ -15,6 +15,15 @@ describe PromptMeme do
         challenge.save
         expect(challenge.errors[:base]).to include("Request Settings must allow at least one field.")
       end
+  describe "#destroy" do
+    let!(:challenge) { create(:prompt_meme) }
+    let!(:collection) { create(:collection, challenge: challenge) }
+
+    it "nullifies the collection's challenge references" do
+      challenge.destroy!
+      collection.reload
+      expect(collection.challenge_id).to be_nil
+      expect(collection.challenge_type).to be_nil
     end
   end
 

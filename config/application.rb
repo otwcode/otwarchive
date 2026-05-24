@@ -90,10 +90,9 @@ module Otwarchive
       BCrypt::Password
     ]
 
-    # Set admin two-factor authentication keys
-    config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]
-    config.active_record.encryption.deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"]
-    config.active_record.encryption.key_derivation_salt = ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"]
+    config.active_record.encryption.primary_key = ArchiveConfig.ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+    config.active_record.encryption.deterministic_key = ArchiveConfig.ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+    config.active_record.encryption.key_derivation_salt = ArchiveConfig.ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
 
     # handle errors with custom error pages:
     config.exceptions_app = self.routes
@@ -149,9 +148,6 @@ module Otwarchive
     config.active_storage.queues.transform = :active_storage
 
     config.active_storage.web_image_content_types = %w[image/png image/jpeg image/gif]
-
-    # Do not enable YJIT automatically once we upgrade to Ruby 3.3
-    config.yjit = false
 
     # Use secret from archive config
     config.secret_key_base = ArchiveConfig.SESSION_SECRET
