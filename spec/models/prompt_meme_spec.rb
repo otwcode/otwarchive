@@ -15,6 +15,9 @@ describe PromptMeme do
         challenge.save
         expect(challenge.errors[:base]).to include("Request Settings must allow at least one field.")
       end
+    end
+  end
+
   describe "#destroy" do
     let!(:challenge) { create(:prompt_meme) }
     let!(:collection) { create(:collection, challenge: challenge) }
