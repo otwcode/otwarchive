@@ -7,17 +7,24 @@ namespace :work_import_urls do
     scope = Work.where("imported_from_url IS NOT NULL AND imported_from_url != ''")
     total = scope.count
     processed = 0
+    failed = 0
 
     puts "Backfilling #{total} work_import_urls records..."
 
     scope.find_each(batch_size: batch_size) do |work|
       next if ImportedUrl.exists?(work_id: work.id)
 
-      work.imported_url = ImportedUrl.create(original: work.imported_from_url)
+      begin
+        work.imported_url = ImportedUrl.create(original: work.imported_from_url)
+      rescue StandardError => e
+        puts "------- Error on import for work_id #{work.id}: #{e.inspect}"
+        failed += 1
+        next
+      end
       processed += 1
       puts "Processed #{processed}/#{total}" if (processed % batch_size).zero?
     end
 
-    puts "Done! Backfilled #{processed} records."
+    puts "Done! Backfilled #{processed} records, failed #{failed} records."
   end
 end
