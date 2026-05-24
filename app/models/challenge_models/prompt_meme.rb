@@ -48,6 +48,6 @@ class PromptMeme < ApplicationRecord
 
   validate :request_restriction_allows_fields
   def request_restriction_allows_fields
-    errors.add(:base, :no_request_fields) unless request_restriction&.allows_any_fields?
+    errors.add(:base, :no_request_fields) unless request_restriction&.allows_prompt_fields?
   end
 end
