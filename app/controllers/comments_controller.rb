@@ -397,7 +397,7 @@ class CommentsController < ApplicationController
     end
 
     @preview_mode = true
-    @context_params = build_context_params
+    @form_state = build_comment_form_state
     render :preview
   end
 
@@ -409,54 +409,55 @@ class CommentsController < ApplicationController
       return
     end
 
-    if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
+    unless @commentable.present?
+      flash[:error] = t("comments.create.missing_commentable")
       redirect_back_or_to root_path
-    else
-      @comment = Comment.new(comment_params)
-      @comment.ip_address = request.remote_ip
-      @comment.user_agent = request.env["HTTP_USER_AGENT"]&.to(499)
-      @comment.cloudflare_bot_score = request.env["HTTP_CF_BOT_SCORE"]
-      @comment.cloudflare_ja3_hash = request.env["HTTP_CF_JA3_HASH"]
-      @comment.cloudflare_ja4 = request.env["HTTP_CF_JA4"]
-      @comment.commentable = Comment.commentable_object(@commentable)
-      @controller_name = params[:controller_name]
+      return
+    end
 
-      # First, try saving the comment
-      if @comment.save
-        flash[:comment_notice] = if @comment.unreviewed?
-                                   # i18n-tasks-use t("comments.create.success.moderated.admin_post")
-                                   # i18n-tasks-use t("comments.create.success.moderated.work")
-                                   t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
-                                 else
-                                   t("comments.create.success.not_moderated")
-                                 end
-        respond_to do |format|
-          format.html do
-            if request.referer&.match(/inbox/)
-              redirect_to user_inbox_path(current_user, filters: filter_params, page: params[:page])
-            elsif request.referer&.match(/new/) || (@comment.unreviewed? && current_user)
-              # If the referer is the new comment page, go to the comment's page
-              # instead of reloading the full work.
-              # If the comment is unreviewed and commenter is logged in, take
-              # them to the comment's page so they can access the edit and
-              # delete options for the comment, since unreviewed comments don't
-              # appear on the commentable.
-              redirect_to comment_path(@comment)
-            elsif request.referer == root_url
-              # replying on the homepage
-              redirect_to root_path
-            elsif @comment.unreviewed?
-              redirect_to_all_comments(@commentable)
-            else
-              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
-            end
+    @comment = Comment.new(comment_params)
+    @comment.ip_address = request.remote_ip
+    @comment.user_agent = request.env["HTTP_USER_AGENT"]&.to(499)
+    @comment.cloudflare_bot_score = request.env["HTTP_CF_BOT_SCORE"]
+    @comment.cloudflare_ja3_hash = request.env["HTTP_CF_JA3_HASH"]
+    @comment.cloudflare_ja4 = request.env["HTTP_CF_JA4"]
+    @comment.commentable = Comment.commentable_object(@commentable)
+    @controller_name = params[:controller_name]
+
+    # First, try saving the comment
+    if @comment.save
+      flash[:comment_notice] = if @comment.unreviewed?
+                                 # i18n-tasks-use t("comments.create.success.moderated.admin_post")
+                                 # i18n-tasks-use t("comments.create.success.moderated.work")
+                                 t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
+                               else
+                                 t("comments.create.success.not_moderated")
+                               end
+      respond_to do |format|
+        format.html do
+          if request.referer&.match(/inbox/)
+            redirect_to user_inbox_path(current_user, filters: filter_params, page: params[:page])
+          elsif request.referer&.match(/new/) || (@comment.unreviewed? && current_user)
+            # If the referer is the new comment page, go to the comment's page
+            # instead of reloading the full work.
+            # If the comment is unreviewed and commenter is logged in, take
+            # them to the comment's page so they can access the edit and
+            # delete options for the comment, since unreviewed comments don't
+            # appear on the commentable.
+            redirect_to comment_path(@comment)
+          elsif request.referer == root_url
+            # replying on the homepage
+            redirect_to root_path
+          elsif @comment.unreviewed?
+            redirect_to_all_comments(@commentable)
+          else
+            redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
           end
         end
-      else
-        flash[:error] = ts("Couldn't save comment!")
-        render action: "new"
       end
+    else
+      flash[:error] = ts("Couldn't save comment!")
+      render action: "new"
     end
   end
 
@@ -779,64 +780,66 @@ class CommentsController < ApplicationController
 
   def render_comment_form
     if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = t("comments.new.missing_commentable")
       redirect_back_or_to root_path
     else
-      if params[:comment_content].present? || params[:comment].present?
-        comment_attrs = {
-          comment_content: params[:comment_content] || params.dig(:comment, :comment_content),
-          pseud_id: params[:pseud_id] || params.dig(:comment, :pseud_id),
-          name: params[:name] || params.dig(:comment, :name),
-          email: params[:email] || params.dig(:comment, :email)
-        }
-        @comment = Comment.new(comment_attrs.compact)
-      else
-        @comment = Comment.new
-      end
+      @comment = build_comment_for_form
       @controller_name = params[:controller_name] if params[:controller_name]
       @name =
         case @commentable.class.name
-        when /Work/
+        when /Work/, /AdminPost/
           @commentable.title
         when /Chapter/
           @commentable.work.title
         when /Tag/
           @commentable.name
-        when /AdminPost/
-          @commentable.title
         when /Comment/
-          ts("Previous Comment")
+          t("comments.new.previous_comment")
         else
           @commentable.class.name
         end
     end
   end
 
-  def build_context_params
-    context = { comment_content: @comment.comment_content }
-    context[:pseud_id] = @comment.pseud_id if @comment.pseud_id
-    context[:name] = @comment.name if @comment.name
-    context[:email] = @comment.email if @comment.email
-    context[:view_full_work] = params[:view_full_work] if params[:view_full_work]
-    context[:page] = params[:page] if params[:page]
-    context[:controller_name] = params[:controller_name] if params[:controller_name]
+  def build_comment_for_form
+    if params[:comment_content].present? || params[:comment].present?
+      comment_attrs = {
+        comment_content: params[:comment_content] || params.dig(:comment, :comment_content),
+        pseud_id: params[:pseud_id] || params.dig(:comment, :pseud_id),
+        name: params[:name] || params.dig(:comment, :name),
+        email: params[:email] || params.dig(:comment, :email)
+      }
+      Comment.new(comment_attrs.compact)
+    else
+      Comment.new
+    end
+  end
+
+  def build_comment_form_state
+    state = { comment_content: @comment.comment_content }
+    state[:pseud_id] = @comment.pseud_id if @comment.pseud_id
+    state[:name] = @comment.name if @comment.name
+    state[:email] = @comment.email if @comment.email
+    state[:view_full_work] = params[:view_full_work] if params[:view_full_work]
+    state[:page] = params[:page] if params[:page]
+    state[:controller_name] = params[:controller_name] if params[:controller_name]
 
     case @commentable
     when Work
-      context[:work_id] = @commentable.id
+      state[:work_id] = @commentable.id
     when Chapter
-      context[:chapter_id] = @commentable.id
+      state[:chapter_id] = @commentable.id
     when AdminPost
-      context[:admin_post_id] = @commentable.id
+      state[:admin_post_id] = @commentable.id
     when Tag
-      context[:tag_id] = @commentable.name
+      state[:tag_id] = @commentable.name
     when Comment
-      context[:comment_id] = @commentable.id
+      state[:comment_id] = @commentable.id
     end
 
-    context[:filters] = filter_params.to_h if controller_name == "inbox" && params[:filters]
+    state[:filters] = filter_params.to_h if controller_name == "inbox" && params[:filters]
 
-    context
+    state
   end
 
   def comment_params

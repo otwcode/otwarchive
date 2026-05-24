@@ -855,6 +855,8 @@ en:
       parent_thread: Parent Thread
       reply_to_this: Reply to this comment
       thread: Thread
+    create:
+      missing_commentable: What did you want to comment on?
     comment_form:
       anonymous_creator: Anonymous Creator
       anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
@@ -921,6 +923,9 @@ en:
       page_heading: Editing comment
       show: Show
       update: Update
+    new:
+      missing_commentable: What did you want to comment on?
+      previous_comment: Previous Comment
     preview:
       anonymous_creator: Anonymous Creator
       back_to_edit: Back to Edit

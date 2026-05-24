@@ -37,7 +37,7 @@
 <!--action buttons-->
 <ul class="actions right">
   <%= form_with url: back_to_edit_comments_path, method: :post, local: true do |f| %>
-    <% @context_params.each do |key, value| %>
+    <% @form_state.each do |key, value| %>
       <% if value.is_a?(Hash) %>
         <% value.each do |sub_key, sub_value| %>
           <%= hidden_field_tag "#{key}[#{sub_key}]", sub_value %>
@@ -59,7 +59,7 @@
       <%= f.hidden_field :email %>
     <% end %>
 
-    <% @context_params.each do |key, value| %>
+    <% @form_state.each do |key, value| %>
       <% next if key.in?([:comment_content, :pseud_id, :name, :email]) %>
       <% if value.is_a?(Hash) %>
         <% value.each do |sub_key, sub_value| %>
