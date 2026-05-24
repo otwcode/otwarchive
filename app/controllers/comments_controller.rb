@@ -364,7 +364,7 @@ class CommentsController < ApplicationController
     render_comment_form
   end
 
-  # POST /comments/back_to_edit
+  # POST /comments/preview/edit
   def back_to_edit
     render_comment_form
     render :new unless performed?
@@ -778,7 +778,7 @@ class CommentsController < ApplicationController
 
   private
 
-  def render_comment_form
+  def load_comment_form
     if @commentable.nil?
       flash[:error] = t("comments.new.missing_commentable")
       redirect_back_or_to root_path
