@@ -52,6 +52,14 @@ describe AuditsCleanupJob do
       AuditsCleanupJob.perform
       expect(existing_user.audits.where(action: %w[create destroy]).count).to eq(2)
     end
+
+    it "respects per-query and per-job delete limits" do
+      ArchiveConfig.USER_KEEP_AUDIT_UPDATES_DAYS = 0
+      ArchiveConfig.USER_KEEP_AUDIT_CREATES_DESTROYS_DAYS = 0
+
+      AuditsCleanupJob.perform(query_delete_limit: 1, job_delete_limit: 2)
+      expect(existing_user.audits.count).to eq(2)
+    end
   end
 
   context "when audits exist for protected users" do
