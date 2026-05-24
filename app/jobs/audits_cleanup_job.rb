@@ -40,7 +40,8 @@ class AuditsCleanupJob < ApplicationJob
 
     query = query.limit(query_delete_limit)
 
-    query_delete_count, job_delete_count = 0, 0
+    query_delete_count = 0
+    job_delete_count = 0
 
     loop do
       query_delete_count = query.delete_all
