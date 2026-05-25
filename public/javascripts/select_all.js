@@ -4,7 +4,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 
   function bindToggle(buttonId, container, checkboxName, state) {
-    const button = document.querySelector(buttonId);
+    var button = document.querySelector(buttonId);
     if (!button) return;
     button.addEventListener("click", function() {
       document.querySelector(container)
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  const toggles = [
+  var toggles = [
     ["#wrangle_all_select",    "#wrangulator", "selected_tags[]", true ],
     ["#wrangle_all_deselect",  "#wrangulator", "selected_tags[]", false],
     ["#canonize_all_select",   "#wrangulator", "canonicals[]",    true ],
