@@ -431,6 +431,3 @@ Then "I should see {string} in the guest name field" do |text|
   expect(find('input[name="comment[name]"]').value).to eq(text)
 end
 
-Given "the anonymous work {string}" do |title|
-  FactoryBot.create(:no_authors, title: title)
-end
