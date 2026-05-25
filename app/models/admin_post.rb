@@ -33,6 +33,7 @@ class AdminPost < ApplicationRecord
   validate :translated_post_must_exist
 
   validate :translated_post_language_must_differ
+  validate :translated_post_must_be_posted_first
 
   scope :non_translated, -> { where("translated_post_id IS NULL") }
 
@@ -85,8 +86,14 @@ class AdminPost < ApplicationRecord
   def translated_post_language_must_differ
     return if translated_post.blank?
     return unless translated_post.language == language
-          
+
     errors.add(:translated_post_id, "cannot be same language as original post")
+  end
+
+  def translated_post_must_be_posted_first
+    return if translated_post.blank?
+
+    errors.add(:translated_post_id, :must_be_posted_first) if translated_post.draft? && self.posted?
   end
 
   ####################

@@ -346,6 +346,19 @@ describe AdminPostsController do
 
     it_behaves_like "an action only authorized admins can access", authorized_roles: posting_roles
     it_behaves_like "an action that non-admins cannot access"
+
+    context "when translated post is not posted" do
+      let(:original_post) { create(:admin_post, :draft) }
+      let(:admin_post) { create(:admin_post, :draft, translated_post: original_post, language_id: create(:language)) }
+
+      before { fake_login_admin(create(:superadmin)) }
+      it "does not post the translation" do
+        subject
+
+        expect(admin_post.reload.posted?).to be_falsey
+        it_redirects_to_with_error(edit_admin_post_path(admin_post), "Sorry, that Admin Post could not be posted.")
+      end
+    end
   end
 
   describe "DELETE #destroy" do

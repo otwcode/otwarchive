@@ -98,6 +98,8 @@ en:
             comment_permissions:
               format: "%{message}"
               invalid_permissions: Comment permissions are invalid.
+            translated_post_id:
+              must_be_posted_first: cannot be posted before the original post
         block:
           attributes:
             blocked:
