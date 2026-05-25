@@ -36,7 +36,7 @@
 
 <!--action buttons-->
 <ul class="actions right">
-  <%= form_with url: new_comment_path, method: :post, local: true do |f| %>
+  <%= form_with url: draft_comments_path, method: :post, local: true do |f| %>
     <% @form_state.each do |key, value| %>
       <% if value.is_a?(Hash) %>
         <% value.each do |sub_key, sub_value| %>
