@@ -430,4 +430,3 @@ end
 Then "I should see {string} in the guest name field" do |text|
   expect(find('input[name="comment[name]"]').value).to eq(text)
 end
-
