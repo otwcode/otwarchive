@@ -1,17 +1,21 @@
 // To be included only where needed:
 // tag_wranglings/index, tags/wrangle, admin/spam
 
-$j(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function() {
 
   function bindToggle(buttonId, container, checkboxName, state) {
-    $j(buttonId).click(function() {
-      $j(container)
-        .find(":checkbox[name='" + checkboxName + "']")
-        .prop("checked", state);
+    const button = document.querySelector(buttonId);
+    if (!button) return;
+    button.addEventListener("click", function() {
+      document.querySelector(container)
+        .querySelectorAll("input[type='checkbox'][name='" + checkboxName + "']")
+        .forEach(function(checkbox) {
+          checkbox.checked = state;
+        });
     });
   }
 
-  var toggles = [
+  const toggles = [
     ["#wrangle_all_select",    "#wrangulator", "selected_tags[]", true ],
     ["#wrangle_all_deselect",  "#wrangulator", "selected_tags[]", false],
     ["#canonize_all_select",   "#wrangulator", "canonicals[]",    true ],
@@ -22,7 +26,7 @@ $j(document).ready(function() {
     ["#ham_all_deselect",      "#spam_works",  "ham[]",           false],
   ];
 
-  $j.each(toggles, function(_, t) {
+  toggles.forEach(function(t) {
     bindToggle(t[0], t[1], t[2], t[3]);
   });
 
