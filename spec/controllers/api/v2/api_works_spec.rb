@@ -514,7 +514,8 @@ describe "API v2 WorksController - Unit Tests", type: :request do
   end
 
   it "work_url_from_external returns the work url when a work is found" do
-    work1 = create(:work, imported_from_url: "http://foo")
+    work1 = create(:work)
+    work1.imported_url = ImportedUrl.new(original: "http://foo")
     work_url_response = @under_test.instance_eval { find_work_by_import_url("http://foo") }
     expect(work_url_response[:works].first).to eq work1
   end

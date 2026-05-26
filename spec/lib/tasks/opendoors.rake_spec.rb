@@ -8,8 +8,11 @@ describe 'rake opendoors:import_url_mapping' do
   original_url = "http://another/1"
   original_url2 = "http://another/2"
 
-  let!(:work_with_temp_url) { create(:work, id: id1, imported_from_url: temp_url) }
-  let!(:work_with_no_url) { create(:work, id: id2, imported_from_url: nil) }
+  let!(:work_with_temp_url) {
+    create(:work, id: id1)
+    :work.imported_url = ImportedUrl.new(original: temp_url)
+  }
+  let!(:work_with_no_url) { create(:work, id: id2) }
 
   after do
     File.delete("opendoors_result.txt") if File.exist?("opendoors_result.txt")
@@ -19,8 +22,8 @@ describe 'rake opendoors:import_url_mapping' do
     it "takes a path to a CSV and updates works" do
       path = file_fixture("opendoors_import_url_mapping.csv")
       subject.invoke(path)
-      expect(Work.find(work_with_temp_url.id).imported_from_url).to eq(original_url)
-      expect(Work.find(work_with_no_url.id).imported_from_url).to eq(original_url2)
+      expect(Work.find(work_with_temp_url.id).imported_url.original).to eq(original_url)
+      expect(Work.find(work_with_no_url.id).imported_url.original).to eq(original_url2)
     end
     it "fails if the CSV path is invalid" do
       expect { subject.invoke("not a path") }.to raise_error Errno::ENOENT
