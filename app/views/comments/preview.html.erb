@@ -4,73 +4,108 @@
 <!--main content-->
 <div id="previewpane">
   <ol class="thread">
-    <li class="<%= cycle :odd, :even %> <%= css_classes_for_comment(@comment) %> preview" id="comment_preview" role="article">
-      <h4 class="heading byline">
-        <% if @comment.by_anonymous_creator? %>
-          <%= t(".anonymous_creator") %>
+    <% if @commentable.is_a?(Comment) %>
+      <li class="<%= cycle :odd, :even %> <%= css_classes_for_comment(@commentable) %>" id="comment_<%= @commentable.id %>" role="article">
+        <% if @commentable.is_deleted %>
+          <p><%= ts("(Previous comment deleted.)") %></p>
+        <% elsif !can_see_hidden_comment?(@commentable) %>
+          <p class="message"><%= ts("(This comment is under review by an admin and is currently unavailable.)") %></p>
         <% else %>
-          <%= get_commenter_pseud_or_name(@comment) %>
+          <h4 class="heading byline">
+            <% if @commentable.by_anonymous_creator? %>
+              <%= ts("Anonymous Creator") %>
+            <% else %>
+              <%= get_commenter_pseud_or_name(@commentable) %>
+            <% end %>
+            <span class="posted datetime">
+              <%= time_in_zone(@commentable.created_at) %>
+            </span>
+          </h4>
+          <div class="icon">
+            <% if @commentable.pseud %>
+              <% if @commentable.by_anonymous_creator? %>
+                <span class="anonymous icon"></span>
+              <% else %>
+                <%= icon_display(@commentable.pseud.user, @commentable.pseud) %>
+              <% end %>
+            <% else %>
+              <span class="visitor icon"></span>
+            <% end %>
+          </div>
+          <blockquote class="userstuff">
+            <%= raw sanitize_field(@commentable, :comment_content) %>
+          </blockquote>
         <% end %>
-        <span class="posted datetime">
-          <%= time_in_zone(Time.current) %>
-        </span>
-      </h4>
-      <div class="icon">
-        <% if @comment.pseud %>
+      </li>
+      <li>
+        <ol class="thread">
+          <li class="<%= cycle :odd, :even %> <%= css_classes_for_comment(@comment) %> preview" id="comment_preview" role="article">
+          <h4 class="heading byline">
+            <% if @comment.by_anonymous_creator? %>
+              <%= t(".anonymous_creator") %>
+            <% else %>
+              <%= get_commenter_pseud_or_name(@comment) %>
+            <% end %>
+            <span class="posted datetime">
+              <%= time_in_zone(Time.current) %>
+            </span>
+          </h4>
+          <div class="icon">
+            <% if @comment.pseud %>
+              <% if @comment.by_anonymous_creator? %>
+                <span class="anonymous icon"></span>
+              <% else %>
+                <%= icon_display(@comment.pseud.user, @comment.pseud) %>
+              <% end %>
+            <% else %>
+              <span class="visitor icon"></span>
+            <% end %>
+          </div>
+          <blockquote class="userstuff">
+            <%= raw sanitize_field(@comment, :comment_content) %>
+          </blockquote>
+        </li>
+        </ol>
+      </li>
+    <% else %>
+      <li class="<%= cycle :odd, :even %> <%= css_classes_for_comment(@comment) %> preview" id="comment_preview" role="article">
+        <h4 class="heading byline">
           <% if @comment.by_anonymous_creator? %>
-            <span class="anonymous icon"></span>
+            <%= t(".anonymous_creator") %>
           <% else %>
-            <%= icon_display(@comment.pseud.user, @comment.pseud) %>
+            <%= get_commenter_pseud_or_name(@comment) %>
           <% end %>
-        <% else %>
-          <span class="visitor icon"></span>
-        <% end %>
-      </div>
-      <blockquote class="userstuff">
-        <%= raw sanitize_field(@comment, :comment_content) %>
-      </blockquote>
-    </li>
+          <span class="posted datetime">
+            <%= time_in_zone(Time.current) %>
+          </span>
+        </h4>
+        <div class="icon">
+          <% if @comment.pseud %>
+            <% if @comment.by_anonymous_creator? %>
+              <span class="anonymous icon"></span>
+            <% else %>
+              <%= icon_display(@comment.pseud.user, @comment.pseud) %>
+            <% end %>
+          <% else %>
+            <span class="visitor icon"></span>
+          <% end %>
+        </div>
+        <blockquote class="userstuff">
+          <%= raw sanitize_field(@comment, :comment_content) %>
+        </blockquote>
+      </li>
+    <% end %>
   </ol>
 </div>
 <!--/content-->
 
-<!--action buttons-->
-<ul class="actions right">
-  <%= form_with url: draft_comments_path, method: :post, local: true do |f| %>
-    <% @form_state.each do |key, value| %>
-      <% if value.is_a?(Hash) %>
-        <% value.each do |sub_key, sub_value| %>
-          <%= hidden_field_tag "#{key}[#{sub_key}]", sub_value %>
-        <% end %>
-      <% else %>
-        <%= f.hidden_field key, name: key, value: value %>
-      <% end %>
-    <% end %>
-    <%= f.submit t(".back_to_edit"), class: "button" %>
-  <% end %>
-
-  <%= form_for @comment, url: comments_path, method: :post, local: true, html: { id: "post_comment_from_preview" } do |f| %>
-    <%= f.hidden_field :comment_content %>
-
-    <% if @comment.pseud_id %>
-      <%= f.hidden_field :pseud_id %>
-    <% elsif @comment.name %>
-      <%= f.hidden_field :name %>
-      <%= f.hidden_field :email %>
-    <% end %>
-
-    <% @form_state.each do |key, value| %>
-      <% next if key.in?([:comment_content, :pseud_id, :name, :email]) %>
-      <% if value.is_a?(Hash) %>
-        <% value.each do |sub_key, sub_value| %>
-          <%= hidden_field_tag "#{key}[#{sub_key}]", sub_value %>
-        <% end %>
-      <% else %>
-        <%= hidden_field_tag key, value %>
-      <% end %>
-    <% end %>
-
-    <%= f.submit t(".post_comment"), class: "button submit" %>
-  <% end %>
-</ul>
-<!--/actions-->
+<!--inline edit form-->
+<div id="edit_comment_on_preview">
+  <h3 class="heading"><%= t(".edit_comment_heading") %></h3>
+  <%= render partial: 'comments/comment_form',
+        locals: {
+          comment: @comment,
+          commentable: @commentable,
+          button_name: t(".post_comment")
+        } %>
+</div>

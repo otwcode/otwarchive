@@ -1,36 +1,36 @@
 class CommentsController < ApplicationController
   before_action :load_commentable,
-                only: [:index, :new, :draft, :create, :preview, :edit, :update, :show_comments,
+                only: [:index, :new, :create, :preview, :edit, :update, :show_comments,
                        :hide_comments, :add_comment_reply,
                        :cancel_comment_reply, :delete_comment,
                        :cancel_comment_delete, :unreviewed, :review_all]
-  before_action :check_user_status, only: [:new, :draft, :create, :preview, :edit, :update, :destroy]
+  before_action :check_user_status, only: [:new, :create, :preview, :edit, :update, :destroy]
   before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject, :freeze, :unfreeze, :hide, :unhide]
   before_action :check_visibility, only: [:show]
   before_action :check_if_restricted
   before_action :check_tag_wrangler_access
   before_action :check_parent_visible
   before_action :check_modify_parent,
-                only: [:new, :draft, :create, :preview, :edit, :update, :add_comment_reply,
+                only: [:new, :create, :preview, :edit, :update, :add_comment_reply,
                        :cancel_comment_reply, :cancel_comment_edit]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_action :check_permission_to_edit, only: [:edit, :update]
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
-  before_action :check_guest_comment_admin_setting, only: [:new, :draft, :create, :preview, :add_comment_reply]
-  before_action :check_parent_comment_permissions, only: [:new, :draft, :create, :preview, :add_comment_reply]
+  before_action :check_guest_comment_admin_setting, only: [:new, :create, :preview, :add_comment_reply]
+  before_action :check_parent_comment_permissions, only: [:new, :create, :preview, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
-  before_action :check_frozen, only: [:new, :draft, :create, :preview, :add_comment_reply]
-  before_action :check_hidden_by_admin, only: [:new, :draft, :create, :preview, :add_comment_reply]
-  before_action :check_not_replying_to_spam, only: [:new, :draft, :create, :preview, :add_comment_reply]
-  before_action :check_guest_replies_preference, only: [:new, :draft, :create, :preview, :add_comment_reply]
+  before_action :check_frozen, only: [:new, :create, :preview, :add_comment_reply]
+  before_action :check_hidden_by_admin, only: [:new, :create, :preview, :add_comment_reply]
+  before_action :check_not_replying_to_spam, only: [:new, :create, :preview, :add_comment_reply]
+  before_action :check_guest_replies_preference, only: [:new, :create, :preview, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
   before_action :check_permission_to_modify_hidden_status, only: [:hide, :unhide]
   before_action :check_guest_email_is_from_suspended_or_banned_user, only: [:create]
-  before_action :admin_logout_required, only: [:new, :draft, :create, :add_comment_reply]
+  before_action :admin_logout_required, only: [:new, :create, :add_comment_reply]
   before_action :set_page_subtitle, only: [:index, :new, :show, :unreviewed]
 
   include WorksHelper
@@ -381,32 +381,6 @@ class CommentsController < ApplicationController
           @commentable.class.name
         end
     end
-  end
-
-  # POST /comments/draft
-  def draft
-    if @commentable.nil?
-      flash[:error] = t("comments.new.missing_commentable")
-      redirect_back_or_to root_path
-    else
-      @comment = build_comment_for_form
-      @controller_name = params[:controller_name] if params[:controller_name]
-      @name =
-        case @commentable.class.name
-        when /Work/, /AdminPost/
-          @commentable.title
-        when /Chapter/
-          @commentable.work.title
-        when /Tag/
-          @commentable.name
-        when /Comment/
-          t("comments.new.previous_comment")
-        else
-          @commentable.class.name
-        end
-    end
-
-    render :new
   end
 
   # GET /comments/1/edit

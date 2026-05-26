@@ -116,4 +116,8 @@ fieldset.comments, .comment .userstuff {
   padding-left: 83px;
 }
 
+#edit_comment_on_preview {
+  margin-top: 2.5em;
+}
+
 /* END == */
