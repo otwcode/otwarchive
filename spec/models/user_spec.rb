@@ -394,6 +394,58 @@ describe User do
         expect(log_item.note).to eq("Change made by #{admin.login}")
       end
     end
+    
+    context "username was changed to match an existing pseud's name. Existing login has capitalization and diacretics new is all downcased" do
+      let(:new_pseud) { build(:pseud, name: "New_Usernamé") }
+
+      before do
+        existing_user.pseuds << new_pseud
+        existing_user.update!(login: "new_username")
+        existing_user.reload
+      end
+
+      it "pseud's capitalization and diacritics were changed to match the new username's" do 
+        expect(existing_user.pseuds.size).to eq(2)
+        expect(existing_user.pseuds.second.name).to eq(existing_user.login)
+        expect(existing_user.pseuds.second.name).to eq("new_username")
+        expect(existing_user.login).to eq("new_username")
+      end
+    end
+
+    context "username was changed to match an existing pseud's name. Existing login have capitalization and diacretics, new only has capitalization" do
+      let(:new_pseud) { build(:pseud, name: "New_Usernamé") }
+
+      before do
+        existing_user.pseuds << new_pseud
+        existing_user.update!(login: "new_UsernaMe")
+        existing_user.reload
+      end
+
+      it "pseud's capitalization and diacritics were changed to match the new username's" do 
+        expect(existing_user.pseuds.size).to eq(2)
+        expect(existing_user.pseuds.second.name).to eq(existing_user.login)
+        expect(existing_user.pseuds.second.name).to eq("new_UsernaMe")
+        expect(existing_user.login).to eq("new_UsernaMe")
+      end
+    end
+    
+    context "username was changed to not match an existing pseud's name, and the user has no psueds" do
+      let(:new_pseud) { build(:pseud, name: "New_Usernamé") }
+
+      before do
+        existing_user.pseuds = []
+        
+        existing_user.update!(login: "new_UsernaMe")
+        existing_user.reload
+      end
+
+      it "creates a new pseud for the users new login" do 
+        expect(existing_user.pseuds.size).to eq(1)
+        expect(existing_user.pseuds.first.name).to eq(existing_user.login)
+        expect(existing_user.pseuds.first.name).to eq("new_UsernaMe")
+        expect(existing_user.login).to eq("new_UsernaMe")
+      end
+    end
   end
 
   describe ".search_multiple_by_email" do

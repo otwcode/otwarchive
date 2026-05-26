@@ -20,10 +20,13 @@ Before do
   I18n.locale = I18n.default_locale
 
   # Assume all spam checks pass by default.
-  allow(Akismetor).to receive(:spam?).and_return(false)
+  allow(AkismetClient).to receive(:enabled?).and_return(false)
 
   # Don't authenticate for Zoho.
   allow_any_instance_of(ZohoAuthClient).to receive(:access_token)
+  
+  # Don't display TOS prompts.
+  allow_any_instance_of(ApplicationHelper).to receive(:tos_exempt_page?).and_return(true)
 
   # Clear Memcached
   Rails.cache.clear

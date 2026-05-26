@@ -368,6 +368,46 @@ describe Comment do
           end
         end
       end
+
+      context "when cloudflare headers are available" do
+        before do
+          subject.cloudflare_bot_score = "42"
+          subject.cloudflare_ja3_hash = "a_hash"
+          subject.cloudflare_ja4 = "another_hash"
+        end
+
+        it "has cloudflare bot score" do
+          expect(subject.akismet_attributes[:cloudflare_bot_score]).to eq("42")
+        end
+
+        it "has cloudflare ja3 hash" do
+          expect(subject.akismet_attributes[:cloudflare_ja3_hash]).to eq("a_hash")
+        end
+
+        it "has cloudflare ja4" do
+          expect(subject.akismet_attributes[:cloudflare_ja4]).to eq("another_hash")
+        end
+      end
+
+      context "when cloudflare headers aren't available" do
+        before do
+          subject.cloudflare_bot_score = nil
+          subject.cloudflare_ja3_hash = nil
+          subject.cloudflare_ja4 = nil
+        end
+
+        it "doesn't have cloudflare bot score" do
+          expect(subject.akismet_attributes).not_to have_key(:cloudflare_bot_score)
+        end
+
+        it "doesn't have cloudflare ja3 hash" do
+          expect(subject.akismet_attributes).not_to have_key(:cloudflare_ja3_hash)
+        end
+
+        it "doesn't have cloudflare ja4" do
+          expect(subject.akismet_attributes).not_to have_key(:cloudflare_ja4)
+        end
+      end
     end
   end
 
@@ -879,20 +919,33 @@ describe Comment do
   end
 
   describe "#mark_as_spam!" do
-    let(:comment) { create(:comment, approved: true, spam: false) }
+    context "when the comment is not marked as spam" do
+      let(:comment) { create(:comment, approved: true, spam: false) }
 
-    it "flags the comment as spam." do
-      comment.mark_as_spam!
-      comment.reload
-      expect(comment.approved).to be_falsey
-      expect(comment.spam).to be_truthy
+      it "flags the comment as spam" do
+        comment.mark_as_spam!
+        comment.reload
+        expect(comment.approved).to be_falsey
+        expect(comment.spam).to be_truthy
+      end
+    end
+
+    context "when the comment is already marked as spam" do
+      let(:comment) { create(:comment, approved: false, spam: false) }
+
+      it "flags the comment as spam" do
+        comment.mark_as_spam!
+        comment.reload
+        expect(comment.approved).to be_falsey
+        expect(comment.spam).to be_truthy
+      end
     end
   end
 
   describe "#mark_as_ham!" do
     let(:comment) { create(:comment, approved: false, spam: true) }
 
-    it "flags the comment as legitimate." do
+    it "flags the comment as legitimate" do
       comment.mark_as_ham!
       comment.reload
       expect(comment.approved).to be_truthy

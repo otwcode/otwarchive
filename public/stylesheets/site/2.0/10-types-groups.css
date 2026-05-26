@@ -158,6 +158,12 @@ dl.index dd .userstuff p {
   display: block;
 }
 
+/* contexts */
+
+form dl.index {
+  position: initial;
+}
+
 /* TYPES */
 
 a.rss span {
@@ -262,6 +268,10 @@ dl.stats dd {
 
 .statistics .index li:nth-of-type(even) {
   background: #eee;
+}
+
+.statistics.chart svg > g:last-child {
+    pointer-events: none;
 }
 
 .concise li { 

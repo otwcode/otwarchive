@@ -133,7 +133,7 @@
 
 /* quotes and stresses */
 
-.userstuff blockquote {
+.userstuff blockquote, .userstuff address {
   line-height: 1.5;
   margin-inline-start: 1.5em;
   padding: 0.75em;
@@ -184,6 +184,10 @@
 
 .comment .userstuff li {
   list-style-position: inside;
+}
+
+.comment .userstuff blockquote {
+    display: flow-root;
 }
 
 .bookmark .user .userstuff {

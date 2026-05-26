@@ -329,6 +329,18 @@ Scenario: Cannot reply to comments (no button) while logged as admin
     Then I should see "Woohoo"
       And I should see "Reply"
 
+Scenario: When guest comments are disabled, display comment actions to admin/guests
+    Given the work "No Guest Comments Work" by "creator"
+    When I am logged in as "commenter"
+      And I view the work "No Guest Comments Work"
+      And I post a comment "I am the comment"    
+    When I am logged in as an admin
+      And I visit the reply page to the comment on "No Guest Comments Work"
+    Then I should see "Thread"
+    When I am logged out
+      And I visit the reply page to the comment on "No Guest Comments Work"
+    Then I should see "Thread"
+
   Scenario: Translated comment notification email
     Given the work "Generic Work" by "creator" and "cocreator"
       And a locale with translated emails
@@ -394,6 +406,23 @@ Scenario: Cannot reply to comments (no button) while logged as admin
       And the email to "commenter" should contain "left the following comment on"
       And the email to "commenter" should contain "Go to the thread starting from this comment"
       And the email to "commenter" should be translated
+
+Scenario: Guest comments with an email from a banned or suspended user should be blocked
+  Given the work "Generic Work" by "creator" with guest comments enabled
+    And the following users exist
+      | login              | email                      |
+      | suspended_user_alt | suspended+tag@example.com  |
+      | suspended_user     | suspended@example.com      |
+      | banned_user        | banneduser@gmail.com       |
+      | banned_user_alt    | banned.user@googlemail.com |
+    And the user "suspended_user" is suspended
+    And the user "banned_user" is banned
+  When I post the comment "I loved this" on the work "Generic Work" as a guest with email "suspended+tag2@example.com"
+  Then I should see "Sorry, you have been blocked from commenting."
+    And I should not see "Comment created!"
+  When I post the comment "I loved this" on the work "Generic Work" as a guest with email "banneduser@googlemail.com"
+  Then I should see "Sorry, you have been blocked from commenting."
+    And I should not see "Comment created!"
 
   Scenario: Translated comment reply notification email
     Given the work "Generic Work" by "creator"

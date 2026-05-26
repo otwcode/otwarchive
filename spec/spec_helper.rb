@@ -66,7 +66,10 @@ RSpec.configure do |config|
     I18n.locale = I18n.default_locale
 
     # Assume all spam checks pass by default.
-    allow(Akismetor).to receive(:spam?).and_return(false)
+    allow(AkismetClient).to receive(:enabled?).and_return(false)
+
+    # Don't display TOS prompts.
+    allow_any_instance_of(ApplicationHelper).to receive(:tos_exempt_page?).and_return(true)
 
     # Stub all requests to example.org, the default external work URL:
     WebMock.stub_request(:any, /example/)

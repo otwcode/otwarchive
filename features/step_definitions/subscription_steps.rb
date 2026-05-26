@@ -32,3 +32,24 @@ When /^"([^\"]*)" subscribes to (author|work|series) "([^\"]*)"$/ do |user, type
   step %{I go to the subscriptions page for "#{user}"}
   step %{I should see an "Unsubscribe from #{name}" button}
 end
+
+Then "the feed should have exactly {int} author(s)" do |int|
+  expect(page).to have_selector(:xpath, "//author").exactly(int)
+end
+
+Then "the feed updated date should be should be the created date of {string}" do |work|
+  w = Work.find_by(title: work)
+  expect(find(:xpath, "//feed/updated")).to have_content(w.created_at.xmlschema)
+end
+
+# rubocop:disable Cucumber/RegexStepName
+Then /^the (\d+)(?:st|nd|rd|th) feed author should contain "([^"]*)"$/ do |n, text|
+  within(:xpath, "//author[#{n}]") do
+    expect(page).to have_content(text)
+  end
+end
+
+Then /^the (\d+)(?:st|nd|rd|th) feed author should not have a link$/ do |n|
+  expect(page).not_to have_selector(:xpath, "//author[#{n}]/uri")
+end
+# rubocop:enable Cucumber/RegexStepName

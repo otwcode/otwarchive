@@ -8,8 +8,8 @@ Bundler.require(*Rails.groups)
 
 module Otwarchive
   class Application < Rails::Application
-    app_config = YAML.load_file(Rails.root.join("config/config.yml"))
-    app_config.merge!(YAML.load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
+    app_config = YAML.safe_load_file(Rails.root.join("config/config.yml"))
+    app_config.merge!(YAML.safe_load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
     ::ArchiveConfig = OpenStruct.new(app_config)
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
@@ -22,7 +22,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 8.0
+    config.load_defaults 8.1
 
     %w[
       app/models/challenge_models
@@ -64,6 +64,10 @@ module Otwarchive
 
     config.action_view.automatically_disable_submit_tag = false
 
+    # Add autocomplete="off" attributes to hidden fields
+    # Workaround for a Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=654072
+    config.action_view.remove_hidden_field_autocomplete = false
+
     # Disable dumping schemas after migrations.
     # This can cause problems since we don't always update versions on merge.
     # Ideally this would be enabled in dev, but we're not quite ready for that.
@@ -86,10 +90,9 @@ module Otwarchive
       BCrypt::Password
     ]
 
-    # Set admin two-factor authentication keys
-    config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]
-    config.active_record.encryption.deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"]
-    config.active_record.encryption.key_derivation_salt = ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"]
+    config.active_record.encryption.primary_key = ArchiveConfig.ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+    config.active_record.encryption.deterministic_key = ArchiveConfig.ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+    config.active_record.encryption.key_derivation_salt = ArchiveConfig.ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
 
     # handle errors with custom error pages:
     config.exceptions_app = self.routes
@@ -145,9 +148,6 @@ module Otwarchive
     config.active_storage.queues.transform = :active_storage
 
     config.active_storage.web_image_content_types = %w[image/png image/jpeg image/gif]
-
-    # Do not enable YJIT automatically once we upgrade to Ruby 3.3
-    config.yjit = false
 
     # Use secret from archive config
     config.secret_key_base = ArchiveConfig.SESSION_SECRET

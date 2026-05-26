@@ -78,7 +78,7 @@ describe Admin::AdminInvitationsController do
     end
   end
 
-  find_roles = %w[superadmin policy_and_abuse support].freeze
+  find_roles = %w[superadmin open_doors policy_and_abuse support].freeze
 
   describe "GET #find" do
     subject { get :find, params: { invitation: { token: invitation.token } } }
