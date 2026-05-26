@@ -46,12 +46,12 @@ class Opendoors::ToolsController < ApplicationController
       flash[:error] = ts("The imported-from url you are trying to set doesn't seem valid.")
     else
       # check for any other works 
-      works = Work.where(imported_from_url: @imported_from_url)
+      works = Work.joins(:imported_url).where(imported_url: { original: @imported_from_url })
       if works.count > 0 
         flash[:error] = ts("There is already a work imported from the url %{url}.", url: @imported_from_url)
       else
         # ok let's try to update
-        @work.update_attribute(:imported_from_url, @imported_from_url)
+        @work.imported_url&.update(original: @imported_from_url)
         flash[:notice] = "Updated imported-from url for #{@work.title} to #{@imported_from_url}"
       end
     end    

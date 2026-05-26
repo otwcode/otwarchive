@@ -298,7 +298,7 @@ class Work < ApplicationRecord
     series.each(&:expire_caches)
 
     Work.expire_work_blurb_version(id)
-    Work.flush_find_by_url_cache unless imported_from_url.blank?
+    Work.flush_find_by_url_cache unless imported_url == nil
   end
 
   def update_pseud_and_collection_indexes
@@ -419,16 +419,21 @@ class Work < ApplicationRecord
 
   def self.find_by_url_uncached(url)
     url = UrlFormatter.new(url)
-    Work.where(imported_from_url: url.original).first ||
-      Work.where(imported_from_url: [url.minimal,
-                                     url.with_http, url.with_https,
-                                     url.no_www, url.with_www,
-                                     url.encoded, url.decoded,
-                                     url.minimal_no_protocol_no_www]).first ||
-      Work.where("imported_from_url LIKE ? or imported_from_url LIKE ?",
-                 "http://#{url.minimal_no_protocol_no_www}%",
-                 "https://#{url.minimal_no_protocol_no_www}%").select do |w|
-        work_url = UrlFormatter.new(w.imported_from_url)
+    
+    Work.joins(:imported_url).where(imported_url: { original: @imported_from_url }).first ||
+    Work.joins(:imported_url).where(imported_url: { minimal: url.minimal }).first ||
+    Work.joins(:imported_url).where(imported_url: { with_http: url.with_http }).first ||
+    Work.joins(:imported_url).where(imported_url: { with_https: url.with_https }).first ||
+    Work.joins(:imported_url).where(imported_url: { no_www: url.no_www }).first ||
+    Work.joins(:imported_url).where(imported_url: { with_www: url.with_www }).first ||
+    Work.joins(:imported_url).where(imported_url: { encoded: url.encoded }).first ||
+    Work.joins(:imported_url).where(imported_url: { decoded: url.decoded }).first ||
+    Work.joins(:imported_url).where(imported_url: { minimal_no_protocol_no_www: url.minimal_no_protocol_no_www }).first ||
+    Work.joins(:imported_url).where(imported_url: { minimal: url.minimal }).first ||
+    Work.joins(:imported_url).where("imported_urls.original LIKE ? or imported_urls.original LIKE ?",
+      "http://#{url.minimal_no_protocol_no_www}%",
+      "https://#{url.minimal_no_protocol_no_www}%").select do |w|
+        work_url = UrlFormatter.new(w.imported_url&.original)
         %w[original minimal no_www with_www with_http with_https encoded decoded].any? do |method|
           work_url.send(method) == url.send(method)
         end
