@@ -3251,7 +3251,9 @@ en:
         required_before_disabling: Before disabling two-step verification, you need to verify your password.
         submit: Disable Two-Step Verification
       confirm_regenerate_backup_codes:
+        confirm: Yes, Re-generate Codes
         confirm_html: Are you sure you want to re-generate your two-step verification backup codes? Your existing backup codes will no longer work.
+        page_heading: Re-generate Backup Codes
       generate_backup_codes:
         backup_codes_copied: Backup Codes Copied!
         copy_to_clipboard: Copy Backup Codes to Clipboard

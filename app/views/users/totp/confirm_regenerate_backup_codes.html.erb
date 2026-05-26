@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Re-generate Backup Codes") %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 
 <!--main content-->
 <%= form_for(current_user, url: generate_backup_codes_user_totp_path, html: { method: :post, class: "simple" }) do |f| %>
@@ -7,7 +7,7 @@
     <%= t(".confirm_html") %>
   </p>
   <p class="actions">
-    <%= f.submit ts("Yes, Regenerate Codes") %>
+  <%= f.submit t(".confirm") %>
   </p>
 <% end %>
 <!--/content-->
