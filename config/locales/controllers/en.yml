@@ -319,7 +319,7 @@ en:
       remove_skin: Go back or follow any link to remove the skin.
       return_to_skin: Return to Skin to Use
       skin_title: You are previewing the skin %{title}.
-      tip: 'Tip: You can preview any archive page you want by adding ''?site_skin=%{site_skin_id}'' to the end of the URL.'
+      tip: 'Tip: You can preview any archive page you want by adding "?site_skin=%{site_skin_id}" to the end of the URL.'
     set:
       failure: Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{skin_title} to be added!
       skin_page: "%{skin_title} skin page"

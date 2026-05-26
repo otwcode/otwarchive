@@ -113,8 +113,8 @@ Feature: Public skins
   Then I should be on OTW_Translation's works page
     And I should see "You are previewing the skin Usable Skin."
     And I should see "Go back or follow any link to remove the skin"
-    And I should see "Tip: You can preview any archive page you want by adding '?site_skin="
-    And I should see "' to the end of the URL"
+    And I should see 'Tip: You can preview any archive page you want by adding "?site_skin='
+    And I should see '" to the end of the URL'
   When I follow "Return to Skin to Use"
   Then I should be on "Usable Skin" skin page
 
