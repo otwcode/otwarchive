@@ -331,6 +331,10 @@ describe Comment do
           end
 
           context "when the comment is from a new user" do
+            let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+            before do
+              admin_setting.update_attribute(:account_age_threshold_for_comment_spam_check, 10)
+            end
             let(:user) { create(:user, created_at: 10.minutes.ago) }
             let(:previous_comment) { create(:comment, :on_admin_post, pseud: user.default_pseud, comment_content: "lorem", created_at: 15.seconds.ago) }
             subject { create(:comment, commentable: previous_comment.ultimate_parent, pseud: user.default_pseud, comment_content: "ipsum", created_at: 0.seconds.ago) }
