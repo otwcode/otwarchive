@@ -13,7 +13,10 @@
   <h3 class="heading"><%= t(".app_setup.heading") %></h3>
   <p><%= t(".app_setup.instructions") %></p>
   <div class="annotation module">
-    <div class="image"><p class="qr"><%= qr_code_as_svg(current_user.totp_qr_code_uri) %></p></div>
+    <div class="image notes">
+      <p class="qr"><%= qr_code_as_svg(current_user.totp_qr_code_uri) %></p>
+      <p class="footnote"><%= t(".app_setup.qr_scan_note") %></p>
+    </div>
     <div class="notes">
       <h4 class="heading"><%= t(".app_setup.key.heading") %></h4>
       <code><%= setup_key = current_user.otp_secret.scan(/.{1,4}/).join(" ") %></code>

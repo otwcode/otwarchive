@@ -396,21 +396,25 @@ en:
       already_enabled: TOTP two-step verification is already enabled.
       confirm_disable:
         page_title: Disable Two-Step Verification
+      confirm_regenerate_backup_codes:
+        page_title: Two-Step Verification Backup Codes
       create:
         incorrect_code: Incorrect verification code. Your code may have expired, or you may need to set up your authenticator app again.
+        page_title: Two-Step Verification Backup Codes
         success: Successfully enabled two-step verification; please make note of your backup codes.
       disable:
         failure: Could not disable two-step verification.
         incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
         success: Successfully disabled two-step verification.
+      generate_backup_codes:
+        not_enabled: Please enable two-step verification first.
+        page_title: Two-Step Verification Backup Codes
+        success: Successfully re-generated your backup codes; please make note of your new backup codes, your old backup codes will no longer work.
       new:
         page_title: Confirm Password
       reauthenticate_create:
         incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
         page_title: Enable Two-Step Verification
-      show_backup_codes:
-        not_enabled: Please enable two-step verification first.
-        page_title: Two-Step Verification Backup Codes
   works:
     create:
       draft_notice_html: Draft was successfully created. It will be %{scheduled_for_deletion_bold} on %{deletion_date}.

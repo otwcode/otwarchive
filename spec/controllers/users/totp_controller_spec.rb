@@ -112,7 +112,7 @@ describe Users::TotpController do
         fake_login_known_user(user)
         post :create, params: { user_id: user.login, totp_attempt: user.current_otp }
         expect(user.reload.totp_enabled?).to be_truthy
-        it_redirects_to_with_notice(show_backup_codes_user_totp_path, "Successfully enabled two-step verification; please make note of your backup codes.")
+        expect(flash[:notice]).to eq("Successfully enabled two-step verification; please make note of your backup codes.")
       end
 
       it "denies access when TOTP code is wrong" do
@@ -136,18 +136,18 @@ describe Users::TotpController do
     end
   end
 
-  describe "GET #show_backup_codes" do
+  describe "POST #generate_backup_codes" do
     let(:user) { create(:user, otp_required_for_login: true) }
     let(:other_user) { create(:user) }
 
     it "denies access to guest users" do
-      get :show_backup_codes, params: { user_id: user.login }
+      post :generate_backup_codes, params: { user_id: user.login }
       it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
     end
 
     it "denies access to other users" do
       fake_login
-      get :show_backup_codes, params: { user_id: user.login }
+      post :generate_backup_codes, params: { user_id: user.login }
       it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
     end
 
@@ -158,19 +158,19 @@ describe Users::TotpController do
 
       it "shows the backup codes once" do
         fake_login_known_user(user)
-        get :show_backup_codes, params: { user_id: user.login }
+        post :generate_backup_codes, params: { user_id: user.login }
         expect(response).to have_http_status(:success)
       end
 
       it "denies access to other's pages" do
         fake_login_known_user(user)
-        get :show_backup_codes, params: { user_id: other_user.login }
+        post :generate_backup_codes, params: { user_id: other_user.login }
         it_redirects_to_with_error(user_path(other_user), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
 
       it "denies access when TOTP is disabled" do
         fake_login_known_user(other_user)
-        get :show_backup_codes, params: { user_id: other_user.login }
+        post :generate_backup_codes, params: { user_id: other_user.login }
         it_redirects_to_with_error(new_user_totp_path, "Please enable two-step verification first.")
       end
     end

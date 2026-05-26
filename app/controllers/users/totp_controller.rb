@@ -27,19 +27,32 @@ class Users::TotpController < ApplicationController
     if current_user.validate_and_consume_otp!(params[:totp_attempt])
       current_user.enable_totp!
 
-      flash[:notice] = t(".success")
-      redirect_to show_backup_codes_user_totp_path
+      flash.now[:notice] = t(".success")
+      
+      @page_subtitle = t(".page_title")
+      @backup_codes = current_user.generate_otp_backup_codes!
+      current_user.save!
+
+      render action: :generate_backup_codes and return
     else
       flash.now[:error] = t(".incorrect_code")
       render action: :new and return
     end
   end
 
-  def show_backup_codes
+  # GET /users/<login>/totp/confirm_regenerate_backup_codes
+  def confirm_regenerate_backup_codes
+    @page_subtitle = t(".page_title")
+  end
+
+  # POST /users/<login>/totp/generate_backup_codes
+  def generate_backup_codes
     unless current_user.totp_enabled?
       flash[:error] = t(".not_enabled")
       redirect_to new_user_totp_path and return
     end
+
+    flash.now[:notice] = t(".success")
 
     @page_subtitle = t(".page_title")
     @backup_codes = current_user.generate_otp_backup_codes!

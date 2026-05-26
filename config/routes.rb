@@ -311,7 +311,8 @@ Rails.application.routes.draw do
     resources :nominations, controller: "tag_set_nominations", only: [:index]
     resources :preferences, only: [:index, :update]
     resource :totp, controller: "users/totp", only: [:create, :new] do
-      get :show_backup_codes
+      get :confirm_regenerate_backup_codes
+      post :generate_backup_codes
       get :confirm_disable
       post :disable
       post :reauthenticate_create

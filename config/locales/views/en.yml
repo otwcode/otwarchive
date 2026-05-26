@@ -3250,6 +3250,14 @@ en:
         password_label: Password
         required_before_disabling: Before disabling two-step verification, you need to verify your password.
         submit: Disable Two-Step Verification
+      confirm_regenerate_backup_codes:
+        confirm_html: Are you sure you want to re-generate your two-step verification backup codes? Your existing backup codes will no longer work.
+      generate_backup_codes:
+        backup_codes_copied: Backup Codes Copied!
+        copy_to_clipboard: Copy Backup Codes to Clipboard
+        finish: Finish
+        page_heading: Two-Step Verification Backup Codes
+        write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
       new:
         page_heading: Confirm Password
         password_label: Password
@@ -3262,12 +3270,13 @@ en:
           heading: About Two-Step Verification
         app_setup:
           heading: 'Step 1: Set up your authenticator app'
-          instructions: Use your authenticator app to scan the QR code or enter the manual setup key. If you are using the mobile device the app is already installed on, click the import settings button. The app will give you a 6-digit code, which you'll use in the next step.
+          instructions: Use your authenticator app to scan the QR code or enter the manual setup key. If you are using the same device the app is installed on, click the import settings button. The app will give you a 6-digit code, which you'll use in the next step.
           key:
             copied: Copied!
             copy_to_clipboard: Copy
             format_note: Spaces and capitalization don't matter
             heading: Setup Key
+          qr_scan_note: Scan with your authenticator app
         enter_code:
           heading: 'Step 2: Enter your 6-digit code'
           instructions: Enter the 6-digit code from your app to enable two-step verification.
@@ -3275,12 +3284,6 @@ en:
           please_wait: Please wait...
           submit: Enable Two-Step Verification
         page_heading: Set Up Two-Step Verification
-      show_backup_codes:
-        backup_codes_copied: Backup Codes Copied!
-        copy_to_clipboard: Copy Backup Codes to Clipboard
-        finish: Finish
-        page_heading: Two-Step Verification Backup Codes
-        write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
   works:
     adult:
       caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.

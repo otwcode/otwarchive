@@ -87,6 +87,8 @@ Feature: Authenticate Users With TOTP 2FA
       And user "user" has TOTP 2FA enabled
     When I follow "My Preferences"
       And I follow "Re-generate two-step verification backup codes"
+    Then I should see "Are you sure you want to re-generate your two-step verification backup codes?"
+    When I press "Yes, Regenerate Codes"
     Then I should see "Two-Step Verification Backup Codes"
     When I follow "Finish"
     Then I should see "Set My Preferences"
