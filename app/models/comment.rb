@@ -118,7 +118,7 @@ class Comment < ApplicationRecord
       comment_post_modified_gmt = ultimate_parent.created_at.iso8601
     end
 
-    recent_comment_content = recent_comments_of_user_on_work&.pluck(:comment_content)&.join || ""
+    recent_comment_content = recent_comments_of_user_on_work&.pluck(:comment_content)&.join
 
     if pseud_id.nil?
       user_role = "guest"
@@ -135,7 +135,7 @@ class Comment < ApplicationRecord
       user_role: user_role,
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
-      comment_content: recent_comment_content || comment_content,
+      comment_content: recent_comment_content.to_s + comment_content,
       comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
       comment_post_modified_gmt: comment_post_modified_gmt
     }
@@ -144,25 +144,28 @@ class Comment < ApplicationRecord
     attributes[:cloudflare_ja3_hash] = cloudflare_ja3_hash if cloudflare_ja3_hash
     attributes[:cloudflare_ja4] = cloudflare_ja4 if cloudflare_ja4
 
-    attributes[:recheck_reason] = "edit" if (will_save_change_to_edited_at? && will_save_change_to_comment_content?) || !recent_comment_content.empty?
+    attributes[:recheck_reason] = "edit" if (will_save_change_to_edited_at? && will_save_change_to_comment_content?) || !recent_comment_content.nil?
 
     attributes
   end
 
   def recent_comments_of_user_on_work
+    # Returns active record relation object of comments the same user left on the same work / admin post in the last
+    # specified amount of minutes, not including this comment.
     return if skip_spamcheck?
 
     pseud_id.nil? ? Comment.where(name: name)
                            .or(Comment.where(email: comment_owner_email))
                            .or(Comment.where(ip_address: ip_address))
-                           .and(Comment.where(created_at: 10.days.ago...))
+                           .and(Comment.where(created_at: (created_at - 10.days)..created_at))
                            .and(Comment.where(parent: parent))
+                           .excluding(self)
                             # is using parent instead of ultimate_parent fine here? it is easier for sure.
-                  : Comment.where(pseud_id: pseud_id)
-                            # well this means you can bypass it via new pseuds, is there a way to check pseud.user without another query?
-                           .and(Comment.where(created_at: 10.days.ago...))
+                            # the only effect is for comments on different chapters so not that big of a deal?
+                  : Comment.where(pseud_id: pseud_id) # well this means you can bypass it via new pseuds, is there a way to check pseud.user without another query?
+                           .and(Comment.where(created_at: (created_at - 10.days)..created_at))
                            .and(Comment.where(parent: parent))
-                            # is using parent instead of ultimate_parent fine here? it is easier for sure.
+                           .excluding(self)
   end
 
   after_create :expire_parent_comments_count

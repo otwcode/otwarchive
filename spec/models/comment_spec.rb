@@ -318,9 +318,8 @@ describe Comment do
 
         context "when they comment again in a short timeframe" do
           context "when the comment is from a guest" do
-            let(:previous_comment) { create(:comment, :by_guest, :on_admin_post, name: "sus_user", comment_content: "lorem") }
-
-            subject { create(:comment, :by_guest, commentable: previous_comment.ultimate_parent, name: "sus_user", comment_content: "ipsum") }
+            let(:previous_comment) { create(:comment, :by_guest, :on_admin_post, name: "sus_user", comment_content: "lorem", created_at: 15.seconds.ago) }
+            subject { create(:comment, :by_guest, commentable: previous_comment.ultimate_parent, name: "sus_user", comment_content: "ipsum", created_at: 0.seconds.ago) }
 
             it "has comment_content as combined content of both of the comments" do
               expect(subject.akismet_attributes[:comment_content]).to eq("loremipsum")
@@ -332,12 +331,11 @@ describe Comment do
           end
 
           context "when the comment is from a new user" do
-            let(:user) { create(:user) }
-            let(:previous_comment) { create(:comment, :on_admin_post, pseud: user.default_pseud, comment_content: "lorem") }
-            subject { create(:comment, commentable: previous_comment.ultimate_parent, pseud: user.default_pseud, comment_content: "ipsum") }
+            let(:user) { create(:user, created_at: 10.minutes.ago) }
+            let(:previous_comment) { create(:comment, :on_admin_post, pseud: user.default_pseud, comment_content: "lorem", created_at: 15.seconds.ago) }
+            subject { create(:comment, commentable: previous_comment.ultimate_parent, pseud: user.default_pseud, comment_content: "ipsum", created_at: 0.seconds.ago) }
 
             it "has comment_content as combined content of both of the comments" do
-              require 'pry'; binding.pry
               expect(subject.akismet_attributes[:comment_content]).to eq("loremipsum")
             end
 
