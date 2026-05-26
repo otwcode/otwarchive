@@ -520,7 +520,7 @@ Scenario: Guest comment preview
   Then I should see "Preview Comment"
     And I should see "Guest User" in the comment byline
     And I should see "Great work!"
-    And I should see "Back to Edit"
+    And I should see a button "Back to Edit"
   When I press "Back to Edit"
   Then I should see "Great work!" in the comment field
     And I should see "Guest User" in the guest name field
