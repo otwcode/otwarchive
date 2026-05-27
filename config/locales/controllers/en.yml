@@ -147,6 +147,9 @@ en:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
       reply: Sorry, you have been blocked by that user.
+    check_permission_to_edit:
+      error:
+        frozen: Frozen comments cannot be edited.
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.
     check_guest_email_is_from_suspended_or_banned_user:
