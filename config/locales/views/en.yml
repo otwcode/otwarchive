@@ -859,6 +859,7 @@ en:
       anonymous_creator: Anonymous Creator
       anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
       cancel_action: Cancel
+      cancel_redirect_warning: You will lose any changes you have made. Are you sure?
       choose_name_field_title: Choose Name
       comment_as: Comment as
       comment_field_title: Enter Comment
@@ -876,7 +877,6 @@ en:
       legend: Post Comment
       preview_button: Preview
       processing_message: Please wait...
-      cancel_redirect_warning: You will lose any changes you have made. Are you sure?
     commentable:
       actions:
         comment: Comment
