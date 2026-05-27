@@ -851,7 +851,6 @@ en:
       error: Sorry, that comment is currently in moderation.
     check_permission_to_edit:
       error:
-        frozen: This comment is frozen.
         has_replies: Comments with replies cannot be edited
     check_permission_to_moderate:
       error: Sorry, you don't have permission to moderate that comment.
