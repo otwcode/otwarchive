@@ -7,13 +7,13 @@
     <% if @commentable.is_a?(Comment) %>
       <li class="<%= cycle :odd, :even %> <%= css_classes_for_comment(@commentable) %>" id="comment_<%= @commentable.id %>" role="article">
         <% if @commentable.is_deleted %>
-          <p><%= ts("(Previous comment deleted.)") %></p>
+          <p><%= t(".deleted_comment") %></p>
         <% elsif !can_see_hidden_comment?(@commentable) %>
-          <p class="message"><%= ts("(This comment is under review by an admin and is currently unavailable.)") %></p>
+          <p class="message"><%= t(".hidden_comment") %></p>
         <% else %>
           <h4 class="heading byline">
             <% if @commentable.by_anonymous_creator? %>
-              <%= ts("Anonymous Creator") %>
+              <%= t(".anonymous_creator") %>
             <% else %>
               <%= get_commenter_pseud_or_name(@commentable) %>
             <% end %>
