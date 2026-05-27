@@ -890,6 +890,7 @@ en:
       legend: Post Comment
       preview_button: Preview
       processing_message: Please wait...
+      cancel_redirect_warning: You will lose any changes you have made. Are you sure?
     commentable:
       actions:
         comment: Comment

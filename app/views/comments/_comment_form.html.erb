@@ -105,7 +105,7 @@
           <%= f.submit t(".preview_button"), name: "preview_button", id: "comment_preview_for_#{commentable.id}" %>
           <%= f.submit button_name, id: "comment_submit_for_#{commentable.id}", data: { disable_with: t(".processing_message") } %>
           <% if local_assigns[:cancel_redirect] %>
-            <%= link_to ts("Cancel"), local_assigns[:cancel_path], data: { confirm: ts("You will lose any changes you have made. Are you sure?") } %>
+            <%= link_to t(".cancel_action"), local_assigns[:cancel_path], data: { confirm: t(".cancel_redirect_warning") } %>
           <% elsif controller.controller_name == 'inbox' %>
             <a name="comment_cancel" id="comment_cancel"><%= t(".cancel_action") %></a>
           <% elsif comment.persisted? %>
