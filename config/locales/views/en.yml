@@ -2593,7 +2593,7 @@ en:
         enable_two_step_verification: Enable two-step verification
         heading: Account Security
         legend: Account Security
-        regenerate_backup_codes: Re-generate two-step verification backup codes
+        reset_backup_codes: Reset two-step verification backup codes
       browser_page_title_format: Browser page title format
       collections_challenges_gifts:
         allow_collection_invitation: Allow others to invite my works to collections.
@@ -3250,11 +3250,11 @@ en:
         password_label: Password
         required_before_disabling: Before disabling two-step verification, you need to verify your password.
         submit: Disable Two-Step Verification
-      confirm_regenerate_backup_codes:
-        confirm: Yes, Re-generate Codes
-        confirm_html: Are you sure you want to re-generate your two-step verification backup codes? Your existing backup codes will no longer work.
-        page_heading: Re-generate Backup Codes
-      generate_backup_codes:
+      confirm_reset_backup_codes:
+        confirm: Yes, Reset Codes
+        confirm_html: Are you sure you want to reset your two-step verification backup codes? Your existing backup codes will no longer work.
+        page_heading: Reset Backup Codes
+      reset_backup_codes:
         backup_codes_copied: Backup Codes Copied!
         copy_to_clipboard: Copy Backup Codes to Clipboard
         finish: Finish

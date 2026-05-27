@@ -2,7 +2,7 @@
 <h2 class="heading"><%= t(".page_heading") %></h2>
 
 <!--main content-->
-<%= form_for(current_user, url: generate_backup_codes_user_totp_path, html: { method: :post, class: "simple" }) do |f| %>
+<%= form_for(current_user, url: reset_backup_codes_user_totp_path, html: { method: :post, class: "simple" }) do |f| %>
   <p class="caution notice">
     <%= t(".confirm_html") %>
   </p>

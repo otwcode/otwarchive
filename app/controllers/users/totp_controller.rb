@@ -33,20 +33,20 @@ class Users::TotpController < ApplicationController
       @backup_codes = current_user.generate_otp_backup_codes!
       current_user.save!
 
-      render action: :generate_backup_codes and return
+      render action: :reset_backup_codes and return
     else
       flash.now[:error] = t(".incorrect_code")
       render action: :new and return
     end
   end
 
-  # GET /users/<login>/totp/confirm_regenerate_backup_codes
-  def confirm_regenerate_backup_codes
+  # GET /users/<login>/totp/confirm_reset_backup_codes
+  def confirm_reset_backup_codes
     @page_subtitle = t(".page_title")
   end
 
-  # POST /users/<login>/totp/generate_backup_codes
-  def generate_backup_codes
+  # POST /users/<login>/totp/reset_backup_codes
+  def reset_backup_codes
     unless current_user.totp_enabled?
       flash[:error] = t(".not_enabled")
       redirect_to new_user_totp_path and return

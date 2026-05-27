@@ -136,18 +136,18 @@ describe Users::TotpController do
     end
   end
 
-  describe "POST #generate_backup_codes" do
+  describe "POST #reset_backup_codes" do
     let(:user) { create(:user, otp_required_for_login: true) }
     let(:other_user) { create(:user) }
 
     it "denies access to guest users" do
-      post :generate_backup_codes, params: { user_id: user.login }
+      post :reset_backup_codes, params: { user_id: user.login }
       it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
     end
 
     it "denies access to other users" do
       fake_login
-      post :generate_backup_codes, params: { user_id: user.login }
+      post :reset_backup_codes, params: { user_id: user.login }
       it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
     end
 
@@ -158,19 +158,19 @@ describe Users::TotpController do
 
       it "shows the backup codes once" do
         fake_login_known_user(user)
-        post :generate_backup_codes, params: { user_id: user.login }
+        post :reset_backup_codes, params: { user_id: user.login }
         expect(response).to have_http_status(:success)
       end
 
       it "denies access to other's pages" do
         fake_login_known_user(user)
-        post :generate_backup_codes, params: { user_id: other_user.login }
+        post :reset_backup_codes, params: { user_id: other_user.login }
         it_redirects_to_with_error(user_path(other_user), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
 
       it "denies access when TOTP is disabled" do
         fake_login_known_user(other_user)
-        post :generate_backup_codes, params: { user_id: other_user.login }
+        post :reset_backup_codes, params: { user_id: other_user.login }
         it_redirects_to_with_error(new_user_totp_path, "Please enable two-step verification first.")
       end
     end
