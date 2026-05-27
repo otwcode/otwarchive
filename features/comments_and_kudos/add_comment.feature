@@ -468,7 +468,7 @@ Scenario: Comment preview
     And I should see "Commenting on: The One Where Neal is Awesome"
     And I should see "This is my test comment with bold text"
     And I should see "commenter" in the comment byline
-    And I should see a button "Back to Edit"
+    And I should see "Cancel"
     And I should see a button "Post Comment"
 
 Scenario: Comment preview persists content when going back to edit
@@ -478,14 +478,10 @@ Scenario: Comment preview persists content when going back to edit
     And I fill in "Comment" with "Initial comment content"
     And I press "Preview"
   Then I should see "Preview Comment"
-  When I press "Back to Edit"
-  Then I should see "Initial comment content" in the comment field
-    And I should see the "Preview" button
   When I fill in "Comment" with "Initial comment content with more text"
     And I press "Preview"
   Then I should see "Initial comment content with more text"
-  When I press "Back to Edit"
-  Then I should see "Initial comment content with more text" in the comment field
+    And I should see "Initial comment content with more text" in the comment field
 
 Scenario: Comment preview and post
   Given the work "The One Where Neal is Awesome"
@@ -520,9 +516,8 @@ Scenario: Guest comment preview
   Then I should see "Preview Comment"
     And I should see "Guest User" in the comment byline
     And I should see "Great work!"
-    And I should see a button "Back to Edit"
-  When I press "Back to Edit"
-  Then I should see "Great work!" in the comment field
+    And I should see "Cancel"
+    And I should see "Great work!" in the comment field
     And I should see "Guest User" in the guest name field
 
 Scenario: Comment preview for anonymous work
