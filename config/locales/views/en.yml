@@ -3254,12 +3254,6 @@ en:
         confirm: Yes, Reset Codes
         confirm_html: Are you sure you want to reset your two-step verification backup codes? Your existing backup codes will no longer work.
         page_heading: Reset Backup Codes
-      reset_backup_codes:
-        backup_codes_copied: Backup Codes Copied!
-        copy_to_clipboard: Copy Backup Codes to Clipboard
-        finish: Finish
-        page_heading: Two-Step Verification Backup Codes
-        write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
       new:
         page_heading: Confirm Password
         password_label: Password
@@ -3286,6 +3280,12 @@ en:
           please_wait: Please wait...
           submit: Enable Two-Step Verification
         page_heading: Set Up Two-Step Verification
+      reset_backup_codes:
+        backup_codes_copied: Backup Codes Copied!
+        copy_to_clipboard: Copy Backup Codes to Clipboard
+        finish: Finish
+        page_heading: Two-Step Verification Backup Codes
+        write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
   works:
     adult:
       caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.

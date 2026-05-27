@@ -406,15 +406,15 @@ en:
         failure: Could not disable two-step verification.
         incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
         success: Successfully disabled two-step verification.
-      reset_backup_codes:
-        not_enabled: Please enable two-step verification first.
-        page_title: Two-Step Verification Backup Codes
-        success: Successfully reset your backup codes; please make note of your new backup codes, your old backup codes will no longer work.
       new:
         page_title: Confirm Password
       reauthenticate_create:
         incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
         page_title: Enable Two-Step Verification
+      reset_backup_codes:
+        not_enabled: Please enable two-step verification first.
+        page_title: Two-Step Verification Backup Codes
+        success: Successfully reset your backup codes; please make note of your new backup codes, your old backup codes will no longer work.
   works:
     create:
       draft_notice_html: Draft was successfully created. It will be %{scheduled_for_deletion_bold} on %{deletion_date}.
