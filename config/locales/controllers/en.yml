@@ -147,9 +147,6 @@ en:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
       reply: Sorry, you have been blocked by that user.
-    check_permission_to_edit:
-      error:
-        frozen: Frozen comments cannot be edited.
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.
     check_guest_email_is_from_suspended_or_banned_user:
@@ -163,6 +160,8 @@ en:
     check_not_replying_to_spam:
       error: Sorry, you can't reply to a comment that has been marked as spam.
     create:
+      error: Couldn't save comment!
+      missing_commentable: What did you want to comment on?
       success:
         moderated:
           admin_post: Your comment was received! It will appear publicly after it has been approved.
@@ -179,7 +178,10 @@ en:
     index:
       page_title: Comments on %{name}
     new:
+      missing_commentable: What did you want to comment on?
       page_title: New Comment on %{name}
+    preview:
+      missing_commentable: What did you want to comment on?
     rate_limited:
       error: You have made too many requests in a short time period. Please wait a while before trying again. If you are receiving this error repeatedly, try browsing more slowly or loading fewer pages at a time.
     show:

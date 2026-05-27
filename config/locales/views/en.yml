@@ -930,9 +930,6 @@ en:
     confirm_delete:
       confirm_button: Yes, delete!
       delete_confirmation: Are you sure you want to delete this comment?
-    create:
-      error: Couldn't save comment!
-      missing_commentable: What did you want to comment on?
     destroy:
       error: We couldn't delete that comment.
       success: Comment deleted.
@@ -942,7 +939,6 @@ en:
       show: Show
       update: Update
     new:
-      missing_commentable: What did you want to comment on?
       previous_comment: Previous Comment
     preview:
       anonymous_creator: Anonymous Creator
@@ -950,7 +946,6 @@ en:
       deleted_comment: "(Previous comment deleted.)"
       edit_comment_heading: Edit Comment
       hidden_comment: "(This comment is under review by an admin and is currently unavailable.)"
-      missing_commentable: What did you want to comment on?
       page_heading: Preview Comment
       post_comment: Post Comment
     review:
