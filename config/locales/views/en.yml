@@ -847,19 +847,6 @@ en:
       tags: Tags
       works: Works (%{count})
   comments:
-    check_permission_to_access_single_unreviewed:
-      error: Sorry, that comment is currently in moderation.
-    check_permission_to_edit:
-      error:
-        has_replies: Comments with replies cannot be edited
-    check_permission_to_moderate:
-      error: Sorry, you don't have permission to moderate that comment.
-    check_permission_to_review:
-      error: Sorry, you don't have permission to see those unreviewed comments.
-    check_pseud_ownership:
-      error: You can't comment with that pseud.
-    check_unreviewed:
-      error: Sorry, you cannot reply to an unapproved comment.
     comment_actions:
       approve: Approve
       comment: Comment
@@ -930,9 +917,6 @@ en:
     confirm_delete:
       confirm_button: Yes, delete!
       delete_confirmation: Are you sure you want to delete this comment?
-    destroy:
-      error: We couldn't delete that comment.
-      success: Comment deleted.
     edit:
       back: Back
       page_heading: Editing comment
@@ -961,8 +945,6 @@ en:
         admin_post: Please note that comments cannot be unapproved once you have approved them. After you delete any comments you do not wish to appear on the news post, you can approve all that remain.
         work: Please note that comments cannot be unapproved once you have reviewed them. After you delete any comments you do not wish to appear on your work, you can approve all that remain.
       page_heading_html: Unreviewed Comments on %{commentable_link}
-    update:
-      success: Comment was successfully updated.
   downloads:
     download_afterword:
       afterword: Afterword
