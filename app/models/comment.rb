@@ -157,13 +157,13 @@ class Comment < ApplicationRecord
     pseud_id.nil? ? Comment.where(name: name)
                            .or(Comment.where(email: comment_owner_email))
                            .or(Comment.where(ip_address: ip_address))
-                           .and(Comment.where(created_at: (created_at - 10.days)..created_at))
+                           .and(Comment.where(created_at: 60.minutes.ago..))
                            .and(Comment.where(parent: parent))
                            .excluding(self)
                             # is using parent instead of ultimate_parent fine here? it is easier for sure.
                             # the only effect is for comments on different chapters so not that big of a deal?
                   : Comment.where(pseud_id: pseud_id) # well this means you can bypass it via new pseuds, is there a way to check pseud.user without another query?
-                           .and(Comment.where(created_at: (created_at - 10.days)..created_at))
+                           .and(Comment.where(created_at: 60.minutes.ago..))
                            .and(Comment.where(parent: parent))
                            .excluding(self)
   end
