@@ -102,10 +102,13 @@
 <!--inline edit form-->
 <div id="edit_comment_on_preview">
   <h3 class="heading"><%= t(".edit_comment_heading") %></h3>
+  <% cancel_target = @commentable.is_a?(Comment) ? @commentable.ultimate_parent : @commentable %>
   <%= render partial: 'comments/comment_form',
         locals: {
           comment: @comment,
           commentable: @commentable,
-          button_name: t(".post_comment")
+          button_name: t(".post_comment"),
+          cancel_redirect: true,
+          cancel_path: cancel_target.is_a?(Tag) ? tag_path(cancel_target) : polymorphic_path(cancel_target)
         } %>
 </div>
