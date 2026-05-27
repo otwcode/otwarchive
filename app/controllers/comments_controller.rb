@@ -204,7 +204,7 @@ class CommentsController < ApplicationController
   def check_hidden_by_admin
     return unless @commentable.respond_to?(:hidden_by_admin?) && @commentable.hidden_by_admin?
 
-    flash[:error] = ts("Sorry, you cannot reply to a hidden comment.")
+    flash[:error] = t("comments.check_hidden_by_admin.error")
     redirect_back_or_to find_parent
   end
 
@@ -501,7 +501,7 @@ class CommentsController < ApplicationController
   def update
     updated_comment_params = comment_params.merge(edited_at: Time.current)
     if @comment.update(updated_comment_params)
-      flash[:comment_notice] = t("comments.update.success")
+      flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
         format.html do
           redirect_to comment_path(@comment) and return if @comment.unreviewed?
@@ -525,17 +525,17 @@ class CommentsController < ApplicationController
 
     if !@comment.destroy_or_mark_deleted
       # something went wrong?
-      flash[:comment_error] = t("comments.destroy.error")
+      flash[:comment_error] = ts("We couldn't delete that comment.")
       redirect_to_comment(@comment)
     elsif unreviewed
       # go back to the rest of the unreviewed comments
-      flash[:notice] = t("comments.destroy.success")
+      flash[:notice] = ts("Comment deleted.")
       redirect_back_or_to unreviewed_work_comments_path(@comment.commentable)
     elsif parent_comment
-      flash[:comment_notice] = t("comments.destroy.success")
+      flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
     else
-      flash[:comment_notice] = t("comments.destroy.success")
+      flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_all_comments(parent, {show_comments: true})
     end
   end
@@ -552,7 +552,7 @@ class CommentsController < ApplicationController
     @comment.toggle!(:unreviewed)
     # mark associated inbox comments as read
     InboxComment.where(user_id: current_user.id, feedback_comment_id: @comment.id).update_all(read: true) unless logged_in_as_admin?
-    flash[:notice] = t("comments.review.success")
+    flash[:notice] = ts("Comment approved.")
     respond_to do |format|
       format.html do
         if params[:approved_from] == "inbox"
