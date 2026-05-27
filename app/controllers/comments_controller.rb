@@ -41,15 +41,15 @@ class CommentsController < ApplicationController
     parent = find_parent
 
     if blocked_by?(parent)
-      flash[:comment_error] = ts("Sorry, you have been blocked by one or more of this work's creators.")
+      flash[:comment_error] = t("comments.check_blocked.parent")
       redirect_to_all_comments(parent, show_comments: true)
     elsif @comment && blocked_by_comment?(@comment.commentable)
       # edit and update set @comment to the comment being edited
-      flash[:comment_error] = ts("Sorry, you have been blocked by that user.")
+      flash[:comment_error] = t("comments.check_blocked.reply")
       redirect_to_all_comments(parent, show_comments: true)
     elsif @comment.nil? && blocked_by_comment?(@commentable)
       # new, create, and add_comment_reply don't set @comment, but do set @commentable
-      flash[:comment_error] = ts("Sorry, you have been blocked by that user.")
+      flash[:comment_error] = t("comments.check_blocked.reply")
       redirect_to_all_comments(parent, show_comments: true)
     end
   end
@@ -113,12 +113,12 @@ class CommentsController < ApplicationController
     parent = find_parent
     # No one can create or update comments on something hidden by an admin.
     if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
-      flash[:error] = ts("That work is hidden.")
+      flash[:error] = ts("Sorry, you can't add or edit comments on a hidden work.")
       redirect_to work_path(parent)
     end
     # No one can create or update comments on unrevealed works.
     if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
-      flash[:error] = ts("That work hasn't been revealed yet.")
+      flash[:error] = t("comments.check_modify_parent.draft")
       redirect_to work_path(parent)
     end
 
@@ -163,10 +163,10 @@ class CommentsController < ApplicationController
     end
 
     if parent.disable_all_comments?
-      flash[:error] = ts("You can't leave comments right now.")
+      flash[:error] = t("comments.commentable.permissions.#{translation_key}.disable_all")
       redirect_to parent
     elsif parent.disable_anon_comments? && !logged_in?
-      flash[:error] = ts("Anonymous users can't comment right now.")
+      flash[:error] = t("comments.commentable.permissions.#{translation_key}.disable_anon")
       redirect_to parent
     end
   end
@@ -176,14 +176,14 @@ class CommentsController < ApplicationController
 
     return unless admin_settings.guest_comments_off? && guest?
 
-    flash[:error] = ts("Sorry, the Archive doesn't allow guests to comment right now.")
+    flash[:error] = t("comments.commentable.guest_comments_disabled")
     redirect_back_or_to find_parent
   end
 
   def check_guest_replies_preference
     return unless guest? && @commentable.respond_to?(:guest_replies_disallowed?) && @commentable.guest_replies_disallowed?
 
-    flash[:error] = ts("Sorry, this user doesn't allow non-Archive users to reply to their comments.")
+    flash[:error] = t("comments.check_guest_replies_preference.error")
     redirect_back_or_to find_parent
   end
 
@@ -197,7 +197,7 @@ class CommentsController < ApplicationController
   def check_frozen
     return unless @commentable.respond_to?(:iced?) && @commentable.iced?
 
-    flash[:error] = ts("Sorry, you cannot reply to a frozen comment.")
+    flash[:error] = t("comments.check_frozen.error")
     redirect_back_or_to find_parent
   end
 
@@ -211,7 +211,7 @@ class CommentsController < ApplicationController
   def check_not_replying_to_spam
     return unless @commentable.respond_to?(:approved?) && !@commentable.approved?
 
-    flash[:error] = ts("Sorry, you can't reply to a comment that has been marked as spam.")
+    flash[:error] = t("comments.check_not_replying_to_spam.error")
     redirect_back_or_to find_parent
   end
 
@@ -251,10 +251,10 @@ class CommentsController < ApplicationController
   # Comments cannot be edited after they've been replied to or if they are frozen.
   def check_permission_to_edit
     if @comment.iced?
-      flash[:error] = ts("Frozen comments cannot be edited.")
+      flash[:error] = t("comments.check_permission_to_edit.error.frozen")
       redirect_back_or_to @comment
     elsif !@comment.count_all_comments.zero?
-      flash[:error] = t("comments.check_permission_to_edit.error.has_replies")
+      flash[:error] = ts("Comments with replies cannot be edited")
       redirect_back_or_to @comment
     end
   end
@@ -269,7 +269,7 @@ class CommentsController < ApplicationController
 
     # i18n-tasks-use t('comments.freeze.permission_denied')
     # i18n-tasks-use t('comments.unfreeze.permission_denied')
-    flash[:error] = ts("Sorry, that comment thread could not be frozen.")
+    flash[:error] = t("comments.#{action_name}.permission_denied")
     redirect_back_or_to @comment
   end
 
@@ -278,7 +278,7 @@ class CommentsController < ApplicationController
 
     # i18n-tasks-use t('comments.hide.permission_denied')
     # i18n-tasks-use t('comments.unhide.permission_denied')
-    flash[:error] = ts("Sorry, you don't have permission to modify that comment.")
+    flash[:error] = t("comments.#{action_name}.permission_denied")
     redirect_back_or_to @comment
   end
 
