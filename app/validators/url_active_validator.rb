@@ -14,7 +14,15 @@ class UrlActiveValidator < ActiveModel::EachValidator
     begin
       status = Timeout::timeout(options[:timeout] || inactive_url_timeout) {
         url = Addressable::URI.parse(value)
-        response_code = Net::HTTP.start(url.host, url.port) {|http| http.head(url.path.blank? ? '/' : url.path).code}
+
+        env_proxy = ENV['http_proxy']
+        http = if env_proxy
+                 proxy = URI(env_proxy)
+                 Net::HTTP.new(url.hostname, url.port, proxy.hostname, proxy.port)
+               else
+                 Net::HTTP.new(url.hostname, url.port)
+               end
+        response_code = http.start {|h| h.head(url.path.blank? ? '/' : url.path).code }
         active_status = %w[200 301 302 307 308]
         active_status.include? response_code
       }
