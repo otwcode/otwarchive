@@ -808,6 +808,7 @@ class StoryParser
         # or if they've used capital letters or an underscore in the hostname
         uri = UrlFormatter.new(location).standardized
         raise Error, I18n.t("story_parser.on_archive") if ArchiveConfig.PERMITTED_HOSTS.include?(uri.host)
+        raise Error, I18n.t("story_parser.localhost") if %w[localhost 127.0.0.1].include?(uri.host)
 
         response = Net::HTTP.get_response(uri)
         case response

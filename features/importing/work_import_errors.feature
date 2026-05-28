@@ -24,3 +24,21 @@ Feature: Import Works
     Then I should see "We couldn't successfully import that work, sorry: URL is for a work on the Archive. Please bookmark it directly instead."
     When I follow "My Dashboard"
     Then I should see "Drafts (0)"
+
+  Scenario: Cannot import works from localhost
+    Given I set up importing
+    And I fill in "urls" with "http://localhost:3000//works/54711364"
+    And I select "English" from "Choose a language"
+    And I press "Import"
+    Then I should see "URL not a valid URL."
+    When I follow "My Dashboard"
+    Then I should see "Drafts (0)"
+
+  Scenario: Cannot import works from localhost
+    Given I set up importing
+    And I fill in "urls" with "http://127.0.0.1:3000//works/54711364"
+    And I select "English" from "Choose a language"
+    And I press "Import"
+    Then I should see "URL not a valid URL."
+    When I follow "My Dashboard"
+    Then I should see "Drafts (0)"

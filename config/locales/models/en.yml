@@ -315,6 +315,7 @@ en:
         invalid: does not appear to be a valid URL.
   story_parser:
     on_archive: URL is for a work on the Archive. Please bookmark it directly instead.
+    localhost: URL not a valid URL.
   subscriptions:
     deleted: Deleted item
     mystery_work: Mystery Work
