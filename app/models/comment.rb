@@ -150,20 +150,21 @@ class Comment < ApplicationRecord
   end
 
   def recent_comments_of_user_on_work
-    # Returns active record relation object of comments the same user left on the same work / admin post in the last
+    # Returns active record relation object of comments the same person left on the same work / admin post in the last
     # specified amount of minutes, not including this comment.
     return [] if skip_spamcheck?
 
     pseud_id.nil? ? Comment.where(name: name)
                            .or(Comment.where(email: comment_owner_email))
                            .or(Comment.where(ip_address: ip_address))
-                           .and(Comment.where(created_at: 60.minutes.ago..))
+                           .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
                            .and(Comment.where(parent: parent))
                            .excluding(self)
                             # is using parent instead of ultimate_parent fine here? it is easier for sure.
                             # the only effect is for comments on different chapters so not that big of a deal?
+                            # Also, two periods might result in marking future comments but i don't see how that can happen
                   : Comment.where(pseud_id: pseud_id) # well this means you can bypass it via new pseuds, is there a way to check pseud.user without another query?
-                           .and(Comment.where(created_at: 60.minutes.ago..))
+                           .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
                            .and(Comment.where(parent: parent))
                            .excluding(self)
   end
