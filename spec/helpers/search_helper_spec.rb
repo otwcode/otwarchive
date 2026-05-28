@@ -29,7 +29,7 @@ describe SearchHelper do
       expect(helper.search_header(paginated_collection, item_type: :work)).to eq("21 - 40 of 1,400 Works")
     end
 
-    it "assembles query and scope text through translations" do
+    it "uses item and location-specific translations when query text is present" do
       search = instance_double(WorkSearchForm, query: "coffee")
       user = create(:user, login: "creator")
 
@@ -40,7 +40,7 @@ describe SearchHelper do
       expect(helper.search_header(single_page_collection, item_type: :challenge_signup, query_present: true)).to eq("1 Sign-up found")
     end
 
-    it "combines multiple scope phrases without hard-coded concatenation" do
+    it "uses item-specific translations for combined locations" do
       tag = create(:tag, name: "Alchemy")
       fandom = create(:fandom, name: "Dragon Age")
 
