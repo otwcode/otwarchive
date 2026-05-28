@@ -442,7 +442,8 @@ class CommentsController < ApplicationController
         end
       else
         flash[:error] = ts("Couldn't save comment!")
-        # this place looks nice to spam check old ones
+        # If the reason of that is spam, check if they left any recent comments
+        # on the same work/adminpost, and if so mark those as spam too.
         @comment.recent_comments_of_user_on_work.each do |recent|
           recent.mark_as_spam!
         end if @comment.spam?
