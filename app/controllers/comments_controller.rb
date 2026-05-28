@@ -443,11 +443,8 @@ class CommentsController < ApplicationController
       else
         flash[:error] = ts("Couldn't save comment!")
         # this place looks nice to spam check old ones
-        recents = @comment.recent_comments_of_user_on_work # realizing i don't need this variable nor the if. i can just call each on this as is.
-        if recents&.count > 1
-          recents.each do |comment|
-            comment.mark_as_spam!
-          end
+        @comment.recent_comments_of_user_on_work.each do |comment|
+          comment.mark_as_spam!
         end
         render action: "new"
       end
