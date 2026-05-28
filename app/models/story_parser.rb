@@ -816,6 +816,7 @@ class StoryParser
                else
                  Net::HTTP.new(uri.hostname, uri.port)
                end
+        http.use_ssl = true if uri.scheme == "https"
         response = http.start { |h| h.request_get(uri.path.presence || "/") }
 
         case response
