@@ -152,7 +152,7 @@ class Comment < ApplicationRecord
   def recent_comments_of_user_on_work
     # Returns active record relation object of comments the same user left on the same work / admin post in the last
     # specified amount of minutes, not including this comment.
-    return if skip_spamcheck?
+    return [] if skip_spamcheck?
 
     pseud_id.nil? ? Comment.where(name: name)
                            .or(Comment.where(email: comment_owner_email))
