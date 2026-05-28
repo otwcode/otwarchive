@@ -160,10 +160,7 @@ class Comment < ApplicationRecord
                            .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
                            .and(Comment.where(parent: parent))
                            .excluding(self)
-                            # is using parent instead of ultimate_parent fine here? it is easier for sure.
-                            # the only effect is for comments on different chapters so not that big of a deal?
-                            # Also, two periods might result in marking future comments but i don't see how that can happen
-                  : Comment.where(pseud_id: pseud_id) # well this means you can bypass it via new pseuds, is there a way to check pseud.user without another query?
+                  : Comment.where(pseud_id: pseud_id)
                            .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
                            .and(Comment.where(parent: parent))
                            .excluding(self)
