@@ -809,14 +809,14 @@ class StoryParser
         uri = UrlFormatter.new(location).standardized
         raise Error, I18n.t("story_parser.on_archive") if ArchiveConfig.PERMITTED_HOSTS.include?(uri.host)
 
-        env_proxy = ENV['http_proxy']
+        env_proxy = ENV["http_proxy"]
         http = if env_proxy
                  proxy = URI(env_proxy)
                  Net::HTTP.new(uri.hostname, uri.port, proxy.hostname, proxy.port)
                else
                  Net::HTTP.new(uri.hostname, uri.port)
                end
-        response = http.start { |h| h.request_get(uri.path) }
+        response = http.start { |h| h.request_get(uri.path.presence || "/") }
 
         case response
         when Net::HTTPSuccess
