@@ -347,7 +347,7 @@ describe Comment do
             end
 
             let(:user) { create(:user, created_at: 2.days.ago) }
-            let(:comment_sharing_pseud) { create(:comment, commentable: chapter, pseud: user.default_pseud, comment_content: "Lorem", created_at: 15.seconds.ago) }
+            let!(:comment_sharing_pseud) { create(:comment, commentable: chapter, pseud: user.default_pseud, comment_content: "Lorem", created_at: 15.seconds.ago) }
             subject { create(:comment, commentable: chapter, pseud: user.default_pseud, comment_content: "Ipsum", created_at: 0.seconds.ago) }
 
             it "has comment_content as combined content of both of the comments" do
@@ -410,7 +410,7 @@ describe Comment do
             end
 
             let(:user) { create(:user, created_at: 10.minutes.ago) }
-            let(:comment_sharing_pseud) { create(:comment, commentable: admin_post, pseud: user.default_pseud, comment_content: "Lorem", created_at: 15.seconds.ago) }
+            let!(:comment_sharing_pseud) { create(:comment, commentable: admin_post, pseud: user.default_pseud, comment_content: "Lorem", created_at: 15.seconds.ago) }
             subject { create(:comment, commentable: admin_post, pseud: user.default_pseud, comment_content: "Ipsum", created_at: 0.seconds.ago) }
 
             it "has comment_content as combined content of both of the comments" do
