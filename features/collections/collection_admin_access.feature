@@ -39,13 +39,13 @@ Feature: Admin access to collection pages
       And I invite the work "Test Work" to the collection "Moderated Collection"
     When I am logged in as a "support" admin
       And I view the awaiting collection approval collection items page for "Moderated Collection"
-    Then I should not see "You don't have permission"
+    Then I should see "Items in"
     When I view the awaiting user approval collection items page for "Moderated Collection"
-    Then I should not see "You don't have permission"
+    Then I should see "Items in"
     When I view the rejected by collection collection items page for "Moderated Collection"
-    Then I should not see "You don't have permission"
+    Then I should see "Items in"
     When I view the rejected by user collection items page for "Moderated Collection"
-    Then I should not see "You don't have permission"
+    Then I should see "Items in"
 
   Scenario: Support admin can access Collection Settings page
     Given I have a collection "Settings Collection"
@@ -100,7 +100,7 @@ Feature: Admin access to collection pages
   # Gift Exchange Pages
   # ============================================================
 
-  Scenario: Support admin can access gift exchange sign-ups
+  Scenario: Support admin can access gift exchange sign-ups and view an individual sign-up
     Given I have created the gift exchange "GE Admin Test"
       And I open signups for "GE Admin Test"
       And I am logged in as "signer1"
@@ -109,15 +109,7 @@ Feature: Admin access to collection pages
       And I go to the "GE Admin Test" signups page
     Then I should see "Sign-ups"
       And I should see "signer1"
-
-  Scenario: Support admin can access an individual sign-up
-    Given I have created the gift exchange "GE Signup View"
-      And I open signups for "GE Signup View"
-      And I am logged in as "signer1"
-      And I sign up for "GE Signup View" with combination A
-    When I am logged in as a "support" admin
-      And I go to the "GE Signup View" signups page
-      And I follow "signer1"
+    When I follow "signer1"
     Then I should see "Sign-up for"
       And I should see "signer1"
 
@@ -128,14 +120,14 @@ Feature: Admin access to collection pages
       And I sign up for "GE Requests" with combination A
     When I am logged in as a "support" admin
       And I go to the "GE Requests" requests page
-    Then I should not see "You are not allowed to view the requests summary!"
+    Then I should see "Prompts for"
 
   Scenario: Support admin can access the Matching page
     Given I have created the gift exchange "GE Matching"
       And I open signups for "GE Matching"
     When I am logged in as a "support" admin
       And I go to "GE Matching" gift exchange matching page
-    Then I should not see "Sorry, you don't have permission"
+    Then I should see "Matching for"
 
   Scenario: Support admin cannot generate potential matches
     Given I have created the gift exchange "GE No Match"
@@ -155,6 +147,12 @@ Feature: Admin access to collection pages
     When I am logged in as a "support" admin
       And I go to the "GE Assignments" assignments page
     Then I should see "Assignments"
+
+  Scenario: Support admin can access an individual assignment
+    Given everyone has their assignments for "GE Individual Assignment"
+    When I am logged in as a "support" admin
+      And I go to the first assignment page for "GE Individual Assignment"
+    Then I should see "Assignment for"
 
   Scenario: Support admin can access gift exchange Challenge Settings
     Given I have created the gift exchange "GE Settings"
@@ -208,7 +206,7 @@ Feature: Admin access to collection pages
       And I sign up for Battle 12 with combination A
     When I am logged in as a "support" admin
       And I go to the "Battle 12" claims page
-    Then I should not see "Sorry, you don't have permission"
+    Then I should see "Unposted Claims for"
 
   Scenario: Support admin can access prompt meme Challenge Settings
     Given I have Battle 12 prompt meme fully set up
