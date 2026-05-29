@@ -144,7 +144,7 @@ class Comment < ApplicationRecord
     attributes[:cloudflare_ja3_hash] = cloudflare_ja3_hash if cloudflare_ja3_hash
     attributes[:cloudflare_ja4] = cloudflare_ja4 if cloudflare_ja4
 
-    attributes[:recheck_reason] = "edit" if (will_save_change_to_edited_at? && will_save_change_to_comment_content?) || !recent_comment_content.nil?
+    attributes[:recheck_reason] = "edit" if (will_save_change_to_edited_at? && will_save_change_to_comment_content?) || !recent_comment_content.empty?
 
     attributes
   end
