@@ -154,16 +154,19 @@ class Comment < ApplicationRecord
     # specified amount of minutes, not including this comment.
     return [] if skip_spamcheck?
 
-    pseud_id.nil? ? Comment.where(name: name)
-                           .or(Comment.where(email: comment_owner_email))
-                           .or(Comment.where(ip_address: ip_address))
-                           .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
-                           .and(Comment.where(parent: parent))
-                           .excluding(self)
-                  : Comment.where(pseud_id: pseud_id)
-                           .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
-                           .and(Comment.where(parent: parent))
-                           .excluding(self)
+    if pseud_id.nil?
+      Comment.where(name: name)
+             .or(Comment.where(email: comment_owner_email))
+             .or(Comment.where(ip_address: ip_address))
+             .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
+             .and(Comment.where(parent: parent))
+             .excluding(self)
+    else
+      Comment.where(pseud_id: pseud_id)
+             .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
+             .and(Comment.where(parent: parent))
+             .excluding(self)
+    end
   end
 
   after_create :expire_parent_comments_count

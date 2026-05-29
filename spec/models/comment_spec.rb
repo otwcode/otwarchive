@@ -322,14 +322,15 @@ describe Comment do
             let!(:comment_sharing_name) { create(:comment, :by_guest, commentable: chapter, name: "sus_user", comment_content: "Lorem", created_at: 15.seconds.ago) }
             let!(:comment_sharing_email) { create(:comment, :by_guest, commentable: chapter, email: "sus@example.com", comment_content: "Ipsum", created_at: 15.seconds.ago) }
             let!(:comment_sharing_ip) { create(:comment, :by_guest, commentable: chapter, ip_address: "1.2.3.4", comment_content: "Dolor", created_at: 15.seconds.ago) }
-            subject { create(:comment,
+            subject do create(:comment,
                              :by_guest,
                              commentable: chapter,
                              name: "sus_user",
                              email: "sus@example.com",
                              ip_address: "1.2.3.4",
                              comment_content: "Sit",
-                             created_at: 0.seconds.ago) }
+                             created_at: 0.seconds.ago)
+            end
 
             it "has comment_content as combined content of both of the comments" do
               expect(subject.akismet_attributes[:comment_content]).to eq("LoremIpsumDolorSit")
@@ -379,20 +380,18 @@ describe Comment do
         context "when they comment on the same admin post again in a short timeframe" do
           let(:admin_post) { create(:admin_post) }
           context "when the comment is from a guest" do
-            let!(:comment_sharing_name) { create(:comment, :by_guest, commentable: admin_post, created_at: 15.seconds.ago,
-                                                 name: "sus_user", comment_content: "Lorem") }
-            let!(:comment_sharing_email) { create(:comment, :by_guest, commentable: admin_post, created_at: 15.seconds.ago,
-                                                  email: "sus@example.com", comment_content: "Ipsum") }
-            let!(:comment_sharing_ip) { create(:comment, :by_guest, commentable: admin_post, created_at: 15.seconds.ago,
-                                               ip_address: "1.2.3.4", comment_content: "Dolor") }
-            subject { create(:comment,
+            let!(:comment_sharing_name) { create(:comment, :by_guest, commentable: admin_post, created_at: 15.seconds.ago, name: "sus_user", comment_content: "Lorem") }
+            let!(:comment_sharing_email) { create(:comment, :by_guest, commentable: admin_post, created_at: 15.seconds.ago, email: "sus@example.com", comment_content: "Ipsum") }
+            let!(:comment_sharing_ip) { create(:comment, :by_guest, commentable: admin_post, created_at: 15.seconds.ago, ip_address: "1.2.3.4", comment_content: "Dolor") }
+            subject do create(:comment,
                              :by_guest,
                              commentable: admin_post,
                              name: "sus_user",
                              email: "sus@example.com",
                              ip_address: "1.2.3.4",
                              comment_content: "Sit",
-                             created_at: 0.seconds.ago) }
+                             created_at: 0.seconds.ago)
+            end
 
             it "has comment_content as combined content of both of the comments" do
               expect(subject.akismet_attributes[:comment_content]).to eq("LoremIpsumDolorSit")
