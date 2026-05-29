@@ -314,6 +314,7 @@ en:
       url:
         invalid: does not appear to be a valid URL.
   story_parser:
+    invalid_url: URL is not valid.
     on_archive: URL is for a work on the Archive. Please bookmark it directly instead.
   subscriptions:
     deleted: Deleted item

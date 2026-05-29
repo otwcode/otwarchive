@@ -18,9 +18,9 @@ class UrlActiveValidator < ActiveModel::EachValidator
         env_proxy = ENV["http_proxy"]
         http = if env_proxy
                  proxy = URI(env_proxy)
-                 Net::HTTP.new(url.hostname, url.port, proxy.hostname, proxy.port)
+                 Net::HTTP.new(url.hostname, url.inferred_port, proxy.hostname, proxy.port)
                else
-                 Net::HTTP.new(url.hostname, url.port)
+                 Net::HTTP.new(url.hostname, url.inferred_port)
                end
         http.use_ssl = true if url.scheme == "https"
         response_code = http.start { |h| h.head(url.path.presence || "/").code }
