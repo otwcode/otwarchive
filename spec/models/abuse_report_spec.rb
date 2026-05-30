@@ -672,35 +672,36 @@ describe AbuseReport do
   describe "#reported_work_id" do
     context "for a plain work URL" do
       it "returns the work id" do
-        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/")
+        # allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/")
+        subject.url = "http://archiveofourown.org/works/123/"
         expect(subject.reported_work_id).to eq("123")
       end
     end
 
     context "for a work URL with bookmark-form anchor" do
       it "returns the work id" do
-        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123#bookmark-form")
+        subject.url = "http://archiveofourown.org/works/123#bookmark-form"
         expect(subject.reported_work_id).to eq("123")
       end
     end
 
     context "for a work URL with comments" do
       it "returns nil" do
-        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/comments/")
+        subject.url = "http://archiveofourown.org/works/123/comments/"
         expect(subject.reported_work_id).to be_nil
       end
     end
 
     context "for a work URL with bookmarks" do
       it "returns nil" do
-        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/bookmarks/")
+        subject.url = "http://archiveofourown.org/works/123/comments/"
         expect(subject.reported_work_id).to be_nil
       end
     end
 
     context "for a work URL with a specific bookmark" do
       it "returns nil" do
-        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/bookmarks/456/")
+        subject.url = "http://archiveofourown.org/works/123/comments/"
         expect(subject.reported_work_id).to be_nil
       end
     end
