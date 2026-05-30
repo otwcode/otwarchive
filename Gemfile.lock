@@ -245,6 +245,10 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     date (3.5.1)
+    departure (8.1.0)
+      activerecord (>= 7.2.0)
+      mysql2 (>= 0.4.0, < 0.6.0)
+      railties (>= 7.2.0)
     devise-async (1.0.0)
       activejob (>= 5.0)
       devise (>= 4.0)
@@ -724,6 +728,7 @@ DEPENDENCIES
   cucumber-timecop
   dalli
   database_cleaner
+  departure (~> 8.0)
   devise!
   devise-async
   devise-pwned_password
