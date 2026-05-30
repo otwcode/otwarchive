@@ -416,3 +416,7 @@ end
 When "there are {int} assignments per page" do |amount|
   allow_any_instance_of(ApplicationController).to receive(:pagy_get_limit).and_return(amount)
 end
+
+Given "I make the collection {string} moderated" do |collection_title|
+  Collection.find_by!(title: collection_title).collection_preference.update!(moderated: true)
+end

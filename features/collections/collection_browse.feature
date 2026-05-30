@@ -229,6 +229,64 @@ Feature: Collection
     And I should see "Surprise Presents"
     But I should not see "Another Gift Swap"
 
+  Scenario: Sort collections by Works and Bookmarks
+
+  Given I have a collection "Privates"
+    And I have a collection "Publics"
+  When I am logged in as the owner of "Privates"
+    And I post the work "Private 1" in the collection "Privates"
+    And I lock the work "Private 1"
+    And I post the work "Private 2" in the collection "Privates"
+    And I lock the work "Private 2"
+    And I bookmark the work "Private 1" to the collection "Publics"
+    And I bookmark the work "Private 2" to the collection "Publics"
+    And I post the work "Public 1" in the collection "Publics"
+    And I bookmark the work "Public 1" to the collection "Privates"
+    And all indexing jobs have been run
+    And I go to the collections page
+    And I select "Works" from "Sort by"
+    And I press "Sort and Filter"
+  Then the 1st collection result should contain "Privates"
+    And the 1st collection result should contain "Works: 2"
+    And the 2nd collection result should contain "Publics"
+    And the 2nd collection result should contain "Works: 1"
+  When I log out
+    Then the 1st collection result should contain "Publics"
+    And the 1st collection result should contain "Works: 1"
+    And the 2nd collection result should contain "Privates"
+    And the 2st collection result should contain "Works: 0"
+  When I am logged in as a super admin
+    And I go to the collections page
+    And I select "Works" from "Sort by"
+    And I press "Sort and Filter"
+  Then the 1st collection result should contain "Privates"
+    And the 1st collection result should contain "Works: 2"
+    And the 2nd collection result should contain "Publics"
+    And the 2nd collection result should contain "Works: 1"
+  When I go to the collections page
+    And I select "Bookmarked Items" from "Sort by"
+    And I press "Sort and Filter"
+  Then the 1st collection result should contain "Publics"
+    And the 1st collection result should contain "Bookmarked Items: 2"
+    And the 2nd collection result should contain "Privates"
+    And the 2nd collection result should contain "Bookmarked Items: 1"
+  When I log out
+    And I go to the collections page
+    And I select "Bookmarked Items" from "Sort by"
+    And I press "Sort and Filter"
+  Then the 1nd collection result should contain "Privates"
+    And the 1st collection result should contain "Bookmarked Items: 1"
+    And the 2nd collection result should contain "Publics"
+    And the 2nd collection result should not contain "Bookmarked Items"
+  When I am logged in as a super admin
+    And I go to the collections page
+    And I select "Bookmarked Items" from "collection_search_sort_column"
+    And I press "Sort and Filter"
+  Then the 1st collection result should contain "Publics"
+    And the 1st collection result should contain "Bookmarked Items: 2"
+    And the 2nd collection result should contain "Privates"
+    And the 2nd collection result should contain "Bookmarked Items: 1"
+
   Scenario: Look at a collection, see the rules and intro and FAQ
 
   Given a set of collections for searching

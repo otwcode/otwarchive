@@ -37,7 +37,6 @@ gem "lograge" # https://github.com/roidrage/lograge
 gem 'will_paginate', '>=3.0.2'
 gem "pagy", "~> 9.3"
 gem 'acts_as_list', '~> 0.9.7'
-gem 'akismetor'
 
 gem 'httparty'
 gem "csv", "~> 3.3.5"
@@ -61,7 +60,7 @@ gem "terrapin"
 gem 'fastimage'
 
 # Gems for authentication
-gem "devise", git: "https://github.com/otwcode/devise", ref: "fade89f"
+gem "devise", git: "https://github.com/otwcode/devise", ref: "5dd846e"
 gem "devise-async" # To mails through queues
 gem "bcrypt"
 gem "devise-pwned_password"
