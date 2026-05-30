@@ -937,9 +937,7 @@ describe Comment do
     end
 
     context "when the comment is already marked as spam" do
-      let(:comment) { build(:comment, approved: false, spam: true) }
-
-      before { comment.save!(validate: false) }
+      let(:comment) { create_invalid(:comment, approved: false, spam: true) }
 
       it "flags the comment as spam" do
         comment.mark_as_spam!
@@ -967,9 +965,7 @@ describe Comment do
   end
 
   describe "#mark_as_ham!" do
-    let(:comment) { build(:comment, approved: false, spam: true) }
-
-    before { comment.save!(validate: false) }
+    let(:comment) { create_invalid(:comment, approved: false, spam: true) }
 
     it "flags the comment as legitimate" do
       comment.mark_as_ham!
