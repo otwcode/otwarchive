@@ -60,9 +60,9 @@ RUN bundle exec bootsnap precompile -j 1 app/ lib/
 # Final stage for app image
 FROM base
 
-# Install runtime dependencies, e.g. for downloads generation
+# Install runtime dependencies, e.g. for downloads generation and online database migrations
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y calibre libmariadb3 shared-mime-info zip && \
+    apt-get install --no-install-recommends -y calibre libmariadb3 percona-toolkit shared-mime-info zip && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Run and own only the runtime files as a non-root user for security
