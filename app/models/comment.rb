@@ -156,16 +156,16 @@ class Comment < ApplicationRecord
 
     if pseud_id.nil?
       Comment.where(name: name)
-             .or(Comment.where(email: comment_owner_email))
-             .or(Comment.where(ip_address: ip_address))
-             .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
-             .and(Comment.where(parent: parent))
-             .excluding(self)
+        .or(Comment.where(email: comment_owner_email))
+        .or(Comment.where(ip_address: ip_address))
+        .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
+        .and(Comment.where(parent: parent))
+        .excluding(self)
     else
       Comment.where(pseud_id: pseud_id)
-             .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
-             .and(Comment.where(parent: parent))
-             .excluding(self)
+        .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
+        .and(Comment.where(parent: parent))
+        .excluding(self)
     end
   end
 

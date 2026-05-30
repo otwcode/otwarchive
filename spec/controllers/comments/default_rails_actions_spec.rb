@@ -689,14 +689,24 @@ describe CommentsController do
     end
 
     context "when they comment on same work again in a small timeframe" do
-      let!(:previous_comment) { create(:comment, :on_admin_post, :by_guest, name: "sus_user",
-                                      comment_content: "lorem", created_at: 15.seconds.ago) }
-      subject { create(:comment,
-                       :by_guest,
-                       commentable: previous_comment.ultimate_parent,
-                       name: "sus_user",
-                       comment_content: "ipsum",
-                       created_at: 0.seconds.ago) }
+      let!(:previous_comment) do
+        create(:comment,
+               :on_admin_post,
+               :by_guest,
+               name: "sus_user",
+               comment_content: "lorem",
+               created_at: 15.seconds.ago)
+      end
+
+      subject do 
+        create(:comment,
+               :by_guest,
+               commentable: previous_comment.ultimate_parent,
+               name: "sus_user",
+               comment_content: "ipsum",
+               created_at: 0.seconds.ago)
+      end
+
       before do
         subject.update_attribute(:approved, false)
         subject.update_attribute(:spam, true)
