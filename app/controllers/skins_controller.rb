@@ -139,7 +139,7 @@ class SkinsController < ApplicationController
       t(".remove_skin"),
       t(".tip", site_skin_id: @skin.id),
       helpers.link_to(t(".return_to_skin"), skin_path(@skin), class: "action")
-    ].join('<br />')
+    ].join("<br />")
     redirect_to "#{ArchiveConfig.SKIN_PREVIEW_URL}?site_skin=#{@skin.id}"
   end
 
