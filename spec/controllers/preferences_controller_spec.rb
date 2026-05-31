@@ -132,6 +132,15 @@ describe PreferencesController do
         expect(response).to render_template(:index)
         expect(flash[:error]).to eq("Sorry, something went wrong. Please try that again.")
       end
+
+      it "disallows setting a parent-only site skin" do
+        skin.update!(unusable: true)
+
+        put :update, params: {user_id: user.login, id: user.preference.id, preference: preference_params}
+
+        expect(response).to render_template(:index)
+        expect(flash[:error]).to eq("Sorry, something went wrong. Please try that again.")
+      end
     end
 
     context "as a guest" do

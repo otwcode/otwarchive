@@ -28,10 +28,15 @@ class Preference < ApplicationRecord
   end
 
   def can_use_skin
-    return if skin_id == AdminSetting.default_skin_id ||
-              (skin.is_a?(Skin) && skin.approved_or_owned_by?(user))
+    return if skin_id == AdminSetting.default_skin_id
+    
+    if !skin.is_a?(Skin) || !skin.approved_or_owned_by?(user)
+      errors.add(:base, :no_permission_for_skin)
+    end
 
-    errors.add(:base, "You don't have permission to use that skin!")
+    if skin.unusable?
+      errors.add(:base, :unusable_skin)
+    end
   end
 
   def locale
