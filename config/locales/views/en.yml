@@ -1826,25 +1826,21 @@ en:
         tos_faq_in_parens_html: "(%{tos_faq_link})"
         tos_faq_link_label: Usernames, Icons, and Profiles FAQ
     diversity_statement:
-      archive_description_html: This archive is a permanent, panfandom place for fanworks, built by fans for fans. Whichever way you use the Archive, you're part of this, powering it, shaping it through your use and %{your_feedback_link}.
-      archive_for_you: 'No matter your appearance, circumstances, configuration or take on the world: if you enjoy consuming, creating or commenting on fanworks, the Archive is for you.'
-      archive_team: the Archive team
-      diversity_statement: Diversity Statement
-      dreamwidth: Dreamwidth's
-      dreamwidth_remix_html: This is a remix of %{dreamwidth_link} %{diversity_statement_link}.
-      few_restrictions: few restrictions
-      license:
-        creative_commons_by_sa: Creative Commons Attribution-Share Alike 3.0 Unported License
-        html: This work is licensed under a %{creative_commons_by_sa_link}.
-        image_alt: Creative Commons License
-      some_essential_parts: some essential parts
-      still_missing_html: 'We know that there are %{some_essential_parts_link} that are still missing to make the Archive truly panfandom: the ability to host fanworks other than text, an interface in languages other than English, and more ways for you to connect with each other, to name just a few. But with your support, we''ll get there.'
+      accessibility_commitment_html: We value making fannish activities and creations as accessible as possible to all those who wish to participate. We recognize that supporting diversity and inclusion is an ongoing responsibility, and we remain dedicated to developing AO3 and its policies in a way that reflects our commitment. As we %{update_ao3_link}, we will continue to prioritize features that improve the site's inclusivity and accessibility for everyone.
+      archive_description_html: AO3 is a permanent, panfandom archive for fanworks, %{built_by_link}. We want AO3 to be a place where all fannish works are recognized as legal and transformative, and where every fan of any media feels welcome, no matter who they are or how they use AO3. If you enjoy creating or engaging with fanworks, AO3 is for you.
+      built_by: built by fans, for fans
+      collaboration_statement_html: We dedicate our time to support AO3, but we can't do this work alone. All of us – %{how_to_help_link} – work together to foster a culture of inclusiveness on AO3 and the rest of the %{our_projects_link}.
+      content_policies: content policies
+      diversity_header: Diversity Statement
+      feedback_statement_html: AO3 exists to support fans, fandoms, and fanworks of all kinds, and we welcome %{your_feedback_link} on how to make that possible.
+      inclusiveness_commitment_html: We take our commitment to %{maximum_inclusiveness_link} seriously. Our %{content_policies_link} are designed to give creators as much creative freedom as possible, while still allowing us to maintain our focus as a non-commercial fanwork archive. We strive to protect your rights to %{privacy_policy_link} and free expression, as outlined in our %{terms_of_service_link}.
+      helpers: donors, users, and volunteers
+      maximum_inclusiveness: maximum inclusiveness of fanwork content
+      our_projects: Organization for Transformative Works' projects
+      privacy: privacy
       terms_of_service: Terms of Service
-      we_build_for: We are building this archive for you. Come be a part of it.
-      welcome_header: You are welcome at the Archive of Our Own.
-      what_we_do_html: We, %{archive_team_link}, know that we won't get everything right on the first try, and we won't be able to make everyone equally happy. But we strive to find a good balance, and we promise to respectfully consider your feedback and to take it seriously.
-      why_we_build: We are building this archive because we believe it's possible for people of all opinions and persuasions to come together and share with each other.
-      you_can_html: You are free to express your creativity within the %{few_restrictions_link} needed to keep the service viable for other users. The Archive strives to protect your rights to free expression and privacy; you can read about the details in our %{terms_of_service_link}.
+      update_ao3: update AO3
+      welcome_statement: You are welcome at the Archive of Our Own.
       your_feedback: your feedback
     donate:
       general:
@@ -2013,6 +2009,7 @@ en:
         ao3_news: AO3 News
         archive_faq: Archive FAQ
         content_policy: Content Policy
+        diversity_statement: Diversity Statement
         header: About the Archive of Our Own
         known_issues: Known Issues
         privacy_policy: Privacy Policy

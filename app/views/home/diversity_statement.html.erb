@@ -1,47 +1,33 @@
-<h2 class="heading"><%= t(".welcome_header") %></h2>
+<h2 class="heading"><%= t(".diversity_header") %></h2>
 
 <div class="userstuff">
-  <p><%= t(".archive_for_you") %></p>
+  <p><big><strong><%= t(".welcome_statement") %></strong></big></p>
 
   <p>
     <%= t(".archive_description_html",
-          your_feedback_link: link_to(t(".your_feedback"), new_feedback_report_path)) %>
+          built_by_link: link_to(t(".built_by"), about_path)) %>
   </p>
 
   <p>
-    <%= t(".what_we_do_html",
-          archive_team_link: link_to(t(".archive_team"), admin_posts_path)) %>
-  </p>
-
-  <p>
-    <%= t(".you_can_html",
-          few_restrictions_link: link_to(t(".few_restrictions"), content_path),
+    <%= t(".inclusiveness_commitment_html",
+          maximum_inclusiveness_link: link_to(t(".maximum_inclusiveness"), tos_faq_path(anchor: "max_inclusiveness")),
+          content_policies_link: link_to(t(".content_policies"), content_path),
+          privacy_policy_link: link_to(t(".privacy"), privacy_path),
           terms_of_service_link: link_to(t(".terms_of_service"), tos_path)) %>
   </p>
 
   <p>
-    <%= t(".still_missing_html",
-          some_essential_parts_link: link_to(t(".some_essential_parts"), admin_post_path(295))) %>
-  </p>
-
-  <p><%= t(".why_we_build") %></p>
-
-  <p><%= t(".we_build_for") %></p>
-
-  <br />
-  <p>
-    <%= t(".dreamwidth_remix_html",
-          dreamwidth_link: link_to(t(".dreamwidth"), "http://www.dreamwidth.org"),
-          diversity_statement_link: link_to(t(".diversity_statement"), "http://www.dreamwidth.org/legal/diversity")) %>
+    <%= t(".accessibility_commitment_html",
+          update_ao3_link: link_to(t(".update_ao3"), admin_posts_path(tag: 1))) %>
   </p>
 
   <p>
-    <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-      <img alt="<%= t(".license.image_alt") %>" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" />
-    </a>
-    <br />
-    <%= t(".license.html",
-          creative_commons_by_sa_link: link_to(t(".license.creative_commons_by_sa"),
-            "http://creativecommons.org/licenses/by-sa/3.0/")) %>
+    <%= t(".collaboration_statement_html",
+          how_to_help_link: link_to(t(".helpers"), "https://www.transformativeworks.org/how-you-can-help/"),
+          our_projects_link: link_to(t(".our_projects"), "https://www.transformativeworks.org/our-projects/")) %>
+  </p>
+
+  <p><%= t(".feedback_statement_html",
+           your_feedback_link: link_to(t(".your_feedback"), new_feedback_report_path)) %>
   </p>
 </div>
