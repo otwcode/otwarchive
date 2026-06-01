@@ -146,7 +146,7 @@ describe StoryParser do
         to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
 
       storyparser_user = FactoryBot.create(:user)
-      urls = %w(http://url1 http://url2)
+      urls = %w[http://url1.net http://url2.com]
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [storyparser_user.default_pseud], do_not_set_current_author: false })
       work.save
       actual_date = work.revised_at.to_date
@@ -334,7 +334,7 @@ describe StoryParser do
     end
 
     it "does not throw an exception with non-ASCII characters in metadata fields" do
-      urls = %w[http://ascii-8bit http://utf-8 http://win-1252]
+      urls = %w[http://ascii-8bit.fr http://utf-8.es http://win-1252.pt]
       urls.each do |url|
         expect do
           @sp.download_and_parse_story(url, pseuds: [@user.default_pseud], do_not_set_current_author: false)
@@ -343,7 +343,7 @@ describe StoryParser do
     end
 
     it "ignores string terminators (AO3-2251)" do
-      story = @sp.download_and_parse_story("http://non-sgml-character-number-3", pseuds: [@user.default_pseud])
+      story = @sp.download_and_parse_story("http://non-sgml-character-number-3.da", pseuds: [@user.default_pseud])
       expect(story.chapters[0].content).to include("When I get out of here")
     end
   end

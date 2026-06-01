@@ -22,6 +22,17 @@ Feature: Prompt Meme Challenge
   When I create Battle 12 promptmeme
   Then Battle 12 prompt meme should be correctly created
 
+  Scenario: Prompt meme timezone updates without caching
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "scott"
+  When the user "scott" sets the time zone to "Nairobi"
+    And I go to the Collections page
+  Then I should see "EAT" within ".collection.picture.index.group .userstuff.summary"
+  When the user "scott" sets the time zone to "Mumbai"
+    And I go to the Collections page
+  Then I should see "IST" within ".collection.picture.index.group .userstuff.summary"
+
   Scenario: User can see a prompt meme
   
   Given I have Battle 12 prompt meme fully set up

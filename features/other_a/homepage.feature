@@ -14,7 +14,7 @@ Feature: Various things on the homepage
   Scenario: DMCA
 
   Given I am on the homepage
-  When I follow "DMCA Policy"
+  When I follow "DMCA & TIDA Policies"
   Then I should see "Filing a DMCA counternotice"
 
   Scenario: Donate
