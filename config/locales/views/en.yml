@@ -1858,8 +1858,8 @@ en:
       content_policies: content policies
       diversity_header: Diversity Statement
       feedback_statement_html: AO3 exists to support fans, fandoms, and fanworks of all kinds, and we welcome %{your_feedback_link} on how to make that possible.
-      inclusiveness_commitment_html: We take our commitment to %{maximum_inclusiveness_link} seriously. Our %{content_policies_link} are designed to give creators as much creative freedom as possible, while still allowing us to maintain our focus as a non-commercial fanwork archive. We strive to protect your rights to %{privacy_policy_link} and free expression, as outlined in our %{terms_of_service_link}.
       helpers: donors, users, and volunteers
+      inclusiveness_commitment_html: We take our commitment to %{maximum_inclusiveness_link} seriously. Our %{content_policies_link} are designed to give creators as much creative freedom as possible, while still allowing us to maintain our focus as a non-commercial fanwork archive. We strive to protect your rights to %{privacy_policy_link} and free expression, as outlined in our %{terms_of_service_link}.
       maximum_inclusiveness: maximum inclusiveness of fanwork content
       our_projects: Organization for Transformative Works' projects
       privacy: privacy
