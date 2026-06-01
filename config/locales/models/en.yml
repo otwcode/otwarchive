@@ -136,6 +136,11 @@ en:
           attributes:
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them.
+        gift_exchange:
+          attributes:
+            base:
+              no_offer_fields: Offer Settings must allow at least one field.
+              no_request_fields: Request Settings must allow at least one field.
         invitation:
           attributes:
             base:
@@ -174,6 +179,10 @@ en:
           format: "%{message}"
         prompt:
           tags_not_in_fandom: "^These %{tag_label} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)"
+        prompt_meme:
+          attributes:
+            base:
+              no_request_fields: Request Settings must allow at least one field.
         related_work:
           attributes:
             parent:
