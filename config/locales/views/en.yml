@@ -778,9 +778,13 @@ en:
         collection_tags: 'Collection tags:'
   collections:
     collection_blurb:
+      bookmarked_items: 'Bookmarked Items:'
+      challenges_subcollections: 'Challenges/Subcollections:'
       collection_tags: 'Collection Tags:'
+      prompts: 'Prompts:'
       signups_close_at: 'Sign-ups close at:'
       summary: Summary
+      works: 'Works:'
     filters:
       clear_filters: Clear Filters
       closed:
