@@ -1,5 +1,6 @@
 class HelpController < ApplicationController
   HELP_ACTIONS = %i[
+    collectibles_add_to_collection
     first_login
     html
     preferences_collection
