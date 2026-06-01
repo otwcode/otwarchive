@@ -33,6 +33,7 @@ class Preference < ApplicationRecord
     errors.add(:base, :no_permission_for_skin) if !skin.is_a?(Skin) || !skin.approved_or_owned_by?(user)
     
     return unless skin.unusable?
+
     errors.add(:base, :unusable_skin)
   end
 
