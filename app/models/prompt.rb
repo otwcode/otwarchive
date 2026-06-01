@@ -33,6 +33,13 @@ class Prompt < ApplicationRecord
     where("set_taggings.tag_id = ?", tag.id)
   }
 
+  # VIRTUAL ATTRIBUTES
+
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    self[:title].try(:html_safe)
+  end
+
   # VALIDATIONS
 
   before_validation :inherit_from_signup, on: :create, if: :challenge_signup

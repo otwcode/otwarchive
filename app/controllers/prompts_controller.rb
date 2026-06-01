@@ -111,7 +111,8 @@ class PromptsController < ApplicationController
   end
 
   def edit
-    @index = @challenge_signup.send(@prompt.class.name.downcase.pluralize).index(@prompt)
+    # Range query avoids the prompt's attributes being marked as came_from_user
+    @index = @challenge_signup.send(@prompt.class.name.downcase.pluralize).where(id: ...@prompt.id).count
   end
 
   def create
