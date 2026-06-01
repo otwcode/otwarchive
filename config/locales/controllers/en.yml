@@ -114,6 +114,8 @@ en:
     index:
       page_title: "%{username} - Challenge Claims"
   challenge_signups:
+    index:
+      page_title: "%{username} - Challenge Sign-ups"
     new:
       page_title: New Challenge Sign-up
   chapters:
