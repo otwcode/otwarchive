@@ -1690,9 +1690,8 @@ en:
         content_policy: Content Policy
         contribute: contribute
         description: The Archive of Our Own (AO3) is a non-profit, non-commercial fanwork archive for transformative fanworks; created by and for fans of books, music, art, games, shows, movies, real-person fiction (RPF), and other fandoms.
-        github_repository: GitHub repository
         inclusiveness: maximum inclusiveness of fanwork content
-        inclusiveness_html: <strong>AO3 is built upon the principle of %{inclusiveness_link}.</strong> Fanworks that do not violate the %{content_policy_link} or some other part of the %{tos_link} will not be removed from AO3, even if someone believes they are offensive or objectionable.</p>
+        inclusiveness_html: "<strong>AO3 is built upon the principle of %{inclusiveness_link}.</strong> Fanworks that do not violate the %{content_policy_link} or some other part of the %{tos_link} will not be removed from AO3, even if someone believes they are offensive or objectionable.</p>"
         jira_project: Jira project
         open_source_html: AO3 runs on %{github_repository_link} developed by the Organization for Transformative Works (OTW). Anyone is welcome to %{contribute_link} by working on the unclaimed tasks in our %{jira_project_link}.
         tos: Terms of Service
