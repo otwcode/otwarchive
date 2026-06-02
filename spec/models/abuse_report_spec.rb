@@ -693,7 +693,7 @@ describe AbuseReport do
 
     context "for a work URL with bookmarks" do
       it "returns nil" do
-        subject.url = "http://archiveofourown.org/works/123/bookmarks"
+        subject.url = "http://archiveofourown.org/works/123/bookmarks/"
         expect(subject.reported_work_id).to be_nil
       end
     end
