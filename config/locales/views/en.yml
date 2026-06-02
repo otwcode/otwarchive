@@ -2081,6 +2081,7 @@ en:
         require_user_specific_proof: We reserve the right to require user-specific proof of identity before providing Personal Information to a requester. This is necessary to protect the safety and privacy of our users and personnel.
     site_map:
       about:
+        about_us: About Us
         ao3_news: AO3 News
         archive_faq: Archive FAQ
         content_policy: Content Policy
