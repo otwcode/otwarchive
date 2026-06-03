@@ -6,8 +6,10 @@
   <p><%= t(".ao3.description") %></p>
 
   <p>
+    <%= tag.strong(t(".ao3.inclusiveness_on_ao3_html",
+          inclusiveness_link: link_to(t(".ao3.inclusiveness"), tos_faq_path(anchor: "max_inclusiveness")))) %>
+
     <%= t(".ao3.inclusiveness_html",
-          inclusiveness_link: link_to(t(".ao3.inclusiveness"), tos_faq_path(anchor: "max_inclusiveness")),
           content_policy_link: link_to(t(".ao3.content_policy"), content_path),
           tos_link: link_to(t(".ao3.tos"), tos_path)) %>
   </p>
