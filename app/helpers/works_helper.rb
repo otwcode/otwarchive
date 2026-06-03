@@ -148,6 +148,11 @@ module WorksHelper
         language: language,
         locale: default_locale,
         creator_link: creator_link)
+    elsif related_work.respond_to?(:hidden_by_admin?) && related_work.hidden_by_admin?
+      t(".#{relation}.hidden_html",
+        language: language,
+        locale: default_locale,
+        creator_link: creator_link)
     else
       t(".#{relation}.revealed_html",
         language: language,

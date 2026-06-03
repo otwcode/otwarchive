@@ -388,7 +388,7 @@ Feature: Download a work
     And a related work has been posted and approved
     And I am logged in as "remixer"
     And I lock the work "Followup"
-  When I am logged out
+  When I log out
     And I view the work "Worldbuilding"
     And I follow "HTML"
   Then I should see "[Restricted Work] by remixer"
@@ -396,7 +396,7 @@ Feature: Download a work
     And I lock the work "Worldbuilding"
     And I am logged in as "remixer"
     And I unlock the work "Followup"
-    And I am logged out
+    And I log out
     And I view the work "Followup"
     And I follow "HTML"
   Then I should see "Inspired by [Restricted Work] by inspiration"
@@ -431,10 +431,64 @@ Feature: Download a work
     And a translation has been posted and approved
     And I am logged in as "translator"
     And I lock the work "Worldbuilding Translated"
-  When I am logged out
+  When I log out
     And I view the work "Worldbuilding"
     And I follow "HTML"
   Then I should see "[Restricted Work] by translator"
+
+  Scenario: Hidden inspired and inspiring works' titles should be hidden in downloads
+    Given I have related works setup
+      And a related work has been posted and approved
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the work "Followup"
+    When I log out
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should see "[Hidden Work] by remixer"
+    When I am logged in as a "policy_and_abuse" admin
+      And I unhide the work "Followup"
+      And I hide the work "Worldbuilding"
+    When I log out
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should see "[Hidden Work] by inspiration"
+
+  Scenario: Hidden translations and translated works' titles should be hidden in downloads
+    Given I have related works setup
+      And a translation has been posted and approved
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the work "Worldbuilding Translated"
+    When I log out
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should see "[Hidden Work] by translator"
+    When I am logged in as a "policy_and_abuse" admin
+      And I unhide the work "Worldbuilding Translated"
+      And I hide the work "Worldbuilding"
+    When I log out
+      And I view the work "Worldbuilding Translated"
+      And I follow "HTML"
+    Then I should see "[Hidden Work] by inspiration"
+
+  Scenario: Downloads should update when works get hidden and unhidden
+    Given I have related works setup
+      And a related work has been posted and approved
+    When I log out
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should see "Followup by remixer"
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the work "Followup"
+    When I log out
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should see "[Hidden Work] by remixer"
+    When I am logged in as a "policy_and_abuse" admin
+      And I unhide the work "Followup"
+    When I log out
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should see "Followup by remixer"
 
   Scenario: Download multi-chapter work with mixed chapter titles (one without, one with)
   
