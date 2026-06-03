@@ -14,14 +14,14 @@
 
   <p>
     <%= t(".ao3.open_source_html",
-          github_repository_link: link_to(t(".ao3.archiving_software"), "https://github.com/otwcode/otwarchive#otw-archive"),
+          archiving_software_link: link_to(t(".ao3.archiving_software"), "https://github.com/otwcode/otwarchive#otw-archive"),
           contribute_link: link_to(t(".ao3.contribute"), "https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md"),
           jira_project_link: link_to(t(".ao3.jira_project"), "https://otwarchive.atlassian.net/browse/AO3")) %>
   </p>
 
   <p>
     <%= t(".ao3.beta_html",
-          fanlore_ao3_link: link_to(t(".ao3.ao3_history"), "https://fanlore.org/wiki/Archive_of_Our_Own")) %>
+          fanlore_ao3_link: link_to(t(".ao3.fanlore_ao3"), "https://fanlore.org/wiki/Archive_of_Our_Own")) %>
   </p>
 
   <h4 class="heading" id="our_team"><%= t(".heading.our_team") %></h4>
@@ -78,8 +78,8 @@
 
   <p>
     <%= t(".otw.html",
-          donation_link: link_to(t(".otw.donations"), "https://donate.transformativeworks.org/otwgive"),
-          otw_mission_link: link_to(t(".otw.mission"), "https://www.transformativeworks.org/what_we_believe/"),
+          donations_link: link_to(t(".otw.donations"), "https://donate.transformativeworks.org/otwgive"),
+          mission_link: link_to(t(".otw.mission"), "https://www.transformativeworks.org/what_we_believe/"),
           transformative_fanworks_link: link_to(t(".otw.transformative_fanworks"), "https://www.transformativeworks.org/faq/what-do-you-mean-by-a-transformative-work/")) %>
   </p>
 
@@ -93,7 +93,7 @@
     </li>
     <li>
       <%= t(".major_projects.legal_details_html",
-            legal_link: link_to(t(".major_projects.legal_advocacy"), "https://transformativeworks.org/projects/legal")) %>
+            legal_advocacy_link: link_to(t(".major_projects.legal_advocacy"), "https://transformativeworks.org/projects/legal")) %>
     </li>
     <li>
       <%= t(".major_projects.open_doors_details_html",
@@ -111,15 +111,15 @@
 
   <p>
     <%= t(".learn_more.html",
-          faq_page_link: link_to(t(".learn_more.ao3_faq"), archive_faqs_path),
+          ao3_faq_link: link_to(t(".learn_more.ao3_faq"), archive_faqs_path),
           transformative_works_faq_link: link_to(t(".learn_more.transformative_works_faq"), "https://www.transformativeworks.org/faq/"),
           donate_link: link_to(t(".learn_more.donate"), donate_path)) %>
   </p>
 
   <p>
     <%= t(".learn_more.technical_help_html",
-          communications_link: link_to(t(".learn_more.contact_communications"), "https://www.transformativeworks.org/contact_us/?who=Communications"),
-          policy_abuse_link: link_to(t(".learn_more.contact_policy_abuse"), new_abuse_report_path),
-          support_link: link_to(t(".learn_more.contact_support"), new_feedback_report_path)) %>
+          contact_communications_link: link_to(t(".learn_more.contact_communications"), "https://www.transformativeworks.org/contact_us/?who=Communications"),
+          contact_policy_abuse_link: link_to(t(".learn_more.contact_policy_abuse"), new_abuse_report_path),
+          contact_support_link: link_to(t(".learn_more.contact_support"), new_feedback_report_path)) %>
   </p>
 </div>
