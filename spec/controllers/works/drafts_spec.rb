@@ -76,6 +76,13 @@ describe WorksController do
                                    "You can only see your own drafts, sorry!")
       end
     end
+
+    context "when the requested user does not exist" do
+      it "should raise error 404" do
+        get :drafts, params: { user_id: "invalid-user" }
+        expect(response.status).to eq(404)
+      end
+    end
   end
 
   describe "post_draft" do
