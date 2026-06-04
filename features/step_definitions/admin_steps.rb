@@ -125,6 +125,13 @@ Given "account age threshold for comment spam check is set to {int} days" do |da
   click_button("Update")
 end
 
+Given "comment count threshold for comment rate limit is set to {int}" do |count|
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  fill_in("admin_setting_comment_count_threshold_for_comment_rate_limit", with: count)
+  click_button("Update")
+end
+
 Given "I have posted known issues" do
   step %{I am logged in as a super admin}
   step %{I follow "Admin Posts"}
