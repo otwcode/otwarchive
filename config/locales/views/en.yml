@@ -393,7 +393,7 @@ en:
         fields:
           account_age_threshold_for_comment_spam_check: How old (in days) accounts should be before we stop checking comments for spam
           account_age_threshold_for_comment_spam_check_note: Enter 0 to turn off comment spam checks for all logged in users.
-          comment_count_threshold_for_comment_rate_limit: How many comments accounts should have before we stop rate limiting them like new accounts
+          comment_count_threshold_for_comment_rate_limit: How many comments older accounts should have before we stop rate limiting them
           comment_count_threshold_for_comment_rate_limit_note: Enter 0 to turn off additional comment rate limits based on comment count.
           account_creation_enabled: Account creation enabled
           cache_expiration: How often (in minutes) should we refresh caching
