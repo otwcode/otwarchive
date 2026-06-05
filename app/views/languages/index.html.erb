@@ -1,6 +1,7 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= t(".page_heading") %></h2>
 <!--/descriptions-->
+
 <!--subnav-->
 <p class="navigation actions" role="navigation">
   <% if policy(Language).new? %>
@@ -10,6 +11,7 @@
   <% end %>
 </p>
 <!--/subnav-->
+
 <!--main content-->
 <dl class="language index group">
   <% @languages.each do |language| %>
@@ -21,10 +23,11 @@
       </dt>
       <dd>
         <%= link_to t(".works_count", count: works_count, formatted_count: number_with_delimiter(works_count)), language_works_path(language) %>
+
       </dd>
     <% else %>
       <dt>
-        <span lang="<%= language.short %>"><%= language.name %></span>
+        <span lang="<%= language.short %>"><%= language.name %></span><%= link_to language.name, language, lang: language.short %>
         <%= t(".language_code_format_html", code: content_tag(:abbr, language.short)) %>
       </dt>
       <dd>
