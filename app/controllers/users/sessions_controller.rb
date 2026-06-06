@@ -46,43 +46,49 @@ class Users::SessionsController < Devise::SessionsController
 
   private
 
-  def valid_totp_attempt?(user)
-    user.validate_and_consume_otp!(params[:totp_attempt]) ||
-      user.invalidate_otp_backup_code!(params[:totp_attempt])
-  end
-
   def prompt_for_otp_two_factor(user)
     @user = user
 
     session[:otp_user_id] = user.id
-    
+
     session[:pwned] = user.respond_to?(:password_pwned?) && user.password_pwned?(user_params[:password]) if params[:user] && params[:user][:password]
 
     render "users/sessions/totp"
   end
 
   def authenticate_user_with_otp_two_factor(user)
-    if valid_totp_attempt?(user)
+    totp_valid = user.validate_and_consume_otp!(params[:totp_attempt])
+    backup_code_used = !totp_valid && user.invalidate_otp_backup_code!(params[:totp_attempt])
+
+    if totp_valid || backup_code_used
       pwned = session[:pwned]
       # Remove any lingering user data from login
       session.delete(:otp_user_id)
       session.delete(:pwned)
 
-      user.save!
+      if backup_code_used
+        user.disable_totp!
+      else
+        user.save!
+      end
 
-      flash[:notice] = t("devise.sessions.signed_in")
       sign_in(user, event: :authentication)
 
       # Set the user_credentials flag cookie
       # because this login flow bypasses ApplicationController#ensure_user_credentials
       cookies[:user_credentials] = { value: 1, expires: 1.year.from_now } unless cookies[:user_credentials]
 
-      if pwned
+      if backup_code_used
+        flash[:notice] = t("users.sessions.backup_code_used")
+        redirect_to user_preferences_path(user)
+      elsif pwned
+        flash[:notice] = t("devise.sessions.signed_in")
         # Set the pwned flash notice
         # because this login flow bypasses ApplicationController#after_sign_in_path_for
         set_flash_message! :alert, :warn_pwned
         redirect_to change_password_user_path(user)
       else
+        flash[:notice] = t("devise.sessions.signed_in")
         redirect_to root_path
       end
     else

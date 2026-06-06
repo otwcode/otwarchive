@@ -385,6 +385,7 @@ en:
       new:
         page_title: Create Account
     sessions:
+      backup_code_used: Successfully logged in with your backup code. Two-step verification has been disabled. Please set up two-step verification again to secure your account.
       invalid_totp: Incorrect two-step verification code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
     status:
       ban_notice_html: Your account has been banned. You are not permitted to post or edit content on AO3. Please check your email or %{contact_abuse_link} for more information.

@@ -119,9 +119,9 @@ Feature: Authenticate Users With TOTP 2FA
     Then I should see "Enter the verification code from your authenticator app"
     When I fill in a valid TOTP recovery code for user "user"
       And I press "Log In" within "div#main"
-    Then I should see "Successfully logged in"
-  
-  Scenario: Users with TOTP 2FA enabled cannot log in with a used recovery code
+    Then I should see "Successfully logged in with your backup code. Two-step verification has been disabled."
+
+  Scenario: Users with TOTP 2FA enabled have 2FA disabled when they log in using a recovery code
     Given the following activated users exist
       | login | password     |
       | user  | testpassword |
@@ -133,16 +133,9 @@ Feature: Authenticate Users With TOTP 2FA
     Then I should see "Enter the verification code from your authenticator app"
     When I fill in a valid TOTP recovery code for user "user"
       And I press "Log In" within "div#main"
-    Then I should see "Successfully logged in"
-    When I log out
-      And I go to the login page
-      And I fill in "Username or email" with "user"
-      And I fill in "Password" with "testpassword"
-      And I press "Log In"
-      And I fill in a used TOTP recovery code
-      And I press "Log In" within "div#main"
-    Then I should see "Incorrect two-step verification code."
-      And I should not see "Successfully logged in"
+    Then I should see "Successfully logged in with your backup code. Two-step verification has been disabled."
+      And I should see "Enable Two-Step Verification"
+      And I should not see "Disable two-step verification"
 
   Scenario: Users with TOTP 2FA enabled should not be prompted for their code if they enter invalid credentials
     Given the following activated users exist
