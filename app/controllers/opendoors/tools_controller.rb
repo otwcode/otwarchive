@@ -51,7 +51,11 @@ class Opendoors::ToolsController < ApplicationController
         flash[:error] = ts("There is already a work imported from the url %{url}.", url: @imported_from_url)
       else
         # ok let's try to update
-        @work.imported_url&.update(original: @imported_from_url)
+        if @work.imported_url == nil
+          @work.imported_url = ImportedUrl.create(original: @imported_from_url)
+        else
+          @work.imported_url.update(original: @imported_from_url)
+        end
         flash[:notice] = "Updated imported-from url for #{@work.title} to #{@imported_from_url}"
       end
     end    
