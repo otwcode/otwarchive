@@ -4,6 +4,7 @@ describe Users::TotpController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  # "Confirm Password" page
   describe "GET #new" do
     let(:user) { create(:user) }
     let(:other_user) { create(:user, otp_required_for_login: true) }
@@ -40,6 +41,7 @@ describe Users::TotpController do
     end
   end
 
+  # Form to redirect from the "Confirm Password" page to the setup 2FA app and enter 6-digit code page
   describe "POST #reauthenticate_create" do
     let(:user) { create(:user, password: "correct_password") }
     let(:other_user) { create(:user, otp_required_for_login: true) }
@@ -67,6 +69,15 @@ describe Users::TotpController do
         expect(response).to render_template(:reauthenticate_create)
       end
 
+      it "audits and redacts otp_secret" do
+        fake_login_known_user(user)
+        post :reauthenticate_create, params: { user_id: user.login, password_check: "correct_password" }
+
+        last_change = user.audits.pluck(:audited_changes).last
+
+        expect(last_change["otp_secret"]).to eq(["[FILTERED]", "[FILTERED]"])
+      end
+
       it "denies access when password is wrong" do
         fake_login_known_user(user)
         post :reauthenticate_create, params: { user_id: user.login, password_check: "wrong_password" }
@@ -88,6 +99,7 @@ describe Users::TotpController do
     end
   end
 
+  # Form to redirect from the enter 6-digit code page to the show backup codes page
   describe "POST #create" do
     let(:user) { create(:user) }
     let(:other_user) { create(:user, otp_required_for_login: true) }
@@ -115,6 +127,15 @@ describe Users::TotpController do
         expect(flash[:notice]).to eq("Successfully enabled two-step verification; please make note of your backup codes.")
       end
 
+      it "audits and redacts otp_secret" do
+        fake_login_known_user(user)
+        post :reset_backup_codes, params: { user_id: user.login }
+        
+        last_change = user.audits.pluck(:audited_changes).last
+
+        expect(last_change["otp_secret"]).to eq(["[FILTERED]", "[FILTERED]"])
+      end
+
       it "denies access when TOTP code is wrong" do
         fake_login_known_user(user)
         post :create, params: { user_id: user.login, totp_attempt: "000000" }
@@ -136,6 +157,7 @@ describe Users::TotpController do
     end
   end
 
+  # Form to redirect from the "Confirm password" page to the show backup codes page
   describe "POST #reset_backup_codes" do
     let(:user) { create(:user, otp_required_for_login: true) }
     let(:other_user) { create(:user) }
@@ -162,6 +184,15 @@ describe Users::TotpController do
         expect(response).to have_http_status(:success)
       end
 
+      it "audits and redacts otp_backup_codes" do
+        fake_login_known_user(user)
+        post :reset_backup_codes, params: { user_id: user.login }
+        
+        last_change = user.audits.pluck(:audited_changes).last
+
+        expect(last_change["otp_backup_codes"]).to eq(["[REDACTED]", "[REDACTED]"])
+      end
+
       it "denies access to other's pages" do
         fake_login_known_user(user)
         post :reset_backup_codes, params: { user_id: other_user.login }
@@ -176,6 +207,7 @@ describe Users::TotpController do
     end
   end
 
+  # "Confirm Password" page
   describe "GET #confirm_disable" do
     let(:user) { create(:user, otp_required_for_login: true) }
     let(:other_user) { create(:user) }
@@ -219,6 +251,7 @@ describe Users::TotpController do
     end
   end
 
+  # Form to enter the password in the "Confirm Password" page and disables 2FA 
   describe "POST #disable_totp" do
     let(:user) { create(:user, password: "correct_password", otp_required_for_login: true) }
     let(:other_user) { create(:user) }
@@ -246,6 +279,17 @@ describe Users::TotpController do
         post :disable, params: { user_id: user.login, password_check: "correct_password" }
         expect(user.reload.totp_enabled?).to be_falsey
         it_redirects_to_with_notice(user_preferences_path(user), "Successfully disabled two-step verification.")
+      end
+
+      it "audits and redacts otp_secret and otp_backup_codes" do
+        fake_login_known_user(user)
+        post :disable, params: { user_id: user.login, password_check: "correct_password" }
+
+        last_change = user.audits.pluck(:audited_changes).last
+
+        expect(last_change["otp_secret"]).to eq(["[FILTERED]", "[FILTERED]"])
+        expect(last_change["otp_backup_codes"]).to eq(["[REDACTED]", "[REDACTED]"])
+        expect(last_change["otp_required_for_login"]).to eq([true, false])
       end
 
       it "denies access when password is wrong" do

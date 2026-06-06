@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  audited redacted: [:encrypted_password, :password_salt]
+  audited redacted: [:encrypted_password, :password_salt, :otp_secret, :otp_backup_codes]
   include Justifiable
   include WorksOwner
   include PasswordResetsLimitable
