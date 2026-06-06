@@ -67,11 +67,11 @@ describe Opendoors::ToolsController do
 
       context "with a valid work ID" do
         let(:work) { create(:work) }
-        let(:work_with_imported_from_url) {
+        let!(:work_with_imported_from_url) do
           work = create(:work)
           work.imported_url = ImportedUrl.create(original: "http://example.org/my-immortal")
           work
-        }
+        end
 
         it "redirects to tools if imported-from URL is missing" do
           post :url_update, params: { work_url: "/works/#{work.id}/" }
