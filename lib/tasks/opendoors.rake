@@ -4,10 +4,8 @@ namespace :opendoors do
     def update_work(row)
       begin
         work = Work.find(row["AO3 id"])
-        if work&.imported_url.nil?
-          work.imported_url = ImportedUrl.new()
-        end
-        if work&.imported_url.original.blank? || work&.imported_url.original == row["URL Imported From"]
+        work.imported_url = ImportedUrl.new if work&.imported_url.nil?
+        if work&.imported_url&.original.blank? || work&.imported_url&.original == row["URL Imported From"]
           work.imported_url.original = row["Original URL"]
           work.save!
           "#{work.id}\twas updated: its import url is now #{work.imported_url.original}"

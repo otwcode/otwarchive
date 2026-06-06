@@ -431,8 +431,8 @@ class Work < ApplicationRecord
       Work.joins(:imported_url).where(imported_url: { minimal_no_protocol_no_www: url.minimal_no_protocol_no_www }).first ||
       Work.joins(:imported_url).where(imported_url: { minimal: url.minimal }).first ||
       Work.joins(:imported_url).where("imported_urls.original LIKE ? or imported_urls.original LIKE ?",
-      "http://#{url.minimal_no_protocol_no_www}%",
-      "https://#{url.minimal_no_protocol_no_www}%").select do |w|
+                                      "http://#{url.minimal_no_protocol_no_www}%",
+                                      "https://#{url.minimal_no_protocol_no_www}%").select do |w|
         work_url = UrlFormatter.new(w.imported_url&.original)
         %w[original minimal no_www with_www with_http with_https encoded decoded].any? do |method|
           work_url.send(method) == url.send(method)
