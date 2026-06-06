@@ -12,8 +12,9 @@ end
 describe "API v2 WorksController - Search", type: :request, work_search: true do
   describe "valid work URL request" do
     let!(:work) {
-      create(:work)
-      :work.imported_url = ImportedUrl.new(original: "foo")
+      work = create(:work)
+      work.imported_url = ImportedUrl.create(original: "foo")
+      work
     }
     
     it "returns 200 OK" do
