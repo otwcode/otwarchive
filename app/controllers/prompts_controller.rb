@@ -126,11 +126,11 @@ class PromptsController < ApplicationController
       flash[:notice] = ts("Prompt was successfully added.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      if params[:prompt_type] == "offer"
-        @index = @challenge_signup.offers.count
-      else
-        @index = @challenge_signup.requests.count
-      end
+      @index = if params[:prompt_type] == "offer"
+                 @challenge_signup.offers.count
+               else
+                 @challenge_signup.requests.count
+               end
       render action: :new
     end
   end
