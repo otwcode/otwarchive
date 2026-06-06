@@ -34,8 +34,7 @@ module WorksHelper
     collections_data = show_collections_data(work.approved_collections_after_saving)
     return if collections_data.blank?
 
-    content_tag(:dt, t("works_helper.collections_meta_tag.collections"), class: "collections") +
-      "\n".html_safe +
+    content_tag(:dt, "#{t('works_helper.collections_meta_tag.collections')} ", class: "collections") +
       content_tag(:dd, collections_data, class: "collections")
   end
 

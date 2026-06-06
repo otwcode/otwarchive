@@ -307,11 +307,11 @@ class WorksController < ApplicationController
       if @work.posted
         # We check here to see if we are attempting to post to moderated collection
         flash[:notice] = t(".posted_notice")
-        in_moderated_collection
+        show_moderated_collection_warning
         redirect_to work_path(@work)
       else
         flash[:notice] = t(".draft_notice_html", scheduled_for_deletion_bold: helpers.tag.strong(t(".scheduled_for_deletion")), deletion_date: view_context.date_in_zone(@work.created_at + 29.days))
-        in_moderated_collection
+        show_moderated_collection_warning
         redirect_to preview_work_path(@work)
       end
     end
@@ -362,7 +362,7 @@ class WorksController < ApplicationController
     elsif params[:preview_button]
       flash[:notice] = t(".unposted_notice") unless @work.posted?
 
-      in_moderated_collection(flash.now)
+      show_moderated_collection_warning(flash.now)
       @preview_mode = true
       render :preview
     else
@@ -375,7 +375,7 @@ class WorksController < ApplicationController
         if posted_changed
           flash[:notice] << ts(" It should appear in work listings within the next few minutes.")
         end
-        in_moderated_collection
+        show_moderated_collection_warning
         redirect_to work_path(@work)
       else
         @chapter.errors.full_messages.each { |err| @work.errors.add(:base, err) }
@@ -566,7 +566,7 @@ class WorksController < ApplicationController
   end
 
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
-  def in_moderated_collection(flash = self.flash)
+  def show_moderated_collection_warning(flash = self.flash)
     moderated_collections = @work.collection_items_after_saving
       .select(&:approved_by_user?)
       .select(&:unreviewed_by_collection?)

@@ -209,12 +209,12 @@ describe BookmarksController do
       let(:pseud) { user.default_pseud }
       let(:bookmark) { create(:bookmark, pseud: pseud) }
       let(:collection) { create(:collection) }
-    
+
       before do
         fake_login_known_user(user)
       end
-    
-      it "shows the collection warning message" do
+
+      it "successfully updates when adding to a collection" do
         put :update, params: { id: bookmark.id, bookmark: { collection_names: collection.name } }
 
         it_redirects_to_with_notice(bookmark_path(bookmark), "Bookmark was successfully updated.")
