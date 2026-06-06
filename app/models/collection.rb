@@ -326,12 +326,12 @@ class Collection < ApplicationRecord
 
   def notify_maintainers_assignments_sent
     if self.collection_email.present?
-      UserMailer.assignments_sent_notification(self.id, self.collection_email).deliver_later
+      GiftExchangeMailer.assignments_sent_notification(self.id, self.collection_email).deliver_later
     else
       # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale_for_mails) do
-          UserMailer.assignments_sent_notification(self.id, user.email).deliver_later
+          GiftExchangeMailer.assignments_sent_notification(self.id, user.email).deliver_later
         end
       end
     end
@@ -339,12 +339,12 @@ class Collection < ApplicationRecord
 
   def notify_maintainers_assignment_default(challenge_assignment)
     if self.collection_email.present?
-      UserMailer.assignment_default_notification(self.id, challenge_assignment.id, self.collection_email).deliver_later
+      GiftExchangeMailer.assignment_default_notification(self.id, challenge_assignment.id, self.collection_email).deliver_later
     else
       # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale_for_mails) do
-          UserMailer.assignment_default_notification(self.id, challenge_assignment.id, user.email).deliver_later
+          GiftExchangeMailer.assignment_default_notification(self.id, challenge_assignment.id, user.email).deliver_later
         end
       end
     end

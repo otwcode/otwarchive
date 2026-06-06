@@ -20,7 +20,10 @@
             <%= f.text_field :wip_length, class: "number" %>
           </p>
         </dd>
-        <dt id="managePublicationDate"><%= f.label :published_at, ts("Chapter Publication Date") %>  <%= link_to_help "backdating-help" %></dt>
+        <dt id="managePublicationDate">
+          <%= f.label :published_at, t(".publication_date") %>
+          <%= link_to_help_modal(help_works_backdating_path, t(".works_backdating_help_title")) %>
+        </dt>
         <dd class="datetime"><%= f.date_select "published_at", start_year: Date.current.year, end_year: 1950, default: @work.default_date, order: [:day, :month, :year] %></dd>
       </dl>
     </fieldset>
