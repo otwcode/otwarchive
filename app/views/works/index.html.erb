@@ -18,14 +18,15 @@
     <ul class="user navigation actions" role="navigation">
       <% if @user %>
         <% if @user == current_user %>
-          <li id="edit_multiple"><%= link_to ts("Edit Works"), show_multiple_user_works_path(@user) %></li>
+          <li id="edit_multiple"><%= link_to t(".navigation.user_edit_works"), show_multiple_user_works_path(@user) %></li>
         <% end %>
-        <li><%= span_if_current ts("Works in Collections"), collected_user_works_path(@user) %></li>
-        <li><%= span_if_current ts("Works"), user_works_path(@user) %></li>
+        <li><%= span_if_current t(".navigation.user_collection_works"), collected_user_works_path(@user) %></li>
+        <li><%= span_if_current t(".navigation.user_works"), user_works_path(@user) %></li>
       <% end %>
       <% if @tag && !@collection %>
-        <li><%= span_if_current ts("Works"), tag_works_path(@tag) %></li>
-        <li><%= span_if_current ts("Bookmarks"), tag_bookmarks_path(@tag) %></li>
+        <li><%= span_if_current t(".navigation.tag_works"), tag_works_path(@tag) %></li>
+        <li><%= span_if_current t(".navigation.tag_bookmarks"), tag_bookmarks_path(@tag) %></li>
+        <li><%= span_if_current t(".navigation.tag_collections"), tag_collections_path(@tag) %></li>
       <% end %>
       <% if @facets.present? %>
         <%# Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>

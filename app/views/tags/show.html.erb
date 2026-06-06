@@ -6,13 +6,14 @@
     <% if @tag.canonical || @tag.merger || can_wrangle? %>
       <ul class="navigation actions" role="navigation">
         <% if @tag.canonical || @tag.merger %>
-          <li><%= link_to ts("Works"), tag_works_path(@tag) %></li>
-          <li><%= link_to ts("Bookmarks"), tag_bookmarks_path(@tag) %></li>
+          <li><%= link_to t(".navigation.works"), tag_works_path(@tag) %></li>
+          <li><%= link_to t(".navigation.bookmarks"), tag_bookmarks_path(@tag) %></li>
+          <li><%= link_to t(".navigation.collections"), tag_collections_path(@tag) %></li>
         <% end %>
     	<% if can_wrangle? %>
-          <li><%= link_to ts("Edit"), edit_tag_path(@tag) %> </li>
+          <li><%= link_to t(".navigation.edit"), edit_tag_path(@tag) %> </li>
           <li><%= tag_comment_link(@tag) %></li>
-          <li class="reindex"><%= link_to ts("Troubleshoot"), tag_troubleshooting_path(@tag) %> </li>
+          <li class="reindex"><%= link_to t(".navigation.troubleshoot"), tag_troubleshooting_path(@tag) %> </li>
         <% end %>
       </ul>
     <% end %>
@@ -27,7 +28,8 @@
     <%= t(".canonical_html",
           canonical_tag_link: link_to(t(".canonical_tag"), archive_faq_path("glossary", anchor: "canonicaldef")),
           filter_works_link: link_to(t(".filter_works"), tag_works_path(@tag)),
-          filter_bookmarks_link: link_to(t(".filter_bookmarks"), tag_bookmarks_path(@tag))) %>
+          filter_bookmarks_link: link_to(t(".filter_bookmarks"), tag_bookmarks_path(@tag)),
+          filter_collections_link: link_to(t(".filter_collections"), tag_collections_path(@tag))) %>
     <% if @tag.is_a?(Fandom) %>
       <%= t(".list_fandom_tags_html", fandom_relationship_tags_link: link_to(t(".fandom_relationship_tags"), fandom_path(@tag))) %>
     <% end %>

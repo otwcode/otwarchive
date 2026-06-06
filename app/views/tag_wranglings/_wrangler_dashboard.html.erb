@@ -30,6 +30,11 @@
               <%= span_if_current t(".use_type_and_count", use_type: t(".use_type.external_works"), count: @counts[key]),
                     { controller: :bookmarks, action: :index, tag_id: @tag } %>
             </li>
+            <% elsif key == "Collections" %>
+              <li>
+              <%= span_if_current t(".use_type_and_count", use_type: t(".use_type.collections"), count: @counts[key]),
+                    { controller: :collections, action: :index, tag_id: @tag } %>
+            </li>
             <% else %>
               <li>
               <span>

@@ -1,49 +1,56 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <% if @user %>
-    <%= t(".page_heading.users_collections", user: @user.login) %>
+  <% if @user || @tag || @work %>
+    <%= search_header(@collections, @query, t(".page_heading.collection"), @owner) %>
   <% elsif @collection %>
-    <%= t(".page_heading.challenges_subcollections_in", collection: @collection.title) %>
-  <% elsif @work %>
-    <%= t(".page_heading.collections_including", work: @work.title) %>
+    <%= search_header(@collections, @query, t(".page_heading.subcollection"), @owner) %>
   <% else %>
-    <%= t(".page_heading.collections_in_the", archive: ArchiveConfig.APP_NAME) %>
+    <%= t(".page_heading.collections_in_the", collections: search_header(@collections, @query, t(".page_heading.collection"), @owner), archive: ArchiveConfig.APP_NAME) %>
   <% end %>
 </h2>
 
-<h3 class="heading">
-  <% if @collections.empty? %>
-    <%= ts("Sorry, there were no collections found.") %>
-  <% else %>
-    <%= search_header @collections, @query, ts("Collection") %>
-  <% end %>
-</h3>
+<%# TODO: Do we still need this now that there's a 0 in the search header? %>
+<% if @collections.empty? %>
+  <h3 class="heading">
+    <%= t(".page_heading.sorry") %>
+  </h3>
+<% end %>
+
 <!--/descriptions-->
 
 <!--Subnavigation, sorting and actions-->
-<h3 class="landmark heading"><%= ts("Navigation") %></h3>
+<h3 class="landmark heading"><%= t(".landmark.navigation") %></h3>
 <ul class="navigation actions" role="navigation">
+  <% if @tag && !@collection %>
+    <li><%= span_if_current t(".navigation.works"), tag_works_path(@tag) %></li>
+    <li><%= span_if_current t(".navigation.bookmarks"), tag_bookmarks_path(@tag) %></li>
+    <li><%= span_if_current t(".navigation.collections"), tag_collections_path(@tag) %></li>
+  <% end %>
+  <% if @facets.present? %>
+    <%# Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+    <li class="narrow-shown hidden"><a href="#work-filters" id="go_to_filters"><%= t(".navigation.filters") %></a></li>
+  <% end %>
   <% # Collections and Open Challenges links unless a logged in user viewing own collections page %>
-  <% unless logged_in? && @user && @user == current_user %>
-    <li><%= span_if_current ts("Collections"), collections_path %></li>
-    <li><%= link_to ts("Open Challenges"), list_challenges_collections_path %></li>
+  <% unless @tag || (logged_in? && @user && @user == current_user) %>
+    <li><%= span_if_current t(".navigation.all_collections"), collections_path %></li>
+    <li><%= link_to t(".navigation.open_challenges"), list_challenges_collections_path %></li>
   <% end %>
   <% if logged_in? %>
     <% # Logged in user on own collections index gets links for user Collections and Manage Collection Items %>
     <% if @user && @user == current_user %>
-      <li><%= span_if_current ts("Collections"), user_collections_path(@user) %></li>
-      <li><%= link_to ts("Manage Collection Items"), user_collection_items_path(@user) %></li>
+      <li><%= span_if_current t(".navigation.user_collections"), user_collections_path(@user) %></li>
+      <li><%= link_to t(".navigation.manage_collection"), user_collection_items_path(@user) %></li>
     <% end %>
     <% # Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
     <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
-      <li><%= link_to ts("New Subcollection"), new_collection_collection_path(@collection) %></li>
-    <% else %>
-      <li><%= link_to ts("New Collection"), new_collection_path %></li>
+      <li><%= link_to t(".navigation.new_subcollection"), new_collection_collection_path(@collection) %></li>
+    <% elsif !@tag %>
+      <li><%= link_to t(".navigation.new_collection"), new_collection_path %></li>
     <% end %>
   <% end %>
   <% if @sort_and_filter %>
     <% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
-    <li class="narrow-shown hidden"><a href="#collection-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
+    <li class="narrow-shown hidden"><a href="#collection-filters" id="go_to_filters"><%= t(".navigation.filters") %></a></li>
   <% end %>
 </ul>
 
@@ -52,7 +59,7 @@
   <%= will_paginate @collections %>
 
   <!--main content-->
-  <h3 class="landmark heading"><%= ts("List of Collections") %></h3>
+  <h3 class="landmark heading"><%= t(".landmark.list_collections") %></h3>
   <ul class="collection picture index group">
     <% @collections.each do |collection| %>
       <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>
