@@ -19,9 +19,9 @@ describe AdminPostHelper do
 
     context "when the news is posted" do
       it "does not include draft translations" do
-        _german_post = create(:admin_post, :draft, language: german, translated_post: english_post)
+        create(:admin_post, :draft, language: german, translated_post: english_post)
         finnish_post = create(:admin_post, language: finnish, translated_post: english_post)
-        _indonesian_post = create(:admin_post, :draft, language: indonesian, translated_post: english_post)
+        create(:admin_post, :draft, language: indonesian, translated_post: english_post)
 
         expect(sorted_translations(english_post.reload)).to eq([finnish_post])
       end
