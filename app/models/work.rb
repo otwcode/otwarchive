@@ -775,8 +775,13 @@ class Work < ApplicationRecord
   # Issue 1316: total number needs to reflect the actual number of chapters posted
   # rather than the total number of chapters indicated by user
   def number_of_posted_chapters
-    Rails.cache.fetch(key_for_chapter_posted_counting(self), expires_in: 1.hour) do
-      self.chapters.posted.count
+    Rails.cache.fetch(
+      key_for_chapter_posted_counting(self),
+      expires_in: ArchiveConfig.SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE.seconds,
+      race_condition_ttl: 10.seconds
+    ) do
+      count = chapters.posted.count
+      count.zero? && posted? ? 1 : count
     end
   end
 

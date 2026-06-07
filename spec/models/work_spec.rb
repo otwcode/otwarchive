@@ -600,15 +600,23 @@ describe Work do
   end
 
   describe "#number_of_posted_chapters" do
-    it "uses a cache expiry so stale replica data does not persist indefinitely" do
+    it "does not cache 0 posted chapters for a posted work when replica is stale" do
+      draft = create(:draft)
+      draft.update!(posted: true)
+
+      stale_relation = double(count: 0)
+      allow(draft).to receive(:chapters).and_return(double(posted: stale_relation))
+
+      expect(draft.number_of_posted_chapters).to eq(1)
+    end
+
+    it "caches the correct count when replica returns a non-zero value" do
       work = create(:work)
-      key = work.send(:key_for_chapter_posted_counting, work)
 
-      Rails.cache.write(key, 0)
-      expect(work.number_of_posted_chapters).to eq(0)
+      stale_relation = double(count: 3)
+      allow(work).to receive(:chapters).and_return(double(posted: stale_relation))
 
-      Rails.cache.delete(key)
-      expect(work.number_of_posted_chapters).to eq(1)
+      expect(work.number_of_posted_chapters).to eq(3)
     end
   end
 end
