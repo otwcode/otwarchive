@@ -725,11 +725,14 @@ class Work < ApplicationRecord
     chapter_one = self.first_chapter
 
     return unless self.saved_change_to_posted? && self.posted
-    return if chapter_one&.posted
 
-    chapter_one.published_at = Date.current unless self.backdate
-    chapter_one.posted = true
-    chapter_one.save
+    unless chapter_one&.posted
+      chapter_one.published_at = Date.current unless self.backdate
+      chapter_one.posted = true
+      chapter_one.save
+    end
+
+    Rails.cache.write(key_for_chapter_posted_counting(self), 1)
   end
 
   # Virtual attribute for first chapter

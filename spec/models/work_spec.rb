@@ -598,4 +598,24 @@ describe Work do
       end
     end
   end
+
+  describe "#post_first_chapter" do
+    it "posts the first chapter and caches the count when a draft is posted" do
+      draft = create(:draft)
+      draft.posted = true
+      draft.save!
+
+      expect(draft.first_chapter.posted).to eq(true)
+      key = draft.send(:key_for_chapter_posted_counting, draft)
+      expect(Rails.cache.read(key)).to eq(1)
+    end
+
+    it "caches the posted chapter count when a work is created as posted" do
+      work = create(:work)
+
+      expect(work.first_chapter.posted).to eq(true)
+      key = work.send(:key_for_chapter_posted_counting, work)
+      expect(Rails.cache.read(key)).to eq(1)
+    end
+  end
 end
