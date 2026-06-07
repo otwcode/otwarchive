@@ -309,7 +309,8 @@ module MailerHelper
       t(".content.tag.text",
         pseud: commenter_pseud_or_name_text(comment),
         tag: comment.ultimate_parent.commentable_name,
-        tag_url: tag_url(comment.ultimate_parent))
+        tag_url: tag_url(comment.ultimate_parent),
+        category: t("comment_mailer.tag_category.#{comment.ultimate_parent.model_name.i18n_key}"))
     elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
       if comment.parent.title.blank?
         t(".content.chapter.untitled_text",
@@ -337,7 +338,8 @@ module MailerHelper
     if comment.ultimate_parent.is_a?(Tag)
       t(".content.tag.html",
         pseud_link: commenter_pseud_or_name_link(comment),
-        tag_link: style_link(comment.ultimate_parent.commentable_name, tag_url(comment.ultimate_parent)))
+        tag_link: style_link(comment.ultimate_parent.commentable_name, tag_url(comment.ultimate_parent)),
+        category: t("comment_mailer.tag_category.#{comment.ultimate_parent.model_name.i18n_key}"))
     elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
       t(".content.chapter.html",
         pseud_link: commenter_pseud_or_name_link(comment),
