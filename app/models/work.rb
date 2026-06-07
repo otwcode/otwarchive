@@ -725,14 +725,11 @@ class Work < ApplicationRecord
     chapter_one = self.first_chapter
 
     return unless self.saved_change_to_posted? && self.posted
+    return if chapter_one&.posted
 
-    unless chapter_one&.posted
-      chapter_one.published_at = Date.current unless self.backdate
-      chapter_one.posted = true
-      chapter_one.save
-    end
-
-    Rails.cache.write(key_for_chapter_posted_counting(self), 1)
+    chapter_one.published_at = Date.current unless self.backdate
+    chapter_one.posted = true
+    chapter_one.save
   end
 
   # Virtual attribute for first chapter
@@ -778,7 +775,7 @@ class Work < ApplicationRecord
   # Issue 1316: total number needs to reflect the actual number of chapters posted
   # rather than the total number of chapters indicated by user
   def number_of_posted_chapters
-    Rails.cache.fetch(key_for_chapter_posted_counting(self)) do
+    Rails.cache.fetch(key_for_chapter_posted_counting(self), expires_in: 1.hour) do
       self.chapters.posted.count
     end
   end
