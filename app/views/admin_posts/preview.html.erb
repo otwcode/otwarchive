@@ -5,7 +5,7 @@
   </div>
   <div class="clear"><!-- presentational --></div>
 
-  <%= form_for(@admin_post) do |f| %>
+  <%= form_with model: @admin_post do |f| %>
     <%= f.hidden_field :title, value: @admin_post.title.to_s %>
     <%= f.hidden_field :content, value: @admin_post.content.to_s %>
     <% unless @admin_post.translated_post %>
