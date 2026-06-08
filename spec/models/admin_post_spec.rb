@@ -47,6 +47,18 @@ describe AdminPost do
     end
   end
 
+  describe "#translated_post_must_be_posted_first" do
+    let(:admin_post) { create(:admin_post, :draft) }
+    let(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:language).id) }
+
+    it "returns error when posting a translation first" do
+      translation.posted = true
+
+      expect(translation.valid?).to be_falsey
+      expect(translation.errors).to be_added(:translated_post_id, :must_be_posted_first)
+    end
+  end
+
   describe "#set_published_at" do
     before { freeze_time }
 
@@ -70,6 +82,7 @@ describe AdminPost do
     it "posts draft translations" do
       admin_post.reload.update!(posted: true)
       expect(translation.reload.posted?).to be_truthy
+      expect(translation.published_at).to eq(admin_post.published_at)
     end
   end
 end
