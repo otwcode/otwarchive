@@ -162,10 +162,6 @@ class AdminPost < ApplicationRecord
   def post_translations
     return if translations.blank? || !self.posted
 
-    transaction do
-      translations.find_each do |post|
-        post.update(posted: true, published_at: self.published_at)
-      end
-    end
+    translations.update_all(posted: true, published_at: self.published_at)
   end
 end
