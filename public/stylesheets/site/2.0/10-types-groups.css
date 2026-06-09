@@ -105,7 +105,11 @@ https://otwcode.github.io/docs/classes-taxonomy.html#grouping-and-spacing
   width: 100%;
 }
 
-#outer.wrapper, #inner.wrapper {
+#work-skin.wrapper {
+  overflow-y: hidden;
+}
+
+#outer.wrapper, #inner.wrapper, #work-skin.wrapper {
     box-shadow: none;
 }
 
