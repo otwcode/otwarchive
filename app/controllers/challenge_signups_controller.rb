@@ -85,6 +85,7 @@ class ChallengeSignupsController < ApplicationController
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
         @challenge_signups = @user.challenge_signups.order_by_date
+        @page_subtitle = t(".page_title", username: @user.login)
         render action: :index and return
       else
         flash[:error] = ts("You aren't allowed to see that user's sign-ups.")

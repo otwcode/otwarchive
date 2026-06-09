@@ -410,6 +410,12 @@ describe ChallengeAssignmentsController do
         expect(assigns[:challenge_assignments]).not_to include(defaulted_assignment)
         expect(response).to render_template(:index)
       end
+
+      it "shows the username in the page title" do
+        get :index, params: { user_id: user.login }
+        expect(response).to have_http_status(:success)
+        expect(assigns[:page_subtitle]).to eq("#{user.login} - Challenge Assignments")
+      end
     end
 
     context "when logged in as the owner of a defaulted assignment" do

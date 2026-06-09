@@ -1,5 +1,6 @@
 class HelpController < ApplicationController
   HELP_ACTIONS = %i[
+    collectibles_add_to_collection
     first_login
     html
     preferences_collection
@@ -17,6 +18,8 @@ class HelpController < ApplicationController
     tags_fandoms
     tags_ratings
     tags_warnings
+    works_assignment
+    works_backdating
     works_languages
     works_parents
     works_recipients

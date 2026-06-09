@@ -106,21 +106,17 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v6
 
-      - name: Install redis
-        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05
-        with:
-          packages: redis-server
-          version: "1.0"
+      - name: Run apt-get update
+        run: sudo apt-get update
 
-      - name: Start up redis servers
-        run: ./script/gh-actions/multiple_redis.sh
+      - name: Install and start up redis servers
+        run: |
+          sudo apt-get install -y redis-server
+          ./script/gh-actions/multiple_redis.sh
 
       - name: Install ebook converters
         if: ${{ matrix.tests.ebook }}
-        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05
-        with:
-          packages: calibre zip
-          version: "1.0"
+        run: sudo apt-get install -y calibre zip
 
       - name: Cache VCR cassettes
         if: ${{ matrix.tests.vcr }}
@@ -144,10 +140,7 @@ jobs:
 
       - name: Install libvips for image processing
         if: ${{ matrix.tests.libvips }}
-        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05
-        with:
-          packages: libvips-dev
-          version: "1.0"
+        run: sudo apt-get install -y libvips-dev
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1

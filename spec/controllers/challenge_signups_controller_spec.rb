@@ -81,6 +81,14 @@ describe ChallengeSignupsController do
       it_redirects_to_with_error(closed_collection,
                                  "You aren't allowed to see the CSV summary.")
     end
+
+    context "when user visits their own sign-ups" do
+      it "sets the page subtitle correctly" do
+        fake_login_known_user(user)
+        get :index, params: { user_id: user.login }
+        expect(assigns(:page_subtitle)).to eq("#{user.login} - Challenge Sign-ups")
+      end
+    end
   end
 
   describe "destroy" do

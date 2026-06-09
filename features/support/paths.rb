@@ -184,6 +184,8 @@ module NavigationHelpers
       collection_participants_path(Collection.find_by(title: $1))
     when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by(title: $1))
+    when /^the "(.*)" claims page for the current user$/       # e.g. when I go to the "Collection name" claims page for the current user
+      collection_claims_path(Collection.find_by(title: Regexp.last_match(1)), for_user: true)
     when /^"(.*)" gift exchange edit page$/i
       edit_collection_gift_exchange_path(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange matching page$/i
