@@ -1602,6 +1602,42 @@ en:
           non_con:
             acronym: non-con
             title: non-consensual sex
+    tags_additional:
+      description: Any other tags you want to give your work (for example, "Angst", "Crossover", or "Tentacles"). You may also use this field to warn for things not covered by the Archive Warnings. Please do not enter fandom, relationship, or character names in this field. Multiple tags should be separated by commas.
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags section of the Archive FAQ
+      page_heading: Additional Tags
+    tags_categories:
+      description: 'There are 6 categories of works on the Archive. While here we have given an interpretation of the abbreviations, the exact definitions of these vary from fandom to fandom and fan to fan; use whichever you feel are applicable, or else none:'
+      femslash:
+        abbreviation: F/F
+        description: Female/Female relationships
+      general:
+        abbreviation: Gen
+        description: 'General: no romantic or sexual relationships, or relationships which are not the main focus of the work'
+      het:
+        abbreviation: F/M
+        description: Female/Male relationships
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags section of the Archive FAQ
+      multiple:
+        abbreviation: Multi
+        description: More than one kind of relationship, or a relationship with multiple partners
+      other:
+        abbreviation: Other
+        description: Other relationships
+      page_heading: Category Tags
+      slash:
+        abbreviation: M/M
+        description: Male/Male relationships
+    tags_characters:
+      description: The main character(s) in your work, separated by commas. Full names (personal name and family name) are preferred.
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags section of the Archive FAQ
+      page_heading: Characters Tags
     tags_fandoms:
       description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
       more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
@@ -1627,6 +1663,12 @@ en:
       teen_and_up_audiences:
         description: The content may be inappropriate for audiences under 13.
         header: Teen And Up Audiences
+    tags_relationships:
+      description: The relationships in your work. Full names are preferred (for example, "Mickey Mouse/Minnie Mouse" or "Rodney McKay & John Sheppard") when possible. You may list more than one relationship, separated by commas. Please note that all user-created tags must be 150 characters or less; if your work contains a large poly relationship or multiple characters with long names, you may want to consider shortening these names to just first names or surnames with initials to avoid going over the character limit while keeping the names recognizable.
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags section of the Archive FAQ
+      page_heading: Relationships Tags
     tags_warnings:
       choose_not_to_use:
         description: Use this if you don't want to warn for anything. You may also choose this option if you don't know what you should warn for; if you don't like warning for certain topics or warnings in general; if you want to avoid some spoilers, but not others; etc.
