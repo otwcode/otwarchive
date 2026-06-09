@@ -644,8 +644,11 @@ en:
       save: Save
       saved: Saved
     external_work_fields:
+      categories_help_title: Categories help
+      characters_help_title: Characters help
       fandoms_help_title: Fandom help
       ratings_help_title: Rating help
+      relationships_help_title: Relztionships help
     filters:
       from: From
       to: To
@@ -3404,8 +3407,12 @@ en:
     work_form_associations_language:
       works_languages_help_title: Languages help
     work_form_tags:
+      additional_tags_help_title: Additional tags help
+      categories_help_title: Categories help
+      characters_help_title: Characters help
       fandoms_help_title: Fandom help
       ratings_help_title: Rating help
+      relationships_help_title: Relztionships help
       warnings_help_title: Warning help
     work_header_navigation:
       chapter_index:

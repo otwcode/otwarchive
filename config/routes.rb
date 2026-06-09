@@ -678,6 +678,10 @@ Rails.application.routes.draw do
   get "/help/recipients.html", to: redirect("/help/works_recipients")
   get "/help/choosing-series.html", to: redirect("/help/works_series")
   get "/help/translation-link.html", to: redirect("/help/works_translation_link")
+  get "/help/categories-help.html", to: redirect("/help/tags_categories")
+  get "/help/relationships-help.html", to: redirect("/help/tags_relationships")
+  get "/help/characters-help.html", to: redirect("/help/tags_characters")
+  get "/help/additional-tags-help.html", to: redirect("/help/tags_additional")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
