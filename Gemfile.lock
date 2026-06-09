@@ -405,7 +405,7 @@ GEM
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.2)
       connection_pool (~> 2.2)
-    net-imap (0.5.14)
+    net-imap (0.5.15)
       date
       net-protocol
     net-pop (0.1.2)
