@@ -810,3 +810,9 @@ WORKS_SHARDS: 5
 ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: bEZjYLY9tCYGh6WlcMtEJpIi7GO2plZC
 ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: PpLWizzsQHIWnIihtECw8nDHZQd0amzf
 ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: 3S99KdpdEWLnCYudBgUfdCFDBWePWCud
+
+# The relative URL to redirect to when previewing a skin
+# e.g. /users/OTW_Translation/works ->
+# http://test.archiveofourown.org/users/OTW_Translation/works?site_skin=[skin_id]
+# This will not work in dev unless you manually create the OTW_Translation user
+SKIN_PREVIEW_URL: '/users/OTW_Translation/works'
