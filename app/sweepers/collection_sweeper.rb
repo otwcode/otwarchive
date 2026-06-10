@@ -44,18 +44,7 @@ class CollectionSweeper < ActionController::Caching::Sweeper
   def expire_collection_cache_for(record)
     collections = get_collections_from_record(record)
     collections.each do |collection|
-      CollectionSweeper.expire_collection_blurb_and_profile(collection)
+      Collection.expire_caches(collection.id)
     end
-  end
-
-  # Expire the collection blurb and profile
-  def self.expire_collection_blurb_and_profile(collection)
-    # Expire both versions of the blurb, whether the user is logged in or not.
-    %w[logged-in logged-out].each do |logged_in|
-      cache_key = "collection-blurb-#{logged_in}-#{collection.id}-v4"
-      ActionController::Base.new.expire_fragment(cache_key)
-    end
-
-    ActionController::Base.new.expire_fragment("collection-profile-#{collection.id}")
   end
 end

@@ -11,7 +11,7 @@
 <% end %>
 <% if work.series.exists? %>
 <%= ts("Series: ") %>
-<%= series_list_for_feeds(work).html_safe %><br />
+<%= series_list_with_work_position(work) %><br />
 <% end %>
 <% if work.summary.present? %>
 <%= ts("Summary: ") %>

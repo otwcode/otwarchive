@@ -8,7 +8,7 @@ include Rails.application.routes.url_helpers
 # Base URL
 default_url_options[:host] = ArchiveConfig.APP_URL
 
-def multi_gets(all_text = "")
+def multi_gets(all_text = +"")
   until (text = gets) == "\n"
     all_text << text
   end

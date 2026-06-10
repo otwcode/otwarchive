@@ -11,9 +11,13 @@ FactoryBot.define do
       name { Faker::Name.first_name }
       email { Faker::Internet.email }
     end
+    
+    trait :for_mailer_preview do
+      pseud { create(:user, :for_mailer_preview).default_pseud }
+    end
 
     trait :on_admin_post do
-      commentable { create(:admin_post) }
+      commentable { create(:admin_post, comment_permissions: :enable_all) }
     end
 
     trait :on_tag do

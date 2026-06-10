@@ -4,30 +4,31 @@ Feature: Search works by stats
   I want to search works by hits, kudos, comments, and bookmarks
 
   Scenario: Search by range of hits
-    Given I have the Battle set loaded
+    Given a set of works with stats for searching
     When I am on the search works page
       And I fill in "Hits" with "10000-20000"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: hits: 10000-20000"
       And I should see "1 Found"
       And the 1st result should contain "Hits: 10,000"
+      And I should see "many"
     When I follow "Edit Your Search"
     Then the field labeled "Hits" should contain "10000-20000"
 
   Scenario: Search by > hits
-    Given I have the Battle set loaded
+    Given a set of works with stats for searching
     When I am on the search works page
       And I fill in "Hits" with "> 100"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: hits: > 100"
       And I should see "2 Found"
-      And I should see "First work"
-      And I should see "third work"
+      And I should see "many"
+      And I should see "less"
     When I follow "Edit Your Search"
     Then the field labeled "Hits" should contain "> 100"
 
   Scenario: Search and sort by kudos
-    Given I have the Battle set loaded
+    Given a set of works with stats for searching
     When I am on the search works page
       And I fill in "Kudos" with ">0"
       And I select "Kudos" from "Sort by"
@@ -50,20 +51,18 @@ Feature: Search works by stats
     Then I should see "You searched for: kudos count: 4 sort by: kudos descending"
       And I should see "1 Found"
       And the 1st result should contain "Kudos: 4"
+      And I should see "many"
     When I follow "Edit Your Search"
     Then the field labeled "Kudos" should contain "4"
     When I fill in "Kudos" with "<2"
       And I select "Ascending" from "Sort direction"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: kudos count: <2 sort by: kudos ascending"
-      And I should see "6 Found"
-      And I should see "second work"
-      And I should see "third work"
-      And I should see "fourth"
-      And I should see "fifth"
-      And I should see "I am <strong>er Than Yesterday & Other Lies"
-      And I should see "Fulfilled Story-thing"
-      And the 6th result should contain "Kudos: 1"
+      And I should see "3 Found"
+      And I should see "unfinished"
+      And I should see "none"
+      And I should see "less"
+      And the 3rd result should contain "Kudos: 1"
     When I follow "Edit Your Search"
     Then the field labeled "Kudos" should contain "<2"
       And "Kudos" should be selected within "Sort by"
@@ -71,12 +70,10 @@ Feature: Search works by stats
     When I choose "Complete works only"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Complete kudos count: <2 sort by: kudos ascending"
-      And I should see "4 Found"
-      And I should see "second work"
-      And I should see "third work"
-      And I should see "fourth"
-      And I should see "Fulfilled Story-thing"
-      And the 4th result should contain "Kudos: 1"
+      And I should see "2 Found"
+      And I should see "none"
+      And I should see "less"
+      And the 2nd result should contain "Kudos: 1"
     When I follow "Edit Your Search"
     Then the field labeled "Kudos" should contain "<2"
       And the "Complete works only" checkbox should be checked

@@ -3,7 +3,8 @@ Feature: Muting
     Given the user "pest" exists and is activated
       And I am logged in as "muter"
     When I go to the muted users page for "muter"
-      And I fill in "muted_id" with "pest"
+    Then the page title should include "muter - Muted Users"
+    When I fill in "muted_id" with "pest"
       And I press "Mute"
       And I press "Yes, Mute User"
     Then I should see "You have muted the user pest."
@@ -88,7 +89,8 @@ Feature: Muting
     Given the user "muter" has muted the user "pest"
     When I am logged in as a "<role>" admin
       And I go to the muted users page for "muter"
-    Then I should see "pest"
+    Then the page title should include "muter - Muted Users"
+      And I should see "pest"
       And the blurb should say when "muter" muted "pest"
       And I should see a link "Unmute"
     When I follow "Unmute"
@@ -119,7 +121,7 @@ Feature: Muting
       And I am logged in as "pest"
       And I edit the work "Annoying Work"
       And I add the series "Annoying Series"
-      And I press "Post"
+      And I press "Update"
     When I am logged in as "muter"
       And I go to pest's series page
     Then I should not see "Annoying Series"

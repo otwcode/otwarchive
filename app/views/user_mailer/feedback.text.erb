@@ -21,4 +21,4 @@
 <%= t("mailer.general.signature.support") %>
 <% end %>
 
-<% content_for :sent_at do %><%= l(Time.now) %><% end %>
+<% content_for :sent_at do %><%= l(Time.current) %><% end %>

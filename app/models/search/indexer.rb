@@ -1,12 +1,13 @@
 class Indexer
-  BATCH_SIZE = 1000
   INDEXERS_FOR_CLASS = {
     Work: %w[WorkIndexer WorkCreatorIndexer BookmarkedWorkIndexer],
     Bookmark: %w[BookmarkIndexer],
     Tag: %w[TagIndexer],
     Pseud: %w[PseudIndexer],
     Series: %w[BookmarkedSeriesIndexer],
-    ExternalWork: %w[BookmarkedExternalWorkIndexer]
+    ExternalWork: %w[BookmarkedExternalWorkIndexer],
+    User: %w[UserIndexer],
+    Collection: %w[CollectionIndexer]
   }.freeze
 
   delegate :klass, :klass_with_includes, :index_name, :document_type, to: :class
@@ -29,8 +30,10 @@ class Indexer
       BookmarkedSeriesIndexer,
       BookmarkedWorkIndexer,
       BookmarkIndexer,
+      CollectionIndexer,
       PseudIndexer,
       TagIndexer,
+      UserIndexer,
       WorkIndexer,
       WorkCreatorIndexer
     ]
@@ -120,13 +123,17 @@ class Indexer
   end
 
   def self.index_from_db
-    total = (indexables.count / BATCH_SIZE) + 1
+    total = (indexables.count / batch_size) + 1
     i = 1
-    indexables.find_in_batches(batch_size: BATCH_SIZE) do |group|
+    indexables.find_in_batches(batch_size: batch_size) do |group|
       puts "Queueing #{klass} batch #{i} of #{total}" unless Rails.env.test?
       AsyncIndexer.new(self, :world).enqueue_ids(group.map(&:id))
       i += 1
     end
+  end
+
+  def self.batch_size
+    ArchiveConfig.SEARCH_INDEXER_BATCH_SIZE
   end
 
   # Add conditions here

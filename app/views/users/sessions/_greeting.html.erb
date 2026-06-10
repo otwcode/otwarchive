@@ -27,10 +27,10 @@
             <li><%= link_to t(".nav.history"), user_readings_path(current_user) %></li>
           <% end %>
           <li><%= link_to t(".nav.preferences"), user_preferences_path(current_user) %></li>
-          <% if permit?("opendoors") %>
+          <% if @current_user_opendoors %>
             <li><%= link_to t(".nav.open_doors"), opendoors_tools_path %></li>
           <% end %>
-          <% if current_user.is_tag_wrangler? %>
+          <% if @current_user_tag_wrangler %>
             <li><%= link_to t(".nav.tag_wrangling"), tag_wrangler_path(current_user) %></li>
           <% end %>
         </ul>
@@ -45,7 +45,7 @@
           <% end %>
         </ul>
       </li>
-      <li><%= link_to t(".nav.log_out"), destroy_user_session_path, method: :delete %></li>
+      <li><%= link_to t(".nav.log_out"), destroy_user_session_path(return_to: request.fullpath.start_with?(destroy_user_session_path) ? params[:return_to] : request.fullpath), method: :delete %></li>
     </ul>
 
     <% elsif logged_in_as_admin? %>

@@ -57,13 +57,16 @@ class UserManager
   end
 
   def validate_admin_note
-    return true if admin_note.present? || admin_action.blank?
-
-    if admin_action == "spamban"
+    if admin_action == "spamban" && admin_note.blank?
       @admin_note = "Banned for spam"
-    elsif admin_action.present?
+    elsif admin_action.blank?
+      errors << "You must choose an action to perform."
+      false
+    elsif admin_action.present? && admin_note.blank?
       errors << "You must include notes in order to perform this action."
       false
+    else
+      true
     end
   end
 

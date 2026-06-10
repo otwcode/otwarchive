@@ -1,5 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= t(".page_heading") %></h2>
+<p><%= t(".introductions") %></p>
 <p><%= t(".instructions") %></p>
 <!--/descriptions-->
 
@@ -7,8 +8,8 @@
 <%= form_for resource, url: user_password_path, html: { method: :post, html: "reset password simple post" } do |f| %>
   <%= error_messages_for resource %>
   <p>
-    <%= label_tag :reset_login, t(".email_or_username_html", or: tag.strong(t(".or"))) %>
-    <%= f.text_field :login, id: :reset_login %>
+    <%= label_tag :reset_email, t(".email_html") %>
+    <%= f.text_field :email, id: :reset_email %>
     <%= f.submit t(".reset_password") %>
   </p>
 <% end %>

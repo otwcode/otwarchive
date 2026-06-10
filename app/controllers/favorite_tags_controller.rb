@@ -1,5 +1,4 @@
 class FavoriteTagsController < ApplicationController
-  skip_before_action :store_location, only: [:create, :destroy]
   before_action :users_only
   before_action :load_user
   before_action :check_ownership

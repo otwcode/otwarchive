@@ -257,14 +257,14 @@ When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
   end
 end
 
-When /^I delete the comment$/ do
+When "I delete the comment" do
   step %{I follow "Delete" within ".odd"}
-  step %{I follow "Yes, delete!"}
+  step %{I press "Yes, delete!"}
 end
 
-When /^I delete the reply comment$/ do
+When "I delete the reply comment" do
   step %{I follow "Delete" within ".even"}
-  step %{I follow "Yes, delete!"}
+  step %{I press "Yes, delete!"}
 end
 
 When /^I view the latest comment$/ do
@@ -313,6 +313,12 @@ end
 When /^I visit the thread for the comment on "([^\"]*?)"/ do |work|
   w = Work.find_by(title: work)
   visit comment_path(w.comments.first)
+end
+
+When "I visit the reply page to the comment on {string}" do |work|
+  w = Work.find_by(title: work)
+  comment_id = w.comments.first
+  visit comment_path(comment_id, add_comment_reply_id: comment_id, anchor: "comment_#{comment_id}")
 end
 
 Then /^there should be (\d+) comments on "([^\"]*?)"/ do |num, work|
@@ -377,7 +383,7 @@ When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
     visit work_url(work, show_comments: true)
     break unless page.has_content? "Delete"
     click_link("Delete")
-    click_link("Yes, delete!") # TODO: Fix along with comment deletion.
+    click_button("Yes, delete!")
   end
 end
 

@@ -29,9 +29,9 @@ class Admin::BannersController < Admin::BaseController
     if @admin_banner.save
       if @admin_banner.active?
         AdminBanner.banner_on
-        flash[:notice] = ts('Setting banner back on for all users. This may take some time.')
+        flash[:notice] = t(".banner_on")
       else
-        flash[:notice] = ts('Banner successfully created.')
+        flash[:notice] = t(".success")
       end
       redirect_to @admin_banner
     else
@@ -46,14 +46,14 @@ class Admin::BannersController < Admin::BaseController
     if !@admin_banner.update(admin_banner_params)
       render action: 'edit'
     elsif params[:admin_banner_minor_edit]
-      flash[:notice] = ts('Updating banner for users who have not already dismissed it. This may take some time.')
+      flash[:notice] = t(".minor_edit")
       redirect_to @admin_banner
     else
       if @admin_banner.active?
         AdminBanner.banner_on
-        flash[:notice] = ts('Setting banner back on for all users. This may take some time.')
+        flash[:notice] = t(".banner_on")
       else
-        flash[:notice] = ts('Banner successfully updated.')
+        flash[:notice] = t(".success")
       end
       redirect_to @admin_banner
     end
@@ -62,15 +62,23 @@ class Admin::BannersController < Admin::BaseController
   # GET /admin/banners/1/confirm_delete
   def confirm_delete
     @admin_banner = authorize AdminBanner.find(params[:id])
+    return unless @admin_banner.active?
+    
+    flash[:error] = t("admin.banners.cannot_delete_active")
+    redirect_to @admin_banner
   end
 
   # DELETE /admin/banners/1
   def destroy
     @admin_banner = authorize AdminBanner.find(params[:id])
-    @admin_banner.destroy
-
-    flash[:notice] = ts('Banner successfully deleted.')
-    redirect_to admin_banners_path
+    if @admin_banner.active?
+      flash[:error] = t("admin.banners.cannot_delete_active")
+      redirect_to @admin_banner
+    else
+      @admin_banner.destroy
+      flash[:notice] = t(".success")
+      redirect_to admin_banners_path
+    end
   end
 
   private

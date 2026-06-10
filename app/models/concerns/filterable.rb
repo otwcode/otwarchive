@@ -61,46 +61,33 @@ module Filterable
   # SEARCH
   ################
 
-  # Simple name to make it easier for people to use in full-text search
-  def tag
-    (tags.pluck(:name) + filters.pluck(:name)).uniq
-  end
+  # Restricted tags (which are in the general list but not the public one) only
+  # really apply to series, as works are either fully restricted or fully public.
+  # We define the various visibility-based methods to be the same here, and they are
+  # overridden in the Series class to account for tags on restricted works in the series.
+  %w[general public].each do |visibility|
+    define_method("#{visibility}_tags") do
+      (tags.pluck(:name) + filters.pluck(:name)).uniq
+    end
 
-  # Index all the filters for pulling works
-  def filter_ids
-    (tags.pluck(:id) + filters.pluck(:id)).uniq
-  end
+    # Index all the filters for pulling works
+    define_method("#{visibility}_filter_ids") do
+      (tags.pluck(:id) + filters.pluck(:id)).uniq
+    end
 
-  # Index only direct filters (non meta-tags) for facets
-  def filters_for_facets
-    @filters_for_facets ||= direct_filters.to_a
-  end
+    # Index only direct filters (non meta-tags) for facets
+    define_method("#{visibility}_filters_for_facets") do
+      cache_variable = "@filters_for_facets_#{visibility}"
+      instance_variable_set(cache_variable, direct_filters.to_a) unless instance_variable_defined?(cache_variable)
+      instance_variable_get(cache_variable)
+    end
 
-  def rating_ids
-    filters_for_facets.select { |t| t.type == "Rating" }.map(&:id)
-  end
-
-  def archive_warning_ids
-    filters_for_facets.select { |t| t.type == "ArchiveWarning" }.map(&:id)
-  end
-
-  def category_ids
-    filters_for_facets.select { |t| t.type == "Category" }.map(&:id)
-  end
-
-  def fandom_ids
-    filters_for_facets.select { |t| t.type == "Fandom" }.map(&:id)
-  end
-
-  def character_ids
-    filters_for_facets.select { |t| t.type == "Character" }.map(&:id)
-  end
-
-  def relationship_ids
-    filters_for_facets.select { |t| t.type == "Relationship" }.map(&:id)
-  end
-
-  def freeform_ids
-    filters_for_facets.select { |t| t.type == "Freeform" }.map(&:id)
+    Tag::FILTERS.each do |tag_type|
+      define_method("#{visibility}_#{tag_type.underscore}_ids") do
+        send("#{visibility}_filters_for_facets")
+          .select { |tag| tag.type.to_s == tag_type }
+          .map(&:id)
+      end
+    end
   end
 end

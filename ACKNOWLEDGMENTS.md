@@ -4,7 +4,6 @@ Acknowledgments
 <p><a href="https://www.browserstack.com/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/Browserstack.svg" width="200"/> BrowserStack</a> for our cross-browser testing tool.</p>
 <!--cc0 image https://pixabay.com/en/capybara-mammal-capibara-animal-147184/ -->
 <p><a href="http://teamcapybara.github.io/capybara/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/capabara.png" width="200"/> Capybara</a> for integration testing.</p>
-<p><a href="https://codeship.com/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo_codeship_colour_whitebg.png" width="200"/> Codeship</a> for continuous integration.</p>
 <p><a href="https://cucumber.io/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo-cucumber.png" width="200"/> Cucumber</a> for integration testing.</p>
 <p><a href="https://www.debian.org/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/Debian.png" width="200"/> Debian</a> for our Linux distribution.</p>
 <p><a href="https://www.elastic.co/products/elasticsearch"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/Elasticsearch-Logo-Color-H.png" width="200"/> Elasticsearch</a> for our tag searching.</p>

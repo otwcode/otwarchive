@@ -16,7 +16,8 @@ class DownloadWriter
 
   def generate_html
     renderer = ApplicationController.renderer.new(
-      http_host: ArchiveConfig.APP_HOST
+      http_host: ArchiveConfig.APP_HOST,
+      https: true
     )
     renderer.render(
       template: "downloads/show",

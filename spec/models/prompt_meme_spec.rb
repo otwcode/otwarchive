@@ -1,0 +1,72 @@
+require "spec_helper"
+
+describe PromptMeme do
+  describe "#save" do
+    let(:challenge) { build(:prompt_meme) }
+
+    context "when request restriction doesn't allow any fields" do
+      before do
+        r = challenge.request_restriction
+        r.description_allowed = false
+        TagSet::TAG_TYPES.each { |type| r.send("#{type}_num_allowed=", 0) }
+      end
+
+      it "raises a validation error" do
+        challenge.save
+        expect(challenge.errors[:base]).to include("Request Settings must allow at least one field.")
+      end
+    end
+  end
+
+  describe "#destroy" do
+    let!(:challenge) { create(:prompt_meme) }
+    let!(:collection) { create(:collection, challenge: challenge) }
+
+    it "nullifies the collection's challenge references" do
+      challenge.destroy!
+      collection.reload
+      expect(collection.challenge_id).to be_nil
+      expect(collection.challenge_type).to be_nil
+    end
+  end
+
+  describe "reindexing" do
+    let!(:collection) { create(:collection) }
+
+    context "when prompt meme is created" do
+      it "enqueues the collection for reindex" do
+        expect do
+          create(:prompt_meme, collection: collection)
+        end.to add_to_reindex_queue(collection, :main)
+      end
+    end
+
+    context "when prompt meme already exists" do
+      let!(:exchange) { create(:prompt_meme, collection: collection, signup_open: false) }
+
+      context "when prompt meme signups are opened" do
+        it "enqueues the collection for reindex" do
+          expect do
+            exchange.update!(signup_open: true)
+          end.to add_to_reindex_queue(collection, :main)
+        end
+      end
+
+      context "when prompt meme is not significantly changed" do
+        it "doesn't enqueue the collection for reindex" do
+          expect do
+            exchange.update!(signup_instructions_general: "Changed text")
+          end.to not_add_to_reindex_queue(collection, :main)
+        end
+      end
+
+      context "when prompt meme is destroyed" do
+        it "enqueues the collection for reindex" do
+          expect do
+            exchange.destroy!
+          end.to add_to_reindex_queue(collection, :main)
+        end
+      end
+    end
+  end
+end

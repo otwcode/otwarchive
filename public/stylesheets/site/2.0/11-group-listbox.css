@@ -1,5 +1,5 @@
-/*==GROUP: LISTBOX 
-http://otwcode.github.com/docs/front_end_coding/patterns/listbox
+/* == GROUP: LISTBOX
+https://otwcode.github.io/docs/patterns/listbox.html
 */
 
 .listbox, fieldset fieldset.listbox {
@@ -66,7 +66,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
   margin-right: 1.5em;
 }
 
-/*Contexts */
+/* Contexts */
 
 .review .listbox {
   overflow: visible;
@@ -78,7 +78,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
   line-height: 1.5645;
 }
 
-/*INTERACTION context (show many/more/lots)*/
+/* INTERACTION context (show many/more/lots) */
 
 .listbox .options {
   overflow: auto;

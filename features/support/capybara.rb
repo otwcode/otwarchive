@@ -30,6 +30,10 @@ Capybara.configure do |config|
   config.server_port = CAPYBARA_PORT
 end
 
+Capybara.register_driver :rack_test_no_data_method do |app|
+  Capybara::RackTest::Driver.new(app, respect_data_method: false)
+end
+
 # Modified from https://github.com/teamcapybara/capybara/blob/49cf69c40f4b25931aecab162fb3285d8fe5bff7/lib/capybara/registrations/drivers.rb#L31-L42
 Capybara.register_driver :selenium_chrome_headless do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new.tap do |opts|

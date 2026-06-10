@@ -46,6 +46,12 @@ module UsersHelper
     user.coauthors.collect(&:name).join(', ')
   end
 
+  # Prints link to collections page with user-appropriate number of collections
+  def collections_link(user)
+    total = SearchCounts.collection_count_for_user(user)
+    span_if_current t("users_helper.collections_link", coll_number: total.to_s), user_collections_path(user)
+  end
+
   # Prints link to bookmarks page with user-appropriate number of bookmarks
   # (The total should reflect the number of bookmarks the user can actually see.)
   def bookmarks_link(user, pseud = nil)
@@ -78,7 +84,7 @@ module UsersHelper
   def series_link(user, pseud = nil)
     return pseud_series_link(pseud) if pseud.present? && !pseud.new_record?
 
-    total = if current_user.nil?
+    total = if User.current_user.nil?
               Series.visible_to_all.exclude_anonymous.for_user(user).count.size
             else
               Series.visible_to_registered_user.exclude_anonymous.for_user(user).count.size
@@ -87,7 +93,7 @@ module UsersHelper
   end
 
   def pseud_series_link(pseud)
-    total = if current_user.nil?
+    total = if User.current_user.nil?
               Series.visible_to_all.exclude_anonymous.for_pseud(pseud).count.size
             else
               Series.visible_to_registered_user.exclude_anonymous.for_pseud(pseud).count.size
@@ -96,12 +102,13 @@ module UsersHelper
   end
 
   def gifts_link(user)
-    if current_user.nil?
-      gift_number = user.gift_works.visible_to_all.distinct.count
-    else
-      gift_number = user.gift_works.visible_to_registered_user.distinct.count
-    end
-    span_if_current ts('Gifts (%{gift_number})', gift_number: gift_number.to_s), user_gifts_path(user)
+    works = if User.current_user.nil?
+              user.gift_works.visible_to_all
+            else
+              user.gift_works.visible_to_registered_user
+            end
+    gift_number = works.distinct.count
+    span_if_current t("users_helper.gifts_link", gift_number: gift_number), user_gifts_path(user)
   end
 
   def authored_items(pseud, work_counts = {}, rec_counts = {})

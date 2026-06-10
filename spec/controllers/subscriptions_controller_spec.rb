@@ -16,8 +16,7 @@ describe SubscriptionsController do
 
     it "redirects to login when not logged in" do
       get :index, params: { user_id: user.login }
-      it_redirects_to_with_error(new_user_session_path,
-                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      it_redirects_to_user_login_with_error
     end
 
     context "when logged in" do
@@ -53,6 +52,11 @@ describe SubscriptionsController do
         end
       end
 
+      it "sets no subscription type in page subtitle without type" do
+        get :index, params: { user_id: user.login }
+        expect(assigns[:page_subtitle]).to eq("#{user.login} - Subscriptions")
+      end
+
       context "with valid subscription types in params" do
         %w[series works users].each do |sub_type|
           it "renders #{sub_type} subscriptions only" do
@@ -61,6 +65,11 @@ describe SubscriptionsController do
             expect(response).to render_template("index")
             expect(assigns(:subscribable_type)).to eq(sub_type)
             expect(assigns(:subscriptions).count).to eq(1)
+          end
+
+          it "sets #{sub_type} type in page subtitle" do
+            get :index, params: { user_id: user.login, type: sub_type }
+            expect(assigns[:page_subtitle]).to eq("#{user.login} - #{sub_type.classify} Subscriptions")
           end
         end
       end
@@ -73,6 +82,32 @@ describe SubscriptionsController do
           expect(assigns(:subscribable_type)).to be_nil
           expect(assigns(:subscriptions)).to contain_exactly(sub_series, sub_work, sub_user)
         end
+
+        it "sets no type in page subtitle" do
+          get :index, params: { user_id: user.login, type: "Invalid" }  
+          expect(assigns[:page_subtitle]).to eq("#{user.login} - Subscriptions")
+        end
+      end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    let(:work) { create(:work) }
+    let!(:subscription) { create(:subscription, user: user, subscribable: work) }
+
+    before { fake_login_known_user(user) }
+
+    it "redirects with the work title in the success notice" do
+      delete :destroy, params: { user_id: user.login, id: subscription.id }
+      it_redirects_to_with_notice(user_subscriptions_path(user), "You have successfully unsubscribed from #{work.title}.")
+    end
+
+    context "when the work is in an unrevealed collection" do
+      before { work.update!(collection_names: create(:unrevealed_collection).name) }
+
+      it "redirects with 'Mystery Work' in the success notice" do
+        delete :destroy, params: { user_id: user.login, id: subscription.id }
+        it_redirects_to_with_notice(user_subscriptions_path(user), "You have successfully unsubscribed from Mystery Work.")
       end
     end
   end

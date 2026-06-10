@@ -1,38 +1,40 @@
-<!-- this partial requires collection; @challenges_count, @works_count, @bookmarks_count must be set -->
 <li class="<% if collection.user_is_owner?(current_user) %>own <% end %>collection picture blurb group" role="article">
   <% logged_in = (logged_in_as_admin? || logged_in?) ? "logged-in" : "logged-out" %>
-  <% # remember to update collection_sweeper if you change this key %>
-  <% cache("collection-blurb-#{logged_in}-#{collection.id}-v4", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
+  <%# remember to update Collection.expire_blurb_cache if you change this key (or the similar summary and body keys below) %>
+  <% cache("collection-blurb-#{logged_in}-#{collection.id}-v5-header", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
     <div class="header module group">
       <h4 class="heading">
         <%= link_to collection.title, collection_path(collection) %>
         <span class="name">(<%= collection.name %>)</span>
         <%= ts('by') %>
-        <%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ").html_safe %>
+        <%= safe_join(collection.maintainers.uniq.map { |maintainer| link_to(maintainer.byline, maintainer.user, class: collection.user_is_owner?(maintainer.user) ? "owner" : "mod") }, t("support.array.words_connector")) %>
       </h4>
       <!--collections header iconised header image-->
       <div class="icon">
         <%= collection_icon_display(collection) %>
       </div>
       <p class="datetime"><%= set_format_for_date(collection.updated_at) %></p>
-      <% if collection.all_moderators.length > 0%>
-        <h6 class="landmark heading"><%= ts("Mods") %></h6>
-        <ul class="mods commas">
-          <%= collection.all_moderators.map {|mod| content_tag(:li, link_to(mod.byline, mod.user))}.join("\n").html_safe %>
-        </ul>
+      <% unless collection.tag_string.blank? %>
+        <h5 class="tags heading">
+          <span class="landmark"><%= t(".collection_tags") %></span>
+          <%= safe_join(collection.tags.collect{ |tag| link_to_tag_works(tag) }, t("support.array.words_connector")) %>
+        </h5>
       <% end %>
     </div>
+  <% end %> <!-- end blurb header cache -->
 
-    <!--summary/descriptions-->
-    <h6 class="landmark heading"><%= ts("Summary") %></h6>
-    <blockquote class="userstuff summary">
+  <!--summary/descriptions-->
+  <h6 class="landmark heading"><%= t(".summary") %></h6>
+  <blockquote class="userstuff summary">
+    <% cache("collection-blurb-#{logged_in}-#{collection.id}-v5-summary", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
       <%=raw strip_images(sanitize_field(collection, :description)) || "&nbsp;".html_safe %>
+    <% end %><!-- end blurb summary cache -->
+    <% if collection.challenge && collection.challenge.signup_open %>
+      <p><%= t(".signups_close_at") %> <%= time_in_zone(collection.challenge.signups_close_at, (collection.challenge.time_zone || Time.zone.name)) %></p>
+    <% end %>
+  </blockquote>
 
-      <% if collection.challenge && collection.challenge.signup_open %>
-        <p><%= ts("Sign-ups close at:") %> <%= time_in_zone(collection.challenge.signups_close_at, (collection.challenge.time_zone || Time.zone.name)) %></p>
-      <% end %>
-    </blockquote>
-
+  <% cache("collection-blurb-#{logged_in}-#{collection.id}-v5-body", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
     <p class="type">
       (<%= collection.closed? ? ts("Closed") : ts("Open") %>, <%= collection.moderated? ? ts("Moderated") : ts("Unmoderated") %><%= collection.unrevealed? ? ts(", Unrevealed") : "" %><%= collection.anonymous? ? ts(", Anonymous") : "" %><%= collection.gift_exchange? ? ts(", Gift Exchange Challenge") : "" %><%= collection.prompt_meme? ? ts(", Prompt Meme Challenge") : "" %>)
     </p>
@@ -40,35 +42,31 @@
     <!--stats-->
     <dl class="stats">
       <% if (@challenges_count = collection.children.count) > 0 %>
-        <dt><%= ts("Challenges/Subcollections:") %></dt>
-        <dd><%= link_to(@challenges_count, collection_collections_path(collection)) %></dd>
-      <% end %>
-      <% if (@works_count = SearchCounts.work_count_for_collection(collection)) > 0 %>
-        <dt><%= ts("Fandoms:") %></dt>
-        <dd><%= link_to(SearchCounts.fandom_count_for_collection(collection), collection_fandoms_path(collection)) %></dd>
+        <dt class="collections"><%= t(".challenges_subcollections") %></dt>
+        <dd class="collections"><%= link_to(number_with_delimiter(@challenges_count), collection_collections_path(collection)) %></dd>
       <% end %>
       <% if collection.challenge? && collection.prompt_meme? %>
-        <dt><%= ts("Prompts:") %></dt>
-        <dd><%= link_to(collection.prompts.count.to_s, collection_requests_path(collection)) %></dd>
+        <dt class="prompts"><%= t(".prompts") %></dt>
+        <dd class="prompts"><%= link_to(number_with_delimiter(collection.prompts.count), collection_requests_path(collection)) %></dd>
       <% end %>
-      <dt><%= ts("Works:") %></dt>
-      <dd><%= link_to(@works_count, collection_works_path(collection)) %></dd>
-      <% if (@bookmarks_count = SearchCounts.bookmarkable_count_for_collection(collection)) > 0 %>
-        <dt><%= ts("Bookmarked Items:") %></dt>
-        <dd><%= link_to(@bookmarks_count, collection_bookmarks_path(collection)) %></dd>
+      <dt class="works"><%= t(".works") %></dt>
+      <dd class="works"><%= link_to(number_with_delimiter(collection.approved_works_count), collection_works_path(collection)) %></dd>
+      <% if (@bookmarks_count = collection.approved_bookmarked_items_count) > 0 %>
+        <dt class="bookmarks"><%= t(".bookmarked_items") %></dt>
+        <dd class="bookmarks"><%= link_to(number_with_delimiter(@bookmarks_count), collection_bookmarks_path(collection)) %></dd>
       <% end %>
     </dl>
 
-  <% end %><!-- end cache -->
+  <% end %><!-- end blurb body cache -->
 
   <% if collection.user_is_owner?(current_user) || (collection.challenge && collection.challenge.signup_open && logged_in?) || (collection.moderated? && logged_in?) %>
     <h6 class="landmark heading"><%= ts("User Actions") %></h6>
-    <ul class="actions" role="menu">
+    <ul class="actions">
       <% if collection.user_is_owner?(current_user) %>
         <li><%= link_to ts("Edit"), edit_collection_path(collection) %></li>
       <% end %>
       <% if collection.challenge && collection.challenge.signup_open && logged_in? %>
-        <%= render "challenge/#{challenge_class_name(collection)}/challenge_navigation_user", :collection => collection %>
+        <%= render "challenge/#{challenge_class_name(collection)}/challenge_navigation_user", collection: collection %>
       <% end %>
       <% if !collection.user_is_owner?(current_user) && collection.moderated? && !(collection.challenge && collection.challenge.signup_open) %>
         <li>
@@ -77,7 +75,7 @@
               data: {confirm: ts('Are you certain you want to leave this collection?')},
               :method => :delete %></li>
           <% else %>
-            <%= link_to ts("Join"), join_collection_participants_path(collection) %>
+            <%= button_to ts("Join"), join_collection_participants_path(collection), method: :post %>
           <% end %>
         </li>
       <% end %>

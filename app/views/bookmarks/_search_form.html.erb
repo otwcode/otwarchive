@@ -28,6 +28,12 @@
                                         @search.bookmarkable_type) %>
       </dd>
       <dt>
+        <%= f.label :word_count, t(".word_count") %>
+      </dt>
+      <dd>
+        <%= f.text_field :word_count %>
+      </dd>
+      <dt>
         <%= f.label :language_id, ts("Work language") %>
       </dt>
       <dd>

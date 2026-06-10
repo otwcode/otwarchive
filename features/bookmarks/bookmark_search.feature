@@ -65,6 +65,31 @@ Feature: Search Bookmarks
       And I should see "New bookmark of old external work"
       And I should see "New bookmark of new external work"
 
+  Scenario: Search bookmarks by word count
+    Given bookmarks with various word counts in fandom "Totally a fandom" to search
+    When I fill in "Word count" with "<15"
+      And I press "Search Bookmarks"
+    Then I should see the page title "Search Bookmarks"
+      And I should see "You searched for: Word count: <15"
+      And I should see "2 Found"
+      And I should see "Five"
+      And I should see "Ten"
+    When I follow "Edit Your Search"
+    Then the field labeled "Word count" should contain "<15"
+
+  Scenario: Sort bookmarks by word count
+    Given bookmarks with various word counts in fandom "Totally a fandom" to search
+    When I select "Word Count" from "Sort by"
+      And I fill in "Work tags" with "Totally a fandom"
+      And I press "Search Bookmarks"
+    Then I should see the page title "Search Bookmarks"
+      And I should see "4 Found"
+      And "Twenty" should appear before "Fifteen"
+      And "Fifteen" should appear before "Ten"
+      And "Ten" should appear before "Five"
+    When I follow "Edit Your Search"
+    Then "Word Count" should be selected within "Sort by"
+
   Scenario: Search bookmarks by date updated
     Given I have bookmarks to search by dates
     When I fill in "Date updated" with "> 900 days ago"
@@ -145,6 +170,26 @@ Feature: Search Bookmarks
       And I should see "H/C Series"
       And I should see "External Whump"
 
+  Scenario: Search bookmarks on information on unrevealed works
+    Given I am logged in as "recengine"
+      And I have the hidden collection "secret"
+      And I post the work "SeeMeNot" with fandom "Secret" to the collection "secret"
+      And I bookmark the work "SeeMeNot" with the note "FoundMe" with the tags "Fluff"
+      And all indexing jobs have been run
+      And I log out
+    When I am on the search Bookmarks page
+      And I fill in "Any field on work" with "SeeMeNot"
+      And I press "Search Bookmarks"
+    Then I should not see "1 Found"
+      And I should not see "Fluff"
+      And I should not see "Secret"
+    When I am on the search Bookmarks page
+      And I fill in "Any field on bookmark" with "FoundMe"
+      And I press "Search Bookmarks"
+    Then I should see "1 Found"
+      And I should see "Fluff"
+      And I should not see "Secret"
+
   Scenario: Search bookmarks by type
     Given I have bookmarks to search
     When I select "External Work" from "Type"
@@ -161,7 +206,7 @@ Feature: Search Bookmarks
       And I should see "2 Found"
 
   Scenario: Search for bookmarks with notes, and then edit search to narrow
-  results by the note content
+    results by the note content
     Given I have bookmarks to search
     When I check "With notes"
       And I press "Search Bookmarks"
@@ -184,7 +229,7 @@ Feature: Search Bookmarks
       And the "With notes" checkbox should be checked
 
   Scenario: If testuser has the pseud tester_pseud, searching for bookmarks by
-  the bookmarker testuser returns all of tester_pseud's bookmarks
+    the bookmarker testuser returns all of tester_pseud's bookmarks
     Given I have bookmarks to search
     When I fill in "Bookmarker" with "testuser"
       And I press "Search Bookmarks"

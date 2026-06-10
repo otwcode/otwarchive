@@ -34,14 +34,6 @@ module ChallengeCore
       end
     end
   end
-
-  # When Challenges are deleted, there are two references left behind that need to be reset to nil
-  def clear_challenge_references
-    collection.challenge_id = nil
-    collection.challenge_type = nil
-    collection.save!
-  end
-  
   # a couple of handy shorthand methods
   def required(type)
     self.send("#{type}_num_required")
@@ -78,6 +70,28 @@ module ChallengeCore
     true
   end
 
+  def should_update_collection_index?
+    return true if destroyed?
+
+    pertinent_attributes = %w[signup_open signups_open_at signups_close_at assignments_due_at works_reveal_at authors_reveal_at]
+    (self.saved_changes.keys & pertinent_attributes).present?
+  end
+
+  def update_collection_index
+    return if self.collection.blank?
+
+    IndexQueue.enqueue_id(Collection, collection.id, :main)
+  end
+
+  def clean_up_challenge
+    return unless collection
+
+    collection.assignments.each(&:destroy)
+    collection.potential_matches.each(&:destroy)
+    collection.signups.each(&:destroy)
+    collection.prompts.each(&:destroy)
+  end
+
   module ClassMethods
     # override datetime setters so we can take strings
     def override_datetime_setters
@@ -96,6 +110,10 @@ module ChallengeCore
   end
   
   def self.included(base)
+    base.class_eval do
+      after_commit :update_collection_index, if: :should_update_collection_index?
+      before_destroy :clean_up_challenge
+    end
     base.extend(ClassMethods)
   end
   

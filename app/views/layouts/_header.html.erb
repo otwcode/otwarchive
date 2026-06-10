@@ -16,7 +16,7 @@
 <header id="header" class="region<% if @collection %> collection<% end %>">
 
   <h1 class="heading">
-    <%= link_to(content_tag(:span, ArchiveConfig.APP_NAME) + content_tag(:sup, " beta") +
+    <%= link_to(content_tag(:span, ArchiveConfig.APP_NAME) +
     image_tag("/images/ao3_logos/logo_42.png", alt: ArchiveConfig.ALT_LOGO, class: "logo", skip_pipeline: true), root_path) %>
   </h1>
 
@@ -25,7 +25,7 @@
   <% else %>
     <div id="login" class="dropdown">
       <p class="user actions">
-        <%= link_to t(".login"), new_user_session_path, id: "login-dropdown" %>
+        <%= link_to t(".login"), new_user_session_path(return_to: request.fullpath.start_with?(new_user_session_path) ? params[:return_to] : request.fullpath), id: "login-dropdown" %>
       </p>
       <%= render "users/sessions/login" %>
     </div>

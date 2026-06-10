@@ -1,0 +1,85 @@
+class Admin::SupportNoticesController < Admin::BaseController
+  before_action :load_support_notice, only: [:confirm_delete, :destroy, :edit, :show, :update]
+  before_action :check_inactive, only: [:confirm_delete, :destroy]
+  
+  # GET /admin/notices/support
+  def index
+    authorize(SupportNotice)
+
+    @pagy, @support_notices = pagy(SupportNotice.order(active: :desc, updated_at: :desc))
+    @page_subtitle = t(".page_title")
+  end
+
+  # GET /admin/notices/support/1
+  def show
+    @page_subtitle = t(".page_title")
+  end
+
+  # GET /admin/notices/support/new
+  def new
+    @support_notice = authorize SupportNotice.new
+    @page_subtitle = t(".page_title")
+  end
+
+  # GET /admin/notices/support/1/edit
+  def edit
+    @page_subtitle = t(".page_title")
+  end
+
+  # POST /admin/notices/support
+  def create
+    @support_notice = authorize SupportNotice.new(support_notice_params)
+
+    if @support_notice.save
+      AdminActivity.log_action(current_admin, @support_notice, action: "create support notice", summary: @support_notice.notice_content)
+
+      flash[:notice] = t(".success")
+      redirect_to admin_support_notice_path(@support_notice)
+    else
+      render action: "new"
+    end
+  end
+
+  # PUT /admin/notices/support/1
+  def update
+    if @support_notice.update(support_notice_params)
+      AdminActivity.log_action(current_admin, @support_notice, action: "update support notice", summary: @support_notice.notice_content)
+
+      flash[:notice] = t(".success")
+      redirect_to admin_support_notice_path(@support_notice)
+    else
+      render action: "edit"
+    end
+  end
+
+  # GET /admin/notices/support/1/confirm_delete
+  def confirm_delete
+    @page_subtitle = t(".page_title")
+  end
+
+  # DELETE /admin/notices/support/1
+  def destroy
+    AdminActivity.log_action(current_admin, @support_notice, action: "destroy support notice", summary: @support_notice.notice_content)
+    @support_notice.destroy
+
+    flash[:notice] = t(".success")
+    redirect_to admin_support_notices_path
+  end
+
+  private
+
+  def load_support_notice
+    @support_notice = authorize SupportNotice.find(params[:id])
+  end
+
+  def check_inactive
+    return unless @support_notice.active?
+
+    flash[:error] = t("admin.support_notices.cannot_delete_active")
+    redirect_to admin_support_notice_path(@support_notice)
+  end
+
+  def support_notice_params
+    params.require(:support_notice).permit(:notice_content, :support_notice_type, :active)
+  end
+end

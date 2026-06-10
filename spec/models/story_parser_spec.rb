@@ -146,7 +146,7 @@ describe StoryParser do
         to_return(status: 200, body: "Date: 2001-01-22 12:56\nstubbed response", headers: {})
 
       storyparser_user = FactoryBot.create(:user)
-      urls = %w(http://url1 http://url2)
+      urls = %w[http://url1.net http://url2.com]
       work = @sp.download_and_parse_chapters_into_story(urls, { pseuds: [storyparser_user.default_pseud], do_not_set_current_author: false })
       work.save
       actual_date = work.revised_at.to_date
@@ -201,7 +201,7 @@ describe StoryParser do
 
     it "does NOT convert raw anchor links to absolute links" do
       location = "http://external_site"
-      story_in = "<html><body><p><a href=#local>local href</p></body></html>"
+      story_in = +"<html><body><p><a href=#local>local href</p></body></html>"
       result = @sp.parse_common(story_in, location)
       expect(result[:chapter_attributes][:content]).not_to include(location)
       expect(result[:chapter_attributes][:content]).to include("#local")
@@ -284,7 +284,7 @@ describe StoryParser do
   def mock_external
     curly_quotes = "String with non-ASCII “Curly quotes” and apostrophes’"
 
-    body = "
+    body = <<~STUB
       Title: #{curly_quotes}
       Summary: #{curly_quotes}
       Fandom: #{curly_quotes}
@@ -296,13 +296,16 @@ describe StoryParser do
       Tags: #{curly_quotes}
       Author's notes: #{curly_quotes}
 
-      stubbed response".gsub('      ', '')
+      stubbed response
+    STUB
+
+    binary_body = body.clone.force_encoding("ASCII-8BIT")
 
     WebMock.allow_net_connect!
 
     WebMock.stub_request(:any, /ascii-8bit/).
       to_return(status: 200,
-                body: body.force_encoding("ASCII-8BIT"),
+                body: binary_body,
                 headers: {})
 
     WebMock.stub_request(:any, /utf-8/).
@@ -312,7 +315,7 @@ describe StoryParser do
 
     WebMock.stub_request(:any, /win-1252/).
       to_return(status: 200,
-                body: body.force_encoding("Windows-1252"),
+                body: body.encode("Windows-1252"),
                 headers: {})
 
     WebMock.stub_request(:any, /non-sgml-character-number-3/).
@@ -330,17 +333,17 @@ describe StoryParser do
       WebMock.reset!
     end
 
-    it "should not throw an exception with non-ASCII characters in metadata fields" do
-      urls = %w(http://ascii-8bit http://utf-8 http://win-1252)
+    it "does not throw an exception with non-ASCII characters in metadata fields" do
+      urls = %w[http://ascii-8bit.fr http://utf-8.es http://win-1252.pt]
       urls.each do |url|
-        expect {
+        expect do
           @sp.download_and_parse_story(url, pseuds: [@user.default_pseud], do_not_set_current_author: false)
-        }.to_not raise_exception
+        end.not_to raise_exception
       end
     end
 
     it "ignores string terminators (AO3-2251)" do
-      story = @sp.download_and_parse_story("http://non-sgml-character-number-3", pseuds: [@user.default_pseud])
+      story = @sp.download_and_parse_story("http://non-sgml-character-number-3.da", pseuds: [@user.default_pseud])
       expect(story.chapters[0].content).to include("When I get out of here")
     end
   end

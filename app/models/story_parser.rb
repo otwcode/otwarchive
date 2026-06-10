@@ -8,6 +8,8 @@ class StoryParser
   require 'open-uri'
   include HtmlCleaner
 
+  VALID_URL_PATTERN = /^https?:\/\/[_a-z\d\-]+\.[._a-z\d\-]+(:\d+)?\/?.+/i.freeze
+
   OPTIONAL_META = {notes: 'Note',
                    freeform_string: 'Tag',
                    fandom_string: 'Fandom',
@@ -300,7 +302,9 @@ class StoryParser
     raise Error, "Work could not be downloaded" if work.nil?
 
     @options = options
-    work.imported_from_url = location
+    work.imported_from_url = location # @todo remove this as part of AO3-6979
+    work.imported_url = ImportedUrl.new(original: work.imported_from_url)
+
     work.ip_address = options[:ip_address]
     work.expected_number_of_chapters = work.chapters.length
     work.revised_at = work.chapters.last.published_at
@@ -554,11 +558,13 @@ class StoryParser
     # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
     # preserve line breaks in plain text documents
     # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
-    begin
-      @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), encoding: encoding)
-    rescue StandardError
-      @doc = ""
-    end
+    story.prepend("<foo></foo>")
+    @doc =
+      begin
+        Nokogiri::HTML5.parse(story, encoding: encoding)
+      rescue StandardError
+        Nokogiri::HTML5.parse("")
+      end
 
     # Try to convert all relative links to absolute
     base = @doc.at_css("base") ? @doc.css("base")[0]["href"] : location.split("?").first
@@ -616,6 +622,7 @@ class StoryParser
     # inside the body.
     body = @doc.css("body")
     storytext = body.css("article.b-singlepost-body").inner_html
+    storytext = body.css("div.aentry-post__text").inner_html if storytext.empty?
     storytext = body.inner_html if storytext.empty?
 
     # cleanup the text
@@ -628,9 +635,8 @@ class StoryParser
     work_params.merge!(scan_text_for_meta(storytext, detect_tags))
 
     date = @doc.css("time.b-singlepost-author-date")
-    unless date.empty?
-      work_params[:revised_at] = convert_revised_at(date.first.inner_text)
-    end
+    date = @doc.css("p.aentry-head__date/time") if date.empty?
+    work_params[:revised_at] = convert_revised_at(date.first.inner_text) unless date.empty?
 
     work_params
   end
@@ -711,7 +717,7 @@ class StoryParser
 
     # cleanup the notes
     notes.gsub!(%r{<br\s*\/?>}i, "\n") # replace the breaks with newlines
-    notes = clean_storytext(notes)
+    notes = clean_storytext(notes, "notes")
     work_params[:notes] = notes
 
     work_params.merge!(scan_text_for_meta(notes, detect_tags))
@@ -797,15 +803,25 @@ class StoryParser
   end
 
   def download_with_timeout(location, limit = 10)
-    story = ""
+    story = +""
     Timeout.timeout(STORY_DOWNLOAD_TIMEOUT) do
       begin
         # we do a little cleanup here in case the user hasn't included the 'http://'
         # or if they've used capital letters or an underscore in the hostname
         uri = UrlFormatter.new(location).standardized
         raise Error, I18n.t("story_parser.on_archive") if ArchiveConfig.PERMITTED_HOSTS.include?(uri.host)
+        raise Error, I18n.t("story_parser.invalid_url") if uri.to_s !~ VALID_URL_PATTERN || uri.hostname =~ /\A127\.|\A::1\z/
 
-        response = Net::HTTP.get_response(uri)
+        env_proxy = ENV["http_proxy"]
+        http = if env_proxy
+                 proxy = URI(env_proxy)
+                 Net::HTTP.new(uri.hostname, uri.port, proxy.hostname, proxy.port)
+               else
+                 Net::HTTP.new(uri.hostname, uri.port)
+               end
+        http.use_ssl = true if uri.scheme == "https"
+        response = http.start { |h| h.request_get(uri.path.presence || "/") }
+
         case response
         when Net::HTTPSuccess
           story = response.body
@@ -853,9 +869,9 @@ class StoryParser
   end
 
   # We clean the text as if it had been submitted as the content of a chapter
-  def clean_storytext(storytext)
+  def clean_storytext(storytext, field = "content")
     storytext = storytext.encode("UTF-8", invalid: :replace, undef: :replace, replace: "") unless storytext.encoding.name == "UTF-8"
-    sanitize_value("content", storytext)
+    sanitize_value(field, storytext)
   end
 
   # works conservatively -- doesn't split on

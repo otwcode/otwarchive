@@ -6,8 +6,11 @@ module AdminHelper
   end
 
   def admin_activity_target_link(activity)
-    url = if activity.target.is_a?(Pseud)
+    url = case activity.target
+          when Pseud
             user_pseuds_path(activity.target.user)
+          when SupportNotice
+            admin_support_notice_path(activity.target)
           else
             activity.target
           end

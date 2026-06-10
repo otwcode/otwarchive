@@ -1,6 +1,9 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe ProfileController do
+  include RedirectExpectationHelper
+  include LoginMacros
+
   describe "show" do
     let(:user) { create(:user) }
 
@@ -19,14 +22,54 @@ describe ProfileController do
 
       expect(user.profile).not_to be_nil
     end
+  end
 
-    it "uses the profile presenter for the profile" do
-      profile_presenter = instance_double(ProfilePresenter)
-      allow(ProfilePresenter).to receive(:new).and_return(profile_presenter)
+  describe "GET #edit" do
+    let(:user) { create(:user) }
 
-      get :show, params: { user_id: user }
+    context "as admin" do
+      subject { get :edit, params: { user_id: user.login } }
 
-      expect(assigns(:profile)).to eq(profile_presenter)
+      let(:success) do
+        expect(assigns(:user)).to eq(user)
+        expect(response).to be_successful    
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin policy_and_abuse]
+    end
+  end
+
+  describe "PATCH #update" do
+    let(:user) { create(:user) }
+
+    context "as admin" do
+      before do 
+        ticket = {
+          "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID,
+          "status" => "Open",
+          "webUrl" => Faker::Internet.url
+        }
+        allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
+      end
+
+      let(:params) do
+        {
+          user_id: user.login,
+          profile: {
+            title: "Title",
+            about_me: "About Me",
+            ticket_number: "123456"
+          }
+        }
+      end
+
+      subject { patch :update, params: params }
+
+      let(:success) do
+        it_redirects_to_with_notice(user_profile_path(user), "Your profile has been successfully updated")
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin policy_and_abuse]
     end
   end
 end

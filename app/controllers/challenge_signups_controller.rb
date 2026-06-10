@@ -4,7 +4,8 @@ require 'csv'
 class ChallengeSignupsController < ApplicationController
   include ExportsHelper
 
-  before_action :users_only, except: [:summary]
+  before_action :users_only, except: [:summary, :index, :show]
+  before_action :users_or_privileged_collection_admins_only, only: [:index, :show]
   before_action :load_collection, except: [:index]
   before_action :load_challenge, except: [:index]
   before_action :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
@@ -45,7 +46,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def maintainer_or_signup_owner_only
-    not_allowed(@collection) and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
+    not_allowed(@collection) and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user) || privileged_collection_admin?)
   end
 
   def not_signup_owner
@@ -60,13 +61,6 @@ class ChallengeSignupsController < ApplicationController
 
   def load_signup_from_id
     @challenge_signup = ChallengeSignup.find(params[:id])
-    no_signup and return unless @challenge_signup
-  end
-
-  def no_signup
-    flash[:error] = ts("What sign-up did you want to work on?")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
   end
 
   def check_pseud_ownership
@@ -92,6 +86,7 @@ class ChallengeSignupsController < ApplicationController
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
         @challenge_signups = @user.challenge_signups.order_by_date
+        @page_subtitle = t(".page_title", username: @user.login)
         render action: :index and return
       else
         flash[:error] = ts("You aren't allowed to see that user's sign-ups.")
@@ -107,7 +102,7 @@ class ChallengeSignupsController < ApplicationController
     # see ExportsHelper for export_csv method
     respond_to do |format|
       format.html {
-          if @challenge.user_allowed_to_see_signups?(current_user)
+          if @challenge.user_allowed_to_see_signups?(current_user) || privileged_collection_admin?
             @challenge_signups = @collection.signups.joins(:pseud)
             if params[:query]
               @query = params[:query]
@@ -121,7 +116,8 @@ class ChallengeSignupsController < ApplicationController
           end
       }
       format.csv {
-        if (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) ||
+        if privileged_collection_admin? ||
+           (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) ||
         (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
           csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
           filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
@@ -135,6 +131,8 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def summary
+    return if @collection.challenge.topmost_tag_type.blank?
+
     @summary = ChallengeSignupSummary.new(@collection)
 
     if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
@@ -197,6 +195,7 @@ class ChallengeSignupsController < ApplicationController
 
   public
   def new
+    @page_subtitle = t(".page_title")
     if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
       flash[:notice] = ts("You are already signed up for this challenge. You can edit your sign-up below.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)

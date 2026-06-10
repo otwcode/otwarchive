@@ -49,14 +49,6 @@ describe ChallengeSignupsController do
   end
 
   describe "show" do
-    # TODO: AO3-5552
-    xit "redirects and errors if there is no sign-up with that id" do
-      fake_login
-      get :show, params: { id: 0, collection_id: closed_collection.name }
-      it_redirects_to_with_error(collection_path(closed_collection),
-                                 "What sign-up did you want to work on?")
-    end
-
     it "redirects and errors if the user does not own the sign-up or the collection" do
       fake_login
       get :show, params: { id: closed_signup, collection_id: closed_collection.name }
@@ -88,6 +80,14 @@ describe ChallengeSignupsController do
       get :index, params: { collection_id: closed_collection.name, format: :csv }
       it_redirects_to_with_error(closed_collection,
                                  "You aren't allowed to see the CSV summary.")
+    end
+
+    context "when user visits their own sign-ups" do
+      it "sets the page subtitle correctly" do
+        fake_login_known_user(user)
+        get :index, params: { user_id: user.login }
+        expect(assigns(:page_subtitle)).to eq("#{user.login} - Challenge Sign-ups")
+      end
     end
   end
 
@@ -278,6 +278,41 @@ describe ChallengeSignupsController do
           .to eq([["Pseud", "Sign-up URL", "Tags", "Description"],
                   ["(Anonymous)", "", signup.requests.first.tag_set.tags.first.name, ""]])
       end
+    end
+  end
+
+  describe "admin access to signups pages" do
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
+
+    describe "GET #index" do
+      subject { get :index, params: { collection_id: closed_collection.name } }
+
+      let(:success) do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
+    end
+
+    describe "GET #show" do
+      subject { get :show, params: { id: closed_signup.id, collection_id: closed_collection.name } }
+
+      let(:success) do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:show)
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
+    end
+
+    it "allows support admins to download CSV" do
+      fake_login_admin(create(:support_admin))
+
+      get :index, params: { collection_id: closed_collection.name, format: :csv }
+
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to include("text/csv")
     end
   end
 end

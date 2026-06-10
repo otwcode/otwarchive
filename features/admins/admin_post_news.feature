@@ -25,7 +25,8 @@ Feature: Admin Actions to Post News
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
     # notification to the admin list for admin post
-    Then 1 email should be delivered to "admin@example.org"
+    Then 0 emails should be delivered to "testadmin-communications@example.org"
+      But 1 email should be delivered to "admin@example.org"
       And the email should contain "Excellent"
 
     # regular user edits their comment
@@ -33,28 +34,8 @@ Feature: Admin Actions to Post News
       And I follow "Edit"
       And I press "Update"
     # notification to the admin list for admin post
-    Then 1 email should be delivered to "admin@example.org"
-
-  Scenario: Evil user can impersonate admin in comments
-  # However, they can't use an icon, so the admin's icon is the guarantee that they're real
-  # also their username will be plain text and not a link
-
-    Given I have posted an admin post
-    When I am logged in as "happyuser"
-      And I go to the admin-posts page
-    When I follow "Default Admin Post"
-      And I fill in "Comment" with "Excellent, my dear!"
-      And I press "Comment"
-    When I log out
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
-      And I fill in "Comment" with "Behold, ye mighty, and despair!"
-      And I fill in "Guest name" with "admin"
-      And I fill in "Guest email" with "admin@example.com"
-      And I press "Comment"
-    Then I should see "Comment created!"
-      And I should see "admin"
-      And I should see "Behold, ye mighty, and despair!"
+    Then 0 emails should be delivered to "testadmin-communications@example.org"
+      But 1 email should be delivered to "admin@example.org"
 
   Scenario: User views RSS of admin posts
 
@@ -247,6 +228,7 @@ Feature: Admin Actions to Post News
     Given I am logged in as a "communications" admin
     When I start to make an admin post
       And I check "Enable comment moderation"
+      And I choose "Registered users and guests can comment"
       And I press "Post"
     Then I should see "Admin Post was successfully created."
       And I should not see "Unreviewed Comments"
@@ -261,6 +243,7 @@ Feature: Admin Actions to Post News
       And I press "Comment"
     Then I should see "Your comment was received! It will appear publicly after it has been approved."
       And I should be on the "Default Admin Post" admin post page
+      And 1 email should be delivered to "admin@example.org"
 
     # Leave a logged in comment on a moderated admin post
     When I am logged in as "commenter"

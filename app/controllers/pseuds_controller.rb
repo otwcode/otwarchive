@@ -1,33 +1,26 @@
 class PseudsController < ApplicationController
-  cache_sweeper :pseud_sweeper
-
   before_action :load_user
   before_action :check_ownership, only: [:create, :destroy, :new]
   before_action :check_ownership_or_admin, only: [:edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
 
   def load_user
-    @user = User.find_by(login: params[:user_id])
+    @user = User.find_by!(login: params[:user_id])
     @check_ownership_of = @user
   end
 
   # GET /pseuds
   # GET /pseuds.xml
   def index
-    if @user
-      @pseuds = @user.pseuds.with_attached_icon.alphabetical.paginate(page: params[:page])
-      @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
-      @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
-      @page_subtitle = @user.login
-    else
-      redirect_to search_people_path
-    end
+    @pseuds = @user.pseuds.with_attached_icon.alphabetical.paginate(page: params[:page])
+    @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
+    @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
+    @pseuds_with_works = Pseud.has_works_for(@pseuds.collect(&:id)) if @user == current_user
+    @page_subtitle = @user.login
   end
 
   # GET /users/:user_id/pseuds/:id
   def show
-    raise ActiveRecord::RecordNotFound, t(".could_not_find_user", username: params[:user_id]) if @user.blank?
-
     @pseud = @user.pseuds.find_by!(name: params[:id])
     @page_subtitle = @pseud.name
 
@@ -70,8 +63,6 @@ class PseudsController < ApplicationController
 
   # GET /pseuds/1/edit
   def edit
-    raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:user_id]}'" unless @user
-
     @pseud = @user.pseuds.find_by!(name: params[:id])
     authorize @pseud if logged_in_as_admin?
   end
@@ -131,7 +122,9 @@ class PseudsController < ApplicationController
     end
 
     @pseud = @user.pseuds.find_by(name: params[:id])
-    if @pseud.is_default
+    if @pseud.nil?
+      flash[:error] = t(".cannot_delete_nonexisting")
+    elsif @pseud.is_default
       flash[:error] = t(".cannot_delete_default")
     elsif @pseud.name == @user.login
       flash[:error] = t(".cannot_delete_matching_username")

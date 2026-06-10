@@ -1,4 +1,4 @@
-FROM ruby:3.2.7
+FROM ruby:3.4.6
 
 # Install additional packages
 RUN apt-get update             && \
@@ -17,7 +17,7 @@ VOLUME /otwa
 # Install ruby packages
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v 2.6.3 && bundle install
+RUN gem install bundler -v 2.6.9 && bundle install
 
 # Default command to run in a new container
 EXPOSE 3000

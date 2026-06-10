@@ -1,6 +1,5 @@
 <!--REVIEW: trying out articles on these fieldsets to see if that's a better chunker, but may revert after testing. Have also tossed in landmark headings on top level groups-->
 <%= form_for(@work, html: { id: "work-form", class: "verbose post work" }) do |f| %>
-
   <p class="required notice">* <%= ts("Required information") %></p>
 
   <%= render "work_form_tags", include_blank: false %>
@@ -51,7 +50,7 @@
         <!-- if the user has open assignments? -->
         <dt class="collection">
           <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %>
-          <%= link_to_help "add-work-to-assignment" %>
+          <%= link_to_help_modal(help_works_assignment_path, t(".works_assignment_help_title")) %>
         </dt>
         <dd class="collection listbox group">
           <h4 class="heading"><%= ts("Open Assignments") %></h4>
@@ -64,7 +63,7 @@
         <!-- if the user has open claims? -->
         <dt class="collection">
           <%= f.label "challenge_claim_ids[]", ts("Fulfill a Claim") %>
-          <%= link_to_help "add-work-to-assignment" %>
+          <%= link_to_help_modal(help_works_assignment_path, t(".works_assignment_help_title")) %>
         </dt>
         <dd class="collection listbox group">
           <h4 class="heading"><%= ts("Open Claims") %></h4>
@@ -76,7 +75,7 @@
       <!-- Add collection -->
       <dt class="collection" title="<%= ts("post to collection or challenge") %>">
         <%= f.label :collection_names, ts("Post to Collections / Challenges") %>
-        <%= link_to_help "add-collectible-to-collection" %>
+        <%= link_to_help_modal(help_collectibles_add_to_collection_path, t(".collectibles_add_to_collection_help_title")) %>
       </dt>
       <dd class="collection" title="<%= ts("post to collection or challenge") %>">
         <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>
@@ -84,7 +83,7 @@
 
       <dt class="recipient" title="<%= ts("gift to") %>">
         <%= f.label :recipients, ts("Gift this work to") %>
-        <%= link_to_help "recipients" %>
+        <%= link_to_help_modal(help_works_recipients_path, t(".works_recipients_help_title")) %>
       </dt>
       <dd class="recipient" title="<%= ts("gift to") %>">
         <%= f.text_field :recipients, autocomplete_options("pseud", value: @work.recipients(for_form = true)) %>
@@ -95,8 +94,8 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), class: "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag "parent-options-show", ts("This work is a remix, a translation, a podfic, or was inspired by another work") %>
-        <%= link_to_help "parent-works-help" %>
+        <%= label_tag "parent-options-show", t(".header") %>
+        <%= link_to_help_modal(help_works_parents_path, t(".works_parents_help_title")) %>
 
         <!-- Toggles on with parent checkbox -->
         <fieldset id="parent-options">
@@ -122,7 +121,7 @@
 
               <dt>
                 <%= p.label :language_id, ts("Language") %>
-                <%= link_to_help "languages-help" %>
+                <%= link_to_help_modal(help_works_languages_path, t(".works_languages_help_title")) %>
               </dt>
               <dd>
                 <%= p.select(:language_id, language_options_for_select(sorted_languages, "id"), prompt: " ") %>
@@ -131,27 +130,27 @@
               <dt class="translation"><%= p.check_box :translation %></dt>
               <dd class="translation">
                 <%= p.label :translation, ts("This is a translation") %>
-                <%= link_to_help "translation-link" %>
+                <%= link_to_help_modal(help_works_translation_link_path, t(".works_translation_link_help_title")) %>
               </dd>
             <% end %>
 
             <% unless existing_parents.blank? %>
               <dt><%= ts("Current parent works") %></dt>
               <% existing_parents.each do |related_work| %>
-                <% if related_work.parent %>
-                  <dd>
-                    <ul class="actions" role="navigation">
-                      <li>
+                <dd>
+                  <ul class="actions">
+                    <li>
+                      <% if related_work.parent %>
                         <%= link_to related_work.parent.title, related_work.parent %>
-                      </li>
-                      <li>
-                        <%= link_to ts("Remove"), related_work,
-                                data: { confirm: ts("Are you sure you want to delete the connection to this work?") },
-                                method: :delete %>
-                      </li>
-                    </ul>
-                  </dd>
-                <% end %>
+                      <% else %>
+                        <%= t(".deleted_work") %>
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to t(".remove"), related_work, data: { confirm: t(".remove_confirm") }, method: :delete %>
+                    </li>
+                  </ul>
+                </dd>
               <% end %>
             <% end %>
           </dl>
@@ -165,7 +164,7 @@
       </dt>
       <dd class="serial">
         <%= label_tag "series-options-show", ts("This work is part of a series") %>
-        <%= link_to_help "choosing-series" %>
+        <%= link_to_help_modal(help_works_series_path, t(".works_series_help_title")) %>
 
         <!-- Toggles on with series checkbox -->
         <fieldset id="series-options">
@@ -227,7 +226,7 @@
         </dt>
         <dd class="backdate">
           <%= label_tag "backdate-options-show", ts("Set a different publication date") %>
-          <%= link_to_help "backdating-help" %>
+          <%= link_to_help_modal(help_works_backdating_path, t(".works_backdating_help_title")) %>
 
           <fieldset id="backdate-options" class="optional">
             <dl>
@@ -308,9 +307,7 @@
       </ul>
       <p class="rtf-html-instructions note">
         <span class="html-notes"><%= allowed_html_instructions %></span>
-        <span class="hidden rtf-notes">
-          <%= ts("Type or paste formatted text.") %><%= link_to_help "rte-help" %>
-        </span>
+        <span class="hidden rtf-notes"><%= rich_text_instructions %></span>
       </p>
       <p class="notice">
         <%= ts("<strong>Note:</strong> Text entered in the posting form is <strong>not</strong> automatically saved. Always keep a backup copy of your work.").html_safe %>
@@ -339,31 +336,8 @@
 
   <% end %><!-- end of fields for chapters -->
 
-  <fieldset class="create">
-    <legend><%= ts("Post") %></legend>
-    <p class="notice">
-      <%= t(".post_notice_html",
-            content_policy_link: link_to(t(".content_policy"), content_path),
-            tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
-    </p>
-    <ul class="actions">
-      <% unless @work.new_record? || @work.posted? %>
-        <li>
-          <%= submit_tag ts("Save As Draft"), name: "save_button" %>
-        </li>
-      <% end %>
-      <li>
-        <%= submit_tag ts("Preview"), name: "preview_button" %>
-      </li>
-      <li>
-        <%= submit_tag ts("Post"), name: "post_button",
-              data: { disable_with: ts("Please wait...") } %>
-      </li>
-      <li>
-        <%= submit_tag ts("Cancel"), name: "cancel_button" %>
-      </li>
-    </ul>
-  </fieldset>
+  <%= render "posting_fieldset" %>
+
 <% end %> <!-- end of form_for -->
 
 <%= content_for :footer_js do %>

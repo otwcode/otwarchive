@@ -15,7 +15,8 @@ class CommentDecorator < SimpleDelegator
 
       next unless comment.reply_comment?
 
-      wrapped_by_id[comment.commentable_id].comments << wrapped
+      parent = wrapped_by_id[comment.commentable_id]
+      parent.comments << wrapped if parent
     end
 
     wrapped_by_id

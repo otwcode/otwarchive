@@ -1,11 +1,12 @@
 class CollectionParticipantsController < ApplicationController
-  before_action :users_only
+  before_action :users_only, except: [:index]
   before_action :load_collection
   before_action :load_participant, only: [:update, :destroy]
   before_action :allowed_to_promote, only: [:update]
   before_action :allowed_to_destroy, only: [:destroy]
   before_action :has_other_owners, only: [:update, :destroy]
-  before_action :collection_maintainers_only, only: [:index, :add, :update]
+  before_action :collection_maintainers_or_privileged_admins_only, only: [:index]
+  before_action :collection_maintainers_only, only: [:add, :update]
 
   cache_sweeper :collection_sweeper
 
@@ -41,7 +42,7 @@ class CollectionParticipantsController < ApplicationController
   def join
     unless @collection
       flash[:error] = t('no_collection', default: "Which collection did you want to join?")
-      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+      redirect_back_or_to root_path and return
     end
     participants = CollectionParticipant.in_collection(@collection).for_user(current_user) unless current_user.nil?
     if participants.empty?
@@ -57,14 +58,14 @@ class CollectionParticipantsController < ApplicationController
         if participant.is_invited?
           participant.approve_membership!
           flash[:notice] = t('collection_participants.accepted_invite', default: "You are now a member of %{collection}.", collection: @collection.title)
-          redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+          redirect_back_or_to root_path and return
         end
       end
 
       flash[:notice] = t('collection_participants.no_invitation', default: "You have already joined (or applied to) this collection.")
     end
 
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    redirect_back_or_to root_path
   end
 
   def index
@@ -73,17 +74,17 @@ class CollectionParticipantsController < ApplicationController
 
   def update
     if @participant.update(collection_participant_params)
-      flash[:notice] = t('collection_participants.update_success', default: "Updated %{participant}.", participant: @participant.pseud.name)
+      flash[:notice] = t(".success", participant: @participant.pseud.byline)
     else
-      flash[:error] = t(".failure", participant: @participant.pseud.name)
+      flash[:error] = t(".failure", participant: @participant.pseud.byline)
     end
     redirect_to collection_participants_path(@collection)
   end
 
   def destroy
     @participant.destroy
-    flash[:notice] = t('collection_participants.destroy', default: "Removed %{participant} from collection.", participant: @participant.pseud.name)
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    flash[:notice] = t(".success", participant: @participant.pseud.byline)
+    redirect_back_or_to root_path
   end
 
   def add

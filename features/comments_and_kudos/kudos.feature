@@ -251,3 +251,11 @@ Feature: Kudos
     When I view the work "Awesome Story"
       And I press "Kudos ♥"
     Then I should see "Please log out of your official account!"
+
+  @javascript
+  Scenario: Cannot leave kudos while logged in as a user with the archivist role
+    Given the user "clicker" exists and has the role "archivist"
+      And I am logged in as "clicker"
+    When I view the work "Awesome Story"
+      And I press "Kudos ♥"
+    Then I should see "Please log out of your archivist account!"

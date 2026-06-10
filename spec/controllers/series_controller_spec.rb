@@ -13,11 +13,32 @@ describe SeriesController do
     end
   end
 
-  describe 'edit' do
-    it 'redirects to orphan if there are no pseuds left' do
+  describe "PATCH #remove_user_creatorship" do
+    it "removes creatorship if there are non-user pseuds left" do
       fake_login_known_user(user)
-      get :edit, params: { remove: "me", id: series }
+      other_user_pseud = create(:user).default_pseud
+      series = create(:series, authors: [user.default_pseud, other_user_pseud])
+
+      patch :remove_user_creatorship, params: { id: series }
+
+      expect(series.pseuds.reload).to contain_exactly(other_user_pseud)
+      it_redirects_to_with_notice(series_path(series), "You have been removed as a creator from the series and its works.")
+    end
+
+    it "redirects to orphan if there are no pseuds left" do
+      fake_login_known_user(user)
+      patch :remove_user_creatorship, params: { id: series }
       it_redirects_to(new_orphan_path(series_id: series))
+    end
+
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        patch :remove_user_creatorship, params: { id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
     end
   end
 
@@ -33,6 +54,18 @@ describe SeriesController do
       post :create, params: { series: { title: "test title", author_attributes: { ids: user.pseud_ids } } }
       expect(flash[:notice]).to eq "Series was successfully created."
       expect(response).to have_http_status :redirect
+    end
+  end
+
+  describe "GET #edit" do
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        get :edit, params: { id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
     end
   end
 
@@ -72,12 +105,34 @@ describe SeriesController do
       expect(response).to render_template('edit')
       expect(series.reload.title).not_to eq("foobar")
     end
+
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        put :update, params: { series: { title: "foobar" }, id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+  end
+
+  describe "GET #manage" do
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        get :manage, params: { id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
   end
 
   describe 'update_positions' do
     it 'updates the position and redirects' do
       fake_login_known_user(user)
-      first_work = create(:serial_work, series: series)
+      first_work = series.serial_works.first
       second_work = create(:serial_work, series: series)
       expect(first_work.position).to eq(1)
       expect(second_work.position).to eq(2)
@@ -86,6 +141,30 @@ describe SeriesController do
       second_work.reload
       expect(first_work.position).to eq(2)
       expect(second_work.position).to eq(1)
+    end
+
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        first_work = series.serial_works.first
+        second_work = create(:serial_work, series: series)
+        post :update_positions, params: { id: series.id, serial: [second_work, first_work], format: :json }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+  end
+
+  describe "GET #confirm_delete" do
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        get :confirm_delete, params: { id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
     end
   end
 
@@ -96,6 +175,16 @@ describe SeriesController do
       delete :destroy, params: { id: series }
       it_redirects_to_with_error(series_path(series), \
                                  "Sorry, we couldn't delete the series. Please try again.")
+    end
+
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        delete :destroy, params: { id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
     end
   end
 
@@ -166,17 +255,17 @@ describe SeriesController do
 
     it "assigns page title for series" do
       work = create(:work, fandom_string: "Fandom", authors: [user.default_pseud])
-      create(:serial_work, work: work, series: series)
-      get :show, params: { id: series }
-      expect(assigns[:page_title]).to eq("#{series.title} - #{user.default_pseud.name} - Fandom [#{ArchiveConfig.APP_NAME}]")
+      series_with_work = create(:series, works: [work], authors: [user.default_pseud])
+      get :show, params: { id: series_with_work }
+      expect(assigns[:page_title]).to eq("#{series_with_work.title} - #{user.default_pseud.name} - Fandom [#{ArchiveConfig.APP_NAME}]")
     end
 
     it "assigns page title for anonymous series" do
       anonymous_collection = create(:anonymous_collection)
       anonymous_work = create(:work, fandom_string: "Fandom", collections: [anonymous_collection])
-      create(:serial_work, work: anonymous_work, series: series)
-      get :show, params: { id: series }
-      expect(assigns[:page_title]).to eq("#{series.title} - Anonymous - Fandom [#{ArchiveConfig.APP_NAME}]")
+      series_with_work = create(:series, works: [anonymous_work])
+      get :show, params: { id: series_with_work }
+      expect(assigns[:page_title]).to eq("#{series_with_work.title} - Anonymous - Fandom [#{ArchiveConfig.APP_NAME}]")
     end
 
     it "assigns page subtitle for unrevealed series" do

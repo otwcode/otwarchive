@@ -88,7 +88,7 @@ module TagsHelper
 
   # Adds the "tag" classname to links (for tag links)
   def link_to_with_tag_class(path, text, options)
-    options[:class] ? options[:class] << " tag" : options[:class] = "tag"
+    options[:class] ? options[:class].dup << " tag" : options[:class] = "tag"
     link_to text, path, options
   end
 
@@ -152,9 +152,8 @@ module TagsHelper
   end
 
   def show_wrangling_dashboard
-    can_wrangle? &&
     (%w(tags tag_wranglings tag_wranglers tag_wrangling_requests unsorted_tags).include?(controller.controller_name) ||
-    (@tag && controller.controller_name == 'comments'))
+    (@tag && controller.controller_name == 'comments')) && can_wrangle?
   end
 
   # Returns a nested list of meta tags
@@ -173,7 +172,7 @@ module TagsHelper
 
   # Returns a nested list of sub tags
   def sub_tag_tree(tag)
-    sub_ul = ""
+    sub_ul = +""
     unless tag.direct_sub_tags.empty?
       sub_ul << "<ul class='tags tree index'>"
       tag.direct_sub_tags.order(:name).each do |sub|
@@ -191,7 +190,7 @@ module TagsHelper
   def blurb_tag_block(item, tag_groups=nil)
     tag_groups ||= item.tag_groups
     categories = ['ArchiveWarning', 'Relationship', 'Character', 'Freeform']
-    tag_block = ""
+    tag_block = +""
 
     categories.each do |category|
       if tags = tag_groups[category]
@@ -242,9 +241,9 @@ module TagsHelper
     if tags && tags.size > 0
       # We don't use .to_sentence because these aren't links and we risk making any
       # connector word (e.g., "and") look like part of the final tag.
-      tags.pluck(:name).join(t("support.array.words_connector"))
+      tags.map(&:display_name).join(t("support.array.words_connector"))
     elsif tags.blank? && category_name.blank?
-     "Choose Not To Use Archive Warnings"
+      ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME
     else
       category_name.blank? ? "" : "No" + " " + category_name
     end
@@ -288,7 +287,10 @@ module TagsHelper
   end
 
   def get_symbol_link(css_class, title_string)
-    content_tag(:li, link_to_help('symbols-key', link = ("<span class=\"#{css_class}\" title=\"#{title_string}\"><span class=\"text\">" + title_string + "</span></span>").html_safe))
+    symbol = tag.span(tag.span(title_string, class: "text"), class: css_class, title: title_string)
+    # Use link_to_modal rather than link_to_help_modal so we can use a title rather than an aria-label, ensuring screen readers read the link text.
+    # Keep classes added by link_to_help_modal for consistency with code prior to AO3-7352.
+    content_tag(:li, link_to_modal(symbol, for: help_symbols_key_path, title: t("tags_helper.get_symbol_link.title"), class: "help symbol question"))
   end
 
   # return the right warnings class

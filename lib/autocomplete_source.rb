@@ -12,8 +12,8 @@ module AutocompleteSource
   AUTOCOMPLETE_WORD_TERMINATOR = ",,".freeze
 
   def transliterate(input)
-    input = input.to_s.mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/, "")
-    result = ""
+    input = input.to_s.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/, "")
+    result = +""
     input.each_char do |char|
       tl = ActiveSupport::Inflector.transliterate(char)
       # If transliterate returns "?", the original character is either unsupported 
@@ -130,7 +130,7 @@ module AutocompleteSource
       options.reverse_merge!({search_param: "", autocomplete_prefix: "", sort: "down"})
       search_param = options[:search_param]
       autocomplete_prefix = options[:autocomplete_prefix]
-      if REDIS_AUTOCOMPLETE.exists(autocomplete_cache_key(autocomplete_prefix, search_param))
+      if REDIS_AUTOCOMPLETE.exists?(autocomplete_cache_key(autocomplete_prefix, search_param)) # rubocop:disable Style/IfUnlessModifier
         return REDIS_AUTOCOMPLETE.zrange(autocomplete_cache_key(autocomplete_prefix, search_param), 0, -1)
       end
 
@@ -241,9 +241,7 @@ module AutocompleteSource
 
     # Split a string into words.
     def autocomplete_phrase_split(string)
-      # Use the ActiveSupport::Multibyte::Chars class to handle downcasing
-      # instead of the basic string class, because it can handle downcasing
-      # letters with accents or other diacritics.
+      # transliterate to handle downcasing letters with accents or other diacritics.
       normalized = self.transliterate(string).downcase.to_s
 
       # Split on one or more spaces, ampersands, slashes, double quotation marks,

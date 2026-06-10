@@ -4,8 +4,7 @@ class GiftExchange < ApplicationRecord
 
   override_datetime_setters
 
-  belongs_to :collection
-  has_one :collection, as: :challenge
+  has_one :collection, as: :challenge, dependent: :nullify
 
   # limits the kind of prompts users can submit
   belongs_to :request_restriction, class_name: "PromptRestriction", dependent: :destroy
@@ -45,9 +44,6 @@ class GiftExchange < ApplicationRecord
   # make sure that challenge sign-up / close / open dates aren't contradictory
   validate :validate_signup_dates
 
-  #  When Challenges are deleted, there are two references left behind that need to be reset to nil
-  before_destroy :clear_challenge_references
-
   after_save :copy_tag_set_from_offer_to_request
   def copy_tag_set_from_offer_to_request
     return unless self.offer_restriction
@@ -77,5 +73,15 @@ class GiftExchange < ApplicationRecord
 
   def user_allowed_to_see_prompt?(user, prompt)
     self.collection.user_is_maintainer?(user) || prompt.pseud.user == user
+  end
+
+  validate :request_restriction_allows_fields
+  def request_restriction_allows_fields
+    errors.add(:base, :no_request_fields) unless request_restriction&.allows_prompt_fields?
+  end
+
+  validate :offer_restriction_allows_fields
+  def offer_restriction_allows_fields
+    errors.add(:base, :no_offer_fields) unless offer_restriction&.allows_prompt_fields?
   end
 end
