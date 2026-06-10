@@ -971,6 +971,7 @@ en:
       end_notes_with_work_notes: more notes
       end_notes_without_work_notes: notes
       inspired_by:
+        deleted: Inspired by a deleted work
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
@@ -990,6 +991,7 @@ en:
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
         unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
       translation_of:
+        deleted: A translation of a deleted work
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
@@ -3360,6 +3362,10 @@ en:
       select: Select work skin
     standard_form:
       collectibles_add_to_collection_help_title: Adding To Collections
+      deleted_work: Deleted work
+      header: This work is a remix, a translation, a podfic, or was inspired by another work
+      remove: Remove
+      remove_confirm: Are you sure you want to remove the connection to this work?
       works_assignment_help_title: Fulfilling Assignments
       works_backdating_help_title: Publication Date Options
       works_languages_help_title: Languages help
@@ -3390,6 +3396,7 @@ en:
         heading: Download
     work_header_notes:
       inspired_by:
+        deleted: Inspired by a deleted work
         other_works_inspired_by_this_one: other works inspired by this one
         restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: Inspired by %{work_link} by %{creator_link}
@@ -3405,6 +3412,7 @@ en:
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
         unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
       translation_of:
+        deleted: A translation of a deleted work
         restricted_html: A translation of [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
