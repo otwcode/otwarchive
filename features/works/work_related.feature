@@ -840,3 +840,29 @@ Scenario: Deleted inspiration relationships can be deleted from the Edit Work pa
   Then I should see "Deleted work"
   When I follow "Remove" within "#parent-options"
   Then I should not see "Deleted work"
+
+Scenario: Sections of the related works page which are empty due to a deleted parent work shouldn't show
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "remixer"
+    And I go to remixer's related works page
+  Then I should see "Works that inspired "
+  When I am logged in as "translator"
+    And I go to translator's related works page
+  Then I should see "Works Translated by "
+  When I am logged in as "inspiration"
+    And I go to inspiration's related works page
+  Then I should see "Translations of "
+    And I should see "Works inspired by "
+
+  When I delete the work "Worldbuilding"
+    And I go to inspiration's related works page
+  Then I should not see "Translations of "
+    And I should not see "Works inspired by "
+  When I am logged in as "remixer"
+    And I go to remixer's related works page
+  Then I should not see "Works that inspired "
+  When I am logged in as "translator"
+    And I go to translator's related works page
+  Then I should not see "Works Translated by "
