@@ -737,7 +737,7 @@ en:
         update: Update
       content_policy: Content Policy
       legend: Post Chapter
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
     preview:
       page_heading: Preview
@@ -3299,7 +3299,7 @@ en:
       page_heading_html: Chapter Index for %{work_link} by %{creators}
     new_import:
       content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
       works_languages_help_title: Languages help
     permissions:
@@ -3322,7 +3322,7 @@ en:
         update: Update
       content_policy: Content Policy
       legend: Post Work
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
     preface:
       title: Preface
