@@ -1,10 +1,6 @@
 PhraseApp::InContextEditor.configure do |config|
   # Enable or disable the In-Context-Editor in general
-  if ENV["AO3_PHRASE_APP"] == "true" || ArchiveConfig.PHRASEAPP_ENABLE == "true"
-    config.enabled = true
-  else
-    config.enabled = false
-  end
+  config.enabled = ENV["AO3_PHRASE_APP"] == "true" || ArchiveConfig.PHRASEAPP_ENABLE == "true"
 
   # Configure with your project id and account id. You can find the
   # project id in your project settings and account id in your account
