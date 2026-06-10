@@ -510,6 +510,8 @@ class Comment < ApplicationRecord
   end
 
   def submit_spam
+    return unless approved && !is_deleted
+
     AkismetClient.submit_spam(akismet_attributes)
   end
 
