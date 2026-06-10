@@ -17,4 +17,17 @@ describe ImportedUrl do
     expect(url.encoded).to eq("http://www.trickster.org/llwyden/misc/cracked.html")
     expect(url.decoded).to eq("http://www.trickster.org/llwyden/misc/cracked.html")
   end
+
+  it "handles longer urls where the encoded column will be much larger gracefully" do
+    # default string column max is 255 so we create an url with exactly 255 chars
+    # and encoding that will extend the
+    repeated_string = "#() {}" * 38
+    long_url = "http://www.faikes.org/#{repeated_string}.html"
+
+    formatter = UrlFormatter.new(long_url)
+    url.original = formatter.original
+
+    expect { url.save }
+      .not_to raise_error
+  end
 end

@@ -11,7 +11,10 @@
   </dd>
 <% end %>
   
-<dt><%= form.label :collections_to_add, ts("Add to collections") %> <%= link_to_help "add-collectible-to-collection" %></dt>
+<dt>
+  <%= form.label :collections_to_add, t(".add_to_collections") %>
+  <%= link_to_help_modal(help_collectibles_add_to_collection_path, t(".collectibles_add_to_collection_help_title")) %>
+</dt>
 <dd title="add to collection">
   <%= form.text_field :collections_to_add, autocomplete_options("open_collection_names") %>
 </dd>
