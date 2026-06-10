@@ -304,3 +304,27 @@ Feature: User dashboard
     Then I should see "Here are some tips to help you get started" within "#modal"
       And I should see "First login help" within "#modal"
       And I should see "Close" within "#modal"
+
+  Scenario: The sidebar's related work count should remain accurate even when the parent's of related works are deleted
+    Given I have related works setup
+      And I post a related work as remixer
+      And I post a translation as translator
+    When I am logged in as "remixer"
+      And I go to remixer's user page
+    Then I should see "Related Works (1)"
+    When I am logged in as "translator"
+      And I go to translator's user page
+    Then I should see "Related Works (1)"
+    When I am logged in as "inspiration"
+      And I go to inspiration's user page
+    Then I should see "Related Works (2)"
+
+    When I delete the work "Worldbuilding"
+      And I go to inspiration's user page
+    Then I should see "Related Works (0)"
+    When I am logged in as "remixer"
+      And I go to remixer's user page
+    Then I should see "Related Works (0)"
+    When I am logged in as "translator"
+      And I go to translator's user page
+    Then I should see "Related Works (0)"
