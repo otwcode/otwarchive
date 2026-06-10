@@ -40,6 +40,8 @@ en:
         requests_num_required: Number of requests required per sign-up
       language:
         short: Abbreviation
+      locale:
+        interface_enabled: Use for interface
       meta_tagging:
         meta_tag: Metatag
         meta_tag_id: Metatag
@@ -136,6 +138,11 @@ en:
           attributes:
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them.
+        gift_exchange:
+          attributes:
+            base:
+              no_offer_fields: Offer Settings must allow at least one field.
+              no_request_fields: Request Settings must allow at least one field.
         invitation:
           attributes:
             base:
@@ -162,6 +169,10 @@ en:
               official: Please log out of your official account!
           format: "%{message}"
           taken: You have already left kudos here. :)
+        locale:
+          attributes:
+            interface_enabled:
+              only_if_email_enabled: can only be enabled if use for emails is also enabled.
         mute:
           attributes:
             muted:
@@ -174,6 +185,10 @@ en:
           format: "%{message}"
         prompt:
           tags_not_in_fandom: "^These %{tag_label} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)"
+        prompt_meme:
+          attributes:
+            base:
+              no_request_fields: Request Settings must allow at least one field.
         related_work:
           attributes:
             parent:
@@ -314,6 +329,7 @@ en:
       url:
         invalid: does not appear to be a valid URL.
   story_parser:
+    invalid_url: URL is not valid.
     on_archive: URL is for a work on the Archive. Please bookmark it directly instead.
   subscriptions:
     deleted: Deleted item

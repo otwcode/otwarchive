@@ -157,7 +157,7 @@ en:
         work: Delete Work
       edit:
         external_work: Edit External Work
-      edit_tags: Edit Tags and Language
+      edit_work: Edit Work
       hide:
         bookmark: Hide Bookmark
         external_work: Hide External Work
@@ -723,6 +723,9 @@ en:
       heading: Sign-up Summary for %{collection}
       no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
+    chapter_form:
+      publication_date: Chapter Publication Date
+      works_backdating_help_title: Publication Date Options
     posting_fieldset:
       actions:
         cancel: Cancel
@@ -734,10 +737,14 @@ en:
         update: Update
       content_policy: Content Policy
       legend: Post Chapter
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
     preview:
       page_heading: Preview
+  collectibles:
+    collectible_form:
+      add_to_collections: Add to collections
+      collectibles_add_to_collection_help_title: Adding To Collections
   collection_items:
     collection_item_form:
       add: Add
@@ -771,9 +778,13 @@ en:
         collection_tags: 'Collection tags:'
   collections:
     collection_blurb:
+      bookmarked_items: 'Bookmarked Items:'
+      challenges_subcollections: 'Challenges/Subcollections:'
       collection_tags: 'Collection Tags:'
+      prompts: 'Prompts:'
       signups_close_at: 'Sign-ups close at:'
       summary: Summary
+      works: 'Works:'
     filters:
       clear_filters: Clear Filters
       closed:
@@ -960,6 +971,7 @@ en:
       end_notes_with_work_notes: more notes
       end_notes_without_work_notes: notes
       inspired_by:
+        deleted: Inspired by a deleted work
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
@@ -979,6 +991,7 @@ en:
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
         unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
       translation_of:
+        deleted: A translation of a deleted work
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
@@ -1076,6 +1089,8 @@ en:
   external_works:
     edit:
       works_languages_help_title: Languages help
+    new:
+      page_heading: Bookmark External Work
     notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
   fandoms:
     index:
@@ -1137,6 +1152,12 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    collectibles_add_to_collection:
+      collection_names: Note that you need to use the collection's name, which gets used in the collection's URL, and not the collection's spiffy title (because different collections can have the same title). A collection's name is the equivalent of your user login. Names will be auto-completed for you if you have JavaScript turned on.
+      guidance: Enter collection names as a comma-separated list, and the item you are editing will be added to all the collections you specify.
+      moderated_and_anonymous_collections: 'Also note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically - it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
+      page_heading: Adding To Collections
+      removing_from_collection: If you change your mind about having an item in a collection, you can either edit the list of collections when editing it, or you can manage all your collected items under the "My Collections" page in your account.
     first_login:
       additional_info:
         header: Additional Browsing Information
@@ -1635,6 +1656,14 @@ en:
       underage_sex:
         description: This is for descriptions or depictions of sexual activity involving characters under the age of eighteen. (This doesn't include dating activity like kissing or vague references with no actual description or depiction.) This warning generally applies to humans; if you are creating a pornographic work about space aliens who only live for a month or thousand-year-old vampires with twelve-year-old bodies, please just use your best judgment. You are always free to specify characters' ages or to use "Choose Not to Use Archive Warnings".
         header: 'Underage Sex:'
+    works_assignment:
+      guidance: If you have any open challenge assignments, you can choose one of them here if the story you are posting is meant to fulfill one of them. This will automatically add your story to the challenge collection (or submit it for approval) and also mark your assignment as fulfilled for the challenge moderators.
+      moderated_and_anonymous_collections: 'Note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically — it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
+      page_heading: Fulfilling Assignments
+    works_backdating:
+      chapters: Any subsequent chapters you add will have that date pre-set on the form, though you will still have the option of overriding that date. This means that if you don't know or care exactly when each chapter was originally published, you can still backdate your work conveniently.
+      guidance: When posting a work, you have the option to set a different publication date — in other words, to backdate the work. You can also set publication dates for individual chapters. Please note that in both cases, this affects whether and where your work appears on your dashboard and the works page, etc. These pages which show the date when your work was last updated — the publication date of your work or of one of your chapters, whichever is the most recent date.
+      page_heading: Publication Date Options
     works_languages:
       contact_support: let us know via the Support form
       page_heading: Languages
@@ -2137,7 +2166,8 @@ en:
           agreement: 'Agreement:'
           any_other_form: any other form of content
           content_policy: Content Policy
-          html: '%{agreement} AO3 hosts and shares content created by fans, for fans. Our %{content_policy_link} and %{privacy_policy_link} are part of these Terms of Service (TOS). By submitting a work; bookmark; comment; tag; link; text, image, audio, or video file; username; fannish next-of-kin; %{personal_information_link} (such as an email address); or %{any_other_form_link} ("Content") to the Archive of Our Own service (hereinafter "Service", "AO3", or "Archive"), or by creating an account and/or accessing Content on AO3, you affirm, confirm, and state that you comply with and assent to the TOS.'
+          fnok: fannish next-of-kin
+          html: '%{agreement} AO3 hosts and shares content created by fans, for fans. Our %{content_policy_link} and %{privacy_policy_link} are part of these Terms of Service (TOS). By submitting a work; bookmark; comment; tag; link; text, image, audio, or video file; username; %{fannish_next_of_kin_link}; %{personal_information_link} (such as an email address); or %{any_other_form_link} ("Content") to the Archive of Our Own service (hereinafter "Service", "AO3", or "Archive"), or by creating an account and/or accessing Content on AO3, you affirm, confirm, and state that you comply with and assent to the TOS.'
           personal_information: Personal Information
           privacy_policy: Privacy Policy
         entirety_of_agreement:
@@ -3231,6 +3261,9 @@ en:
         related_works: Related Works (%{related_works_number})
         sign_ups: Sign-ups (%{signup_number})
   works:
+    admin_edit_form:
+      associations_title: Associations
+      required_information: Required information
     adult:
       caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.
       footnote: If you accept cookies from our site and you choose "Yes, Continue", you will not be asked again during this session (that is, until you close your browser). If you log in you can store your preference and never be asked again.
@@ -3250,12 +3283,20 @@ en:
       page_heading: Unposted Draft
       please_note: 'Please note:'
       unposted_drafts_get_deleted: Unposted drafts are only saved for 30 days from the day they are first created, and then deleted from %{app_name}.
+    edit:
+      add_chapter: Add Chapter
+      delete_confirm: Are you sure you want to delete this work? This will destroy all comments and kudos on this work as well and CANNOT BE UNDONE!
+      delete_work: Delete Work
+      draft_chapter_position: "%{position} (Draft)"
+      edit_chapter: 'Edit Chapter:'
+      manage_chapters: Manage Chapters
+      orphan_work: Orphan Work
+      page_heading: Edit Work
+      remove_me_as_co_creator: Remove Me As Co-Creator
     edit_multiple:
       works_languages_help_title: Languages help
     edit_tags:
-      page_heading:
-        edit_tags_and_language_html: Edit Work Tags and Language for %{title}
-        edit_tags_html: Edit Work Tags for %{title}
+      page_heading_html: Edit Work Tags for %{title}
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works
@@ -3272,7 +3313,7 @@ en:
       page_heading_html: Chapter Index for %{work_link} by %{creators}
     new_import:
       content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
       works_languages_help_title: Languages help
     permissions:
@@ -3295,7 +3336,7 @@ en:
         update: Update
       content_policy: Content Policy
       legend: Post Work
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
     preface:
       title: Preface
@@ -3320,6 +3361,13 @@ en:
     skin:
       select: Select work skin
     standard_form:
+      collectibles_add_to_collection_help_title: Adding To Collections
+      deleted_work: Deleted work
+      header: This work is a remix, a translation, a podfic, or was inspired by another work
+      remove: Remove
+      remove_confirm: Are you sure you want to remove the connection to this work?
+      works_assignment_help_title: Fulfilling Assignments
+      works_backdating_help_title: Publication Date Options
       works_languages_help_title: Languages help
       works_parents_help_title: Parent works help
       works_recipients_help_title: Recipients
@@ -3348,6 +3396,7 @@ en:
         heading: Download
     work_header_notes:
       inspired_by:
+        deleted: Inspired by a deleted work
         other_works_inspired_by_this_one: other works inspired by this one
         restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: Inspired by %{work_link} by %{creator_link}
@@ -3363,6 +3412,7 @@ en:
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
         unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
       translation_of:
+        deleted: A translation of a deleted work
         restricted_html: A translation of [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection

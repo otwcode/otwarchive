@@ -210,3 +210,8 @@ Feature: Create bookmarks of external works
     When I follow "A Work Not Posted To The AO3"
     Then I should see "This work isn't hosted on the Archive"
       And I should see a link to "https://example.com/external_work" within "h4"
+
+  Scenario: A user should see the correct title on the external bookmark page
+    Given I am logged in as "bookmarker"
+    When I am on the new external work page
+    Then I should see the page title "Bookmark External Work"
