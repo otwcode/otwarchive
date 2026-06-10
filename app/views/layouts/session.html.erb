@@ -28,10 +28,10 @@
     </title>
 
     <%= render "layouts/includes" %>
-    <%= phraseapp_in_context_editor_js %>
+    <%= load_in_context_editor %>
   </head>
 
-  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
+  <body class="<%= logged_in? ? 'logged-in' : 'logged-out' %>">
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts("Main Content") %></a></li></ul>
       <%= render "layouts/header" %>
