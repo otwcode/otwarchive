@@ -8,11 +8,11 @@ describe 'rake opendoors:import_url_mapping' do
   original_url = "http://another/1"
   original_url2 = "http://another/2"
 
-  let!(:work_with_temp_url) {
+  let!(:work_with_temp_url) do
     work_with_temp_url = create(:work, id: id1)
     work_with_temp_url.imported_url = ImportedUrl.create(original: temp_url)
     work_with_temp_url
-  }
+  end
   let!(:work_with_no_url) { create(:work, id: id2) }
 
   after do

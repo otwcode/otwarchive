@@ -1,9 +1,8 @@
 namespace :opendoors do
   def update_work(row)
-    begin
       work = Work.find(row["AO3 id"])
       # ImportedUrl needs an original value, so we use the imported url temporarily and only save if we're actually updating it
-      work.imported_url = ImportedUrl.new(:original => row["URL Imported From"]) if work.imported_url.nil?
+      work.imported_url = ImportedUrl.new(original: row["URL Imported From"]) if work.imported_url.nil?
 
       if work.imported_url.original == row["URL Imported From"]
         work.imported_url.original = row["Original URL"]
@@ -12,9 +11,8 @@ namespace :opendoors do
       else
         "#{work.id}\twas not changed: its import url is #{work.imported_url.original}"
       end
-    rescue StandardError => e
-      "#{row["AO3 id"]}\twas not changed: #{e}"
-    end
+  rescue StandardError => e
+    "#{row['AO3 id']}\twas not changed: #{e}"
   end
   
   desc "Map import urls based on spreadsheet data - required fields: 'AO3 id', 'URL Imported From', 'Original URL'"
