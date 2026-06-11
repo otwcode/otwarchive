@@ -1,16 +1,16 @@
 namespace :opendoors do
   def update_work(row)
-      work = Work.find(row["AO3 id"])
-      # ImportedUrl needs an original value, so we use the imported url temporarily and only save if we're actually updating it
-      work.imported_url = ImportedUrl.new(original: row["URL Imported From"]) if work.imported_url.nil?
+    work = Work.find(row["AO3 id"])
+    # ImportedUrl needs an original value, so we use the imported url temporarily and only save if we're actually updating it
+    work.imported_url = ImportedUrl.new(original: row["URL Imported From"]) if work.imported_url.nil?
 
-      if work.imported_url.original == row["URL Imported From"]
-        work.imported_url.original = row["Original URL"]
-        work.imported_url.save!
-        "#{work.id}\twas updated: its import url is now #{work.imported_url.original}"
-      else
-        "#{work.id}\twas not changed: its import url is #{work.imported_url.original}"
-      end
+    if work.imported_url.original == row["URL Imported From"]
+      work.imported_url.original = row["Original URL"]
+      work.imported_url.save!
+      "#{work.id}\twas updated: its import url is now #{work.imported_url.original}"
+    else
+      "#{work.id}\twas not changed: its import url is #{work.imported_url.original}"
+    end
   rescue StandardError => e
     "#{row['AO3 id']}\twas not changed: #{e}"
   end
