@@ -363,6 +363,7 @@ When "I uncheck the {string} role checkbox" do |role|
   uncheck("user_roles_#{role_id}")
 end
 
+# rubocop:disable Cucumber/RegexStepName
 When /^I set up a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
@@ -379,6 +380,7 @@ When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   step %{I set up a translation of an admin post with tags "#{tags}"}
   click_button("Post")
 end
+# rubocop:enable Cucumber/RegexStepName
 
 When /^I hide the work "(.*?)"$/ do |title|
   work = Work.find_by(title: title)
