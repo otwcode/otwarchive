@@ -43,6 +43,7 @@ class AdminPost < ApplicationRecord
   scope :posted, -> { where(posted: true) }
 
   before_validation :inherit_translated_post_attributes
+  before_save :apply_tag_list
   before_save :set_published_at, if: :posted_changed?
   after_destroy :expire_cached_home_admin_posts
   after_save :expire_cached_home_admin_posts, :update_translation_attributes
@@ -66,13 +67,22 @@ class AdminPost < ApplicationRecord
   end
 
   def tag_list
-    tags.map{ |t| t.name }.join(", ")
+    @tag_list&.join(", ") || tags.map(&:name).join(", ")
   end
 
   def tag_list=(list)
-    return if translated_post_id.present?
-
-    self.tags = list.split(",").uniq.collect do |name|
+    @tag_list = list.split(",").uniq if translated_post_id.blank?
+  end
+  
+  def tags=(tags)
+    @tag_list = nil
+    super(tags)
+  end
+  
+  def tags
+    return super unless @tag_list
+    
+    @tag_list.collect do |name|
       AdminPostTag.fetch(name.strip, self.language_id)
     end.compact
   end
@@ -126,6 +136,14 @@ class AdminPost < ApplicationRecord
 
     self.comment_permissions = translated_post.comment_permissions
     self.tags = translated_post.tags
+  end
+  
+  def apply_tag_list
+    return unless @tag_list
+
+    self.tags = @tag_list.collect do |name|
+      AdminPostTag.fetch(name.strip, self.language_id)
+    end.compact
   end
 
   def update_translation_attributes

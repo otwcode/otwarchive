@@ -308,3 +308,29 @@ Scenario: Preview of a translation of an admin post keeps tags of original post
     When I press "Edit"
     Then I should not see the input with id "admin_post_tag_list"
       And I should not see "Tags from the selected post will replace any tags entered on this page."
+
+Scenario: Preview of a new admin post does not immediately create tags
+    Given basic languages
+      And I am logged in as a "translation" admin
+    When I start to make an admin post
+      And I fill in "Tags" with "never seen before"
+      And I press "Preview"
+    Then I should see "never seen before" within "dd.tags"
+    When I follow "Cancel"
+    Then "never seen before" should not be an option within "Tag"
+
+Scenario: Preview of an edit to an admin post does not immediately create tags
+    Given I have posted an admin post with tags "original1, original2"
+      And basic languages
+      And I am logged in as a "translation" admin
+    When I go to the admin-posts page
+      And I follow "Edit"
+      And I fill in "Tags" with "never seen before"
+      And I press "Preview"
+    Then I should see "never seen before" within "dd.tags"
+    When I follow "Cancel"
+    Then I should see "original1 original2" within "dd.tags"
+    When I go to the admin-posts page
+    Then "never seen before" should not be an option within "Tag"
+      And "original1" should be an option within "Tag"
+      And "original2" should be an option within "Tag"
