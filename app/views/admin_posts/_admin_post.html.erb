@@ -9,7 +9,7 @@
   <dl class="meta">
     <% if admin_post.posted? %>
       <dt class="published"><%= t(".published") %></dt>
-      <dd class="published"><%= admin_post.published_at %></dd>
+      <dd class="published"><%= l(admin_post.published_at) %></dd>
     <% end %>
     <% if admin_post.translated_post %>
       <dt class="original translations"><%= ts("Original:") %></dt>

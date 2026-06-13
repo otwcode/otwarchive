@@ -45,7 +45,7 @@ Feature: Admin Actions to Draft News
     Then I should see "Admin Post was successfully updated."
       And I should see "New Post Title"
     When I follow "Back to AO3 News Drafts"
-    Then I should see "Created at 2026-05-12 12:00:00 UTC and updated at 2026-05-13 12:34:56 UTC"
+    Then I should see "Created on Tue, 12 May 2026 12:00:00 +0000 and updated on Wed, 13 May 2026 12:34:56 +0000"
 
   Scenario: Admins with posting permissions can post drafts
     Given the draft admin post "My Draft Post"

@@ -291,7 +291,7 @@ Feature: Admin Actions to Post News
     Then I should see "Admin Post was successfully posted."
     When I follow "Back to AO3 News Index"
     Then "First News Post" should appear before "Second News Post"
-      And I should see "Published at 2026-05-18 05:30:00 UTC (Created at 2026-05-16 03:30:00 UTC and updated at 2026-05-18 05:30:00 UTC)"
+      And I should see "Published on Mon, 18 May 2026 05:30:00 +0000 (Created on Sat, 16 May 2026 03:30:00 +0000 and updated on Mon, 18 May 2026 05:30:00 +0000)"
     When I log out
       And I am on the homepage
     Then "First News Post" should appear before "Second News Post"
