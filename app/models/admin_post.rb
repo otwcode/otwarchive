@@ -42,10 +42,10 @@ class AdminPost < ApplicationRecord
   scope :unposted, -> { where(posted: false) }
   scope :posted, -> { where(posted: true) }
 
-  before_save :inherit_translated_post_comment_permissions, :inherit_translated_post_tags
+  before_validation :inherit_translated_post_attributes
   before_save :set_published_at, if: :posted_changed?
   after_destroy :expire_cached_home_admin_posts
-  after_save :expire_cached_home_admin_posts, :update_translation_comment_permissions, :update_translation_tags
+  after_save :expire_cached_home_admin_posts, :update_translation_attributes
   after_save :post_translations, if: :saved_change_to_posted?
 
   # Return the name to link comments to for this object
@@ -72,9 +72,9 @@ class AdminPost < ApplicationRecord
   def tag_list=(list)
     return if translated_post_id.present?
 
-    self.tags = list.split(",").uniq.collect { |t|
-      AdminPostTag.fetch(name: t.strip, language_id: self.language_id, post: self)
-      }.compact
+    self.tags = list.split(",").uniq.collect do |name|
+      AdminPostTag.fetch(name.strip, self.language_id)
+    end.compact
   end
 
   def translated_post_must_exist
@@ -121,35 +121,20 @@ class AdminPost < ApplicationRecord
     end
   end
 
-  def inherit_translated_post_comment_permissions
+  def inherit_translated_post_attributes
     return if translated_post.blank?
 
     self.comment_permissions = translated_post.comment_permissions
-  end
-
-  def inherit_translated_post_tags
-    return if translated_post.blank?
-
     self.tags = translated_post.tags
   end
 
-  def update_translation_comment_permissions
-    return if translations.blank?
-
-    transaction do
-      translations.find_each do |post|
-        post.comment_permissions = self.comment_permissions
-        post.save
-      end
-    end
-  end
-
-  def update_translation_tags
+  def update_translation_attributes
     return if translations.blank?
 
     transaction do
       translations.find_each do |post|
         post.tags = self.tags
+        post.comment_permissions = self.comment_permissions
         post.save
       end
     end

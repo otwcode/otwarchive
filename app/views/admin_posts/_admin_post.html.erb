@@ -13,7 +13,7 @@
     <% end %>
     <% if admin_post.translated_post %>
       <dt class="original translations"><%= ts("Original:") %></dt>
-      <dd class="original translations"><%= link_to admin_post.translated_post.title, admin_post.translated_post %></dd>
+      <dd class="original translations"><%= link_to admin_post.translated_post.title.html_safe, admin_post.translated_post %></dd>
     <% else %>
       <% translations = sorted_translations(admin_post) %>
       <% unless translations.blank? %>
@@ -31,8 +31,8 @@
       <dt class="tags"><%= ts("Tags:") %></dt>
       <dd class="tags">
         <ul class="tags commas">
-          <% for tag in admin_post.tags %>
-            <li><%= link_to tag.name, admin_posts_path(tag: tag.id), class: "tag" %></li>
+          <% admin_post.tags.each do |tag| %>
+          <li><%= link_to tag.name, admin_posts_path(tag: tag.id), class: "tag" %></li>
           <% end %>
         </ul>
       </dd>

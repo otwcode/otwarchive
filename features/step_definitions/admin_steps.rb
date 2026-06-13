@@ -363,7 +363,7 @@ When "I uncheck the {string} role checkbox" do |role|
   uncheck("user_roles_#{role_id}")
 end
 
-When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
+When /^I set up a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
   admin_post_id = !admin_post.nil? ? admin_post.id : 0
@@ -373,6 +373,10 @@ When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   step %{I select "Deutsch" from "Choose a language"}
   fill_in("admin_post_translated_post_id", with: admin_post_id)
   fill_in("admin_post_tag_list", with: tags) if tags
+end
+
+When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
+  step %{I set up a translation of an admin post with tags "#{tags}"}
   click_button("Post")
 end
 

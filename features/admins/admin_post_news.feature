@@ -296,3 +296,15 @@ Feature: Admin Actions to Post News
       And I am on the homepage
     Then "First News Post" should appear before "Second News Post"
       And I should see "Published: Mon 18 May 2026 05:30AM UTC"
+
+Scenario: Preview of a translation of an admin post keeps tags of original post
+    Given I have posted an admin post with tags "original1, original2"
+      And basic languages
+      And I am logged in as a "translation" admin
+    When I set up a translation of an admin post with tags "ooops"
+      And I press "Preview"
+    Then I should see "original1 original2" within "dd.tags"
+      And I should not see "ooops"
+    When I press "Edit"
+    Then I should not see the input with id "admin_post_tag_list"
+      And I should not see "Tags from the selected post will replace any tags entered on this page."
