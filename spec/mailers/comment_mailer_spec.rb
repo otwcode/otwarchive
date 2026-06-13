@@ -291,7 +291,7 @@ describe CommentMailer do
 
         expect(subject.html_part).to have_xpath(
           "//a[@href=\"#{url}\"]",
-          text: "#{comment.ultimate_parent.commentable_name}"
+          text: comment.ultimate_parent.commentable_name
         )
       end
     end
