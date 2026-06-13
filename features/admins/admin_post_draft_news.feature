@@ -44,6 +44,7 @@ Feature: Admin Actions to Draft News
       And I press "Save As Draft"
     Then I should see "Admin Post was successfully updated."
       And I should see "New Post Title"
+      And the page title should include "(Draft)"
     When I follow "Back to AO3 News Drafts"
     Then I should see "Created on Tue, 12 May 2026 12:00:00 +0000 and updated on Wed, 13 May 2026 12:34:56 +0000"
 

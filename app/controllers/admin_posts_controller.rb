@@ -27,12 +27,13 @@ class AdminPostsController < Admin::BaseController
       @admin_posts = admin_posts.posted.order(published_at: :desc).limit(8)
       @previous_admin_post = admin_posts.posted.order(published_at: :desc).where("published_at < ?", @admin_post.published_at).first
       @next_admin_post = admin_posts.posted.order(published_at: :asc).where("published_at > ?", @admin_post.published_at).first
+      @page_subtitle = @admin_post.title.html_safe
     else
       @admin_posts = admin_posts.unposted.order(created_at: :desc).limit(8)
       @previous_admin_post = admin_posts.unposted.order(created_at: :desc).where("created_at < ?", @admin_post.created_at).first
       @next_admin_post = admin_posts.unposted.order(created_at: :asc).where("created_at > ?", @admin_post.created_at).first
+      @page_subtitle = t(".page_title_draft", title: @admin_post.title.html_safe)
     end
-    @page_subtitle = @admin_post.title.html_safe
     respond_to do |format|
       format.html # show.html.erb
       format.js
