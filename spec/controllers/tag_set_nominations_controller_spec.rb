@@ -1238,6 +1238,42 @@ describe TagSetNominationsController do
     end
   end
 
+  describe "PUT update - concurrent nomination limit bypass" do
+    let(:owned_tag_set) { create(:owned_tag_set) }
+    let(:nomination) { create(:tag_set_nomination, owned_tag_set: owned_tag_set, pseud: random_user.default_pseud) }
+
+    before do
+      fake_login_known_user(random_user)
+    end
+
+    context "when another tab already saved a fandom at the limit" do
+      before do
+        owned_tag_set.update_column(:fandom_nomination_limit, 2)
+      end
+
+      it "does not save the extra fandom" do
+        fandom_a = FandomNomination.create!(tag_set_nomination: nomination, tagname: "Fandom A")
+        FandomNomination.create!(tag_set_nomination: nomination, tagname: "Fandom B")
+
+        put :update, params: {
+          tag_set_id: owned_tag_set.id,
+          id: nomination.id,
+          tag_set_nomination: {
+            pseud_id: random_user.default_pseud.id,
+            fandom_nominations_attributes: {
+              '0': { tagname: "Fandom A", id: fandom_a.id },
+              '1': { tagname: "Fandom C" }
+            }
+          }
+        }
+
+        expect(nomination.reload.fandom_nominations.count).to eq(2)
+        expect(response).to render_template("edit")
+      end
+    end
+
+  end
+
   describe 'DELETE destroy' do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do

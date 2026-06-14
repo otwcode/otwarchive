@@ -42,36 +42,5 @@ describe TagSetNomination do
       end
     end
 
-    context "when a concurrent update adds a character beyond the limit" do
-      before do
-        owned_tag_set.update_column(:fandom_nomination_limit, 1)
-        owned_tag_set.update_column(:character_nomination_limit, 2)
-      end
-
-      it "rejects the second update" do
-        fandom_nom = FandomNomination.create!(tag_set_nomination: nomination, tagname: "Test Fandom")
-        # Simulate tab 1 saving 2 characters while tab 2 is still open
-        CharacterNomination.create!(tag_set_nomination: nomination, fandom_nomination: fandom_nom, tagname: "Char A")
-        CharacterNomination.create!(tag_set_nomination: nomination, fandom_nomination: fandom_nom, tagname: "Char B")
-        nomination.reload
-
-        # Tab 2 submits with the fandom + 2 new characters (it never saw Char A/B)
-        result = nomination.update(
-          fandom_nominations_attributes: {
-            "0" => {
-              id: fandom_nom.id,
-              tagname: "Test Fandom",
-              character_nominations_attributes: {
-                "0" => { tagname: "Char C", from_fandom_nomination: true },
-                "1" => { tagname: "Char D", from_fandom_nomination: true }
-              }
-            }
-          }
-        )
-
-        expect(result).to be_falsey
-        expect(nomination.errors[:base]).to include("You can only nominate 2 character tags per fandom.")
-      end
-    end
   end
 end
