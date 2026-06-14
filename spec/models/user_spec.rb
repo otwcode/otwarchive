@@ -496,7 +496,6 @@ describe User do
   end
 
   describe "canonical_email" do
-
     context "when a user is created" do
       let(:user) { create(:user, email: "old+foo@example.com") }
 
