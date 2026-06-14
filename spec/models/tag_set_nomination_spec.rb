@@ -41,6 +41,5 @@ describe TagSetNomination do
         expect(nomination.errors[:base]).to include("You can only nominate 2 fandom tags")
       end
     end
-
   end
 end

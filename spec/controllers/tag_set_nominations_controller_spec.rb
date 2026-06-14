@@ -1261,8 +1261,8 @@ describe TagSetNominationsController do
           tag_set_nomination: {
             pseud_id: random_user.default_pseud.id,
             fandom_nominations_attributes: {
-              '0': { tagname: "Fandom A", id: fandom_a.id },
-              '1': { tagname: "Fandom C" }
+              "0": { tagname: "Fandom A", id: fandom_a.id },
+              "1": { tagname: "Fandom C" }
             }
           }
         }
@@ -1271,7 +1271,6 @@ describe TagSetNominationsController do
         expect(response).to render_template("edit")
       end
     end
-
   end
 
   describe 'DELETE destroy' do
