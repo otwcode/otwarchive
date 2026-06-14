@@ -777,11 +777,11 @@ class Work < ApplicationRecord
   def number_of_posted_chapters
     Rails.cache.fetch(
       key_for_chapter_posted_counting(self),
-      expires_in: ArchiveConfig.SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE.seconds,
+      skip_nil: true,
       race_condition_ttl: 10.seconds
     ) do
       count = chapters.posted.count
-      count.zero? && posted? ? 1 : count
+      count.zero? ? nil : count
     end
   end
 

@@ -216,7 +216,7 @@ module WorksHelper
 
   # 1/1, 2/3, 5/?, etc.
   def chapter_total_display(work)
-    current = work.posted? ? work.number_of_posted_chapters : 1
+    current = work.posted? ? work.number_of_posted_chapters.to_i : 1
     number_with_delimiter(current) + "/" + number_with_delimiter(work.wip_length)
   end
 
@@ -224,7 +224,7 @@ module WorksHelper
   # (e.g. 3/5, 2/?), with the current # linked to that chapter. If the work is 1 chapter,
   # returns the un-linked version.
   def chapter_total_display_with_link(work)
-    total_posted_chapters = work.number_of_posted_chapters
+    total_posted_chapters = work.number_of_posted_chapters.to_i
     if total_posted_chapters > 1
       link_to(number_with_delimiter(total_posted_chapters),
               work_chapter_path(work, work.last_posted_chapter.id)) +

@@ -600,22 +600,27 @@ describe Work do
   end
 
   describe "#number_of_posted_chapters" do
-    it "does not cache 0 posted chapters for a posted work when replica is stale" do
-      draft = create(:draft)
-      draft.update!(posted: true)
+    it "does not cache a zero count from a stale replica" do
+      work = create(:work)
+      Rails.cache.clear
 
       stale_relation = double(count: 0)
-      allow(draft).to receive(:chapters).and_return(double(posted: stale_relation))
+      allow(work).to receive(:chapters).and_return(double(posted: stale_relation))
+      work.number_of_posted_chapters
 
-      expect(draft.number_of_posted_chapters).to eq(1)
+      allow(work).to receive(:chapters).and_call_original
+      expect(work.number_of_posted_chapters).to eq(1)
     end
 
-    it "caches the correct count when replica returns a non-zero value" do
+    it "caches a non-zero count" do
       work = create(:work)
+      Rails.cache.clear
 
       stale_relation = double(count: 3)
       allow(work).to receive(:chapters).and_return(double(posted: stale_relation))
+      work.number_of_posted_chapters
 
+      allow(work).to receive(:chapters).and_call_original
       expect(work.number_of_posted_chapters).to eq(3)
     end
   end
