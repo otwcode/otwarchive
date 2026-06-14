@@ -27,7 +27,7 @@
       </dd>
     <% else %>
       <dt>
-        <span lang="<%= language.short %>"><%= language.name %></span><%= link_to language.name, language, lang: language.short %>
+        <span lang="<%= language.short %>"><%= language.name %></span>
         <%= t(".language_code_format_html", code: content_tag(:abbr, language.short)) %>
       </dt>
       <dd>
