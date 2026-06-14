@@ -72,5 +72,4 @@ describe TagSetNomination do
       end
     end
   end
-
 end
