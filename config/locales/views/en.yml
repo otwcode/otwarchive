@@ -1609,7 +1609,7 @@ en:
       description: Any other tags you want to give your work (for example, "Angst", "Crossover", or "Tentacles"). You may also use this field to warn for things not covered by the Archive Warnings. Please do not enter fandom, relationship, or character names in this field. Multiple tags should be separated by commas.
       more_info:
         html: "(For more information, see the %{tags_faq_section_link}.)"
-        tags_faq_section: Tags section of the Archive FAQ
+        tags_faq_section: Tags on the Archive FAQ
       page_heading: Additional Tags
     tags_categories:
       description: 'There are 6 categories of works on the Archive. While here we have given an interpretation of the abbreviations, the exact definitions of these vary from fandom to fandom and fan to fan; use whichever you feel are applicable, or else none:'
@@ -1624,7 +1624,7 @@ en:
         description: Female/Male relationships
       more_info:
         html: "(For more information, see the %{tags_faq_section_link}.)"
-        tags_faq_section: Tags section of the Archive FAQ
+        tags_faq_section: Tags on the Archive FAQ
       multiple:
         abbreviation: Multi
         description: More than one kind of relationship, or a relationship with multiple partners
@@ -1639,7 +1639,7 @@ en:
       description: The main character(s) in your work, separated by commas. Full names (personal name and family name) are preferred.
       more_info:
         html: "(For more information, see the %{tags_faq_section_link}.)"
-        tags_faq_section: Tags section of the Archive FAQ
+        tags_faq_section: Tags on the Archive FAQ
       page_heading: Characters Tags
     tags_fandoms:
       description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
@@ -1670,7 +1670,7 @@ en:
       description: The relationships in your work. Full names are preferred (for example, "Mickey Mouse/Minnie Mouse" or "Rodney McKay & John Sheppard") when possible. You may list more than one relationship, separated by commas. Please note that all user-created tags must be 150 characters or less; if your work contains a large poly relationship or multiple characters with long names, you may want to consider shortening these names to just first names or surnames with initials to avoid going over the character limit while keeping the names recognizable.
       more_info:
         html: "(For more information, see the %{tags_faq_section_link}.)"
-        tags_faq_section: Tags section of the Archive FAQ
+        tags_faq_section: Tags on the Archive FAQ
       page_heading: Relationships Tags
     tags_warnings:
       choose_not_to_use:
