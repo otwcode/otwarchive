@@ -37,9 +37,10 @@ class TagSetNomination < ApplicationRecord
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
       limit = self.owned_tag_set.send("#{tag_type}_nomination_limit")
       if count_by_fandom?(tag_type)
-        if active_fandom_nominations.any? { |fandom_nom| active_nominations(fandom_nom, tag_type).size > limit }
-          errors.add(:base, ts("You can only nominate %{limit} #{tag_type} tags per fandom.", limit: limit))
+        over_fandom_limit = active_fandom_nominations.any? do |fandom_nom|
+          active_nominations(fandom_nom, tag_type).size > limit
         end
+        errors.add(:base, "too_many_#{tag_type}_nominations_per_fandom".to_sym, limit: limit) if over_fandom_limit
       else
         count = active_nominations(self, tag_type).size
         errors.add(:base, ts("You can only nominate %{limit} #{tag_type} tags", limit: limit)) if count > limit
