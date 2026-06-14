@@ -496,40 +496,60 @@ describe User do
   end
 
   describe "canonical_email" do
-    let!(:user) { create(:user, email: "old+foo@example.com") }
 
-    context "when user is created" do
+    context "when a user is created" do
+      let(:user) { create(:user, email: "old+foo@example.com") }
+
       it "sets the canonical email" do
         expect(user.canonical_email).to eq("old@example.com")
       end
     end
 
     context "when a user requests an email change" do
+      let!(:existing_user) { create(:user, email: "old+foo@example.com") }
+
       before do
-        user.update!(email: "new+bar@example.com")
-        user.reload
+        existing_user.update!(email: "new+bar@example.com")
+        existing_user.reload
       end
 
       it "does not change the canonical email" do
         # devise reverts the email change and sets unconfirmed_email
-        expect(user.email).to eq("old+foo@example.com")
-        expect(user.unconfirmed_email).to eq("new+bar@example.com")
+        expect(existing_user.email).to eq("old+foo@example.com")
+        expect(existing_user.unconfirmed_email).to eq("new+bar@example.com")
 
-        expect(user.canonical_email).to eq("old@example.com")
+        expect(existing_user.canonical_email).to eq("old@example.com")
       end
 
       context "when the user confirms the email change" do
         before do
-          user.confirm
+          existing_user.confirm
         end
 
         it "changes the canonical email" do
           # devise sets email based on unconfirmed_email and resets unconfirmed_email
-          expect(user.email).to eq("new+bar@example.com")
-          expect(user.unconfirmed_email).to be_nil
+          expect(existing_user.email).to eq("new+bar@example.com")
+          expect(existing_user.unconfirmed_email).to be_nil
 
-          expect(user.canonical_email).to eq("new@example.com")
+          expect(existing_user.canonical_email).to eq("new@example.com")
         end
+      end
+    end
+
+    context "when an admin changes a user's email" do
+      let(:user) { create(:user, email: "old+foo@example.com") }
+
+      before do
+        user.skip_reconfirmation!
+        user.update!(email: "new+bar@example.com")
+        user.reload
+      end
+
+      it "changes the canonical email" do
+        expect(user.email).to eq("new+bar@example.com")
+        expect(user.unconfirmed_email).to be_nil
+
+        expect(user.canonical_email).to eq("new@example.com")
       end
     end
   end
