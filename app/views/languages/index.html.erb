@@ -18,7 +18,7 @@
     <% works_count = estimate_number(@works_counts[language.short] || 0) %>
     <% if language == Language.default %>
       <dt>
-        <span lang="<%= language.short %>"><%= language.name %></span>
+        <%= link_to language.name, language, lang: language.short %>
         <%= t(".language_code_format_html", code: content_tag(:abbr, language.short)) %>
       </dt>
       <dd>
@@ -27,7 +27,7 @@
       </dd>
     <% else %>
       <dt>
-        <span lang="<%= language.short %>"><%= language.name %></span>
+        <%= link_to language.name, language, lang: language.short %>
         <%= t(".language_code_format_html", code: content_tag(:abbr, language.short)) %>
       </dt>
       <dd>
