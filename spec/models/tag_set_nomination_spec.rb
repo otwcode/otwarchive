@@ -18,21 +18,22 @@ describe TagSetNomination do
     let(:owned_tag_set) { create(:owned_tag_set) }
     let(:nomination) { create(:tag_set_nomination, owned_tag_set: owned_tag_set) }
 
-    context "when fandom nominations exceed the limit via update" do
+    context "when a concurrent update adds a fandom beyond the limit" do
       before do
         owned_tag_set.update_column(:fandom_nomination_limit, 2)
       end
 
-      it "rejects adding a fandom beyond the limit" do
+      it "rejects the second update" do
         fandom_a = FandomNomination.create!(tag_set_nomination: nomination, tagname: "Fandom A")
-        fandom_b = FandomNomination.create!(tag_set_nomination: nomination, tagname: "Fandom B")
+        # Simulate tab 1 saving a second fandom while tab 2 is still open
+        FandomNomination.create!(tag_set_nomination: nomination, tagname: "Fandom B")
         nomination.reload
 
+        # Tab 2 submits with the original fandom + a new one (it never saw Fandom B)
         result = nomination.update(
           fandom_nominations_attributes: {
             "0" => { tagname: "Fandom A", id: fandom_a.id },
-            "1" => { tagname: "Fandom B", id: fandom_b.id },
-            "2" => { tagname: "Fandom C" }
+            "1" => { tagname: "Fandom C" }
           }
         )
 
@@ -41,27 +42,28 @@ describe TagSetNomination do
       end
     end
 
-    context "when character nominations exceed the limit via update" do
+    context "when a concurrent update adds a character beyond the limit" do
       before do
         owned_tag_set.update_column(:fandom_nomination_limit, 1)
         owned_tag_set.update_column(:character_nomination_limit, 2)
       end
 
-      it "rejects adding a character beyond the limit" do
+      it "rejects the second update" do
         fandom_nom = FandomNomination.create!(tag_set_nomination: nomination, tagname: "Test Fandom")
+        # Simulate tab 1 saving 2 characters while tab 2 is still open
         CharacterNomination.create!(tag_set_nomination: nomination, fandom_nomination: fandom_nom, tagname: "Char A")
         CharacterNomination.create!(tag_set_nomination: nomination, fandom_nomination: fandom_nom, tagname: "Char B")
         nomination.reload
 
+        # Tab 2 submits with the fandom + 2 new characters (it never saw Char A/B)
         result = nomination.update(
           fandom_nominations_attributes: {
             "0" => {
               id: fandom_nom.id,
               tagname: "Test Fandom",
               character_nominations_attributes: {
-                "0" => { tagname: "Char A", id: fandom_nom.character_nominations.first.id, from_fandom_nomination: true },
-                "1" => { tagname: "Char B", id: fandom_nom.character_nominations.second.id, from_fandom_nomination: true },
-                "2" => { tagname: "Char C", from_fandom_nomination: true }
+                "0" => { tagname: "Char C", from_fandom_nomination: true },
+                "1" => { tagname: "Char D", from_fandom_nomination: true }
               }
             }
           }
