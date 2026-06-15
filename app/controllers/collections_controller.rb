@@ -30,6 +30,7 @@ class CollectionsController < ApplicationController
   end
 
   def index
+    options = params[:collection_search].present? ? collection_filter_params : {}
     if params[:work_id]
       @work = Work.find(params[:work_id])
       @collections = @work.approved_collections
@@ -45,13 +46,13 @@ class CollectionsController < ApplicationController
     elsif params[:user_id]
       @sort_and_filter = true
       @user = User.find_by!(login: params[:user_id])
-      @search = CollectionSearchForm.new(collection_filter_params.merge({ maintainer_id: @user.id }.merge(page: params[:page])))
+      @search = CollectionSearchForm.new(options.merge({ maintainer_id: @user.id }.merge(page: params[:page])))
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       @sort_and_filter = true
-      @search = CollectionSearchForm.new(collection_filter_params.merge(page: params[:page]))
+      @search = CollectionSearchForm.new(options.merge(page: params[:page]))
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
     end
@@ -195,10 +196,10 @@ class CollectionsController < ApplicationController
   private
 
   def collection_filter_params
-    params.permit(:commit, :user_id, collection_search: [
+    params.require(:collection_search).permit(
       :title, :challenge_type, :moderated, :multifandom, :closed, :tag,
       :sort_column, :sort_direction
-    ])[:collection_search] || {}
+    )
   end
 
   def collection_params
