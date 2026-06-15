@@ -62,7 +62,8 @@ describe OtwSanitize::MediaSanitizer do
       %w[audio video source track].each do |element|
         it "does not raise an error for #{element} elements with invalid src URLs" do
           html = "<#{element} src='BAD URL'></#{element}>"
-          expect { Sanitize.fragment(html, config) }.not_to raise_error
+          expect { Sanitize.fragment(html, config) }
+            .not_to raise_error
         end
 
         it "removes src on #{element} elements with invalid src URLs" do
