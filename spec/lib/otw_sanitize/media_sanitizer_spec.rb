@@ -59,6 +59,20 @@ describe OtwSanitize::MediaSanitizer do
         expect(content).to match("flower.webm")
       end
 
+      %w[audio video source track].each do |element|
+        it "does not raise an error for #{element} elements with invalid src URLs" do
+          html = "<#{element} src='BAD URL'></#{element}>"
+          expect { Sanitize.fragment(html, config) }.not_to raise_error
+        end
+
+        it "removes src on #{element} elements with invalid src URLs" do
+          html = "<#{element} src='BAD URL'></#{element}>"
+          content = Sanitize.fragment(html, config)
+          expect(content).not_to match("src")
+          expect(content).not_to match("BAD URL")
+        end
+      end
+
       it "does not close source elements" do
         html = "
           <video controls width='250'>
