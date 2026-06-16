@@ -1,10 +1,11 @@
 class AdminSettingPolicy < ApplicationPolicy
   # Defines the roles that allow admins to view all settings.
-  SETTINGS_ROLES = %w[policy_and_abuse superadmin support tag_wrangling].freeze
+  SETTINGS_ROLES = %w[policy_and_abuse superadmin support tag_wrangling legal].freeze
 
   # Define which roles can update which settings.
   ALLOWED_SETTINGS_BY_ROLES = {
     "policy_and_abuse" => %i[
+      preserve_audit_records_usernames
       hide_spam
       invite_from_queue_enabled
       invite_from_queue_number
@@ -16,6 +17,7 @@ class AdminSettingPolicy < ApplicationPolicy
       cache_expiration
       creation_requires_invite
       days_to_purge_unactivated
+      preserve_audit_records_usernames
       disable_support_form
       disabled_support_form_text
       downloads_enabled
@@ -31,7 +33,8 @@ class AdminSettingPolicy < ApplicationPolicy
       tag_wrangling_off
     ],
     "support" => %i[disable_support_form disabled_support_form_text],
-    "tag_wrangling" => %i[tag_wrangling_off]
+    "tag_wrangling" => %i[tag_wrangling_off],
+    "legal" => %i[preserve_audit_records_usernames]
   }.freeze
 
   def can_view_settings?
