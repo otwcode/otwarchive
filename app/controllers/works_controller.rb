@@ -851,12 +851,11 @@ class WorksController < ApplicationController
     elsif params[:preview_button]
       @preview_mode = true
       render :preview_tags
-    elsif params[:save_button]
+    elsif params[:save_button] # Save Draft
       @work.save
       flash[:notice] = t("works.update.tags_updated")
       redirect_to(@work)
-    else
-      @work.posted = true
+    elsif params[:update_button] # Update
       @work.minor_version += 1
       @work.save!
       flash[:notice] = t("works.update.work_updated")
