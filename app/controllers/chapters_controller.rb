@@ -145,7 +145,7 @@ class ChaptersController < ApplicationController
     elsif params[:preview_button]
       @preview_mode = true
       if @chapter.posted?
-        flash[:notice] = ts("This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.")
+        flash.now[:notice] = ts("This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.")
       else
         draft_flash_message(@work)
       end
