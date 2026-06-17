@@ -36,13 +36,14 @@ Feature: Languages
     
   # Browse works in a language
   
-  When I am on the languages page
-    And all indexing jobs have been run
-  Then I should see "Deutsch"
-  When I follow the link within "Deutsch"
-    Then I should see "Die Rache der Sith"
-    And I should not see "Revenge of the Sith"
-    
+ When I am on the languages page
+  And all indexing jobs have been run
+Then I should see "Deutsch"
+And I should see a link within the "Deutsch" language row
+When I follow the link within "Deutsch"
+Then I should see "Die Rache der Sith"
+And I should not see "Revenge of the Sith"
+
   # cross-check in English
     
   When I am on the languages page
