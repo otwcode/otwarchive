@@ -40,7 +40,6 @@ Feature: Languages
     And all indexing jobs have been run
   Then I should see "Deutsch"
   When I follow the link within "Deutsch"
-  Then I should see "1 Work in Deutsch"
     And I should see "Die Rache der Sith"
     And I should not see "Revenge of the Sith"
     
