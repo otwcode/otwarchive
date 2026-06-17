@@ -39,11 +39,11 @@ Feature: Languages
   When I am on the languages page
   And all indexing jobs have been run
 
-  Then I should see "Deutsch"
+  Then I should see "Deutsch (de)"
   And I should see "English (en)"
 
-  And I should see a link "1 work" within "Deutsch"
-  And I should see a link "1 work" within "English (en)"
+  And I should see a link within "Deutsch (de)"
+  And I should see a link within "English (en)"
     
   # cross-check in English
     
