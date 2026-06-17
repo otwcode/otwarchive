@@ -44,6 +44,9 @@ Feature: Languages
 
   And I should see a link within "Deutsch (de)"
   And I should see a link within "English (en)"
+  When I follow the link within "Deutsch (de)"
+    Then I should see "Die Rache der Sith"
+    And I should not see "Revenge of the Sith"
     
   # cross-check in English
     
