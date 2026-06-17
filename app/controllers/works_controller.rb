@@ -855,7 +855,7 @@ class WorksController < ApplicationController
       @work.save
       flash[:notice] = t("works.update.tags_updated")
       redirect_to(@work)
-    elsif params[:update_button] # Update
+    else # Update
       @work.minor_version += 1
       @work.save!
       flash[:notice] = t("works.update.work_updated")
