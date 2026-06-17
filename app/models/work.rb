@@ -780,7 +780,7 @@ class Work < ApplicationRecord
       skip_nil: true
     ) do
       count = chapters.posted.count
-      count.zero? ? nil : count
+      count.zero? && posted? ? nil : count
     end.to_i
   end
 
