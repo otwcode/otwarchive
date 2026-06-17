@@ -169,7 +169,7 @@ class SkinsController < ApplicationController
 
   # DELETE /skins/1
   def destroy
-    @skin = Skin.find(params[:id])
+    load_skin()
     begin
       @skin.destroy
       flash[:notice] = ts("The skin was deleted.")
