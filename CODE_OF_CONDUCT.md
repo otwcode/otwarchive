@@ -3,7 +3,7 @@
 We want the otwarchive repository to be a welcoming space where everyone feels comfortable participating. This Code of
 Conduct sets expectations for behavior for all community members (whether they are OTW volunteers, contractors, or
 external contributors) and applies to all public and project spaces, including (but not limited to) the otwarchive wiki,
-Jira, and Pull Requests.
+Jira, and pull requests.
 
 ## Expected Behavior
 
