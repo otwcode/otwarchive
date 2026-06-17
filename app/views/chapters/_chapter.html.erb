@@ -32,7 +32,7 @@
       </h4>
     <% end %>
 
-    <% if (@work.number_of_posted_chapters.to_i > 1) || @work.chaptered? %>
+    <% if (@work.number_of_posted_chapters > 1) || @work.chaptered? %>
       <% unless chapter.summary.blank? %>
         <div id="summary" class="summary module">
           <h3 class="heading"><%= ts('Summary:') %></h3>

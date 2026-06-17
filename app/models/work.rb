@@ -777,12 +777,11 @@ class Work < ApplicationRecord
   def number_of_posted_chapters
     Rails.cache.fetch(
       key_for_chapter_posted_counting(self),
-      skip_nil: true,
-      race_condition_ttl: 10.seconds
+      skip_nil: true
     ) do
       count = chapters.posted.count
       count.zero? ? nil : count
-    end
+    end.to_i
   end
 
   def chapters_in_order(include_drafts: false, include_content: true)
