@@ -37,11 +37,13 @@ Feature: Languages
   # Browse works in a language
   
   When I am on the languages page
-    And all indexing jobs have been run
+  And all indexing jobs have been run
+
   Then I should see "Deutsch"
-  And I should see "1 work"
-    And I should see "Die Rache der Sith"
-    And I should not see "Revenge of the Sith"
+  And I should see "English (en)"
+
+  And I should see a link "1 work" within "Deutsch"
+  And I should see a link "1 work" within "English (en)"
     
   # cross-check in English
     
