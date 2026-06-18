@@ -19,7 +19,21 @@ class InboxComment < ApplicationRecord
     end
     direction = (filters[:date]&.upcase == "ASC" ? "created_at ASC" : "created_at DESC")
 
-    includes(feedback_comment: :pseud).
+    # Eager-load the associations the inbox view touches for each
+    # feedback_comment, to avoid N+1 queries while rendering:
+    #   pseud.user.official       -> user roles
+    #   blocked_by? checks        -> user/work_creators' block_of_current_user
+    #   commenter icon            -> pseud icon attachment
+    #   commentable link/title    -> parent (and parent.work for chapters)
+    includes(
+      feedback_comment: [
+        { pseud: [
+          { user: %i[roles block_of_current_user] },
+          { icon_attachment: :blob }
+        ] },
+        { parent: { work: :users } }
+      ]
+    ).
       order(direction).
       where(read: read, replied_to: replied_to)
   }
