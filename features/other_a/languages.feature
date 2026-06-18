@@ -35,7 +35,7 @@ Feature: Languages
   Then I should see "Revenge of the Sith"
     
   # Browse works in a language
-  
+
  When I am on the languages page
   And all indexing jobs have been run
 Then I should see "Deutsch (DE)"
