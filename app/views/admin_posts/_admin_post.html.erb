@@ -8,7 +8,7 @@
 <div class="wrapper">
   <dl class="meta">
     <dt class="published"><%= ts("Published:") %></dt>
-    <dd class="published"><%= admin_post.created_at %></dd>
+    <dd class="published"><%= time_in_zone(admin_post.created_at) %></dd>
     <% if admin_post.translated_post %>
       <dt class="original translations"><%= ts("Original:") %></dt>
       <dd class="original translations"><%= link_to admin_post.translated_post.title, admin_post.translated_post %></dd>
