@@ -2,54 +2,67 @@
 English:
   id: 1
   name: English
+  sortable_name: English
   short: en
   support_available: true
   abuse_support_available: true
 French:
   id: 2
   name: Français
+  sortable_name: Français
   short: fr
 Spanish:
   id: 3
   name: Español
+  sortable_name: Español
   short: es
 German:
   id: 4
   name: Deutsch
+  sortable_name: Deutsch
   short: de
 Italian:
   id: 5
   name: Italiano
+  sortable_name: Italiano
   short: it
 Japanese:
   id: 6
   name: 日本語
+  sortable_name: Nihongo
   short: ja
 Czech:
   id: 7
   name: Čeština
+  sortable_name: Čeština
   short: cs
 Russian:
   id: 8
   name: Русский
+  sortable_name: Russkiy
   short: ru
 Suomi:
   id: 9
   name: Suomi
+  sortable_name: Suomi
   short: fi
 Bahasa Indonesia:
   id: 10
   name: Bahasa Indonesia
+  sortable_name: Bahasa Indonesia
   short: id
 Nederlands:
   id: 11
   name: Nederlands
+  sortable_name: Nederlands
   short: nl
 Português:
   id: 12
   name: Português
+  sortable_name: Português
   short: pt
 ">中文":
   id: 13
   name: ">中文"
+  sortable_name: ">Zhongwen"
   short: zh
