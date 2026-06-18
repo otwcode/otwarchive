@@ -192,7 +192,7 @@ Feature: Delete pseud.
     Then I should see "New members invited: other_pseud (myself)"
     When I select "Moderator" from "myself_role"
       And I submit with the 4th button
-    Then I should see "Updated other_pseud."
+    Then I should see "Updated other_pseud (myself)."
     When I go to the collections page
     Then I should see "My Collection Thing"
       And I should see "other_pseud (myself)" within "#main"

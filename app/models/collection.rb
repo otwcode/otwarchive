@@ -32,23 +32,13 @@ class Collection < ApplicationRecord
   end
 
   belongs_to :challenge, dependent: :destroy, polymorphic: true
+
   has_many :prompts, dependent: :destroy
 
   has_many :signups, class_name: "ChallengeSignup", dependent: :destroy
   has_many :potential_matches, dependent: :destroy
   has_many :assignments, class_name: "ChallengeAssignment", dependent: :destroy
   has_many :claims, class_name: "ChallengeClaim", dependent: :destroy
-
-  # We need to get rid of all of these if the challenge is destroyed
-  after_save :clean_up_challenge
-  def clean_up_challenge
-    return if self.challenge_id
-
-    assignments.each(&:destroy)
-    potential_matches.each(&:destroy)
-    signups.each(&:destroy)
-    prompts.each(&:destroy)
-  end
 
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
@@ -336,12 +326,12 @@ class Collection < ApplicationRecord
 
   def notify_maintainers_assignments_sent
     if self.collection_email.present?
-      UserMailer.assignments_sent_notification(self.id, self.collection_email).deliver_later
+      GiftExchangeMailer.assignments_sent_notification(self.id, self.collection_email).deliver_later
     else
       # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale_for_mails) do
-          UserMailer.assignments_sent_notification(self.id, user.email).deliver_later
+          GiftExchangeMailer.assignments_sent_notification(self.id, user.email).deliver_later
         end
       end
     end
@@ -349,12 +339,12 @@ class Collection < ApplicationRecord
 
   def notify_maintainers_assignment_default(challenge_assignment)
     if self.collection_email.present?
-      UserMailer.assignment_default_notification(self.id, challenge_assignment.id, self.collection_email).deliver_later
+      GiftExchangeMailer.assignment_default_notification(self.id, challenge_assignment.id, self.collection_email).deliver_later
     else
       # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale_for_mails) do
-          UserMailer.assignment_default_notification(self.id, challenge_assignment.id, user.email).deliver_later
+          GiftExchangeMailer.assignment_default_notification(self.id, challenge_assignment.id, user.email).deliver_later
         end
       end
     end
@@ -409,8 +399,13 @@ class Collection < ApplicationRecord
   def self.expire_blurb_cache(id)
     # Expire both versions of the blurb, whether the user is logged in or not.
     %w[logged-in logged-out].each do |logged_in|
-      cache_key = "collection-blurb-#{logged_in}-#{id}-v5"
-      ActionController::Base.new.expire_fragment(cache_key)
+      [
+        "collection-blurb-#{logged_in}-#{id}-v5-header",
+        "collection-blurb-#{logged_in}-#{id}-v5-summary",
+        "collection-blurb-#{logged_in}-#{id}-v5-body"
+      ].each do |cache_key|
+        ActionController::Base.new.expire_fragment(cache_key)
+      end
     end
   end
 

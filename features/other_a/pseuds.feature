@@ -180,7 +180,7 @@ Scenario: Collections reflect pseud changes of moderators after the cache expire
   Then I should see "New members invited: before (myself)"
   When I select "Moderator" from "myself_role"
     And I submit with the 3rd button
-  Then I should see "Updated before."
+  Then I should see "Updated before (myself)."
   When I go to the collections page
   Then I should see "My Collection Thing"
     And I should see "before (myself)" within "#main"

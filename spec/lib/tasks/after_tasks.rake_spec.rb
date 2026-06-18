@@ -850,6 +850,22 @@ describe "rake After:sync_approved_to_spam" do
   end
 end
 
+describe "rake After:add_canonical_email" do
+  let(:user1) { create(:user, email: "A@example.com") }
+  let(:user2) { create(:user, email: "b@googlemail.com") }
+  let(:user3) { create(:user, email: "c+tag@example.com") }
+  let(:user4) { create(:user, email: "d.lastname@gmail.com") }
+
+  it "backfills the canonical_email column for existing users" do
+    subject.invoke
+    
+    expect(user1.canonical_email).to eq("a@example.com")
+    expect(user2.canonical_email).to eq("b@gmail.com")
+    expect(user3.canonical_email).to eq("c@example.com")
+    expect(user4.canonical_email).to eq("dlastname@gmail.com")
+  end
+end
+  
 describe "rake After:remove_noncanonical_fandom_wrangling_assignments" do
   let!(:fandom1) { create(:fandom, canonical: false) }
   let!(:assignment1) { create(:wrangling_assignment, fandom: fandom1) }

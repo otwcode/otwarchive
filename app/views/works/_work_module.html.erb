@@ -3,7 +3,7 @@
   <%= render "works/mystery_blurb", item: work %>
 <% else %>
   <!--title, author, fandom-->
-  <div class="header module">
+  <div class="<% if work.anonymous? %>anonymous <% end %>header module">
     <!-- updated_at=<%= work.updated_at.to_i.to_s %> -->
     <h4 class="heading">
       <% if (work.unrevealed? || work.anonymous?) && (is_author_of?(work) || User.current_user.is_a?(Admin)) %>

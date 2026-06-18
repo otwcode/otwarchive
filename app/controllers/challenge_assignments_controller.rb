@@ -73,6 +73,7 @@ class ChallengeAssignmentsController < ApplicationController
   def index
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
+        @page_subtitle = t(".page_title", username: @user.login)
         @challenge_assignments = @user.assignments.undefaulted
         @challenge_assignments = @challenge_assignments.in_collection(@collection) if params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
         @challenge_assignments = if params[:posted] == "true"
@@ -189,7 +190,10 @@ class ChallengeAssignmentsController < ApplicationController
         assignment.defaulted_at = nil
         assignment.save || (@errors << ts("We couldn't undefault the assignment covering %{request}.", request: assignment.request_byline))
       when "approve"
-        assignment.get_collection_item.approve_by_collection if assignment.get_collection_item
+        if (item = assignment.get_collection_item)
+          item.approve_by_collection
+          item.save || (@errors << t(".approve_error", request: assignment.request_byline))
+        end
       when "cover"
         # cover_[assignment_id] = pinch hitter pseud
         next if val.blank? || assignment.pinch_hitter.try(:byline) == val

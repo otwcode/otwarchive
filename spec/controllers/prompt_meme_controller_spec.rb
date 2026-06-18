@@ -4,7 +4,7 @@ describe Challenge::PromptMemeController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  let(:challenge) { PromptMeme.new }
+  let(:challenge) { create(:prompt_meme) }
   let(:collection) { create(:collection, challenge: challenge) }
   let(:owner) { collection.owners.first.user }
 
@@ -40,16 +40,16 @@ describe Challenge::PromptMemeController do
         end.not_to change { Time.zone }
 
         # Sydney is at +10, so we expect the UTC time to be 10 hours earlier:
-        expect(collection.reload.challenge.signups_open_at).to eq(Time.utc(2021, 6, 30, 20))
+        expect(assigns[:challenge].signups_open_at).to eq(Time.utc(2021, 6, 30, 20))
       end
     end
   end
 
   describe "edit" do
     let(:challenge) do
-      PromptMeme.new(time_zone: "Sydney",
-                     signup_open: false,
-                     signups_open_at: Time.utc(2021, 6, 30, 20))
+      create(:prompt_meme, time_zone: "Sydney",
+                           signup_open: false,
+                           signups_open_at: Time.utc(2021, 6, 30, 20))
     end
 
     it "displays dates in the challenge time zone, but doesn't change Time.zone" do
@@ -91,7 +91,7 @@ describe Challenge::PromptMemeController do
         end.not_to change { Time.zone }
 
         # Sydney is at +10, so we expect the UTC time to be 10 hours earlier:
-        expect(collection.reload.challenge.signups_open_at).to eq(Time.utc(2021, 6, 30, 20))
+        expect(assigns[:challenge].signups_open_at).to eq(Time.utc(2021, 6, 30, 20))
       end
     end
   end

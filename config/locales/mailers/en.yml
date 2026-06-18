@@ -199,6 +199,50 @@ en:
         other: "[%{app_name}] Edited reply to your comment on %{title}"
         tag: "[%{app_name}] Edited reply to your comment on the tag %{name}"
       you_wrote: 'You wrote:'
+  gift_exchange_mailer:
+    assignment_default_notification:
+      assign_pinch_hitter:
+        collection_assignments_page: collection assignments page
+        html: You can assign a pinch hitter on the %{collection_assignments_page_link}.
+        text: 'You can assign a pinch hitter on the collection assignments page: %{collection_assignments_page_url}.'
+      defaulted_on_assignment:
+        html: "%{offer_byline} has defaulted on their assignment for %{request_byline} in your gift exchange %{collection_link}."
+        text: '%{offer_byline} has defaulted on their assignment for %{request_byline} in your gift exchange "%{collection_title}" (%{collection_url}).'
+      subject: "[%{app_name}][%{collection_title}] Assignment default by %{offer_byline}"
+    assignments_sent_notification:
+      all_sent_out:
+        html: All assignments have now been sent out for your gift exchange %{collection_link}.
+        text: All assignments have now been sent out for your gift exchange "%{collection_title}" (%{collection_url}).
+      subject: "[%{app_name}][%{collection_title}] Assignments sent"
+    invalid_signup_notification:
+      found_invalid:
+        html: We have found some invalid sign-ups in your gift exchange %{collection_link}. Potential matches can't be generated until these are cleaned up.
+        text: We have found some invalid sign-ups in your gift exchange "%{collection_title}" (%{collection_url}). Potential matches can't be generated until these are cleaned up.
+      see_details:
+        challenge_matching_help: the challenge matching help
+        html: Invalid sign-ups may be duplicates, or may not meet the requirements you've set for your challenge. Unfortunately, there is no automatic way to fix them, so you will have to manually edit or delete them. For more details, refer to %{challenge_matching_help_link}.
+        text: 'Invalid sign-ups may be duplicates, or may not meet the requirements you''ve set for your challenge. Unfortunately, there is no automatic way to fix them, so you will have to manually edit or delete them. For more details, refer to the challenge matching help: %{challenge_matching_help_url}.'
+      signup: 'Signup #%{signup_id}'
+      signups_here: 'Here are the invalid sign-ups:'
+      subject: "[%{app_name}][%{collection_title}] Invalid sign-ups found"
+    no_potential_matches_notification:
+      generation_finished:
+        html: Potential match generation for %{collection_link} has finished. Unfortunately, there were no potential matches found.
+        text: Potential match generation for "%{collection_title}" (%{collection_url}) has finished. Unfortunately, there were no potential matches found.
+      please_try_again:
+        html: Please update your gift exchange's %{match_settings_link} and try generating potential matches again.
+        match_settings: Minimum Number to Match settings
+        text: Please update your gift exchange's Minimum Number to Match settings (%{match_settings_url}) and try generating potential matches again.
+      subject: "[%{app_name}][%{collection_title}] No potential matches found"
+    potential_match_generation_notification:
+      finished_generating:
+        html: We have finished generating potential assignments for your gift exchange %{collection_link}.
+        text: We have finished generating potential assignments for your gift exchange "%{collection_title}" (%{collection_url}).
+      matches_available:
+        html: The potential matches and set assignments are available on its %{matching_page_link}.
+        matching_page: Matching page
+        text: 'The potential matches and set assignments are available on its Matching page: %{matching_page_url}.'
+      subject: "[%{app_name}][%{collection_title}] Potential assignment generation complete"
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -232,8 +276,12 @@ en:
         attribution:
           anon: by Anonymous
           named:
-            html: by %{creator_links}
-            text: by %{creators}
+            html:
+              one: by %{creator_links}
+              other: by %{creator_links}
+            text:
+              one: by %{creators}
+              other: by %{creators}
         link_with_word_count: "%{creation_link} (%{word_count})"
         title_with_chapter_number: Chapter %{position} of %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
@@ -398,20 +446,6 @@ en:
       work_added:
         html: The collection maintainers of %{collection_link} have added your work %{work_link} to their collection!
         text: The collection maintainers of "%{collection_title}" (%{collection_url}) have added your work "%{work_title}" (%{work_url}) to their collection!
-    assignment_default_notification:
-      assign_pinch_hitter:
-        collection_assignments_page: collection assignments page
-        html: You can assign a pinch hitter on the %{collection_assignments_page_link}.
-        text: 'You can assign a pinch hitter on the collection assignments page: %{collection_assignments_page_url}.'
-      defaulted_on_assignment:
-        html: "%{offer_byline} has defaulted on their assignment for %{request_byline} in your gift exchange %{collection_link}."
-        text: '%{offer_byline} has defaulted on their assignment for %{request_byline} in your gift exchange "%{collection_title}" (%{collection_url}).'
-      subject: "[%{app_name}][%{collection_title}] Assignment default by %{offer_byline}"
-    assignments_sent_notification:
-      all_sent_out:
-        html: All assignments have now been sent out for your gift exchange %{collection_link}.
-        text: All assignments have now been sent out for your gift exchange "%{collection_title}" (%{collection_url}).
-      subject: "[%{app_name}][%{collection_title}] Assignments sent"
     batch_subscription_notification:
       chapter_summary: Chapter Summary
       footer_note:
@@ -655,17 +689,6 @@ en:
       additional_ticket: If you have additional questions or information, do not hesitate to send in another ticket.
       introduction: 'We''re working hard to reply to everyone, and we''ll respond to you as soon as we can. Your communication is greatly valued, and it will be reviewed and answered by our volunteer Support team. In the meantime, here is a copy of the information you submitted through the Technical Support and Feedback form:'
       subject: "[%{app_name}] Support - %{summary}"
-    invalid_signup_notification:
-      found_invalid:
-        html: We have found some invalid sign-ups in your gift exchange %{collection_link}. Potential matches can't be generated until these are cleaned up.
-        text: We have found some invalid sign-ups in your gift exchange "%{collection_title}" (%{collection_url}). Potential matches can't be generated until these are cleaned up.
-      see_details:
-        challenge_matching_help: the challenge matching help
-        html: Invalid sign-ups may be duplicates, or may not meet the requirements you've set for your challenge. Unfortunately, there is no automatic way to fix them, so you will have to manually edit or delete them. For more details, refer to %{challenge_matching_help_link}.
-        text: 'Invalid sign-ups may be duplicates, or may not meet the requirements you''ve set for your challenge. Unfortunately, there is no automatic way to fix them, so you will have to manually edit or delete them. For more details, refer to the challenge matching help: %{challenge_matching_help_url}.'
-      signup: 'Signup #%{signup_id}'
-      signups_here: 'Here are the invalid sign-ups:'
-      subject: "[%{app_name}][%{collection_title}] Invalid sign-ups found"
     invitation:
       been_invited: You've been invited to join the Archive of Our Own!
       features: With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!
@@ -753,15 +776,6 @@ en:
       would_like_to_include:
         html: The collection maintainers of %{collection_link} would like to include your work %{work_link} in their collection!
         text: The collection maintainers of "%{collection_title}" (%{collection_url}) would like to include your work "%{work_title}" (%{work_url}) in their collection!
-    potential_match_generation_notification:
-      finished_generating:
-        html: We have finished generating potential assignments for your gift exchange %{collection_link}.
-        text: We have finished generating potential assignments for your gift exchange "%{collection_title}" (%{collection_url}).
-      matches_available:
-        html: The potential matches and set assignments are available on its %{matching_page_link}.
-        matching_page: Matching page
-        text: 'The potential matches and set assignments are available on its Matching page: %{matching_page_url}.'
-      subject: "[%{app_name}][%{collection_title}] Potential assignment generation complete"
     prompter_notification:
       a_response_to_your_prompt:
         collection:
@@ -838,7 +852,8 @@ en:
         subject: "[%{app_name}] Your password has been changed"
       reset_password_instructions:
         change_your_password: change your password
-        choose_new_password: use this link to choose a new password
+        choose_new_password_imperative: use this link to choose a new password
+        choose_new_password_modal: use this link to choose a new password
         contact_policy_abuse: contact Policy & Abuse
         contact_policy_abuse_instructions:
           html: If you have other reasons to believe that someone else currently has access to your %{app_name} account, please %{contact_policy_abuse_link} with all relevant information.
@@ -851,14 +866,14 @@ en:
         instructions:
           html: "%{intro_bold} If the link in this email has expired, you will need to %{new_password_reset_link}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, %{contact_support_link} for further assistance."
           intro:
-            one: If you made this request, please %{choose_new_password_link} within %{count} day.
-            other: If you made this request, please %{choose_new_password_link} within %{count} days.
+            one: If you made this request, please %{choose_new_password_link_imperative} within %{count} day.
+            other: If you made this request, please %{choose_new_password_link_imperative} within %{count} days.
           text:
             one: 'If you made this request, please use this link to choose a new password within %{count} day: %{choose_new_password_url}. If the link in this email has expired, you will need to request a new password reset: %{new_password_reset_url}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, contact Support for further assistance: %{contact_support_url}.'
             other: 'If you made this request, please use this link to choose a new password within %{count} days: %{choose_new_password_url}. If the link in this email has expired, you will need to request a new password reset: %{new_password_reset_url}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, contact Support for further assistance: %{contact_support_url}.'
         intro: Someone has made a request to reset the password for your %{app_name} account.
         new_password_reset: request a new password reset
         reset_emails_clarification:
-          html: Receiving password reset emails that you did not request does not necessarily mean that your %{app_name} account is at risk. As long as you are the only person with access to your email account, your %{app_name} account will not be affected and your password will not change simply because you received this password reset email. However, you can still %{choose_new_password_link} or log in and %{change_your_password_link}. Either option will log your account out of all sessions on all devices.
+          html: Receiving password reset emails that you did not request does not necessarily mean that your %{app_name} account is at risk. As long as you are the only person with access to your email account, your %{app_name} account will not be affected and your password will not change simply because you received this password reset email. However, you can still %{choose_new_password_link_modal} or log in and %{change_your_password_link}. Either option will log your account out of all sessions on all devices.
           text: 'Receiving password reset emails that you did not request does not necessarily mean that your %{app_name} account is at risk. As long as you are the only person with access to your email account, your %{app_name} account will not be affected and your password will not change simply because you received this password reset email. However, you can still use this link to choose a new password (%{choose_new_password_url}) or log in and change your password: %{change_your_password_url}. Either option will log your account out of all sessions on all devices.'
         subject: "[%{app_name}] Reset your password"

@@ -654,6 +654,19 @@ namespace :After do
     AuditsBackfillJob.spawn_jobs
     puts "Backfill started and running on resque in background"
   end
+  
+  desc "Backfill canonical_email for existing users"
+  task(add_canonical_email: :environment) do
+    User.find_in_batches.with_index do |batch, index|
+      batch.each do |user|
+        user.update_attribute(:canonical_email, EmailCanonicalizer.canonicalize(user.email)) if user.email
+      end
+
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    puts "Job complete."
+  end
 
   desc "Remove wrangling assigments of non-canonical fandoms"
   task(remove_noncanonical_fandom_wrangling_assignments: :environment) do

@@ -14,6 +14,20 @@
 </ul>
 
 <p class="actions">
+  <button id="copy-totp-backup-codes" onclick="copyBackupCodes()" style="visibility: hidden;">
+    <%= t(".copy_to_clipboard") %>
+  </button>
   <%= link_to t(".finish"), admins_path %>
 </p>
 <!--/content-->
+
+<% content_for :footer_js do %>
+  <script type="text/javascript">
+    document.getElementById("copy-totp-backup-codes").style.visibility = "visible";
+
+    async function copyBackupCodes() {
+      await navigator.clipboard.writeText("<%= @backup_codes.join('\n') %>");
+      document.getElementById("copy-totp-backup-codes").textContent = "<%= t(".backup_codes_copied") %>";
+    }
+  </script>
+<% end %>
