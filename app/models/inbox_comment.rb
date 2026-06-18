@@ -35,9 +35,9 @@ class InboxComment < ApplicationRecord
         ] },
         { parent: { work: { users: :block_of_current_user } } }
       ]
-    ).
-      order(direction).
-      where(read: read, replied_to: replied_to)
+    )
+      .order(direction)
+      .where(read: read, replied_to: replied_to)
   }
 
   scope :for_homepage, -> {
