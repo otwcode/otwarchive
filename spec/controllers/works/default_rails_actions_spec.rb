@@ -643,6 +643,81 @@ describe WorksController, work_search: true do
       before { fake_logout }
 
       it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin policy_and_abuse support]
+
+      context "with the policy_and_abuse role" do
+        let(:admin) { create(:policy_and_abuse_admin) }
+
+        before { fake_login_admin(admin) }
+
+        it "updates comment settings and logs the change" do
+          work.update!(comment_permissions: :disable_anon)
+
+          expect do
+            put :update, params: {
+              id: work,
+              work: { comment_permissions: "disable_all" }
+            }
+          end.to change(AdminActivity, :count).by(1)
+
+          activity = AdminActivity.last
+          expect(work.reload.comment_permissions).to eq("disable_all")
+          expect(activity.admin).to eq(admin)
+          expect(activity.target).to eq(work)
+          expect(activity.action).to eq("edit comment settings")
+          expect(activity.summary).to eq(
+            "<p>Old comment setting: Only registered users can comment</p>" \
+            "<p>New comment setting: No one can comment</p>"
+          )
+        end
+
+        it "logs comment settings separately from tags and language" do
+          work.update!(comment_permissions: :disable_anon)
+
+          expect do
+            put :update, params: {
+              id: work,
+              work: {
+                relationship_string: "kronfaumei",
+                language_id: language.id,
+                comment_permissions: "disable_all"
+              }
+            }
+          end.to change(AdminActivity, :count).by(2)
+
+          activities = AdminActivity.last(2)
+          expect(work.reload.relationship_string).to eq("kronfaumei")
+          expect(work.language).to eq(language)
+          expect(work.comment_permissions).to eq("disable_all")
+          expect(activities.map(&:action)).to eq(["update", "edit comment settings"])
+          expect(activities.first.summary).to include("Old tags:")
+        end
+      end
+
+      context "with the support role" do
+        let(:admin) { create(:support_admin) }
+
+        before { fake_login_admin(admin) }
+
+        it "updates tags and language but not comment settings" do
+          work.update!(comment_permissions: :disable_anon)
+
+          expect do
+            put :update, params: {
+              id: work,
+              work: {
+                relationship_string: "kronfaumei",
+                language_id: language.id,
+                comment_permissions: "disable_all"
+              }
+            }
+          end.to change(AdminActivity, :count).by(1)
+
+          expect(work.reload.relationship_string).to eq("kronfaumei")
+          expect(work.language).to eq(language)
+          expect(work.comment_permissions).to eq("disable_anon")
+          expect(AdminActivity.last.action).to eq("update")
+        end
+      end
     end
 
     before do

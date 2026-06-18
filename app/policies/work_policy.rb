@@ -11,6 +11,10 @@ class WorkPolicy < UserCreationPolicy
     user_has_roles?(EDIT_TAG_ROLES)
   end
 
+  def comment_settings_access?
+    user_has_roles?(%w[superadmin policy_and_abuse])
+  end
+
   # Support admins need to be able to delete duplicate works.
   def destroy?
     super || user_has_roles?(%w[support])

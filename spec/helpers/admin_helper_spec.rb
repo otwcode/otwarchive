@@ -20,4 +20,15 @@ describe AdminHelper do
       end
     end
   end
+
+  describe "admin activity summary" do
+    it "renders comment settings summaries as HTML" do
+      admin_activity.action = "edit comment settings"
+      admin_activity.summary = "<p>Old comment setting: Only registered users can comment</p>"
+
+      expect(admin_activity_summary(admin_activity)).to eq(
+        "<p>Old comment setting: Only registered users can comment</p>"
+      )
+    end
+  end
 end

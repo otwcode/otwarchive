@@ -11,6 +11,16 @@
     </dl>
   </fieldset>
 
+  <% if policy(@work).comment_settings_access? %>
+    <fieldset class="privacy" role="article">
+      <legend><%= t("works.permissions.privacy") %></legend>
+      <h3 class="landmark heading"><%= t("works.permissions.privacy") %></h3>
+      <dl>
+        <%= render "work_form_comment_permissions", f: f %>
+      </dl>
+    </fieldset>
+  <% end %>
+
   <%= render "posting_fieldset" %>
 
 <% end %>

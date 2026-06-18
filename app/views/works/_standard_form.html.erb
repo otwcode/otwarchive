@@ -279,21 +279,7 @@
         <%= link_to_help "comments-moderated" %>
       </dd>
 
-      <dt class="permissions comments">
-        <%= t("comments.commentable.permissions.options.label") %>
-        <%= link_to_help "who-can-comment-on-this-work" %>
-      </dt>
-      <dd class="permissions comments">
-        <fieldset>
-          <%=
-            radio_button_list(f, :comment_permissions, [
-              [:enable_all, t("comments.commentable.permissions.options.enable_all")],
-              [:disable_anon, t("comments.commentable.permissions.options.disable_anon")],
-              [:disable_all, t("comments.commentable.permissions.options.disable_all")]
-            ])
-          %>
-        </fieldset>
-      </dd>
+      <%= render "work_form_comment_permissions", f: f %>
 
     </dl>
   </fieldset>
