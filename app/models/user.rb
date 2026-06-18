@@ -24,6 +24,7 @@ class User < ApplicationRecord
   # Allows other models to get the current user with User.current_user
   thread_cattr_accessor :current_user
 
+  # Devise confirmable may undo email modifications in before_update, so canonicalize_email has to run after it
   before_create :canonicalize_email
   before_update :canonicalize_email, if: :will_save_change_to_email?
 
