@@ -1,18 +1,38 @@
-﻿<h2 class="heading"><%= t(".general.title") %></h2>
-<h3 class="heading"><%= t(".general.text") %></h3>
+﻿<h2 class="heading"><%= t(".page_title") %></h2>
 
 <div class="userstuff">
-  <h3><%= t(".time.title") %></h3>
-  <p><%= t(".time.info_html",
-           otw_link: link_to(t(".time.otw"), "https://www.transformativeworks.org"),
-           projects_link: link_to(t(".time.projects"), "https://www.transformativeworks.org/our-projects")) %></p>
-  <p><%= t(".time.contribute_html",
-           github_repository_link: link_to(t(".time.github_repository"), "https://github.com/otwcode/otwarchive"),
-           jira_project_link: link_to(t(".time.jira_project"), "https://otwarchive.atlassian.net/browse/AO3"),
-           volunteer_listings_link: link_to(t(".time.volunteer_listings"), "https://www.transformativeworks.org/volunteer"),
-           news_by_email_link: link_to(t(".time.news_by_email"), "https://www.transformativeworks.org/you-can-now-subscribe-to-otw-news-by-email")) %></p>
+  <p><big><strong><%= t(".intro") %></strong></big></p>
 
   <h3><%= t(".money.title") %></h3>
-  <p><%= t(".money.details_html",
-           donation_link: link_to(t(".money.donation"), "https://donate.transformativeworks.org/otwgive")) %></p>
+  <p>
+    <%= t(".money.details_html",
+          donation_link: link_to(t(".money.donation"), "https://donate.transformativeworks.org/otwgive"),
+          budget_reports_link: link_to(t(".money.budget_reports"), "/admin_posts?tag=174"),
+          faq_link: link_to(t(".money.faq"), "https://www.transformativeworks.org/faq/#faq-financesfaq")) %>
+  </p>
+
+  <h3><%= t(".time.title") %></h3>
+
+  <h4><%= t(".time.volunteering.title") %></h4>
+  <p>
+    <%= t(".time.volunteering.info_html",
+          otw_link: link_to(t(".time.volunteering.otw"), "https://www.transformativeworks.org"),
+          projects_link: link_to(t(".time.volunteering.projects"), "https://www.transformativeworks.org/our-projects/"),
+          committees_link: link_to(t(".time.volunteering.committees"), "https://www.transformativeworks.org/committees/")) %>
+  </p>
+
+  <p>
+    <%= t(".time.volunteering.listings_html",
+          listings_link: link_to(t(".time.volunteering.listings"), "https://www.transformativeworks.org/volunteer"),
+          news_link: link_to(t(".time.volunteering.news"), "https://www.transformativeworks.org/sign-up-for-otw-news-by-email/"),
+          social_link: link_to(t(".time.volunteering.social"), "https://www.transformativeworks.org/where-find-us/")) %>
+  </p>
+
+  <h4><%= t(".time.contributing.title") %></h4>
+  <p>
+    <%= t(".time.contributing.info_html",
+          github_link: link_to(t(".time.contributing.github"), "https://github.com/otwcode/otwarchive"),
+          jira_link: link_to(t(".time.contributing.jira"), "https://otwarchive.atlassian.net/browse/AO3"),
+          contributing_link: link_to(t(".time.contributing.contributing"), "https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md")) %>
+  </p>
 </div>
