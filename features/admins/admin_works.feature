@@ -189,6 +189,9 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I fill in "Additional Tags" with "Admin-Added Freeform"
       And I uncheck "M/M"
       And I check "Other"
+      And I should see "Privacy"
+      And I should see "Who can comment on this work"
+      And I choose "No one can comment"
     When I press "Update"
     Then I should not see "User-Added Fandom"
       And I should see "Admin-Added Fandom"
@@ -205,10 +208,12 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
      When I follow "Activities"
      Then I should see "Admin Activities"
      When I visit the last activities item
-     Then I should see "No Archive Warnings Apply"
-      And I should see "Old tags"
-      And I should see "User-Added Fandom"
-      And I should not see "Admin-Added Fandom"
+     Then I should see "edit comment settings"
+      And I should see "Old comment setting: Only registered users can comment"
+      And I should see "New comment setting: No one can comment"
+     When I go to the admin-activities page
+     Then I should see "update"
+      And I should see "edit comment settings"
 
   Scenario: Can edit external works
     Given basic languages

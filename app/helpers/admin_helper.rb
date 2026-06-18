@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module AdminHelper
+  include HtmlCleaner
+
   def admin_activity_login_string(activity)
     activity.admin.nil? ? ts("Admin deleted") : activity.admin_login
   end
@@ -17,11 +19,10 @@ module AdminHelper
     link_to(activity.target_name, url)
   end
 
-  # Summaries for profile and pseud edits, which contain links, need to be
-  # handled differently from summaries that use item.inspect (and thus contain
-  # angle brackets).
+  # Summaries that intentionally contain HTML need to be handled differently
+  # from summaries that use item.inspect (and thus contain angle brackets).
   def admin_activity_summary(activity)
-    if activity.action == "edit pseud" || activity.action == "edit profile"
+    if activity.action.in?(["edit pseud", "edit profile", "edit comment settings"])
       raw sanitize_field(activity, :summary)
     else
       activity.summary

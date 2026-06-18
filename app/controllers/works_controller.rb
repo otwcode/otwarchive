@@ -14,7 +14,6 @@ class WorksController < ApplicationController
   before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit, :update, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
   # admins should have the ability to edit works (tags, language, and more) as per our ToS
   before_action :check_ownership_or_admin, only: [:edit, :update]
-  before_action :log_admin_activity, only: [:update]
   before_action :check_parent_visible, only: [:navigate]
   before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
 
@@ -832,19 +831,14 @@ class WorksController < ApplicationController
     end
   end
 
-  def log_admin_activity
-    if logged_in_as_admin?
-      summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}" if params[:action] == "update"
-
-      AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
-    end
-  end
-
   private
 
   def admin_update_work
     @work.preview_mode = (params[:preview_button] || params[:edit_button]).present?
-    @work.attributes = work_tag_params
+    old_tags = @work.tags.pluck(:name).join(", ")
+    old_language_id = @work.language_id
+    old_comment_permissions = @work.comment_permissions
+    @work.attributes = work_admin_params
 
     if params[:edit_button] || work_cannot_be_saved?
       render :edit
@@ -853,15 +847,44 @@ class WorksController < ApplicationController
       render :preview_tags
     elsif params[:save_button]
       @work.save
+      log_admin_work_update(old_tags, old_language_id, old_comment_permissions)
       flash[:notice] = t("works.update.tags_updated")
       redirect_to(@work)
     else
       @work.posted = true
       @work.minor_version += 1
       @work.save!
+      log_admin_work_update(old_tags, old_language_id, old_comment_permissions)
       flash[:notice] = t("works.update.work_updated")
       redirect_to(@work)
     end
+  end
+
+  def log_admin_work_update(old_tags, old_language_id, old_comment_permissions)
+    if old_tags != @work.tags.pluck(:name).join(", ") || old_language_id != @work.language_id
+      AdminActivity.log_action(current_admin, @work,
+                               action: "update",
+                               summary: "Old tags: #{old_tags}")
+    end
+
+    return unless old_comment_permissions != @work.comment_permissions
+
+    AdminActivity.log_action(current_admin, @work,
+                             action: "edit comment settings",
+                             summary: comment_settings_summary(old_comment_permissions, @work.comment_permissions))
+  end
+
+  def comment_settings_summary(old_setting, new_setting)
+    helpers.safe_join(
+      [
+        helpers.tag.p("Old comment setting: #{comment_setting_name(old_setting)}"),
+        helpers.tag.p("New comment setting: #{comment_setting_name(new_setting)}")
+      ]
+    )
+  end
+
+  def comment_setting_name(setting)
+    t("comments.commentable.permissions.options.#{setting}")
   end
 
   def build_options(params)
@@ -926,6 +949,20 @@ class WorksController < ApplicationController
       category_strings: [],
       archive_warning_strings: []
     )
+  end
+
+  def work_admin_params
+    submitted_params = params.require(:work).dup
+    submitted_params.delete(:comment_permissions) unless policy(@work).comment_settings_access?
+
+    permitted_attributes = [
+      :rating_string, :fandom_string, :relationship_string, :character_string,
+      :archive_warning_string, :category_string, :freeform_string, :language_id,
+      { category_strings: [], archive_warning_strings: [] }
+    ]
+    permitted_attributes << :comment_permissions
+
+    submitted_params.permit(*permitted_attributes)
   end
 
   def work_search_params
