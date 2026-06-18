@@ -111,7 +111,8 @@ class PromptsController < ApplicationController
   end
 
   def edit
-    @index = @challenge_signup.send(@prompt.class.name.downcase.pluralize).index(@prompt)
+    # Range query avoids the prompt's attributes being marked as came_from_user
+    @index = @challenge_signup.send(@prompt.class.name.downcase.pluralize).where(id: ...@prompt.id).count
   end
 
   def create
@@ -125,8 +126,12 @@ class PromptsController < ApplicationController
       flash[:notice] = ts("Prompt was successfully added.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
-      redirect_to edit_collection_signup_path(@collection, @challenge_signup)
+      @index = if params[:prompt_type] == "offer"
+                 @challenge_signup.offers.count
+               else
+                 @challenge_signup.requests.count
+               end
+      render action: :new
     end
   end
 

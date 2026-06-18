@@ -802,3 +802,41 @@ Scenario: Notification emails for translations are translated
     And "encouragement" should receive 2 emails
     And the last email to "encouragement" should be non-translated
     And the last email should have "Related work notification" in the subject
+
+Scenario: A note appears on deleted inspirations and translations
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  When I view the work "Followup"
+  Then I should see "Inspired by a deleted work"
+  When I view the work "Worldbuilding Translated"
+  Then I should see "A translation of a deleted work"
+
+Scenario: Downloaded works with a deleted inspiration display the correct note when downloaded
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  Then I should be able to download all versions of "Followup"
+  When I view the work "Followup" 
+    And I follow "HTML"
+  Then I should see "Inspired by a deleted work"
+
+Scenario: Deleted inspiration relationships can be deleted from the Edit Work page
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  When I am logged in as "remixer"
+    And I view the work "Followup"
+    And I follow "Edit"
+  Then I should see "Deleted work"
+  When I follow "Remove" within "#parent-options"
+  Then I should not see "Deleted work"

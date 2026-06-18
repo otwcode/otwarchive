@@ -179,7 +179,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I post the work "Changes" with fandom "User-Added Fandom" with freeform "User-Added Freeform" with category "M/M"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Changes"
-      And I follow "Edit Tags and Language"
+      And I follow "Edit Work"
     When I select "Mature" from "Rating"
       And I uncheck "No Archive Warnings Apply"
       And I check "Choose Not To Use Archive Warnings"
@@ -375,8 +375,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the work "Wrong Language"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Language"
-      And I follow "Edit Tags and Language"
-    Then I should see "Edit Work Tags and Language for "
+      And I follow "Edit Work"
+    Then I should see "Edit Work"
     When I select "Deutsch" from "Choose a language"
       And I press "Update"
     Then I should see "Deutsch"
@@ -387,7 +387,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the work "Wrong Language"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Language"
-      And I follow "Edit Tags and Language"
+      And I follow "Edit Work"
     When I select "Deutsch" from "Choose a language"
       And I press "Preview"
     Then I should see "Preview Tags and Language"
@@ -528,7 +528,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the work "Over the Limit" has 3 fandom tags
     When I am logged in as a "<role>" admin
       And I view the work "Over the Limit"
-      And I follow "Edit Tags and Language"
+      And I follow "Edit Work"
       And I select "Mature" from "Rating"
       And I press "Update"
     Then I should see "Work was successfully updated."

@@ -180,14 +180,23 @@ module NavigationHelpers
       collection_requests_path(Collection.find_by(title: $1))
     when /^the "(.*)" assignments page$/i                      # e.g. when I go to the "Collection name" assignments page
       collection_assignments_path(Collection.find_by(title: $1))
+    when /^the first assignment page for "(.*?)"$/i
+      collection = Collection.find_by(title: Regexp.last_match(1))
+      collection_assignment_path(collection, collection.assignments.first)
     when /^the "(.*)" participants page$/i                      # e.g. when I go to the "Collection name" participants page
       collection_participants_path(Collection.find_by(title: $1))
     when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by(title: $1))
+    when /^the "(.*)" claims page for the current user$/       # e.g. when I go to the "Collection name" claims page for the current user
+      collection_claims_path(Collection.find_by(title: Regexp.last_match(1)), for_user: true)
     when /^"(.*)" gift exchange edit page$/i
       edit_collection_gift_exchange_path(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange matching page$/i
       collection_potential_matches_path(Collection.find_by(title: $1))
+    when /^"(.*)" prompt meme edit page$/i
+      edit_collection_prompt_meme_path(Collection.find_by(title: $1))
+    when /^the "(.*)" claims page$/i
+      collection_claims_path(Collection.find_by(title: $1))
     when /^the works tagged "(.*?)" in collection "(.*?)"$/i
       step %{all indexing jobs have been run}
       collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
