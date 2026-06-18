@@ -39,9 +39,9 @@ Feature: Languages
  When I am on the languages page
   And all indexing jobs have been run
 Then I should see "Deutsch (DE)"
- When I follow "1 works"
-  Then I should see "Die Rache der Sith"
-  And I should not see "Revenge of the Sith"
+When I follow "1 works"
+ Then I should see "Die Rache der Sith"
+ And I should not see "Revenge of the Sith"
 
   # cross-check in English
     
