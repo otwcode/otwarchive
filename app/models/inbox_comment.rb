@@ -31,7 +31,7 @@ class InboxComment < ApplicationRecord
           { user: %i[roles block_of_current_user] },
           { icon_attachment: :blob }
         ] },
-        { parent: { work: :users } }
+        { parent: { work: { users: :block_of_current_user } } }
       ]
     ).
       order(direction).
