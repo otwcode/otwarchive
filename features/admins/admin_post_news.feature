@@ -168,6 +168,17 @@ Feature: Admin Actions to Post News
     Then I should see "App News & a <strong> Warning"
       And I should not see "App News &amp; a &lt;strong&gt; Warning"
 
+  Scenario: If a translated admin post has characters like & and < and > in the title, the escaped version will not show in the original post header
+  Given I have posted an admin post
+    And basic languages
+    And I am logged in as a "translation" admin
+  When I make a translation of an admin post with title "Deutsch News & a <strong> Warning"
+  Then I should see "Admin Post was successfully created."
+  When I am logged in as "ordinaryuser"
+    And I visit the admin post with title "Deutsch News & a <strong> Warning"
+  Then I should see "Default Admin Post" within "dd.original.translations"
+    And I should not see "Default Admin Post &amp;"
+    
   Scenario: Admin post should be shown on the homepage
     Given I have posted an admin post
     When I am on the homepage
