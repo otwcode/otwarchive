@@ -39,6 +39,7 @@ Feature: Languages
  When I am on the languages page
   And all indexing jobs have been run
 Then I should see "Deutsch (DE)"
+Then I should see a link within "Deutsch (DE)"
 
   # cross-check in English
     
