@@ -128,6 +128,8 @@ en:
     show:
       chapter_position: " - Chapter %{position}"
       unrevealed: Mystery Work
+    update:
+      preview_notice: This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.
   collection_items:
     create:
       invited: invited
