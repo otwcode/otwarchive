@@ -14,6 +14,8 @@ class Comment < ApplicationRecord
 
   has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
 
+  has_many :abuse_reports, as: :reportable, dependent: nil
+
   validates :name, presence: { unless: :pseud_id }, not_forbidden_name: { if: :will_save_change_to_name? }
   validates :email, email_format: { on: :create, unless: :pseud_id }, email_blacklist: { on: :create, unless: :pseud_id }
 

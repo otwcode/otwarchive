@@ -13,6 +13,8 @@ class Series < ApplicationRecord
 
   has_many :subscriptions, as: :subscribable, dependent: :destroy
 
+  has_many :abuse_reports, as: :reportable, dependent: nil
+
   validates_presence_of :title
   validates_length_of :title,
     minimum: ArchiveConfig.TITLE_MIN,

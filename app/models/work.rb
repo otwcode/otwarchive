@@ -66,6 +66,8 @@ class Work < ApplicationRecord
   # imported url
   has_one :imported_url, dependent: :destroy
 
+  has_many :abuse_reports, as: :reportable, dependent: nil
+
   ########################################################################
   # VIRTUAL ATTRIBUTES
   ########################################################################

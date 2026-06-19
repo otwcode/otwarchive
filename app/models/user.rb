@@ -175,6 +175,8 @@ class User < ApplicationRecord
   has_many :log_items, dependent: :destroy
   validates_associated :log_items
 
+  has_many :abuse_reports, as: :reportable, dependent: nil
+
   def canonicalize_email
     self.canonical_email = EmailCanonicalizer.canonicalize(self.email) if self.email
   end
