@@ -471,19 +471,8 @@ class Collection < ApplicationRecord
                if: :saved_change_to_parent_id?
 
   def reindex_associated_works_and_bookmarks
-    items = all_items.pluck(:item_type, :item_id)
-
-    work_ids = []
-    bookmark_ids = []
-
-    items.each do |item_type, item_id|
-      case item_type
-      when "Work"
-        work_ids << item_id
-      when "Bookmark"
-        bookmark_ids << item_id
-      end
-    end
+    work_ids = all_items.where(item_type: "Work").pluck(:item_id).uniq
+    bookmark_ids = all_items.where(item_type: "Bookmark").pluck(:item_id).uniq
 
     IndexQueue.enqueue_ids(Work, work_ids.uniq, :background) if work_ids.present?
     IndexQueue.enqueue_ids(Bookmark, bookmark_ids.uniq, :background) if bookmark_ids.present?
