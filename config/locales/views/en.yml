@@ -1876,27 +1876,27 @@ en:
       you_can_html: You are free to express your creativity within the %{few_restrictions_link} needed to keep the service viable for other users. The Archive strives to protect your rights to free expression and privacy; you can read about the details in our %{terms_of_service_link}.
       your_feedback: your feedback
     donate:
-      intro: "There are two main ways to support the Archive of Our Own (AO3) \u2013 donating your time or money."
-      page_title: Donate or Volunteer
+      intro: There are two main ways to support the Archive of Our Own (AO3) – donating your time or money.
       money:
         budget_reports: budget reports
-        details_html: "AO3 is free to use and will never include ads of any type. All of our operating costs are supported by %{donation_link}, and we can't run AO3 without your help. We hold donation drives twice a year in April and October, but you can donate year-round. To learn more, check out our %{budget_reports_link} or refer to our %{faq_link}."
+        details_html: AO3 is free to use and will never include ads of any type. All of our operating costs are supported by %{donation_link}, and we can't run AO3 without your help. We hold donation drives twice a year in April and October, but you can donate year-round. To learn more, check out our %{budget_reports_link} or refer to our %{faq_link}.
         donation: donations
         faq: Donation and Finance FAQs
         title: Donating Financially
+      page_title: Donate or Volunteer
       time:
-        title: Donating Your Time
         contributing:
           contributing: Contributing Guidelines
           github: open-source archiving software
-          info_html: "AO3 is run on %{github_link} developed by OTW volunteers and community contributors. Anyone can contribute to one of the open tasks in our %{jira_link}. To get started, refer to our %{contributing_link}."
+          info_html: AO3 is run on %{github_link} developed by OTW volunteers and community contributors. Anyone can contribute to one of the open tasks in our %{jira_link}. To get started, refer to our %{contributing_link}.
           jira: Jira project
           title: Contributing Code
+        title: Donating Your Time
         volunteering:
           committees: committees
-          info_html: "The %{otw_link} (OTW) is the parent organization of AO3. The OTW normally recruits about once a month for volunteers to support %{projects_link}. Many of the OTW's %{committees_link} contribute to AO3 in some capacity. However, if you are interested in volunteering primarily for AO3, the committees to look for are: Accessibility, Design, &amp; Technology; AO3 Documentation; Policy &amp; Abuse; Support; Tag Wrangling; Translation; and User Response Translation."
+          info_html: 'The %{otw_link} (OTW) is the parent organization of AO3. The OTW normally recruits about once a month for volunteers to support %{projects_link}. Many of the OTW''s %{committees_link} contribute to AO3 in some capacity. However, if you are interested in volunteering primarily for AO3, the committees to look for are: Accessibility, Design, &amp; Technology; AO3 Documentation; Policy &amp; Abuse; Support; Tag Wrangling; Translation; and User Response Translation.'
           listings: open volunteer position listings
-          listings_html: "We encourage you to browse through our %{listings_link} and apply for any volunteer roles that match your qualifications and interests. If there are no roles currently recruiting, you can sign up for %{news_link} or follow us on %{social_link}."
+          listings_html: We encourage you to browse through our %{listings_link} and apply for any volunteer roles that match your qualifications and interests. If there are no roles currently recruiting, you can sign up for %{news_link} or follow us on %{social_link}.
           news: OTW News by Email
           otw: Organization for Transformative Works
           projects: its projects
@@ -2471,10 +2471,10 @@ en:
         takedown_policy: DMCA & TIDA Policies
         tos: Terms of Service
       contact_us:
+        donations: Donate or Volunteer
         header: Contact Us
         pac: Policy Questions & Abuse Reports
         support: Technical Support & Feedback
-        donations: Donate or Volunteer
       customize:
         default: Default
         header: Customize
