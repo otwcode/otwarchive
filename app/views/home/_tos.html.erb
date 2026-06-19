@@ -327,7 +327,8 @@
     <strong><%= t(".abuse_policy.appeals.heading") %></strong>
     <p>
       <%= t(".abuse_policy.appeals.html",
-            appeal_decision_link: link_to(t(".abuse_policy.appeals.appeal_decision"), tos_faq_path(anchor: "appeal"))) %>
+            appeal_decision_link: link_to(t(".abuse_policy.appeals.appeal_decision"), tos_faq_path(anchor: "appeal")),
+            appeal_rejection_link: link_to(t(".abuse_policy.appeals.appeal_rejection"), tos_faq_path(anchor: "appeal_rejections"))) %>
     </p>
   </li>
 </ol>
