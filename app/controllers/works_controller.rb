@@ -6,16 +6,16 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts, :share]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit, :update, :drafts, :share]
   before_action :check_user_status, except: [:index, :edit, :edit_multiple, :confirm_delete_multiple, :delete_multiple, :confirm_delete, :destroy, :show, :show_multiple, :navigate, :search, :collected, :share]
   before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy, :show_multiple, :edit_multiple, :confirm_delete_multiple, :delete_multiple]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
-  # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
-  before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
-  before_action :save_old_tags, only: [:update_tags]
-  after_action :log_admin_activity, only: [:update_tags], unless: [:work_cannot_be_saved?]
+  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit, :update, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
+  # admins should have the ability to edit works (tags, language, and more) as per our ToS
+  before_action :check_ownership_or_admin, only: [:edit, :update]
+  before_action :save_old_tags, only: [:update]
+  after_action :log_admin_activity, only: [:update], unless: [:work_cannot_be_saved?]
   before_action :check_parent_visible, only: [:navigate]
   before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
 
@@ -320,6 +320,11 @@ class WorksController < ApplicationController
 
   # GET /works/1/edit
   def edit
+    if logged_in_as_admin?
+      authorize @work
+      return
+    end
+
     @hide_dashboard = true
     if @work.number_of_chapters > 1
       @chapters = @work.chapters_in_order(include_content: false,
@@ -342,12 +347,16 @@ class WorksController < ApplicationController
 
   # GET /works/1/edit_tags
   def edit_tags
-    authorize @work if logged_in_as_admin?
     @page_subtitle = t(".page_title")
   end
 
   # PUT /works/1
   def update
+    if logged_in_as_admin?
+      authorize @work
+      return admin_update_work
+    end
+
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_params
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
@@ -387,8 +396,6 @@ class WorksController < ApplicationController
 
   # PATCH /works/1/edit_tags
   def update_tags
-    authorize @work if logged_in_as_admin?
-
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_tag_params
 
@@ -840,22 +847,44 @@ class WorksController < ApplicationController
 
     new_tags = @work.tags.pluck(:name)
     tags_changed = new_tags.sort != @old_tags.sort
- 
+
     log_admin_tag_edit(action) if tags_changed
   end
 
-  def log_admin_language_edit 
+  def log_admin_language_edit
     new_language = @work.language.name
     edit_summary = "<p>Old language: #{@old_language}</p><p>New language: #{new_language}</p>"
     AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_summary)
   end
 
   def log_admin_tag_edit(action)
-    edit_summary = "Old tags: #{@old_tags.join(', ')}"
+    edit_summary = "Old tags: #{@old_tags.join(', ')}" if action == "update"
     AdminActivity.log_action(current_admin, @work, action: action, summary: edit_summary)
   end
 
   private
+
+  def admin_update_work
+    @work.preview_mode = (params[:preview_button] || params[:edit_button]).present?
+    @work.attributes = work_tag_params
+
+    if params[:edit_button] || work_cannot_be_saved?
+      render :edit
+    elsif params[:preview_button]
+      @preview_mode = true
+      render :preview_tags
+    elsif params[:save_button]
+      @work.save
+      flash[:notice] = t("works.update.tags_updated")
+      redirect_to(@work)
+    else
+      @work.posted = true
+      @work.minor_version += 1
+      @work.save!
+      flash[:notice] = t("works.update.work_updated")
+      redirect_to(@work)
+    end
+  end
 
   def build_options(params)
     pseuds_to_apply =

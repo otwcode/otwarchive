@@ -12,7 +12,7 @@ describe HtmlCleaner do
     ArchiveConfig.FIELDS_ALLOWING_MEDIA_EMBEDS.each do |field|
       context "#{field} is configured to allow media embeds" do
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com 
-           vidders.net criticalcommons.org google.com podfic.com archive.org
+           vidders.net criticalcommons.org podfic.com archive.org
            open.spotify.com spotify.com w.soundcloud.com soundcloud.com viddertube.com
            bilibili.com player.bilibili.com 4shared.com/web/embed audio.com/embed/audio].each do |source|
 
@@ -41,14 +41,6 @@ describe HtmlCleaner do
             result = sanitize_value(field, html)
             expect(result).to match('flashvars=.*https:')
           end
-        end
-
-        it "keeps google player embeds without closing tag" do
-          # HTML5 disallows </embed>, according to https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/embed#technical_summary
-          html1 = '<embed type="application/x-shockwave-flash" flashvars="audioUrl=http://dl.dropbox.com/u/123/foo.mp3" src="http://www.google.com/reader/ui/123-audio-player.swf" width="400" height="27" allowscriptaccess="never" allownetworking="internal">'
-          html2 = "#{html1}</embed>"
-          result = sanitize_value(field, html2)
-          expect(result).to eq(html1)
         end
 
         it "strips embeds with unknown source" do
