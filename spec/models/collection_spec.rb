@@ -107,9 +107,8 @@ describe Collection do
     end
 
     context "when subcollection is added or removed" do
-      let(:user) { create(:user) }
-      let(:parent_collection) { create(:collection, user: user ) }
-      let(:child) { create(:collection, user: user) }
+      let(:parent_collection) { create(:collection) }
+      let(:child) { create(:collection) }
       let(:work) { create(:work) }
 
       before do
