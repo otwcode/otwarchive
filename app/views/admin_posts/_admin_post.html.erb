@@ -32,11 +32,11 @@
       <dd class="tags">
         <ul class="tags commas">
           <% admin_post.tags.each do |tag| %>
-          <li><%= link_to tag.name, if tag.new_record?
-                                      "#"
-                                    else
-                                      admin_post.draft? ? drafts_admin_posts_path(tag: tag.id) : admin_posts_path(tag: tag.id)
-                                    end, class: "tag" %></li>
+            <li><%= link_to tag.name, if tag.new_record?
+                                        "#"
+                                      else
+                                        admin_post.draft? ? drafts_admin_posts_path(tag: tag.id) : admin_posts_path(tag: tag.id)
+                                      end, class: "tag" %></li>
           <% end %>
         </ul>
       </dd>
