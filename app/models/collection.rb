@@ -474,7 +474,7 @@ class Collection < ApplicationRecord
     work_ids = all_items.where(item_type: "Work").pluck(:item_id).uniq
     bookmark_ids = all_items.where(item_type: "Bookmark").pluck(:item_id).uniq
 
-    IndexQueue.enqueue_ids(Work, work_ids.uniq, :background) if work_ids.present?
-    IndexQueue.enqueue_ids(Bookmark, bookmark_ids.uniq, :background) if bookmark_ids.present?
+    IndexQueue.enqueue_ids(Work, work_ids, :background) if work_ids.present?
+    IndexQueue.enqueue_ids(Bookmark, bookmark_ids, :background) if bookmark_ids.present?
   end
 end
