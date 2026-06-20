@@ -926,12 +926,11 @@ en:
       previous_comment: Previous Comment
     preview:
       anonymous_creator: Anonymous Creator
-      commenting_on_html: 'Commenting on: %{commentable_link}'
       deleted_comment: "(Previous comment deleted.)"
       edit_comment_heading: Edit Comment
       hidden_comment: "(This comment is under review by an admin and is currently unavailable.)"
-      page_heading: Preview Comment
-      post_comment: Post Comment
+      page_heading_html: 'Comment on %{commentable_link}'
+      post_comment: Comment
     review:
       success: Comment approved.
     show:
