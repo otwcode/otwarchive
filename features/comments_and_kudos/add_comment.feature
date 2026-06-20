@@ -464,12 +464,11 @@ Scenario: Comment preview
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "This is my test comment with <b>bold text</b>"
     And I press "Preview"
-  Then I should see "Preview Comment"
-    And I should see "Commenting on: The One Where Neal is Awesome"
+  Then I should see "Comment on The One Where Neal is Awesome"
     And I should see "This is my test comment with bold text"
     And I should see "commenter" in the comment byline
     And I should see "Cancel"
-    And I should see a button "Post Comment"
+    And I should see a button "Comment"
 
 Scenario: Comment preview persists content when going back to edit
   Given the work "The One Where Neal is Awesome"
@@ -477,7 +476,7 @@ Scenario: Comment preview persists content when going back to edit
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "Initial comment content"
     And I press "Preview"
-  Then I should see "Preview Comment"
+  Then I should see "Comment on The One Where Neal is Awesome"
   When I fill in "Comment" with "Initial comment content with more text"
     And I press "Preview"
   Then I should see "Initial comment content with more text"
@@ -489,9 +488,9 @@ Scenario: Comment preview and post
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "I really enjoyed this!"
     And I press "Preview"
-  Then I should see "Preview Comment"
+  Then I should see "Comment on The One Where Neal is Awesome"
     And I should see "I really enjoyed this!"
-  When I press "Post Comment"
+  When I press "Comment"
   Then I should see "Comment created!"
     And I should see "I really enjoyed this!" within ".odd"
 
@@ -501,7 +500,7 @@ Scenario: Comment preview shows sanitized HTML
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "Safe HTML: <b>bold</b>, <i>italic</i>, <p>paragraph</p>"
     And I press "Preview"
-  Then I should see "Preview Comment"
+  Then I should see "Comment on The One Where Neal is Awesome"
     And I should see "bold"
     And I should see "italic"
     And I should see "paragraph"
@@ -513,7 +512,7 @@ Scenario: Guest comment preview
     And I fill in "Guest email" with "guest@example.com"
     And I fill in "Comment" with "Great work!"
     And I press "Preview"
-  Then I should see "Preview Comment"
+  Then I should see "Comment on The One Where Neal is Awesome"
     And I should see "Guest User" in the comment byline
     And I should see "Great work!"
     And I should see "Cancel"
@@ -526,6 +525,6 @@ Scenario: Comment preview for anonymous work
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "Anonymous work comment"
     And I press "Preview"
-  Then I should see "Preview Comment"
+  Then I should see "Comment on The One Where Neal is Awesome"
     And I should see "Anonymous Creator" in the comment byline
     And I should see "Anonymous work comment"
