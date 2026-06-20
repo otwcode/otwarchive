@@ -105,6 +105,28 @@ describe Collection do
       expect { create(:collection, open_doors: nil) }
         .to raise_error(ActiveRecord::NotNullViolation)
     end
+
+    context "when subcollection is added or removed" do
+      let(:parent_collection) { create(:collection) }
+      let(:child) { create(:collection) }
+      let(:work) { create(:work) }
+
+      before do
+        child.collection_items.create(item: work)
+      end
+
+      it "enqueues reindexing of works when subcolelction is added" do
+        child.update!(parent_id: parent_collection.id)
+        expect(IndexQueue).to receive(:enqueue_ids).with(Work, [work.id], :background)
+        allow(IndexQueue).to receive(:enqueue_ids).with(Bookmark, anything, :background)
+      end
+
+      it "enqueues reindexing of works when subcollection is removed" do
+        child.update!(parent_id: nil)
+        expect(IndexQueue).to receive(:enqueue_ids).with(Work, [work.id], :background)
+        allow(IndexQueue).to receive(:enqueue_ids).with(Bookmark, anything, :background)
+      end
+    end
   end
 
   describe "#clear_icon" do
