@@ -2143,9 +2143,9 @@ en:
         answers_common_questions_html: Answers to common questions about the Abuse Policy can be found in the %{tos_faq_link}.
         appeals:
           appeal_decision: appeal a decision to the Policy & Abuse committee
-          appeal_rejection: PAC's decisions are final
+          decisions_are_final: PAC's decisions are final.
           heading: Appeals
-          html: The complainant or the subject of a complaint may %{appeal_decision_link}, in which case it will be reviewed by an additional PAC administrator. The original decision will remain in effect while an appeal is being reviewed. We will attempt to resolve appeals as speedily as possible, but we cannot guarantee any particular timeframe for a response. %{appeal_rejection_link}.
+          html: The complainant or the subject of a complaint may %{appeal_decision_link}, in which case it will be reviewed by an additional PAC administrator. The original decision will remain in effect while an appeal is being reviewed. We will attempt to resolve appeals as speedily as possible, but we cannot guarantee any particular timeframe for a response. %{appeal_rejection_link}
         content_policy: Content Policy
         heading: I.I. Abuse Policy
         no_prescreen_html: We do not prescreen Content for violations of the Terms of Service, including violations of the %{content_policy_link}. Complaints are investigated only when they are submitted through the appropriate channels and with the appropriate information.
