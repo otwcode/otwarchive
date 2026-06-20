@@ -15,7 +15,7 @@ class WorksController < ApplicationController
   # admins should have the ability to edit works (tags, language, and more) as per our ToS
   before_action :check_ownership_or_admin, only: [:edit, :update]
   before_action :save_old_tags, only: [:update]
-  after_action :log_admin_activity, only: [:update], unless: [:work_cannot_be_saved?]
+  after_action :log_admin_activity, only: [:update]
   before_action :check_parent_visible, only: [:navigate]
   before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
 
@@ -841,14 +841,12 @@ class WorksController < ApplicationController
   def log_admin_activity
     return unless logged_in_as_admin?
 
-    action = params[:action]
-
     log_admin_language_edit if @work.saved_change_to_language_id?
 
     new_tags = @work.tags.pluck(:name)
     tags_changed = new_tags.sort != @old_tags.sort
 
-    log_admin_tag_edit(action) if tags_changed
+    log_admin_tag_edit if tags_changed
   end
 
   def log_admin_language_edit
@@ -857,9 +855,9 @@ class WorksController < ApplicationController
     AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_summary)
   end
 
-  def log_admin_tag_edit(action)
-    edit_summary = "Old tags: #{@old_tags.join(', ')}" if action == "update"
-    AdminActivity.log_action(current_admin, @work, action: action, summary: edit_summary)
+  def log_admin_tag_edit
+    edit_summary = "Old tags: #{@old_tags.join(', ')}" if @old_tags.present?
+    AdminActivity.log_action(current_admin, @work, action: "update_tags", summary: edit_summary)
   end
 
   private

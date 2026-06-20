@@ -405,7 +405,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the work "Wrong Tags and Language"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Tags and Language"
-      And I follow "Edit Tags and Language"
+      And I follow "Edit Work"
     When I select "Mature" from "Rating"
       And I select "Deutsch" from "Choose a language"
       And I press "Update"
@@ -417,7 +417,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Given the work "Nothing Wrong"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Nothing Wrong"
-      And I follow "Edit Tags and Language"
+      And I follow "Edit Work"
       And I press "Update"
       And I follow "Activities"
     Then I should not see "update_tags"
@@ -427,7 +427,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Given the work "Nothing Wrong"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Nothing Wrong"
-      And I follow "Edit Tags and Language"
+      And I follow "Edit Work"
       And I press "Preview"
       And I press "Update"
       And I follow "Activities"
@@ -438,7 +438,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Given the work "Some Fic"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Some Fic"
-      And I follow "Edit Tags and Language"
+      And I follow "Edit Work"
       And I uncheck "No Archive Warnings Apply"
     When I press "Update"
       And I follow "Activities"
@@ -449,7 +449,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the work "Some Fic"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Some Fic"
-      And I follow "Edit Tags and Language"
+      And I follow "Edit Work"
       And I select "Mature" from "Rating"
       And I select "Deutsch" from "Choose a language"
     When I press "Preview"
