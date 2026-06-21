@@ -132,11 +132,15 @@ Then /^the neighbors of "([^\"]*)" in the "([^\"]*)" series should link over it$
     visit work_path(neighbor.work)
     # the neighbors should link to each other if they both exist
     if neighbors.count > 1 && index == 0
-      click_link("Next Work →")
+      within("#series") do
+        click_link("Next Work →")
+      end
       page.should_not have_content(work_title)
       page.should have_content(neighbors[1].work.title)
     elsif neighbors.count > 1 && index == 1
-      click_link("← Previous Work")
+      within("#series") do
+        click_link("← Previous Work")
+      end
       page.should_not have_content(work_title)
       page.should have_content(neighbors[0].work.title)
     end
@@ -151,10 +155,14 @@ Then /^the neighbors of "([^\"]*)" in the "([^\"]*)" series should link to it$/ 
   neighbors.each do |neighbor|
     visit work_path(neighbor.work)
     if neighbor.position > position
-      click_link("← Previous Work")
+      within("#series") do
+        click_link("← Previous Work")
+      end
       page.should have_content(work_title)
     else
-      click_link("Next Work →")
+      within("#series") do
+        click_link("Next Work →")
+      end
       page.should have_content(work_title)
     end
   end
