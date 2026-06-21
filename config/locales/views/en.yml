@@ -1392,6 +1392,26 @@ en:
         no_fandom: Don't include the fandom.
         reverse_underscore: Start with fandom, then with author, then title, with underscores instead of dashes.
       page_heading: Work Title Format
+    privacy_moderated_commenting:
+      description: With this feature enabled, you will have to approve all comments before they appear publicly on your work.
+      page_heading: Comments Moderated
+    privacy_restricted_commenting:
+      default_option: This is the default option.
+      deleting_others_comments: Can I edit or delete a comment someone else left on one of my works?
+      disable_all:
+        description: This will disable all new comments on your work.
+        header: No one can comment
+      disable_anon:
+        description_html: "%{default_option_bold} With this enabled, only logged in users will be able to comment on your work."
+        header: Only registered users can comment
+      enable_all:
+        description: All users can comment on your work whether they are logged in or not.
+        header: Registered users and guests can comment
+      existing_unaffected_html: Changing these settings will not affect any existing comments. If there are comments on the work that you would like to remove, check out %{deleting_others_comments_link} to learn how.
+      page_heading: Who can comment on this work?
+    privacy_restricted_work:
+      description: A registered user is a person with an Archive account. If you check this box your story can only be viewed by a person who is logged in.
+      page_heading: Registered Users
     rte:
       description_html: 'The exact behavior of the Rich Text Editor (%{rte_abbreviation}) depends on your device, browser, and operating system as well as the source you''re pasting from. However, starting with a well-formatted document will help you get the most out of the %{rte_abbreviation_no_title}. Here are some general tips to ensure that as much of your formatting as possible will be retained:'
       enter_once:
@@ -1683,6 +1703,23 @@ en:
       about_series: A series is a set of related stories, each of which is complete on its own. You can make new series or add stories to your series anytime you like from inside your dashboard.
       page_heading: Choosing Series
       when_chaptered_story_instead: If you'd like to post a work in progress, or a story with chapters, you probably want a chaptered story instead.
+    works_skins:
+      description_html: You can create custom stylesheets, or "skins", for your works just like you can create skins for the Archive. The main difference is that work skins will change the way your work appears to %{other_bold} users, not just you.
+      example:
+        create_a_work_skin: Create a work skin
+        create_skin_with_html: "%{create_a_work_skin_link} with the following content: %{css_class_example_code}"
+        css_class_example: ".bluetext {color: blue;}"
+        html_class_example: I want <span class="bluetext">house</span> to be in blue
+        html_give_word_class_html: 'In the HTML of your text, you would then give the word this class: %{html_class_example_code}'
+        select_skin: Select this skin when posting your work.
+      for_example: 'For example, let''s say that you want to make a single word in your text bright blue. Here is what you might do:'
+      limitations_html: Work skins will %{only_bold} affect the body of the work they are applied to—you can't change the Archive navigation or background with them. What you can do, however, is create your own classes. For instance, you can change the color of some of your text, indent some paragraphs in a particular way, and so on.
+      only: only
+      other: other
+      page_heading: Work Skins
+      refer_tutorial_faq_html: Refer to %{tutorial_creating_skin_link} and %{skins_interface_faq_link} for more information.
+      skins_interface_faq: Skins and Archive Interface FAQ
+      tutorial_creating_skin: 'Tutorial: Creating a Work Skin'
     works_translation_link:
       about_translations: As well as citing a work that has inspired yours (e.g. if you are remixing another work) you can also state that your work is a translation of another work.
       page_heading: Translations
@@ -3296,7 +3333,11 @@ en:
       page_heading: Edit Work
       remove_me_as_co_creator: Remove Me As Co-Creator
     edit_multiple:
+      privacy_moderated_commenting_help_title: Comments moderated
+      privacy_restricted_commenting_help_title: Who can comment on these works
+      privacy_restricted_work_help_title: Registered users
       works_languages_help_title: Languages help
+      works_skins_help_title: Work skins
     edit_tags:
       page_heading_html: Edit Work Tags for %{title}
     import:
@@ -3316,6 +3357,9 @@ en:
     new_import:
       content_policy: Content Policy
       post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      privacy_moderated_commenting_help_title: Comments moderated
+      privacy_restricted_commenting_help_title: Who can comment on these works
+      privacy_restricted_work_help_title: Registered users
       tos_faq: Terms of Service FAQ
       works_languages_help_title: Languages help
     permissions:
@@ -3366,6 +3410,9 @@ en:
       collectibles_add_to_collection_help_title: Adding To Collections
       deleted_work: Deleted work
       header: This work is a remix, a translation, a podfic, or was inspired by another work
+      privacy_moderated_commenting_help_title: Comments moderated
+      privacy_restricted_commenting_help_title: Who can comment on this work
+      privacy_restricted_work_help_title: Registered users
       remove: Remove
       remove_confirm: Are you sure you want to remove the connection to this work?
       works_assignment_help_title: Fulfilling Assignments
@@ -3374,6 +3421,7 @@ en:
       works_parents_help_title: Parent works help
       works_recipients_help_title: Recipients
       works_series_help_title: Choosing series
+      works_skins_help_title: Work skins
       works_translation_link_help_title: Translation link
     work_approved_children:
       inspired_by:
