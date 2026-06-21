@@ -13,9 +13,7 @@ module SeriesHelper
 
     series = work.serial_works.map(&:series).compact
     series.map do |serial|
-      works_in_series = serial.works_in_order.posted.where.not(
-        in_unrevealed_collection: true, in_anon_collection: true
-      ).select(
+      works_in_series = serial.works_in_order.posted.where.not(in_unrevealed_collection: true).where.not(in_anon_collection: true).select(
         :id, :restricted, :hidden_by_admin, :posted
       ).select(&:visible?)
 
