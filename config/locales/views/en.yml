@@ -395,6 +395,8 @@ en:
           account_age_threshold_for_comment_spam_check_note: Enter 0 to turn off comment spam checks for all logged in users.
           account_creation_enabled: Account creation enabled
           cache_expiration: How often (in minutes) should we refresh caching
+          comment_count_threshold_for_comment_rate_limit: How many comments older accounts should have before we stop rate limiting them
+          comment_count_threshold_for_comment_rate_limit_note: Enter 0 to turn off additional comment rate limits based on comment count.
           creation_requires_invite: Account creation requires invitation
           days_to_purge_unactivated: How many weeks you have to activate your account before we purge it
           disable_support_form: Turn off support form

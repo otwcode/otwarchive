@@ -10,6 +10,7 @@ class AdminSettingPolicy < ApplicationPolicy
       invite_from_queue_number
       request_invite_enabled
       account_age_threshold_for_comment_spam_check
+      comment_count_threshold_for_comment_rate_limit
     ],
     "superadmin" => %i[
       account_creation_enabled
@@ -23,6 +24,7 @@ class AdminSettingPolicy < ApplicationPolicy
       hide_spam
       guest_comments_off
       account_age_threshold_for_comment_spam_check
+      comment_count_threshold_for_comment_rate_limit
       invite_from_queue_enabled
       invite_from_queue_frequency
       invite_from_queue_number
