@@ -50,6 +50,8 @@ en:
     qr_code_as_svg:
       default_label: QR code
   series_helper:
+    series_data_for_work:
+      hidden_notice: Part of a series (hidden)
     series_description_html: Part %{index} of %{series_link}
   tags_helper:
     get_symbol_link:
@@ -83,7 +85,3 @@ en:
       anonymous: Anonymous
       multifandom: Multifandom
       unspecified_fandom: No fandom specified
-  series_helper:
-    series_description_html: Part %{index} of %{series_link}
-    series_data_for_work:
-      hidden_notice: "Part of a series (hidden)"
