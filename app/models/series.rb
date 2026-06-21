@@ -112,10 +112,11 @@ class Series < ApplicationRecord
   end
 
   def visible_work_count
+    works = self.works.posted
     if User.current_user.nil?
-      self.works.posted.unrestricted.count
+      works.unrestricted.reject(&:anonymous?).reject(&:unrevealed?).count
     else
-      self.works.posted.count
+      works.reject(&:anonymous?).reject(&:unrevealed?).count
     end
   end
 

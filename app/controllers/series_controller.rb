@@ -44,8 +44,9 @@ class SeriesController < ApplicationController
   def show
     @works = @series.works_in_order.posted.includes(:pseuds)
                .select(&:visible?)
-               .reject { |work| (work.unrevealed? || work.anonymous?) && !(current_user && current_user.is_author_of?(@series)) }
+               .reject { |work| work.unrevealed? || work.anonymous? }
                .paginate(page: params[:page])
+
 
     # sets the page title with the data for the series
     if @series.unrevealed?
