@@ -54,18 +54,29 @@ module SeriesHelper
     end
   end
 
+  # Use visible work positions instead of raw positions to avoid gaps in
+  # displayed series numbering when intermediate works are hidden.
+  def visible_work_position(work, series)
+    visible_works = series.works_in_order.posted.where.not(in_unrevealed_collection: true).where.not(in_anon_collection: true).select(&:visible?)
+    visible_works.index(work)
+  end
+
   def work_series_description(work, series)
-    serial = SerialWork.where(work_id: work.id, series_id: series.id).first
-    ts("Part <strong>%{position}</strong> of %{title}".html_safe, position: serial.position, title: link_to(series.title, series))
+    position = visible_work_position(work, series)
+    return unless position
+
+    t("series_helper.work_series_description_html", position: position + 1, title: link_to(series.title, series))
   end
 
   def series_list_with_work_position(work, email_styling: false)
-    safe_join(work.series.map do |s|
-                t("series_helper.series_description_html",
-                  index: s.serial_works.where(work_id: work.id).pick(:position),
-                  series_link: email_styling ? style_link(s.title, series_url(s)) : link_to(s.title, series_url(s)))
-              end,
-              t("support.array.words_connector"))
+    safe_join(work.series.filter_map do |s|
+      position = visible_work_position(work, s)
+      next unless position
+
+      t("series_helper.series_description_html",
+        index: position + 1,
+        series_link: email_styling ? style_link(s.title, series_url(s)) : link_to(s.title, series_url(s)))
+    end, t("support.array.words_connector"))
   end
 
   # Generates confirmation message for "Remove Me As Co-Creator"

@@ -53,6 +53,7 @@ en:
     series_data_for_work:
       hidden_notice: Part of a series (hidden)
     series_description_html: Part %{index} of %{series_link}
+    work_series_description_html: Part <strong>%{position}</strong> of %{title}
   tags_helper:
     get_symbol_link:
       title: Symbols key
