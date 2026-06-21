@@ -186,6 +186,9 @@ en:
               taken: You have already muted that user.
           format: "%{message}"
         prompt:
+          attributes:
+            title:
+              start_with_special_characters: cannot begin with =, +, -, @ or a whitespace character.
           tags_not_in_fandom: "^These %{tag_label} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)"
         prompt_meme:
           attributes:
