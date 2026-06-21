@@ -83,3 +83,7 @@ en:
       anonymous: Anonymous
       multifandom: Multifandom
       unspecified_fandom: No fandom specified
+  series_helper:
+    series_description_html: Part %{index} of %{series_link}
+    series_data_for_work:
+      hidden_notice: "Part of a series (hidden)"

@@ -7,9 +7,7 @@ module SeriesHelper
 
   # this should only show prev and next works visible to the current user
   def series_data_for_work(work)
-    if work.unrevealed? || work.anonymous?
-      return [content_tag(:span, ts("Part of a series (hidden)"), class: "series")]
-    end
+    return [content_tag(:span, t("series_helper.series_data_for_work.hidden_notice"), class: "series")] if work.unrevealed? || work.anonymous?
 
     series = work.serial_works.map(&:series).compact
     series.map do |serial|
