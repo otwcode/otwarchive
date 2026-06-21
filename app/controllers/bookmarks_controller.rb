@@ -98,7 +98,6 @@ class BookmarksController < ApplicationController
 
       if @owner.present?
         @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
-
         if @user.blank?
           # When it's not a particular user's bookmarks, we want
           # to list *bookmarkable* items to avoid duplication
@@ -112,7 +111,6 @@ class BookmarksController < ApplicationController
           flash_search_warnings(@bookmarks)
           @facets = @bookmarks.facets
         end
-
         if @search.options[:excluded_tag_ids].present? || @search.options[:excluded_bookmark_tag_ids].present?
           # Excluded tags do not appear in search results, so we need to generate empty facets
           # to keep them as checkboxes on the filters.
@@ -288,6 +286,13 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
+    # We check that the URL from where the bookmark was deleted is a list of bookmarks. If it is not, we cannot redirect the user back since it would cause a 404 error
+    if %r{(/bookmarks\z)|(bookmarks/search\z)}.match?(URI.parse(request.referer).path)
+      redirect_back_or_to user_bookmarks_path(current_user)
+    else
+      redirect_to user_bookmarks_path(current_user)
+    end
+  rescue URI::InvalidURIError
     redirect_to user_bookmarks_path(current_user)
   end
 
