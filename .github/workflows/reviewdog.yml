@@ -50,6 +50,3 @@ jobs:
           use_bundler: true
           reporter: github-pr-check
           fail_level: any
-          # TODO: remove this override when we upgrade to versions that use erb_lint instead
-          tool_name: erblint
-          config_file: .erb-lint.yml
