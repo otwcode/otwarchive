@@ -170,12 +170,17 @@ Rails.application.routes.draw do
   end
 
   #### ADMIN ####
+  get "/admin_posts/drafts" => "admin_posts#drafts", as: :drafts_admin_posts
   resources :admin_posts do
     resources :comments do
       collection do
         get :unreviewed
         put :review_all
       end
+    end
+    member do
+      put :post
+      get :preview
     end
   end
 

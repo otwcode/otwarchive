@@ -7,27 +7,36 @@
 <h4 class="landmark heading"><%= ts("Post Header") %></h4>
 <div class="wrapper">
   <dl class="meta">
-    <dt class="published"><%= ts("Published:") %></dt>
-    <dd class="published"><%= admin_post.created_at %></dd>
+    <% if admin_post.posted? %>
+      <dt class="published"><%= t(".published") %></dt>
+      <dd class="published"><%= l(admin_post.published_at) %></dd>
+    <% end %>
     <% if admin_post.translated_post %>
       <dt class="original translations"><%= ts("Original:") %></dt>
-      <dd class="original translations"><%= link_to admin_post.translated_post.title, admin_post.translated_post %></dd>
-    <% elsif !admin_post.translations.empty? %>
+      <dd class="original translations"><%= link_to admin_post.translated_post.title.html_safe, admin_post.translated_post %></dd>
+    <% else %>
+      <% translations = sorted_translations(admin_post) %>
+      <% unless translations.blank? %>
       <dt class="translations"><%= ts("Translations:") %></dt>
       <dd class="translations">
         <ul class="languages commas">
-          <% for translation in sorted_translations(admin_post) %>
+          <% translations.each do |translation| %>
             <li><%= link_to translation.language.name, translation, lang: translation.language.short %></li>
           <% end %>
         </ul>
       </dd>
+      <% end %>
     <% end %>
     <% if admin_post.tags.length > 0 %>
       <dt class="tags"><%= ts("Tags:") %></dt>
       <dd class="tags">
         <ul class="tags commas">
-          <% for tag in admin_post.tags %>
-            <li><%= link_to tag.name, admin_posts_path(tag: tag.id), class: "tag" %></li>
+          <% admin_post.tags.each do |tag| %>
+            <li><%= link_to tag.name, if tag.new_record?
+                                        "#"
+                                      else
+                                        admin_post.draft? ? drafts_admin_posts_path(tag: tag.id) : admin_posts_path(tag: tag.id)
+                                      end, class: "tag" %></li>
           <% end %>
         </ul>
       </dd>

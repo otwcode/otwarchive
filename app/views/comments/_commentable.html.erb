@@ -19,15 +19,19 @@
     <% end %>
 
     <% if @previous_admin_post %>
-      <li><%= link_to("Previous Post", @previous_admin_post) %></li>
+      <li><%= link_to(@previous_admin_post.posted? ? t(".actions.previous_post") : t(".actions.previous_draft"), @previous_admin_post) %></li>
     <% end %>
 
     <% if @next_admin_post %>
-      <li><%= link_to("Next Post", @next_admin_post) %></li>
+      <li><%= link_to(@next_admin_post.posted? ? t(".actions.next_post") : t(".actions.next_draft"), @next_admin_post) %></li>
     <% end %>
 
     <% if @admin_post %>
-      <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
+      <% if @admin_post.posted? %>
+        <li><%= link_to t(".news_index"), admin_posts_path %></li>
+      <% else %>
+        <li><%= link_to t(".draft_news_index"), drafts_admin_posts_path %></li>
+      <% end %>
     <% end %>
 
     <% if @work && !is_author_of?(@work) && !blocked_by?(@work) && !logged_in_as_admin? %>
