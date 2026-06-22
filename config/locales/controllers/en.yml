@@ -187,6 +187,8 @@ en:
       error:
         frozen: Frozen comments cannot be edited.
     create:
+      error: Couldn't save comment!
+      missing_commentable: What did you want to comment on?
       success:
         moderated:
           admin_post: Your comment was received! It will appear publicly after it has been approved.
@@ -203,7 +205,10 @@ en:
     index:
       page_title: Comments on %{name}
     new:
+      missing_commentable: What did you want to comment on?
       page_title: New Comment on %{name}
+    preview:
+      missing_commentable: What did you want to comment on?
     rate_limited:
       error: You have made too many requests in a short time period. Please wait a while before trying again. If you are receiving this error repeatedly, try browsing more slowly or loading fewer pages at a time.
     show:

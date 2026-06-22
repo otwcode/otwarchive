@@ -583,6 +583,7 @@ Rails.application.routes.draw do
       put :unhide
     end
     collection do
+      post :preview
       get :hide_comments
       get :show_comments
       get :add_comment_reply

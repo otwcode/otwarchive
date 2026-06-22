@@ -902,6 +902,7 @@ en:
       anonymous_creator: Anonymous Creator
       anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
       cancel_action: Cancel
+      cancel_redirect_warning: You will lose any changes you have made. Are you sure?
       choose_name_field_title: Choose Name
       comment_as: Comment as
       comment_field_title: Enter Comment
@@ -917,6 +918,7 @@ en:
         comment: Comment
         note: Note
       legend: Post Comment
+      preview_button: Preview
       processing_message: Please wait...
     commentable:
       actions:
@@ -969,6 +971,17 @@ en:
       page_heading: Editing comment
       show: Show
       update: Update
+    new:
+      previous_comment: Previous Comment
+    preview:
+      anonymous_creator: Anonymous Creator
+      deleted_comment: "(Previous comment deleted.)"
+      edit_comment_heading: Edit Comment
+      hidden_comment: "(This comment is under review by an admin and is currently unavailable.)"
+      page_heading_html: 'Comment on %{commentable_link}'
+      post_comment: Comment
+    review:
+      success: Comment approved.
     show:
       comment_on_html: Comment on %{commentable_link}
     single_comment:

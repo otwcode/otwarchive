@@ -457,3 +457,74 @@ Scenario: Guest comments with an email from a banned or suspended user should be
       And the email to "creator" should contain "edited their reply to your comment on"
       And the email to "creator" should contain "Go to the thread starting from this comment"
       And the email to "creator" should be translated
+
+Scenario: Comment preview
+  Given the work "The One Where Neal is Awesome"
+  When I am logged in as "commenter"
+    And I view the work "The One Where Neal is Awesome"
+    And I fill in "Comment" with "This is my test comment with <b>bold text</b>"
+    And I press "Preview"
+  Then I should see "Comment on The One Where Neal is Awesome"
+    And I should see "This is my test comment with bold text"
+    And I should see "commenter" in the comment byline
+    And I should see "Cancel"
+    And I should see a button "Comment"
+
+Scenario: Comment preview persists content when going back to edit
+  Given the work "The One Where Neal is Awesome"
+  When I am logged in as "commenter"
+    And I view the work "The One Where Neal is Awesome"
+    And I fill in "Comment" with "Initial comment content"
+    And I press "Preview"
+  Then I should see "Comment on The One Where Neal is Awesome"
+  When I fill in "Comment" with "Initial comment content with more text"
+    And I press "Preview"
+  Then I should see "Initial comment content with more text"
+    And I should see "Initial comment content with more text" in the comment field
+
+Scenario: Comment preview and post
+  Given the work "The One Where Neal is Awesome"
+  When I am logged in as "commenter"
+    And I view the work "The One Where Neal is Awesome"
+    And I fill in "Comment" with "I really enjoyed this!"
+    And I press "Preview"
+  Then I should see "Comment on The One Where Neal is Awesome"
+    And I should see "I really enjoyed this!"
+  When I press "Comment"
+  Then I should see "Comment created!"
+    And I should see "I really enjoyed this!" within ".odd"
+
+Scenario: Comment preview shows sanitized HTML
+  Given the work "The One Where Neal is Awesome"
+  When I am logged in as "commenter"
+    And I view the work "The One Where Neal is Awesome"
+    And I fill in "Comment" with "Safe HTML: <b>bold</b>, <i>italic</i>, <p>paragraph</p>"
+    And I press "Preview"
+  Then I should see "Comment on The One Where Neal is Awesome"
+    And I should see "bold"
+    And I should see "italic"
+    And I should see "paragraph"
+
+Scenario: Guest comment preview
+  Given the work "The One Where Neal is Awesome" by "creator" with guest comments enabled
+  When I view the work "The One Where Neal is Awesome"
+    And I fill in "Guest name" with "Guest User"
+    And I fill in "Guest email" with "guest@example.com"
+    And I fill in "Comment" with "Great work!"
+    And I press "Preview"
+  Then I should see "Comment on The One Where Neal is Awesome"
+    And I should see "Guest User" in the comment byline
+    And I should see "Great work!"
+    And I should see "Cancel"
+    And I should see "Great work!" in the comment field
+    And I should see "Guest User" in the guest name field
+
+Scenario: Comment preview for anonymous work
+  Given there is a work "The One Where Neal is Awesome" in an anonymous collection "Anonymous Hugs"
+  When I am logged in as the author of "The One Where Neal is Awesome"
+    And I view the work "The One Where Neal is Awesome"
+    And I fill in "Comment" with "Anonymous work comment"
+    And I press "Preview"
+  Then I should see "Comment on The One Where Neal is Awesome"
+    And I should see "Anonymous Creator" in the comment byline
+    And I should see "Anonymous work comment"
