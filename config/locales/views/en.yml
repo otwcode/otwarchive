@@ -1838,8 +1838,9 @@ en:
         tos_faq_link_label: Fannish Identities and Impersonation FAQ
       plagiarism:
         heading: II.E. Plagiarism
-        html: Plagiarism is the use of someone else's words, or %{their_expressions_of_their_ideas_link}, without attribution. Minor alterations (such as replacing names, substituting synonyms, or rearranging a few words) are insufficient to make a work your own. Plagiarism is not allowed. Deliberately creating a work using the same general idea as another work is not plagiarism, but citation may be appropriate.
+        html: Plagiarism is the use of someone else's words, or %{their_expressions_of_their_ideas_link}, without attribution. Minor alterations (such as replacing names, substituting synonyms, or rearranging a few words) are insufficient to make a work your own. Plagiarism is not allowed. Deliberately creating a work %{using_the_same_general_idea_link} as another work is not plagiarism, but citation may be appropriate.
         their_expressions_of_their_ideas: their expressions of their ideas
+        using_the_same_general_idea: using the same general idea
         tos_faq: FAQ for Section II.E
         tos_faq_in_parens_html: "(%{tos_faq_link})"
         tos_faq_link_label: Copyright Infringement and Plagiarism FAQ
