@@ -26,8 +26,13 @@
       <%= link_to t(".nav.posts.admin_posts"), admin_posts_path %>
       <ul class="menu">
         <li><%= link_to t(".nav.posts.news"), admin_posts_path %></li>
+        <% if policy(AdminPost).can_draft? %>
+          <li><%= link_to t(".nav.posts.news_drafts"), drafts_admin_posts_path %></li>
+        <% end %>
         <% if policy(AdminPost).can_post? %>
           <li><%= link_to t(".nav.posts.post_news"), new_admin_post_path %></li>
+        <% elsif policy(AdminPost).can_draft? %>
+          <li><%= link_to t(".nav.posts.draft_news"), new_admin_post_path %></li>
         <% end %>
         <% if policy(ArchiveFaq).translation_access? %>
           <li><%= link_to t(".nav.posts.faqs"), archive_faqs_path %></li>

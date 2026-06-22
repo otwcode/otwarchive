@@ -8,14 +8,14 @@ class AdminPostTag < ApplicationRecord
   validates_format_of :name, with: /[a-zA-Z0-9-]+$/, multiline: true
 
   # Find or create by name, and set the language if it's a new record
-  def self.fetch(options)
-    unless options[:name].blank?
-      tag = self.find_by_name(options[:name])
-      return tag unless tag.nil?
-      tag = AdminPostTag.new(name: options[:name],
-                             language_id: options[:language])
-      tag.save ? tag : nil
-    end
+  def self.fetch(name, language_id)
+    return if name.blank?
+
+    tag = self.find_by_name(name)
+    return tag unless tag.nil?
+
+    tag = AdminPostTag.new(name: name, language_id: language_id)
+    tag.valid? ? tag : nil
   end
 
 end

@@ -170,12 +170,17 @@ Rails.application.routes.draw do
   end
 
   #### ADMIN ####
+  get "/admin_posts/drafts" => "admin_posts#drafts", as: :drafts_admin_posts
   resources :admin_posts do
     resources :comments do
       collection do
         get :unreviewed
         put :review_all
       end
+    end
+    member do
+      put :post
+      get :preview
     end
   end
 
@@ -665,6 +670,9 @@ Rails.application.routes.draw do
   get "/help/misc-preferences.html", to: redirect("/help/preferences_misc")
   get "/help/privacy-preferences.html", to: redirect("/help/preferences_privacy")
   get "/help/work_title_format.html", to: redirect("/help/preferences_work_title_format")
+  get "/help/comments-moderated.html", to: redirect("/help/privacy_moderated_commenting")
+  get "/help/who-can-comment-on-this-work.html", to: redirect("/help/privacy_restricted_commenting")
+  get "/help/registered-users.html", to: redirect("/help/privacy_restricted_work")
   get "/help/rte-help.html", to: redirect("/help/rte")
   get "/help/skins-basics.html", to: redirect("/help/skins_basics")
   get "/help/skins-creating.html", to: redirect("/help/skins_creating")
@@ -677,6 +685,7 @@ Rails.application.routes.draw do
   get "/help/parent-works-help.html", to: redirect("/help/works_parents")
   get "/help/recipients.html", to: redirect("/help/works_recipients")
   get "/help/choosing-series.html", to: redirect("/help/works_series")
+  get "/help/work-skins.html", to: redirect("/help/works_skins")
   get "/help/translation-link.html", to: redirect("/help/works_translation_link")
 
   get 'search' => 'works#search'
