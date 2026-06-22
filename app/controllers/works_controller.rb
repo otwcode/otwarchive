@@ -14,7 +14,8 @@ class WorksController < ApplicationController
   before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit, :update, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
   # admins should have the ability to edit works (tags, language, and more) as per our ToS
   before_action :check_ownership_or_admin, only: [:edit, :update]
-  before_action :log_admin_activity, only: [:update]
+  before_action :save_old_tags, only: [:update]
+  after_action :log_admin_activity, only: [:update]
   before_action :check_parent_visible, only: [:navigate]
   before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
 
@@ -832,12 +833,31 @@ class WorksController < ApplicationController
     end
   end
 
-  def log_admin_activity
-    if logged_in_as_admin?
-      summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}" if params[:action] == "update"
+  def save_old_tags
+    @old_language = @work.language.name
+    @old_tags = @work.tags.pluck(:name)
+  end
 
-      AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
-    end
+  def log_admin_activity
+    return unless logged_in_as_admin?
+
+    log_admin_language_edit if @work.saved_change_to_language_id?
+
+    new_tags = @work.tags.pluck(:name)
+    tags_changed = new_tags.sort != @old_tags.sort
+
+    log_admin_tag_edit if tags_changed
+  end
+
+  def log_admin_language_edit
+    new_language = @work.language.name
+    edit_summary = "<p>Old language: #{@old_language}</p><p>New language: #{new_language}</p>"
+    AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_summary)
+  end
+
+  def log_admin_tag_edit
+    edit_summary = "Old tags: #{@old_tags.join(', ')}" if @old_tags.present?
+    AdminActivity.log_action(current_admin, @work, action: "update_tags", summary: edit_summary)
   end
 
   private

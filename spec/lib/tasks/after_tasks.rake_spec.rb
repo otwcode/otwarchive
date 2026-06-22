@@ -865,3 +865,21 @@ describe "rake After:add_canonical_email" do
     expect(user4.canonical_email).to eq("dlastname@gmail.com")
   end
 end
+  
+describe "rake After:remove_noncanonical_fandom_wrangling_assignments" do
+  let!(:fandom1) { create(:fandom, canonical: false) }
+  let!(:assignment1) { create(:wrangling_assignment, fandom: fandom1) }
+
+  it "deletes wrangling assignments of noncanonical fandoms" do
+    subject.invoke
+    expect(WranglingAssignment.all).not_to include(assignment1)
+  end
+
+  let!(:fandom2) { create(:canonical_fandom) }
+  let!(:assignment2) { create(:wrangling_assignment, fandom: fandom2) }
+
+  it "doesn't delete wrangling assignments of canonical fandoms" do
+    subject.invoke
+    expect(WranglingAssignment.all).to include(assignment2)
+  end
+end

@@ -78,6 +78,27 @@ en:
         success:
           one: Successfully removed pseud %{pseuds} from this work.
           other: Successfully removed pseuds %{pseuds} from this work.
+  admin_posts:
+    admin_post_blurb:
+      confirm_delete: Are you sure?
+      delete: Delete
+      draft:
+        delete: Delete Draft
+        post: Post Draft
+      edit: Edit
+      meta:
+        draft: Created on %{created_date} and updated on %{updated_date}
+        published: Published on %{publication_date} (Created on %{created_date} and updated on %{updated_date})
+      show: Show
+    create:
+      success: Admin Post was successfully created.
+    post:
+      error: Sorry, that Admin Post could not be posted.
+      success: Admin Post was successfully posted.
+    show:
+      page_title_draft: "%{title} (Draft)"
+    update:
+      success: Admin Post was successfully updated.
   application:
     access_denied:
       access_denied:
@@ -339,6 +360,11 @@ en:
     index:
       page_title: "%{username} - Subscriptions"
       subscription_type_page_title: "%{username} - %{subscription_type} Subscriptions"
+  tag_wranglers:
+    create:
+      noncanonical_fandoms_tried_assignment:
+        one: Could not assign fandom %{fandom_list}. Non-canonical fandoms cannot be assigned.
+        other: Could not assign fandoms %{fandom_list}. Non-canonical fandoms cannot be assigned.
   tag_wranglings:
     index:
       page_subtitle: fandoms

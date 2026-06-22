@@ -10,6 +10,9 @@ class HelpController < ApplicationController
     preferences_misc
     preferences_privacy
     preferences_work_title_format
+    privacy_moderated_commenting
+    privacy_restricted_commenting
+    privacy_restricted_work
     rte
     skins_basics
     skins_creating
@@ -24,6 +27,7 @@ class HelpController < ApplicationController
     works_parents
     works_recipients
     works_series
+    works_skins
     works_translation_link
   ].freeze
 
