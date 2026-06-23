@@ -2113,7 +2113,8 @@ en:
         heading: III.E. Your rights under applicable data privacy laws
         other_rights: other rights regarding your Personal Information
         potential_other_rights_html: You may have %{other_rights_link} under the laws of the jurisdiction in which you are located. We will not discriminate against you for making a request under the data privacy laws of applicable jurisdictions.
-        request_data_html: You can request that the OTW assemble the data that AO3 has about you, and provide you with a copy in electronic format. We agree to provide such data to you within a reasonable time if you are a resident or citizen of the European Union or another %{applicable_jurisdiction_link}.
+        request_data: request that the OTW assemble the data that AO3 has about you
+        request_data_html: You can %{request_data_link}, and provide you with a copy in electronic format. We agree to provide such data to you within a reasonable time if you are a resident or citizen of the European Union or another %{applicable_jurisdiction_link}.
         require_user_specific_proof: We reserve the right to require user-specific proof of identity before providing Personal Information to a requester. This is necessary to protect the safety and privacy of our users and personnel.
     site_map:
       about:

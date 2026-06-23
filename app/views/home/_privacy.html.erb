@@ -118,6 +118,7 @@
   <li id="III.E.1">
     <p>
       <%= t(".your_rights.request_data_html",
+            request_data_link: link_to(t(".your_rights.request_data"), tos_faq_path(anchor: "exercise_privacy_rights")),
             applicable_jurisdiction_link: link_to(t(".your_rights.applicable_jurisdiction"), tos_faq_path(anchor: "privacy_rights"))) %>
     </p>
   </li>
