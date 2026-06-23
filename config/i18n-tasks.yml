@@ -227,6 +227,8 @@ ignore_unused:
   - errors.messages.*
   - errors.attributes.ticket_number.{closed_ticket,invalid_department,required}
   - attributes.ticket_number
+  # Dynamically interpolated in app/helpers/search_helper.rb#search_header_text
+  - search_helper.search_header.items.*
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:

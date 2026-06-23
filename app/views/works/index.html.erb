@@ -2,7 +2,7 @@
 <%= render "muted/muted_items_notice" %>
 
 <h2 class="heading">
-  <%= search_header @works, @search, "Work", @owner %>
+  <%= search_header @works, item_type: :work, search: @search, parent: @owner, fandom: @fandom %>
 </h2>
 <!-- /end descriptions-->
 
