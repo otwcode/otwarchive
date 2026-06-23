@@ -1852,7 +1852,7 @@ en:
         technical_integrity: technical integrity
         tos_faq: FAQ for Section II.K
         tos_faq_in_parens_html: "(%{tos_faq_link})"
-        tos_faq_link_label: Offensive Content vs Illegal Content FAQ
+        tos_faq_link_label: Spam and Technical Integrity FAQ
         violates_us_law_html: If you encounter Content that you believe violates a specific law of the United States, you can %{report_it_to_us_link}.
       impersonation:
         function: function
