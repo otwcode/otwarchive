@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  audited redacted: [:encrypted_password, :password_salt]
+  audited redacted: [:encrypted_password, :password_salt, :otp_secret, :otp_backup_codes]
   include Justifiable
   include WorksOwner
   include PasswordResetsLimitable
@@ -14,6 +14,10 @@ class User < ApplicationRecord
          :validatable,
          :lockable,
          :recoverable,
+         :two_factor_authenticatable,
+         :two_factor_backupable,
+         otp_backup_code_length: ArchiveConfig.USER_TOTP_BACKUP_CODE_LENGTH,
+         otp_number_of_backup_codes: ArchiveConfig.USER_TOTP_BACKUP_CODE_COUNT,
          reset_password_keys: [:email]
   devise :pwned_password unless Rails.env.test?
 
@@ -36,7 +40,7 @@ class User < ApplicationRecord
   has_one :invitation, as: :invitee
   has_many :user_invite_requests, dependent: :destroy 
 
-  attr_accessor :invitation_token
+  attr_accessor :invitation_token, :otp_plain_backup_codes
   before_create :create_default_associateds
   # attr_accessible :invitation_token
   after_create :mark_invitation_redeemed, :remove_from_queue
@@ -174,6 +178,43 @@ class User < ApplicationRecord
 
   has_many :log_items, dependent: :destroy
   validates_associated :log_items
+
+  #####################################
+  # TOTP 2FA
+  #####################################
+
+  serialize :otp_backup_codes, type: Array, coder: YAML, yaml: { permitted_classes: [String] }
+  
+  # Generate a TOTP secret it it does not already exist
+  def generate_totp_secret_if_missing!
+    return unless otp_secret.nil?
+
+    update!(otp_secret: User.generate_otp_secret)
+  end
+
+  # Ensure that the user is prompted for their TOTP when they login
+  def enable_totp!
+    update!(otp_required_for_login: true)
+  end
+
+  # Disable the use of TOTP-based two-factor.
+  def disable_totp!
+    update!(
+      otp_required_for_login: false,
+      otp_secret: nil,
+      otp_backup_codes: nil
+    )
+  end
+
+  # Whether this user has TOTP enabled.
+  def totp_enabled?
+    otp_required_for_login
+  end
+
+  # URI for TOTP two-factor QR code
+  def totp_qr_code_uri
+    otp_provisioning_uri(login, issuer: ArchiveConfig.APP_NAME)
+  end
 
   def canonicalize_email
     self.canonical_email = EmailCanonicalizer.canonicalize(self.email) if self.email
