@@ -6,6 +6,10 @@ module Collectible
       has_many :collection_items, as: :item, inverse_of: :item
       accepts_nested_attributes_for :collection_items, allow_destroy: true
       has_many :approved_collection_items, -> { approved_by_both }, class_name: "CollectionItem", as: :item
+      has_many :approved_unrevealed_collection_items,
+               -> { approved_by_both.unrevealed },
+               class_name: "CollectionItem",
+               as: :item
       has_many :user_approved_collection_items, -> { approved_by_user }, class_name: "CollectionItem", as: :item
 
       has_many :collections,
@@ -16,6 +20,10 @@ module Collectible
       has_many :approved_collections,
                through: :approved_collection_items,
                source: :collection
+      has_many :approved_unrevealed_collections,
+               through: :approved_unrevealed_collection_items,
+               source: :collection,
+               strict_loading: true
       has_many :user_approved_collections,
                through: :user_approved_collection_items,
                source: :collection
