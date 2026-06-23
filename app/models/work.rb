@@ -775,9 +775,13 @@ class Work < ApplicationRecord
   # Issue 1316: total number needs to reflect the actual number of chapters posted
   # rather than the total number of chapters indicated by user
   def number_of_posted_chapters
-    Rails.cache.fetch(key_for_chapter_posted_counting(self)) do
-      self.chapters.posted.count
-    end
+    Rails.cache.fetch(
+      key_for_chapter_posted_counting(self),
+      skip_nil: true
+    ) do
+      count = chapters.posted.count
+      count.zero? ? nil : count
+    end.to_i
   end
 
   def chapters_in_order(include_drafts: false, include_content: true)
