@@ -156,6 +156,8 @@ GEM
       parser (>= 2.4)
       smart_properties
     bigdecimal (3.3.1)
+    bootsnap (1.24.5)
+      msgpack (~> 1.2)
     brakeman (7.0.2)
       racc
     builder (3.3.0)
@@ -243,7 +245,7 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     date (3.5.1)
-    departure (8.0.0)
+    departure (8.1.0)
       activerecord (>= 7.2.0)
       mysql2 (>= 0.4.0, < 0.6.0)
       railties (>= 7.2.0)
@@ -392,6 +394,7 @@ GEM
     mini_portile2 (2.8.9)
     minitest (5.27.0)
     mono_logger (1.1.2)
+    msgpack (1.8.0)
     multi_json (1.19.1)
     multi_test (1.1.0)
     multi_xml (0.8.1)
@@ -520,7 +523,6 @@ GEM
       tsort (>= 0.2)
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
-    raindrops (0.20.1)
     rake (13.3.0)
     rdoc (6.15.0)
       erb
@@ -666,9 +668,6 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode (0.4.4.5)
     unicode-display_width (2.6.0)
-    unicorn (5.8.0)
-      kgio (~> 2.6)
-      raindrops (~> 0.7)
     unidecoder (1.1.2)
     uniform_notifier (1.17.0)
     uri (1.1.1)
@@ -713,6 +712,7 @@ DEPENDENCIES
   aws-sdk-s3
   bcrypt
   bcrypt_pbkdf (>= 1.0, < 2.0)
+  bootsnap
   brakeman
   bullet (>= 5.7.3)
   bundler
@@ -802,7 +802,6 @@ DEPENDENCIES
   timecop
   timeliness
   unicode
-  unicorn (~> 5.5)
   unidecoder
   vcr (~> 6.2)
   webmock
