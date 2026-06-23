@@ -185,6 +185,9 @@ en:
             muted_id:
               taken: You have already muted that user.
           format: "%{message}"
+        preference:
+          no_permission_for_skin: You don't have permission to use that skin!
+          unusable_skin: This skin can only be used as a parent.
         prompt:
           attributes:
             title:
