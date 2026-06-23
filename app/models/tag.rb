@@ -162,14 +162,11 @@ class Tag < ApplicationRecord
   validates :name, presence: true
   validates :name, uniqueness: true
   validates :name,
-            length: { minimum: 1,
-                      message: "cannot be blank." }
-  validates :name,
             length: { maximum: ArchiveConfig.TAG_MAX,
                       message: "^Tag name '%{value}' is too long -- try using less than %{count} characters or using commas to separate your tags." }
   validates :name,
-            format: { with: /\A[^,，、*<>^{}=`\\%]+\z/,
-                      message: "^Tag name '%{value}' cannot include the following restricted characters: , &#94; * < > { } = ` ， 、 \\ %" }
+            format: { without: /[,，、*<>^{}=`\\%]/,
+                      message: :restricted_characters }
   validates :name,
             format: { without: /\A\p{Cf}+\z/,
                       message: "^Tag name cannot be blank." }
