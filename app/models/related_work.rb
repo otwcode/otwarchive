@@ -7,9 +7,69 @@ class RelatedWork < ActiveRecord::Base
   attribute :author, :string
   attribute :language_id, :integer
 
-  scope :posted, -> {
-    joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`").
-    where("child_works.posted = 1")
+  scope :translations, -> { where(translation: true) }
+  scope :remixes, -> { where(translation: false) }
+  scope :reciprocal, -> { where(reciprocal: true) }
+
+  scope :posted, lambda {
+    joins("INNER JOIN works child_works ON child_works.id = related_works.work_id")
+      .where("child_works.posted = 1")
+  }
+
+  def self.visible_on_user_page(user)
+    case User.current_user
+    when user || is_a?(Admin)
+      posted.merge(Work.unhidden)
+    when is_a?(User)
+      posted.reciprocal.merge(Work.unhidden.revealed.non_anon)
+    else
+      posted.reciprocal.merge(Work.unhidden.revealed.non_anon.unrestricted)
+    end
+  end
+
+  scope :unhidden, lambda {
+    joins("INNER JOIN works child_works ON child_works.id = related_works.work_id")
+      .where("child_works.hidden_by_admin = false")
+  }
+
+  scope :unrestricted, lambda {
+    joins("INNER JOIN works child_works ON child_works.id = related_works.work_id")
+      .where("child_works.restricted = false")
+  }
+
+  scope :visible_works, lambda {
+    if User.current_user.present?
+      unhidden
+    else
+      unhidden.unrestricted
+    end
+  }
+
+  # Separate scopes for local and external parent works to make tests work
+  # (the join in of_unhidden_local_works gets both local and external works
+  # in web environments, but only local ones in automated tests)
+
+  scope :of_local_works, -> { where(parent_type: Work) }
+  scope :of_external_works, -> { where(parent_type: ExternalWork) }
+
+  scope :of_unhidden_local_works, lambda {
+    of_local_works
+      .joins("INNER JOIN works parent_works ON parent_works.id = related_works.parent_id")
+      .where("parent_works.hidden_by_admin = false")
+  }
+
+  scope :of_visible_local_works, lambda {
+    if User.current_user.present?
+      of_unhidden_local_works
+    else 
+      of_unhidden_local_works.where("parent_works.restricted = false")
+    end
+  }
+
+  scope :of_visible_external_works, lambda {
+    of_external_works
+      .joins("INNER JOIN external_works parent_works ON parent_works.id = related_works.parent_id")
+      .where("parent_works.hidden_by_admin = false")
   }
 
   before_validation :set_parent, if: :new_record?
