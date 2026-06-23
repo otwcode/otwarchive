@@ -3486,6 +3486,7 @@ en:
       download:
         button: Download
         heading: Download
+      unreviewed_comments: "Unreviewed Comments (%{count})"
     work_header_notes:
       inspired_by:
         deleted: Inspired by a deleted work
