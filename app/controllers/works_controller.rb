@@ -308,11 +308,11 @@ class WorksController < ApplicationController
       if @work.posted
         # We check here to see if we are attempting to post to moderated collection
         flash[:notice] = t(".posted_notice")
-        in_moderated_collection
+        show_moderated_collection_warning
         redirect_to work_path(@work)
       else
         flash[:notice] = t(".draft_notice_html", scheduled_for_deletion_bold: helpers.tag.strong(t(".scheduled_for_deletion")), deletion_date: view_context.date_in_zone(@work.created_at + 29.days))
-        in_moderated_collection
+        show_moderated_collection_warning
         redirect_to preview_work_path(@work)
       end
     end
@@ -372,7 +372,7 @@ class WorksController < ApplicationController
     elsif params[:preview_button]
       flash[:notice] = t(".unposted_notice") unless @work.posted?
 
-      in_moderated_collection
+      show_moderated_collection_warning(flash.now)
       @preview_mode = true
       render :preview
     else
@@ -385,7 +385,7 @@ class WorksController < ApplicationController
         if posted_changed
           flash[:notice] << ts(" It should appear in work listings within the next few minutes.")
         end
-        in_moderated_collection
+        show_moderated_collection_warning
         redirect_to work_path(@work)
       else
         @chapter.errors.full_messages.each { |err| @work.errors.add(:base, err) }
@@ -574,22 +574,23 @@ class WorksController < ApplicationController
   end
 
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
-  def in_moderated_collection
-    moderated_collections = []
-    @work.collections.each do |collection|
-      next unless !collection.nil? && collection.moderated? && !collection.user_is_posting_participant?(current_user)
-      next unless @work.collection_items.present?
-      @work.collection_items.each do |collection_item|
-        next unless collection_item.collection == collection
-        if collection_item.approved_by_user? && collection_item.unreviewed_by_collection?
-          moderated_collections << collection
-        end
-      end
+  def show_moderated_collection_warning(flash = self.flash)
+    moderated_collections = @work.collection_items_after_saving
+      .select(&:approved_by_user?)
+      .select(&:unreviewed_by_collection?)
+      .map(&:collection)
+
+    return if moderated_collections.blank?
+
+    links = moderated_collections.map do |collection|
+      view_context.link_to(collection.title, collection_path(collection))
     end
-    if moderated_collections.present?
-      flash[:notice] ||= ''
-      flash[:notice] += ts(" You have submitted your work to #{moderated_collections.size > 1 ? 'moderated collections (%{all_collections}). It will not become a part of those collections' : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: moderated_collections.map(&:title).join(', '))
-    end
+
+    message = t("works.moderated_collections_message_html",
+                count: moderated_collections.length,
+                collections: view_context.safe_join(links, ", "))
+
+    flash[:notice] = view_context.safe_join([flash[:notice], message].compact, " ")
   end
 
   public
@@ -794,7 +795,7 @@ class WorksController < ApplicationController
     @serial_works = @work.serial_works
 
     if @collection.nil?
-      @collection = @work.approved_collections.first
+      @collection = @work.approved_collections_after_saving.first
     end
 
     if params[:claim_id]
