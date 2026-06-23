@@ -360,7 +360,8 @@ describe Work do
          http://lj-site.com/bar/foo?color=blue
          https://www.lj-site.com/bar/foo?color=blue
          http://www.foo.com/bar https://www.foo.com/bar].each do |url|
-        work = create(:work, imported_from_url: url)
+        work = create(:work)
+        work.imported_url = ImportedUrl.create(original: url)
         expect(Work.find_by_url(url)).to eq(work)
         work.destroy
       end
@@ -372,33 +373,38 @@ describe Work do
         "http://efiction-site.com/viewstory.php?sid=123" => "http://efiction-site.com/viewstory.php?sid=456",
         "http://www.foo.com/i-am-something" => "http://foo.com/i-am-something/else"
       }.each do |import_url, find_url|
-        work = create(:work, imported_from_url: import_url)
+        work = create(:work)
+        work.imported_url = ImportedUrl.create(original: import_url)
         expect(Work.find_by_url(find_url)).to_not eq(work)
         work.destroy
       end
     end
 
     it "should find works imported with irrelevant query parameters" do
-      work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      work = create(:work)
+      work.imported_url = ImportedUrl.create(original: "http://lj-site.com/thing1?style=mine")
       expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
       work.destroy
     end
 
     it "finds works imported with HTTP protocol and irrelevant query parameters" do
-      work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      work = create(:work)
+      work.imported_url = ImportedUrl.create(original: "http://lj-site.com/thing1?style=mine")
       expect(Work.find_by_url("https://lj-site.com/thing1?style=other")).to eq(work)
       work.destroy
     end
 
     it "finds works imported with HTTPS protocol and irrelevant query parameters" do
-      work = create(:work, imported_from_url: "https://lj-site.com/thing1?style=mine")
+      work = create(:work)
+      work.imported_url = ImportedUrl.create(original: "https://lj-site.com/thing1?style=mine")
       expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
       work.destroy
     end
 
     it "gets the work from cache when searching for an imported work by URL" do
       url = "http://lj-site.com/thing2"
-      work = create(:work, imported_from_url: url)
+      work = create(:work)
+      work.imported_url = ImportedUrl.new(original: url)
       expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to be_nil
       expect(Work.find_by_url(url)).to eq(work)
       expect(Rails.cache.read(Work.find_by_url_cache_key(url))).to eq(work)
