@@ -9,6 +9,16 @@ module WorkRecipients
 
     attr_accessor :new_gifts
 
+    # If the recipient doesn't allow gifts, it should not be possible to give them
+    # a gift work unless it fulfills a gift exchange assignment or non-anonymous
+    # prompt meme claim for the recipient.
+    # We don't want the work to save if the gift shouldn't exist, but the gift
+    # model can't access a work's challenge_assignments or challenge_claims until
+    # the work and its assignments and claims are saved. Gifts are created after
+    # the work is saved, so it's too late then to prevent the work from saving.
+    # Additionally, the work's assignments and claims don't appear to be available
+    # by the time gift validations run, which means the gift is never created if
+    # the user doesn't allow them.
     validate :new_recipients_allow_gifts
     validate :new_recipients_have_not_blocked_gift_giver
   end
@@ -17,7 +27,7 @@ module WorkRecipients
     new_gifts = []
     gifts = [] # rebuild the list of associated gifts using the new list of names
     # add back in the rejected gift recips; we don't let users delete rejected gifts in order to prevent regifting
-    recip_names = recipient_names.split(',') + self.gifts.are_rejected.collect(&:recipient)
+    recip_names = recipient_names.split(",") + self.gifts.are_rejected.collect(&:recipient)
     recip_names.uniq.each do |name|
       name.strip!
       gift = self.gifts.for_name_or_byline(name).first
@@ -37,10 +47,10 @@ module WorkRecipients
     self.new_gifts = new_gifts
   end
 
-  def recipients(for_form = false)
+  def recipients(for_form: false)
     names = (for_form ? self.gifts.not_rejected : self.gifts).collect(&:recipient)
-    names << self.new_gifts.collect(&:recipient) if self.new_gifts.present?
-    names.flatten.uniq.join(",")
+    names.concat(self.new_gifts.collect(&:recipient)) if self.new_gifts.present?
+    names.uniq.join(",")
   end
 
   private
@@ -51,7 +61,7 @@ module WorkRecipients
     self.new_gifts.each do |gift|
       next if gift.pseud.blank?
       next if gift.pseud&.user&.preference&.allow_gifts?
-      next if challenge_bypass(gift)
+      next if challenge_bypass?(gift)
 
       self.errors.add(:base, :blocked_gifts, byline: gift.pseud.byline)
     end
@@ -64,7 +74,7 @@ module WorkRecipients
       # Already dealt with in #new_recipients_allow_gifts
       next if gift.pseud&.user&.preference && !gift.pseud.user.preference.allow_gifts?
 
-      next if challenge_bypass(gift)
+      next if challenge_bypass?(gift)
 
       blocked_users = gift.pseud&.user&.blocked_users || []
       next if blocked_users.empty?
@@ -85,15 +95,13 @@ module WorkRecipients
     return if self.new_gifts.blank?
 
     self.new_gifts.each do |gift|
-      next if self.gifts.for_name_or_byline(gift.recipient).present?
+      next if self.gifts.for_name_or_byline(gift.recipient).exists?
 
-      # Recreate the gift once the work is saved. This ensures the work_id is
-      # set properly.
-      Gift.create(recipient: gift.recipient, work: self)
+      gifts.create(recipient: gift.recipient)
     end
   end
 
-  def challenge_bypass(gift)
+  def challenge_bypass?(gift)
     self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud) ||
       self.challenge_claims
         .reject { |c| c.request_prompt.anonymous? }
