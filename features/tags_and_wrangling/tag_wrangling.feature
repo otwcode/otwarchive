@@ -370,14 +370,10 @@ Feature: Tag wrangling
   Scenario: Subtags are listed in alphabetical order
     Given a canonical freeform "Angst"
       And a canonical freeform "Angstc"
-      And it is currently 1 second from now
       And a canonical freeform "Angstb"
-      And it is currently 1 second from now
       And a canonical freeform "Angsta"
       And "Angst" is a metatag of the freeform "Angstc"
-      And it is currently 1 second from now
       And "Angst" is a metatag of the freeform "Angstb"
-      And it is currently 1 second from now
       And "Angst" is a metatag of the freeform "Angsta"
     When I view the tag "Angst"
     Then "Angsta" should appear before "Angstb"
@@ -386,14 +382,10 @@ Feature: Tag wrangling
   Scenario: Metatags are listed in alphabetical order
     Given a canonical freeform "Sex and Feels and Pain"
       And a canonical freeform "Smut"
-      And it is currently 1 second from now
       And a canonical freeform "Angst"
-      And it is currently 1 second from now
       And a canonical freeform "Fluff"
       And "Smut" is a metatag of the freeform "Sex and Feels and Pain"
-      And it is currently 1 second from now
       And "Angst" is a metatag of the freeform "Sex and Feels and Pain"
-      And it is currently 1 second from now
       And "Fluff" is a metatag of the freeform "Sex and Feels and Pain"
     When I view the tag "Sex and Feels and Pain"
     Then "Angst" should appear before "Fluff"
