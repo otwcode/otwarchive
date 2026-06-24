@@ -37,7 +37,7 @@ class Work < ApplicationRecord
   has_many :subscriptions, as: :subscribable, dependent: :destroy
 
   has_many :challenge_assignments, as: :creation
-  has_many :challenge_claims, as: :creation
+  has_many :challenge_claims, as: :creation, dependent: :nullify
   accepts_nested_attributes_for :challenge_claims
 
   acts_as_commentable
@@ -381,7 +381,10 @@ class Work < ApplicationRecord
 
   after_destroy :clean_up_assignments
   def clean_up_assignments
-    self.challenge_assignments.each {|a| a.creation = nil; a.save!}
+    self.challenge_assignments.each do |a|
+      a.creation = nil
+      a.save!
+    end
   end
 
   ########################################################################
