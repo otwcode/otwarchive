@@ -10,7 +10,7 @@ class Sanitize
         sub summary sup table tbody td tfoot th thead tr tt u ul var
       ],
       attributes: {
-        all: %w[align title dir],
+        all: %w[align dir lang title],
         "a" => %w[href name],
         "blockquote" => %w[cite],
         "col" => %w[span width],

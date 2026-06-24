@@ -121,6 +121,6 @@ Feature: Parsing HTML
 Scenario: Can't use classes in a bookmark note
   Given the work "Really Good Thing"
     And I am logged in as "bookmarker"
-  When I bookmark the work "Really Good Thing" with the note "My <span='remove-me'>best yet</span>"
+  When I bookmark the work "Really Good Thing" with the note "My <span class='remove-me'>best yet</span>"
     And I edit the bookmark for "Really Good Thing"
   Then the "Notes" field should not contain "remove-me"
