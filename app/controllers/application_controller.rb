@@ -389,7 +389,7 @@ public
     redirect_to (fallback || root_path) rescue redirect_to '/'
   end
 
-  def get_page_title(fandom, author, title, options = {})
+  def get_page_subtitle(fandom, author, title, options = {})
     # truncate any piece that is over 15 chars long to the nearest word
     if options[:truncate]
       fandom = fandom.gsub(/^(.{15}[\w.]*)(.*)/) {$2.empty? ? $1 : $1 + '...'}
@@ -406,7 +406,6 @@ public
       page_title = "#{title} - #{author} - #{fandom}"
     end
 
-    page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
     page_title.html_safe
   end
 

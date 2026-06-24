@@ -19,6 +19,7 @@ Feature: Collection
     | myname4        | password   |
     | pinchhitter    | password    |
     And I am logged in as "mod1"
+    And the app name is "Example Archive"
     And I have no collections
     And I have Yuletide challenge tags setup
     And I add the fandom "Stargate Atlantis" to the character "John Sheppard"
@@ -588,7 +589,7 @@ Feature: Collection
     And I should not see "myname6"
     And I should not see "pinchhitter"
   When I follow "Fulfilling Story 1"
-  Then I should see the page title "Fulfilling Story 1 - Anonymous - Stargate Atlantis [Example Archive]"
+  Then I should see the page title "Fulfilling Story 1 - Anonymous - Stargate Atlantis | Example Archive"
   Then I should see "Anonymous"
     And I should not see "myname1"
     And I should not see "myname3"

@@ -30,18 +30,18 @@ module WorksHelper
     content_tag(:dl, list.to_s, class: 'stats').html_safe
   end
 
-  def work_page_title(work, title, options = {})
+  def work_page_subtitle(work, title, options = {})
     fandoms = work.fandoms
     title_fandom = if fandoms.empty?
-                     t("works_helper.work_page_title.unspecified_fandom")
+                     t("works_helper.work_page_subtitle.unspecified_fandom")
                    elsif fandoms.size > 2
-                     t("works_helper.work_page_title.multifandom")
+                     t("works_helper.work_page_subtitle.multifandom")
                    else
                      fandoms.pluck(:name).join(t("support.array.words_connector"))
                    end
-    author = work.anonymous? ? t("works_helper.work_page_title.anonymous") : work.pseuds.sort.collect(&:byline).join(t("support.array.words_connector"))
+    author = work.anonymous? ? t("works_helper.work_page_subtitle.anonymous") : work.pseuds.sort.collect(&:byline).join(t("support.array.words_connector"))
 
-    get_page_title(title_fandom, author, title, options)
+    get_page_subtitle(title_fandom, author, title, options)
   end
 
   def recipients_link(work)

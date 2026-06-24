@@ -45,13 +45,14 @@ class SeriesController < ApplicationController
     @works = @series.works_in_order.posted.includes(:pseuds).select(&:visible?).paginate(page: params[:page])
 
     # sets the page title with the data for the series
-    if @series.unrevealed?
-      @page_subtitle = t(".unrevealed_series")
-    else
-      @page_title = get_page_title(@series.fandoms.pluck(:name).join(t("support.array.words_connector")),
-                                   helpers.text_byline(@series),
-                                   @series.title)
-    end
+    
+    @page_subtitle = if @series.unrevealed?
+                       t(".unrevealed_series")
+                     else
+                       get_page_subtitle(@series.fandoms.pluck(:name).join(t("support.array.words_connector")),
+                                         helpers.text_byline(@series),
+                                         @series.title)
+                     end
 
     return unless current_user.respond_to?(:subscriptions)
 

@@ -371,7 +371,7 @@ describe WorksController, work_search: true do
 
       get :show, params: { id: work_no_fandoms.id }
 
-      expect(assigns(:page_title)).to include "No fandom specified"
+      expect(assigns(:page_subtitle)).to include "No fandom specified"
     end
 
     it "assigns @page_subtitle with unrevealed work and not @page_title" do

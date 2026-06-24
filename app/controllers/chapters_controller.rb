@@ -48,11 +48,11 @@ class ChaptersController < ApplicationController
       @next_chapter = @chapters[chapter_position + 1]
     end
 
-    if @work.unrevealed?
-      @page_subtitle = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
-    else
-      @page_title = work_page_title(@work, @work.title + t(".chapter_position", position: @chapter.position.to_s))
-    end
+    @page_subtitle = if @work.unrevealed?
+                       t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
+                     else
+                       work_page_subtitle(@work, @work.title + t(".chapter_position", position: @chapter.position.to_s))
+                     end
 
     if params[:view_adult]
       cookies[:view_adult] = "true"
