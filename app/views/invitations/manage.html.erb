@@ -1,5 +1,12 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
+<h2 class="heading">
+  <% if logged_in_as_admin? %>
+    <%= t(".page_heading.admin", username: @user.login) %>
+  <% else %>
+    <%= t(".page_heading.user") %>
+  <% end %>
+</h2>
+
 <!--/descriptions-->
 
 <!--subnav -->

@@ -20,6 +20,7 @@ class InvitationsController < ApplicationController
   end
 
   def manage
+    @page_subtitle = t(".page_title", username: @user.login)
     status = params[:status]
     @invitations = @user.invitations
     if %w(unsent unredeemed redeemed).include?(status)

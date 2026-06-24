@@ -517,6 +517,7 @@ Feature: Admin Actions to Manage Invitations
       And I am logged in as a "<role>" admin
     When I go to creator's manage invitations page
     Then I should see "invitee"
+      And the page title should include "creator - Manage Invitations"
     When I view the most recent invitation for "creator"
     Then I should see "invitee"
     When I follow "invitee"
