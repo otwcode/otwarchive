@@ -60,17 +60,74 @@ end
 
 # when for remixes / related works
 
-When /^I post a related work as remixer$/ do
+When "I post a related work as remixer" do
   step %{I am logged in as "remixer"}
-    step %{I go to the new work page}
-    step %{I select "Not Rated" from "Rating"}
-    step %{I check "No Archive Warnings Apply"}
-    step %{I select "English" from "Choose a language"}
-    step %{I fill in "Fandoms" with "Stargate"}
-    step %{I fill in "Work Title" with "Followup"}
-    step %{I fill in "content" with "That could be an amusing crossover."}
-    step %{I list the work "Worldbuilding" as inspiration}
-    step %{I press "Preview"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I press "Preview"}
+  step %{I press "Post"}
+end
+
+When "I post a related work as remixer without previewing it" do
+  step %{I am logged in as "remixer"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I press "Post"}
+end
+
+When "I post a related work as remixer after saving it as a draft" do
+  step %{I am logged in as "remixer"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I press "Save Draft"}
+  step %{I press "Post"}
+end
+
+When "I post a related work as remixer after saving it as a draft and then editing it" do
+  step %{I am logged in as "remixer"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I press "Save Draft"}
+  step %{I press "Edit"}
+  step %{I press "Post"}
+end
+
+When "I post a related work as remixer after previewing it and then editing it" do
+  step %{I am logged in as "remixer"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I press "Preview"}
+  step %{I press "Edit"}
   step %{I press "Post"}
 end
 
