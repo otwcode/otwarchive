@@ -538,13 +538,13 @@ class CommentsController < ApplicationController
   def approve
     authorize @comment
     @comment.mark_as_ham!
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   end
 
   def reject
     authorize @comment if logged_in_as_admin?
     @comment.mark_as_spam!
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   end
 
   # PUT /comments/1/freeze
@@ -559,10 +559,10 @@ class CommentsController < ApplicationController
       flash[:comment_notice] = t(".success")
     end
 
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   rescue StandardError
     flash[:comment_error] = t(".error")
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   end
 
   # PUT /comments/1/unfreeze
@@ -577,10 +577,10 @@ class CommentsController < ApplicationController
       flash[:comment_error] = t(".error")
     end
 
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   rescue StandardError
     flash[:comment_error] = t(".error")
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   end
 
   # PUT /comments/1/hide
