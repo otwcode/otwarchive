@@ -57,7 +57,8 @@
 <p>
   <%= t(".fanworks.bookmarks_only_fanworks_html",
         bookmarks_link: link_to(t(".fanworks.bookmarks"), archive_faq_path("bookmarks")),
-        external_bookmarks_link: link_to(t(".fanworks.external_bookmarks"), archive_faq_path("bookmarks", anchor: "externalbookmark"))) %>
+        external_bookmarks_link: link_to(t(".fanworks.external_bookmarks"), archive_faq_path("bookmarks", anchor: "externalbookmark")),
+        created_for_fanworks_link: link_to(t(".fanworks.created_for_fanworks"), tos_faq_path(anchor: "bookmark_fanworks"))) %>
 </p>
 <p>
   <small>
