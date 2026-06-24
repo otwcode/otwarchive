@@ -11,7 +11,18 @@ module CommentsHelper
     else
       title = link_to(commentable.commentable_name, commentable)
     end
-    (ts('Reading Comments on ') + title).html_safe
+    t("comments_helper.page_heading.reading_comments_html", commentable_link: title)
+  end
+
+  def title_for_new_comment_page(commentable)
+    title = if commentable.commentable_name.blank?
+              ""
+            elsif commentable.is_a?(Tag)
+              link_to_tag(commentable)
+            else
+              link_to(commentable.commentable_name, commentable)
+            end
+    t("comments_helper.page_heading.new_comment_html", commentable_link: title)
   end
 
   def link_to_comment_ultimate_parent(comment)
