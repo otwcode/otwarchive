@@ -1810,7 +1810,8 @@ en:
       effective: 'Effective: November 19, 2024'
       fanworks:
         bookmarks: Bookmarks
-        bookmarks_only_fanworks_html: "%{bookmarks_link} must only be created for fanworks. You may create %{external_bookmarks_link} for fanworks hosted on third-party sites."
+        bookmarks_only_fanworks_html: '%{bookmarks_link} must only be %{created_for_fanworks_link}</a>. You may create %{external_bookmarks_link} for fanworks hosted on third-party sites.'
+        created_for_fanworks: created for fanworks
         external_bookmarks: external bookmarks
         heading: II.B. Fanworks
         must_be_fanworks_html: Works must be fanworks. Posting a Work that primarily consists of %{non_fanwork_content_link} is not allowed.
