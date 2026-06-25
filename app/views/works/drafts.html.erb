@@ -13,9 +13,7 @@
 
 <!--main content-->
 <ul class="work index group">
-  <% for work in @works %>
-    <%= render 'work_blurb', :work => work %>
-  <% end %>
+  <%= render WorkBlurbPresenter.new(@works) %>
 </ul>
 <!--/content-->
 
