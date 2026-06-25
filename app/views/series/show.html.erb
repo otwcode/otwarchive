@@ -89,7 +89,7 @@
   <%= will_paginate @works %>
 <% end %>
 <ul class="series work index group">
-  <%= render partial: "works/work_blurb", collection: @works, as: :work %>
+  <%= render WorkBlurbPresenter.new(@works) %>
 </ul>
 
 <% unless @works.blank? %>
