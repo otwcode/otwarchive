@@ -93,7 +93,7 @@ en:
     create:
       success: Admin Post was successfully created.
     edit:
-      page_title_edit: Edit AO3 News Post
+      page_title: Edit AO3 News Post
     post:
       error: Sorry, that Admin Post could not be posted.
       success: Admin Post was successfully posted.
