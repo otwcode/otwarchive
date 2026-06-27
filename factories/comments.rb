@@ -37,5 +37,13 @@ FactoryBot.define do
   factory :inbox_comment do
     user { create(:user) }
     feedback_comment { create(:comment) }
+
+    trait :with_guest_comment do
+      feedback_comment { create(:comment, :by_guest) }
+    end
+
+    trait :with_reply_comment do
+      feedback_comment { create(:comment, commentable: create(:comment)) }
+    end
   end
 end
