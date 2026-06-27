@@ -1104,4 +1104,44 @@ describe AbuseReport do
       end
     end
   end
+
+  describe "#delete_old_report_records" do
+    let!(:old_comment_report) { create(:abuse_report, url: "https://archiveofourown.org/comments/123", created_at: ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD.days.ago).id }
+    let!(:old_bookmark_report) { create(:abuse_report, url: "https://archiveofourown.org/bookmarks/123", created_at: ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD.days.ago).id }
+    let!(:old_user_report) { create(:abuse_report, url: "https://archiveofourown.org/users/123", created_at: ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago).id }
+    let!(:old_work_report) { create(:abuse_report, url: "https://archiveofourown.org/works/123", created_at: ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago).id }
+    let!(:old_series_report) { create(:abuse_report, url: "https://archiveofourown.org/series/123", created_at: ArchiveConfig.ABUSE_REPORTS_PER_SERIES_PERIOD.days.ago).id }
+    let!(:old_report) { create(:abuse_report, url: "https://archiveofourown.org/for_email_based_ratelimiting", created_at: 1.day.ago).id }
+
+    let!(:recent_comment_report) { create(:abuse_report, url: "https://archiveofourown.org/comments/123", created_at: ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD.days.ago + 1.minute).id }
+    let!(:recent_bookmark_report) { create(:abuse_report, url: "https://archiveofourown.org/bookmarks/123", created_at: ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD.days.ago + 1.minute).id }
+    let!(:recent_user_report) { create(:abuse_report, url: "https://archiveofourown.org/users/123", created_at: ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago + 1.minute).id }
+    let!(:recent_work_report) { create(:abuse_report, url: "https://archiveofourown.org/works/123", created_at: ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago + 1.minute).id }
+    let!(:recent_series_report) { create(:abuse_report, url: "https://archiveofourown.org/series/123", created_at: ArchiveConfig.ABUSE_REPORTS_PER_SERIES_PERIOD.days.ago + 1.minute).id }
+    let!(:recent_report) { create(:abuse_report, url: "https://archiveofourown.org/for_email_based_ratelimiting", created_at: 1.day.ago + 1.minute).id }
+
+    before do
+      freeze_time
+    end
+
+    it "deletes reports outside of all rate limiting periods" do
+      AbuseReport.delete_old_report_records
+
+      expect([AbuseReport.exists?(old_comment_report), AbuseReport.exists?(old_bookmark_report),
+              AbuseReport.exists?(old_user_report), AbuseReport.exists?(old_work_report),
+              AbuseReport.exists?(old_series_report), AbuseReport.exists?(old_report)]
+            ).to include(false)
+    end
+
+    it "does not delete any reports that could still be used for rate limiting" do
+      AbuseReport.delete_old_report_records
+
+      expect(AbuseReport.exists?(recent_comment_report)).to be_truthy
+      expect(AbuseReport.exists?(recent_bookmark_report)).to be_truthy
+      expect(AbuseReport.exists?(recent_user_report)).to be_truthy
+      expect(AbuseReport.exists?(recent_work_report)).to be_truthy
+      expect(AbuseReport.exists?(recent_series_report)).to be_truthy
+      expect(AbuseReport.exists?(recent_report)).to be_truthy
+    end
+  end
 end

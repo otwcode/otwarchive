@@ -829,7 +829,7 @@ describe UserMailer do
 
   describe "abuse_report" do
     let(:report) { create(:abuse_report) }
-    let(:email) { UserMailer.abuse_report(report.id) }
+    let(:email) { UserMailer.abuse_report(report.mailer_attributes) }
 
     it "has the correct subject" do
       expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Abuse - #{report.summary}"

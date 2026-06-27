@@ -2,7 +2,6 @@ namespace :resanitize do
   desc "Re-run the sanitizer on all fields."
   task(all: :environment) do
     [
-      AbuseReport,
       AdminActivity,
       AdminBanner,
       AdminPost,

@@ -2,8 +2,8 @@ class UserMailerPreview < ApplicationMailerPreview
   # Sent to a user when they submit an abuse report
   # URL: /rails/mailers/user_mailer/abuse_report
   def abuse_report
-    abuse_report = create(:abuse_report, url: "https://#{ArchiveConfig.APP_HOST}/tags/1984%20-%20George%20Orwell")
-    UserMailer.abuse_report(abuse_report.id)
+    abuse_report = build(:abuse_report, url: "https://#{ArchiveConfig.APP_HOST}/tags/1984%20-%20George%20Orwell")
+    UserMailer.abuse_report(abuse_report.mailer_attributes)
   end
 
   [:series, :chapter, :work].each do |creation_type|

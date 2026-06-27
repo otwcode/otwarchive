@@ -1,5 +1,9 @@
 ---
 en:
+  abuse_reports:
+    create:
+      failure_send: Sorry, your report could not be submitted. Please try again later.
+      success: Your report was submitted to the Policy & Abuse team. A confirmation message has been sent to the email address you provided.
   admin:
     access:
       action_access_denied: Sorry, only an authorized admin can do that.

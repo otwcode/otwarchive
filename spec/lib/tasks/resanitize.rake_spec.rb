@@ -39,7 +39,6 @@ describe "rake resanitize:all" do
   end
 
   {
-    abuse_report: [:summary, :comment],
     admin_activity: [:summary],
     admin_banner: [:content],
     admin_post: [:content],
