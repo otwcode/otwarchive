@@ -13,7 +13,6 @@ namespace :resanitize do
       CollectionProfile,
       Comment,
       ExternalWork,
-      Feedback,
       GiftExchange,
       KnownIssue,
       OwnedTagSet,

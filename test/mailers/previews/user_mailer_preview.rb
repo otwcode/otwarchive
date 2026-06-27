@@ -40,8 +40,7 @@ class UserMailerPreview < ApplicationMailerPreview
   # Sent to a user when the submit a support request (AKA feedback)
   # URL: /rails/mailers/user_mailer/feedback
   def feedback
-    feedback = create(:feedback)
-    UserMailer.feedback(feedback.id)
+    UserMailer.feedback(build(:feedback).mailer_attributes)
   end
 
   # Sent by gift exchanges to the participants

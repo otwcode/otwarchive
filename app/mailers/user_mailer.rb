@@ -349,17 +349,16 @@ class UserMailer < ApplicationMailer
   ### OTHER NOTIFICATIONS ###
 
   # archive feedback
-  def feedback(feedback_id)
-    feedback = Feedback.find(feedback_id)
-    return unless feedback.email
+  def feedback(feedback)
+    return unless feedback[:email]
 
-    @summary = feedback.summary
-    @comment = feedback.comment
-    @username = feedback.username if feedback.username.present?
-    @language = feedback.language
+    @summary = feedback[:summary]
+    @comment = feedback[:comment]
+    @username = feedback[:username] if feedback[:username].present?
+    @language = feedback[:language]
     mail(
-      to: feedback.email,
-      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(feedback.summary))
+      to: feedback[:email],
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
     )
   end
 

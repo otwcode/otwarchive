@@ -235,6 +235,10 @@ en:
     index:
       choose_media: Please choose a media category to start browsing fandoms.
       collection_page_title: "%{collection_title} - Fandoms"
+  feedbacks:
+    create:
+      failure_send: Sorry, your message could not be sent - please try again later.
+      successfully_sent: Your message was sent to the Archive team - thank you!
   gifts:
     index:
       page_subtitle: "%{name} - Gifts"

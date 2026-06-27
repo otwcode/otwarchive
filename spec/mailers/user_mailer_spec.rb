@@ -880,9 +880,9 @@ describe UserMailer do
 
   describe "feedback" do
     context "when username is present" do
-      subject(:email) { UserMailer.feedback(feedback.id) }
+      subject(:email) { UserMailer.feedback(feedback.mailer_attributes) }
 
-      let(:feedback) { create(:feedback) }
+      let(:feedback) { build(:feedback) }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
@@ -912,9 +912,9 @@ describe UserMailer do
     end
 
     context "when username is not present" do
-      subject(:email) { UserMailer.feedback(feedback.id) }
+      subject(:email) { UserMailer.feedback(feedback.mailer_attributes) }
 
-      let(:feedback) { create(:feedback, username: "A. Name") }
+      let(:feedback) { build(:feedback, username: "A. Name") }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
