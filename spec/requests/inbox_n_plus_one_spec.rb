@@ -6,11 +6,13 @@ describe "n+1 queries in the InboxController" do
   describe "#show" do
     let!(:user) { create(:user) }
 
-    shared_examples "a constant number of queries" do |*traits|
+    shared_examples "a constant number of queries" do
       context "when displaying multiple inbox comments", n_plus_one: true do
         before { fake_login_known_user(user) }
 
-        populate { |n| create_list(:inbox_comment, n, *traits, user: user) }
+        populate do |n|
+          n.times { create(:inbox_comment, user: user, feedback_comment: build_feedback_comment.call) }
+        end
 
         warmup { get user_inbox_path(user) }
 
@@ -23,15 +25,21 @@ describe "n+1 queries in the InboxController" do
     end
 
     context "with comments from registered users" do
+      let(:build_feedback_comment) { -> { create(:comment) } }
+
       it_behaves_like "a constant number of queries"
     end
 
     context "with comments from guests" do
-      it_behaves_like "a constant number of queries", :with_guest_comment
+      let(:build_feedback_comment) { -> { create(:comment, :by_guest) } }
+
+      it_behaves_like "a constant number of queries"
     end
 
     context "with reply comments" do
-      it_behaves_like "a constant number of queries", :with_reply_comment
+      let(:build_feedback_comment) { -> { create(:comment, commentable: create(:comment)) } }
+
+      it_behaves_like "a constant number of queries"
     end
   end
 end
