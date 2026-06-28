@@ -928,10 +928,16 @@ describe Comment do
         expect(comment.approved).to be_falsey
         expect(comment.spam).to be_truthy
       end
+
+      it "submits the comment to Akismet" do
+        expect(AkismetClient).to receive(:submit_spam)
+
+        comment.mark_as_spam!
+      end
     end
 
     context "when the comment is already marked as spam" do
-      let(:comment) { create(:comment, approved: false, spam: false) }
+      let(:comment) { create_invalid(:comment, approved: false, spam: true) }
 
       it "flags the comment as spam" do
         comment.mark_as_spam!
@@ -939,11 +945,27 @@ describe Comment do
         expect(comment.approved).to be_falsey
         expect(comment.spam).to be_truthy
       end
+
+      it "does not resubmit the comment to Akismet" do
+        expect(AkismetClient).not_to receive(:submit_spam)
+
+        comment.mark_as_spam!
+      end
+    end
+
+    context "when the comment is deleted" do
+      let(:comment) { create(:comment, approved: true, spam: false, is_deleted: true) }
+
+      it "does not submit the comment to akismet" do
+        expect(AkismetClient).not_to receive(:submit_spam)
+
+        comment.mark_as_spam!
+      end
     end
   end
 
   describe "#mark_as_ham!" do
-    let(:comment) { create(:comment, approved: false, spam: true) }
+    let(:comment) { create_invalid(:comment, approved: false, spam: true) }
 
     it "flags the comment as legitimate" do
       comment.mark_as_ham!
