@@ -59,9 +59,10 @@ class AbuseReport < ApplicationRecord
   # Profile URLs: "users/username"
   # Bookmark URLs: "bookmarks/123"
   # Series URLs: "series/123"
+  # Collection URLs: "collections/collection_name"
   before_validation :standardize_url, on: :create
   def standardize_url
-    return unless url =~ %r{((chapters|works|comments|bookmarks|series)/\d+)} || url =~ %r{(users/\w+)}
+    return unless url =~ %r{((chapters|works|comments|bookmarks|series)/\d+)} || url =~ %r{((users|collections)/\w+)}
 
     self.url = add_scheme_to_url(url)
     self.url = clean_url(url)
@@ -255,6 +256,14 @@ class AbuseReport < ApplicationRecord
                                                  series_report_period,
                                                  "%#{series_params_only}%").count
       errors.add(:base, :over_reported_series) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_SERIES_MAX
+    when %r{/collections/\w+/$}
+      collection_params_only = url.match(%r{/collections/\w+/}).to_s
+      collection_report_period = ArchiveConfig.ABUSE_REPORTS_PER_COLLECTION_PERIOD.days.ago
+      existing_reports_total = AbuseReport.where('created_at > ? AND
+                                                  url LIKE ?',
+                                                  collection_report_period,
+                                                  "%#{collection_params_only}%").count
+      errors.add(:base, :over_reported_collection) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_COLLECTION_MAX
     end
   end
 
