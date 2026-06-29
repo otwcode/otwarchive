@@ -78,9 +78,10 @@ describe WorksController do
     end
 
     context "when the requested user does not exist" do
-      it "should raise error 404" do
-        get :drafts, params: { user_id: "invalid-user" }
-        expect(response.status).to eq(404)
+      it "should raise a RecordNotFound error" do
+        expect do
+          get :drafts, params: { user_id: "invalid-user" }
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

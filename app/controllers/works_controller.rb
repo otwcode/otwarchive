@@ -172,8 +172,6 @@ class WorksController < ApplicationController
     else
       @works = @user.unposted_works.for_blurb.paginate(page: params[:page])
     end
-  rescue StandardError
-    render template: "errors/404", status: :not_found
   end
 
   # GET /works/1
