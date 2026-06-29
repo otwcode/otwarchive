@@ -95,7 +95,7 @@ class Collection < ApplicationRecord
     end
   end
 
-  validates :name, presence: { message: ts("Please enter a name for your collection.") }
+  validates :name, presence: { message: ts("^Please enter a name for your collection.") }
   validates :name, uniqueness: { message: ts("Sorry, that name is already taken. Try again, please!") }
   validates :name,
             length: { minimum: ArchiveConfig.TITLE_MIN,
@@ -113,7 +113,7 @@ class Collection < ApplicationRecord
 
   validates :email, email_format: { allow_blank: true }
 
-  validates :title, presence: { message: ts("Please enter a title to be displayed for your collection.") }
+  validates :title, presence: { message: ts("^Please enter a title to be displayed for your collection.") }
   validates :title,
             length: { minimum: ArchiveConfig.TITLE_MIN,
                       too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN) }
