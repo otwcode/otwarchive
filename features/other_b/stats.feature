@@ -93,3 +93,15 @@ Feature: User statistics
   Given I am logged in as "NUMB3RSfan"
   When I go to NUMB3RSfan's stats page
   Then I should see the page title "NUMB3RSfan - Stats"
+
+  Scenario: Statistics page groups synonyms of a fandom with the fandom
+
+  Given I am logged in as "interestingIndividual"
+    And I post the work "Iced" with fandom "Raw"
+    And I post the work "Fire" with fandom "Shoot"
+    And a synonym "Raw" of the tag "Shoot"
+  When I go to interestingIndividual's stats page
+  Then I should see "Shoot"
+    And I should not see "Raw"
+    And I should see "Iced"
+    And I should see "Fire"
