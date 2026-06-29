@@ -9,7 +9,7 @@ describe "n+1 queries in the inbox controller for the homepage" do
 
       subject do
         proc do
-          get '/'
+          get "/"
         end
       end
 
