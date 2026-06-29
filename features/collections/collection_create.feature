@@ -210,3 +210,15 @@ Feature: Collection
       And I fill in "Collection name" with "hey_you"
       And I press "Submit"
     Then I should see "Sorry, the ',' character cannot be in a collection Display Title."
+
+  Scenario: Error messages are accurate after entering nothing when creating a new collection
+    Given I am logged in
+      And I am on the new collection page
+    When I press "Submit"
+    Then I should see "Please enter a name for your collection."
+      And I should not see "Name Please enter a name for your collection."
+      And I should see "Name must be at least 1 characters long."
+      And I should see "Name must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces."
+      And I should see "Please enter a title to be displayed for your collection."
+      And I should not see "Title Please enter a title to be displayed for your collection."
+      And I should see "Title must be at least 1 characters long."
