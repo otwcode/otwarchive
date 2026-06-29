@@ -45,6 +45,8 @@ class AdminPostsController < Admin::BaseController
     @preview_mode = true
     @admin_post = AdminPost.find(params[:id])
     authorize(@admin_post)
+    
+    @page_subtitle = t(".page_title", title: @admin_post.title.html_safe)
   end
 
   # GET /admin_posts/new
@@ -69,6 +71,7 @@ class AdminPostsController < Admin::BaseController
     if !params[:edit_button] && @admin_post.valid?
       if params[:preview_button]
         @preview_mode = true
+        @page_subtitle = t("admin_posts.preview.page_title", title: @admin_post.title.html_safe)
         render action: "preview" and return
       elsif !params[:edit_button] && @admin_post.save
         flash[:notice] = t(".success")
@@ -89,6 +92,7 @@ class AdminPostsController < Admin::BaseController
     if !params[:edit_button] && @admin_post.valid?
       if params[:preview_button]
         @preview_mode = true
+         @page_subtitle = t("admin_posts.preview.page_title", title: @admin_post.title.html_safe)
         render :preview and return
       elsif @admin_post.save
         flash[:notice] = t(".success")

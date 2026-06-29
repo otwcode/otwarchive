@@ -95,6 +95,8 @@ en:
     post:
       error: Sorry, that Admin Post could not be posted.
       success: Admin Post was successfully posted.
+    preview:
+      page_title: "%{title} (Preview)"
     show:
       page_title_draft: "%{title} (Draft)"
     update:
