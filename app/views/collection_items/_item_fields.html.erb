@@ -42,7 +42,7 @@
       <% id = "blurb_#{collection_item.item_type}_#{collection_item.item_id}_#{collection_item.collection.name}" %>
       <blockquote id="<%= id %>" class="<% if collection_item.item_type == 'Bookmark' %>bookmark <% else %>work <% end %> blurb toggled">
         <% if collection_item.item_type == 'Work' %>
-          <%= render "works/work_module", work: collection_item.item, is_unrevealed: false %>
+          <%= render WorkBlurbPresenter.new(collection_item.item, blurb: false) %>
         <% elsif collection_item.item_type == 'Bookmark' %>
           <% bookmark = collection_item.item %>
           <% bookmarkable = bookmark.bookmarkable %>
