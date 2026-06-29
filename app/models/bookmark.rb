@@ -101,7 +101,26 @@ class Bookmark < ApplicationRecord
 
   scope :latest, -> { is_public.order_by_created_at.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
 
-  scope :for_blurb, -> { includes(:tags, :collections, { bookmarkable: :approved_unrevealed_collections }, pseud: [:user]) }
+  BLURB_INCLUDES = [:bookmarkable, :tags, :collections, { pseud: [:user] }].freeze
+
+  module BlurbPreloads
+    def exec_queries(&block)
+      super(&block).tap { |records| Bookmark.preload_work_bookmarkable_blurbs(records) }
+    end
+  end
+
+  scope :for_blurb, -> { includes(*BLURB_INCLUDES).extending(BlurbPreloads) }
+
+  def self.preload_work_bookmarkable_blurbs(bookmarks)
+    work_bookmarkables = Array(bookmarks).filter_map do |bookmark|
+      bookmark.bookmarkable if bookmark.bookmarkable_type == "Work"
+    end
+
+    ActiveRecord::Associations::Preloader.new(
+      records: work_bookmarkables,
+      associations: :approved_unrevealed_collections
+    ).call
+  end
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope

@@ -64,7 +64,7 @@ class TagsController < ApplicationController
                else
                  @tag.works.visible_to_all.for_blurb.paginate(page: params[:page])
                end
-      @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
+      @bookmarks = @tag.bookmarks.visible.for_blurb.paginate(page: params[:page])
       @collections = @tag.collections.paginate(page: params[:page])
     end
 
