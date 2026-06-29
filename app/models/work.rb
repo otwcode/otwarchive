@@ -1032,7 +1032,9 @@ class Work < ApplicationRecord
   scope :visible_to_owner, -> { posted }
   scope :all_with_tags, -> { includes(:tags) }
 
-  scope :giftworks_for_recipient_name, lambda { |name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name).where("gifts.rejected = FALSE") }
+  scope :giftworks_for_recipient_name, lambda { |name|
+    distinct.joins(:gifts).where(gifts: { recipient_name: name, rejected: false })
+  }
 
   scope :non_anon, -> { where(in_anon_collection: false) }
   scope :unrevealed, -> { where(in_unrevealed_collection: true) }
@@ -1046,17 +1048,16 @@ class Work < ApplicationRecord
   # if the user is an Admin, we use the "visible_to_admin" scope
   # if the user is not a logged-in User, we use the "visible_to_all" scope
   # otherwise, we use a join to get userids and then get all posted works that are either unhidden OR belong to this user.
-  # Note: in that last case we have to use select("DISTINCT works.") because of cases where the same user appears twice
-  # on a work.
+  # Note: in that last case we have to use distinct because of cases where the same user appears twice on a work.
   def self.visible_to_user(user=User.current_user)
     case user.class.to_s
     when 'Admin'
       visible_to_admin
     when 'User'
-      select("DISTINCT works.*").
-      posted.
-      joins({pseuds: :user}).
-      where("works.hidden_by_admin = false OR users.id = ?", user.id)
+      distinct
+        .posted
+        .joins(pseuds: :user)
+        .where("works.hidden_by_admin = false OR users.id = ?", user.id)
     else
       visible_to_all
     end
@@ -1067,7 +1068,7 @@ class Work < ApplicationRecord
     visible_to_user(user)
   end
 
-  scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({pseuds: :user}).where('users.id = ?', user.id)}
+  scope :owned_by, ->(user) { distinct.joins(pseuds: :user).where(users: { id: user.id }) }
 
   def self.in_series(series)
     joins(:series).
@@ -1082,7 +1083,7 @@ class Work < ApplicationRecord
   }
 
   scope :with_includes_for_blurb, lambda {
-    includes(:pseuds, :approved_collections, :stat_counter)
+    includes(:pseuds, :approved_collections, :approved_unrevealed_collections, :stat_counter)
   }
 
   scope :for_blurb, -> { with_columns_for_blurb.with_includes_for_blurb }
