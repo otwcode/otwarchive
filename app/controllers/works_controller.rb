@@ -152,7 +152,7 @@ class WorksController < ApplicationController
   end
 
   def drafts
-    unless params[:user_id] && (@user = User.find_by(login: params[:user_id]))
+    unless params[:user_id] && (@user = User.find_by!(login: params[:user_id]))
       flash[:error] = ts('Whose drafts did you want to look at?')
       redirect_to users_path
       return

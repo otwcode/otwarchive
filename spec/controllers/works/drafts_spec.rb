@@ -76,6 +76,14 @@ describe WorksController do
                                    "You can only see your own drafts, sorry!")
       end
     end
+
+    context "when the requested user does not exist" do
+      it "should raise a RecordNotFound error" do
+        expect do
+          get :drafts, params: { user_id: "invalid-user" }
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
   describe "post_draft" do
