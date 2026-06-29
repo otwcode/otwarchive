@@ -7,6 +7,7 @@ class Work < ApplicationRecord
   include BookmarkCountCaching
   include WorkChapterCountCaching
   include Creatable
+  include WorkRecipients
 
   ########################################################################
   # ASSOCIATIONS
@@ -30,9 +31,6 @@ class Work < ApplicationRecord
   has_many :approved_children, through: :approved_related_works, source: :work
 
   accepts_nested_attributes_for :parent_work_relationships, allow_destroy: true, reject_if: proc { |attrs| attrs.values_at(:url, :author, :title).all?(&:blank?) }
-
-  has_many :gifts, dependent: :destroy
-  accepts_nested_attributes_for :gifts, allow_destroy: true
 
   has_many :subscriptions, as: :subscribable, dependent: :destroy
 
@@ -73,7 +71,6 @@ class Work < ApplicationRecord
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
   attr_accessor :new_parent, :url_for_parent
-  attr_accessor :new_gifts
   attr_accessor :preview_mode
 
   # Virtual attribute for whether the hidden-for-spam email has been sent, so the normal work-hidden email should not be sent
@@ -169,55 +166,6 @@ class Work < ApplicationRecord
   validates :user_defined_tags_count,
             at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } },
             unless: -> { User.current_user.is_a?(Admin) }
-
-  # If the recipient doesn't allow gifts, it should not be possible to give them
-  # a gift work unless it fulfills a gift exchange assignment or non-anonymous
-  # prompt meme claim for the recipient.
-  # We don't want the work to save if the gift shouldn't exist, but the gift
-  # model can't access a work's challenge_assignments or challenge_claims until
-  # the work and its assignments and claims are saved. Gifts are created after
-  # the work is saved, so it's too late then to prevent the work from saving.
-  # Additionally, the work's assignments and claims don't appear to be available
-  # by the time gift validations run, which means the gift is never created if
-  # the user doesn't allow them.
-  validate :new_recipients_allow_gifts
-
-  def new_recipients_allow_gifts
-    return if self.new_gifts.blank?
-
-    self.new_gifts.each do |gift|
-      next if gift.pseud.blank?
-      next if gift.pseud&.user&.preference&.allow_gifts?
-      next if challenge_bypass(gift)
-
-      self.errors.add(:base, :blocked_gifts, byline: gift.pseud.byline)
-    end
-  end
-
-  validate :new_recipients_have_not_blocked_gift_giver
-  def new_recipients_have_not_blocked_gift_giver
-    return if self.new_gifts.blank?
-
-    self.new_gifts.each do |gift|
-      # Already dealt with in #new_recipients_allow_gifts
-      next if gift.pseud&.user&.preference && !gift.pseud.user.preference.allow_gifts?
-
-      next if challenge_bypass(gift)
-
-      blocked_users = gift.pseud&.user&.blocked_users || []
-      next if blocked_users.empty?
-
-      pseuds_after_saving.each do |pseud|
-        next unless blocked_users.include?(pseud.user)
-
-        if User.current_user == pseud.user
-          self.errors.add(:base, :blocked_your_gifts, byline: gift.pseud.byline)
-        else
-          self.errors.add(:base, :blocked_gifts, byline: gift.pseud.byline)
-        end
-      end
-    end
-  end
 
   enum :comment_permissions, {
     enable_all: 0,
@@ -517,48 +465,6 @@ class Work < ApplicationRecord
     self.challenge_assignments =
       ChallengeAssignment.where(id: ids)
         .select { |assign| valid_users.include?(assign.offering_user) }
-  end
-
-  def recipients=(recipient_names)
-    new_gifts = []
-    gifts = [] # rebuild the list of associated gifts using the new list of names
-    # add back in the rejected gift recips; we don't let users delete rejected gifts in order to prevent regifting
-    recip_names = recipient_names.split(',') + self.gifts.are_rejected.collect(&:recipient)
-    recip_names.uniq.each do |name|
-      name.strip!
-      gift = self.gifts.for_name_or_byline(name).first
-      if gift
-        gifts << gift # new gifts are added after saving, not now
-        new_gifts << gift unless self.posted # all gifts are new if work not posted
-      else
-        g = self.gifts.new(recipient: name)
-        if g.valid?
-          new_gifts << g # new gifts are added after saving, not now
-        else
-          g.errors.full_messages.each { |msg| self.errors.add(:base, msg) }
-        end
-      end
-    end
-    self.gifts = gifts
-    self.new_gifts = new_gifts
-  end
-
-  def recipients(for_form = false)
-    names = (for_form ? self.gifts.not_rejected : self.gifts).collect(&:recipient)
-    names << self.new_gifts.collect(&:recipient) if self.new_gifts.present?
-    names.flatten.uniq.join(",")
-  end
-
-  def save_new_gifts
-    return if self.new_gifts.blank?
-
-    self.new_gifts.each do |gift|
-      next if self.gifts.for_name_or_byline(gift.recipient).present?
-
-      # Recreate the gift once the work is saved. This ensures the work_id is
-      # set properly.
-      Gift.create(recipient: gift.recipient, work: self)
-    end
   end
 
   def marked_for_later?(user)
@@ -1316,11 +1222,4 @@ class Work < ApplicationRecord
     (saved_changes.keys & pertinent_attributes).present?
   end
 
-  def challenge_bypass(gift)
-    self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud) ||
-      self.challenge_claims
-        .reject { |c| c.request_prompt.anonymous? }
-        .map(&:requesting_pseud)
-        .include?(gift.pseud)
-  end
 end

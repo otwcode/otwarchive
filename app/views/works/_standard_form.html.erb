@@ -86,7 +86,7 @@
         <%= link_to_help_modal(help_works_recipients_path, t(".works_recipients_help_title")) %>
       </dt>
       <dd class="recipient" title="<%= ts("gift to") %>">
-        <%= f.text_field :recipients, autocomplete_options("pseud", value: @work.recipients(for_form = true)) %>
+        <%= f.text_field :recipients, autocomplete_options("pseud", value: @work.recipients(for_form: true)) %>
       </dd>
 
       <!-- Inspiration / remix -->

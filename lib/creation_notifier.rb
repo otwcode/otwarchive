@@ -38,11 +38,7 @@ module CreationNotifier
     recip_preferences = Preference.where(user_id: recipient_pseuds.map(&:user_id), recipient_emails_off: false)
     recip_preferences.each do |userpref|
       I18n.with_locale(userpref.locale_for_mails) do
-        if self.collections.empty? || self.collections.first.nil?
-          UserMailer.recipient_notification(userpref.user_id, self.id).deliver_after_commit
-        else
-          UserMailer.recipient_notification(userpref.user_id, self.id, self.collections.first.id).deliver_after_commit
-        end
+        UserMailer.recipient_notification(userpref.user_id, self.id, self.collections.first&.id).deliver_after_commit
       end
     end
   end
