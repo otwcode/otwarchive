@@ -92,7 +92,7 @@ class AdminPostsController < Admin::BaseController
     if !params[:edit_button] && @admin_post.valid?
       if params[:preview_button]
         @preview_mode = true
-         @page_subtitle = t("admin_posts.preview.page_title", title: @admin_post.title.html_safe)
+        @page_subtitle = t("admin_posts.preview.page_title", title: @admin_post.title.html_safe)
         render :preview and return
       elsif @admin_post.save
         flash[:notice] = t(".success")
