@@ -234,6 +234,12 @@ en:
             subscribable:
               blank: The item you tried to subscribe to does not exist. It may have been deleted.
               format: "%{message}"
+        tag_set_nomination:
+          attributes:
+            base:
+              format: "%{message}"
+              too_many_character_nominations_per_fandom: You can only nominate %{limit} character tags per fandom.
+              too_many_relationship_nominations_per_fandom: You can only nominate %{limit} relationship tags per fandom.
         user:
           attributes:
             age_over_13:

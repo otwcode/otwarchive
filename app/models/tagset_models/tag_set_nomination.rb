@@ -27,17 +27,15 @@ class TagSetNomination < ApplicationRecord
   
   validate :nomination_limits
   def nomination_limits
-    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|    
+    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
       limit = self.owned_tag_set.send("#{tag_type}_nomination_limit")
       if count_by_fandom?(tag_type)
-        if self.fandom_nominations.any? {|fandom_nom| fandom_nom.send("#{tag_type}_nominations").try(:count) > limit}
-          errors.add(:base, ts("You can only nominate %{limit} #{tag_type} tags per fandom.", limit: limit))
-        end
+        errors.add(:base, "too_many_#{tag_type}_nominations_per_fandom".to_sym, limit: limit) if active_fandom_nominations.any? { |fandom_nom| active_nominations(fandom_nom, tag_type).size > limit }
       else
-        count = self.send("#{tag_type}_nominations").count
+        count = active_nominations(self, tag_type).size
         errors.add(:base, ts("You can only nominate %{limit} #{tag_type} tags", limit: limit)) if count > limit
       end
-    end 
+    end
   end
 
   # This makes sure a single user doesn't nominate the same tagname twice
@@ -98,5 +96,18 @@ class TagSetNomination < ApplicationRecord
        self.send("#{tag_type}_nominations")
     end
   end
-  
+
+  private
+
+  def discarded_nomination?(nomination)
+    nomination.marked_for_destruction? || nomination.tagname.blank?
+  end
+
+  def active_fandom_nominations
+    fandom_nominations.reject { |n| discarded_nomination?(n) }
+  end
+
+  def active_nominations(owner, tag_type)
+    owner.send("#{tag_type}_nominations").reject { |n| discarded_nomination?(n) }
+  end
 end
