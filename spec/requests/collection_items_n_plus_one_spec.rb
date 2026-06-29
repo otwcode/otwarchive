@@ -6,6 +6,20 @@ describe "n+1 queries in the collection items controller" do
   include LoginMacros
 
   describe "#index" do
+    it "renders bookmark items whose bookmarkable is an unrevealed work" do
+      user = create(:user)
+      collection = create(:unrevealed_collection)
+      mystery_work = create(:work, collection_names: collection.name)
+      bookmark = create(:bookmark, bookmarkable_id: mystery_work.id, pseud_id: user.default_pseud.id)
+      create(:collection_item, item: bookmark, user_approval_status: :approved, collection_approval_status: :approved)
+
+      fake_login_known_user(user)
+      get user_collection_items_path(user_id: user, status: "approved")
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Mystery Work")
+    end
+
     context "when viewing collection items for a specific user", n_plus_one: true do
       let!(:user) { create(:user) }
 

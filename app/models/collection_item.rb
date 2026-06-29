@@ -32,9 +32,36 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  scope :include_for_works, -> { includes(item: [:pseuds, :approved_unrevealed_collections]) }
+  module BlurbPreloads
+    def exec_queries(&block)
+      super(&block).tap { |records| CollectionItem.preload_item_blurbs(records) }
+    end
+  end
+
+  scope :include_for_works, -> { includes(:item).extending(BlurbPreloads) }
   scope :unrevealed, -> { where(unrevealed: true) }
   scope :anonymous, -> { where(anonymous:  true) }
+
+  def self.preload_item_blurbs(collection_items)
+    records = Array(collection_items)
+    work_items = records.filter_map do |collection_item|
+      collection_item.item if collection_item.item_type == "Work"
+    end
+    bookmark_items = records.filter_map do |collection_item|
+      collection_item.item if collection_item.item_type == "Bookmark"
+    end
+
+    ActiveRecord::Associations::Preloader.new(
+      records: work_items,
+      associations: [:pseuds, :approved_unrevealed_collections]
+    ).call
+
+    ActiveRecord::Associations::Preloader.new(
+      records: bookmark_items,
+      associations: Bookmark::BLURB_INCLUDES
+    ).call
+    Bookmark.preload_work_bookmarkable_blurbs(bookmark_items)
+  end
 
   def self.for_user(user=User.current_user)
     # get ids of user's bookmarks and works
