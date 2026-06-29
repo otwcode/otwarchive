@@ -1129,8 +1129,8 @@ describe AbuseReport do
 
       expect([AbuseReport.exists?(old_comment_report), AbuseReport.exists?(old_bookmark_report),
               AbuseReport.exists?(old_user_report), AbuseReport.exists?(old_work_report),
-              AbuseReport.exists?(old_series_report), AbuseReport.exists?(old_report)]
-            ).to include(false)
+              AbuseReport.exists?(old_series_report), AbuseReport.exists?(old_report)])
+        .to include(false)
     end
 
     it "does not delete any reports that could still be used for rate limiting" do
