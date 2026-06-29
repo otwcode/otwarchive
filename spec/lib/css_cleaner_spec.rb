@@ -243,6 +243,44 @@ describe CssCleaner do
         skin = create(:work_skin, css: "p { color: red; }")
         expect(skin.reload.css).to include("#workskin p")
       end
+
+      context "with aspect-ratio property" do
+        it "allows permitted values" do
+          skin = build(:work_skin, css: [
+            "div { aspect-ratio: auto }",
+            "div { aspect-ratio: initial }",
+            "div { aspect-ratio: 1 }",
+            "div { aspect-ratio: 0.5 }",
+            "div { aspect-ratio: 16 /9 }",
+            "div { aspect-ratio: 16/ 9 }",
+            "div { aspect-ratio: 16 / 9}",
+            "div { aspect-ratio: 16/9 }",
+            "div { aspect-ratio: 1/1.75 }",
+            "div { aspect-ratio: auto 1 }",
+            "div { aspect-ratio: auto 0.25 }",
+            "div { aspect-ratio: auto 4/3 }",
+            "div { aspect-ratio: 1 auto }",
+            "div { aspect-ratio: 0.25 auto }",
+            "div { aspect-ratio: 0.5/ 1 auto }"
+          ].join("\n"))
+          expect(skin.save).to be_truthy
+        end
+        it "strips nonsensical values" do
+          skin = build(:work_skin, css: [
+            "div { aspect-ratio: 1,300 }",
+            "div { aspect-ratio: 100% }",
+            "div { aspect-ratio: banana }",
+            "div { aspect-ratio: auto 1/1 auto }",
+            "div { aspect-ratio: auto auto }"
+          ].join("\n"))
+          expect(skin.save).to be_falsey
+          expect(skin.errors[:base]).to include("aspect-ratio in div cannot have the value 1,300, sorry!")
+          expect(skin.errors[:base]).to include("aspect-ratio in div cannot have the value 100%, sorry!")
+          expect(skin.errors[:base]).to include("aspect-ratio in div cannot have the value banana, sorry!")
+          expect(skin.errors[:base]).to include("aspect-ratio in div cannot have the value auto 1/1 auto, sorry!")
+          expect(skin.errors[:base]).to include("aspect-ratio in div cannot have the value auto auto, sorry!")
+        end
+      end
     end
   end
 end

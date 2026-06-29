@@ -8,9 +8,12 @@ module CssCleaner
   ALPHA_REGEX = Regexp.new('[a-z\-]+')
   UNITS_REGEX = Regexp.new('deg|cm|em|ex|in|mm|pc|pt|px|s|%', Regexp::IGNORECASE)
   NUMBER_REGEX = Regexp.new('-?\.?\d{1,3}\.?\d{0,3}')
+  NUMBER_OR_RATIO_REGEX = Regexp.new("#{NUMBER_REGEX}(\s*\/\s*#{NUMBER_REGEX})?")
   NUMBER_WITH_UNIT_REGEX = Regexp.new("#{NUMBER_REGEX}\s*#{UNITS_REGEX}?\s*,?\s*")
   PAREN_NUMBER_REGEX = Regexp.new('\(\s*' + NUMBER_WITH_UNIT_REGEX.to_s + '+\s*\)')
   PREFIX_REGEX = Regexp.new('moz|ms|o|webkit')
+
+  GLOBAL_VALUE_REGEX = Regexp.new("inherit|initial|revert|revert-layer|unset", Regexp::IGNORECASE)
 
   FUNCTION_NAME_REGEX = Regexp.new('scalex?y?|translatex?y?|skewx?y?|rotatex?y?|matrix', Regexp::IGNORECASE)
   TRANSFORM_FUNCTION_REGEX = Regexp.new("#{FUNCTION_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
@@ -136,6 +139,10 @@ module CssCleaner
     if property == "font-family"
       # preserve the original capitalization
       clean = value if sanitize_css_font(value).present?
+    elsif property == "aspect-ratio"
+      # Allow either global values such as "inherit", "revert", etc; "auto"; a ratio;
+      # "auto" followed by a ratio; or a ratio followed by "auto".
+      clean = value if value.match(/^(#{GLOBAL_VALUE_REGEX}|auto|(auto\s+)?#{NUMBER_OR_RATIO_REGEX}(\s+auto)?)$/i) && !value.match(/^auto.*auto$/i)
     elsif property == "content"
       # don't allow var() function
       clean = value.match(/\bvar\b/i) ? "" : sanitize_css_content(value)
