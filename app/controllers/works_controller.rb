@@ -545,7 +545,12 @@ class WorksController < ApplicationController
 
     # collect the errors neatly, matching each error to the failed url
     unless failed_urls.empty?
-      error_msgs = 0.upto(failed_urls.length).map { |index| "<dt>#{failed_urls[index]}</dt><dd>#{errors[index]}</dd>" }.join("\n")
+      error_msgs = (0...failed_urls.length).map do |index|
+        # each failed url may have multiple errors, so show them in a bulleted list underneath the url
+        errors_per_url = errors[index].map { |error| "<li>#{error}</li>" }
+          .join("\n")
+        "<dt>#{failed_urls[index]}</dt><ul>#{errors_per_url}</ul>"
+      end.join("\n")
       flash.now[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
     end
 
