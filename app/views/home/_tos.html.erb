@@ -293,7 +293,8 @@
     <p>
       <%= t(".abuse_policy.resolution_of_complaints.potentially_legitimate_fanwork_html",
             illegal_and_inappropriate_content_policy_link: link_to(t(".abuse_policy.resolution_of_complaints.illegal_and_inappropriate_content_policy"),
-              content_path(anchor: "II.K"))) %>
+              content_path(anchor: "II.K")),
+            true_threat_link: link_to(t(".abuse_policy.resolution_of_complaints.true_threat"), tos_faq_path(anchor: "true_threat"))) %>
     </p>
     <p><%= t(".abuse_policy.resolution_of_complaints.voluntary_removal") %></p>
     <p>
