@@ -118,6 +118,8 @@ class Comment < ApplicationRecord
       comment_post_modified_gmt = ultimate_parent.created_at.iso8601
     end
 
+    recent_comment_content = recent_comments_of_user_on_work&.pluck(:comment_content)&.join
+
     if pseud_id.nil?
       user_role = "guest"
       comment_author = name
@@ -133,7 +135,7 @@ class Comment < ApplicationRecord
       user_role: user_role,
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
-      comment_content: comment_content,
+      comment_content: recent_comment_content.to_s + comment_content,
       comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
       comment_post_modified_gmt: comment_post_modified_gmt
     }
@@ -142,9 +144,29 @@ class Comment < ApplicationRecord
     attributes[:cloudflare_ja3_hash] = cloudflare_ja3_hash if cloudflare_ja3_hash
     attributes[:cloudflare_ja4] = cloudflare_ja4 if cloudflare_ja4
 
-    attributes[:recheck_reason] = "edit" if will_save_change_to_edited_at? && will_save_change_to_comment_content?
+    attributes[:recheck_reason] = "edit" if (will_save_change_to_edited_at? && will_save_change_to_comment_content?) || !recent_comment_content.empty?
 
     attributes
+  end
+
+  def recent_comments_of_user_on_work
+    # Returns active record relation object of comments the same person left on the same work / admin post in the last
+    # specified amount of minutes, not including this comment.
+    return [] if skip_spamcheck?
+
+    if pseud_id.nil?
+      Comment.where(name: name)
+        .or(Comment.where(email: comment_owner_email))
+        .or(Comment.where(ip_address: ip_address))
+        .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
+        .and(Comment.where(parent: parent))
+        .excluding(self)
+    else
+      Comment.where(pseud_id: pseud_id)
+        .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
+        .and(Comment.where(parent: parent))
+        .excluding(self)
+    end
   end
 
   after_create :expire_parent_comments_count
