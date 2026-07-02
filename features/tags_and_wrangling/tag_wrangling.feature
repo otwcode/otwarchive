@@ -371,6 +371,8 @@ Feature: Tag wrangling
     Given a canonical freeform "Angst"
       And a canonical freeform "Angstc"
       And it is currently 1 second from now
+      # The waits are here so we can be sure the tags are created/attached in
+      # a non-sorted order, so the test can check that reordering is happening
       And a canonical freeform "Angstb"
       And it is currently 1 second from now
       And a canonical freeform "Angsta"
@@ -387,6 +389,8 @@ Feature: Tag wrangling
     Given a canonical freeform "Sex and Feels and Pain"
       And a canonical freeform "Smut"
       And it is currently 1 second from now
+      # The waits are here so we can be sure the tags are created/attached in
+      # a non-sorted order, so the test can check that reordering is happening
       And a canonical freeform "Angst"
       And it is currently 1 second from now
       And a canonical freeform "Fluff"
