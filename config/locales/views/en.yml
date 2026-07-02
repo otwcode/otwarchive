@@ -2188,7 +2188,6 @@ en:
           open_doors_removal_html: The removal of Content imported via Open Doors will not usually result in a penalty for the archivist or creator, except for violations of %{content_policy_ii_k_1_link}.
           remove_resolve_lawsuit_html: We may determine that we need to remove Content to resolve a threatened or pending lawsuit or to mitigate other liability. If so, we will remove the Content. Unless said Content was submitted by an %{age_barred_individual_link} or otherwise violates the TOS, removal for such reasons will not lead to a suspension.
           tos_faq: TOS FAQ
-          
           violations_warnings_suspensions_html: Violations of the TOS may result in warnings or suspensions ("penalties") for all accounts owned by the offending user. The determination of appropriate penalties, including the length of any suspensions, is subject to the discretion of the Policy & Abuse committee. PAC's discretion will be informed by the nature of the violation and the behavior of the user. For more information, please refer to the %{tos_faq_link}.
         resolution_of_complaints:
           add_or_edit_tags_html: AO3 administrators may also determine that tags need to be added to or edited on a Work, and may add or edit those tags. For more information, please refer to the %{mandatory_tags_policy_link}.
