@@ -1,4 +1,6 @@
 class AbuseReport < ApplicationRecord
+  attr_accessor :comment, :summary, :language, :username, :user_agent
+
   validates :email, email_format: { allow_blank: false }
   validates_presence_of :language
   validates_presence_of :summary
@@ -12,11 +14,6 @@ class AbuseReport < ApplicationRecord
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
   before_validation :truncate_url, if: :will_save_change_to_url?
-
-  # It doesn't have the type set properly in the database, so override it here:
-  attribute :summary_sanitizer_version, :integer, default: 0
-
-  attr_accessor :user_agent
 
   # Truncates the user-provided URL to the maximum we can store in the database. We don't want to reject reports with very long URLs, but we need to do
   # something to avoid a 500 error for long URLs.
@@ -46,6 +43,16 @@ class AbuseReport < ApplicationRecord
       comment_author: name,
       comment_author_email: email,
       comment_content: comment
+    }
+  end
+
+  def mailer_attributes
+    {
+      email: email,
+      username: username,
+      url: url,
+      summary: summary,
+      comment: comment
     }
   end
 
@@ -116,12 +123,15 @@ class AbuseReport < ApplicationRecord
   end
 
   def email_and_send
-    UserMailer.abuse_report(id).deliver_later
-    send_report
+    if self.send_report
+      UserMailer.abuse_report(self.mailer_attributes).deliver_later
+      return true
+    end
+    false
   end
 
   def send_report
-    return unless zoho_enabled?
+    return true unless zoho_enabled?
 
     reporter = AbuseReporter.new(
       title: summary,
@@ -136,9 +146,10 @@ class AbuseReport < ApplicationRecord
     )
     response = reporter.send_report!
     ticket_id = response["id"]
-    return if ticket_id.blank?
+    return false if ticket_id.blank?
 
     attach_work_download(ticket_id)
+    true
   end
 
   def creator_ids
@@ -269,6 +280,11 @@ class AbuseReport < ApplicationRecord
                           volunteers from being overwhelmed, please do not seek
                           out violations to report, but only report violations you
                           encounter during your normal browsing."))
+  end
+
+  # run daily with resque scheduler
+  def self.delete_old_report_records
+    AbuseReport.where(created_at: ..ArchiveConfig.ABUSE_REPORTS_RETENTION_PERIOD.days.ago).delete_all
   end
 
   private

@@ -1,5 +1,9 @@
 ---
 en:
+  abuse_reports:
+    create:
+      failure_send: Sorry, your report could not be submitted. Please try again later.
+      success: Your report was submitted to the Policy & Abuse team. A confirmation message has been sent to the email address you provided.
   admin:
     access:
       action_access_denied: Sorry, only an authorized admin can do that.
@@ -235,6 +239,10 @@ en:
     index:
       choose_media: Please choose a media category to start browsing fandoms.
       collection_page_title: "%{collection_title} - Fandoms"
+  feedbacks:
+    create:
+      failure_send: Sorry, your message could not be sent - please try again later.
+      successfully_sent: Your message was sent to the Archive team - thank you!
   gifts:
     index:
       page_subtitle: "%{name} - Gifts"

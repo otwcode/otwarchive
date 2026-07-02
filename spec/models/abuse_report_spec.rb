@@ -1104,4 +1104,27 @@ describe AbuseReport do
       end
     end
   end
+
+  describe "#delete_old_report_records" do
+    let!(:expired_report) { create(:abuse_report, created_at: ArchiveConfig.ABUSE_REPORTS_RETENTION_PERIOD.days.ago).id }
+    let!(:old_report) { create(:abuse_report, created_at: ArchiveConfig.ABUSE_REPORTS_RETENTION_PERIOD.days.ago + 1.minute).id }
+    let!(:recent_report) { create(:abuse_report).id }
+
+    before do
+      freeze_time
+    end
+
+    it "deletes reports outside the retention period" do
+      AbuseReport.delete_old_report_records
+
+      expect(AbuseReport.exists?(expired_report)).to be_falsy
+    end
+
+    it "does not delete any reports that could still be used for rate limiting" do
+      AbuseReport.delete_old_report_records
+
+      expect(AbuseReport.exists?(old_report)).to be_truthy
+      expect(AbuseReport.exists?(recent_report)).to be_truthy
+    end
+  end
 end

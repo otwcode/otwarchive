@@ -6,6 +6,9 @@ describe FeedbacksController do
   include LoginMacros
 
   describe "POST #create" do
+    success_response = { headers: { content_type: "application/json" }, body: '{"data":[{"id":"1"}]}' }.freeze
+    failure_response = { status: 400, headers: { content_type: "application/json" }, body: "{}" }.freeze
+
     let(:mock_zoho) { instance_double(ZohoResourceClient) }
 
     let(:default_parameters) do
@@ -28,7 +31,7 @@ describe FeedbacksController do
     it "specifies a channel" do
       expect(mock_zoho).to receive(:create_ticket).with(ticket_attributes: include(
         "channel" => "Support Form"
-      ))
+      )).and_return(success_response)
       post :create, params: default_parameters
     end
 
@@ -51,7 +54,7 @@ describe FeedbacksController do
             "cf" => include(
               "cf_site_skin" => Skin.default.title
             )
-          ))
+          )).and_return(success_response)
           post :create, params: default_parameters
         end
       end
@@ -68,7 +71,8 @@ describe FeedbacksController do
             "cf" => include(
               "cf_site_skin" => skin.title
             )
-          ))
+          )).and_return(success_response)
+
           post :create, params: default_parameters
         end
       end
@@ -85,7 +89,8 @@ describe FeedbacksController do
             "cf" => include(
               "cf_site_skin" => "Custom skin"
             )
-          ))
+          )).and_return(success_response)
+
           post :create, params: default_parameters
         end
       end
@@ -102,7 +107,8 @@ describe FeedbacksController do
           "cf" => include(
             "cf_user_agent" => user_agent.to(499)
           )
-        ))
+        )).and_return(success_response)
+
         post :create, params: default_parameters
         expect(assigns[:feedback].user_agent.length).to eq(500)
       end
@@ -118,9 +124,29 @@ describe FeedbacksController do
           "cf" => include(
             "cf_user_agent" => "Unknown user agent"
           )
-        ))
+        )).and_return(success_response)
+
         post :create, params: default_parameters
         expect(assigns[:feedback].user_agent).to be_nil
+      end
+    end
+
+    context "when the feedback is invalid" do
+      it "renders the new template with an error message" do
+        post :create, params: default_parameters.deep_merge(feedback: { email: "not an email" })
+        expect(response).to render_template(:new)
+        expect(assigns[:feedback].errors.full_messages).to include("Email should look like an email address.")
+      end
+    end
+
+    context "when Zoho does not accept the ticket" do
+      it "renders the new template with an error message" do
+        expect(mock_zoho).to receive(:create_ticket).and_return(failure_response)
+
+        post :create, params: default_parameters
+
+        expect(response).to render_template(:new)
+        expect(flash[:error]).to include("Sorry, your message could not be sent - please try again later")
       end
     end
   end
