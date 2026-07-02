@@ -284,12 +284,7 @@ class AbuseReport < ApplicationRecord
 
   # run daily with resque scheduler
   def self.delete_old_report_records
-    AbuseReport.where(created_at: ..[ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_PERIOD,
-                                     ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_PERIOD,
-                                     ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD,
-                                     ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD,
-                                     ArchiveConfig.ABUSE_REPORTS_PER_SERIES_PERIOD,
-                                     1].max.days.ago).delete_all
+    AbuseReport.where(created_at: ..ArchiveConfig.ABUSE_REPORTS_RETENTION_PERIOD.days.ago).delete_all
   end
 
   private
