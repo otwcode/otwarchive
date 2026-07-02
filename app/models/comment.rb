@@ -155,8 +155,7 @@ class Comment < ApplicationRecord
     return [] if skip_spamcheck?
 
     if pseud_id.nil?
-      Comment.where(name: name)
-        .or(Comment.where(email: comment_owner_email))
+      Comment.where(email: comment_owner_email)
         .or(Comment.where(ip_address: ip_address))
         .and(Comment.where(created_at: ArchiveConfig.RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME.minutes.ago..))
         .and(Comment.where(parent: parent))

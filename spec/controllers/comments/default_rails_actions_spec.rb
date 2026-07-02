@@ -693,7 +693,7 @@ describe CommentsController do
         create(:comment,
                :on_admin_post,
                :by_guest,
-               name: "sus_user",
+               email: "sus@example.com",
                comment_content: "lorem",
                created_at: 15.seconds.ago)
       end
@@ -702,7 +702,7 @@ describe CommentsController do
         create(:comment,
                :by_guest,
                commentable: previous_comment.ultimate_parent,
-               name: "sus_user",
+               email: "sus@example.com",
                comment_content: "ipsum",
                created_at: 0.seconds.ago)
       end
