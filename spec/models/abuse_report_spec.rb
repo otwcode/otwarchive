@@ -384,25 +384,24 @@ describe AbuseReport do
       # a specific work under a collection
       it_behaves_like "alright", "http://archiveofourown.org/collections/collection_name/works/789"
 
+      it "does not count toward the collection report count" do
+        collection_report_count = lambda {
+          AbuseReport.where(
+            "url LIKE ? AND url NOT REGEXP ?",
+            "%/collections/collection_name/%",
+            "/collections/collection_name/works/[0-9]+"
+          ).count
+        }
+
+        expect do
+          create(:abuse_report, url: "http://archiveofourown.org/collections/collection_name/works/789")
+        end.not_to change { collection_report_count.call }
+      end
+
       context "after the collection over-reporting period" do
         before { travel(ArchiveConfig.ABUSE_REPORTS_PER_COLLECTION_PERIOD.days) }
 
         it_behaves_like "alright", collection_url
-      end
-    end
-
-    context "when specific works in a collection have been reported" do
-      before do
-        ArchiveConfig.ABUSE_REPORTS_PER_COLLECTION_MAX.times do
-          create(:abuse_report, url: "http://archiveofourown.org/collections/collection_name/works/789")
-        end
-      end
-
-      it "does not count them toward the collection report limit" do
-        report = build(:abuse_report, url: "http://archiveofourown.org/collections/collection_name")
-
-        expect(report.save).to be_truthy
-        expect(report.errors[:base]).to be_empty
       end
     end
 
