@@ -56,4 +56,4 @@ the [Policy & Abuse contact form](https://archiveofourown.org/abuse_reports/new)
 ## Enforcement
 
 Violations of any part of this Code of Conduct, including our [policy on AI usage](CONTRIBUTING.md#contributing-code),
-may result in corrective action, up to and including banning from the GitHub repository and Jira.
+may result in corrective action, up to and including being banned from the GitHub repository and Jira.
