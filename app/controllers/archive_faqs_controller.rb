@@ -131,7 +131,7 @@ class ArchiveFaqsController < ApplicationController
   end
 
   RENAMED_LOCALES = {
-    "sr" => "src", # AO3-6720
+    "sr" => "scr", # AO3-6720
     "zh-CN" => "zh-Hans" # AO3-7525
   }.freeze
 
