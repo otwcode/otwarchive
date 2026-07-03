@@ -1,2 +1,1077 @@
 ---
-hi: {}
+hi:
+  activerecord:
+    attributes:
+      work:
+        chapter_total_display: अध्याय
+        summary: सारांश
+    models:
+      archive_warning:
+        one: चेतावनी
+        other: चेतावनियाँ
+      category:
+        one: वर्ग
+        other: वर्ग
+      chapter:
+        one: अध्याय
+        other: अध्याय
+      character:
+        one: पात्र
+        other: पात्र
+      fandom:
+        one: प्रशंसक समूह
+        other: प्रशंसक समूह
+      freeform:
+        one: अतिरिक्त टैग
+        other: अतिरिक्त टैग्स
+      rating:
+        one: रेटिंग
+        other: रेटिंग्स
+      relationship:
+        one: संबंध
+        other: संबंध
+      series:
+        one: श्रृंखला
+        other: श्रृंखला
+  comment_mailer:
+    comment_notification_footer:
+      comment_thread:
+        html: इस टिप्पणी से शुरू होने वाले सूत्र पर जाएँ
+        text: 'इस टिप्पणी से शुरू होने वाले सूत्र पर जाएँ: %{url}'
+      last_edited: 'अंतिम संपादन: %{datetime}'
+      parent_thread:
+        html: इस टिप्पणी के सूत्र पर जाएँ
+        text: 'इस टिप्पणी के सूत्र पर जाएँ: %{url}'
+      posted: 'पोस्ट किया गया: %{datetime}'
+      read_all_comments:
+        chapter:
+          html: "%{title} के अध्याय %{position} पर सभी टिप्पणियाँ पढ़ें"
+          text: '"%{title}": %{url} के अध्याय %{position} पर सभी टिप्पणियाँ पढ़ें'
+        other:
+          html: "%{title} पर सभी टिप्पणियाँ पढ़ें"
+          text: '"%{title}": %{url} पर सभी टिप्पणियाँ पढ़ें'
+        tag:
+          html: "%{tag}: %{url} टैग पर सभी टिप्पणियाँ पढ़ें"
+      reply:
+        html: इस टिप्पणी का उत्तर दें
+        text: 'इस टिप्पणी का उत्तर दें: %{url}'
+      review:
+        html: "%{title} पर टिप्पणियों की समीक्षा करें"
+        text: '"%{title}": %{url} पर टिप्पणियों की समीक्षा करें'
+      unreviewed:
+        admin_post: इस समाचार पोस्ट पर टिप्पणियाँ नियंत्रित की जाती हैं और जब तक उन्हें
+          मंज़ूरी नहीं दी जाती, वे दिखाई नहीं देंगे।
+        work: इस काम पर टिप्पणियाँ नियंत्रित की जाती हैं और जब तक कार्य के निर्माता
+          उन्हें मंज़ूरी नहीं देतें, वे दिखाई नहीं देंगे।
+        work_owner: इस काम पर टिप्पणियाँ नियंत्रित की जाती हैं और जब तक आप उन्हें
+          मंज़ूरी नहीं देतें, वे दिखाई नहीं देंगे।
+    comment_notification:
+      chapter:
+        titled: 'अध्याय %{position}: %{title}'
+        untitled: अध्याय %{position}
+      content:
+        chapter:
+          html: "%{pseud_link} ने %{work_link} के %{chapter_link} पर निम्नलिखित टिप्पणी
+            की:"
+          titled_text: "%{pseud} ने %{work} (%{chapter_url}) के अध्याय %{chapter_position}:
+            %{chapter_title} पर निम्नलिखित टिप्पणी की:"
+          untitled_text: "%{pseud} ने %{work} (%{chapter_url}) के अध्याय %{chapter_position}
+            पर निम्नलिखित टिप्पणी की:"
+        other:
+          html: "%{pseud_link} ने %{commentable_link} पर निम्नलिखित टिप्पणी की:"
+          text: "%{pseud} ने %{title} (%{commentable_link}) पर निम्नलिखित टिप्पणी
+            की:"
+        tag:
+          html: "%{pseud_link} ने %{tag_link} टैग पर निम्नलिखित टिप्पणी की:"
+          text: "%{pseud} ने %{tag} (%{tag_url}) टैग पर निम्नलिखित टिप्पणी की:"
+      subject:
+        chapter: "[%{app_name}] %{title} के अध्याय %{position} पर टिप्पणी"
+        other: "[%{app_name}] %{title} पर टिप्पणी"
+        tag: "[%{app_name}] %{name} टैग पर टिप्पणी"
+    comment_reply_notification:
+      chapter:
+        titled: 'अध्याय %{position}: %{title}'
+        untitled: अध्याय %{position}
+      commenter_edited_response:
+        text: "%{commenter} ने अपने उत्तर को संपादित करके लिखा:"
+      commenter_responded:
+        html: "%{commenter_link} ने उत्तर दिया:"
+        text: "%{commenter} ने उत्तर दिया:"
+      content:
+        chapter:
+          html: "%{pseud_link} ने %{work_link} के %{chapter_link} पर आपके टिप्पणी
+            का उत्तर दिया:"
+          titled_text: "%{pseud} ने %{work} (%{chapter_url}) के अध्याय %{chapter_position}:
+            %{chapter_title} पर आपके टिप्पणी का उत्तर दिया:"
+          untitled_text: "%{pseud} ने %{work} (%{chapter_url}) के अध्याय %{chapter_position}
+            पर आपके टिप्पणी का उत्तर दिया:"
+        other:
+          html: "%{pseud_link} ने %{commentable_link} पर आपके टिप्पणी का उत्तर दिया:"
+          text: "%{pseud} ने %{title} (%{commentable_url}) पर आपके टिप्पणी का उत्तर
+            दिया:"
+        tag:
+          html: "%{pseud_link} ने %{tag_link} टैग पर आपके टिप्पणी का उत्तर दिया:"
+          text: "%{pseud} ने %{tag} (%{tag_url}) टैग पर आपके टिप्पणी का उत्तर दिया:"
+      subject:
+        chapter: "[%{app_name}] %{title} के अध्याय %{position} पर आपके टिप्पणी का
+          उत्तर दें"
+        other: "[%{app_name}] %{title} पर आपके टिप्पणी का उत्तर दें"
+        tag: "[%{app_name}] %{name} टैग पर आपके टिप्पणी का उत्तर दें"
+      you_wrote: 'आपने लिखा:'
+    comment_reply_sent_notification:
+      chapter:
+        titled: 'अध्याय %{position}: %{title}'
+        untitled: अध्याय %{position}
+      commenter_wrote:
+        html: "%{commenter_link} ने लिखा:"
+        text: "%{commenter} ने लिखा:"
+      content:
+        chapter:
+          html: "%{work_link} के %{chapter_link} पर टिप्पणी का आपने उत्तर दिया:"
+          titled_text: "%{work} (%{chapter_url}) के अध्याय %{chapter_position}: %{chapter_title}
+            पर टिप्पणी का आपने उत्तर दिया:"
+          untitled_text: "%{work} (%{chapter_url}) के अध्याय %{chapter_position} पर
+            टिप्पणी का आपने उत्तर दिया:"
+        other:
+          html: "%{commentable_link} पर टिप्पणी का आपने उत्तर दिया:"
+          text: "%{title} पर टिप्पणी का आपने उत्तर दिया (%{commentable_url}):"
+        tag:
+          html: "%{tag_link} टैग पर टिप्पणी का आपने उत्तर दिया:"
+          text: "%{tag} (%{tag_url}) टैग पर टिप्पणी का आपने उत्तर दिया:"
+      subject:
+        chapter: "[%{app_name}] %{title} के %{position} पर टिप्पणी का आपका उत्तर"
+        other: "[%{app_name}] %{title} पर टिप्पणी का आपका उत्तर"
+        tag: "[%{app_name}] %{name} टैग पर टिप्पणी का आपका उत्तर"
+      you_responded: 'आपने उत्तर दिया:'
+    comment_sent_notification:
+      chapter:
+        titled: 'अध्याय %{position}: %{title}'
+        untitled: अध्याय %{position}
+      content:
+        chapter:
+          html: 'आपने %{work_link} के %{chapter_link} पर निम्नलिखित टिप्पणी की:'
+          titled_text: 'आपने %{work} (%{chapter_url}) के अध्याय %{chapter_position}:
+            %{chapter_title} पर निम्नलिखित टिप्पणी की:'
+          untitled_text: 'आपने %{work} (%{chapter_url}) के अध्याय %{chapter_position}
+            पर निम्नलिखित टिप्पणी की:'
+        other:
+          html: 'आपने %{commentable_link} पर निम्नलिखित टिप्पणी की:'
+          text: 'आपने %{title} (%{commentable_url}) पर निम्नलिखित टिप्पणी की:'
+        tag:
+          html: 'आपने %{tag_link} टैग पर निम्नलिखित टिप्पणी की:'
+          text: 'आपने %{tag} (%{tag_url}) टैग पर निम्नलिखित टिप्पणी की:'
+      subject:
+        chapter: "[%{app_name}] %{title} के अध्याय %{position} पर आपकी टिप्पणी"
+        other: "[%{app_name}] %{title} पर आपकी टिप्पणी"
+        tag: "[%{app_name}] %{name} टैग पर आपकी टिप्पणी"
+    edited_comment_notification:
+      chapter:
+        titled: 'अध्याय %{position}: %{title}'
+        untitled: अध्याय %{position}
+      content:
+        chapter:
+          html: "%{pseud_link} ने %{work_link} के %{chapter_link} पर निम्नलिखित टिप्पणी
+            को संपादित किया:"
+          titled_text: "%{pseud} ने %{work} (%{chapter_url}) के अध्याय %{chapter_position}:
+            %{chapter_title} पर निम्नलिखित टिप्पणी को संपादित किया:"
+          untitled_text: "%{pseud} ने %{work} (%{chapter_url}) के अध्याय %{chapter_position}
+            पर निम्नलिखित टिप्पणी को संपादित किया:"
+        other:
+          html: "%{pseud_link} ने %{commentable_link} पर निम्नलिखित टिप्पणी को संपादित
+            किया:"
+          text: "%{pseud} ने %{title} (%{commentable_url}) पर निम्नलिखित टिप्पणी को
+            संपादित किया:"
+        tag:
+          html: "%{pseud_link} ने %{tag_link} टैग पर निम्नलिखित टिप्पणी को संपादित
+            किया:"
+          text: "%{pseud} ने %{tag} (%{tag_url}) टैग पर निम्नलिखित टिप्पणी को संपादित
+            किया:"
+      subject:
+        chapter: "[%{app_name}] %{title} के अध्याय %{position} पर संपादित टिप्पणी"
+        other: "[%{app_name}] %{title} पर संपादित टिप्पणी"
+        tag: "[%{app_name}] %{name} टैग पर संपादित टिप्पणी"
+    edited_comment_reply_notification:
+      chapter:
+        titled: 'अध्याय %{position}: %{title}'
+        untitled: अध्याय %{position}
+      commenter_edited_response:
+        html: "%{commenter_link} ने अपने उत्तर को संपादित करके लिखा:"
+      content:
+        chapter:
+          html: "%{pseud_link} ने %{work_link} के %{chapter_link} पर आपकी टिप्पणी
+            के जवाब में अपना उत्तर संपादित किया"
+          titled_text: "%{pseud} ने %{work} (%{chapter_url}) के अध्याय %{chapter_position}:
+            %{chapter_title} पर आपकी टिप्पणी के जवाब में अपना उत्तर संपादित किया:"
+          untitled_text: "%{pseud} ने %{work} के अध्याय %{chapter_position} (%{chapter_url})
+            पर आपकी टिप्पणी के जवाब में अपना उत्तर संपादित किया:"
+        other:
+          html: "%{pseud_link} ने %{commentable_link} पर आपकी टिप्पणी के जवाब में
+            अपना उत्तर संपादित किया:"
+          text: "%{pseud} ने %{title} (%{commentable_url}) पर आपकी टिप्पणी के जवाब
+            में अपना उत्तर संपादित किया:"
+        tag:
+          html: "%{pseud_link} ने %{tag_link} टैग पर आपकी टिप्पणी के जवाब में अपना
+            उत्तर संपादित किया:"
+          text: "%{pseud} ने %{tag} (%{tag_url}) टैग पर आपकी टिप्पणी के जवाब में अपना
+            उत्तर संपादित किया:"
+      subject:
+        chapter: "[%{app_name}] %{title} के अध्याय %{position} पर आपकी टिप्पणी का
+          संपादित उत्तर"
+        other: "[%{app_name}] %{title} पर आपकी टिप्पणी का संपादित उत्तर"
+        tag: "[%{app_name}] %{name} टैग पर आपकी टिप्पणी का संपादित उत्तर"
+      you_wrote: 'आपने लिखा:'
+  help:
+    preferences_locale:
+      locale:
+        description: यह प्राथमिकता आपको AO3 द्वारा भेजे गए ईमेल संदेशों के लिए अपनी
+          पसंदीदा भाषा चुनने की अनुमति देती है। इन संदेशों के टेम्पलेट्स अभी हमारे
+          स्वयंसेवक अद्यतन और अनुवाद कर रहे हैं। यह काम प्रगति पर है; इस समय सभी संदेश
+          अंग्रेजी के अलावा अन्य भाषाओं में उपलब्ध नहीं होंगे। यदि उस ईमेल का टेम्पलेट
+          अभी तक आपकी भाषा में अनूदित नहीं हुआ है, वह अंग्रेजी में भेजा जाएगा।
+        header: स्थान प्राथमिकताएँ तय करें
+      page_heading: स्थान प्राथमिकताएँ
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: अतिथि
+        other: "%{count} अतिथिगण"
+      left_kudos:
+        html:
+          one: "%{givers_list} ने %{commentable_link} पर कुङोस दिया है।"
+          other: "%{givers_list} ने %{commentable_link} पर कुङोस दिए हैं।"
+        text:
+          one: '%{givers_list} ने "%{commentable_title}" (%{commentable_url}) पर कुङोस
+            दिया है।'
+          other: '%{givers_list} ने "%{commentable_title}" (%{commentable_url}) पर
+            कुङोस दिए हैं।'
+      single_guest:
+        giver: एक अतिथि
+        html: "%{giver} ने %{commentable_link} पर कुङोस दिया है।"
+        text: एक अतिथि ने "%{commentable_title}" (%{commentable_url}) पर कुङोस दिया
+          है।
+      subject: "[%{app_name}] आपको कुङोस मिला हैं!"
+  mailer:
+    collections:
+      why_collection_email:
+        html: आपको यह ईमेल प्राप्त हुआ है क्योंकि आपका ईमेल पता %{collection_link}
+          संग्रह के लिए संग्रह ईमेल के रूप में सूचीबद्ध किया गया है।
+        text: आपको यह ईमेल प्राप्त हुआ है क्योंकि आपका ईमेल पता "%{collection_title}"
+          (%{collection_url}) संग्रह के लिए संग्रह ईमेल के रूप में सूचीबद्ध किया गया
+          है।
+      why_maintainer:
+        html: आपको यह ईमेल प्राप्त हुआ है क्योंकि आप %{collection_link} संग्रह के
+          मालिक या नियंत्रक हैं।
+        text: आपको यह ईमेल प्राप्त हुआ है क्योंकि आप "%{collection_title}" (%{collection_url})
+          संग्रह के मालिक या नियंत्रक हैं।
+    general:
+      closing:
+        formal: निष्ठा से,
+        informal: उत्तम,
+      creation:
+        attribution:
+          anon: अनाम द्वारा
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: अध्याय %{position} का %{title}
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          one: "%{count} शब्द"
+          other: "%{count} शब्द"
+      footer:
+        about:
+          html: AO3 एक प्रशंसकों द्वारा संचालित और फैन-समर्थित संग्रह है जो %{your_donations_link}
+            पर निर्भर करता है।
+          text: 'AO3 एक प्रशंसकों द्वारा संचालित और फैन-समर्थित संग्रह है जो आपके
+            दान: %{your_donations_url} पर निर्भर करता है।'
+          your_donations: आपके दान
+        sent_at: "%{sent_at} पर भेजा गया।"
+        why_policy_abuse:
+          contact_policy_abuse: नीति और दुरुपयोग से संपर्क करें।
+          html: यदि आपको समझ नहीं आ रहा है कि आपको यह ईमेल क्यों भेजा गया है, तो कृपया
+            %{contact_policy_abuse_link}।
+          text: 'यदि आपको समझ नहीं आ रहा है कि आपको यह ईमेल क्यों भेजा गया है, तो
+            कृपया नीति और दुरुपयोग से संपर्क करें: %{contact_policy_abuse_url}।'
+        why_support:
+          contact_support: सहायता से सम्पर्क करें
+          html: यदि आपको समझ नहीं आ रहा है कि आपको यह ईमेल क्यों भेजा गया है, तो कृपया
+            %{contact_support_link}।
+          text: 'यदि आपको समझ नहीं आ रहा है कि आपको यह ईमेल क्यों भेजा गया है, तो
+            कृपया सहायता से संपर्क करें: %{contact_support_url}।'
+      greeting:
+        formal:
+          addressed_html: नमस्कार %{name},
+        informal:
+          addressed_html: नमस्कार, %{name}!
+        introductory: AO3 से नमस्कार!
+      metadata_label_indicator: ":"
+      signature:
+        app_short_name: AO3
+        open_doors: Open Doors (खुले दरवाज़े) दल
+        parent_org: Organization for Transformative Works – OTW (परिवर्तनकारी कार्य
+          हेतु संगठन)
+  preferences:
+    locale_help_title: स्थान प्राथमिकता सहायता
+  roles:
+    anonymous_creator: गुमनाम निर्माता
+    commenter_name:
+      html: "%{name} %{role_with_parens}"
+      text: "%{name} %{role_with_parens}"
+    guest_with_parens: "(अतिथि)"
+    official_with_parens: "(आधिकारिक)"
+    registered_with_parens: "(पंजीकृत उपयोगकर्ता)"
+  user_mailer:
+    admin_deleted_work_notification:
+      check_email:
+        html: यदि आप नही जानते कि आपका कार्य क्यों हटा दिया गया है, और आपने इस बारे
+          मे कोई अलग ईमेल प्राप्त नहीं किया है, कृपया अपने ईमेल (रद्दी ईमेल फोल्डर
+          सहित) देखें या सीधा %{contact_abuse_link}
+        text: 'यदि आप नही जानते कि आपका कार्य क्यों हटा दिया गया है, और आपने इस बारे
+          मे कोई अलग ईमेल प्राप्त नहीं किया है, कृपया अपने ईमेल (रद्दी ईमेल फोल्डर
+          सहित) देखें या सीधा हमारे नीति और दुरुपयोग समिति से संपर्क करें: %{contact_abuse_link}।'
+      contact_abuse: नीति और दुरुपयोग समिति से संपर्क करें
+      content_policy: अंतर्वस्तु नीति
+      deleted:
+        html: आपका कार्य %{title} %{app_name} प्रशासक द्वारा हटा दिया गया है। आपके
+          कार्य की प्रतिलिपि इस ईमेल के साथ संलग्न है।
+        text: आपका कार्य "%{title}" %{app_name} प्रशासक द्वारा डिलीट किया गया है।
+          आपके कार्य का एक कॉपी इस ईमेल के साथ संलग्न है।
+      may_not_repost: आप उल्लंघन को ठीक करने के लिए कदम उठाए बिना इस कार्य को दोबारा
+        पोस्ट नहीं कर सकते।
+      subject: "[%{app_name}] आपका कार्य प्रशासक द्वारा हटा दिया गया है"
+      tos: "%{app_name} सेवा की शर्तें"
+      tos_faq: सेवा की शर्तें FAQ (अक्सर पूछे जाने वाले प्रश्न)
+      tos_violation:
+        html: यदि आपका कार्य %{tos_link} (%{content_policy_link} सहित) के उल्लंघन
+          के वजह से हटा दिया गया है, %{may_not_repost_bold}। अधिक जानकारी के लिए,
+          कृपया %{tos_faq_link} देखें।
+        text: 'यदि आपका कार्य, (%{content_policy_url}) अंतर्वस्तु नीति सहित, %{app_name}
+          सेवा की शर्तों (%{tos_url}) के उल्लंघन की वजह से हटा दिया गया है, तो आप
+          उल्लंघन को ठीक करने के लिए कदम उठाए बिना इस कार्य को दोबारा पोस्ट नहीं कर
+          सकते। अधिक जानकारी के लिए, कृपया सेवा की शर्तें FAQ यहां देखें: %{tos_faq_link}।'
+    admin_hidden_work_notification:
+      access:
+        one: जब तक आपका कार्य छुपा हुआ है, आप उसे ऊपर दी हुई लिंक से उपलब्ध कर सकेंगे,
+          लेकिन यह अन्य उपयोगकर्ताओं के लिए उपलब्ध नहीं होगा और आपके कार्य पेज पर
+          सूचित नहीं किया जाएगा।
+        other: जब तक आपके कार्य छुपे हुए है, आप उन्हें ऊपर दी हुई लिंक्स से उपलब्ध
+          कर सकेंगे, लेकिन यह अन्य उपयोगकर्ताओं के लिए उपलब्ध नहीं होंगे और आपके कार्य
+          पेज पर सूचित नहीं किया जाएंगे।
+      check_email:
+        one: कृपया अपना ईमेल, स्पैम फ़ोल्डर सहित जांचें, क्योंकि नीति और दुरुपयोग
+          समिति ने संभवतः आपसे पहले ही संपर्क किया होगा आपके कार्य को क्यों छिपाया
+          गया है वह समजाते हुए।
+        other: कृपया अपना ईमेल, स्पैम फ़ोल्डर सहित जांचें, क्योंकि नीति और दुरुपयोग
+          समिति ने संभवतः आपसे पहले ही संपर्क किया होगा आपके कार्यों को क्यों छिपाया
+          गया है वह समजाते हुए।
+      contact_abuse: नीति और दुरुपयोग समिति से संपर्क करें
+      content_policy: अंतर्वस्तु नीति
+      help:
+        html:
+          one: यदि आपको यह नहीं पता कि आपका कार्य क्यों छिपाया गया है, और आपको इसका
+            कारण बताने वाला कोई अलग ईमेल प्राप्त नहीं हुआ है, तो कृपया सीधे %{contact_abuse_link}
+            से संपर्क करें।
+          other: यदि आपको यह नहीं पता कि आपके कार्य क्यों छिपाए गए हैं, और आपको इसका
+            कारण बताने वाला कोई अलग ईमेल प्राप्त नहीं हुआ है, तो कृपया सीधे %{contact_abuse_link}
+            से संपर्क करें।
+        text:
+          one: 'यदि आपको यह नहीं पता कि आपके कार्य को क्यों छिपाया गया है, और आपको
+            इसका कारण बताने वाला कोई ईमेल प्राप्त नहीं हुआ है, तो कृपया सीधे नीति
+            एवं दुरुपयोग समिति से संपर्क करें: %{contact_abuse_url}।'
+          other: 'यदि आपको यह नहीं पता कि आपके कार्यों को क्यों छिपाया गया है, और
+            आपको इसका कारण बताने वाला कोई ईमेल प्राप्त नहीं हुआ है, तो कृपया सीधे
+            नीति एवं दुरुपयोग समिति से संपर्क करें: %{contact_abuse_url}।'
+      hidden_multiple:
+        one: 'आपके %{count} कार्य को नीति और दुरुपयोग समिति के द्वारा छुपाया गया है:'
+        other: 'आपके %{count} कार्यों को नीति और दुरुपयोग समिति के द्वारा छुपाया गया
+          है:'
+      hidden_one:
+        html: आपके कार्य %{title} को नीति और दुरुपयोग समिति के द्वारा छुपाया गया है।
+        text: आपका कार्य "%{title}" (%{work_url}) को नीति और दुरुपयोग समिति द्वारा
+          छिपा दिया गया है।
+      subject:
+        one: "[%{app_name}] आपके कार्य को नीति और दुरुपयोग समिति के द्वारा छुपाया
+          गया है।"
+        other: "[%{app_name}]"
+      tos: AO3 की सेवा की शर्तें
+      tos_faq: सेवा की शर्तें FAQ
+      tos_violation:
+        html:
+          one: यदि आपका कार्य %{tos_link} (जिसमें %{content_policy_link} शामिल है)
+            का उल्लंघन करने के कारण छिपाया गया है, तो आपको उस उल्लंघन को ठीक करने
+            के लिए आवश्यक कार्रवाई करनी होगी। यदि आप अपने कार्य को सेवा की शर्तों
+            के अनुरूप नहीं लाते हैं, तो आपका कार्य AO3 से हटाया जा सकता है। अधिक जानकारी
+            के लिए, कृपया %{tos_faq_link} देखें।
+          other: यदि आपके कार्य %{tos_link} (जिसमें %{content_policy_link} शामिल है)
+            का उल्लंघन करने के कारण छिपाए गए हैं, तो आपको उन उल्लंघनों को ठीक करने
+            के लिए आवश्यक कार्रवाई करनी होगी। यदि आप अपने कार्यों को सेवा की शर्तों
+            के अनुरूप नहीं लाते हैं, तो आपके कार्य AO3 से हटाए जा सकते हैं। अधिक जानकारी
+            के लिए, कृपया %{tos_faq_link} देखें।
+        text:
+          one: 'यदि आपका कार्य AO3 की सेवा की शर्तों (%{tos_url}), जिसमें अंतर्वस्तु
+            नीति (%{content_policy_url}) शामिल है, का उल्लंघन करने के कारण छिपाया
+            गया है, तो आपको उस उल्लंघन को ठीक करने के लिए आवश्यक कार्रवाई करनी होगी।
+            यदि आप अपने कार्य को सेवा की शर्तों के अनुरूप नहीं लाते हैं, तो आपका कार्य
+            AO3 से हटाया जा सकता है। अधिक जानकारी के लिए, कृपया सेवा की शर्तों से
+            संबंधित FAQ देखें: %{tos_faq_url}।'
+          other: 'यदि आपके कार्य AO3 की सेवा की शर्तों (%{tos_url}), जिसमें अंतर्वस्तु
+            नीति (%{content_policy_url}) शामिल है, का उल्लंघन करने के कारण छिपाए गए
+            हैं, तो आपको उन उल्लंघनों को ठीक करने के लिए आवश्यक कार्रवाई करनी होगी।
+            यदि आप अपने कार्यों को सेवा की शर्तों के अनुरूप नहीं लाते हैं, तो आपके
+            कार्य AO3 से हटाए जा सकते हैं। अधिक जानकारी के लिए, कृपया सेवा की शर्तों
+            से संबंधित FAQ देखें: %{tos_faq_url}।'
+      work_info: '- "%{title}" (%{work_url})'
+    anonymous_or_unrevealed_notification:
+      anonymous_info: अज्ञात कार्य हमरे टैग सूचीकरण में शामिल होते है पर आप के कार्य
+        पेज पर नहीं। कार्य पर आपका उपयोगकर्ता नाम को "Anonymous" (अज्ञात) के साथ बदला
+        जाएगा।
+      anonymous_unrevealed_info: संग्रह की देखरेख करने वाले लोग आपके कार्य को शायद
+        प्रकाशित करे पर उसे अज्ञात रखे। जिन लोगों ने आपको सब्सक्राइब किया हैं उन्हें
+        इस बदलाव के बारे में सुचना नहीं मिलेगी। आपका कार्य टैग सूचियों में शामिल हो
+        जाएगा, पर आपके कार्य पेज पर नहीं। कार्य पर आपका उपयोगकर्ता नाम को "Anonymous"
+        (अज्ञात) के साथ बदला जाएगा।
+      changed_status:
+        anonymous_unrevealed:
+          html: जो लोग %{collection_link} संग्रह की देखरेख करते हैं उन्होंने आपके
+            %{work_link} कार्य की अवस्था को अज्ञात और अप्रकाशित स्थिति में बदल दिया
+            है ।
+          text: जो लोग "%{collection_title}" (%{collection_url}) संग्रह की देखरेख
+            करते हैं उन्होंने आपके "%{work_title}" (%{work_url}) कार्य की अवस्था को
+            अज्ञात और अप्रकाशित स्थिति में बदल दिया है ।
+        anonymous:
+          html: जो लोग %{collection_link} संग्रह की देखरेख करते हैं उन्होंने आपके
+            %{work_link} कार्य की अवस्था को अज्ञात स्थिति में बदल दिया है ।
+          text: जो लोग "%{collection_title}" संग्रह (%{collection_url}) की देखरेख
+            करते हैं उन्होंने आपके "%{work_title}" (%{work_url}) कार्य की अवस्था को
+            अज्ञात स्थिति में बदल दिया है ।
+        unrevealed:
+          html: जो लोग %{collection_link} संग्रह की देखरेख करते हैं उन्होंने आपके
+            %{work_link} कार्य की अवस्था को अप्रकाशित स्थिति में बदल दिया है ।
+          text: जो लोग "%{collection_title}" (%{collection_url}) संग्रह की देखरेख
+            करते हैं उन्होंने आपके "%{work_title}" (%{work_url}) कार्य की अवस्था को
+            अप्रकाशित स्थिति में बदल दिया है ।
+      collection_items_link_text: Approved Collection Items (स्वीकृत संग्रह वस्तु)
+        पेज।
+      do_not_want:
+        anonymous_unrevealed:
+          html: अगर आप आपके कार्य को अज्ञात और अप्रकाशित करना नहीं चाहते है, कृपया
+            %{collection_items_link} पर जाइये आपके कार्य को संग्रह से निकालने के लिए।
+          text: अगर आप आपके कार्य को अज्ञात और अप्रकाशित करना नहीं चाहते है, कृपया
+            Approved Collection Items (स्वीकृत संग्रह वस्तु) पेज पर जाइये कार्य को
+            इस संग्रह (%{collection_items_url}) से निकालने के लिए।
+        anonymous:
+          html: अगर आप आपके कार्य को अज्ञात करना नहीं चाहते है, कृपया %{collection_items_link}
+            पर जाइये कार्य को संग्रह से निकालने के लिए।
+          text: अगर आप आपके कार्य को अज्ञात करना नहीं चाहते है, कृपया Approved Collection
+            Items (स्वीकृत संग्रह वस्तु) पेज पर जाइये कार्य को इस संग्रह (%{collection_items_url})
+            से निकालने के लिए।
+        unrevealed:
+          html: अगर आप आपके कार्य को अप्रकाशित करना नहीं चाहते है, कृपया %{collection_items_link}
+            पर जाइये आपके कार्य को संग्रह से निकालने के लिए।
+          text: अगर आप आपके कार्य को अप्रकाशित करना नहीं चाहते है, कृपया Approved
+            Collection Items (स्वीकृत संग्रह वस्तु) पेज पर जाइये कार्य को इस संग्रह
+            (%{collection_items_url}) से निकालने के लिए।
+      faq_link_text: संग्रह FAQ
+      more_info:
+        html: अधिक जानकारी के लिए, कृपया हमारे %{faq_link} को देखिये।
+        text: 'ज्यादा जानकारी के लिए, कृपया हमारे संग्रह FAQ: %{faq_url} को देखिये।'
+      subject:
+        anonymous: "[%{app_name}] आपके कार्य को अज्ञात किया गया हैं।"
+        anonymous_unrevealed: "[%{app_name}] आपके कार्य को अज्ञात और अप्रकाशित किया
+          गया हैं।"
+        unrevealed: "[%{app_name}] आपके कार्य को अप्रकाशित किया गया हैं।"
+      unrevealed_info: अप्रकाशित कार्य हमरे टैग सूचीकरण में या आप के कार्य पेज पर
+        शामिल नहीं होते है। जो भी आपके कार्य तक एक लिंक से आएँगे, उन्हें एक सूचना
+        मिलेगी की वह अभी अप्रकाशित है और वह उसके अंदर के विषय को अभिगम नहीं कर पाएंगे।
+    archivist_added_to_collection_notification:
+      approved_collection_items_page: Approved Collection Items (स्वीकृत संग्रह वस्तुएँ)'
+        पृष्ठ
+      archivist_notice: क्योंकि संग्रह अनुरक्षक अपने Open Doors (खुले दरवाज़े) संग्राहकों
+        के पद पर अपनी आधिकारिक क्षमता में कार्य कर रहे हैं, उन्हें आपके कार्य को इस
+        संग्रह में जोड़ने की अनुमति है, यद्यपि आपने संग्रह आमंत्रण अक्षम किए हों।
+        संग्राहक एक कार्य को केवल तब संग्रह में जोड़ेंगे यदि उसे एक आयातित संग्रह
+        पर होस्ट किया गया था।
+      removal_instructions:
+        html: अगर आप अपना कार्य इस संग्रह से हटाना चाहते हैं, कृपया अपने %{approved_items_link}
+          पर जाएँ।
+        text: 'अगर आप अपना कार्य इस संग्रह से हटाना चाहते हैं, कृपया अपने Approved
+          Collection Items (स्वीकृत संग्रह वस्तुएँ) पृष्ठ पर जाएँ: %{approved_items_url}।'
+      subject: "[%{app_name}][%{collection_title}] एक Open Doors (खुले दरवाज़े) संग्राहक
+        ने आपके कार्य को एक संग्रह में जोड़ा है।"
+      work_added:
+        html: "%{collection_link} के संग्रह अनुरक्षकों ने आपका कार्य %{work_link}
+          अपने संग्रह में जोड़ा है!"
+        text: '"%{collection_title}" (%{collection_url}) के संग्रह अनुरक्षकों ने आपका
+          कार्य "%{work_title}" (%{work_url}) अपने संग्रह में जोड़ा है!'
+    assignment_default_notification:
+      assign_pinch_hitter:
+        collection_assignments_page: संग्रह असाइनमेंट पृष्ठ
+        html: आप %{collection_assignments_page_link} पर प्रतिस्थानक नियुक्त कर सकते
+          हैं।
+        text: 'आप संग्रह असाइनमेंट पृष्ठ पर प्रतिस्थानक नियुक्त कर सकते हैं: %{collection_assignments_page_url}।'
+      defaulted_on_assignment:
+        html: "%{offer_byline} ने %{request_byline} के लिए आपके उपहार विनिमय %{collection_link}
+          में अपने असाइनमेंट पर डिफ़ॉल्ट किया है।"
+        text: '%{offer_byline} ने %{request_byline} के लिए आपके उपहार विनिमय "%{collection_title}"
+          (%{collection_url}) में अपने असाइनमेंट पर डिफ़ॉल्ट किया है।'
+      subject: "[%{app_name}][%{collection_title}] %{offer_byline} द्वारा असाइनमेंट
+        डिफ़ॉल्ट किया गया"
+    assignments_sent_notification:
+      all_sent_out:
+        html: आपके उपहार विनिमय के लिए सारे असाइनमेंट अब भेजे जा चुके हैं %{collection_link}।
+        text: आपके उपहार विनिमय के लिए सारे असाइनमेंट अब भेजे जा चुके हैं "%{collection_title}"
+          (%{collection_url})
+      subject: "[%{app_name}][%{collection_title}] असाइनमेंट भेज दिए गए है।"
+    batch_subscription_notification:
+      chapter_summary: अध्याय सारांश
+      footer_note:
+        html: आपको यह ईमेल इसलिए मिला है, क्योंकि आपने %{subscription_link} को सब्सक्राइब
+          किया है। अगर आप अब अपडेट्स प्राप्त नहीं करना चाहते हैं, तो अनसब्सक्राइब
+          करने के लिए लिंक पर जाएँ।
+        text: आपको यह ईमेल इसलिए मिला है क्योंकि आपने %{subscription_name} को सब्सक्राइब
+          किया है। अगर आप अब अपडेट्स प्राप्त नहीं करना चाहते हैं, तो अनसब्सक्राइब
+          करने के लिए %{unsubscribe_url} लिंक पर जाएँ।
+      preface:
+        anon:
+          chapter:
+            html: 'नामरहित ने %{work_link_with_word_count} शब्दों का नया अध्याय पोस्ट
+              किया है:'
+            text: 'नामरहित ने %{work_title_with_word_count} का नया अध्याय पोस्ट किया
+              है:'
+          work:
+            backdated: 'नामरहित ने पूर्व-दिनांकित कार्य पोस्ट किया है:'
+            new: 'नामरहित ने नया कार्य पोस्ट किया है:'
+        named:
+          chapter:
+            html:
+              one: "%{creator_links} ने %{work_link_with_word_count} शब्दों का नया
+                अध्याय पोस्ट किया है:"
+              other: "%{creator_links} ने %{work_link_with_word_count} शब्दों का नया
+                अध्याय पोस्ट किया है:"
+            text:
+              one: "%{creators} ने %{work_title_with_word_count} का नया अध्याय पोस्ट
+                किया है:"
+              other: "%{creators} ने %{work_title_with_word_count} का नया अध्याय पोस्ट
+                किया है:"
+          work:
+            backdated:
+              html:
+                one: "%{creator_links} ने पूर्व-दिनांकित कार्य पोस्ट किया है:"
+                other: "%{creator_links} ने पूर्व-दिनांकित कार्य पोस्ट किया है:"
+              text:
+                one: "%{creators} ने पूर्व-दिनांकित कार्य पोस्ट किया है:"
+                other: "%{creators} ने पूर्व-दिनांकित कार्य पोस्ट किया है:"
+            new:
+              html:
+                one: "%{creators} ने नया कार्य पोस्ट किया है:"
+                other: "%{creators} ने नया कार्य पोस्ट किया है:"
+      subject:
+        anon:
+          chapter:
+            multiple_entries: "[%{app_name}] नामरहित ने %{work_title} का %{chapter_position}
+              अध्याय पोस्ट किया है %{more}"
+            one_entry: "[%{app_name}] नामरहित ने %{work_title} का %{chapter_position}
+              अध्याय पोस्ट किया है"
+          series:
+            chapter:
+              multiple_entries: "[%{app_name}] नामरहित ने %{series_title} शृंखला के
+                %{work_title} का %{chapter_position} अध्याय पोस्ट किया है %{more}"
+              one_entry: "[%{app_name}] नामरहित ने %{series_title} शृंखला के %{work_title}
+                का %{chapter_position} अध्याय पोस्ट किया है"
+          work:
+            multiple_entries: "[%{app_name}] नामरहित ने %{series_title} शृंखला में
+              %{work_title} पोस्ट किया है %{more}"
+        more:
+          one: और %{count} अन्य
+          other: और %{count} अन्य
+        named:
+          chapter:
+            multiple_entries:
+              one: "[%{app_name}] %{creators} ने %{work_title} का %{chapter_position}
+                अध्याय पोस्ट किया है %{more}"
+              other: "[%{app_name}] %{creators} ने %{work_title} का %{chapter_position}
+                अध्याय पोस्ट किया है %{more}"
+            one_entry:
+              one: "[%{app_name}] %{creators} ने %{work_title} का %{chapter_position}
+                अध्याय पोस्ट किया है"
+              other: "[%{app_name}] %{creators} ने %{work_title} का %{chapter_position}
+                अध्याय पोस्ट किया है"
+          series:
+            chapter:
+              multiple_entries:
+                one: "[%{app_name}] %{creators} ने %{series_title} शृंखला के %{work_title}
+                  का %{chapter_position} अध्याय पोस्ट किया है %{more}"
+                other: "[%{app_name}] %{creators} ने %{series_title} शृंखला के %{work_title}
+                  का %{chapter_position} अध्याय पोस्ट किया है %{more}"
+              one_entry:
+                one: "[%{app_name}] %{creators} ने %{series_title} शृंखला के %{work_title}
+                  का %{chapter_position} अध्याय पोस्ट किया है"
+                other: "[%{app_name}] %{creators} ने %{series_title} शृंखला के %{work_title}
+                  का %{chapter_position} अध्याय पोस्ट किया है"
+            work:
+              multiple_entries:
+                one: "[%{app_name}] %{creators} ने %{series_title} शृंखला में %{work_title}
+                  पोस्ट किया है %{more}"
+                other: "[%{app_name}] %{creators} ने %{series_title} शृंखला में %{work_title}
+                  पोस्ट किया है %{more}"
+              one_entry:
+                one: "[%{app_name}] %{creators} ने %{series_title} शृंखला में %{work_title}
+                  पोस्ट किया है"
+                other: "[%{app_name}] %{creators} ने %{series_title} शृंखला में %{work_title}
+                  पोस्ट किया है"
+          work:
+            multiple_entries:
+              one: "[%{app_name}] %{creators} ने %{work_title} पोस्ट किया है %{more}"
+              other: "[%{app_name}] %{creators} ने %{work_title} पोस्ट किया है %{more}"
+            one_entry:
+              one: "[%{app_name}] %{creators} ने %{work_title} पोस्ट किया है"
+              other: "[%{app_name}] %{creators} ने %{work_title} पोस्ट किया है"
+    challenge_assignment_notification:
+      any: कोई भी
+      assignment:
+        html: आपको AO3 पर %{link} चुनौती में निम्नलिखित अनुरोध सौंपा गया है!
+        text: आपको AO3 पर "%{collection_title}" (%{collection_url}) चुनौती में निम्नलिखित
+          अनुरोध सौंपा गया है!
+      description: विवरण
+      due: यह कार्यभार देय है
+      footer:
+        challenge_profile: चुनौती प्रोफ़ाइल पृष्ठ
+        html: आपको यह ईमेल इसलिए मिल रहा है क्योंकि आपने %{title} चुनौती के लिए साइन-अप
+          किया है। इस चुनौती के बारे में अधिक जानकारी और मंदकों की संपर्क जानकारी
+          के लिए, कृपया %{challenge_profile_link} पर जाएँ।
+        text: आपको यह ईमेल इसलिए मिल रहा है क्योंकि आपने %{title} चुनौती (%{url})
+          के लिए साइन-अप किया है। इस चुनौती के बारे में अधिक जानकारी और मंदकों के
+          संपर्क की जानकारी के लिए, कृपया %{challenge_profile_url} पर जाएँ।
+      look_up:
+        html: आप इस कार्यभार को %{your_assignments_link} पर देख सकते हैं।
+        text: आप इस कार्यभार को %{your_assignments_url} पर आपके Assignments (कार्यभार)
+          पृष्ठ से देख सकते हैं।
+        your_assignments: आपका Assignments (कार्यभार) पृष्ठ
+      optional_tags: वैकल्पिक टैग
+      prompt_url: प्रॉम्प्ट URL
+      prompts: प्रॉम्प्ट
+      recipient: प्राप्तकर्ता
+      recipient_missing: 'कोई नहीं: मदद के लिए मंदक से संपर्क करें!'
+      subject: "[%{app_name}][%{collection_title}] आपका कार्यभार!"
+    change_email:
+      confirm_change:
+        html:
+          one: यदि इस अनुरोध को आपने दर्ज़ किया था, तब अपने ईमेल बदलाव की पुष्टि करने
+            के लिए %{count} दिन के अंदर %{unconfirmed_email} पर अपना ईमेल जांच लें।
+            अगर आपको पुष्टिकरण ईमेल न मिला हो, या आप अन्य समस्याओं का सामना कर रहे
+            हैं, तब कृपया (सहायता टीम को संपर्क करें)।
+          other: यदि इस अनुरोध को आपने दर्ज़ किया था, तब अपने ईमेल बदलाव की पुष्टि
+            करने के लिए %{count} दिनों के अंदर %{unconfirmed_email} पर अपना ईमेल जांच
+            लें। अगर आपको पुष्टिकरण ईमेल नहीं मिला, या आप अन्य समस्याओं का सामना कर
+            रहे हैं, तब कृपया सहायता टीम को संपर्क करें।
+        text:
+          one: यदि इस अनुरोध को आपने दर्ज़ किया था, तब अपने ईमेल बदलाव की पुष्टि करने
+            के लिए %{count} दिन के अंदर %{unconfirmed_email} पर अपना ईमेल जांच लें।
+            अगर आपको पुष्टिकरण ईमेल न मिला हो, या आप अन्य समस्याओं का सामना कर रहे
+            हैं, तब कृपया सहायता टीम को संपर्क करें।
+          other: यदि इस अनुरोध को आपने दर्ज़ किया था, तब अपने ईमेल बदलाव की पुष्टि
+            करने के लिए %{count} दिनों के अंदर %{unconfirmed_email} पर अपना ईमेल जांच
+            लें। अगर आपको पुष्टिकरण ईमेल नहीं मिला, या आप अन्य समस्याओं का सामना कर
+            रहे हैं, तब कृपया सहायता टीम को संपर्क करें।
+      contact_policy_abuse: नीति व दुरुपयोग समिति को संपर्क करें
+      contact_support: सहायता टीम को संपर्क करें
+      email_change_form: ईमेल बदलाव प्रपत्र
+      made_request: किसी ने आपके %{app_name} खाते से जुड़े ईमेल पते को बदलने का अनुरोध
+        दर्ज़ किया है।
+      not_made_request:
+        html: यदि आपने यह अनुरोध नहीं किया था, तब आपके %{app_name} खाते की जानकारी
+          किसी अन्य व्यक्ति के पास हो सकती है जो आपके खाते तक बिना आपके सहमति से पहुँच
+          रहा हो। कृपया %{reset_password_link} अपना पासवर्ड बदलें या %{contact_policy_abuse_link}
+          नीति व दुरुपयोग समिति से संपर्क करें।
+        text: यदि आपने यह अनुरोध नहीं किया था, तब आपके %{app_name} खाते की जानकारी
+          किसी अन्य व्यक्ति के पास हो सकती है जो आपके खाते तक बिना आपके सहमति से पहुँच
+          रहा हो। कृपया %{reset_password_link} अपना पासवर्ड बदलें या %{contact_policy_abuse_link}
+          नीति व दुरुपयोग समिति से संपर्क करें।
+      reset_password: अपना पासवर्ड अभी बदलें
+      subject: "[%{app_name}] ईमेल बदलाव अनुरोध"
+      wrong_email:
+        html: यदि आपने गलत ईमेल पता लिखा है, तब आपको दोबारा %{email_change_form_link}
+          ईमेल बदलाव प्रपत्र भरना होगा।
+        text: यदि आपने ग़लत ईमेल पता लिखा है, तब आपको दोबारा %{email_change_form_link}
+          ईमेल बदलाव प्रपत्र भरना होगा।
+    change_username:
+      change_cooldown_html:
+        one: "%{app_name} उपयोगकर्ता के नाम दिन में केवल एक ही बार बदले जा सकते हैं।
+          आप अपना उपयोगकर्ता का नाम पुनः %{date} को बदल सकते हैं।"
+        other: "%{app_name} उपयोगकर्ता के नाम %{count} दिनों में केवल एक ही बार बदले
+          जा सकते हैं। आप अपना उपयोगकर्ता का नाम पुनः %{date} को बदल सकते हैं।"
+      changed_html: आपके %{app_name} खाते के उपयोकर्ता का नाम %{old_username} से %{new_username}
+        में बदल दिया गया है।
+      contact_policy_abuse: नीति और दुरुपयोग समिति से संपर्क करें
+      contact_support: सहायता से संपर्क करें।
+      did_not_make_change:
+        html: यदि आपने यह बदलाव नहीं किया है, तो किसी अन्य व्यक्ति के पास आपके %{app_name}
+          खाते तक पहुंच हो सकती है। कृपया %{reset_password_link} या %{contact_policy_abuse_link}।
+        text: 'यदि आपने यह बदलाव नहीं किया है, तो किसी अन्य व्यक्ति के पास आपके %{app_name}
+          खाते तक पहुंच हो सकती है। कृपया %{reset_password_link} से अभी अपना पासवर्ड
+          बदले या नीति और दुरुपयोग समिति से संपर्क करें: %{contact_policy_abuse_link}।'
+      effects:
+        html: आप %{refer_faq_link} से जान सकते हैं कि उपयोगकर्ता का नाम बदलने पर आपके
+          खाते पर क्या प्रभाव पड़ेगा। यदि आपको एक हफ्ते बाद अपने कार्य और बुकमार्क्स
+          पर अपना पुराना उपयोकर्ता नाम दिखने जैसे कोई तकनीकि समस्याएँ होती है तो कृपया
+          %{contact_support_link}।
+        text: 'आप हमारे अक्सर पूछे जाने वाले प्रश्नों से जान सकते हैं कि उपयोगकर्ता
+          का नाम बदलने पर आपके खाते पर क्या प्रभाव पड़ सकता है: %{refer_faq_link}।
+          यदि आपको एक हफ्ते बाद अपने कार्य और बुकमार्क्स पर अपना पुराना उपयोकर्ता
+          नाम दिखने जैसे कोई तकनीकि समस्याएँ होती है तो कृपया सहायता से संपर्क करें:
+          %{contact_support_link}।'
+      refer_faq: हमारे अक्सर पूछे जाने वाले प्रश्न पृष्ट को देखें।
+      reset_password: अभी अपना पासवर्ड बदलें
+      subject: "[%{app_name}] आपका उपयोगकर्ता का नाम बदल दिया गया है।"
+    claim_notification:
+      access:
+        contact_support: AO3 सहायता से सम्पर्क करें
+        html: संग्रह के आधार पर, हो सकता है कि आपके कार्यों को केवल पंजीकृत उपयोगकर्ताओं
+          तक ही सीमित रखा गया हो (उन्हें Google खोजों से बाहर रखने के लिए)। यदि यह
+          मामला है, तो कार्य केवल लॉग-इन उपयोगकर्ताओं द्वारा ही पहुंच योग्य होंगे
+          जब तक कि आप उन्हें पूरी तरह से दृश्यमान बनाना नहीं चुनते। अपने कार्यों को
+          अनलॉक करने, अलग करने या हटाने में सहायता के लिए, कृपया %{contact_support_link}।
+        text: संग्रह के आधार पर, हो सकता है कि आपके कार्यों को केवल पंजीकृत उपयोगकर्ताओं
+          तक ही सीमित रखा गया हो (उन्हें Google खोजों से बाहर रखने के लिए)। यदि यह
+          मामला है, तो कार्य केवल लॉग-इन उपयोगकर्ताओं द्वारा ही पहुंच योग्य होंगे
+          जब तक कि आप उन्हें पूरी तरह से दृश्यमान बनाना नहीं चुनते। अपने कार्यों को
+          अनलॉक करने, अनाथ करने या हटाने में सहायता के लिए, कृपया %{support_url} पर
+          AO3 सहायता से संपर्क करें।
+      email_tips: यदि आप हमसे संपर्क कर रहे हैं, तो कृपया अपने सुरक्षित संपर्कों की
+        सूची में @transformativeworks.org से ईमेल पते जोड़ें और हमारे उत्तर के लिए
+        अपने स्पैम फ़ोल्डर्स की जांच करें।
+      introduction:
+        ao3_name: Archive of Our Own – AO3 (हमारा अपना संग्रह)
+        html: आपको यह ईमेल इसलिए प्राप्त हो रहा है क्योंकि आपके पास एक फैनवर्क्स संग्रह
+          में काम था जिसे %{open_doors_name_link} द्वारा %{app_link} में आयात किया
+          गया है। क्योंकि यह ईमेल पता आयातित संग्रह पर पंजीकृत पते से जुड़ा हुआ है,
+          संबंधित फैनवर्क्स (नीचे सूचीबद्ध) स्वचालित रूप से आपके AO3 खाते में जोड़
+          दिए गए हैं।
+        open_doors_name: Open Doors (खुले दरवाज़े)
+        text: 'आपको यह ईमेल इसलिए प्राप्त हो रहा है क्योंकि आपके पास एक फैनवर्क्स
+          संग्रह में काम था जिसे Open Doors (खुले दरवाज़े) (%{open_doors_url}) द्वारा
+          Archive of Our Own – AO3 (हमरा अपना संग्रह): %{app_url} में आयात किया गया
+          है। क्योंकि यह ईमेल पता आयातित संग्रह पर पंजीकृत पते से जुड़ा हुआ है, संबंधित
+          फैनवर्क्स (नीचे सूचीबद्ध) स्वचालित रूप से आपके AO3 खाते में जोड़ दिए गए
+          हैं।'
+      mistake:
+        contact_open_doors: खुले दरवाज़े से सम्पर्क करें
+        html: यदि यह एक गलती है और ये आपके कार्य नहीं हैं, तो कृपया इन्हें न हटाएं!
+          कृपया केवल %{contact_open_doors_link} और हम इसे सुलझा लेंगे।
+        text: यदि यह एक गलती है और ये आपके कार्य नहीं हैं, तो कृपया इन्हें न हटाएं!
+          कृपया केवल खुले दरवाज़े से सम्पर्क करें (%{open_doors_url}) और हम इसे सुलझा
+          लेंगे।
+      more_info:
+        ao3_news: AO3 न्यूज़
+        contact_support: AO3 सहायता से सम्पर्क करें
+        faq_page: FAQ (अक्सर पूछे जाने वाले प्रश्न) पृष्ठ
+        html: आप %{ao3_news_link} पर हालिया संग्रह चालों के बारे में घोषणाएं पढ़ सकते
+          हैं, और खुले दरवाज़े के %{faq_page_link} या %{tutorial_page_link} पर अतिरिक्त
+          जानकारी पा सकते हैं। ऐसे किसी भी प्रश्न के लिए जिसका उत्तर FAQ, ट्यूटोरियल
+          या इस ईमेल में नहीं दिया गया है, कृपया %{contact_support_link}।
+        text: आप AO3 न्यूज़ (%{news_url}) पर हालिया संग्रह चालों के बारे में घोषणाएँ
+          पढ़ सकते हैं, और खुले दरवाज़े के FAQ पेज (%{open_doors_faq_url}) या ट्यूटोरियल
+          पेज (%{open_doors_tutorial_url}) पर अतिरिक्त जानकारी पा सकते हैं। FAQ, ट्यूटोरियल
+          या इस ईमेल में उत्तर न दिए गए किसी भी प्रश्न के लिए, कृपया %{support_url}
+          पर सहायता से संपर्क करें।
+        tutorial_page: ट्यूटोरियल पृष्ठ
+      other_works:
+        contact_open_doors: खुले दरवाज़े से सम्पर्क करें
+        html: यदि आपके पास किसी ईमेल पते के तहत आयातित संग्रह पर अन्य कार्य हैं, जिन्हें
+          आप अब एक्सेस नहीं कर सकते हैं, तो कृपया %{contact_open_doors_link} किसी
+          भी जानकारी के साथ जो आपकी पहचान को सत्यापित करने में मदद कर सके।
+        text: यदि आपके पास किसी ईमेल पते के तहत आयातित संग्रह पर अन्य कार्य हैं, जिन्हें
+          आप अब एक्सेस नहीं कर सकते हैं, तो कृपया किसी भी जानकारी के लिए खुले दरवाज़े
+          से संपर्क करें किसी भी जानकारी के साथ जो आपकी पहचान को सत्यापित करने में
+          मदद कर सकती है।
+      questions:
+        contact_support: AO3 सहायता से सम्पर्क करें
+        html: अन्य पूछताछ के लिए, कृपया %{contact_support_link}।
+        text: अन्य पूछताछ के लिए, कृपया %{support_url} पर AO3 सहायता से संपर्क करें।
+      redirects:
+        faq: FAQ (अक्सर पूछे जाने वाले प्रश्न)
+        html: अगर आपने इन कार्यों की प्रतियाँ को पहले अपलोड कर दिया है और आपने URL
+          से आयात वैशिष्ट्य का उपयोग %{negation} किया है, तो AO3 पर एक ही कार्य की
+          दो प्रतियाँ होगी। क्योंकि AO3 पर प्रतिलिपि कार्य नही स्वीकारे जाते हैं,
+          इन में से एक कार्य को कृपया डिलीट करें। यह आप पर है कि आप इनमें से किस प्रतिलिपि
+          को रखना चाहते हैं, लेकिन यदि आप खुले दरवाज़े द्वारा आयात किया हुआ प्रतिलिपि
+          को डिलीट करते हैं, तो दूसरी प्रतिलिपि आयात किए हुए आर्काइव्स के संग्रह में
+          शामिल करने के बारे में सोचें। कार्यों को डिलीट करने या उन्हें संग्रहों में
+          शामिल करने की प्रक्रियों पर प्रश्नों के लिए, AO3 के %{faq_link} को देखें।
+        negation: नहीं
+        text: 'अगर आपने इन कार्यों की प्रतियाँ को पहले अपलोड कर दिया है और आपने URL
+          से आयात वैशिष्ट्य का उपयोग नहीं किया है, तो AO3 पर एक ही कार्य की दो प्रतियाँ
+          होगी। क्योंकि AO3 पर प्रतिलिपि कार्य नही स्वीकारे जाते हैं, इन में से एक
+          कार्य को कृपया डिलीट करें। यह आप पर है कि आप इनमें से किस प्रतिलिपि को रखना
+          चाहते हैं, लेकिन यदि आप खुले दरवाज़े द्वारा आयात किया हुआ प्रतिलिपि को डिलीट
+          करते हैं, तो दूसरी प्रतिलिपि आयात किए हुए आर्काइव्स के संग्रह में शामिल
+          करने के बारे में सोचें। कार्यों को डिलीट करने या उन्हें संग्रहों में शामिल
+          करने की प्रक्रियों पर प्रश्नों के लिए, AO3 के FAQ (अक्सर पूछे जाने वाले
+          प्रश्न): %{faq_url} को देखें।'
+      subject: "[%{app_name}] अपलोड किए गए कार्य"
+      work_info:
+        html: "%{work_link} (%{fandom})"
+        text:
+          no_fandom: '- "%{work_title}" (%{work_url})'
+          with_fandom: '- "%{work_title}" (%{work_url}) (%{fandom})'
+      works_by: 'ये कार्य ईमेल के अंतर्गत लिखें गए हैं: %{email}'
+    creatorship_notification_archivist:
+      explanation: क्योंकि वे अपने Open Doors (खुले दरवाज़े) संग्राहकों के पद पर अपनी
+        आधिकारिक क्षमता में कार्य कर रहे हैं, उन्हें - बिना किसी आमंत्रण के - आपको
+        जोड़ने की अनुमति है, यद्यपि आपने सह-निर्माण अक्षम किए हों।
+      html:
+        creation: "%{pseud_links} द्वारा %{creation_link}"
+        edit_chapter: अध्याय संपादित करें
+        edit_series: शृंखला संपादित करें
+        edit_work: कार्य संपादित करें
+        remove_chapter: यदि आपको गलती से जोड़ा गया है या आप एक निर्माता के रूप में
+          सूचीबद्ध नहीं होना चाहते हैं, तो आप खुद को निर्माता के रूप से हटाने के लिए
+          %{edit_chapter_link} कर सकते हैं।
+        remove_series: यदि आपको गलती से जोड़ा गया है या आप एक निर्माता के रूप में
+          सूचीबद्ध नहीं होना चाहते हैं, तो आप खुद को निर्माता के रूप से हटाने के लिए
+          %{edit_series_link} कर सकते हैं।
+        remove_work: यदि आपको गलती से जोड़ा गया है या आप एक निर्माता के रूप में सूचीबद्ध
+          नहीं होना चाहते हैं, तो आप खुद को निर्माता के रूप में हटाने के लिए %{edit_work_link}
+          कर सकते हैं।
+      intro_chapter: 'प्रयोक्ता %{archivist} ने आपके उपनाम %{pseud} को निम्नलिखित
+        अध्याय में सह-निर्माता के रूप में जोड़ा है:'
+      intro_series: 'प्रयोक्ता %{archivist} ने आपके उपनाम %{pseud} को निम्नलिखित शृंखला
+        में सह-निर्माता के रूप में जोड़ा है:'
+      intro_work: 'प्रयोक्ता %{archivist} ने आपके उपनाम %{pseud} को निम्नलिखित कार्य
+        में सह-निर्माता के रूप में जोड़ा है:'
+      subject: "[%{app_name}] एक संग्राहक ने आपको सह-निर्माता के रूप में जोड़ा है"
+      text:
+        creation: "%{pseuds} द्वारा %{title} (%{url})"
+        remove_chapter: 'यदि आपको गलती से जोड़ा गया है या आप एक निर्माता के रूप में
+          सूचीबद्ध नहीं होना चाहते हैं, तो आप स्वयं को निर्माता के रूप से हटाने के
+          लिए अध्याय को संपादित कर सकते हैं: %{url}'
+        remove_series: 'यदि आपको गलती से जोड़ा गया है या आप एक निर्माता के रूप में
+          सूचीबद्ध नहीं होना चाहते हैं, तो आप स्वयं को निर्माता के रूप से हटाने के
+          लिए शृंखला को संपादित कर सकते हैं: %{url}'
+        remove_work: 'यदि आपको गलती से जोड़ा गया है या आप एक निर्माता के रूप में सूचीबद्ध
+          नहीं होना चाहते हैं, तो आप स्वयं को निर्माता के रूप से हटाने के लिए कार्य
+          संपादित कर सकते हैं: %{url}'
+    creatorship_notification:
+      explanation: जब आप किसी काम के सह-निर्माता होते हैं, तो आपकी सह-निर्माण सेटिंग
+        पर ध्यान दिए बिना आपको नए अध्यायों में जोड़ा जा सकता है। आपको किसी भी श्रृंखला
+        में भी जोड़ा जाएगा जिसमें यह काम जोड़ा गया है।
+      html:
+        creation: "%{pseud_links} द्वारा %{creation_link}"
+        edit_chapter: अध्याय संपादित करें
+        edit_series: श्रृंखला संपादित करें
+        remove_chapter: अगर आपको गलती से जोड़ा गया है या आप एक निर्माता के रूप में
+          सूचीबद्ध नहीं होना चाहते हैं, तो आप खुद को निर्माता के रूप से हटाने के लिए
+          %{edit_chapter_link} कर सकते हैं।
+        remove_series: अगर आपको गलती से जोड़ा गया है या आप एक निर्माता के रूप में
+          सूचीबद्ध नहीं होना चाहते हैं, तो आप खुद को निर्माता के रूप में हटाने के
+          लिए %{edit_series_link} कर सकते हैं।
+      intro_chapter: 'उपयोगकर्ता %{adding_user} ने आपके छद्म %{pseud} को निम्नलिखित
+        अध्याय में सह-निर्माता के रूप में सूचीबद्ध किया है:'
+      intro_series: 'प्रयोक्ता %{adding_user} ने आपके उपनाम %{pseud} को निम्नलिखित
+        श्रृंखला में सह-निर्माता के रूप में सूचीबद्ध किया है:'
+      subject: "[%{app_name}] आपको सह-निर्माता के तौर पर जोड़ा गया है"
+      text:
+        creation: "%{title} (%{url}) %{pseuds} द्वारा"
+        remove_chapter: 'यदि आपको गलती से जोड़ा गया है या आप एक निर्माता के रूप में
+          सूचीबद्ध नहीं होना चाहते हैं, तो आप खुद को निर्माता के रूप में हटाने के
+          लिए अध्याय को संपादित कर सकते हैं: %{url}'
+        remove_series: 'यदि आपको गलती से जोड़ा गया है या आप एक निर्माता के रूप में
+          सूचीबद्ध नहीं होना चाहते हैं, तो आप खुद को निर्माता के रूप में हटाने के
+          लिए श्रृंखला को संपादित कर सकते हैं: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} जो %{pseud_links} के द्वारा रुचित है"
+        instructions: आप इस अनुरोध को अपने %{page_name} पेज पर स्वीकार या इंकार कर
+          सकते है।
+        page_name: Co-Creator Requests (सह-निर्माता अनुरोध)
+      intro_chapter: 'उपयोगकर्ता %{inviting_user} ने आपके उपनाम %{pseud} को निम्नलिखित
+        अध्याय पर सह-निर्माता के रूप में सूचीबद्ध होने के लिए आमंत्रित किया है:'
+      intro_series: 'उपयोगकर्ता %{inviting_user} ने आपके उपनाम %{pseud} को निम्नलिखित
+        श्रृंखला पर सह-निर्माता के रूप में सूचीबद्ध होने के लिए आमंत्रित किया है:'
+      intro_work: 'उपयोगकर्ता %{inviting_user} ने आपके उपनाम %{pseud} को निम्नलिखित
+        कार्य पर सह-निर्माता के रूप में सूचीबद्ध होने के लिए आमंत्रित किया है:'
+      subject: "[%{app_name}] आपको सह-निर्माता बनने का अनुरोध मिला है"
+      text:
+        creation: "%{title} (%{url}), %{pseuds} के द्वारा रचित"
+        instructions: 'आप इस अनुरोध को अपने Co-Creator Requests (सह-निर्माता अनुरोध)
+          पेज पर स्वीकार या इंकार कर सकते है: %{url}'
+    delete_work_notification:
+      attachment: आपके कार्य का नकल, संदर्भ हेतु जुड़ा हुआ है।
+      deleted_other:
+        html: आपका कार्य %{title}, %{pseud} के अनुरोध पर मिटा दिया गया था।
+        text: आपका कार्य "%{title}", %{pseud} के अनुरोध पर मिटा दिया गया था।
+      deleted_yourself:
+        html: आपका कार्य %{title}, आपके अनुरोध पर मिटा दिया गया था।
+        text: आपका कार्य "%{title}", आपके अनुरोध पर मिटा दिया गया था।
+      questions:
+        html: यदि आपके कोई प्रश्न हैं, तो कृपया %{support}।
+        text: यदि आपके कोई प्रश्न हैं, तो कृपया %{support} (%{url})।
+      subject: "[%{app_name}] आपका कार्य मिटा दिया गया है"
+      support: सहयोग टीम से संपर्क करें
+    invalid_signup_notification:
+      found_invalid:
+        html: हमें आपके उपहार विनिमय में कुछ अमान्य साईन-अप्स मिले %{collection_link}।
+          जब तक इन्हें साफ़ नहीं कर लिया जाता, तब तक संभावित मैच जेनरेट नहीं किए जा
+          सकते हैं।
+        text: हमें आपके उपहार विनिमय में कुछ अमान्य साईन-अप्स मिले "%{collection_title}"
+          (%{collection_url})। जब तक इन्हें साफ़ नहीं कर लिया जाता, तब तक संभावित
+          मैच जेनरेट नहीं किए जा सकते।
+      see_details:
+        challenge_matching_help: चुनौती मैचिंग के लिए मदद
+        html: अमान्य साईन-अप्स संभवतः डुप्लिकेट हो सकते हैं, या वे आपकी चुनौती के
+          लिए आपके द्वारा निर्धारित आवश्यकताओं को पूरा न कर सकते हों। दुर्भाग्यवश,
+          इन्हें ठीक करने का कोई स्वचालित तरीका नहीं है, इसलिए आपको इन्हें स्वयं हाथ
+          से एडिट या डीलीट करना पड़ेगा। अधिक जानकारी के लिए, %{challenge_matching_help_link}
+          देखें।
+        text: अमान्य साईन-अप्स संभवतः डुप्लिकेट हो सकते हैं या वे आपकी चुनौती के लिए
+          आपके द्वारा निर्धारित आवश्यकताओं को पूरा न कर सकते हों। दुर्भाग्यवश, इन्हें
+          ठीक करने का कोई स्वचालित तरीका नहीं है, इसलिए आपको इन्हें स्वयं हाथ से एडिट
+          या डीलीट करना पड़ेगा। अधिक जानकारी के लिए, चुनौती मैचिंग सहायता देखें %{challenge_matching_help_link}।
+      signup: 'साईनअप #%{signup_id}'
+      signups_here: 'अमान्य साईन-अप्स यहाँ दिए गए हैं:'
+      subject: "[%{app_name}][%{collection_title}] अमान्य साईन-अप्स पाए गए हैं"
+    invited_to_collection_notification:
+      approve:
+        collection_items_page: Collection Items (संग्रह की वस्तुएँ) पृष्ठ
+        html: इस अनुरोध को स्वीकार या अस्वीकार करने के लिए, कृपया अपने %{collection_items_page_link}
+          पर जाएँ।
+        text: 'इस अनुरोध को स्वीकार या अस्वीकार करने हेतु, कृपया अपने Collection Items
+          (संग्रह की वस्तुएँ) पृष्ठ: %{collection_items_page_url} पर जाएँ।'
+      subject: "[%{app_name}][%{collection_title}] संग्रह में कार्य शामिल करने के
+        लिए अनुरोध"
+      would_like_to_include:
+        html: "%{collection_link} के संग्रह अनुरक्षक आपका %{work_link} कार्य, अपने
+          संग्रह में शामिल करना पसंद करेंगे!"
+        text: '"%{collection_title}" (%{collection_url}) के संग्रह अनुरक्षक आपका "%{work_title}"
+          (%{work_url}) कार्य अपने संग्रह में शामिल करना पसंद करेंगे!'
+    prompter_notification:
+      a_response_to_your_prompt:
+        collection:
+          html: आपके प्रॉम्प्ट का उत्तर AO3 पर %{collection_link} संग्रह में पोस्ट
+            किया गया है!
+          text: आपके प्रॉम्प्ट का एक जवाब AO3 पर "%{collection_title}" संग्रह (%{collection_url})
+            में पोस्ट किया गया है!
+        no_collection: आपके प्रॉम्प्ट का उत्तर AO3 पर पोस्ट किया गया है!
+      subject: "[%{app_name}] आपके प्रॉम्प्ट का उत्तर"
+    recipient_notification:
+      collection:
+        html: आप के लिए एक उपहार कार्य AO3 पर %{collection_link} संग्रह में पोस्ट
+          किया गया है!
+        text: आप के लिए एक उपहार कार्य AO3 पर "%{collection_title}" संग्रह (%{collection_url})
+          में पोस्ट किया गया है!
+      no_collection: आप के लिए एक उपहार कार्य AO3 पर पोस्ट किया गया है!
+      subject:
+        collection: "[%{app_name}][%{collection_title}] आप के लिए एक उपहार कार्य %{collection_title}
+          से।"
+        no_collection: "[%{app_name}] आप के लिए एक उपहार कार्य"
+  users:
+    mailer:
+      confirmation_instructions:
+        confirm_by:
+          html: यदि आप अपना अनुरोध %{date} तक पुष्टि नहीं करते हैं, तो इस ईमेल में
+            दिया गया लिंक अमान्य हो जाएगा और आपको दोबारा %{email_change_form_link}
+            अपने ईमेल परिवर्तन की पुष्टि करनी होगी।
+          text: 'यदि आप %{date} तक अपना अनुरोध पुष्टि नहीं करते हैं, तो इस ईमेल में
+            दिया गया लिंक अमान्य हो जाएगा और आपको ईमेल परिवर्तन फ़ॉर्म फिर से भरना
+            होगा: %{email_change_form_url}।'
+        confirm_email_change: अपने ईमेल परिवर्तन की पुष्टि करे।
+        did_not_make_request: यदि आपने यह अनुरोध नहीं किया है, तो आप इस ईमेल को नज़रअंदाज़
+          करके हटा सकते हैं। संभव है कि किसी और ने गलती से आपका ईमेल पता दर्ज कर दिया
+          हो।
+        email_change_form: ईमेल परिवर्तन फॉर्म जमा करें।
+        made_request:
+          html:
+            one: यदि आपने यह अनुरोध किया है, तो कृपया लॉगिन करें और %{count} दिन के
+              भीतर %{confirm_email_change_link} खोलें।
+            other: यदि आपने यह अनुरोध किया है, तो कृपया लॉगिन करें और %{count} दिनों
+              के भीतर %{confirm_email_change_link} खोलें।
+          text:
+            one: 'यदि आपने यह अनुरोध किया है, तो कृपया लॉग इन करें और %{count} दिन
+              के भीतर अपना ईमेल परिवर्तन पुष्टि करें: %{confirm_email_change_url}।'
+            other: 'यदि आपने यह अनुरोध किया है, तो कृपया लॉग इन करें और %{count} दिनों
+              के भीतर अपना ईमेल परिवर्तन पुष्टि करें: %{confirm_email_change_url}।'
+        request_to_change_email_html: किसी ने %{app_name} खाते %{username} से जुड़े
+          ईमेल पते को बदलकर इस ईमेल पते पर करने का अनुरोध किया है।
+        subject: "[%{app_name}] अपने ईमेल परिवर्तन की पुष्टि करें"
+      password_change:
+        changed: आपके %{app_name} खाते का पासवर्ड %{date} को बदला गया है।
+        did_not_make_change:
+          contact_policy_abuse: नीति और दुरुपयोग से संपर्क करें
+          html: यदि आपने यह बदलाव नहीं किया है, तो किसी और को आपके %{app_name} खाते
+            की पहुँच हो सकती है। कृपया %{reset_password_link} या %{contact_policy_abuse_link}
+            पर जाएँ।
+          reset_password: अभी अपना पासवर्ड रिसेट करें।
+          text: 'यदि आपने यह बदलाव नहीं किया है, तो किसी और को आपके %{app_name} खाते
+            की पहुँच हो सकती है। कृपया अपना पासवर्ड अभी रिसेट करें (%{reset_password_link})
+            या नीति और दुरुपयोग से संपर्क करें: %{contact_policy_abuse_link}।'
+        made_change:
+          contact_support: सहायता से संपर्क करें
+          html: यदि यह बदलाव आपने की है, तो आप %{login_link} पर जा सकते हैं या अगर
+            आप अपना पासवर्ड भूल गए हैं तो आप %{reset_password_link} पर जा सकते हैं।
+            यदि आप कोई तकनीकी समस्या का सामना कर रहें हैं, तो %{contact_support_link}
+            से कृपया संपर्क करें।
+          login: अपने नए पासवर्ड से लोग इन करें
+          reset_password: अपना पासवर्ड रिसेट करें
+          text: 'यदि यह बदलाव आपने की है, तो आप अपने नए पासवर्ड से लॉग इन कर सकते
+            हैं (%{login_url}) या अगर आप अपना पासवर्ड भूल गए हैं अपना पासवर्ड रिसेट
+            कर सकते हैं (%{reset_password_url})। यदि आप काई तकनीकी समस्याओं का सामना
+            कर रहे हैं, तो कृपया सहायता से संपर्क करें: %{contact_support_url}'
+        subject: "[%{app_name}] आपका पासवर्ड बदला गया है।"
+      reset_password_instructions:
+        change_your_password: अपना पासवर्ड बदलें
+        choose_new_password_imperative: इस लिंक का उपयोग करके नया पासवर्ड चुनें।
+        choose_new_password_imperative_modal: इस लिंक का उपयोग करके नया पासवर्ड चुनें।
+        contact_policy_abuse: नीति और दुरुपयोग टीम से संपर्क करें
+        contact_policy_abuse_instructions:
+          html: यदि आपको किसी अन्य कारण से लगता है कि किसी और के पास आपके %{app_name}
+            खाते का अभिगम है तो कृपया सभी संबंधित जानकारी के साथ %{contact_policy_abuse_link}
+            करें।
+          text: यदि आपको किसी अन्य कारण से लगता है कि किसी और के पास आपके %{app_name}
+            खाते का अभिगम है तो कृपया सभी संबंधित जानकारी के साथ नीति और दुरुपयोग
+            टीम से संपर्क करें %{contact_policy_abuse_link}।
+        contact_support: सहायता टीम से संपर्क करें
+        ignore_if_not_requested:
+          html: "%{safely_ignore_bold} संभव है कि किसी और ने गलती से आपका ईमेल पता
+            दर्ज कर दिया हो।"
+          safely_ignore: यदि आपने यह अनुरोध नहीं किया है, तो आप इस ईमेल को सुरक्षित
+            रूप से नज़रअंदाज़ कर सकते हैं और हटा सकते हैं।
+          text: यदि आपने यह अनुरोध नहीं किया है, तो आप इस ईमेल को सुरक्षित रूप से
+            नज़रअंदाज़ कर सकते हैं और हटा सकते हैं। संभव है कि किसी और ने गलती से
+            आपका ईमेल पता दर्ज कर दिया हो।
+        instructions:
+          html: यदि इस ईमेल में दिए गए लिंक की अवधि समाप्त हो गई है, तो आपको %{new_password_reset_link}
+            करना होगा। अगर आपको तकनीकी समस्याओं का सामना करना पड़ रहा है, तो कृपया
+            कुछ घंटों तक प्रतीक्षा करें और फिर से प्रयास करें। यदि एक दिन से अधिक
+            हो गया है, तो आगे की सहायता के लिए %{contact_support_link} करें।
+          intro:
+            one: अगर आपने यह अनुरोध किया है, तो कृपया %{count} दिन के भीतर %{choose_new_password_link_imperative}
+              करें।
+            other: अगर आपने यह अनुरोध किया है, तो कृपया %{count} दिनों के भीतर %{choose_new_password_link_imperative}
+              करें।
+          text:
+            one: 'यदि आपने यह अनुरोध किया है, तो कृपया %{count} दिनों के भीतर इस लिंक
+              का उपयोग करके नया पासवर्ड चुनें: %{choose_new_password_url}।'
+            यदि: 'यदि इस ईमेल में दिए गए लिंक की अवधि समाप्त हो गई है, तो आपको नया
+              पासवर्ड रीसेट अनुरोध करना होगा: %{new_password_reset_url}। यदि आपको
+              तकनीकी समस्याओं का सामना करना पड़ रहा है, तो कृपया कुछ घंटों तक प्रतीक्षा
+              करें और फिर से प्रयास करें। यदि एक दिन से अधिक हो गया है, तो आगे की
+              सहायता के लिए सपोर्ट से संपर्क करें: %{contact_support_url}।'
+        intro: किसी ने आपके %{app_name} खाते के पासवर्ड को रीसेट करने का अनुरोध किया
+          है।
+        new_password_reset: नया पासवर्ड रीसेट करने के लिए अनुरोध करें
+        reset_emails_clarification:
+          html: आपको ऐसे पासवर्ड रीसेट ईमेल प्राप्त होना, जिनका आपने अनुरोध नहीं किया,
+            यह ज़रूरी नहीं है कि आपका %{app_name} खाता खतरे में है। जब तक आपके ईमेल
+            खाते का अभिगम सिर्फ आपके पास है, आपके %{app_name} अकाउंट पर कोई असर नहीं
+            पड़ेगा, और सिर्फ पासवर्ड रीसेट ईमेल मिलने से आपका पासवर्ड अपने आप नहीं
+            बदलेगा। हालाँकि, आप फिर भी %{choose_new_password_link_modal} कर सकते हैं
+            या लॉग इन करके %{change_your_password_link} कर सकते हैं। इनमें से कोई
+            भी विकल्प चुनने पर आपका खाता सभी डिवाइसों पर सभी सत्रों से लॉग आउट हो
+            जाएगा।
+          text: 'आपको ऐसे पासवर्ड रीसेट ईमेल प्राप्त होना, जिनका आपने अनुरोध नहीं
+            किया, यह ज़रूरी नहीं है कि आपका %{app_name} खाता खतरे में है। जब तक आपके
+            ईमेल खाते का अभिगम सिर्फ आपके पास है, आपके %{app_name} खाते पर कोई असर
+            नहीं पड़ेगा, और सिर्फ पासवर्ड रीसेट ईमेल मिलने से आपका पासवर्ड अपने आप
+            नहीं बदलेगा। हालाँकि, आप इस लिंक (%{choose_new_password_url}) का उपयोग
+            करके नया पासवर्ड चुन सकते हैं, या लॉग इन करके यहाँ अपना पासवर्ड बदल सकते
+            हैं: %{change_your_password_url}। इनमें से कोई भी विकल्प चुनने पर आपका
+            खाता सभी डिवाइसों पर सभी सत्रों से लॉग आउट हो जाएगा।'
+        subject: "[%{app_name}] पासवर्ड को रीसेट करें।"

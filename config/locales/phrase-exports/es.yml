@@ -1,2 +1,1036 @@
 ---
-es: {}
+es:
+  activerecord:
+    attributes:
+      work:
+        chapter_total_display: Capítulos
+        summary: Resumen
+    models:
+      archive_warning:
+        one: Advertencia
+        other: Advertencias
+      category:
+        one: Categoría
+        other: Categorías
+      chapter:
+        one: Capítulo
+        other: Capítulos
+      character:
+        one: Personaje
+        other: Personajes
+      fandom:
+        one: Fandom
+        other: Fandoms
+      freeform:
+        one: Etiqueta adicional
+        other: Etiquetas adicionales
+      rating:
+        one: Rating
+        other: Ratings
+      relationship:
+        one: Relación
+        other: Relaciones
+      series:
+        one: Serie
+        other: Series
+  comment_mailer:
+    comment_notification_footer:
+      comment_thread:
+        html: Dirigirse al hilo que inicia este comentario
+        text: 'Dirigirse al hilo que inicia este comentario: %{url}'
+      last_edited: 'Última edición: %{datetime}'
+      parent_thread:
+        html: Dirigirse al hilo donde pertenece este comentario
+        text: 'Dirigirse al hilo donde pertenece este comentario: %{url}'
+      posted: 'Publicado: %{datetime}'
+      read_all_comments:
+        chapter:
+          html: Leer todos los comentarios en capítulo %{position} de %{title}
+          text: 'Leer todos los comentarios en capítulo %{position} de "%{title}":
+            %{url}'
+        other:
+          html: Leer todos los comentarios en %{title}
+          text: 'Leer todos los comentarios "%{title}": %{url}'
+        tag:
+          html: 'Leer todos los comentarios en %{tag}: %{url}'
+      reply:
+        html: Responder a este comentario
+        text: 'Responder este comentario: %{url}'
+      review:
+        html: Revisar comentarios en %{title}
+        text: 'Revisar comentarios en "%{title}": %{url}'
+      unreviewed:
+        admin_post: Los comentarios en esta publicación de noticias son moderados
+          y no aparecerán hasta que sean aprobados.
+        work: Los comentarios en esta obra son moderados y no aparecerán hasta que
+          sean aprobados por quien creó la obra.
+        work_owner: Los comentarios en esta obra son moderados y no aparecerán hasta
+          que los apruebes.
+    comment_notification:
+      chapter:
+        titled: 'Capítulo %{position}: %{title}'
+        untitled: Capítulo %{position}
+      content:
+        chapter:
+          html: "%{pseud_link} dejó el siguiente comentario en %{chapter_link} de
+            %{work_link}:"
+          titled_text: "%{pseud} dejó el siguiente comentario en capítulo %{chapter_position}:
+            %{chapter_title} de %{work} (%{chapter_url}):"
+          untitled_text: "%{pseud} dejó el siguiente comentario en capítulo %{chapter_position}
+            de %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} dejó el siguiente comentario en %{commentable_link}:"
+          text: "%{pseud} dejó el siguiente comentario en %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} dejó el siguiente comentario en la etiqueta %{tag_link}:"
+          text: "%{pseud} dejó el siguiente comentario en la etiqueta %{tag} (%{tag_url}):"
+      subject:
+        chapter: "[%{app_name}] Comentario en el capítulo %{position} de %{title}"
+        other: "[%{app_name}] Comentario en %{title}"
+        tag: "[%{app_name}] Comentario en la etiqueta %{name}"
+    comment_reply_notification:
+      chapter:
+        titled: 'Capítulo %{position}: %{title}'
+        untitled: Capítulo %{position}
+      commenter_edited_response:
+        text: "%{commenter} editó su respuesta a:"
+      commenter_responded:
+        html: "%{pseud_link} respondió a tu comentario en la etiqueta %{tag_link}:"
+        text: "%{commenter} respondió:"
+      content:
+        chapter:
+          html: "%{pseud_link} respondío a tu comentario en %{chapter_link} de %{work_link}:"
+          titled_text: "%{pseud} respondió a tu comentario en capítulo %{chapter_position}:
+            %{chapter_title} de %{work} (%{chapter_url}):"
+          untitled_text: "%{pseud} respondió a tu comentario en capítulo %{chapter_position}
+            de %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} respondió a tu comentario en %{commentable_link}:"
+          text: "%{pseud} respondió a tu comentario en %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} respondió a tu comentario en la etiqueta %{tag_link}:"
+          text: "%{pseud} respondió a tu comentario en la etiqueta %{tag} (%{tag_url}):"
+      subject:
+        chapter: "%{app_name}] Respondió a tu comentario en capítulo %{position} de
+          %{title}"
+        other: "[%{app_name}] Respondió a tu comentario en %{title}"
+        tag: "[%{app_name}] Respondió a tu comentario en la etiqueta %{name}"
+      you_wrote: 'Escribiste:'
+    comment_reply_sent_notification:
+      chapter:
+        titled: 'Capítulo %{position}: %{title}'
+        untitled: Capítulo %{position}
+      commenter_wrote:
+        html: "%{commenter_link} escribió:"
+        text: "%{commenter} escribió:"
+      content:
+        chapter:
+          html: 'Respondiste un comentario en %{chapter_link} de %{work_link}:'
+          titled_text: 'Respondiste un comentario en capítulo %{chapter_position}:
+            %{chapter_title} de %{work} (%{chapter_url}):'
+          untitled_text: 'Respondiste un comentario en capítulo %{chapter_position}
+            de %{work} (%{chapter_url}):'
+        other:
+          html: 'Respondiste un comentario en %{commentable_link}:'
+          text: 'Respondiste un comentario en %{title} (%{commentable_url}):'
+        tag:
+          html: 'Respondiste un comentario en la etiqueta %{tag_link}:'
+          text: 'Respondiste un comentario en la etiqueta %{tag} (%{tag_url}):'
+      subject:
+        chapter: "[%{app_name}] Respuesta que dejaste a un comentario en capítulo
+          %{position} de %{title}"
+        other: "[%{app_name}] Respuesta que dejaste a un comentario en %{title}"
+        tag: "[%{app_name}] Respuesta que dejaste a un comentario en la etiqueta %{name}"
+      you_responded: 'Respondiste:'
+    comment_sent_notification:
+      chapter:
+        titled: 'Capítulo %{position}: %{title}'
+        untitled: Capítulo %{position}
+      content:
+        chapter:
+          html: 'Dejaste el siguiente comentario en %{chapter_link} de %{work_link}:'
+          titled_text: 'Dejaste el siguiente comentario en capítulo %{chapter_position}:
+            %{chapter_title} de %{work} (%{chapter_url}):'
+          untitled_text: 'Dejaste el siguiente comentario en capítulo %{chapter_position}
+            de %{work} (%{chapter_url}):'
+        other:
+          html: 'Dejaste el siguiente comentario en %{commentable_link}:'
+          text: 'Dejaste el siguiente comentario en %{title} (%{commentable_url}):'
+        tag:
+          html: 'Dejaste el siguiente comentario en la etiqueta %{tag_link}:'
+          text: 'Dejaste el siguiente comentario en la etiqueta %{tag} (%{tag_url}):'
+      subject:
+        chapter: "[%{app_name}] Comentario que dejaste en capítulo %{position} de
+          %{title}"
+        other: "[%{app_name}] Comentario que dejaste en %{title}"
+        tag: "[%{app_name}] Comentario que dejaste en la etiqueta %{name}"
+    edited_comment_notification:
+      chapter:
+        titled: 'Captíulo %{position}: %{title}'
+        untitled: Capítulo %{position}
+      content:
+        chapter:
+          html: "%{pseud_link} editó el siguiente comentario en %{chapter_link} de
+            %{work_link}:"
+          titled_text: "%{pseud} editó el siguiente comentario en capítulo %{chapter_position}:
+            %{chapter_title} de %{work} (%{chapter_url}):"
+          untitled_text: "%{pseud} editó el siguiente comentario en capítulo %{chapter_position}
+            de %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} editó el siguiente comentario en %{commentable_link}:"
+          text: "%{pseud} editó el siguiente comentario en %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} editó el siguiente comentario en la etiqueta %{tag_link}:"
+          text: "%{pseud} editó el siguiente comentario en la etiqueta %{tag} (%{tag_url}):"
+      subject:
+        chapter: "[%{app_name}] Comentario editado en capítulo %{position} de %{title}"
+        other: "[%{app_name}] Comentario editado en %{title}"
+        tag: "[%{app_name}] Comentario editado en la etiqueta %{name}"
+    edited_comment_reply_notification:
+      chapter:
+        titled: 'Capítulo %{position}: %{title}'
+        untitled: Capítulo %{position}
+      commenter_edited_response:
+        html: "%{commenter_link} editó su respuesta a:"
+      content:
+        chapter:
+          html: "%{pseud_link} editó su respuesta a tu comentario en %{chapter_link}
+            de %{work_link}:"
+          titled_text: "%{pseud} editó su respuesta a tu comentario en capítulo %{chapter_position}:
+            %{chapter_title} de %{work} (%{chapter_url}):"
+          untitled_text: "%{pseud} editó su respuesta a tu comentario en capítulo
+            %{chapter_position} de %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} editó su respuesta a tu comentario en %{commentable_link}:"
+          text: "%{pseud} editó su respuesta a tu comentario en %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} editó su respuesta a tu comentario en la etiqueta %{tag_link}:"
+          text: "%{pseud} editó su respuesta a tu comentario en la etiqueta %{tag}
+            (%{tag_url}):"
+      subject:
+        chapter: "[%{app_name}] Respuesta editada a tu comentario en capítulo %{position}
+          de %{title}"
+        other: "[%{app_name}] Respuesta editada a tu comentario en %{title}"
+        tag: "[%{app_name}] Respuesta editada a tu comentario en la etiqueta %{name}"
+      you_wrote: 'Escribiste:'
+  help:
+    preferences_locale:
+      locale:
+        description: Esta preferencia te permite seleccionar en qué idioma quieres
+          que se te envíen los correos electrónicos del AO3. De hecho, nuestro personal
+          voluntario está traduciendo y actualizando las plantillas de estos mensajes.
+          Es algo que está en proceso, por lo tanto, estos mensajes no estarán disponibles
+          en todos los idiomas de manera inmediata. Si no existe una traducción disponible
+          de la plantilla en tu idioma, se te enviará la versión en inglés.
+        header: Definir preferencias de ubicación
+      page_heading: Preferencias de ubicación
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        one: unx visitante
+        other: "%{count} visitantes"
+      left_kudos:
+        html:
+          one: "%{givers_list} dejó kudos en %{commentable_link}."
+          other: "%{givers_list} dejaron kudos en %{commentable_link}"
+        text:
+          one: '%{givers_list} dejó kudos en "%{commentable_title}" (%{commentable_url}).'
+          other: '%{givers_list} dejaron kudos en "%{commentable_title}" (%{commentable_url}).'
+      single_guest:
+        giver: Unx visitante
+        html: "%{giver} dejó kudos en %{commentable_link}."
+        text: Unx visitante dejó kudos en "%{commentable_title}" (%{commentable_url}).
+      subject: "[%{app_name}] ¡Recibiste kudos!"
+  mailer:
+    collections:
+      why_collection_email:
+        html: Recibes este mensaje porque tu dirección de correo electrónico ha sido
+          registrada como el contacto de la colección %{collection_link}.
+        text: Recibes este mensaje porque tu dirección de correo electrónico ha sido
+          registrada como el contacto de la colección "%{collection_title}" (%{collection_url}).
+      why_maintainer:
+        html: Recibes este mensaje porque eres propietarix o moderadorx de la colección
+          %{collection_link}
+        text: Recibes este mensaje porque eres propietarix o moderadorx de la colección
+          "%{collection_title}" (%{collection_url}).
+    general:
+      closing:
+        formal: Atentamente,
+        informal: Saludos,
+      creation:
+        attribution:
+          anon: de Anónimo
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: Capítulo %{position} de %{title}
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          many: "%{count} de palabras"
+          one: "%{count} palabra"
+          other: "%{count} palabras"
+      footer:
+        about:
+          html: AO3 es un archivo administrado y mantenido por fans que depende de
+            %{your_donations_link}.
+          text: 'AO3 es un archivo administrado y mantenido por fans que depende de
+            tus donaciones: %{your_donations_url}.'
+          your_donations: tus donaciones
+        sent_at: 'Enviado a: %{sent_at}.'
+        why_policy_abuse:
+          contact_policy_abuse: Contacta a Políticas y Prevención de Abuso
+          html: Si no sabes por qué recibiste este correo electrónico, por favor,
+            %{contact_policy_abuse_link}.
+          text: 'Si no sabes por qué recibiste este correo electrónico, por favor,
+            contacta a Políticas y Prevención de Abuso: %{contact_policy_abuse_url}.'
+        why_support:
+          contact_support: Comunícate con Soporte Técnico
+          html: Si no sabes por qué recibiste este correo electrónico, por favor,
+            %{contact_support_link}.
+          text: 'Si no sabes por qué recibiste este correo electrónico, por favor,
+            comunícate con Soporte Técnico en: %{contact_support_url}.'
+      greeting:
+        formal:
+          addressed_html: Hola %{name},
+        informal:
+          addressed_html: "¡Hola %{name}!"
+        introductory: Saludos de parte del Archive of Our Own – AO3 (Un Archivo Propio)
+      metadata_label_indicator: ":"
+      signature:
+        app_short_name: Archive of Our Own – AO3 (Un Archivo Propio)
+        open_doors: El equipo de Open Doors (Puertas Abiertas)
+        parent_org: Organization for Transformative Works – OTW (Organización para
+          las Obras Transformativas)
+  preferences:
+    locale_help_title: Ayuda para preferencias ubicación
+  roles:
+    anonymous_creator: Creadorx anónimx
+    commenter_name:
+      html: "%{name} %{role_with_parens}"
+      text: "%{name} %{role_with_parens}"
+    guest_with_parens: "(Invitadx)"
+    official_with_parens: "(Oficial)"
+    registered_with_parens: "(Usuarix registradx)"
+  user_mailer:
+    admin_deleted_work_notification:
+      check_email:
+        html: Si no sabes por qué fue eliminada tu obra y no recibiste un correo electrónico
+          por separado que lo explicara, revisa tu bandeja de entrada (incluso la
+          carpeta de spam) o %{contact_abuse_link}.
+        text: 'Si no sabes por qué fue eliminada tu obra y no recibiste un correo
+          electrónico por separado que lo explicara, revisa tu bandeja de entrada
+          (incluso la carpeta de spam) o comunícate con el comité de Políticas y Prevención
+          de Abuso: %{contact_abuse_url}.'
+      contact_abuse: comunícate con el comité de Políticas y Prevención de Abuso
+      content_policy: Política de contenidos
+      deleted:
+        html: Tu obra %{title} fue eliminada por unx admin de %{app_name}. Adjuntamos
+          una copia de tu obra a este correo electrónico.
+        text: Tu obra "%{title}" fue eliminada por unx admin de %{app_name}. Adjuntamos
+          una copia de tu obra a este correo electrónico.
+      may_not_repost: no puedes volver a publicar la obra hasta que hayas corregido
+        la infracción
+      subject: "[%{app_name}] Tu obra fue eliminada por unx admin"
+      tos: "%{app_name} Términos y condiciones de servicio"
+      tos_faq: FAQ (preguntas frecuentes) de los términos y condiciones de servicio
+      tos_violation:
+        html: Si tu obra fue eliminada debido a una infracción a los %{tos_link} (que
+          incluyen la %{content_policy_link}), %{may_not_repost_bold}. Para más información,
+          consulta las %{tos_faq_link}.
+        text: 'Si tu obra fue eliminada debido a una infracción a los términos y condiciones
+          de servicio de %{app_name}(%{tos_url}), que incluye la Política de contenidos
+          (%{content_policy_url}), no puedes volver a publicar la obra hasta que hayas
+          corregido la infracción. Para más información, consulta las FAQ (preguntas
+          frecuentes) de los términos y condiciones de servicio: %{tos_faq_url}.'
+    admin_hidden_work_notification:
+      access:
+        one: 'other (2+): Mientras tus obras permanezcan ocultas, aún podrás acceder
+          a ellas a través de los enlaces dados arriba, pero no estarán disponible
+          para otrxs usuarixs o listadas en tu página de obras'
+      check_email:
+        one: Por favor, revisa tu correo electrónico, incluyendo tu carpeta de spam,
+          ya que el comité de Políticas y Prevención de Abuso puede haberte contactado
+          para explicarte por qué ocultamos tu obra.
+        other: Por favor, revisa tu correo electrónico, incluyendo tu carpeta de spam,
+          ya que el comité de Políticas y Prevención de Abuso puede haberte contactado
+          para explicarte por qué ocultamos tus obras.
+      contact_abuse: contacta al comité de Políticas y Prevención de Abuso
+      content_policy: Políticas de contenido
+      help:
+        html:
+          one: Si no sabes por qué se ha ocultado tu obra y no has recibido un correo
+            electrónico explicándolo, %{contact_abuse_link} directamente.
+          other: Si no sabes por qué se han ocultado tus obras y no has recibido un
+            correo electrónico explicándolo, %{contact_abuse_link} directamente.
+        text:
+          one: 'Si no sabes por qué se ha ocultado tu obra y no has recibido un correo
+            electrónico explicándolo, contacta al comité de Políticas y Prevención
+            de Abuso directamente: %{contact_abuse_link}.'
+          other: 'Si no sabes por qué se han ocultado tus obras y no has recibido
+            un correo electrónico explicándolo, contacta al comité de Políticas y
+            Prevención de Abuso directamente: %{contact_abuse_link}.'
+      hidden_multiple:
+        one: 'other (2+): %{count} de tus obras han sido ocultadas por el comité de
+          Políticas y Prevención de Abuso:'
+      hidden_one:
+        html: Tu obra %{title} ha sido ocultada por el comité de Políticas y Prevención
+          de Abuso.
+        text: Tu obra "%{title}" (%{work_url}) ha sido ocultada por el comité de Políticas
+          y Prevención de Abuso
+      subject:
+        one: 'other (2+): [%{app_name}] Tus obras han sido ocultadas por el comité
+          de Políticas y Prevención de Abuso.'
+      tos: Términos y condiciones de servicio del AO3
+      tos_faq: FAQ de los términos y condiciones de servicio del AO3
+      tos_violation:
+        html:
+          one: Si tu obra se ocultó debido a una infracción de los %{tos_link} (incluyendo
+            las %{content_policy_link}), se requerirá que corrijas dicha infracción.
+            Que tu obra no cumpla con nuestros términos y condiciones de servicio
+            pudiera resultar en la eliminación de tu obra del AO3. Para más información,
+            revisa las %{tos_faq_link}.
+          other: Si tus obras se ocultaron debido a una infracción de los %{tos_link}
+            (incluyendo las %{content_policy_link}), se requerirá que corrijas dicha
+            infracción. Que tus obras no cumplan con nuestros términos y condiciones
+            de servicio pudiera resultar en la eliminación de tus obras del AO3. Para
+            más información, revisa las %{tos_faq_link}.
+        text:
+          one: 'Si tu obra se ocultó debido a una infracción a los términos y condiciones
+            de servicio del AO3 (%{tos_url}), incluyendo nuestras Políticas de contenido
+            (%{content_policy_url}), se requerirá que corrijas dicha infracción. Que
+            tu obra no cumpla con nuestros términos y condiciones de servicio puede
+            resultar en la eliminación de tu obra del AO3. Para más información, revisa
+            las FAQ de nuestros términos y condiciones de servicio: %{tos_faq_url}.'
+          other: 'Si tus obras se ocultaron debido a una infracción a los términos
+            y condiciones de servicio del AO3 (%{tos_url}), incluyendo nuestras Políticas
+            de contenido (%{content_policy_url}), se requerirá que corrijas dicha
+            infracción. Que tus obras no cumplan con nuestros términos y condiciones
+            de servicio puede resultar en la eliminación de tus obras del AO3. Para
+            más información, revisa las FAQ de nuestros términos y condiciones de
+            servicio: %{tos_faq_url}.'
+      work_info: '- "%{title}" (%{work_url})'
+    anonymous_or_unrevealed_notification:
+      anonymous_info: Las obras anónimas están incluidas en los listados por etiquetas,
+        pero no aparecerán en tu página de obras. Tu nombre de usuarix será reemplazado
+        por "Anonymous" (Anónimo) en la obra.
+      anonymous_unrevealed_info: Lxs encargadxs de la colección pueden revelar tu
+        obra en el futuro pero dejarla anónima. No se le notificará a tus subscriptorxs
+        acerca de este cambio. Tu obra se incluirá en los listados por etiquetas,
+        pero no aparecerá en tu página de obras. Tu nombre de usuarix será reemplazado
+        por "Anonymous" (Anónimo) en la obra.
+      changed_status:
+        anonymous_unrevealed:
+          html: Lxs encargadxs de la colección %{collection_link} han cambiado el
+            estado de tu obra %{work_link} a anónima y sin revelar.
+          text: Lxs encargadxs de la colección "%{collection_title}" (%{collection_url})
+            han cambiado el estado de tu obra "%{work_title}" (%{work_url}) a anónima
+            y no revelada
+        anonymous:
+          html: Lxs encargadxs de la colección %{collection_link} han cambiado el
+            estado de tu obra %{work_link} a anónima.
+          text: Lxs encargadxs de la colección "%{collection_title}" (%{collection_url})
+            han cambiado el estado de tu obra "%{work_title}" (%{work_url}) a anónima.
+        unrevealed:
+          html: Lxs encargadxs de la colección %{collection_link} han cambiado el
+            estado de tu obra %{work_link} a sin revelar.
+          text: Lxs encargadxs de la colección "%{collection_title}" (%{collection_url})
+            han cambiado el estado de tu obra "%{work_title}" (%{work_url}) a no revelada.
+      collection_items_link_text: página de Approved Collection Items (Obras autorizadas
+        para estar en una colección)
+      do_not_want:
+        anonymous_unrevealed:
+          html: Si no quieres que tu obra sea anónima y esté sin revelar, por favor
+            visita tu %{collection_items_link} para eliminarla de la colección.
+          text: 'Si no quieres que tu obra sea anónima y esté sin revelar, por favor
+            visita tu página de Approved Collection Items (Obras autorizadas para
+            estar en una colección) para eliminarla de la colección: %{collection_items_url}'
+        anonymous:
+          html: Si no quieres que tu obra sea anónima, por favor visita tu %{collection_items_link}
+            para eliminarla de la colección.
+          text: 'Si no quieres que tu obra sea anónima, por favor visita tu página
+            de Approved Collection Items (Obras autorizadas para estar en una colección)
+            para eliminarla de la colección: %{collection_items_url}'
+        unrevealed:
+          html: Si no quieres que tu obra esté sin revelar, por favor visita tu %{collection_items_link}
+            para eliminarla de la colección.
+          text: 'Si no quieres que tu obra esté sin revelar, por favor visita tu página
+            de Approved Collection Items (Obras autorizadas para estar en una colección)
+            para eliminarla de la colección: %{collection_items_url}'
+      faq_link_text: FAQ (preguntas frecuentes) de colecciones
+      more_info:
+        html: Para más información, visita nuestras %{faq_link}.
+        text: 'Para más información, visita nuestras FAQ (preguntas frecuentes) de
+          colecciones: %{faq_url}'
+      subject:
+        anonymous: "[%{app_name}] Tu obra ahora es anónima"
+        anonymous_unrevealed: "[%{app_name}] Tu obra ahora es anónima y está sin revelar"
+        unrevealed: "[%{app_name}] Tu obra ahora está sin revelar"
+      unrevealed_info: Las obras sin revelar no están incluidas en los listados por
+        etiquetas ni aparecen en tu página de obras. Quien abre un enlace a la obra
+        recibirá un mensaje diciendo que todavía no ha sido revelada y que no tiene
+        acceso.
+    archivist_added_to_collection_notification:
+      approved_collection_items_page: Approved Collection Items (Artículos de colección
+        aprobados)
+      archivist_notice: Dado que lxs administradorxs de la colección actúan en su
+        capacidad oficial de archivistas para Open Doors (Puertas Abiertas), están
+        autorizados para añadir tu obra a esta colección, aún si tienes deshabilitadas
+        las invitaciones a colecciones. Lxs archivistas solo pueden añadir obras a
+        colecciones en el caso de que las obras estuvieran hospedadas en un archivo
+        importado.
+      removal_instructions:
+        html: Si deseas eliminar tu obra de esta colección, revisa tu página de %{approved_items_link}.
+        text: 'Si deseas eliminar tu obra de esta colección, revisa tu página de Approved
+          Collection Items (Artículos de colección aprobados): %{approved_items_url}.'
+      subject: "[%{app_name}][%{collection_title}] Unx archivista de Open Doors (Puertas
+        Abiertas) añadió tu obra a una colección"
+      work_added:
+        html: "¡Lxs administradorxs de %{collection_link} añadieron tu obra %{work_link}
+          a su colección!"
+        text: ¡Lxs administradorxs de "%{collection_title}" (%{collection_url}) añadieron
+          tu obra "%{work_title}" (%{work_url}) a su colección!
+    assignment_default_notification:
+      assign_pinch_hitter:
+        collection_assignments_page: página de tareas de la colección
+        html: Puedes asignar unx suplente en la %{collection_assignments_page_link}.
+        text: 'Puedes asignar unx suplente en la página de tareas en la colección:
+          %{collection_assignments_page_url}.'
+      defaulted_on_assignment:
+        html: "%{offer_byline} ha incumplido su tarea para %{request_byline} en tu
+          intercambio de regalos %{collection_link}."
+        text: '%{offer_byline} ha incumplido su tarea para %{request_byline} en tu
+          intercambio de regalos "%{collection_title}" (%{collection_url}).'
+      subject: "[%{app_name}][%{collection_title}] Tarea incumplida por %{offer_byline}"
+    batch_subscription_notification:
+      chapter_summary: Resumen del capítulo
+      footer_note:
+        html: Recibiste este correo electrónico porque estás suscrito a %{subscription_link}.
+          Sigue el enlace para cancelar la suscripción si quieres dejar de recibir
+          novedades.
+        text: 'Recibiste este correo electrónico porque estás suscrito a %{subscription_name}.
+          Sigue el enlace para cancelar la suscripción si quieres dejar de recibir
+          novedades: %{unsubscribe_url}'
+      preface:
+        anon:
+          chapter:
+            html: 'Anónimo publicó un capítulo nuevo de %{work_link_with_word_count}:'
+            text: 'Anónimo publicó un capítulo nuevo de %{work_title_with_word_count}:'
+          work:
+            backdated: 'Anónimo publicó una obra con fecha retroactiva:'
+            new: 'Anónimo publicó una obra nueva:'
+        named:
+          chapter:
+            html:
+              one: "%{creator_links} publicó un capítulo nuevo de %{work_link_with_word_count}:"
+              other: "%{creator_links} publicaron un capítulo nuevo de %{work_link_with_word_count}:"
+            text:
+              one: "%{creators} publicó un capítulo nuevo de %{work_title_with_word_count}:"
+              other: "%{creators} publicaron un capítulo nuevo de %{work_title_with_word_count}:"
+          work:
+            backdated:
+              html:
+                one: "%{creator_links} publicó una obra con fecha retroactiva:"
+                other: "%{creator_links} publicaron una obra con fecha retroactiva:"
+              text:
+                one: "%{creators} publicó una obra con fecha retroactiva:"
+                other: "%{creators} publicaron una obra con fecha retroactiva:"
+            new:
+              html:
+                one: "%{creators} publicó una obra nueva:"
+                other: "%{creators} publicaron una obra nueva:"
+      subject:
+        anon:
+          chapter:
+            multiple_entries: "[%{app_name}] Anónimo publicó el capítulo %{chapter_position}
+              de %{work_title} %{more}"
+            one_entry: "[%{app_name}] Anónimo publicó el capítulo %{chapter_position}
+              de %{work_title}"
+          series:
+            chapter:
+              multiple_entries: "[%{app_name}] Anónimo publicó el capítulo %{chapter_position}
+                de %{work_title} en la serie %{series_title} %{more}"
+              one_entry: "[%{app_name}] Anónimo publicó el capítulo %{chapter_position}
+                de %{work_title} en la serie %{series_title}"
+          work:
+            multiple_entries: "[%{app_name}] Anónimo publicó %{work_title} en la serie
+              %{series_title} %{more}"
+        more:
+          one: y %{count} más
+          other: y %{count} más
+        named:
+          chapter:
+            multiple_entries:
+              one: "[%{app_name}] %{creators} publicó el capítulo %{chapter_position}
+                de %{work_title} %{more}"
+              other: "[%{app_name}] %{creators} publicaron el capítulo %{chapter_position}
+                de %{work_title} %{more}"
+            one_entry:
+              one: "[%{app_name}] %{creators} publicó el capítulo %{chapter_position}
+                de %{work_title}"
+              other: "[%{app_name}] %{creators} publicaron el capítulo %{chapter_position}
+                de %{work_title}"
+          series:
+            chapter:
+              multiple_entries:
+                one: "[%{app_name}] %{creators} publicó el capítulo %{chapter_position}
+                  de %{work_title} en la serie %{series_title} %{more}"
+                other: "[%{app_name}] %{creators} publicaron el capítulo %{chapter_position}
+                  de %{work_title} en la serie %{series_title} %{more}"
+              one_entry:
+                one: "[%{app_name}] %{creators} publicó el capítulo %{chapter_position}
+                  de %{work_title} en la serie %{series_title}"
+                other: "[%{app_name}] %{creators} publicaron el capítulo %{chapter_position}
+                  de %{work_title} en la serie %{series_title}"
+            work:
+              multiple_entries:
+                one: "[%{app_name}] %{creators} publicó %{work_title} en la serie
+                  %{series_title} %{more}"
+                other: "[%{app_name}] %{creators} publicaron %{work_title} en la serie
+                  %{series_title} %{more}"
+              one_entry:
+                one: "[%{app_name}] %{creators} publicó %{work_title} en la serie
+                  %{series_title}"
+                other: "[%{app_name}] %{creators} publicaron %{work_title} en la serie
+                  %{series_title}"
+          work:
+            multiple_entries:
+              one: "[%{app_name}] %{creators} publicó %{work_title} %{more}"
+              other: "[%{app_name}] %{creators} publicaron %{work_title} %{more}"
+            one_entry:
+              one: "[%{app_name}] %{creators} publicó %{work_title}"
+              other: "[%{app_name}] %{creators} publicaron %{work_title}"
+    challenge_assignment_notification:
+      any: Cualquiera
+      assignment:
+        html: "¡Te han asignado la siguiente solicitud en el desafío %{link} en el
+          AO3!"
+        text: ¡Te han asignado la siguiente solicitud en el desafío "%{collection_title}"
+          (%{collection_url}) en el AO3 (Un Archivo Propio)!
+      description: Descripción
+      due: La fecha de entrega de esta tarea es
+      footer:
+        challenge_profile: página de perfil del desafío
+        html: Has recibido este correo porque te inscribiste en el desafío %{title}.
+          Para más información sobre este desafío y sobre cómo comunicarte con quien
+          lo modera, por favor revisa %{challenge_profile_link}.
+        text: Has recibido este correo porque te inscribiste en el desafío %{title}
+          (%{url}). Para más información sobre este desafío y sobre cómo comunicarte
+          con quien lo modera, por favor revisa %{challenge_profile_url}.
+      look_up:
+        html: Puedes buscar esta tarea en %{your_assignments_link}.
+        text: Puedes buscar esta tarea en tu página de Assignments (Tareas) en %{your_assignments_url}
+        your_assignments: tu página de Assignments (Tareas)
+      optional_tags: Etiquetas opcionales
+      prompt_url: URL de la sugerencia
+      prompts: Sugerencias
+      recipient: Destinatarix
+      recipient_missing: 'No existe: contacta a quien modera para que lo solucione.'
+      subject: "[%{app_name}][%{collection_title}] ¡Tu tarea!"
+    change_email:
+      confirm_change:
+        html:
+          one: Si has sido tú, revisa tu bandeja de correo electrónico %{unconfirmed_email}
+            en %{count} días para confirmar el cambio de dirección de correo electrónico.
+            Si no has recibido un correo de confirmación, o si tienes algún otro problema,
+            %{contact_support_link}.
+          other: Si has sido tú, revisa tu bandeja de correo electrónico %{unconfirmed_email}
+            en %{count} días para confirmar el cambio de dirección de correo electrónico.
+            Si no has recibido un correo de confirmación, o si tienes algún otro problema,
+            %{contact_support_link}.
+        text:
+          one: 'Si has sido tú, revisa tu bandeja de correo electrónico %{unconfirmed_email}
+            en %{count} días para confirmar el cambio de dirección de correo electrónico.
+            Si no has recibido un correo de confirmación, o si tienes algún otro problema,
+            contacta a Soporte Técnico: %{contact_support_link}.'
+          other: 'Si has sido tú, revisa tu bandeja de correo electrónico %{unconfirmed_email}
+            en %{count} días para confirmar el cambio de dirección de correo electrónico.
+            Si no has recibido un correo de confirmación, o si tienes algún otro problema,
+            contacta a Soporte Técnico: %{contact_support_link}.'
+      contact_policy_abuse: contacta a Políticas y Prevención de Abuso
+      contact_support: contacta a Soporte Técnico
+      email_change_form: completar el formulario para cambiar tu dirección de correo
+        electrónico
+      made_request: Se realizó una solicitud para cambiar la dirección de correo electrónico
+        asociada a tu cuenta %{app_name}.
+      not_made_request:
+        html: Si no fuiste tú, otrx usuarix puede tener acceso a tu cuenta %{app_name}.
+          Por favor %{reset_password_link} o %{contact_policy_abuse_link}.
+        text: 'Si no fuiste tú, otrx usuarix puede tener acceso a tu cuenta %{app_name}.
+          Por favor restablece tu contraseña (%{reset_password_link}) o contacta a
+          Políticas y Prevención de Abuso: %{contact_policy_abuse_link}.'
+      reset_password: restablece tu contraseña
+      subject: "[%{app_name}] Solicitud de cambio de correo electrónico"
+      wrong_email:
+        html: Si ingresaste una dirección de correo electrónico equivocada es necesario
+          volver a %{email_change_form_link}.
+        text: 'Si ingresaste una dirección de correo electrónico equivocada es necesario
+          volver a completar el formulario para cambiar tu dirección de correo electrónico:
+          %{email_change_form_link}.'
+    change_username:
+      change_cooldown_html:
+        one: Puedes cambiar tu nombre de usuarix en %{app_name} una vez al día. Podrás
+          volver a cambiar tu nombre de usuarix a partir de %{date}.
+        other: Puedes cambiar tu nombre de usuarix en %{app_name} una vez cada %{count}
+          días. Podrás volver a cambiar tu nombre de usuarix a partir de %{date}.
+      changed_html: El nombre de usuarix para tu cuenta de %{app_name} ha cambiado
+        de %{old_username} a %{new_username}.
+      contact_policy_abuse: contacta Políticas y Prevención de Abuso
+      contact_support: contactar a Soporte Técnico
+      did_not_make_change:
+        html: Si tu no realizaste este cambio, otrx usuarix puede tener acceso a tu
+          cuenta de %{app_name}. Por favor %{reset_password_link} o %{contact_policy_abuse_link}.
+        text: 'Si tu no realizaste este cambio, otrx usuarix puede tener acceso a
+          tu cuenta de %{app_name}. Por favor restablece tu contraseña (%{reset_password_link})
+          o contacta a Políticas y Prevención de Abuso: %{contact_policy_abuse_link}.'
+      effects:
+        html: Puedes %{refer_faq_link} para saber cómo el cambio de nombre de usuarix
+          afectará a tu cuenta. Si tienes problemas técnicos, tales como tu nombre
+          de usuarix anterior en tus obras o tus marcadores después de una semana,
+          puedes %{contact_support_link}.
+        text: 'Puedes revisar nuestras FAQ (preguntas frecuentes) para saber cómo
+          el cambio de nombre de usuarix afectará a tu cuenta: %{refer_faq_link}.
+          Si tienes problemas técnicos, tales como tu nombre de usuarix anterior en
+          tus obras o tus marcadores después de una semana, puedes contactar a Soporte
+          Técnico: %{contact_support_url}.'
+      refer_faq: revisar nuestras FAQ (preguntas frecuentes)
+      reset_password: restablece tu contraseña
+      subject: "[%{app_name}] Se ha cambiado tu nombre de usuarix"
+    claim_notification:
+      access:
+        contact_support: contacta a Soporte Técnico del AO3
+        html: Dependiendo del archivo, tus obras pudieron ser importadas para usuarixs
+          registrados solamente (para mantenerlas fuera de las búsquedas de Google).
+          Si es el caso, las obras sólo serán accesibles para usuarixs con sesión
+          iniciada, a menos que elijas ponerlas a disposición general. Para ayudarte
+          a desbloquear, renunciar o eliminar tus obras, por favor, %{contact_support_link}.
+        text: Dependiendo del archivo, tus obras pudieron ser importadas para usuarixs
+          registrados solamente (para mantenerlas fuera de las búsquedas de Google).
+          Si es el caso, las obras sólo serán accesibles para usuarixs con sesión
+          iniciada, a menos que tu elijas hacerlas disponibles para todxs. Para ayudarte
+          a desbloquear, renunciar o eliminar tus obras, por favor, contacta a Soporte
+          Técnico del AO3 en %{support_url}.
+      email_tips: Si vas a contactarnos, añade los correos relacionados a @transformativeworks.org
+        a tu lista de contactos autorizados y revisa tus carpetas de correo no deseado
+        buscando nuestras respuestas.
+      introduction:
+        ao3_name: Archive of Our Own – AO3 (Un Archivo Propio)
+        html: Recibes este correo electrónico porque tienes obras en un archivo de
+          obras fan que ha sido importado por %{open_doors_name_link} a %{app_link}.
+          Dado que este correo electrónico está vinculado a tu registro en el archivo
+          importado, las obras asociadas al mismo (listadas abajo) se han añadido
+          de manera automática a tu cuenta en el AO3.
+        open_doors_name: Open Doors (Puertas Abiertas)
+        text: 'Recibes este correo electrónico porque tienes obras en un archivo de
+          obras fan que ha sido importado por Open Doors (Puertas Abiertas) (%{open_doors_url})
+          al Archive of Our Own – AO3 (Un Archivo Propio): %{app_url}. Dado que este
+          correo electrónico está vinculado a tu registro en el archivo importado,
+          las obras asociadas al mismo (listadas abajo) se han añadido de manera automática
+          a tu cuenta en el AO3.'
+      mistake:
+        contact_open_doors: contacta a Open Doors
+        html: Si se trata de un error y no son tus obras, por favor, ¡no las elimines!
+          Solo %{contact_open_doors_link} y lo resolveremos.
+        text: Si se trata de un error y no son tus obras, por favor, ¡no las elimines!
+          Sólo contacta a Open Doors (%{open_doors_url}) y lo resolveremos.
+      more_info:
+        ao3_news: Noticias del AO3
+        contact_support: contacta a Soporte Técnico del AO3
+        faq_page: FAQ (Preguntas frecuentes)
+        html: Puedes leer los anuncios sobre mudanzas recientes de archivos en %{ao3_news_link}
+          y encontrar información adicional en las %{faq_page_link} de Open Doors
+          o %{tutorial_page_link}. Para cualquier pregunta que no se responda en las
+          FAQs, tutoriales o este correo electrónico, por favor, %{contact_support_link}.
+        text: Puedes leer los anuncios sobre mudanzas recientes de archivos en las
+          Noticias del AO3 (%{news_url}) y encontrar información adicional en las
+          FAQs de Open Doors (%{open_doors_faq_url}) o páginas de tutoriales (%{open_doors_tutorial_url}).
+          Para cualquier pregunta que no se responda en las FAQs, tutoriales o este
+          correo electrónico, por favor, contacta a Soporte Técnico en %{support_url}.
+        tutorial_page: página de tutoriales
+      other_works:
+        contact_open_doors: contacta a Open Doors
+        html: Si tienes otras obras en este archivo importado bajo un correo electrónico
+          al que ya no tienes acceso, por favor, %{contact_open_doors_link} con cualquier
+          información que pueda ser de ayuda para verificar tu identidad.
+        text: Si tienes otras obras en este archivo importado bajo un correo electrónico
+          al que ya no tienes acceso, por favor, contacta a Open Doors con cualquier
+          información que pueda ser de ayuda para verificar tu identidad.
+      questions:
+        contact_support: contacta a Soporte Técnico del AO3
+        html: Para más consultas, por favor, %{contact_support_link}.
+        text: Para más consultas, por favor, contacta a Soporte Técnico del AO3 en
+          %{support_url}.
+      redirects:
+        faq: FAQs (Preguntas frecuentes) del AO3
+        html: Si ya subiste una copia de estas obras y %{negation} utilizaste la función
+          de importar desde una URL, habrá dos copias de la misma obra en el AO3.
+          Ya que no se permiten las obras duplicadas en el AO3, te pedimos, por favor,
+          eliminar una de las copias. Tu decides cual deseas mantener, aunque si eliminas
+          la copia importada por Open Doors, considera añadir la copia que queda a
+          la colección importada del archivo. Para preguntas sobre cómo eliminar obras
+          o añadirlas a colecciones, revisa las %{faq_link}.
+        negation: 'NO'
+        text: Si ya subiste una copia de estas obras y NO utilizaste la función de
+          importar desde una URL, habrá dos copias de la misma obra en el AO3. Ya
+          que no se permiten las obras duplicadas en el AO3, te pedimos, por favor,
+          eliminar una de las copias. Tu decides cual deseas mantener, aunque si eliminas
+          la copia importada por Open Doors, considera añadir la copia que queda a
+          la colección importada del archivo. Para preguntas sobre cómo eliminar obras
+          o añadirlas a colecciones, revisa las FAQs (Preguntas frecuentes) del AO3
+          %{faq_link}.
+      subject: "[%{app_name}] Obras importadas"
+      work_info:
+        html: "%{work_link} (%{fandom})"
+        text:
+          no_fandom: '- "%{work_title}" (%{work_url})'
+          with_fandom: '- "%{work_title}" (%{work_url}) (%{fandom})'
+      works_by: 'Estas obras se escribieron bajo este correo electrónico: %{email}'
+    creatorship_notification_archivist:
+      explanation: Puesto que actúan en su capacidad oficial como archivistas de Open
+        Doors (Puertas Abiertas), se les permite añadirte sin que lo solicites, incluso
+        si tienes la co-creación deshabilitada.
+      html:
+        creation: "%{creation_link} por %{pseud_links}"
+        edit_chapter: editar el capítulo
+        edit_series: editar la serie
+        edit_work: editar la obra
+        remove_chapter: Si te han añadido por error o no quieres aparecer como creadorx,
+          puedes %{edit_chapter_link}} para eliminarte como creadorx.
+        remove_series: Si te han añadido por error o no quieres aparecer como creadorx,
+          puedes %{edit_series_link} para eliminarte como creadorx.
+        remove_work: Si te han añadido por error o no quieres aparecer como creadorx,
+          puedes %{edit_work_link} para eliminarte como creadorx.
+      intro_chapter: 'Elx usuarix %{archivist} ha añadido tu pseudónimo %{pseud} como
+        co-creadorx en el siguiente capítulo:'
+      intro_series: 'Elx usuarix %{archivist} ha añadido tu pseudónimo %{pseud} como
+        co-creadorx en la siguiente serie:'
+      intro_work: 'Elx usuarix %{archivist} ha añadido tu pseudónimo %{pseud} como
+        co-creadorx en la siguiente obra:'
+      subject: "[%{app_name}] Unx archivista te ha añadido como co-creadorx"
+      text:
+        creation: "%{title} (%{url}) por %{pseuds}"
+        remove_chapter: 'Si te han añadido por error o no quieres aparecer como creadorx,
+          puedes editar el capítulo para eliminarte como creadorx: %{url}'
+        remove_series: 'Si te han añadido por error o no quieres aparecer como creadorx,
+          puedes editar la serie para eliminarte como creadorx: %{url}'
+        remove_work: 'Si te han añadido por error o no quieres aparecer como creadorx,
+          puedes editar la obra para eliminarte como creadorx: %{url}'
+    creatorship_notification:
+      explanation: Cuando eres co-creadorx de una obra, te pueden añadir a nuevos
+        capítulos sin importar tu configuración de co-creación. También se añadirá
+        tu pseudónimo a cualquier serie que incluya esta obra.
+      html:
+        creation: "%{creation_link} por %{pseud_links}"
+        edit_chapter: editar el capítulo
+        edit_series: editar la serie
+        remove_chapter: Si has sido añadidx por error o no quieres aparecer como creadorx,
+          puedes %{edit_chapter_link} para eliminarte como creadorx.
+        remove_series: Si has sido agregadx por error o no deseas aparecer como co-creadorx,
+          puedes %{edit_series_link} para eliminarte como creadorx.
+      intro_chapter: 'La cuenta de usuarix %{adding_user} ha añadido tu pseudónimo
+        %{pseud} como co-creadorx del siguiente capítulo:'
+      intro_series: 'La cuenta de usuarix %{adding_user} ha incluido tu pseudónimo
+        %{pseud} como co-creadorx en la siguiente serie:'
+      subject: "[%{app_name}] Has sido añadidx como co-creadorx"
+      text:
+        creation: "%{title} (%{url}) por %{pseuds}"
+        remove_chapter: 'Si has sido añadidx por error o no quieres aparecer como
+          creadorx, puedes editar el capítulo para eliminarte como creadorx: %{url}'
+        remove_series: 'Si has sido agregadx por error o no deseas aparecer como co-creadorx,
+          puedes editar la serie para eliminarte como creadorx: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} de %{pseud_links}"
+        instructions: Puedes aceptar o rechazar la solicitud en tu página de %{page_name}.
+        page_name: Co-Creator Requests (Solicitudes de co-creadorx)
+      intro_chapter: 'La cuenta de %{inviting_user} ha invitado a tu pseudónimo %{pseud}
+        a ser listado como co-creadorx del siguiente capítulo:'
+      intro_series: 'La cuenta de %{inviting_user} ha invitado a tu pseudónimo %{pseud}
+        a ser listado como co-creadorx de la siguiente serie:'
+      intro_work: 'La cuenta de %{inviting_user} ha invitado a tu pseudónimo %{pseud}
+        a ser listado como co-creadorx de la siguiente obra:'
+      subject: "[%{app_name}] Has recibido una solicitud para ser co-creadorx"
+      text:
+        creation: "%{title} (%{url}) de %{pseuds}"
+        instructions: 'Puedes aceptar o rechazar la solicitud en tu página de Co-Creator
+          Requests (Solicitudes de co-creadorx): %{url}'
+    delete_work_notification:
+      attachment: Hemos adjuntado una copia de la obra como referencia.
+      deleted_other:
+        html: Tu obra %{title} fue eliminada a petición de %{pseud}.
+        text: Tu obra "%{title}" fue eliminada a petición de %{pseud}.
+      deleted_yourself:
+        html: Tu obra %{title} se ha eliminado como solicitaste.
+        text: Tu obra "%{title}" fue eliminada como solicitaste.
+      questions:
+        html: Si tienes alguna pregunta, por favor, %{support}.
+        text: Si tienes alguna pregunta, por favor, %{support} (%{url}).
+      subject: "[%{app_name}] Tu obra ha sido eliminada"
+      support: comunícate con Soporte Técnico
+    invalid_signup_notification:
+      found_invalid:
+        html: Hemos encontrado registros inválidos en tu intercambio de regalos %{collection_link}.
+          No se pueden generar combinaciones potenciales hasta que no se corrijan.
+        text: Hemos encontrado registros inválidos en tu intercambio de regalos "%{collection_title}"
+          (%{collection_url}). No se pueden generar combinaciones potenciales hasta
+          que no se corrijan.
+      see_details:
+        challenge_matching_help: la información de ayuda sobre combinaciones de tu
+          reto
+        html: Los registros inválidos pueden ser duplicados, o pueden no haber cubierto
+          los requisitos que estableciste para tu reto. Desafortunadamente, no hay
+          una manera automática de resolverlo, así que tendrás que editarlos manualmente
+          o eliminarlos. Para más detalles, revisa
+        text: 'Los registros inválidos puede ser duplicados, o pueden no haber cubierto
+          los requisitos que marcaste en tu reto. Desafortunadamente, no hay una manera
+          automática de resolverlo, así que tendrás que editarlos manualmente o eliminarlos.
+          Para más detalles, revisa la información de ayuda sobre combinaciones de
+          tu reto: %{challenge_matching_help_url}.'
+      signup: 'Registro #%{signup_id}'
+      signups_here: 'Estos son los registros inválidos:'
+      subject: "[%{app_name}][%{collection_title}] Registros inválidos encontrados"
+    invited_to_collection_notification:
+      approve:
+        collection_items_page: página de Collection Items (Obras en colecciones)
+        html: Para aprobar o rechazar esta solicitud, por favor, revisa tu %{collection_items_page_link}.
+        text: 'Para aprobar o rechazar esta solicitud, por favor, revisa página de
+          Collection Items (Obras en colecciones): %{collection_items_page_url}.'
+      subject: "[%{app_name}][%{collection_title}] Solicitud para incluir tu obra
+        en una colección"
+      would_like_to_include:
+        html: "¡Las personas responsables de %{collection_link} quisieran incluir
+          tu obra %{work_link} en su colección!"
+        text: ¡Las personas responsables de "%{collection_title}" (%{collection_url})
+          quisieran incluir tu obra"%{work_title}" (%{work_url}) en su colección!
+    prompter_notification:
+      a_response_to_your_prompt:
+        collection:
+          html: "¡Han publicado una respuesta a tu prompt en la colección %{collection_link}
+            en AO3!"
+          text: ¡Han publicado una respuesta a tu prompt en la colección "%{collection_title}"
+            (%{collection_url}) en AO3!
+        no_collection: "¡Han publicado una respuesta a tu prompt en AO3!"
+      subject: "[%{app_name}] Respuesta a tu prompt"
+    recipient_notification:
+      collection:
+        html: "¡Se ha publicado una obra como regalo para ti en la colección %{collection_link}
+          en el AO3!"
+        text: ¡Se ha publicado una obra como regalo para ti en la colección "%{collection_title}"
+          (%{collection_url}) en el AO3!
+      no_collection: "¡Se ha publicado una obra como regalo para ti en el AO3!"
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Tienes una obra de regalo
+          de %{collection_title}"
+        no_collection: "[%{app_name}] Tienes una obra de regalo"
+  users:
+    mailer:
+      confirmation_instructions:
+        confirm_by:
+          html: Si no confirmas tu solicitud para el %{date}, el enlace que viene
+            en este correo expirará y tendrás que %{email_change_form_link} otra vez.
+          text: 'Si no confirmas la solicitud para el %{date}, el enlace en este correo
+            expirará y tendrás que enviar el formulario de cambio de email otra vez:
+            %{email_change_form_url}.'
+        confirm_email_change: Confirma el cambio de email
+        did_not_make_request: Si no hiciste esta solicitud, puedes ignorarla con seguridad
+          y borrar este correo. Puede que alguien haya intentado entrar con tu dirección
+          de correo por error.
+        email_change_form: Envía el formulario del cambio de email
+        made_request:
+          html:
+            one: Si hiciste esta solicitud, por favor, inicia sesión y %{confirm_email_change_link}
+              dentro de %{count} día.
+            other: Si hiciste esta solicitud, por favor, inicia sesión y %{confirm_email_change_link}
+              dentro de %{count} días.
+          text:
+            one: 'Si hiciste esta solicitud, por favor, inicia sesión y confirma tu
+              cambio de email dentro de %{count} día: %{confirm_email_change_url}.'
+            other: 'Si hiciste esta solicitud, por favor, inicia sesión y confirma
+              tu cambio de email dentro de %{count} días: %{confirm_email_change_url}.'
+        request_to_change_email_html: Alguien solicitó hacer un cambio de la dirección
+          de correo asociada con la cuenta de %{app_name}, %{username}, a este nuevo
+          email.
+        subject: Confirma tu cambio de email
+      password_change:
+        changed: La contraseña de tu cuenta %{app_name} fue cambiada el %{date}.
+        did_not_make_change:
+          contact_policy_abuse: contacta a Políticas y Prevención de Abuso
+          html: Si no realizaste este cambio, alguien más puede tener acceso a tu
+            %{app_name} cuenta. Por favor, %{reset_password_link} o %{contact_policy_abuse_link}.
+          reset_password: restablece tu contraseña
+          text: Si no realizaste este cambio, alguien más puede tener acceso a tu
+            %{app_name} cuenta. Por favor, restablece tu contraseña ahora (%{reset_password_url})
+            o contacta a Políticas y Prevención de Abuso %{contact_policy_abuse_url}.
+        made_change:
+          contact_support: contacta a Soporte Técnico
+          html: Si realizaste este cambio, puedes %{login_link} o %{reset_password_link}
+            si la olvidaste. Si tienes problemas técnicos, por favor %{contact_support_link}.
+          login: iniciar sesión con tu nueva contraseña
+          reset_password: restablecer tu contraseña
+          text: 'Si realizaste este cambio, puedes iniciar sesión con tu nueva contraseña
+            (%{login_url}) o restablecerla si la has olvidado (%{reset_password_url}).
+            Si tienes problemas técnicos, por favor, contacta a Soporte Técnico: %{contact_support_url}'
+        subject: "[%{app_name}] Tu contraseña fue cambiada"
+      reset_password_instructions:
+        change_your_password: cambiar tu contraseña
+        choose_new_password_imperative: utiliza este enlace para elegir una nueva
+          contraseña
+        choose_new_password_imperative_modal: utilizar este enlace para cambiar tu
+          contraseña
+        contact_policy_abuse: ponte en contacto con Políticas y Prevención de Abuso
+        contact_policy_abuse_instructions:
+          html: Si tienes motivos para creer que alguien más consiguió acceder a tu
+            cuenta %{app_name}, por favor, %{contact_policy_abuse_link} con todos
+            los detalles pertinentes.
+          text: 'Si tienes motivos para creer que alguien más consiguió acceder a
+            tu cuenta %{app_name}, por favor, ponte en contacto con Políticas y Prevención
+            de Abuso con todos los detalles pertinentes: %{contact_policy_abuse_url}.'
+        contact_support: ponte en contacto con Soporte Técnico
+        ignore_if_not_requested:
+          html: "%{safely_ignore_bold} Tal vez alguien ingresó tu dirección de correo
+            por error."
+          safely_ignore: Si no hiciste esta solicitud, puedes ignorar y eliminar este
+            correo.
+          text: Si no hiciste esta solicitud, puedes ignorar y eliminar este correo.
+            Tal vez alguien ingresó tu dirección de correo por error.
+        instructions:
+          html: "%{intro_bold} Si el enlace en este correo ya ha caducado, tendrás
+            que %{new_password_reset_link}. Si tienes dificultades técnicas, por favor,
+            espera unas horas y vuelve a intentar. Si ha pasado más de un día, %{contact_support_link}
+            para más ayuda."
+          intro:
+            one: Si has sido tú quien hizo la solicitud, por favor, %{choose_new_password_link_imperative}
+              en %{count} día.
+            other: Si has sido tú quien hizo la solicitud, por favor, %{choose_new_password_link_imperative}
+              dentro de los %{count} días.
+          text:
+            one: 'Si has sido tú quien hizo la solicitud, por favor, utiliza este
+              enlace para elegir una nueva contraseña en %{count} día: %{choose_new_password_url}.
+              Si el enlace en este correo ya ha caducado, tendrás que volver a solicitar
+              el restablecimiento de tu contraseña: %{new_password_reset_url}. Si
+              tienes dificultades técnicas, por favor, espera unas horas y vuelve
+              a intentar. Si ha pasado más de un día, ponte en contacto con Soporte
+              Técnico para más ayuda: %{contact_support_url}.'
+            other: 'Si has sido tú quien hizo la solicitud, por favor, utiliza este
+              enlace para elegir una nueva contraseña dentro de los %{count} días:
+              %{choose_new_password_url}. Si el enlace en este correo ya ha caducado,
+              tendrás que volver a solicitar el restablecimiento de tu contraseña:
+              %{new_password_reset_url}. Si tienes dificultades técnicas, por favor,
+              espera unas horas y vuelve a intentar. Si ha pasado más de un día, ponte
+              en contacto con Soporte Técnico para más ayuda: %{contact_support_url}.'
+        intro: Alguien ha solicitado restablecer la contraseña de tu cuenta %{app_name}.
+        new_password_reset: volver a solicitar el restablecimiento de tu contraseña
+        reset_emails_clarification:
+          html: Que hayas recibido un correo de restablecimiento de contraseña que
+            no solicitaste no siempre significa que tu cuenta %{app_name} esté en
+            peligro. Mientras seas la única persona con los datos de acceso a tu cuenta
+            de correo, tu cuenta %{app_name} no se verá afectada y tu contraseña no
+            cambiará con solo solicitar restablecer tu contraseña. Sin embargo, puedes
+            %{choose_new_password_link_modal} o iniciar sesión y %{change_your_password_link}.
+            Cualquiera de las dos opciones cerrará la sesión en todos tus dispositivos.
+          text: 'Que hayas recibido un correo de restablecimiento de contraseña que
+            no solicitaste no siempre significa que tu cuenta %{app_name} esté en
+            peligro. Mientras seas la única persona con los datos de acceso a tu cuenta
+            de correo, tu cuenta %{app_name} no se verá afectada y tu contraseña no
+            cambiará con solo solicitar restablecer tu contraseña. Sin embargo, puedes
+            utilizar este enlace para cambiar tu contraseña (%{choose_new_password_url})
+            o iniciar sesión y cambiar tu contraseña: %{change_your_password_url}.
+            Cualquiera de las dos opciones cerrará la sesión en todos tus dispositivos.'
+        subject: Restablece tu contraseña
