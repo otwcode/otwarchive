@@ -131,6 +131,11 @@ describe ArchiveFaqsController do
         get :index, params: { language_id: "" }, session: { language_id: "" }
         it_redirects_to(archive_faqs_path(language_id: "en"))
       end
+
+      it "redirects to the new locale iso when the locale param is the old iso" do
+        get :index, params: { language_id: "zh-CN" }
+        it_redirects_to(archive_faqs_path(language_id: "zh-Hans"))
+      end
     end
 
     context "when logged in as a regular user" do
