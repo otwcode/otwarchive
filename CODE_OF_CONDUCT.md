@@ -15,9 +15,7 @@ Jira, and pull requests.
 * Contributors may give feedback about code quality, including comments regarding violations of
   our [Coding Standards](https://github.com/otwcode/otwarchive/wiki/Coding-Standards)
   or [Commit Policy](https://github.com/otwcode/otwarchive/wiki/Commit-Policy). Comments regarding other policies,
-  including violations of
-  the [Contributing Guidelines](https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md), are handled by OTW
-  volunteers.
+  including violations of the [Contributing Guidelines](CONTRIBUTING.md), are handled by OTW volunteers.
 * If a pull request or issue appears
   abandoned, [as defined in our stalled issues documentation](https://github.com/otwcode/otwarchive/wiki/Commit-Policy#stalled-pull-requests-and-jira-issues),
   contributors who wish to pick it up are encouraged to
@@ -54,3 +52,8 @@ investigated and responded to as promptly as possible and as appropriate for the
 **Note:** The Archive of Our Own (AO3) is not considered to be a project space, and conduct there is governed by its
 [Terms of Service](https://archiveofourown.org/tos). Potential violations thereof must be reported via
 the [Policy & Abuse contact form](https://archiveofourown.org/abuse_reports/new).
+
+## Enforcement
+
+Violations of any part of this Code of Conduct, including our [policy on AI usage](CONTRIBUTING.md#contributing-code),
+may result in corrective action, up to and including banning from the GitHub repository and Jira.
