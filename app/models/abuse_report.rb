@@ -260,12 +260,11 @@ class AbuseReport < ApplicationRecord
       collection_params_only = url.match(%r{/collections/\w+/}).to_s
       collection_report_period = ArchiveConfig.ABUSE_REPORTS_PER_COLLECTION_PERIOD.days.ago
       existing_reports_total = AbuseReport.where('created_at > ? AND
-                                                  url LIKE ? AND
-                                                  url NOT REGEXP ?',
-                                                  collection_report_period,
-                                                  "%#{collection_params_only}%",
-                                                  "#{collection_params_only}works/[0-9]+").count
-
+                                                 url LIKE ? AND
+                                                 url NOT REGEXP ?',
+                                                 collection_report_period,
+                                                 "%#{collection_params_only}%",
+                                                 "#{collection_params_only}works/[0-9]+").count
       errors.add(:base, :over_reported_collection) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_COLLECTION_MAX
     end
   end
