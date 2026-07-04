@@ -2172,27 +2172,6 @@ en:
       intro:
         html: As the Organization for Transformative Works (OTW) is a U.S. nonprofit, we are subject to U.S. law. Content that is made available on any of our sites, including the Archive of Our Own (AO3), may therefore be subject to removal under certain conditions. In order to enact removal of content under the policies described on this page, a statutorily valid takedown notice must be submitted by an individual with the legal right to request removal of the content in question. %{not_uphold_removal_request}
         not_uphold_removal_request: We will not uphold removal requests from unauthorized third parties.
-      # links:
-      #   complaint_notification: remove the content and notify you by email
-      #   confidentiality: standard of confidentiality
-      #   contact_legal: contact the Legal committee
-      #   copyright_infringement: copyright infringement
-      #   copyright_plagiarism: reproduce copyrighted material without authorization
-      #   creative_commons_license: Creative Commons Attribution-ShareAlike 4.0 International License
-      #   dmca_confidentiality: not subject to confidentiality
-      #   dmca_law: 17 U.S.C. § 512
-      #   legal_contact_form: the Legal committee's contact form
-      #   lumen: Lumen
-      #   lumen_dmca_faq: Lumen DMCA Explanation and FAQ
-      #   original_request: the original TIDA removal request
-      #   plagiarism: plagiarism
-      #   plagiarism_or_infringement: plagiarism or copyright infringement
-      #   repeat_offenses: suspend your account
-      #   suspend: suspend
-      #   takedown_requirements: legal requirements
-      #   terms_of_service: Terms of Service
-      #   terms_of_service_faq: Terms of Service FAQ
-      #   transformative_fanworks: transformative fanworks are legal
       toc:
         heading: Table of Contents
         dmca_policy:
@@ -2216,6 +2195,24 @@ en:
             tida_takedown_requirements: TIDA takedown process
           tida_appeal_options: I was notified that my work was removed from AO3 due to a TIDA takedown notice. What can I do?
         repeat_offenses: Repeat Offenses 
+      dmca_policy:
+        heading: DMCA Policy
+        intro: The Digital Millennium Copyright Act (DMCA) establishes the procedure the OTW will follow when users of our sites (including AO3) %{copyright_infringement_link}, if the infringing material is reported to us by the copyright owner or someone legally authorized to act on their behalf.
+        copyright_infringement: reproduce copyrighted material without authorization
+        details: The OTW adheres to %{uscode_512} and will respond promptly to notices of alleged copyright infringement that substantially comply with all %{legal_requirements}. However, we believe that %{transformative_fanworks_are_legal}, and we reserve the right to review the allegedly infringing content and independently determine whether it is infringing. If you have any questions about the OTW's DMCA Policy, please %{contact_legal_committee}</a>.
+        uscode_512: 17 U.S.C. § 512
+        legal_requirements: legal requirements
+        transformavtive_fanworks_are_legal: transformative fanworks are legal
+        contact_legal_committee: contact the Legal committee
+        dmca_removal_options:
+          heading: My work was posted on AO3 without my permission. What can I do?
+          intro: "If you encounter content on AO3 that you believe infringes on your copyrighted work, you have the following options:"
+          submit_an_abuse_report: Submit an Abuse report
+          submit_an_abuse_report_html: ": Abuse reports are evaluated by the Policy & Abuse committee for violations of the {tos}, and held to a very high %{standard_of_confidentiality}. When submitting an Abuse report about %{copyright_infringement}, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq}."
+          tos: AO3 Terms of Service
+          standard_of_confidentiality: standard of confidentiality
+          copyright_infringement: plagiarism or copyright infringement
+          tos_faq: Terms of Service FAQ
 
 
     tos:
