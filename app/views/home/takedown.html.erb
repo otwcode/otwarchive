@@ -33,12 +33,11 @@
     </ul>
     <h4><a href="#repeat_offenses"><%= t(".toc.repeat_offenses") %></a></h4></nav>
   <h3 class="heading" id="dmca_policy"><%= t(".dmca_policy.heading") %></h3>
-  <p><%= t(".dmca_policy.intro", 
-  copyright_infringement_link: link_to(t(".dmca_policy.copyright_infringement"), 
-  tos_faq_path(anchor: "copyright_plagiarism_faq"))) %></p>
-  <p><%= t(".dmca_policy.details", 
-  uscode_512_link: link_to(t(".dmca_policy.uscode_512"), "https://www.law.cornell.edu/uscode/text/17/512"), 
-  legal_requirements_link: link_to(t(".dmca_policy.legal_requirements"), "takedown#dmca_takedown_requirements"), 
+  <p><%= t(".dmca_policy.html", 
+  copyright_infringement_link: link_to(t(".dmca_policy.copyright_infringement"), tos_faq_path(anchor: "copyright_plagiarism_faq"))) %></p>
+  <p><%= t(".dmca_policy.details_html", 
+  uscode_link: link_to(t(".dmca_policy.uscode"), "https://www.law.cornell.edu/uscode/text/17/512"), 
+  legal_requirements_link: link_to(t(".dmca_policy.legal_requirements"), "/takedown#dmca_takedown_requirements"), 
   transformative_fanworks_are_legal_link: link_to(t(".dmca_policy.transformative_fanworks_are_legal"), "https://www.transformativeworks.org/faq/#faq-WhydoestheOTWbelievethattransformativeworksarelegal"), 
   contact_legal_committee_link: link_to(t(".dmca_policy.contact_legal_committee"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy")) %></p>
   <h4 class="heading" id="dmca_removal_options"><%= t(".dmca_policy.dmca_removal_options.heading") %></h4>
@@ -49,9 +48,7 @@
     tos_link: link_to(t(".dmca_policy.dmca_removal_options.tos"), tos_path),
     standard_of_confidentiality_link: link_to(t(".dmca_policy.dmca_removal_options.standard_of_confidentiality"), tos_faq_path(anchor: "report_anonymity")),
     copyright_infringement_link: link_to(t(".dmca_policy.dmca_removal_options.copyright_infringement"), tos_faq_path(anchor: "copyright_plagiarism_faq")),
-    tos_faq_link: link_to(t(".dmca_policy.dmca_removal_options.tos_faq"), tos_faq_path(anchor: "report_infringement"))
-    )
-    %>
+    tos_faq_link: link_to(t(".dmca_policy.dmca_removal_options.tos_faq"), tos_faq_path(anchor: "report_infringement")))%>
     </li>
     <li><strong><a href="#dmca_takedown_instructions">File a DMCA takedown notice</a>:</strong> DMCA takedown notices can <strong>only</strong> be filed by the copyright owner or someone legally authorized to act on their behalf. DMCA notices must be sent to the OTW's designated agent and comply with all <a href="#dmca_takedown_requirements">legal requirements</a>. DMCA notices are <a href="/tos_faq#dmca_complaint">not subject to confidentiality</a>. The OTW reserves the right to make public all DMCA notices that we receive, though information may be redacted for privacy.</li>
   </ul>

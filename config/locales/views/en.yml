@@ -2197,18 +2197,18 @@ en:
         repeat_offenses: Repeat Offenses 
       dmca_policy:
         heading: DMCA Policy
-        intro: The Digital Millennium Copyright Act (DMCA) establishes the procedure the OTW will follow when users of our sites (including AO3) %{copyright_infringement_link}, if the infringing material is reported to us by the copyright owner or someone legally authorized to act on their behalf.
+        html: The Digital Millennium Copyright Act (DMCA) establishes the procedure the OTW will follow when users of our sites (including AO3) %{copyright_infringement_link}, if the infringing material is reported to us by the copyright owner or someone legally authorized to act on their behalf.
         copyright_infringement: reproduce copyrighted material without authorization
-        details: The OTW adheres to %{uscode_512} and will respond promptly to notices of alleged copyright infringement that substantially comply with all %{legal_requirements}. However, we believe that %{transformative_fanworks_are_legal}, and we reserve the right to review the allegedly infringing content and independently determine whether it is infringing. If you have any questions about the OTW's DMCA Policy, please %{contact_legal_committee}</a>.
-        uscode_512: 17 U.S.C. § 512
+        details_html: The OTW adheres to %{uscode_link} and will respond promptly to notices of alleged copyright infringement that substantially comply with all %{legal_requirements_link}. However, we believe that %{transformative_fanworks_are_legal_link}, and we reserve the right to review the allegedly infringing content and independently determine whether it is infringing. If you have any questions about the OTW's DMCA Policy, please %{contact_legal_committee_link}.
+        uscode: 17 U.S.C. § 512
         legal_requirements: legal requirements
-        transformavtive_fanworks_are_legal: transformative fanworks are legal
+        transformative_fanworks_are_legal: transformative fanworks are legal
         contact_legal_committee: contact the Legal committee
         dmca_removal_options:
           heading: My work was posted on AO3 without my permission. What can I do?
           intro: "If you encounter content on AO3 that you believe infringes on your copyrighted work, you have the following options:"
           submit_an_abuse_report: Submit an Abuse report
-          submit_an_abuse_report_html: ": Abuse reports are evaluated by the Policy & Abuse committee for violations of the {tos}, and held to a very high %{standard_of_confidentiality}. When submitting an Abuse report about %{copyright_infringement}, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq}."
+          submit_an_abuse_report_html: ": Abuse reports are evaluated by the Policy & Abuse committee for violations of the {tos_link}, and held to a very high %{standard_of_confidentiality_link}. When submitting an Abuse report about %{copyright_infringement_link}, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq_link}."
           tos: AO3 Terms of Service
           standard_of_confidentiality: standard of confidentiality
           copyright_infringement: plagiarism or copyright infringement
