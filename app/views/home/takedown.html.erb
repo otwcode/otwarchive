@@ -43,46 +43,51 @@
   <h4 class="heading" id="dmca_removal_options"><%= t(".dmca_policy.dmca_removal_options.heading") %></h4>
   <p><%= t(".dmca_policy.dmca_removal_options.intro") %></p>
   <ul>
-    <li><strong><a href="/abuse_reports/new"><%= t(".dmca_policy.dmca_removal_options.submit_an_abuse_report") %></a></strong>
-    <%= t(".dmca_policy.dmca_removal_options.submit_an_abuse_report_html",
+    <li><strong><a href="/abuse_reports/new"><%= t(".dmca_policy.dmca_removal_options.submit_an_abuse_report")%></a></strong><%= t(".dmca_policy.dmca_removal_options.submit_an_abuse_report_html",
+    colon: tag.strong(t(".dmca_policy.dmca_removal_options.colon")),
     tos_link: link_to(t(".dmca_policy.dmca_removal_options.tos"), tos_path),
     standard_of_confidentiality_link: link_to(t(".dmca_policy.dmca_removal_options.standard_of_confidentiality"), tos_faq_path(anchor: "report_anonymity")),
     copyright_infringement_link: link_to(t(".dmca_policy.dmca_removal_options.copyright_infringement"), tos_faq_path(anchor: "copyright_plagiarism_faq")),
     tos_faq_link: link_to(t(".dmca_policy.dmca_removal_options.tos_faq"), tos_faq_path(anchor: "report_infringement")))%>
     </li>
-    <li><strong><a href="#dmca_takedown_instructions">File a DMCA takedown notice</a>:</strong> DMCA takedown notices can <strong>only</strong> be filed by the copyright owner or someone legally authorized to act on their behalf. DMCA notices must be sent to the OTW's designated agent and comply with all <a href="#dmca_takedown_requirements">legal requirements</a>. DMCA notices are <a href="/tos_faq#dmca_complaint">not subject to confidentiality</a>. The OTW reserves the right to make public all DMCA notices that we receive, though information may be redacted for privacy.</li>
+    <li><strong><a href="#dmca_takedown_instructions"><%= t(".dmca_policy.dmca_removal_options.file_a_dmca_takedown_notice")%></a></strong><%= t(".dmca_policy.dmca_removal_options.file_a_dmca_takedown_notice_html",
+    colon: tag.strong(t(".dmca_policy.dmca_removal_options.colon")),
+    only: tag.strong(t(".dmca_policy.dmca_removal_options.only")),
+    legal_requirements_link: link_to(t(".dmca_policy.dmca_removal_options.legal_requirements"),"#dmca_takedown_requirements"),
+    not_subject_to_confidentiality_link: link_to(t(".dmca_policy.dmca_removal_options.not_subject_to_confidentiality"), tos_faq_path(anchor: "dmca_complaint")))%>
+    </li>
   </ul>
-  <p>Please <strong>do not</strong> submit an Abuse report if you intend to file a DMCA notice. Submitting both an Abuse report and a DMCA notice about the same content may delay the processing of your request.</p>
-  <h5 class="heading" id="dmca_takedown_instructions">Filing a DMCA takedown notice</h5>
-  <p>To initiate a formal DMCA takedown request, contact the OTW's designated agent using <a href="https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy">the Legal committee's contact form</a>, via email to legal@transformativeworks.org, or by mailing a letter to:</p>
+  <p><%= t(".dmca_policy.dmca_removal_options.do_not_submit_both_html", do_not: tag.strong(t(".dmca_policy.dmca_removal_options.do_not")))%></p>
+  <h5 class="heading" id="dmca_takedown_instructions"><%= t(".dmca_policy.dmca_takedown_instructions.heading") %></h5>
+  <p><%= t(".dmca_policy.dmca_takedown_instructions.initiate_a_dmca_html", legal_contact_form_link: link_to(t(".dmca_policy.dmca_takedown_instructions.legal_contact_form"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy"))%></p>
   <address>
-    Organization for Transformative Works<br />
-    228 Park Ave S #18156<br />
-    New York, NY 10003-1502<br />
-    Attention: Legal
+    <%= t(".dmca_policy.dmca_takedown_instructions.otw")%><br />
+    <%= t(".dmca_policy.dmca_takedown_instructions.street")%><br />
+    <%= t(".dmca_policy.dmca_takedown_instructions.city")%><br />
+    <%= t(".dmca_policy.dmca_takedown_instructions.attention_legal")%>
   </address>
-  <p>We prefer to receive DMCA requests through the contact form or by email.</p>
-  <h5 class="heading" id="dmca_takedown_requirements">Requirements of a DMCA takedown notice</h5>
-  <p>The takedown notice must substantially comply with the requirements of 17 U.S.C. § 512(c)(3)(A). You are also required to consent to the jurisdiction of a United States court. The legal requirements of a valid DMCA takedown notice include:</p>
+  <p><%= t(".dmca_policy.dmca_takedown_instructions.prefer_to_receive_dmca")%></p>
+  <h5 class="heading" id="dmca_takedown_requirements"><%= t(".dmca_policy.dmca_takedown_requirements.heading")%></h5>
+  <p><%= t(".dmca_policy.dmca_takedown_requirements.notice_must_comply")%></p>
   <ol>
-    <li>your physical or electronic signature;</li>
-    <li>your contact information;</li>
-    <li>identification of the copyrighted work being infringed upon (for example, a URL or publication listing);</li>
-    <li>the URL(s) of the specific content on our site that you believe to be infringing;</li>
-    <li>a statement that you have a good-faith belief that the use of the content is not authorized by the copyright owner(s), their agent, or the law;</li>
+    <li><%=t(".dmca_policy.dmca_takedown_requirements.signature")%></li>
+    <li><%=t(".dmca_policy.dmca_takedown_requirements.contact")%></li>
+    <li><%=t(".dmca_policy.dmca_takedown_requirements.identification_of_work")%></li>
+    <li><%=t(".dmca_policy.dmca_takedown_requirements.url_on_our_site")%></li>
+    <li><%=t(".dmca_policy.dmca_takedown_requirements.statement_of_good_faith")%></li>
     <li>
       <ol>
-        <li>a statement, <strong>made under penalty of perjury</strong>, that you are authorized to act on behalf of the copyright owner; and</li>
-        <li>a statement that the information you have provided is accurate.</li>
+        <li><%=t(".dmca_policy.dmca_takedown_requirements.perjury_statement_html", made_under_penalty_of_perjury: tag.strong(t(".dmca_policy.dmca_takedown_requirements.made_under_penalty_of_perjury")))%></li>
+        <li><%=t(".dmca_policy.dmca_takedown_requirements.accurate_statement")%></li>
       </ol>
     </li>
   </ol>
-  <p>Per 17 U.S.C. § 512(f), you may be subject to liability if you knowingly and materially misrepresent your claim that the content infringes on your copyright.</p>
-  <h5 class="heading" id="dmca_takedown_process">DMCA takedown process</h5>
-  <p>If the OTW receives a DMCA takedown notice that fulfills all <a href="#dmca_takedown_requirements">legal requirements</a>, we will remove the content once we review the validity of the infringement claim.</p>
-  <p>When the content is removed from AO3, the information you provided in the DMCA takedown notice will be forwarded to the owner of the account responsible for posting the content. We may also send a redacted version of the DMCA takedown notice to <a href="https://lumendatabase.org/">Lumen</a> and other third parties at our discretion.</p>
-  <p>If the account owner believes that their content does not infringe upon your copyright, they may file a DMCA counternotice disputing the takedown. The account owner can file a DMCA counternotice at any point after the content has been removed; there is no time limit.</p>
-  <p>If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify you. You will have 10 business days to file a lawsuit to prevent the restoration of the content. If you do not notify us within 10 business days that you have filed a lawsuit, we may allow the content to be restored in accordance with 17 U.S.C. § 512(g)(2)(B)-(C).</p>
+  <p><%=t(".dmca_policy.dmca_takedown_requirements.subjetct_to_liability")%></p>
+  <h5 class="heading" id="dmca_takedown_process"><%=t(".dmca_policy.dmca_takedown_process.heading")%></h5>
+  <p><%=t(".dmca_policy.dmca_takedown_process.remove_the_content_html", legal_requirements_link: link_to(t(".dmca_policy.dmca_takedown_process.legal_requirements"), "takedown#dmca_takedown_requirements"))%></p>
+  <p><%=t(".dmca_policy.dmca_takedown_process.when_the_content_is_removed_html", lumen_link: link_to(t(".dmca_policy.dmca_takedown_process.lumen"), "https://lumendatabase.org/"))%></p>
+  <p><%=t(".dmca_policy.dmca_takedown_process.dmca_counternotice")%></p>
+  <p><%=t(".dmca_policy.dmca_takedown_process.if_receives_a_dmca_counternotice")%></p>
   <h4 class="heading" id="dmca_appeal_options">I was notified that my work was removed from AO3 due to a DMCA takedown notice. What can I do?</h4>
   <p><a href="/content#II.D">Copyright infringement</a> and <a href="/content#II.E">plagiarism</a> are violations of Sections II.D. and II.E. of our <a href="/tos">Terms of Service</a>, respectively. For more information, please refer to our <a href="/tos_faq#copyright_plagiarism_faq">Terms of Service FAQ</a>.</p>
   <p>If the OTW receives a valid DMCA takedown notice for content you uploaded to AO3, we will <a href="/tos_faq#complaint_notification">remove the content and notify you by email</a>. We may also send a redacted version of the DMCA takedown notice to <a href="https://lumendatabase.org/">Lumen</a> and other third parties at our discretion.</p>

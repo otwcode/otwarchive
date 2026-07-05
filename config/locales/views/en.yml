@@ -2208,13 +2208,48 @@ en:
           heading: My work was posted on AO3 without my permission. What can I do?
           intro: "If you encounter content on AO3 that you believe infringes on your copyrighted work, you have the following options:"
           submit_an_abuse_report: Submit an Abuse report
-          submit_an_abuse_report_html: ": Abuse reports are evaluated by the Policy & Abuse committee for violations of the {tos_link}, and held to a very high %{standard_of_confidentiality_link}. When submitting an Abuse report about %{copyright_infringement_link}, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq_link}."
+          submit_an_abuse_report_html: "%{colon} Abuse reports are evaluated by the Policy & Abuse committee for violations of the {tos_link}, and held to a very high %{standard_of_confidentiality_link}. When submitting an Abuse report about %{copyright_infringement_link}, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq_link}."
+          colon: ":"
           tos: AO3 Terms of Service
           standard_of_confidentiality: standard of confidentiality
           copyright_infringement: plagiarism or copyright infringement
           tos_faq: Terms of Service FAQ
-
-
+          file_a_dmca_takedown_notice: File a DMCA takedown notice
+          file_a_dmca_takedown_notice_html: "%{colon} DMCA takedown notices can %{only} be filed by the copyright owner or someone legally authorized to act on their behalf. DMCA notices must be sent to the OTW's designated agent and comply with all %{legal_requirements_link}. DMCA notices are %{not_subject_to_confidentiality_link}. The OTW reserves the right to make public all DMCA notices that we receive, though information may be redacted for privacy."
+          only: only
+          legal_requirements: legal requirements
+          not_subject_to_confidentiality: not subject to confidentiality
+          do_not_submit_both_html: Please %{do_not} submit an Abuse report if you intend to file a DMCA notice. Submitting both an Abuse report and a DMCA notice about the same content may delay the processing of your request.
+          do_not: do not
+        dmca_takedown_instructions: 
+          heading: Filing a DMCA takedown notice
+          initiate_a_dmca_html: "To initiate a formal DMCA takedown request, contact the OTW's designated agent using %{legal_contact_form_link}, via email to legal@transformativeworks.org, or by mailing a letter to:"
+          legal_contact_form: the Legal committee's contact form
+          otw: Organization for Transformative Works
+          street: "228 Park Ave S #18156"
+          city: New York, NY 10003-1502
+          attention_legal: "Attention: Legal"
+          prefer_to_receive_dmca: We prefer to receive DMCA requests through the contact form or by email.
+        dmca_takedown_requirements:
+          heading: Requirements of a DMCA takedown notice
+          notice_must_comply: "The takedown notice must substantially comply with the requirements of 17 U.S.C. § 512(c)(3)(A). You are also required to consent to the jurisdiction of a United States court. The legal requirements of a valid DMCA takedown notice include:"
+          signature: your physical or electronic signature;
+          contact: your contact information;
+          identification_of_work: identification of the copyrighted work being infringed upon (for example, a URL or publication listing);
+          url_on_our_site: the URL(s) of the specific content on our site that you believe to be infringing;
+          statement_of_good_faith: a statement that you have a good-faith belief that the use of the content is not authorized by the copyright owner(s), their agent, or the law;
+          perjury_statement_html: a statement, %{made_under_penalty_of_perjury}, that you are authorized to act on behalf of the copyright owner; and
+          made_under_penalty_of_perjury: made under penalty of perjury
+          accurate_statement: a statement that the information you have provided is accurate.
+          subjetct_to_liability: Per 17 U.S.C. § 512(f), you may be subject to liability if you knowingly and materially misrepresent your claim that the content infringes on your copyright.
+        dmca_takedown_process:
+          heading: DMCA takedown process
+          remove_the_content_html: If the OTW receives a DMCA takedown notice that fulfills all %{legal_requirements_link}, we will remove the content once we review the validity of the infringement claim.
+          legal_requirements: legal requirements
+          when_the_content_is_removed_html: When the content is removed from AO3, the information you provided in the DMCA takedown notice will be forwarded to the owner of the account responsible for posting the content. We may also send a redacted version of the DMCA takedown notice to %{lumen_link} and other third parties at our discretion.
+          lumen: Lumen
+          dmca_counternotice: If the account owner believes that their content does not infringe upon your copyright, they may file a DMCA counternotice disputing the takedown. The account owner can file a DMCA counternotice at any point after the content has been removed; there is no time limit.
+          if_receives_a_dmca_counternotice: If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify you. You will have 10 business days to file a lawsuit to prevent the restoration of the content. If you do not notify us within 10 business days that you have filed a lawsuit, we may allow the content to be restored in accordance with 17 U.S.C. § 512(g)(2)(B)-(C).
     tos:
       abuse_policy:
         answers_common_questions_html: Answers to common questions about the Abuse Policy can be found in the %{tos_faq_link}.
