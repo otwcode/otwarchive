@@ -2241,7 +2241,7 @@ en:
           perjury_statement_html: a statement, %{made_under_penalty_of_perjury}, that you are authorized to act on behalf of the copyright owner; and
           made_under_penalty_of_perjury: made under penalty of perjury
           accurate_statement: a statement that the information you have provided is accurate.
-          subjetct_to_liability: Per 17 U.S.C. § 512(f), you may be subject to liability if you knowingly and materially misrepresent your claim that the content infringes on your copyright.
+          subject_to_liability: Per 17 U.S.C. § 512(f), you may be subject to liability if you knowingly and materially misrepresent your claim that the content infringes on your copyright.
         dmca_takedown_process:
           heading: DMCA takedown process
           remove_the_content_html: If the OTW receives a DMCA takedown notice that fulfills all %{legal_requirements_link}, we will remove the content once we review the validity of the infringement claim.
@@ -2250,6 +2250,55 @@ en:
           lumen: Lumen
           dmca_counternotice: If the account owner believes that their content does not infringe upon your copyright, they may file a DMCA counternotice disputing the takedown. The account owner can file a DMCA counternotice at any point after the content has been removed; there is no time limit.
           if_receives_a_dmca_counternotice: If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify you. You will have 10 business days to file a lawsuit to prevent the restoration of the content. If you do not notify us within 10 business days that you have filed a lawsuit, we may allow the content to be restored in accordance with 17 U.S.C. § 512(g)(2)(B)-(C).
+        dmca_appeal_options:
+          heading: I was notified that my work was removed from AO3 due to a DMCA takedown notice. What can I do?
+          html: "%{copyright_infringement_link} and %{plagiarism_link} are violations of Sections II.D. and II.E. of our %{tos_link}, respectively. For more information, please refer to our %{tos_faq_link}."
+          copyright_infringement: Copyright infringement
+          plagiarism: plagiarism
+          tos: Terms of Service
+          tos_faq: Terms of Service FAQ
+          remove_the_content_html: If the OTW receives a valid DMCA takedown notice for content you uploaded to AO3, we will %{notify_by_email_link}. We may also send a redacted version of the DMCA takedown notice to %{lumen_link} and other third parties at our discretion.
+          notify_by_email: remove the content and notify you by email
+          lumen: Lumen
+          cannot_reupload_html: If your content was removed due to a DMCA takedown notice, %{you} %{cannot} %{repost_until_counternotice}. If you reupload or repost the content without filing a DMCA counternotice, we may %{suspend_your_account_link}.
+          you: you
+          cannot: cannot
+          repost_until_counternotice: reupload or repost the content unless you have filed a DMCA counternotice to dispute the takedown
+          suspend_your_account: suspend your account
+        dmca_counternotice_instructions:
+          heading: Filing a DMCA counternotice
+          counternotice_html: If you believe that your content does not infringe on the copyright owner's work, you can file a DMCA counternotice to dispute the takedown. By filing a counternotice, you are indicating that %{willing_to_defend} if the party who submitted the original takedown notice chooses to pursue legal action against you.
+          willing_to_defend: you are willing to defend your use of the original copyrighted material in court
+          contact_lawyer_html: If you are considering whether to file a DMCA counternotice, we recommend that you contact an intellectual property lawyer licensed to practice in your jurisdiction, so that you are aware of your legal rights and obligations. You can also review the %{lumen_dmca_link}.
+          lumen_dmca: Lumen DMCA Explanation and FAQ
+          initiate_counter_request_html: "To initiate a formal DMCA counter-notification request, contact the OTW's designated agent using %{legal_contact_form_link}, via email to legal@transformativeworks.org, or by mailing a letter to:"
+          legal_contact_form: the Legal committee's contact form
+          otw: Organization for Transformative Works
+          street: "228 Park Ave S #18156"
+          city: New York, NY 10003-1502
+          attention_legal: "Attention: Legal"
+          prefer_to_receive_dmca: We prefer to receive DMCA requests through the contact form or by email.
+          no_time_limit_to_file: You can file a DMCA counternotice at any point after your content has been removed; there is no time limit.
+        dmca_counternotice_requirements:
+          heading: Requirements of a DMCA counternotice
+          counternotice_comply: "The counternotice must substantially comply with the requirements of 17 U.S.C. § 512(g)(3). You are also required to consent to the jurisdiction of a United States court. The legal requirements of a valid DMCA counternotice include:"
+          signature: your physical or electronic signature;
+          name_info: your name, address, and phone number;
+          removed_url: the URL(s) of the content that was removed;
+          statement_html: a statement, %{made_under_penalty_of_perjury}, that the content was removed due to a mistake or misidentification;
+          made_under_penalty_of_perjury: made under penalty of perjury
+          statement_of_consent: "a statement that you consent to the jurisdiction of a U.S. federal court in either:"
+          district: the district where you live, if you are in the U.S.; or
+          otw_district_html: the district where the OTW is located (%{manhattan_new_york_link}), if you are not in the U.S.; and
+          manhattan_new_york: Manhattan, New York
+          statement_of_service: a statement that you will accept service of process from the party who submitted the original takedown notice.
+          subject_to_liability: Per 17 U.S.C. § 512(f), you may be subject to liability if you knowingly and materially misrepresent your claim that the content was removed due to a mistake or misidentification.
+        dmca_counternotice_process:
+          heading: DMCA counter-notification process
+          counternotice_notification: If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify the party who submitted the original takedown notice.
+          restore_content_html: The original submitter will have 10 business days to prevent the restoration of your content by filing a lawsuit against you. If the original submitter does not file a lawsuit within 10 business days, the OTW may restore your content (or, if your content has already been deleted, allow you to reupload it) between 10 and 14 business days after we receive the counternotice. We may also send a redacted version of the DMCA counternotice to %{lumen_link} and other third parties at our discretion.
+          lumen: Lumen
+
     tos:
       abuse_policy:
         answers_common_questions_html: Answers to common questions about the Abuse Policy can be found in the %{tos_faq_link}.

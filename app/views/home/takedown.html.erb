@@ -37,7 +37,7 @@
   copyright_infringement_link: link_to(t(".dmca_policy.copyright_infringement"), tos_faq_path(anchor: "copyright_plagiarism_faq"))) %></p>
   <p><%= t(".dmca_policy.details_html", 
   uscode_link: link_to(t(".dmca_policy.uscode"), "https://www.law.cornell.edu/uscode/text/17/512"), 
-  legal_requirements_link: link_to(t(".dmca_policy.legal_requirements"), "/takedown#dmca_takedown_requirements"), 
+  legal_requirements_link: link_to(t(".dmca_policy.legal_requirements"), takedown_path(anchor: "dmca_takedown_requirements")), 
   transformative_fanworks_are_legal_link: link_to(t(".dmca_policy.transformative_fanworks_are_legal"), "https://www.transformativeworks.org/faq/#faq-WhydoestheOTWbelievethattransformativeworksarelegal"), 
   contact_legal_committee_link: link_to(t(".dmca_policy.contact_legal_committee"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy")) %></p>
   <h4 class="heading" id="dmca_removal_options"><%= t(".dmca_policy.dmca_removal_options.heading") %></h4>
@@ -53,7 +53,7 @@
     <li><strong><a href="#dmca_takedown_instructions"><%= t(".dmca_policy.dmca_removal_options.file_a_dmca_takedown_notice")%></a></strong><%= t(".dmca_policy.dmca_removal_options.file_a_dmca_takedown_notice_html",
     colon: tag.strong(t(".dmca_policy.dmca_removal_options.colon")),
     only: tag.strong(t(".dmca_policy.dmca_removal_options.only")),
-    legal_requirements_link: link_to(t(".dmca_policy.dmca_removal_options.legal_requirements"),"#dmca_takedown_requirements"),
+    legal_requirements_link: link_to(t(".dmca_policy.dmca_removal_options.legal_requirements"),takedown_path(anchor: "dmca_takedown_requirements")),
     not_subject_to_confidentiality_link: link_to(t(".dmca_policy.dmca_removal_options.not_subject_to_confidentiality"), tos_faq_path(anchor: "dmca_complaint")))%>
     </li>
   </ul>
@@ -82,47 +82,68 @@
       </ol>
     </li>
   </ol>
-  <p><%=t(".dmca_policy.dmca_takedown_requirements.subjetct_to_liability")%></p>
+  <p><%=t(".dmca_policy.dmca_takedown_requirements.subject_to_liability")%></p>
   <h5 class="heading" id="dmca_takedown_process"><%=t(".dmca_policy.dmca_takedown_process.heading")%></h5>
-  <p><%=t(".dmca_policy.dmca_takedown_process.remove_the_content_html", legal_requirements_link: link_to(t(".dmca_policy.dmca_takedown_process.legal_requirements"), "takedown#dmca_takedown_requirements"))%></p>
+  <p><%=t(".dmca_policy.dmca_takedown_process.remove_the_content_html", legal_requirements_link: link_to(t(".dmca_policy.dmca_takedown_process.legal_requirements"), takedown_path(anchor: "dmca_takedown_requirements")))%></p>
   <p><%=t(".dmca_policy.dmca_takedown_process.when_the_content_is_removed_html", lumen_link: link_to(t(".dmca_policy.dmca_takedown_process.lumen"), "https://lumendatabase.org/"))%></p>
   <p><%=t(".dmca_policy.dmca_takedown_process.dmca_counternotice")%></p>
   <p><%=t(".dmca_policy.dmca_takedown_process.if_receives_a_dmca_counternotice")%></p>
-  <h4 class="heading" id="dmca_appeal_options">I was notified that my work was removed from AO3 due to a DMCA takedown notice. What can I do?</h4>
-  <p><a href="/content#II.D">Copyright infringement</a> and <a href="/content#II.E">plagiarism</a> are violations of Sections II.D. and II.E. of our <a href="/tos">Terms of Service</a>, respectively. For more information, please refer to our <a href="/tos_faq#copyright_plagiarism_faq">Terms of Service FAQ</a>.</p>
-  <p>If the OTW receives a valid DMCA takedown notice for content you uploaded to AO3, we will <a href="/tos_faq#complaint_notification">remove the content and notify you by email</a>. We may also send a redacted version of the DMCA takedown notice to <a href="https://lumendatabase.org/">Lumen</a> and other third parties at our discretion.</p>
-  <p>If your content was removed due to a DMCA takedown notice, <strong>you <em>cannot</em> reupload or repost the content unless you have filed a DMCA counternotice to dispute the takedown</strong>. If you reupload or repost the content without filing a DMCA counternotice, we may <a href="#repeat_offenses">suspend your account</a>.</p>
-  <h5 class="heading" id="dmca_counternotice_instructions">Filing a DMCA counternotice</h5>
-  <p>If you believe that your content does not infringe on the copyright owner's work, you can file a DMCA counternotice to dispute the takedown. By filing a counternotice, you are indicating that <strong>you are willing to defend your use of the original copyrighted material in court</strong> if the party who submitted the original takedown notice chooses to pursue legal action against you.</p>
-  <p>If you are considering whether to file a DMCA counternotice, we recommend that you contact an intellectual property lawyer licensed to practice in your jurisdiction, so that you are aware of your legal rights and obligations. You can also review the <a href="https://lumendatabase.org/topics/14">Lumen DMCA Explanation and FAQ</a>.</p>
-  <p>To initiate a formal DMCA counter-notification request, contact the OTW's designated agent using <a href="https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy">the Legal committee's contact form</a>, via email to legal@transformativeworks.org, or by mailing a letter to:</p>
+  <h4 class="heading" id="dmca_appeal_options"><%=t(".dmca_policy.dmca_appeal_options.heading")%></h4>
+  <p><a href="/content#II.D"><%=t(".dmca_policy.dmca_appeal_options.html", 
+  copyright_infringement_link: link_to(t(".dmca_policy.dmca_appeal_options.copyright_infringement"), content_path(anchor: "#II.D")),
+  plagiarism_link: link_to(t(".dmca_policy.dmca_appeal_options.plagiarism"), content_path(anchor: "#II.E")),
+  tos_link: link_to(t(".dmca_policy.dmca_appeal_options.tos"), tos_path),
+  tos_faq_link: link_to(t(".dmca_policy.dmca_appeal_options.tos_faq"), tos_faq_path)
+  )%></p>
+  <p><%=t(".dmca_policy.dmca_appeal_options.remove_the_content_html",
+  notify_by_email_link: link_to(t(".dmca_policy.dmca_appeal_options.notify_by_email"), tos_faq_path(anchor: "complaint_notification")), 
+  lumen_link: link_to(t(".dmca_policy.dmca_appeal_options.lumen"), "https://lumendatabase.org/")
+  )%></p>
+  <p><%=t(".dmca_policy.dmca_appeal_options.cannot_reupload_html",
+  you: tag.strong(t(".dmca_policy.dmca_appeal_options.you")),
+  cannot: tag.em(tag.strong(t(".dmca_policy.dmca_appeal_options.cannot"))),
+  repost_until_counternotice: tag.strong(t(".dmca_policy.dmca_appeal_options.repost_until_counternotice")),
+  suspend_your_account_link: link_to(t(".dmca_policy.dmca_appeal_options.suspend_your_account"), takedown_path(anchor: "repeat_offenses"))
+  )%></p>
+  <h5 class="heading" id="dmca_counternotice_instructions"><%=t(".dmca_policy.dmca_counternotice_instructions.heading")%></h5>
+  <p><%=t(".dmca_policy.dmca_counternotice_instructions.counternotice_html",
+  willing_to_defend: tag.strong(t(".dmca_policy.dmca_counternotice_instructions.willing_to_defend")),
+  )%></p>
+  <p>
+  <%=t(".dmca_policy.dmca_counternotice_instructions.contact_lawyer_html",
+  lumen_dmca_link: link_to(t(".dmca_policy.dmca_counternotice_instructions.lumen_dmca"), "https://lumendatabase.org/topics/14")
+  )%></p>
+  <p>
+  <%=t(".dmca_policy.dmca_counternotice_instructions.initiate_counter_request_html",
+  legal_contact_form_link: link_to(t(".dmca_policy.dmca_counternotice_instructions.legal_contact_form"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy")
+  )%></p>
   <address>
-    Organization for Transformative Works<br />
-    228 Park Ave S #18156<br />
-    New York, NY 10003-1502<br />
-    Attention: Legal
+    <%= t(".dmca_policy.dmca_counternotice_instructions.otw")%><br />
+    <%= t(".dmca_policy.dmca_counternotice_instructions.street")%><br />
+    <%= t(".dmca_policy.dmca_counternotice_instructions.city")%><br />
+    <%= t(".dmca_policy.dmca_counternotice_instructions.attention_legal")%>
   </address>
-  <p>We prefer to receive DMCA requests through the contact form or by email.</p>
-  <p>You can file a DMCA counternotice at any point after your content has been removed; there is no time limit.</p>
-  <h5 class="heading" id="dmca_counternotice_requirements">Requirements of a DMCA counternotice</h5>
-  <p>The counternotice must substantially comply with the requirements of 17 U.S.C. § 512(g)(3). You are also required to consent to the jurisdiction of a United States court. The legal requirements of a valid DMCA counternotice include:</p>
+  <p><%= t(".dmca_policy.dmca_counternotice_instructions.prefer_to_receive_dmca")%></p>
+  <p><%= t(".dmca_policy.dmca_counternotice_instructions.no_time_limit_to_file")%></p>
+  <h5 class="heading" id="dmca_counternotice_requirements"><%=t(".dmca_policy.dmca_counternotice_requirements.heading")%></h5>
+  <p><%= t(".dmca_policy.dmca_counternotice_requirements.counternotice_comply")%></p>
   <ol>
-    <li>your physical or electronic signature;</li>
-    <li>your name, address, and phone number;</li>
-    <li>the URL(s) of the content that was removed;</li>
-    <li>a statement, <strong>made under penalty of perjury</strong>, that the content was removed due to a mistake or misidentification;</li>
-    <li>a statement that you consent to the jurisdiction of a U.S. federal court in either:
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.signature")%></li>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.name_info")%></li>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.removed_url")%></li>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.statement_html", made_under_penalty_of_perjury: tag.strong(t(".dmca_policy.dmca_counternotice_requirements.made_under_penalty_of_perjury")))%></li>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.statement_of_consent")%>
       <ol>
-        <li>the district where you live, if you are in the U.S.; or</li>
-        <li>the district where the OTW is located (<a href="/tos#I.A.3">Manhattan, New York</a>), if you are not in the U.S.; and</li>
+        <li><%= t(".dmca_policy.dmca_counternotice_requirements.district")%></li>
+        <li><%= t(".dmca_policy.dmca_counternotice_requirements.otw_district_html", manhattan_new_york_link: link_to(t(".dmca_policy.dmca_counternotice_requirements.manhattan_new_york"), tos_path(anchor: "I.A.3")))%></li>
       </ol>
     </li>
-    <li>a statement that you will accept service of process from the party who submitted the original takedown notice.</li>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.statement_of_service")%></li>
   </ol>
-  <p>Per 17 U.S.C. § 512(f), you may be subject to liability if you knowingly and materially misrepresent your claim that the content was removed due to a mistake or misidentification.</p>
-  <h5 class="heading" id="dmca_counternotice_process">DMCA counter-notification process</h5>
-  <p>If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify the party who submitted the original takedown notice.</p>
-  <p>The original submitter will have 10 business days to prevent the restoration of your content by filing a lawsuit against you. If the original submitter does not file a lawsuit within 10 business days, the OTW may restore your content (or, if your content has already been deleted, allow you to reupload it) between 10 and 14 business days after we receive the counternotice. We may also send a redacted version of the DMCA counternotice to <a href="https://lumendatabase.org/">Lumen</a> and other third parties at our discretion.</p>
+  <p><%= t(".dmca_policy.dmca_counternotice_requirements.subject_to_liability")%></p>
+  <h5 class="heading" id="dmca_counternotice_process"><%= t(".dmca_policy.dmca_counternotice_process.heading")%></h5>
+  <p><%= t(".dmca_policy.dmca_counternotice_process.counternotice_notification")%></p>
+  <p><%= t(".dmca_policy.dmca_counternotice_process.restore_content_html", lumen_link: link_to(t(".dmca_policy.dmca_counternotice_process.lumen"), "https://lumendatabase.org/"))%></p>
   <h3 class="heading" id="tida_policy">TIDA Policy</h3>
   <p>The "Tools to Address Known Exploitation by Immobilizing Technological Deepfakes on Websites and Networks Act" (Take It Down Act, or TIDA) establishes the procedure the OTW will follow when users of our sites (including AO3) embed or link to nonconsensual, sexually explicit photorealistic images of an identifiable individual, if the images are reported to us by the depicted individual or by someone legally authorized to act on their behalf.</p>
   <h4 class="heading" id="tida_removal_options">A sexually explicit photorealistic image depicting me was posted on AO3 without my consent. What can I do?</h4>
