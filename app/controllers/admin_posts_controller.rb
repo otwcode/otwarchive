@@ -127,14 +127,14 @@ class AdminPostsController < Admin::BaseController
   protected
 
   def load_languages
-    @news_languages = Language.where(id: Locale.all.map(&:language_id)).default_order
+    @news_languages = LocaleLanguage.where(id: Locale.select(:language_id)).default_order
   end
 
   def load_admin_posts
     @tag = AdminPostTag.find_by(id: params[:tag]) if params[:tag]
     @admin_posts = @tag&.admin_posts || AdminPost
 
-    if params[:language_id].present? && (@language = Language.find_by(short: params[:language_id]))
+    if params[:language_id].present? && (@language = LocaleLanguage.find_by(short: params[:language_id]))
       @admin_posts = @admin_posts.where(language_id: @language.id)
       @tags = AdminPostTag.distinct.joins(:admin_posts).where(admin_posts: { language_id: @language.id }).order(:name)
     else

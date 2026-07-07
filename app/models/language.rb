@@ -4,9 +4,6 @@ class Language < ApplicationRecord
   validates :name, presence: true, uniqueness: true
 
   has_many :works
-  has_many :locales
-  has_many :admin_posts
-  has_many :archive_faqs
 
   scope :default_order, -> { order(Arel.sql("COALESCE(NULLIF(sortable_name,''), short)")) }
 

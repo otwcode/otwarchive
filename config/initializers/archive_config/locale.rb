@@ -12,8 +12,10 @@ rescue
   if Language.table_exists? && Locale.table_exists?
     language = Language.find_or_create_by(short: "en", name: "English")
     if LocaleLanguage.table_exists?
-      LocaleLanguage.find_or_create_by(short: "en", name: "English")
+      locale_language = LocaleLanguage.find_or_create_by(short: "en", name: "English")
+      Locale.find_by(iso: "en") || Locale.create(iso: "en", name: "English (US)", language_id: locale_language.id, main: 1)
+    else
+      Locale.find_by(iso: "en") || Locale.create(iso: "en", name: "English (US)", language_id: language.id, main: 1)
     end
-    Locale.find_by(iso: "en") || Locale.create(iso: "en", name: "English (US)", language_id: language.id, main: 1)
   end
 end

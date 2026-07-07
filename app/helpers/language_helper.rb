@@ -34,6 +34,6 @@ module LanguageHelper
   end
 
   def locale_options_for_select(locales, value_attribute)
-    locales.map { |locale| [locale.name, locale[value_attribute], { lang: locale.language.short }] }
+    locales.map { |locale| [locale.name, locale[value_attribute], { lang: locale.locale_language.short }] }
   end
 end

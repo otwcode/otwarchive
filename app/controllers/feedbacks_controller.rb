@@ -37,7 +37,7 @@ class FeedbacksController < ApplicationController
   private
 
   def load_support_languages
-    @support_languages = Language.where(support_available: true).default_order
+    @support_languages = LocaleLanguage.where(support_available: true).default_order
   end
 
   def load_support_notice
