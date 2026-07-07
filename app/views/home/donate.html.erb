@@ -1,4 +1,4 @@
-﻿<h2 class="heading"><%= t(".page_title") %></h2>
+﻿<h2 class="heading"><%= t(".page_heading") %></h2>
 
 <div class="userstuff">
   <p><big><strong><%= t(".intro") %></strong></big></p>
@@ -7,7 +7,7 @@
   <p>
     <%= t(".money.details_html",
           donation_link: link_to(t(".money.donation"), "https://donate.transformativeworks.org/otwgive"),
-          budget_reports_link: link_to(t(".money.budget_reports"), "/admin_posts?tag=174"),
+          budget_reports_link: link_to(t(".money.budget_reports"), admin_posts_path(tag: 174)),
           faq_link: link_to(t(".money.faq"), "https://www.transformativeworks.org/faq/#faq-financesfaq")) %>
   </p>
 
@@ -16,7 +16,7 @@
   <h4><%= t(".time.volunteering.title") %></h4>
   <p>
     <%= t(".time.volunteering.info_html",
-          otw_link: link_to(t(".time.volunteering.otw"), "https://www.transformativeworks.org"),
+          otw_link: link_to(t(".time.volunteering.organization_for_transformative_works"), "https://www.transformativeworks.org"),
           projects_link: link_to(t(".time.volunteering.projects"), "https://www.transformativeworks.org/our-projects/"),
           committees_link: link_to(t(".time.volunteering.committees"), "https://www.transformativeworks.org/committees/")) %>
   </p>

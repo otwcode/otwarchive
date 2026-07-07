@@ -1884,6 +1884,7 @@ en:
         faq: Donation and Finance FAQs
         title: Donating Financially
       page_title: Donate or Volunteer
+      page_heading: Donate or Volunteer
       time:
         contributing:
           contributing: Contributing Guidelines
@@ -1898,7 +1899,7 @@ en:
           listings: open volunteer position listings
           listings_html: We encourage you to browse through our %{listings_link} and apply for any volunteer roles that match your qualifications and interests. If there are no roles currently recruiting, you can sign up for %{news_link} or follow us on %{social_link}.
           news: OTW News by Email
-          otw: Organization for Transformative Works
+          organization_for_transformative_works: Organization for Transformative Works
           projects: its projects
           social: social media
           title: Volunteering
@@ -2078,7 +2079,7 @@ en:
         manage_my_pseuds: Manage My Pseuds
         my_profile: My Profile
       contact_us:
-        donations: Donate or Volunteer
+        donate_or_volunteer: Donate or Volunteer
         header: Contact Us
         policy_questions_and_abuse_reports: Policy Questions & Abuse Reports
         technical_support_and_feedback: Technical Support & Feedback
@@ -2471,7 +2472,7 @@ en:
         takedown_policy: DMCA & TIDA Policies
         tos: Terms of Service
       contact_us:
-        donations: Donate or Volunteer
+        donate_or_volunteer: Donate or Volunteer
         header: Contact Us
         pac: Policy Questions & Abuse Reports
         support: Technical Support & Feedback
