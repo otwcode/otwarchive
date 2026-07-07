@@ -338,6 +338,10 @@ en:
           queue: Manage Queue
           requests: Manage Requests
         label: Admin
+        languages:
+          label: Languages
+          locale_languages: Locale Languages
+          work_languages: Work Languages
         locales: Locales
         posts:
           admin_posts: Admin Posts
@@ -2508,7 +2512,6 @@ en:
         other: "%{count} more users"
   languages:
     form:
-      abuse_support_available: Abuse support available
       name: Name
       required_notice: Required information
       short: Abbreviation
@@ -2516,7 +2519,6 @@ en:
       submit:
         create: Create Language
         update: Update Language
-      support_available: Support available
     index:
       language_code_format_html: "(%{code})"
       navigation:
@@ -2585,6 +2587,27 @@ en:
       read_and_understood: I have read & understood the 2024 Terms of Service, including the Content Policy and Privacy Policy.
       summary_html: On the Archive of Our Own (AO3), users can create works, bookmarks, comments, tags, and other %{content_link}. Any information you publish on AO3 may be accessible by the public, AO3 users, and/or AO3 personnel. Be mindful when sharing personal information, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites.
       tos: Terms of Service
+  locale_languages:
+    edit:
+      heading: Edit Locale Language
+    form:
+      abuse_support_available: Abuse support available
+      name: Name
+      required_notice: Required information
+      short: Abbreviation
+      sortable_name: Name for alphabetical sorting
+      submit:
+        create: Create Locale Language
+        update: Update Locale Language
+      support_available: Support available
+    index:
+      navigation:
+        add: Add a Locale Language
+        edit: Edit
+        suggest: Suggest a Locale Language
+      page_heading: Locale Languages
+    new:
+      heading: New Locale Language
   media:
     index:
       all: All %{media_type}...
