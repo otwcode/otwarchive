@@ -8,7 +8,7 @@ class AdminPost < ApplicationRecord
     disable_all: 2
   }, default: :disable_anon, suffix: :comments, validate: { message: :invalid_permissions }
 
-  belongs_to :language
+  belongs_to :locale_language, foreign_key: :language_id, inverse_of: :admin_posts
   belongs_to :translated_post, class_name: "AdminPost"
   has_many :translations, class_name: "AdminPost", foreign_key: "translated_post_id", dependent: :destroy
   has_many :admin_post_taggings
@@ -95,7 +95,7 @@ class AdminPost < ApplicationRecord
 
   def translated_post_language_must_differ
     return if translated_post.blank?
-    return unless translated_post.language == language
+    return unless translated_post.locale_language == locale_language
 
     errors.add(:translated_post_id, "cannot be same language as original post")
   end

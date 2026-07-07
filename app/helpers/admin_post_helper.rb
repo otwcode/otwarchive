@@ -4,7 +4,7 @@ module AdminPostHelper
     translations = translations.posted if admin_post.posted?
 
     translations.sort_by do |translation|
-      language = translation.language
+      language = translation.locale_language
       language.sortable_name.blank? ? language.short : language.sortable_name
     end
   end
