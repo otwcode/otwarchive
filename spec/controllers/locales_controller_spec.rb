@@ -89,7 +89,7 @@ describe LocalesController do
           get :new
 
           expect(response).to render_template("new")
-          expect(assigns(:languages)).to eq(Language.default_order)
+          expect(assigns(:locale_languages)).to eq(LocaleLanguage.default_order)
           expect(assigns(:locale)).to be_a_new(Locale)
         end
       end
@@ -138,7 +138,7 @@ describe LocalesController do
           get :edit, params: { id: locale.iso }
           expect(response).to render_template("edit")
           expect(assigns(:locale)).to eq(locale)
-          expect(assigns(:languages)).to eq(Language.default_order)
+          expect(assigns(:locale_languages)).to eq(LocaleLanguage.default_order)
         end
       end
     end
@@ -199,7 +199,7 @@ describe LocalesController do
           put :update, params: { id: locale.iso, locale: { iso: Locale.default.iso } }
           expect(response).to render_template("edit")
           expect(assigns(:locale)).to eq(locale)
-          expect(assigns(:languages)).to eq(Language.default_order)
+          expect(assigns(:locale_languages)).to eq(LocaleLanguage.default_order)
         end
 
         it "errors if use for interface is enabled but use for emails isn't" do
@@ -254,7 +254,7 @@ describe LocalesController do
         it "adds a new locale and redirects to list of locales" do
           fake_login_admin(admin)
           params = {
-            name: "Español", iso: "es", language_id: Language.default.id,
+            name: "Español", iso: "es", language_id: LocaleLanguage.default.id,
             email_enabled: true, interface_enabled: false
           }
   
@@ -264,7 +264,7 @@ describe LocalesController do
           locale = Locale.last
           expect(locale.iso).to eq(params[:iso])
           expect(locale.name).to eq(params[:name])
-          expect(locale.language.id).to eq(params[:language_id])
+          expect(locale.locale_language.id).to eq(params[:language_id])
           expect(locale.email_enabled).to eq(params[:email_enabled])
           expect(locale.interface_enabled).to eq(params[:interface_enabled])
         end
@@ -272,13 +272,13 @@ describe LocalesController do
         it "renders the create form if iso is missing" do
           fake_login_admin(admin)
           params = {
-            name: "Español", language_id: Language.default.id,
+            name: "Español", language_id: LocaleLanguage.default.id,
             email_enabled: true, interface_enabled: false
           }
   
           post :create, params: { locale: params }
           expect(response).to render_template("new")
-          expect(assigns(:languages)).to eq(Language.default_order)
+          expect(assigns(:locale_languages)).to eq(LocaleLanguage.default_order)
           expect(Locale.last).to eq(Locale.default)
         end
       end
