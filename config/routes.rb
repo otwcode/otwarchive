@@ -554,9 +554,11 @@ Rails.application.routes.draw do
   # should stay below the main works mapping
   resources :languages, except: [:show] do
     resources :works
-    resources :admin_posts
   end
   get "/languages/:id", to: redirect("/languages/%{id}/works", status: 302)
+
+  resources :locale_languages, except: [:show, :destroy]
+
   resources :locales, except: :destroy
 
   #### API ####
