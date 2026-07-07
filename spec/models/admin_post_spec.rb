@@ -49,7 +49,7 @@ describe AdminPost do
 
   describe "#translated_post_must_be_posted_first" do
     let(:admin_post) { create(:admin_post, :draft) }
-    let(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:language).id) }
+    let(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:locale_language).id) }
 
     it "returns error when posting a translation first" do
       translation.posted = true
@@ -77,7 +77,7 @@ describe AdminPost do
 
   describe "#post_translations" do
     let(:admin_post) { create(:admin_post, :draft) }
-    let!(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:language).id) }
+    let!(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:locale_language).id) }
 
     it "posts draft translations" do
       admin_post.reload.update!(posted: true)

@@ -33,7 +33,7 @@ describe LanguagesController do
       end
     end
 
-    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
+    (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -45,7 +45,7 @@ describe LanguagesController do
       end
     end
 
-    %w[translation superadmin].each do |role|
+    %w[support superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -64,8 +64,6 @@ describe LanguagesController do
         language: {
           name: "Suomi",
           short: "fi",
-          support_available: false,
-          abuse_support_available: false,
           sortable_name: "su"
         }
       }
@@ -79,7 +77,7 @@ describe LanguagesController do
       end
     end
 
-    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
+    (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -92,7 +90,7 @@ describe LanguagesController do
       end
     end
 
-    %w[translation superadmin].each do |role|
+    %w[support superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -105,8 +103,6 @@ describe LanguagesController do
           new_lang = Language.last
           expect(new_lang.name).to eq("Suomi")
           expect(new_lang.short).to eq("fi")
-          expect(new_lang.support_available).to eq(false)
-          expect(new_lang.abuse_support_available).to eq(false)
           expect(new_lang.sortable_name).to eq("su")
         end
 
@@ -126,7 +122,7 @@ describe LanguagesController do
       end
     end
 
-    (Admin::VALID_ROLES - %w[superadmin translation support policy_and_abuse]).each do |role|
+    (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -139,9 +135,9 @@ describe LanguagesController do
       end
     end
 
-    %w[translation superadmin support policy_and_abuse].each do |role|
+    %w[superadmin support].each do |role|
       context "when logged in as an admin with #{role} role" do
-        let!(:deutsch) { Language.create(name: "Deutsch", short: "de") }
+        let!(:deutsch) { create(:language, name: "Deutsch", short: "de") }
         let(:admin) { create(:admin, roles: [role]) }
 
         it "renders the edit template for a non-default language" do
@@ -160,37 +156,14 @@ describe LanguagesController do
   end
 
   describe "PUT update" do
-    let(:finnish) { Language.create(name: "Suomi", short: "fi", support_available: "0", abuse_support_available: "1") }
+    let(:finnish) { create(:language, name: "Suomi", short: "fi") }
     let(:language_params) do
       {
         id: finnish.short,
         language: {
           name: "Suomi",
           short: "fi",
-          support_available: "1",
-          abuse_support_available: "0",
           sortable_name: "su"
-        }
-      }
-    end
-
-    let(:language_params_support) do
-      {
-        id: finnish.short,
-        language: {
-          name: "Suomi",
-          short: "fi",
-          support_available: "1",
-          sortable_name: ""
-        }
-      }
-    end
-
-    let(:language_params_abuse) do
-      {
-        id: finnish.short,
-        language: {
-          abuse_support_available: "0"
         }
       }
     end
@@ -203,7 +176,7 @@ describe LanguagesController do
       end
     end
 
-    (Admin::VALID_ROLES - %w[superadmin translation support policy_and_abuse]).each do |role|
+    (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -216,7 +189,7 @@ describe LanguagesController do
       end
     end
 
-    %w[translation superadmin].each do |role|
+    %w[support superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -229,83 +202,12 @@ describe LanguagesController do
           finnish.reload
           expect(finnish.name).to eq("Suomi")
           expect(finnish.short).to eq("fi")
-          expect(finnish.support_available).to eq(true)
-          expect(finnish.abuse_support_available).to eq(false)
           expect(finnish.sortable_name).to eq("su")
         end
 
         it "redirects and returns success message" do
           it_redirects_to_with_notice(languages_path, "Language was successfully updated.")
         end
-      end
-    end
-
-    context "when logged in as an admin with policy_and_abuse role and I attempt to edit a non-abuse field" do
-      let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
-      before do
-        fake_login_admin(admin)
-      end
-      it "throws error and doesn't save changes to non-abuse field" do
-        expect do
-          put :update, params: language_params
-        end.to raise_exception(ActionController::UnpermittedParameters)
-        finnish.reload
-        expect(finnish.support_available).to eq(false)
-      end
-    end
-
-    context "when logged in as an admin with policy_and_abuse role and attempt to edit abuse_support_available field" do
-      let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
-
-      before do
-        fake_login_admin(admin)
-        put :update, params: language_params_abuse
-      end
-      it "updates the language" do
-        finnish.reload
-        expect(finnish.name).to eq("Suomi")
-        expect(finnish.short).to eq("fi")
-        expect(finnish.support_available).to eq(false)
-        expect(finnish.abuse_support_available).to eq(false)
-        expect(finnish.sortable_name).to eq("")
-      end
-
-      it "redirects and returns success message" do
-        it_redirects_to_with_notice(languages_path, "Language was successfully updated.")
-      end
-    end
-
-    context "when logged in as an admin with support role and attempt to edit abuse_support_available field" do
-      let(:admin) { create(:admin, roles: ["support"]) }
-      before do
-        fake_login_admin(admin)
-      end
-      it "throws error and doesn't save changes to abuse_support_available field" do
-        expect do
-          put :update, params: language_params
-        end.to raise_exception(ActionController::UnpermittedParameters)
-        finnish.reload
-        expect(finnish.abuse_support_available).to eq(true)
-      end
-    end
-
-    context "when logged in as an admin with support role and attempt to edit non-abuse fields" do
-      let(:admin) { create(:admin, roles: ["support"]) }
-      before do
-        fake_login_admin(admin)
-        put :update, params: language_params_support
-      end
-      it "updates the language" do
-        finnish.reload
-        expect(finnish.name).to eq("Suomi")
-        expect(finnish.short).to eq("fi")
-        expect(finnish.support_available).to eq(true)
-        expect(finnish.abuse_support_available).to eq(true)
-        expect(finnish.sortable_name).to eq("")
-      end
-
-      it "redirects and returns success message" do
-        it_redirects_to_with_notice(languages_path, "Language was successfully updated.")
       end
     end
   end

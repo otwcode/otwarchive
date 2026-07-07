@@ -56,14 +56,24 @@ end
 
 Given /^basic languages$/ do
   Language.default
-  german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
-  Locale.create(iso: "de", name: "Deutsch", language: german)
+  Language.find_or_create_by(short: "DE", name: "Deutsch")
+  LocaleLanguage.default
+  german = LocaleLanguage.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
+  Locale.find_or_create_by(iso: "de", name: "Deutsch", language_id: german.id)
+end
+
+Given "basic locale languages" do
+  LocaleLanguage.default
+  german = LocaleLanguage.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
+  Locale.find_or_create_by(iso: "de", name: "Deutsch", language_id: german.id)
 end
 
 Given /^Persian language$/ do
   Language.default
-  persian = Language.find_or_create_by(short: "fa", name: "Persian", support_available: true, abuse_support_available: true)
-  Locale.create(iso: "fa", name: "Persian", language: persian)
+  Language.find_or_create_by(short: "fa", name: "Persian")
+  LocaleLanguage.default
+  persian = LocaleLanguage.find_or_create_by(short: "fa", name: "Persian", support_available: true, abuse_support_available: true)
+  Locale.find_or_create_by(iso: "fa", name: "Persian", language_id: persian.id)
 end
 
 Given /^downloads are off$/ do
@@ -162,8 +172,8 @@ end
 
 Given "the draft admin post {string} translating {string} to {string}" do |title, translated_title, lang|
   admin_post = AdminPost.find_by!(title: translated_title)
-  language = Language.find_by!(name: lang)
-  FactoryBot.create(:admin_post, :draft, title: title, comment_permissions: :enable_all, translated_post_id: admin_post.id, language: language)
+  locale_language = LocaleLanguage.find_by!(name: lang)
+  FactoryBot.create(:admin_post, :draft, title: title, comment_permissions: :enable_all, translated_post_id: admin_post.id, locale_language: locale_language)
 end
 
 Given "the fannish next of kin {string} for the user {string}" do |kin, user|
@@ -214,6 +224,12 @@ end
 Given(/^the following language exists$/) do |table|
   table.hashes.each do |hash|
     FactoryBot.create(:language, hash)
+  end
+end
+
+Given "the following locale language exists" do |table|
+  table.hashes.each do |hash|
+    FactoryBot.create(:locale_language, hash)
   end
 end
 
