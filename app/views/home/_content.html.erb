@@ -273,7 +273,7 @@
     </p>
     <p id="technical_integrity">
       <%= t(".illegal_inappropriate_content.conduct_threatening_technical_integrity_html",
-            technical_integrity_link: link_to(t(".illegal_inappropriate_content.technical_integrity"), tos_faq_path(anchor: "technical_integrity_faq"))) %>
+            technical_integrity_link: link_to(t(".illegal_inappropriate_content.technical_integrity"), tos_faq_path(anchor: "integrity_threat"))) %>
     </p>
   </li>
   <li id="II.K.2">
@@ -296,7 +296,7 @@
     <%= t(".illegal_inappropriate_content.tos_faq_in_parens_html",
           tos_faq_link: link_to(
             t(".illegal_inappropriate_content.tos_faq"),
-            tos_faq_path(anchor: "offensive_content_faq"),
+            tos_faq_path(anchor: "technical_integrity_faq"),
             aria: {
               label: t(".illegal_inappropriate_content.tos_faq_link_label")
             }
