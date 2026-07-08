@@ -370,7 +370,7 @@ class WorksController < ApplicationController
     if params[:edit_button] || work_cannot_be_saved?
       render :edit
     elsif params[:preview_button]
-      flash[:notice] = t(".unposted_notice") unless @work.posted?
+      flash.now[:notice] = t(".unposted_notice") unless @work.posted?
 
       in_moderated_collection
       @preview_mode = true
