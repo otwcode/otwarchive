@@ -185,6 +185,10 @@ en:
             muted_id:
               taken: You have already muted that user.
           format: "%{message}"
+        owned_tag_set:
+          attributes:
+            title:
+              restricted_characters: "^The title of a tag set cannot include the following restricted characters: , &#94; * < > { } = ` \\ %"
         prompt:
           attributes:
             title:
