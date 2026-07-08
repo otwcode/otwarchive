@@ -125,7 +125,6 @@ GEM
     audited (5.8.0)
       activerecord (>= 5.2, < 8.2)
       activesupport (>= 5.2, < 8.2)
-    awesome_print (1.9.2)
     aws-eventstream (1.4.0)
     aws-partitions (1.1196.0)
     aws-sdk-core (3.240.0)
@@ -709,7 +708,6 @@ DEPENDENCIES
   addressable
   after_commit_everywhere
   audited (~> 5.3)
-  awesome_print
   aws-sdk-s3
   bcrypt
   bcrypt_pbkdf (>= 1.0, < 2.0)
