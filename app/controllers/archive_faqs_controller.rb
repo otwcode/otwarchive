@@ -1,5 +1,6 @@
 class ArchiveFaqsController < ApplicationController
   before_action :admin_only, except: [:index, :show]
+  before_action :redirect_renamed_locales
   before_action :set_locale
   before_action :validate_locale, if: :logged_in_as_admin?
   before_action :require_language_id
@@ -127,6 +128,18 @@ class ArchiveFaqsController < ApplicationController
   # Get the value from set_locale to make sure there's no problem with order
   def default_url_options
     { language_id: set_locale.to_s }
+  end
+
+  RENAMED_LOCALES = {
+    "sr" => "scr", # AO3-6720
+    "zh-CN" => "zh-Hans" # AO3-7525
+  }.freeze
+
+  def redirect_renamed_locales
+    return if params[:language_id].blank?
+
+    new_iso = RENAMED_LOCALES[params[:language_id]]
+    redirect_to helpers.current_path_with(language_id: new_iso) if new_iso
   end
 
   # Set the locale as an instance variable first
