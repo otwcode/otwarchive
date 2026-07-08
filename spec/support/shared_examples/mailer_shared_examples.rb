@@ -4,6 +4,12 @@ shared_examples_for "a multipart email" do
     expect(email.body.parts.map(&:content_type)).to eq(["text/plain; charset=UTF-8", "text/html; charset=UTF-8"])
   end
 
+  it "disables phone number detection in the HTML version" do
+    html = Nokogiri::HTML(email.html_part.decoded)
+
+    expect(html.at_xpath("//meta[@name='format-detection'][@content='telephone=no']")).to be_present
+  end
+
   it "does not have exposed HTML" do
     expect(email).not_to have_html_part_content("&lt;")
   end
