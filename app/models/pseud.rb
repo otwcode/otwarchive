@@ -40,7 +40,7 @@ class Pseud < ApplicationRecord
   has_many :direct_filters, through: :works
   has_many :collection_participants, dependent: :destroy
   has_many :collections, through: :collection_participants
-  has_many :tag_set_nominations
+  has_many :tag_set_nominations, dependent: :destroy
   has_many :tag_set_ownerships, dependent: :destroy
   has_many :tag_sets, through: :tag_set_ownerships
   has_many :challenge_signups, dependent: :destroy
