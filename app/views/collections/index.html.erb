@@ -15,7 +15,7 @@
   <% if @collections.empty? %>
     <%= ts("Sorry, there were no collections found.") %>
   <% else %>
-    <%= search_header @collections, @query, ts("Collection") %>
+    <%= search_header @collections, item_type: :collection, search: @search %>
   <% end %>
 </h3>
 <!--/descriptions-->

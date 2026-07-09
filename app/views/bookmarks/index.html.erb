@@ -3,9 +3,9 @@
 
 <h2 class="heading">
   <% if @bookmarkable_items %>
-    <%= search_header @bookmarkable_items, @search, "Bookmarked Item", @owner %>
+    <%= search_header @bookmarkable_items, item_type: :bookmarked_item, search: @search, parent: @owner %>
   <% else %>
-    <%= search_header @bookmarks, @search, "Bookmark", @owner %>
+    <%= search_header @bookmarks, item_type: :bookmark, search: @search, parent: @owner %>
   <% end %>
 </h2>
 <!-- /descriptions-->
