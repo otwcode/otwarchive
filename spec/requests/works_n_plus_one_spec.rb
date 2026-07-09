@@ -17,7 +17,7 @@ describe "n+1 queries in the WorksController" do
           expect do
             subject.call
             expect(response.body.scan('<li id="work_').size).to eq(current_scale.to_i)
-          end.to perform_linear_number_of_queries(slope: queries_per_work).with_warming_up
+          end.to perform_linear_number_of_queries(slope: queries_per_work)
         end
       else
         it "performs a constant number of queries" do

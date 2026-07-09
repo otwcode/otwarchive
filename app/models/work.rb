@@ -780,6 +780,8 @@ class Work < ApplicationRecord
       skip_nil: true
     ) do
       count = chapters.posted.count
+      # Return nil for zero so skip_nil prevents caching stale data.
+      # The .to_i below converts nil back to 0 for callers.
       count.zero? ? nil : count
     end.to_i
   end
