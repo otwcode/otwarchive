@@ -24,7 +24,10 @@ class SubscriptionsController < ApplicationController
   # POST /subscriptions
   # POST /subscriptions.xml
   def create
-    @subscription = @user.subscriptions.build(subscription_params)
+    @subscribable = load_subscribable
+    return if performed?
+
+    @subscription = @user.subscriptions.build(subscribable: @subscribable)
 
     success_message = ts("You are now following %{name}. If you'd like to stop receiving email updates, you can unsubscribe from <a href=\"#{user_subscriptions_path}\">your Subscriptions page</a>.", name: @subscription.name).html_safe
     if @subscription.save
@@ -86,10 +89,25 @@ class SubscriptionsController < ApplicationController
     @subscribable_type = params[:type].pluralize.downcase if params[:type] && Subscription::VALID_SUBSCRIBABLES.include?(params[:type].singularize.titleize)
   end
 
-  def subscription_params
-    params.require(:subscription).permit(
-      :subscribable_id, :subscribable_type
-    )
-  end
+  SUBSCRIBABLE_PARAMS = {
+    work_id: Work,
+    series_id: Series,
+    user_id: User
+  }.freeze
 
+  def load_subscribable
+    sub_params = params[:subscription] || {}
+    matched = SUBSCRIBABLE_PARAMS.filter_map do |key, klass|
+      id = sub_params[key]
+      [klass, id] if id.present?
+    end
+
+    if matched.size != 1
+      head :unprocessable_entity
+      return
+    end
+
+    klass, id = matched.first
+    klass.find(id)
+  end
 end
