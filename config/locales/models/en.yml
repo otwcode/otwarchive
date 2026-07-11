@@ -269,9 +269,9 @@ en:
               invalid_permissions: Comment permissions are invalid.
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them.
-          work_skin_not_allowed: You do not have permission to use that custom work stylesheet.
           blocked_gifts: "%{byline} does not accept gifts."
           blocked_your_gifts: "%{byline} does not accept gifts from you."
+          work_skin_not_allowed: You do not have permission to use that custom work stylesheet.
         work/parent_work_relationships:
           format: "%{message}"
     models:
