@@ -34,7 +34,7 @@ module KudosHelper
       # Add the link to show more at the end of the list:
       kudos_links << link_to(
         t("kudos.user_links.more_link", count: collapsed_count),
-        work_kudos_path(commentable, before: kudos_to_display.last.id),
+        polymorphic_path([commentable, :kudos], before: kudos_to_display.last.id),
         id: "kudos_more_link", remote: true
       )
 
@@ -47,6 +47,6 @@ module KudosHelper
       end
     end
 
-    kudos_links.to_sentence(connectors).html_safe
+    [kudos_links.to_sentence(connectors).html_safe, total_count]
   end
 end

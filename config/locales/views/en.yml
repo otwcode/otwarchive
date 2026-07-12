@@ -2511,6 +2511,19 @@ en:
       more_link:
         one: "%{count} more user"
         other: "%{count} more users"
+    left_kudos:
+      admin_post_html:
+        one: "%{givers_list} left kudos on this post!"
+        other: "%{givers_list} left kudos on this post!"
+      work_html:
+        one: "%{givers_list} left kudos on this work!"
+        other: "%{givers_list} left kudos on this work!"
+      user_and_guest_html:
+        one: "%{users} as well as %{count} guest"
+        other: "%{users} as well as %{count} guests"
+      guest_only:
+        one: "%{count} guest"
+        other: "%{count} guests"
   languages:
     form:
       abuse_support_available: Abuse support available

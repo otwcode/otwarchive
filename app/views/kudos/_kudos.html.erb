@@ -5,16 +5,20 @@
   <% if has_user_kudos || guest_kudos_count > 0 %>
     <% cache "#{commentable.cache_key}/kudos-v4", expires_in: ArchiveConfig.MINUTES_UNTIL_COMMENTABLE_KUDOS_LISTS_EXPIRE.minutes, race_condition_ttl: 10.seconds, skip_digest: true do %>
       <p class="kudos">
+        <% total_count = guest_kudos_count %>
         <% if has_user_kudos %>
-          <%= kudos_user_links(commentable, kudos, showing_more: false) %>
+          <% givers, user_kudos_count = kudos_user_links(commentable, kudos, showing_more: false) %>
+          <% total_count += user_kudos_count %>
+          <% givers = t("kudos.left_kudos.user_and_guest_html", users: givers, count: guest_kudos_count) unless guest_kudos_count.zero? %>
+        <% else %>
+          <% givers = t("kudos.left_kudos.guest_only", count: guest_kudos_count) %>
         <% end %>
-        <% if guest_kudos_count > 0 %>
-          <% if has_user_kudos %>
-            <%= ts(" as well as ") %>
-          <% end %>
-          <%= ts(pluralize(guest_kudos_count, "guest")) %>
+
+        <% if commentable.is_a?(Work) %>
+          <%= t("kudos.left_kudos.work_html", givers_list: givers, count: total_count) %>
+        <% else %>
+          <%= t("kudos.left_kudos.admin_post_html", givers_list: givers, count: total_count) %>
         <% end %>
-        <%= ts(" left kudos on this #{commentable.is_a?(AdminPost) ? "post" : "work"}!") %>
       </p>
     <% end %>
   <% end %>

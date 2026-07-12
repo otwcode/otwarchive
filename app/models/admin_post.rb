@@ -94,7 +94,7 @@ class AdminPost < ApplicationRecord
       errors.add(:translated_post_id, "does not exist")
     end
   end
-  
+
   def guest_kudos_count
     Rails.cache.fetch "admin_posts/#{id}/guest_kudos_count-v2" do
       kudos.by_guest.count

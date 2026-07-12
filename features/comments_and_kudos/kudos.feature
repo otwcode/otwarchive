@@ -263,9 +263,8 @@ Feature: Kudos
   Scenario: Leave kudos on an admin post when logged in
     Given I have posted an admin post
       And I am logged in as "happyuser"
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
       And all emails have been delivered
+      And I go to the "Default Admin Post" admin post page
       And I press "Kudos ♥"
     Then I should see "Thank you for leaving kudos!"
       And I should see "happyuser left kudos on this post!"
@@ -276,8 +275,8 @@ Feature: Kudos
 
   Scenario: Leave kudos on an admin post when logged out
     Given I have posted an admin post
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
+      And all emails have been delivered
+      And I go to the "Default Admin Post" admin post page
       And I press "Kudos ♥"
     Then I should see "Thank you for leaving kudos!"
       And I should see "1 guest left kudos on this post!"
@@ -290,9 +289,8 @@ Feature: Kudos
   Scenario: Leave kudos on an admin post via JS when logged in
     Given I have posted an admin post
       And I am logged in as "happyuser"
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
       And all emails have been delivered
+      And I go to the "Default Admin Post" admin post page
       And I press "Kudos ♥"
     Then I should see "Thank you for leaving kudos!"
       And I should see "happyuser left kudos on this post!"
@@ -302,8 +300,8 @@ Feature: Kudos
   @javascript
   Scenario: Leave kudos on an admin post via JS when logged out
     Given I have posted an admin post
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
+      And all emails have been delivered
+      And I go to the "Default Admin Post" admin post page
       And I press "Kudos ♥"
     Then I should see "Thank you for leaving kudos!"
       And I should see "1 guest left kudos on this post!"

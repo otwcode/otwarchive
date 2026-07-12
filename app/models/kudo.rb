@@ -67,8 +67,8 @@ class Kudo < ApplicationRecord
   after_create :after_create, :update_work_stats
   def after_create
     return unless self.commentable.respond_to?(:pseuds)
-    
-    users = self.commentable.pseuds.map(&:user).uniq 
+
+    users = self.commentable.pseuds.map(&:user).uniq
 
     users.each do |user|
       RedisMailQueue.queue_kudo(user, self) if notify_user_by_email?(user)
