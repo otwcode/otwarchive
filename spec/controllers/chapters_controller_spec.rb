@@ -173,9 +173,9 @@ describe ChaptersController do
     end
 
     it "shows the chapter if work is not given but chapter exists" do
-        get :show, params: { id: work.chapters.first.id }
-        expect(response).to render_template(:show)
-        expect(assigns[:work]).to eq work
+      get :show, params: { id: work.chapters.first.id }
+      expect(response).to render_template(:show)
+      expect(assigns[:work]).to eq work
     end
 
     it "assigns @chapters to chapters in order" do
