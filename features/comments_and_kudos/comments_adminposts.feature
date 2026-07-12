@@ -113,33 +113,14 @@ Feature: Commenting on admin posts
     Then I should see "Comment created!"
       And I should see "zug zug"
 
-  Scenario: Admin post with comment moderation
-    Given I have posted an admin post
-      And I am logged in as a "communications" admin
-    When I go to the admin-posts page
-      And I follow "Edit"
-      And I check "Enable comment moderation"
-    When I am logged out
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
-      And I fill in "comment[name]" with "tester"
-      And I fill in "comment[email]" with "tester@example.com"
-      And I fill in "comment[comment_content]" with "guz guz"
-      And I press "Comment"
-    When I am logged in as a "communications" admin
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
-      And I follow "Unreviewed Comments (1)"
-      And I press "Approve"
-    When I am logged out
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
-    When I follow "Reply"
-      And I fill in "comment[name]" with "tester"
-      And I fill in "comment[email]" with "tester@example.com"
-      And I fill in "comment[comment_content]" with "guz"
-      And I press "Comment"
-    Then I should see "Comments on this news post are moderated."
+  Scenario: Replying to a comment on an admin post with comment moderation shows a notice that news post comments are moderated
+    Given I have posted an admin post with guest comments enabled
+      And a guest comment on the admin post "Default Admin Post"
+      And comment moderation on the admin post "Default Admin Post" is enabled
+    When I view the latest comment
+      And I follow "Reply"
+    Then I should see "Comments on this news post are moderated." within "div[@title='Reply to this comment']"
+      And I should not see "This work's creator has chosen to moderate comments on the work."
 
   Scenario: Modifying the comment permissions of an admin post with translations
     Given I have posted an admin post
