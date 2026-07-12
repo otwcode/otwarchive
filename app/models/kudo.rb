@@ -86,12 +86,12 @@ class Kudo < ApplicationRecord
 
     if commentable_type == "AdminPost"
       # Expire the admin post's cached total kudos count.
-      Rails.cache.delete("admin_posts/#{commentable_id}/kudos_count-v2")
+      Rails.cache.delete("admin_posts/#{commentable_id}/kudos_count")
       # If it's a guest kudo, also expire the admin post's cached guest kudos count.
-      Rails.cache.delete("admin_posts/#{commentable_id}/guest_kudos_count-v2") if user_id.nil?
+      Rails.cache.delete("admin_posts/#{commentable_id}/guest_kudos_count") if user_id.nil?
     end
 
-    # Expire the cached kudos section under the work.
+    # Expire the cached kudos section under the work/admin post.
     ActionController::Base.new.expire_fragment("#{commentable.cache_key}/kudos-v4")
   end
 
