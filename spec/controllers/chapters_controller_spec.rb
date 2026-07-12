@@ -38,14 +38,14 @@ describe ChaptersController do
     chapter
   end
 
-  describe "index" do
+  describe "GET #index" do
     it "redirects to work" do
       get :index, params: { work_id: work.id }
       it_redirects_to work_path(work.id)
     end
   end
 
-  describe "manage" do
+  describe "GET #manage" do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :manage, params: { work_id: work.id }
@@ -58,9 +58,10 @@ describe ChaptersController do
         fake_login_known_user(user)
       end
 
-      it "errors and redirects to root path if work does not exist" do
-        get :manage, params: { work_id: 0 }
-        it_redirects_to_with_error(root_path, "Sorry, we couldn't find the work you were looking for.")
+      it "errors if work does not exist" do
+        expect do
+          get :manage, params: { work_id: 0 }
+        end.to raise_error ActiveRecord::RecordNotFound
       end
 
       it "renders manage template" do
@@ -90,7 +91,7 @@ describe ChaptersController do
     end
   end
 
-  describe "show" do
+  describe "GET #show" do
     context "when user is logged out" do
       it "renders show template" do
         get :show, params: { work_id: work.id, id: work.chapters.first }
@@ -157,6 +158,24 @@ describe ChaptersController do
       chapter = create(:chapter)
       get :show, params: { work_id: work.id, id: chapter.id }
       it_redirects_to_with_error(work_path(work), "Sorry, we couldn't find the chapter you were looking for.")
+    end
+
+    it "errors if work and chapter do not exist" do
+      expect do
+        get :show, params: { work_id: 0, id: 0 }
+      end.to raise_error ActiveRecord::RecordNotFound
+    end
+
+    it "errors if work does not exist but chapter exists" do
+      expect do
+        get :show, params: { work_id: 0, id: work.chapters.first.id }
+      end.to raise_error ActiveRecord::RecordNotFound
+    end
+
+    it "shows the chapter if work is not given but chapter exists" do
+        get :show, params: { id: work.chapters.first.id }
+        expect(response).to render_template(:show)
+        expect(assigns[:work]).to eq work
     end
 
     it "assigns @chapters to chapters in order" do
@@ -311,7 +330,7 @@ describe ChaptersController do
     end
   end
 
-  describe "new" do
+  describe "GET #new" do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :new, params: { work_id: work.id }
@@ -356,7 +375,7 @@ describe ChaptersController do
     end
   end
 
-  describe "edit" do
+  describe "GET #edit" do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :edit, params: { work_id: work.id, id: work.chapters.first.id }
@@ -463,7 +482,7 @@ describe ChaptersController do
     end
   end
 
-  describe "create" do
+  describe "POST #create" do
     let(:chapter_attributes) { { content: "This doesn't matter" } }
 
     context "when user is logged out" do
@@ -674,7 +693,7 @@ describe ChaptersController do
     end
   end
 
-  describe "update" do
+  describe "PUT #update" do
     let(:chapter_attributes) { { content: "This doesn't matter" } }
 
     context "when user is logged out" do
@@ -866,7 +885,7 @@ describe ChaptersController do
     end
   end
 
-  describe "update_positions" do
+  describe "POST #update_positions" do
     let(:chapter1) { work.chapters.first }
     let!(:chapter2) { create(:chapter, :draft, work: work, position: 2, authors: [user.pseuds.first]) }
     let!(:chapter3) { create(:chapter, work: work, position: 3, authors: [user.pseuds.first]) }
@@ -949,7 +968,7 @@ describe ChaptersController do
     end
   end
 
-  describe "preview" do
+  describe "GET #preview" do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :preview, params: { work_id: work.id, id: work.chapters.first.id }
@@ -987,7 +1006,7 @@ describe ChaptersController do
     end
   end
 
-  describe "post" do
+  describe "POST #post" do
     before do
       @chapter_to_post = create(:chapter, :draft, work: work, authors: [user.pseuds.first], position: 2)
     end
@@ -1089,7 +1108,7 @@ describe ChaptersController do
     end
   end
 
-  describe "confirm_delete" do
+  describe "GET #confirm_delete" do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :confirm_delete, params: { work_id: work.id, id: work.chapters.first.id }
@@ -1126,7 +1145,7 @@ describe ChaptersController do
     end
   end
 
-  describe "destroy" do
+  describe "DELETE #destroy" do
     context "when user is logged out" do
       it "errors and redirects to login" do
         delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
