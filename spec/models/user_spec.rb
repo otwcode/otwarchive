@@ -28,6 +28,10 @@ describe User do
         expect(existing_user.save).to be_truthy
       end
     end
+
+    context "internal skeleton" do
+      expect(NotForbiddenNameValidator.intern)
+    end
   end
 
   describe "#destroy" do
