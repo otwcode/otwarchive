@@ -1,5 +1,5 @@
 class Locale < ApplicationRecord
-  belongs_to :language
+  belongs_to :locale_language, foreign_key: :language_id, inverse_of: :locales
   validates_presence_of :iso
   validates :iso, uniqueness: true
   validates_presence_of :name
@@ -16,13 +16,13 @@ class Locale < ApplicationRecord
   end
 
   def self.default
-    language = Language.default
-    Locale.set_base_locale(iso: ArchiveConfig.DEFAULT_LOCALE_ISO, name: ArchiveConfig.DEFAULT_LOCALE_NAME, language_id: language.id)
+    locale_language = LocaleLanguage.default
+    Locale.set_base_locale(iso: ArchiveConfig.DEFAULT_LOCALE_ISO, name: ArchiveConfig.DEFAULT_LOCALE_NAME, language_id: locale_language.id)
   end
 
   def self.set_base_locale(locale={iso: "en", name: "English"})
-    language = Language.find_by(short: ArchiveConfig.DEFAULT_LANGUAGE_SHORT)
-    Locale.find_by(iso: locale[:iso].to_s) || language.locales.create(iso: locale[:iso].to_s, name: locale[:name].to_s, main: 1)
+    locale_language = LocaleLanguage.find_by(short: ArchiveConfig.DEFAULT_LANGUAGE_SHORT)
+    Locale.find_by(iso: locale[:iso].to_s) || locale_language.locales.create(iso: locale[:iso].to_s, name: locale[:name].to_s, main: 1)
   end
 
   after_update :update_translations, if: :saved_change_to_iso?

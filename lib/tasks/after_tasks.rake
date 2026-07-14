@@ -672,5 +672,21 @@ namespace :After do
   task(remove_noncanonical_fandom_wrangling_assignments: :environment) do
     WranglingAssignment.joins("LEFT JOIN tags ON (tags.id = wrangling_assignments.fandom_id)").where(tags: { canonical: false }).find_each(&:destroy!)
   end
+
+  # Fallback for the migration that copies the languages table.
+  # Use only if the migration data needs to be re-synced.
+  desc "Populate locale_languages table from languages table"
+  task(populate_locale_languages_table: :environment) do
+    Language.find_each do |lang|
+      LocaleLanguage.find_or_create_by(id: lang.id) do |ll|
+        ll.name = lang.name
+        ll.short = lang.short
+        ll.support_available = lang.support_available
+        ll.abuse_support_available = lang.abuse_support_available
+        ll.sortable_name = lang.sortable_name
+      end
+    end
+  end
+
   # This is the end that you have to put new tasks above.
 end

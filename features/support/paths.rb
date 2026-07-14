@@ -252,6 +252,8 @@ module NavigationHelpers
       claim_path(invitation_token: Invitation.find_by(invitee_email: $1).token)
     when /^the languages page$/i
       languages_path
+    when /^the locale_languages page$/i
+      locale_languages_path
     when /^the wranglers page$/i
       tag_wranglers_path
     when /^the wrangling page for "(.*)"$/i

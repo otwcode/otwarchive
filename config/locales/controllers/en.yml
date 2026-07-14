@@ -285,6 +285,10 @@ en:
     cannot_edit_default: Sorry, you can't edit the default language.
     successfully_added: Language was successfully added.
     successfully_updated: Language was successfully updated.
+  locale_languages:
+    cannot_edit_default: Sorry, you can't edit the default locale language.
+    successfully_added: Locale language was successfully added.
+    successfully_updated: Locale language was successfully updated.
   media:
     index:
       browser_title: Fandoms
