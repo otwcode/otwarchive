@@ -40,6 +40,7 @@ class Pseud < ApplicationRecord
   has_many :direct_filters, through: :works
   has_many :collection_participants, dependent: :destroy
   has_many :collections, through: :collection_participants
+  has_many :tag_set_nominations, dependent: :destroy
   has_many :tag_set_ownerships, dependent: :destroy
   has_many :tag_sets, through: :tag_set_ownerships
   has_many :challenge_signups, dependent: :destroy
@@ -321,6 +322,7 @@ class Pseud < ApplicationRecord
     change_collections_membership
     change_gift_recipients
     change_challenge_participation
+    change_tag_set_nominations
     self.destroy
   end
 
@@ -406,6 +408,15 @@ class Pseud < ApplicationRecord
 
     bookmarks.update_all(pseud_id: default_pseud_id)
     IndexQueue.enqueue_ids(Bookmark, bookmark_ids, :main)
+  end
+
+  def change_tag_set_nominations
+    default_pseud_id = user.default_pseud.id
+    # Destroy nominations for tag sets where the default pseud already has one,
+    # to avoid violating the (owned_tag_set_id, pseud_id) uniqueness constraint.
+    existing_tag_set_ids = TagSetNomination.where(pseud_id: default_pseud_id).pluck(:owned_tag_set_id)
+    tag_set_nominations.where(owned_tag_set_id: existing_tag_set_ids).destroy_all
+    tag_set_nominations.update_all(pseud_id: default_pseud_id)
   end
 
   def change_collections_membership
