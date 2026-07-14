@@ -240,11 +240,9 @@ class ChaptersController < ApplicationController
 
   # fetch work these chapters belong to from db
   def load_work
-    @work = params[:work_id] ? Work.find(params[:work_id]) : Chapter.find_by(id: params[:id]).try(:work)
-    if @work.blank?
-      flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
-      redirect_to root_path and return
-    end
+    @work = params[:work_id] ? Work.find(params[:work_id]) : Chapter.find(params[:id]).work
+    raise ActiveRecord::RecordNotFound, "Couldn't find work for chapter with id '#{params[:id]}'" if @work.blank?
+
     @check_ownership_of = @work
     @check_visibility_of = @work
   end

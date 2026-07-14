@@ -154,9 +154,14 @@ describe ChaptersController do
       it_redirects_to work_chapter_path(work_id: work.id, id: chapter.id)
     end
 
-    it "errors and redirects to work if chapter is not found" do
+    it "errors and redirects to work if chapter is not found in work but work is given" do
       chapter = create(:chapter)
       get :show, params: { work_id: work.id, id: chapter.id }
+      it_redirects_to_with_error(work_path(work), "Sorry, we couldn't find the chapter you were looking for.")
+    end
+
+    it "errors and redirects to work if chapter is invalid but work is given" do
+      get :show, params: { work_id: work.id, id: 0 }
       it_redirects_to_with_error(work_path(work), "Sorry, we couldn't find the chapter you were looking for.")
     end
 
@@ -172,10 +177,24 @@ describe ChaptersController do
       end.to raise_error ActiveRecord::RecordNotFound
     end
 
-    it "shows the chapter if work is not given but chapter exists" do
+    it "errors if chapter does not exist and work is not given" do
+      expect do
+        get :show, params: { id: 0 }
+      end.to raise_error ActiveRecord::RecordNotFound
+    end
+
+    it "shows the chapter if chapter exists and work is not given" do
       get :show, params: { id: work.chapters.first.id }
       expect(response).to render_template(:show)
       expect(assigns[:work]).to eq work
+    end
+
+    it "errors if chapter is given but has no work and work is not given" do
+      chapter = work.chapters.first.id
+      work.delete
+      expect do
+        get :show, params: { id: chapter }
+      end.to raise_error ActiveRecord::RecordNotFound
     end
 
     it "assigns @chapters to chapters in order" do
