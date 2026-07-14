@@ -1,5 +1,6 @@
 class CollectionsController < ApplicationController
-  before_action :users_only, only: [:new, :create]
+  before_action :load_owner, only: [:index]
+  before_action :users_only, only: [:new, :edit, :create, :update]
   before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :collection_owners_or_privileged_admins_only, only: [:edit]
   before_action :collection_owners_only, only: [:update, :destroy, :confirm_delete]
@@ -31,31 +32,48 @@ class CollectionsController < ApplicationController
   end
 
   def index
+    base_options = {
+      page: params[:page] || 1
+    }
     options = params[:collection_search].present? ? collection_filter_params : {}
-    if params[:work_id]
-      @work = Work.find(params[:work_id])
+    options.merge!(base_options)
+
+    @page_subtitle = case @owner
+                     when Collection
+                       t(".subcollection", collection_title: @collection.title)
+                     when User
+                       t(".user", user_name: @user.login)
+                     when Tag
+                       t(".tag", tag_name: @tag.name)
+                     else
+                       t(".general")
+                     end
+
+    if @work.present?
       @collections = @work.approved_collections
         .by_title
         .for_blurb
         .paginate(page: params[:page])
-    elsif params[:collection_id]
-      @collection = Collection.find_by!(name: params[:collection_id])
-      @search = CollectionSearchForm.new({ parent_id: @collection.id, sort_column: "title.keyword" }.merge(page: params[:page]))
-      @collections = @search.search_results.scope(:for_search)
-      flash_search_warnings(@collections)
-      @page_subtitle = t(".subcollections_page_title", collection_title: @collection.title)
-    elsif params[:user_id]
+    elsif @user.present?
+      # maybe find a way to merge this elsif branch
+      # into the @owner.present? one below it later
       @sort_and_filter = true
-      @user = User.find_by!(login: params[:user_id])
-      @search = CollectionSearchForm.new(options.merge({ maintainer_id: @user.id }.merge(page: params[:page])))
+      @search = CollectionSearchForm.new(options.merge({ maintainer_id: @user.id }))
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
-      @page_subtitle = ts("%{username} - Collections", username: @user.login)
+    elsif @owner.present?
+      # include "|| @user.present?" in this one later after deleting above
+      @sort_and_filter = @tag.present?
+      @search = CollectionSearchForm.new(options.merge(parent: @owner))
+      @collections = @search.search_results.scope(:for_search)
+      flash_search_warnings(@collections)
+      @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
     else
       @sort_and_filter = true
-      @search = CollectionSearchForm.new(options.merge(page: params[:page]))
+      @search = CollectionSearchForm.new(options)
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
+      @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
     end
   end
 
@@ -192,6 +210,24 @@ class CollectionsController < ApplicationController
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
     redirect_to(collections_path)
+  end
+
+  protected
+
+  def load_owner
+    @user = User.find_by!(login: params[:user_id]) if params[:user_id].present?
+    @work = Work.find(params[:work_id]) if params[:work_id].present?
+    @collection = Collection.find_by!(name: params[:collection_id]) if params[:collection_id].present?
+    if params[:tag_id].present?
+      @tag = Tag.find_by_name(params[:tag_id])
+      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'" unless @tag.is_a?(Tag)
+
+      unless @tag.canonical?
+        redirect_path = @tag.merger.present? ? tag_collections_path(@tag.merger) : tag_path(@tag)
+        redirect_to redirect_path and return
+      end
+    end
+    @owner = @user || @work || @collection || @tag
   end
 
   private

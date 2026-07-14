@@ -690,6 +690,7 @@ en:
       choose_fandom: choose a fandom
       navigation:
         bookmarks: Bookmarks
+        collections: Collections
         edit: Edit Bookmark
         new: Bookmark
         new_external_work: Bookmark External Work
@@ -867,23 +868,25 @@ en:
         footnote: Use this if your collection is not fandom-specific.
         label: Multifandom
     index:
-      main_content:
-        landmark_heading: List of Collections
+      landmark:
+        list_collections: List of Collections
+        navigation: Navigation
       navigation:
-        actions:
-          collections: Collections
-          filters: Filters
-          manage_items: Manage Collection Items
-          new_collection: New Collection
-          new_subcollection: New Subcollection
-          open_challenges: Open Challenges
-        landmark_heading: Navigation
+        all_collections: Collections
+        bookmarks: Bookmarks
+        collections: Collections
+        filters: Filters
+        manage_collection: Manage Collection Items
+        new_collection: New Collection
+        new_subcollection: New Subcollection
+        open_challenges: Open Challenges
+        user_collections: Collections
+        works: Works
       page_heading:
-        challenges_subcollections_in: Challenges/Subcollections in %{collection}
-        collections_in_the: Collections in the %{archive}
+        collection: Collection
+        collections_in_the: "%{collections} in the %{archive}"
         collections_including: Collections including %{work}
-        no_results: Sorry, there were no collections found.
-        search_header: Collection
+        subcollection: Subcollection
         users_collections: "%{user}'s Collections"
     sidebar:
       bookmarks: Bookmarked Items (%{count})
@@ -3104,15 +3107,22 @@ en:
       type: Type
       wrangling_status: Wrangling status
     show:
-      canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
+      canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}, as well as %{filter_collections_link}.
       canonical_tag: canonical tag
       children:
         heading: 'Child tags (displaying the first %{count} of each type):'
         more: and more
       fandom_relationship_tags: Relationship tags in this fandom
       filter_bookmarks: filter bookmarks
+      filter_collections: filter collections
       filter_works: filter works
       list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
+      navigation:
+        bookmarks: Bookmarks
+        collections: Collections
+        edit: Edit
+        troubleshoot: Troubleshoot
+        works: Works
       synonyms: 'Tags with the same meaning:'
     wrangle:
       manage:
@@ -3449,6 +3459,15 @@ en:
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
+      navigation:
+        tag:
+          bookmarks: Bookmarks
+          collections: Collections
+          works: Works
+        user:
+          collection_works: Works in Collections
+          edit_works: Edit Works
+          works: Works
       recent_works_html: These are some of the latest works posted to the Archive. To find more works, %{choose_fandom_link} or %{advanced_search_link}.
     meta:
       original_creators:

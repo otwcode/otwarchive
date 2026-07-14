@@ -24,6 +24,7 @@ class CollectionQuery < Query
 
   # Combine the available filters
   def filters
+    add_owner
     [
       multifandom_filter,
       signup_open_filter,
@@ -42,6 +43,24 @@ class CollectionQuery < Query
     @queries = [
       general_query
     ].flatten.compact
+  end
+
+  def add_owner
+    owner = options[:parent]
+    # should maybe be an if statement?
+    case owner
+    when Tag
+      options[:filter_ids] ||= []
+      options[:filter_ids] << owner.id
+    when User
+      options[:maintainer_id] = owner.id
+      options[:sort_column] = "title.keyword"
+      options[:sort_direction] = "asc"
+    when Collection
+      options[:parent_id] = owner.id
+      options[:sort_column] = "title.keyword"
+      options[:sort_direction] = "asc"
+    end
   end
 
   ####################
