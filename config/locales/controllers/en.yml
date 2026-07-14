@@ -249,6 +249,8 @@ en:
   home:
     content:
       page_title: Content Policy
+    diversity:
+      page_title: Diversity Statement
     privacy:
       page_title: Privacy Policy
     tos:
