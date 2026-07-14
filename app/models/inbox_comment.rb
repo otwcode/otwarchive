@@ -19,9 +19,17 @@ class InboxComment < ApplicationRecord
     end
     direction = (filters[:date]&.upcase == "ASC" ? "created_at ASC" : "created_at DESC")
 
-    includes(feedback_comment: :pseud).
-      order(direction).
-      where(read: read, replied_to: replied_to)
+    includes(
+      feedback_comment: [
+        { pseud: [
+          { user: %i[roles block_of_current_user] },
+          { icon_attachment: :blob }
+        ] },
+        { parent: { work: { users: :block_of_current_user } } }
+      ]
+    )
+      .order(direction)
+      .where(read: read, replied_to: replied_to)
   }
 
   scope :for_homepage, -> {
