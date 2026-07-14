@@ -50,6 +50,7 @@ class AdminPostsController < Admin::BaseController
   # GET /admin_posts/new
   # GET /admin_posts/new.xml
   def new
+    @page_subtitle = t(".page_title")
     @admin_post = AdminPost.new
     authorize @admin_post
   end

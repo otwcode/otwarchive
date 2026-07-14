@@ -538,6 +538,9 @@ en:
       page_title: AO3 News Drafts
     index:
       page_title: AO3 News
+    new:
+      page_heading: New AO3 News Post
+      page_title: New AO3 News Post
     posting_fieldset:
       actions:
         cancel: Cancel
