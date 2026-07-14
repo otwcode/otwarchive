@@ -103,6 +103,9 @@ https://otwcode.github.io/docs/classes-taxonomy.html#grouping-and-spacing
 #outer.wrapper {
   float: left;
   width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 #work-skin.wrapper {
@@ -111,6 +114,10 @@ https://otwcode.github.io/docs/classes-taxonomy.html#grouping-and-spacing
 
 #outer.wrapper, #inner.wrapper, #work-skin.wrapper {
     box-shadow: none;
+}
+
+#inner.wrapper {
+    flex: 1;
 }
 
 .module, .index, .index .index {
