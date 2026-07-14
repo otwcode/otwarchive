@@ -238,6 +238,10 @@ en:
             subscribable:
               blank: The item you tried to subscribe to does not exist. It may have been deleted.
               format: "%{message}"
+        tag_set_nomination:
+          attributes:
+            base:
+              taken_by_user: You have already submitted nominations for that tag set. Try editing them instead.
         user:
           attributes:
             age_over_13:
