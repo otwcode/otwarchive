@@ -2,26 +2,6 @@
 zh-Hans:
   activerecord:
     attributes:
-      archive_warning:
-        name_with_colon:
-          other: 警告：
-      category:
-        name_with_colon:
-          other: 性向/性向分类：
-      character:
-        name_with_colon:
-          other: 角色：
-      fandom:
-        name_with_colon:
-          other: 同人圈：
-      freeform:
-        name_with_colon:
-          other: 其他标签：
-      rating:
-        name_with_colon: 分级：
-      relationship:
-        name_with_colon:
-          other: 配对：
       work:
         chapter_total_display: 章节
         summary: 简介
@@ -44,6 +24,12 @@ zh-Hans:
         other: 配对
       series:
         other: 系列
+  help:
+    preferences_locale:
+      locale:
+        description: 您可以在此选择接收AO3邮件的首选语言。目前，我们的志愿者正在更新和翻译这些邮件的模板。由于工作仍在推进中，因此现阶段并非所有邮件都提供英文以外的其他语言版本。如果某封邮件模板尚未翻译成您所选的语言，该邮件将以英文发送。
+        header: 设定首选区域设置
+      page_heading: 区域设置偏好
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -58,106 +44,102 @@ zh-Hans:
         html: "%{giver}给您的作品%{commentable_link}点了赞。"
         text: 一名访客给您的作品%{commentable_title}（%{commentable_url}）点了赞。
       subject: "[%{app_name}] 您收到了点赞！"
-  layouts:
-    proxy_notice:
-      faux_heading: 重要提示：
-      point1: 您使用的是第三方开发的反向代理网站，此网站并非Archive of Our Own - AO3（AO3作品库）原站。
-      point2: 代理网站的开发者能够获取您上传至该站点的全部内容，包括您的ip地址。如您通过代理登录AO3，对方将获得您的密码。
   mailer:
+    collections:
+      why_collection_email:
+        html: 您收到此邮件是因为您的电子邮件地址被列为同人作品集%{collection_link}的收信邮箱。
+        text: 您收到此邮件是因为您的电子邮件地址被列为同人作品集"%{collection_title}" （%{collection_url}）的收信邮箱。
+      why_maintainer:
+        html: 您收到此邮件是因为您是同人作品集%{collection_link}的所有人或管理员。
+        text: 您收到此邮件是因为您是同人作品集"%{collection_title}" （%{collection_url}）的所有人或管理员。
     general:
       closing:
         formal: 此致敬礼
         informal: 祝好
       creation:
+        attribution:
+          anon: 匿名作者
         link_with_word_count: "%{creation_link}（%{word_count}）"
         title_with_chapter_number: "%{title}的第%{position}章"
         title_with_word_count: '"%{creation_title}"（%{word_count}）'
         word_count:
-          other: "%{count} 字符"
+          other: "%{count}字符"
       footer:
-        general:
-          about:
-            html: AO3是由同人爱好者运作及支持、并由%{donate_link}资助运行的作品库。
-            text: AO3是由同人爱好者运作及支持、并由您的捐赠资助运行的作品库：%{donate_url}。
-          html:
-            donate_link_text: 您的捐赠
-            support_link_text: 联系支持团队
-          unwanted_email:
-            html: 如果这封邮件被误发给了您，请%{support_link}。
-            text: 如果这封邮件被误发给了您，请于此联系支持团队：%{support_url}。
+        about:
+          html: AO3是由同人爱好者运作及支持、并由%{your_donations_link}资助运行的作品库。
+          text: AO3是由同人爱好者运作及支持、并由您的捐赠资助运行的作品库：%{your_donations_url}。
+          your_donations: 您的捐赠
         sent_at: 于%{sent_at}发送。
+        why_policy_abuse:
+          contact_policy_abuse: 联系条款支持与违规行为处理委员会
+          html: 如您不清楚为何会收到此邮件，请%{contact_policy_abuse_link}。
+          text: 如您不清楚为何会收到此邮件，请于此联系条款执行与违规行为处理委员会：%{contact_policy_abuse_url}。
+        why_support:
+          contact_support: 联系支持团队
+          html: 如您不清楚为何会收到此邮件，请%{contact_support_link}。
+          text: 如您不清楚为何会收到此邮件，请于此联系支持团队：%{contact_support_url}。
       greeting:
-        formal_html: 尊敬的%{name}，
+        formal:
+          addressed_html: 您好%{name}，
         informal:
           addressed_html: 您好，%{name}！
-          unaddressed: 您好！
-        introductory: Archive of Our Own – AO3（AO3作品库）向您问好！
+        introductory: AO3作品库向您问好！
       metadata_label_indicator: "："
       signature:
-        abuse_team: AO3条款执行和违规行为处理团队
         app_short_name: AO3
-        open_doors: Open Doors（Open Doors拯救计划）团队
-        parent_org: Organization for Transformative Works – OTW（OTW再创作组织）
-        support: AO3支持委员会团队
-  users:
-    mailer:
-      reset_password_instructions:
-        expiration: 此链接一周后失效，如果您届时仍未修改密码，则需要申请新的链接。
-        intro: 有人提出了重设您的账号密码的申请。您可以进入下方的链接对密码进行更改：
-        link_title: 更改我的密码。
-        subject: "[%{app_name}] 重设您的密码"
-        unrequested: 如果您没有申请重设密码，请忽略此邮件，继续使用您原本的密码。
+        open_doors: Open Doors拯救计划团队
+        parent_org: OTW再创作组织
+  preferences:
+    locale_help_title: 区域设置偏好帮助
   user_mailer:
-    admin_deleted_work_notification:
-      bye: 附件中为该作品副本，以供参考。
-      contact_abuse: 联系条款执行与违反行为处理委员会
-      deleted:
-        html: 您的作品%{title}已被网站管理员从AO3作品库中删除。
-        text: 网站管理员从AO3作品库中删除您的作品%{title}。
-      html:
-        tos_violation: 如果您的作品违反了AO3作品库的网站服务条款，请%{contact_abuse_link}。
-      import_project:
-        html: 如果您的作品属于Open Doors（Open Doors拯救计划）的导入项目，请%{opendoors_link}提出有关疑问。
-        text: 如果您的作品属于Open Doors（Open Doors拯救计划）的导入项目，请联系Open Doors拯救计划（%{opendoors_link}）。
-      opendoors: 联系Open Doors拯救计划
-      subject: "[%{app_name}] 您的作品已被管理员删除"
-      text:
-        tos_violation: 如果您的作品违反了AO3作品库的网站服务条款，请联系条款执行和违反行为处理委员会（%{contact_abuse_url}）。
     admin_hidden_work_notification:
-      access: 在作品被隐藏期间，您依然可以通过上方链接访问该作品，但它将不会显示在您的作品页，且其他AO3用户将无法访问。
-      check_email: 条款执行和违反行为处理委员会可能已经联系您并对您作品被隐藏的原因进行了解释，因此请检查您的邮箱，包括垃圾邮件列表。
-      contact_abuse: 联系条款执行和违反行为处理委员会
-      html:
-        help: 如果您不确定为什么您的作品会被隐藏，并且没有收到有关此事的进一步联系，请直接%{contact_abuse_link}。
-        hidden: 您的作品%{title}已被条款执行和违反行为处理委员会隐藏且无法再被公开访问。
-        tos_violation: 如果您的作品是因为违反AO3的%{tos_link}而被隐藏，您会被要求采取行动以纠正违规行为。如果您无法让您的作品符合服务条款，您的作品可能会被从AO3作品库中删除。
-      subject: "[%{app_name}] 您的作品已被条款执行和违反行为处理委员会隐藏"
-      text:
-        help: 如果您不确定为什么您的作品会被隐藏，并且没有收到有关此事的进一步联系，请直接联系条款执行和违反行为处理委员会：%{contact_abuse_url}。
-        hidden: 您的作品"%{title}"（%{work_url}）已被条款执行和违反行为处理委员会隐藏且无法再被公开访问。
-        tos_violation: 如果您的作品是因为违反AO3的服务条款（%{tos_url}）而被隐藏，您会被要求采取行动以纠正违规行为。如果您无法让您的作品符合服务条款，您的作品可能会被从AO3作品库中删除。
-      tos: 服务条款
+      access:
+        other: 在您的作品被隐藏期间，您依然可以通过上方链接访问。不过其他用户将无法访问该作品，它也不会出现在您的作品页面上。
+      check_email:
+        other: 条款执行与违规行为处理委员会可能已经与您取得联系，并对您作品被隐藏的原因给予解释。请检查您的邮箱，包括垃圾邮件列表。
+      contact_abuse: 联系条款执行与违规行为处理委员会
+      content_policy: 内容政策
+      help:
+        html:
+          other: 如您不清楚作品被隐藏的原因，且未收到单独的解释邮件，请直接%{contact_abuse_link}。
+        text:
+          other: 如您不清楚作品被隐藏的原因，且未收到单独的解释邮件，请直接联系条款执行与违规行为处理委员会：%{contact_abuse_url}。
+      hidden_multiple:
+        other: 您的%{count}份作品已被条款执行与违规行为处理委员会隐藏：
+      hidden_one:
+        html: 您的作品《%{title}》已被条款执行与违规行为处理委员会隐藏。
+        text: 您的作品《%{title}》（%{work_url}）已被条款执行与违规行为处理委员会隐藏
+      subject:
+        other: "[%{app_name}] 您的作品已被条款执行与违规行为处理委员会隐藏"
+      tos: AO3服务条款
+      tos_faq: 服务条款常见问题
+      tos_violation:
+        html:
+          other: 如果您的作品因违反%{tos_link}（包括%{content_policy_link}）而被隐藏，您须采取行动纠正违规行为。如未能使作品符合服务条款规定，您的作品可能会被移除出AO3作品库。若想了解更多信息，请参阅%{tos_faq_link}。
+        text:
+          other: 如果您的作品因违反AO3服务条款（%{tos_link}），包括内容政策（%{content_policy_link}），而被隐藏，您须采取行动纠正违规行为。如未能使作品符合服务条款规定，您的作品可能会被移除出AO3作品库。若想了解更多信息，请参阅服务条款常见问题：%{tos_faq_link}。
+      work_info: "-《%{title}》（%{work_url}）"
     anonymous_or_unrevealed_notification:
       anonymous_info: 匿名作品在标签列表中可见，但不会显示在您的作品页面上。在作品页，您的用户名将被替换为"Anonymous"（佚名）。
-      anonymous_unrevealed_info: 管理员随后可能会公开您的作品，但仍保留匿名。订阅您账户的用户不会收到相关改动提示。作品一经公开，即会被收录到标签列表中，但不会显示在您的作品页面。在作品页，您的用户名将被替换为"Anonymous"（佚名）。
+      anonymous_unrevealed_info: 管理员随后可能会公开您的作品，但仍保留匿名。订阅您账户的用户不会收到相关改动提示。您的作品将被收录到标签列表中，但不会显示在您的作品页面。在作品页，您的用户名将被替换为"Anonymous"（佚名）。
       changed_status:
-        anonymous:
-          html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为匿名状态。
-          text: 作品集%{collection_title}（%{collection_url}）的管理员已将您的作品%{work_title}（%{work_url}）设为匿名状态。
         anonymous_unrevealed:
           html: 作品集%{collection_link}的管理员已将您的作品%{work_link} 设为匿名与非公开状态.
           text: 作品集%{collection_title}（%{collection_url}）的管理员已将您的作品%{work_title}（%{work_url}）设为匿名与非公开状态。
+        anonymous:
+          html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为匿名状态。
+          text: 作品集%{collection_title}（%{collection_url}）的管理员已将您的作品%{work_title}（%{work_url}）设为匿名状态。
         unrevealed:
           html: 作品集%{collection_link}的管理员已将您的作品%{work_link}设为非公开状态。
           text: 作品集%{collection_title}（%{collection_url}）的管理员已将您的作品%{work_title}（%{work_url}）设为非公开状态。
       collection_items_link_text: Approved Collection Items（已通过作品集条目）页
       do_not_want:
-        anonymous:
-          html: 如果您想取消作品的匿名状态，请访问%{collection_items_link}将其从该作品集中移除。
-          text: 如果您不希望作品保持匿名状态，请访问Approved Collection Items（已通过作品集条目）页，将其从该作品集中移除：%{collection_items_url}
         anonymous_unrevealed:
           html: 如果您不希望您的作品保持匿名与非公开状态，请访问%{collection_items_link}将其从作品集中移除。
           text: 如果您不希望作品保持匿名与非公开状态，请访问Approved Collection Items（已通过作品集条目）页，将其从该作品集中移除：%{collection_items_url}
+        anonymous:
+          html: 如果您想取消作品的匿名状态，请访问%{collection_items_link}将其从该作品集中移除。
+          text: 如果您不希望作品保持匿名状态，请访问Approved Collection Items（已通过作品集条目）页，将其从该作品集中移除：%{collection_items_url}
         unrevealed:
           html: 如果您不希望您的作品保持非公开状态，请访问%{collection_items_link}将其从作品集中移除。
           text: 如果您不希望作品保持非公开状态，请访问Approved Collection Items（已通过作品集条目）页，将其从该作品集中移除：%{collection_items_url}
@@ -184,96 +166,56 @@ zh-Hans:
       any: 任意
       assignment:
         html: 您在AO3的%{link}写手挑战中收到了以下点文！
-      description: 描述：
-      due: 本篇点文的截止日期为：
-      html:
-        footer: 您之所以会收到这封邮件，是因为您报名参加了%{title}写手挑战。如果想了解本次挑战的相关信息以及管理员的联系方式，请前往%{footer_link}。
-        footer_link: 写手挑战详情页面
-        look_up: 查看本篇点文详情，请前往%{link}。
-        look_up_link: 您的Assignments（点文）页面
-      optional_tags: 可选标签：
-      prompts: 点梗：
-      prompt_url: 点梗链接：
-      recipient: 受赠者：
+        text: 您在AO3的%{collection_title}写手挑战（%{collection_url}）中收到了以下点文！
+      description: 描述
+      due: 本篇点文的截止日期为
+      footer:
+        challenge_profile: 写手挑战详情页面
+        html: 您之所以会收到这封邮件，是因为您报名参加了%{title}写手挑战。如果想了解本次挑战的相关信息以及管理员的联系方式，请前往%{challenge_profile_link}。
+        text: 您之所以会收到这封邮件，是因为您报名参加了%{title}写手挑战（%{url}）。如果您想了解本次挑战的相关信息以及管理员的联系方式，请前往%{challenge_profile_url}。
+      look_up:
+        html: 查看本篇点文详情，请前往%{your_assignments_link}。
+        text: 查看本篇点文详情，请前往您的Assignments（点文）页面%{your_assignments_url}。
+        your_assignments: 您的Assignments（点文）页面
+      optional_tags: 可选标签
+      prompt_url: 点梗链接
+      prompts: 点梗
+      recipient: 受赠者
       recipient_missing: 无受赠者：请联系写手挑战管理员。
       subject: "[%{app_name}][%{collection_title}] 您的点文！"
-      text:
-        assignment: 您在AO3的%{collection_title}写手挑战（%{collection_url}）中收到了以下点文！
-        footer: 您之所以会收到这封邮件，是因为您报名参加了%{title}写手挑战（%{url}）。如果您想了解本次挑战的相关信息以及管理员的联系方式，请前往%{profile_url}。
-        look_up: 查看本篇点文详情，请前往您的Assignments（点文）页面%{link}。
     change_email:
-      changed:
-        html: "%{login}，与您账号关联的邮箱地址已改为 %{email}"
-        text: "%{login}，与您账号关联的邮箱地址已改为 %{email}"
-      subject: "[%{app_name}] 邮箱地址更换"
-    claim_notification:
-      access:
-        contact_support: 联系AO3支持委员会
-        html: 出于被搬运作品库的要求，您的作品被搬运至AO3后可能仅向登录用户开放（以防它们出现在谷歌检索结果中）。在这种情况下，除非您选择面向所有访客打开权限，否则仅登录用户可以查看这些作品。关于如何解锁、遗弃或删除您的作品，请%{contact_support_link}。
-        text: 出于被搬运作品库的要求，您的作品被搬运至AO3后可能仅向登录用户开放（以防它们出现在谷歌检索结果中）。在这种情况下，除非您选择面向所有访客打开权限，否则仅登录用户可以查看这些作品。关于如何解锁、遗弃或删除您的作品，请使用%{support_url}，联系AO3支持委员会。
-      email_tips: 如欲与我们取得联系，请将使用@transformativeworks.org这一域名的电邮地址添加至安全联系人列表，并检查您的垃圾邮件确认其中是否有我们的回复。
-      introduction:
-        ao3_name: Archive of Our Own – AO3（AO3作品库）
-        html: 本邮件旨在通知您，包含您作品的同人作品库已被%{open_doors_name_link}搬运至 %{app_link}。由于此电邮地址与被搬运作品库的注册用户相关联，相关同人作品（如下）已被自动添加至您的AO3账号。
-        open_doors_name: Open Doors（Open Doors拯救计划）
-        text: 本邮件旨在通知您，包含您作品的同人作品库已被Open Doors（Open Doors拯救计划）（%{open_doors_url}）搬运至Archive
-          of Our Own – AO3（AO3作品库）：%{app_url}。由于此电邮地址与被搬运作品库的注册用户相关联，相关同人作品（如下）已被自动添加至您的AO3账号。
-      mistake:
-        contact_open_doors: 联系Open Doors拯救计划
-        html: 如果存在错误，并且下列作品并非您的作品，请勿将其删除！请%{contact_open_doors_link}，我们会帮助您解决。
-        text: 如果存在错误，并且下列作品并非您的作品，请勿将其删除！请联系Open Doors拯救计划（%{open_doors_url}），我们会帮助您解决。
-      more_info:
-        ao3_news: AO3新闻
-        contact_support: 联系AO3支持委员会
-        faq_page: 常见问题页面
-        html: 您可以点击%{ao3_news_link}阅读近期的作品库搬运公告，亦可前往Open Doors拯救计划的%{faq_page_link}或%{tutorial_page_link}了解更多信息。对于常见问题、教程或此封邮件中未予解答的任何问题，请%{contact_support_link}。
-        text: 您可以点击AO3新闻（%{news_url}）阅读近期的作品库搬运公告，亦可前往Open Doors拯救计划的常见问题页面（%{open_doors_faq_url}）或教程页面（%{open_doors_tutorial_url}），了解更多信息。对于常见问题、教程或此封邮件中未予解答的任何问题，请使用%{support_url}联系支持委员会。
-        tutorial_page: 教程页面
-      other_works:
-        contact_open_doors: 联系Open Doors拯救计划
-        html: 如果您在被搬运作品库还拥有其他作品，但已无法访问上传时所用的电邮地址，请%{contact_open_doors_link}并提供任何有助于核验您身份的信息。
-        text: 如果您在被搬运作品库还拥有其他作品，但已无法访问上传时所用的电邮地址，请联系Open Doors拯救计划并提供任何有助于核验您身份的信息。
-      questions:
-        contact_support: 联系AO3支持委员会
-        html: 如有其他疑问，请%{contact_support_link}。
-        text: 如有其他疑问，请使用%{support_url}联系AO3支持委员会。
-      redirects:
-        html: 为保留推荐列表和收藏，在有限的时间内，被搬运作品库的网址可能会被重定向至这些作品在AO3上的搬运副本（请查阅作品库搬运公告帖确认具体情况）。如果您已上传这些作品的副本，并且%{negation}使用"通过URL地址搬运"这一功能，同一作品在AO3上将有两份副本。
-      subject: "[%{app_name}]作品上传通知"
-      update_redirect:
-        contact_open_doors: 联系Open Doors拯救计划
-        html: 如果您希望由Open Doors拯救计划来更新重定向链接，导向您自行上传的作品副本，请删除搬运副本，并%{contact_open_doors_link}，说明您的AO3账号用户名、您在被搬运作品库使用的用户名，以及希望重定向链接导向的同人作品标题和URL地址。（如果涉及多份作品，您可以在同一封邮件中全部列出。）
-        text: 如果您希望由Open Doors拯救计划来更新重定向链接，导向您已自行上传的作品副本，请删除搬运副本，并使用%{open_doors_url}联系Open
-          Doors拯救计划，说明您的AO3账号用户名、您在被搬运作品库使用的用户名，以及希望重定向链接导向的同人作品标题和URL地址。（如果涉及多份作品，您可以在同一封邮件中全部列出。）
-      works_by: 此邮箱（%{email}）关联的作品如下：
-      work_info:
-        html: "%{work_link} (%{fandom})"
+      confirm_change:
+        html:
+          other: 如系您本人申请，请于%{count}日内查看%{unconfirmed_email}上的邮件，确认电子邮箱变更。如未收到确认邮件，或遭遇其他问题，请%{contact_support_link}。
         text:
-          no_fandom: "- %{work_title} %{work_url}"
-          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
-    collection_notification:
-      assignments_sent:
-        complete: 所有任务已发送。
-        subject: 任务已发送
-      html:
-        received_message: 您收到一则有关您的作品集%{collection_link}的信息：
-      text:
-        received_message: 您收到一则有关您的作品集"%{collection_title}"（%{collection_url}）的信息：
-    creatorship_notification:
-      explanation: 作为某一作品的共同创作者, 无论您在个人设置中是否允许他人邀请您成为共同创作者，您都可能被列为该作品新章节的创作者， 也会被列为该作品所属系列的创作者之一。
-      html:
-        creation: 由%{pseud_links}所作的%{creation_link}
-        edit_chapter: 编辑章节
-        edit_series: 编辑系列
-        remove_chapter: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过%{edit_chapter_link}将自己从创作者名单中移除。
-        remove_series: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过%{edit_series_link}将自己从创作者名单中移除。
-      intro_chapter: 用户%{adding_user}将您 以别名%{pseud}列为了下述章节的共同创作者：
-      intro_series: 用户%{adding_user}将您以别名%{pseud}列为了下述系列的共同创作者：
-      subject: "[%{app_name}] 共同创作者提示"
-      text:
-        creation: 由%{pseuds}所作的%{title}（%{url}）
-        remove_chapter: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过编辑章节将自己从创作者名单中移除：%{url}
-        remove_series: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过编辑系列将自己从创作者名单中移除：%{url}
+          other: 如系您本人申请，请于%{count}日内查看%{unconfirmed_email}上的邮件，确认电子邮箱变更。如未收到确认邮件，或遭遇其他问题，请联系支持委员会：%{contact_support_url}。
+      contact_policy_abuse: 联系条款执行与违规行为处理委员会
+      contact_support: 联系支持委员会
+      email_change_form: 提交电子邮箱变更表格
+      made_request: 有人申请更改与您%{app_name}账号关联的电子邮箱地址。
+      not_made_request:
+        html: 如非您本人申请，他人有可能获取了您%{app_name}账号的访问权限。请%{reset_password_link}，或%{contact_policy_abuse_link}。
+        text: 如非您本人申请，他人有可能获取了您%{app_name}账号的访问权限。请立即重置密码（%{reset_password_url}），或联系条款执行与违规行为处理委员会：%{contact_policy_abuse_url}。
+      reset_password: 立即重置密码
+      subject: "[%{app_name}] 电子邮箱变更申请"
+      wrong_email:
+        html: 如您的电子邮箱地址输入有误，您需重新%{email_change_form_link}。
+        text: 如您的电子邮箱地址输入有误，您需重新提交电子邮箱变更表格：%{email_change_form_url}。
+    change_username:
+      change_cooldown_html:
+        other: "%{app_name}用户名仅限每%{count}日更改一次，您可于%{date}再次予以变更。"
+      changed_html: 您%{app_name}账号的用户名已从%{old_username}更改为%{new_username}。
+      contact_policy_abuse: 联系条款执行与违规行为处理委员会
+      contact_support: 联系支持委员会
+      did_not_make_change:
+        html: 如此变更非您本人操作，他人有可能获取了您%{app_name}账号的访问权限。请%{reset_password_link}或%{contact_policy_abuse_link}。
+        text: 如此变更非您本人操作，他人有可能获取了您%{app_name}账号的访问权限。请立即重置密码（%{reset_password_url}）或联系条款执行与违规行为处理委员会：%{contact_policy_abuse_url}。
+      effects:
+        html: 您可%{refer_faq_link}以了解更改用户名对账号的影响。如遇到技术问题，比如更改用户名一周后作品或收藏界面仍显示原有用户名，请%{contact_support_link}。
+        text: 您可参考我们的常见问题，了解更改用户名对您账号的影响：%{refer_faq_url}。如遇到技术问题，比如更改用户名一周后作品或收藏界面仍显示原有用户名，请联系支持委员会：%{contact_support_url}。
+      refer_faq: 参考我们的常见问题
+      reset_password: 立即重置密码
+      subject: "[%{app_name}]您的用户名已更改"
     creatorship_notification_archivist:
       explanation: 该用户作为Open Doors（Open Doors拯救计划）的作品库管理员，在相关工作需要时，可在不发送请求的情况下将您添加为共同创作者，即使您可能在个人设置中禁止了其他用户邀请您成为共同创作者。
       html:
@@ -287,24 +229,12 @@ zh-Hans:
       intro_chapter: 用户%{archivist} 已将您以别名%{pseud}添加为下述章节的共同创作者：
       intro_series: 用户%{archivist} 已将您以别名%{pseud}添加为下述系列的共同创作者：
       intro_work: 用户%{archivist}已将您以别名%{pseud}添加为下述作品的共同创作者：
-      subject: "[%{app_name}]档案管理员添加共同创作者通知"
+      subject: "[%{app_name}]档案管理员已将你添加为共同创作者"
       text:
         creation: "%{title}（%{url}），作者：%{pseuds}"
         remove_chapter: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过编辑章节将自己从创作者名单中移除：%{url}
         remove_series: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过编辑系列将自己从创作者名单中移除：%{url}
         remove_work: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过编辑作品将自己从创作者名单中移除：%{url}
-    creatorship_request:
-      html:
-        creation: 由%{pseud_links}所作的%{creation_link}
-        instructions: 您可以在您的%{page_name}页面接受或拒绝此邀请。
-        page_name: Co-Creator Requests（共同创作者邀请）
-      intro_chapter: 用户%{inviting_user}向您发送了一则邀请，希望将您以别名%{pseud}列为下述章节的共同创作者：
-      intro_series: 用户%{inviting_user}向您发送了一则邀请，希望将您以别名%{pseud}列为下述系列的共同创作者：
-      intro_work: 用户%{inviting_user}向您发送了一则邀请，希望将您以别名%{pseud}列为下述作品的共同创作者：
-      subject: "[%{app_name}] 共同创作者邀请"
-      text:
-        creation: 由%{pseuds}所作的%{title}（%{url}）
-        instructions: 您可以在您的Co-Creator Requests（共同创作者邀请）页面接受或拒绝此邀请：%{url}
     delete_work_notification:
       attachment: 附件中为该作品副本，以供参考。
       deleted_other:
@@ -318,43 +248,35 @@ zh-Hans:
         text: 如果您有任何疑问，请%{support} （%{url}）。
       subject: "[%{app_name}] 您的作品已被删除"
       support: 联系支持委员会
-    invite_increase_notification:
-      html:
-        body:
-          other: 我们想通知您，您有%{count}份新邀请帖，该邀请帖用于创建AO3作品库的新帐户。您可以在%{invitation_page_link}邀请朋友。
-      invitation_page_link_text: 您的Invitations（邀请帖）页面
-      subject: "[%{app_name}] 新邀请帖"
-      text:
-        body:
-          other: 我们想通知您，您有%{count}份新邀请帖，该邀请帖用于创建AO3作品库的新帐户。您可以在(%{invitation_page_url})邀请朋友。
-    invite_request_declined:
-      main:
-        other: 我们很遗憾地通知您，您提出的%{count}份新邀请码申请未能获批。
-      reason: 您的申请为：
-      subject: "[%{app_name}] 额外邀请码申请拒函"
+    prompter_notification:
+      a_response_to_your_prompt:
+        collection:
+          html: 您发起的梗在AO3作品集%{collection_link}收到了新作品！
+          text: 您发起的梗在AO3作品集%{collection_title}（%{collection_url}）收到了新作品！
+        no_collection: 您发起的梗在AO3收到了新作品！
+      subject: "[%{app_name}] 您发起的梗收到新作品"
     recipient_notification:
-      html:
-        collection: 您在AO3上收到了一篇来自于作品集 %{collection_link} 的赠文！
+      collection:
+        html: 您在AO3上收到了一篇来自于作品集 %{collection_link} 的赠文！
+        text: 您在AO3上收到了一篇来自于作品集%{collection_title} （%{collection_url}）的赠文！
       no_collection: 您在AO3上收到了一篇赠文！
       subject:
         collection: "[%{app_name}][%{collection_title}]来自于作品集 %{collection_title}
           的赠文"
         no_collection: "[%{app_name}]您收到了一篇赠文"
-      text:
-        collection: 您在AO3上收到了一篇来自于作品集%{collection_title} （%{collection_url}）的赠文！
-    signup_notification:
-      activate:
-        html: 请%{activate_account_link}。
-        text: 请点击以下链接激活您的账户： %{activate_account_url}
-      activate_your_account: 点击以下链接激活您的账户
-      admin_posts: AO3新闻
-      bye: 祝您使用愉快。
-      contact_support: 联系支持委员会
-      faq: 常见问题
-      features:
-        html: 激活账户后，即可使用本站诸多功能，包括发布同人作品；设置邮件订阅，在喜爱的创作者或作品更新时获取即时通知；进行偏好设置，定制网站界面和操作方式；保留浏览历史，追踪之前在AO3上阅读的作品。
-        text: 激活账户后，即可使用本站诸多功能，包括发布同人作品；设置邮件订阅，在喜爱的创作者或作品更新时获取即时通知；进行偏好设置，定制网站界面和操作方式；保留浏览历史，追踪之前在AO3上阅读的作品。
-      information:
-        html: 您可浏览本站%{faq_link}，详细了解关于AO3使用方法的信息与建议；进入%{admin_posts_link}板块，了解网站建设的最新消息。如您需要更多帮助，遇到程序漏洞，存在疑问或想提出意见，请%{contact_support_link}，该团队将竭诚为您服务。
-        text: 您可浏览本站%{faq_url}，详细了解关于AO3使用方法的信息与建议；进入%{admin_posts_url}板块，了解网站建设的最新消息。如您需要更多帮助，遇到程序漏洞，存在疑问或想提出意见，请%{contact_support_url}，该团队将竭诚为您服务。
-      welcome: 欢迎来到AO3， %{login}！
+  users:
+    mailer:
+      confirmation_instructions:
+        confirm_by:
+          html: 如果您未在%{date}前确认您的请求，此电子邮件中的链接将过期，您也需要再次%{email_change_form_link}。
+          text: 如果您未在%{date}前确认您的请求，此电子邮件中的链接将过期，您也需要再次提交电子邮箱更改表格：%{email_change_form_url}。
+        confirm_email_change: 确认您的电子邮箱更改
+        did_not_make_request: 如果您没有提交此请求，您可以放心地忽略并删除此电子邮件。有人可能误输入了您的电子邮箱地址。
+        email_change_form: 提交电子邮箱更改表格
+        made_request:
+          html:
+            other: 如果您提交了此请求，请在%{count}天内登录并%{confirm_email_change_link}。
+          text:
+            other: 如果您提交了此请求，请在%{count}天内登录并%{confirm_email_change_url}。
+        request_to_change_email_html: 有人已请求将与%{app_name}账号%{username}关联的电子邮箱地址更改为此电子邮箱地址。
+        subject: "[%{app_name}] 确认您的电子邮箱更改"
