@@ -93,8 +93,10 @@ class CommentsController < ApplicationController
 
   def check_pseud_ownership
     return unless params[:comment][:pseud_id]
+
     pseud = Pseud.find(params[:comment][:pseud_id])
     return if pseud && current_user && current_user.pseuds.include?(pseud)
+
     flash[:error] = ts("You can't comment with that pseud.")
     redirect_to root_path
   end
@@ -218,14 +220,17 @@ class CommentsController < ApplicationController
   def check_permission_to_review
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent)
+
     flash[:error] = ts("Sorry, you don't have permission to see those unreviewed comments.")
     redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
 
   def check_permission_to_access_single_unreviewed
     return unless @comment.unreviewed?
+
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
+
     flash[:error] = ts("Sorry, that comment is currently in moderation.")
     redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
@@ -337,7 +342,7 @@ class CommentsController < ApplicationController
   def index
     return raise_not_found if @commentable.blank?
 
-    return unless @commentable.class == Comment
+    return unless @commentable.instance_of?(Comment)
 
     # we link to the parent object at the top
     @commentable = @commentable.ultimate_parent
@@ -436,7 +441,7 @@ class CommentsController < ApplicationController
             elsif @comment.unreviewed?
               redirect_to_all_comments(@commentable)
             else
-              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
+              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] && params[:view_full_work] == "true"), page: params[:page] })
             end
           end
         end
@@ -456,6 +461,7 @@ class CommentsController < ApplicationController
       respond_to do |format|
         format.html do
           redirect_to comment_path(@comment) and return if @comment.unreviewed?
+
           redirect_to_comment(@comment)
         end
         format.js # updating the comment in place
@@ -487,7 +493,7 @@ class CommentsController < ApplicationController
       redirect_to_comment(parent_comment)
     else
       flash[:comment_notice] = ts("Comment deleted.")
-      redirect_to_all_comments(parent, {show_comments: true})
+      redirect_to_all_comments(parent, { show_comments: true })
     end
   end
 
@@ -612,10 +618,10 @@ class CommentsController < ApplicationController
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
         # so we're being extra-nice and preserving any intention to comment along with the show comments option
-        options = {show_comments: true}
+        options = { show_comments: true }
         options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
-        options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
         options[:page] = params[:page]
+        options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
         redirect_to_all_comments(@commentable, options)
       end
 
@@ -640,11 +646,11 @@ class CommentsController < ApplicationController
     @comment = Comment.new
     respond_to do |format|
       format.html do
-        options = {show_comments: true}
+        options = { show_comments: true }
         options[:controller] = @commentable.class.to_s.underscore.pluralize
         options[:anchor] = "comment_#{params[:id]}"
         options[:page] = params[:page]
-        options[:view_full_work] = params[:view_full_work]
+        options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
         if @thread_view
           options[:id] = @thread_root
           options[:add_comment_reply_id] = params[:id]
@@ -706,44 +712,58 @@ class CommentsController < ApplicationController
   # if necessary to display it
   def redirect_to_comment(comment, options = {})
     if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
-      if comment.ultimate_parent.is_a?(Tag)
-        default_options = {
-           controller: :comments,
-           action: :show,
-           id: comment.commentable.id,
-           tag_id: comment.ultimate_parent.to_param,
-           anchor: "comment_#{comment.id}"
-        }
-      else
-        default_options = {
-           controller: comment.commentable.class.to_s.underscore.pluralize,
-           action: :show,
-           id: (comment.commentable.is_a?(Tag) ? comment.commentable.to_param : comment.commentable.id),
-           anchor: "comment_#{comment.id}"
-        }
-      end
+      default_options = if comment.ultimate_parent.is_a?(Tag)
+                          {
+                            controller: :comments,
+                            action: :show,
+                            id: comment.commentable.id,
+                            tag_id: comment.ultimate_parent.to_param,
+                            anchor: "comment_#{comment.id}"
+                          }
+                        else
+                          {
+                            controller: comment.commentable.class.to_s.underscore.pluralize,
+                            action: :show,
+                            id: (comment.commentable.is_a?(Tag) ? comment.commentable.to_param : comment.commentable.id),
+                            anchor: "comment_#{comment.id}"
+                          }
+                        end
       # display the comment's direct parent (and its associated thread)
       redirect_to(url_for(default_options.merge(options)))
     else
       # need to redirect to the specific chapter; redirect_to_all will then retrieve full work view if applicable
-      redirect_to_all_comments(comment.parent, options.merge({show_comments: true, anchor: "comment_#{comment.id}"}))
+      redirect_to_all_comments(comment.parent, options.merge({ show_comments: true, anchor: "comment_#{comment.id}" }))
     end
   end
 
   def redirect_to_all_comments(commentable, options = {})
-    default_options = {anchor: "comments"}
+    default_options = { anchor: "comments" }
     options = default_options.merge(options)
 
     if commentable.is_a?(Tag)
       redirect_to comments_path(tag_id: commentable.to_param,
-                  add_comment_reply_id: options[:add_comment_reply_id],
-                  delete_comment_id: options[:delete_comment_id],
-                  page: options[:page],
-                  anchor: options[:anchor])
+                                add_comment_reply_id: options[:add_comment_reply_id],
+                                delete_comment_id: options[:delete_comment_id],
+                                page: options[:page],
+                                anchor: options[:anchor])
     else
-      if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
-        commentable = commentable.work
-      end
+      is_coming_from_chapter_view = request.referer&.match(/chapters/).present?
+      is_not_coming_from_work_view = request.referer&.match(/works/).nil?
+      view_full_work = if is_coming_from_chapter_view
+                         false
+                       elsif is_not_coming_from_work_view
+                         case params[:view_full_work]
+                         when "true"
+                           true
+                         when "false"
+                           false
+                         else
+                           current_user.try(:preference).try(:view_full_works).present?
+                         end
+                       else
+                         true
+                       end
+      commentable = commentable.work if commentable.is_a?(Chapter) && view_full_work
       redirect_to polymorphic_path(commentable,
                                    options.slice(:show_comments,
                                                  :add_comment_reply_id,
