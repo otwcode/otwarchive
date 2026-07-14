@@ -464,4 +464,17 @@ class Collection < ApplicationRecord
   def approved_bookmarked_items_count
     SearchCounts.bookmarkable_count_for_collection(self)
   end
+
+  # Reindex associated works and bookmarks when a collection's parent changes
+  # because works and bookmarks index parent collection ids in Elasticsearch.
+  after_commit :reindex_associated_works_and_bookmarks,
+               if: :saved_change_to_parent_id?
+
+  def reindex_associated_works_and_bookmarks
+    work_ids = all_items.where(item_type: "Work").pluck(:item_id).uniq
+    bookmark_ids = all_items.where(item_type: "Bookmark").pluck(:item_id).uniq
+
+    IndexQueue.enqueue_ids(Work, work_ids, :background) if work_ids.present?
+    IndexQueue.enqueue_ids(Bookmark, bookmark_ids, :background) if bookmark_ids.present?
+  end
 end
