@@ -409,9 +409,11 @@ class WorksController < ApplicationController
       @work.save
       flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
-    else # Save Draft
+    else
       @work.posted = true
       @work.minor_version = @work.minor_version + 1
+      @work.save
+      @work.word_count = @work.first_chapter.word_count
       @work.save
       flash[:notice] = ts('Work was successfully updated.')
       redirect_to(@work)
