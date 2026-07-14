@@ -157,13 +157,13 @@ class ArchiveFaqsController < ApplicationController
     return if params[:language_id].blank? || Locale.exists?(iso: params[:language_id])
 
     flash[:error] = "The specified locale does not exist."
-    redirect_to url_for(request.query_parameters.merge(language_id: I18n.default_locale))
+    redirect_to helpers.current_path_with(language_id: I18n.default_locale)
   end
 
   def require_language_id
     return if params[:language_id].present? && Locale.exists?(iso: params[:language_id])
 
-    redirect_to url_for(request.query_parameters.merge(language_id: @i18n_locale.to_s))
+    redirect_to helpers.current_path_with(language_id: @i18n_locale.to_s)
   end
 
   def default_locale_only
