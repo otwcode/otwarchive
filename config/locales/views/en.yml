@@ -946,6 +946,7 @@ en:
       draft_news_index: Back to AO3 News Drafts
       guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
+      kudos: Kudos ♥
       logged_as_admin: Please log out of your admin account to comment.
       news_index: Back to AO3 News Index
       permissions:
@@ -2050,6 +2051,8 @@ en:
       parent_org_intro_html: The Archive of Our Own (AO3) is a project of the %{parent_org_link}.
     news_module:
       news:
+        comments_html: 'Comments: %{comments}'
+        kudos_html: 'Kudos: %{kudos}'
         published_html: 'Published: %{publication_date}'
     privacy:
       account_termination:
@@ -2562,6 +2565,19 @@ en:
     guest_header:
       one: "%{count} guest has also left kudos"
       other: "%{count} guests have also left kudos"
+    left_kudos:
+      admin_post_html:
+        one: "%{givers_list} left kudos on this post!"
+        other: "%{givers_list} left kudos on this post!"
+      guest_only:
+        one: "%{count} guest"
+        other: "%{count} guests"
+      user_and_guest_html:
+        one: "%{users} as well as %{count} guest"
+        other: "%{users} as well as %{count} guests"
+      work_html:
+        one: "%{givers_list} left kudos on this work!"
+        other: "%{givers_list} left kudos on this work!"
     user_links:
       more_link:
         one: "%{count} more user"
