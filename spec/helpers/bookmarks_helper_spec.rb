@@ -111,6 +111,17 @@ describe BookmarksHelper do
         end
       end
 
+      context "When work belongs to a series" do
+        before do
+          create(:series, works: [work])
+        end
+        
+        it "returns string with default classes, creation and creator info, and series info" do
+          result = helper.css_classes_for_bookmark_blurb(work_bookmark.reload)
+          expect(result).to eq("#{default_classes} work-#{work.id} series-#{work.series.first.id} user-#{work_creator.id} user-#{bookmarker.id}")
+        end
+      end
+
       context "when work is updated" do
         context "when new creator is added" do
           let(:work_creator2) { create(:user) }
