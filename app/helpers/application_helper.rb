@@ -19,9 +19,10 @@ module ApplicationHelper
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
 
-    show_sidebar = (!@hide_dashboard && (@user || @admin_posts || @collection || show_wrangling_dashboard))
-    class_names += " dashboard" if show_sidebar
-
+    # Rails/HelperInstanceVariable is disabled for the the following line given this warning is raised for reusing helpers. This function is only used once in application.html.erb
+    # Whether or not the sidebar should be shown
+    class_names += " dashboard" if !@hide_dashboard && (@user || @admin_posts || @collection || show_wrangling_dashboard) # rubocop:disable Rails/HelperInstanceVariable
+    # Whether or not the page will have filters
     class_names += " filtered" if page_has_filters?
 
     case controller.controller_name
@@ -58,7 +59,8 @@ module ApplicationHelper
   end
 
   def page_has_filters?
-    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms')
+    # This function is currently only used for classes_for_main, the linting error is disabled for the same reason
+    @facets.present? || (@sort_and_filter && controller.controller_name == "collections") || (controller.action_name == "unassigned" && controller.controller_name == "fandoms") # rubocop:disable Rails/HelperInstanceVariable
   end
 
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
@@ -571,7 +573,7 @@ module ApplicationHelper
   def tos_exempt_page?
     case params[:controller]
     when "home"
-      %w[index content dmca privacy tos tos_faq].include?(params[:action])
+      %w[index content privacy takedown tos tos_faq].include?(params[:action])
     when "abuse_reports", "feedbacks", "users/sessions"
       %w[new create].include?(params[:action])
     when "archive_faqs"

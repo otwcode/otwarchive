@@ -8,14 +8,6 @@
     <%= t(".page_heading.collections_in_the", collections: search_header(@collections, @query, t(".page_heading.collection"), @owner), archive: ArchiveConfig.APP_NAME) %>
   <% end %>
 </h2>
-
-<%# TODO: Do we still need this now that there's a 0 in the search header? %>
-<% if @collections.empty? %>
-  <h3 class="heading">
-    <%= t(".page_heading.sorry") %>
-  </h3>
-<% end %>
-
 <!--/descriptions-->
 
 <!--Subnavigation, sorting and actions-->
@@ -26,22 +18,18 @@
     <li><%= span_if_current t(".navigation.bookmarks"), tag_bookmarks_path(@tag) %></li>
     <li><%= span_if_current t(".navigation.collections"), tag_collections_path(@tag) %></li>
   <% end %>
-  <% if @facets.present? %>
-    <%# Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
-    <li class="narrow-shown hidden"><a href="#work-filters" id="go_to_filters"><%= t(".navigation.filters") %></a></li>
-  <% end %>
   <% # Collections and Open Challenges links unless a logged in user viewing own collections page %>
   <% unless @tag || (logged_in? && @user && @user == current_user) %>
     <li><%= span_if_current t(".navigation.all_collections"), collections_path %></li>
     <li><%= link_to t(".navigation.open_challenges"), list_challenges_collections_path %></li>
   <% end %>
   <% if logged_in? %>
-    <% # Logged in user on own collections index gets links for user Collections and Manage Collection Items %>
+    <%# Logged in user on own collections index gets links for user Collections and Manage Collection Items %>
     <% if @user && @user == current_user %>
       <li><%= span_if_current t(".navigation.user_collections"), user_collections_path(@user) %></li>
       <li><%= link_to t(".navigation.manage_collection"), user_collection_items_path(@user) %></li>
     <% end %>
-    <% # Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
+    <%# Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
     <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
       <li><%= link_to t(".navigation.new_subcollection"), new_collection_collection_path(@collection) %></li>
     <% elsif !@tag %>

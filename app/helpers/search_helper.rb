@@ -1,7 +1,6 @@
 module SearchHelper
-
   # modified from mislav-will_paginate-2.3.2/lib/will_paginate/view_helpers.rb
-  def search_header(collection, search, item_name, parent=nil)
+  def search_header(collection, search, item_name, parent = nil)
     header = []
     if !collection.respond_to?(:total_pages)
       header << ts("Recent #{item_name.pluralize}")
@@ -27,8 +26,8 @@ module SearchHelper
       header << ts("by %{username}", username: parent.login)
     when Language
       header << ts("in %{language}", language: parent.name)
-    when Work
-      header << ts("including %{work}", work: parent.title)
+    # when Work
+    #   header << ts("including %{work}", work: parent.title)
     end
 
     header << ts("in %{tag_link}", tag_link: link_to_tag_with_text(parent, parent.name)) if parent.is_a?(Tag)

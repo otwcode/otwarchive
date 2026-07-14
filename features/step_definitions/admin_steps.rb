@@ -125,6 +125,13 @@ Given "account age threshold for comment spam check is set to {int} days" do |da
   click_button("Update")
 end
 
+Given "comment count threshold for comment rate limit is set to {int}" do |count|
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  fill_in("admin_setting_comment_count_threshold_for_comment_rate_limit", with: count)
+  click_button("Update")
+end
+
 Given "I have posted known issues" do
   step %{I am logged in as a super admin}
   step %{I follow "Admin Posts"}
@@ -143,6 +150,20 @@ end
 
 Given "the admin post {string}" do |title|
   FactoryBot.create(:admin_post, title: title, comment_permissions: :enable_all)
+end
+
+Given "the draft admin post {string}" do |title|
+  FactoryBot.create(:admin_post, :draft, title: title, comment_permissions: :enable_all)
+end
+
+Given "the draft admin post {string} with tag(s) {string}" do |title, tags|
+  FactoryBot.create(:admin_post, :draft, title: title, comment_permissions: :enable_all, tag_list: tags)
+end
+
+Given "the draft admin post {string} translating {string} to {string}" do |title, translated_title, lang|
+  admin_post = AdminPost.find_by!(title: translated_title)
+  language = Language.find_by!(name: lang)
+  FactoryBot.create(:admin_post, :draft, title: title, comment_permissions: :enable_all, translated_post_id: admin_post.id, language: language)
 end
 
 Given "the fannish next of kin {string} for the user {string}" do |kin, user|
@@ -349,7 +370,8 @@ When "I uncheck the {string} role checkbox" do |role|
   uncheck("user_roles_#{role_id}")
 end
 
-When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
+# rubocop:disable Cucumber/RegexStepName
+When /^I set up a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
   admin_post_id = !admin_post.nil? ? admin_post.id : 0
@@ -359,8 +381,13 @@ When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   step %{I select "Deutsch" from "Choose a language"}
   fill_in("admin_post_translated_post_id", with: admin_post_id)
   fill_in("admin_post_tag_list", with: tags) if tags
+end
+
+When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
+  step %{I set up a translation of an admin post with tags "#{tags}"}
   click_button("Post")
 end
+# rubocop:enable Cucumber/RegexStepName
 
 When /^I hide the work "(.*?)"$/ do |title|
   work = Work.find_by(title: title)

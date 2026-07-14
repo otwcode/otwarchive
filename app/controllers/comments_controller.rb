@@ -68,7 +68,7 @@ class CommentsController < ApplicationController
 
     return false unless logged_in? # Guest comment rate limits are not handled here
 
-    return false unless current_user.should_spam_check_comments?
+    return false unless current_user.should_rate_limit_comments?
 
     parent = find_parent
     return false if parent.is_a?(Tag)
@@ -287,9 +287,7 @@ class CommentsController < ApplicationController
 
     canonical_email = EmailCanonicalizer.canonicalize(params[:comment][:email])
 
-    user = User.find_by(canonical_email: canonical_email)
-
-    return unless user&.suspended? || user&.banned?
+    return unless User.where(canonical_email: canonical_email).where("banned OR suspended").exists?
 
     flash[:error] = t("comments.check_guest_email_is_from_suspended_or_banned_user.error")
     redirect_back_or_to @comment

@@ -78,6 +78,29 @@ en:
         success:
           one: Successfully removed pseud %{pseuds} from this work.
           other: Successfully removed pseuds %{pseuds} from this work.
+  admin_posts:
+    admin_post_blurb:
+      confirm_delete: Are you sure?
+      delete: Delete
+      draft:
+        delete: Delete Draft
+        post: Post Draft
+      edit: Edit
+      meta:
+        draft: Created on %{created_date} and updated on %{updated_date}
+        published: Published on %{publication_date} (Created on %{created_date} and updated on %{updated_date})
+      show: Show
+    create:
+      success: Admin Post was successfully created.
+    edit:
+      page_title: Edit AO3 News Post
+    post:
+      error: Sorry, that Admin Post could not be posted.
+      success: Admin Post was successfully posted.
+    show:
+      page_title_draft: "%{title} (Draft)"
+    update:
+      success: Admin Post was successfully updated.
   application:
     access_denied:
       access_denied:
@@ -106,12 +129,17 @@ en:
   challenge_assignments:
     index:
       access_denied_user: You aren't allowed to see that user's assignments.
+      page_title: "%{username} - Challenge Assignments"
+    update_multiple:
+      approve_error: We couldn't approve the assignment for %{request}.
     validation:
       not_owner: You aren't the owner of that assignment.
   challenge_claims:
     index:
       page_title: "%{username} - Challenge Claims"
   challenge_signups:
+    index:
+      page_title: "%{username} - Challenge Sign-ups"
     new:
       page_title: New Challenge Sign-up
   chapters:
@@ -123,13 +151,18 @@ en:
     show:
       chapter_position: " - Chapter %{position}"
       unrevealed: Mystery Work
+    update:
+      preview_notice: This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.
   collection_items:
     create:
       invited: invited
       invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
   collection_participants:
+    destroy:
+      success: Removed %{participant} from collection.
     update:
       failure: Couldn't update %{participant}.
+      success: Updated %{participant}.
     validation:
       owners_required: You can't remove the only owner!
   collection_profile:
@@ -140,7 +173,7 @@ en:
       general: Collections
       subcollection: "%{collection_title} - Subcollections"
       tag: "%{tag_name} - Collections"
-      user: "%{user_name} - Collections"
+      user: "%{username} - Collections"
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
@@ -201,6 +234,8 @@ en:
     timeout_error:
       browser_title: Timeout Error
   external_works:
+    new:
+      page_title: Bookmark External Work
     update:
       successfully_updated: External work was successfully updated.
   fandoms:
@@ -209,7 +244,7 @@ en:
       collection_page_title: "%{collection_title} - Fandoms"
   gifts:
     index:
-      page_subtitle: Gifts for %{name}
+      page_subtitle: "%{name} - Gifts"
       whose_gifts_error: Whose gifts did you want to see?
     toggle_rejected:
       now_hidden_notice: This work will no longer be listed among your gifts.
@@ -217,6 +252,8 @@ en:
   home:
     content:
       page_title: Content Policy
+    diversity:
+      page_title: Diversity Statement
     privacy:
       page_title: Privacy Policy
     tos:
@@ -283,6 +320,7 @@ en:
     destroy:
       cannot_delete_default: You cannot delete your default pseudonym, sorry!
       cannot_delete_matching_username: You cannot delete the pseud matching your username, sorry!
+      cannot_delete_nonexisting: What pseud did you want to delete?
       not_deleted: The pseud was not deleted.
       successfully_deleted: The pseud was successfully deleted.
     update:
@@ -297,7 +335,7 @@ en:
       success: Your history is now cleared.
     index:
       history_page_title: "%{username} - History"
-      marked_for_later_page_title: Marked for Later
+      marked_for_later_page_title: "%{username} - Marked for Later"
   related_works:
     index:
       page_title: "%{login} - Related Works"
@@ -305,13 +343,22 @@ en:
     index:
       page_title: "%{username} - Series"
     show:
-      anonymous: Anonymous
       unrevealed_series: Mystery Series
   skins:
     default_skin: You are now using the default site skin again!
     index:
       public_site_page_title: Public Site Skins
       public_work_page_title: Public Work Skins
+    preview:
+      cannot_preview: Sorry, you can't preview that skin.
+      remove_skin: Go back or follow any link to remove the skin.
+      return_to_skin: Return to Skin to Use
+      skin_title: You are previewing the skin %{title}.
+      tip: 'Tip: You can preview any archive page you want by adding "?site_skin=%{site_skin_id}" to the end of the URL.'
+    set:
+      failure: Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{skin_title} to be added!
+      skin_page: "%{skin_title} skin page"
+      success_html: You're now using the %{skin_title} skin. This will last for 2 weeks even if you close your browser. If you'd like to keep it longer, go to the %{skin_page_link} and select the "Use" button at the bottom of the page.
   stats:
     index:
       page_title: "%{username} - Stats"
@@ -322,6 +369,11 @@ en:
     index:
       page_title: "%{username} - Subscriptions"
       subscription_type_page_title: "%{username} - %{subscription_type} Subscriptions"
+  tag_wranglers:
+    create:
+      noncanonical_fandoms_tried_assignment:
+        one: Could not assign fandom %{fandom_list}. Non-canonical fandoms cannot be assigned.
+        other: Could not assign fandoms %{fandom_list}. Non-canonical fandoms cannot be assigned.
   tag_wranglings:
     index:
       page_subtitle: fandoms
@@ -394,7 +446,9 @@ en:
       page_title:
         unrevealed: Mystery Work
     update:
+      tags_updated: Tags were successfully updated.
       unposted_notice: Your changes have not been saved. Please post your work or save the draft if you want to keep them.
+      work_updated: Work was successfully updated.
     update_tags:
       page_title: Preview Work Tags
   wrangling_guidelines:

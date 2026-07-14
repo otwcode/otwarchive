@@ -2,7 +2,8 @@ class CollectionsController < ApplicationController
   before_action :load_owner, only: [:index]
   before_action :users_only, only: [:new, :edit, :create, :update]
   before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
-  before_action :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
+  before_action :collection_owners_or_privileged_admins_only, only: [:edit]
+  before_action :collection_owners_only, only: [:update, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   before_action :validate_challenge_type
   before_action :check_parent_visible, only: [:index]
@@ -37,23 +38,31 @@ class CollectionsController < ApplicationController
     options = params[:collection_search].present? ? collection_filter_params : {}
     options.merge!(base_options)
 
-    @page_title = case @owner
-                  when Collection
-                    t(".subcollection", collection_title: @collection.title)
-                  when User
-                    t(".user", user_name: @user.login)
-                  when Tag
-                    t(".tag", tag_name: @tag.name)
-                  else
-                    t(".general")
-                  end
+    @page_subtitle = case @owner
+                     when Collection
+                       t(".subcollection", collection_title: @collection.title)
+                     when User
+                       t(".user", user_name: @user.login)
+                     when Tag
+                       t(".tag", tag_name: @tag.name)
+                     else
+                       t(".general")
+                     end
 
-    if params[:work_id].present?
+    if @work.present?
       @collections = @work.approved_collections
         .by_title
         .for_blurb
         .paginate(page: params[:page])
+    elsif @user.present?
+      # maybe find a way to merge this elsif branch
+      # into the @owner.present? one below it later
+      @sort_and_filter = true
+      @search = CollectionSearchForm.new(options.merge({ maintainer_id: @user.id }))
+      @collections = @search.search_results.scope(:for_search)
+      flash_search_warnings(@collections)
     elsif @owner.present?
+      # include "|| @user.present?" in this one later after deleting above
       @sort_and_filter = @tag.present?
       @search = CollectionSearchForm.new(options.merge(parent: @owner))
       @collections = @search.search_results.scope(:for_search)
@@ -224,10 +233,10 @@ class CollectionsController < ApplicationController
   private
 
   def collection_filter_params
-    params.permit(:commit, :tag_id, collection_search: [
+    params.require(:collection_search).permit(
       :title, :challenge_type, :moderated, :multifandom, :closed, :tag,
       :sort_column, :sort_direction
-    ])[:collection_search] || {}
+    )
   end
 
   def collection_params

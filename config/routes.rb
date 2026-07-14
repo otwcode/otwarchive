@@ -171,12 +171,17 @@ Rails.application.routes.draw do
   end
 
   #### ADMIN ####
+  get "/admin_posts/drafts" => "admin_posts#drafts", as: :drafts_admin_posts
   resources :admin_posts do
     resources :comments do
       collection do
         get :unreviewed
         put :review_all
       end
+    end
+    member do
+      put :post
+      get :preview
     end
   end
 
@@ -650,29 +655,12 @@ Rails.application.routes.draw do
   end
   resources :orphans, only: [:index, :new, :create]
 
-  %w[
-    first_login
-    html
-    preferences_collection
-    preferences_comment
-    preferences_display
-    preferences_locale
-    preferences_misc
-    preferences_privacy
-    preferences_work_title_format
-    rte
-    skins_basics
-    skins_creating
-    skins_parents
-    symbols_key
-    tags_fandoms
-    tags_ratings
-    tags_warnings
-  ].each do |action|
+  HelpController::HELP_ACTIONS.each do |action|
     get "/help/#{action}", to: "help##{action}"
   end
 
   # Redirects for moved help files
+  get "/help/add-collectible-to-collection.html", to: redirect("/help/collectibles_add_to_collection")
   get "/first_login_help", to: redirect("/help/first_login")
   get "/help/html-help.html", to: redirect("/help/html")
   get "/help/collection-preferences.html", to: redirect("/help/preferences_collection")
@@ -681,14 +669,29 @@ Rails.application.routes.draw do
   get "/help/misc-preferences.html", to: redirect("/help/preferences_misc")
   get "/help/privacy-preferences.html", to: redirect("/help/preferences_privacy")
   get "/help/work_title_format.html", to: redirect("/help/preferences_work_title_format")
+  get "/help/comments-moderated.html", to: redirect("/help/privacy_moderated_commenting")
+  get "/help/who-can-comment-on-this-work.html", to: redirect("/help/privacy_restricted_commenting")
+  get "/help/registered-users.html", to: redirect("/help/privacy_restricted_work")
   get "/help/rte-help.html", to: redirect("/help/rte")
   get "/help/skins-basics.html", to: redirect("/help/skins_basics")
   get "/help/skins-creating.html", to: redirect("/help/skins_creating")
   get "/help/skins-parents.html", to: redirect("/help/skins_parents")
   get "/help/symbols-key.html", to: redirect("/help/symbols_key")
+  get "/help/additional-tags-help.html", to: redirect("/help/tags_additional")
+  get "/help/categories-help.html", to: redirect("/help/tags_categories")
+  get "/help/characters-help.html", to: redirect("/help/tags_characters")
   get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
   get "/help/rating-help.html", to: redirect("/help/tags_ratings")
+  get "/help/relationships-help.html", to: redirect("/help/tags_relationships")
   get "/help/warning-help.html", to: redirect("/help/tags_warnings")
+  get "/help/add-work-to-assignment.html", to: redirect("/help/works_assignment")
+  get "/help/backdating-help.html", to: redirect("/help/works_backdating")
+  get "/help/languages-help.html", to: redirect("/help/works_languages")
+  get "/help/parent-works-help.html", to: redirect("/help/works_parents")
+  get "/help/recipients.html", to: redirect("/help/works_recipients")
+  get "/help/choosing-series.html", to: redirect("/help/works_series")
+  get "/help/work-skins.html", to: redirect("/help/works_skins")
+  get "/help/translation-link.html", to: redirect("/help/works_translation_link")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
@@ -698,7 +701,8 @@ Rails.application.routes.draw do
   get "tos" => "home#tos"
   get "tos_faq" => "home#tos_faq"
   get 'unicorn_test' => 'home#unicorn_test'
-  get 'dmca' => 'home#dmca'
+  get "dmca", to: redirect("/takedown#dmca_policy")
+  get "takedown" => "home#takedown"
   get 'diversity' => 'home#diversity'
   get 'site_map' => 'home#site_map'
   get 'site_pages' => 'home#site_pages'

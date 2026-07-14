@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/otwcode/devise
-  revision: fade89f61c64e766d87f24cfcb980ee533a5d5f2
-  ref: fade89f
+  revision: 5dd846ef7ba8aae6fe728e8e5fc2a1578a2c3f77
+  ref: 5dd846e
   specs:
-    devise (5.0.2)
+    devise (5.0.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 7.0)
@@ -121,12 +121,10 @@ GEM
     after_commit_everywhere (1.6.0)
       activerecord (>= 4.2)
       activesupport
-    akismetor (1.0.0)
     ast (2.4.3)
     audited (5.8.0)
       activerecord (>= 5.2, < 8.2)
       activesupport (>= 5.2, < 8.2)
-    awesome_print (1.9.2)
     aws-eventstream (1.4.0)
     aws-partitions (1.1196.0)
     aws-sdk-core (3.240.0)
@@ -163,8 +161,8 @@ GEM
     bullet (8.1.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
-    bundler-audit (0.9.1)
-      bundler (>= 1.2.0, < 3)
+    bundler-audit (0.9.3)
+      bundler (>= 1.2.0)
       thor (~> 1.0)
     byebug (12.0.0)
     capistrano (2.15.11)
@@ -194,13 +192,13 @@ GEM
     chunky_png (1.4.0)
     climate_control (1.2.0)
     coderay (1.1.3)
-    concurrent-ruby (1.3.5)
+    concurrent-ruby (1.3.7)
     connection_pool (2.5.5)
     crack (1.0.0)
       bigdecimal
       rexml
     crass (1.0.6)
-    css_parser (1.16.0)
+    css_parser (1.22.0)
       addressable
     csv (3.3.5)
     cucumber (9.2.1)
@@ -243,7 +241,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    date (3.4.1)
+    date (3.5.1)
     departure (8.0.0)
       activerecord (>= 7.2.0)
       mysql2 (>= 0.4.0, < 0.6.0)
@@ -276,7 +274,7 @@ GEM
     email_spec (1.6.0)
       launchy (~> 2.1)
       mail (~> 2.2)
-    erb (5.1.1)
+    erb (6.0.1.1)
     erb_lint (0.4.0)
       activesupport
       better_html (>= 2.0.1)
@@ -295,11 +293,11 @@ GEM
       railties (>= 6.1.0)
     faker (3.5.2)
       i18n (>= 1.8.11, < 2)
-    faraday (2.14.1)
+    faraday (2.14.3)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-net_http (3.4.2)
+    faraday-net_http (3.4.4)
       net-http (~> 0.5)
     fastimage (2.3.0)
     ffi (1.17.2)
@@ -350,7 +348,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.19.2)
+    json (2.19.9)
     kgio (2.10.0)
     launchy (2.5.2)
       addressable (~> 2.8)
@@ -406,7 +404,7 @@ GEM
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.2)
       connection_pool (~> 2.2)
-    net-imap (0.5.9)
+    net-imap (0.5.15)
       date
       net-protocol
     net-pop (0.1.2)
@@ -425,7 +423,7 @@ GEM
     netrc (0.11.0)
     nio4r (2.7.4)
     nkf (0.2.0)
-    nokogiri (1.19.1)
+    nokogiri (1.19.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -458,7 +456,7 @@ GEM
     psych (5.2.6)
       date
       stringio
-    public_suffix (6.0.2)
+    public_suffix (7.0.5)
     puma (6.5.0)
       nio4r (~> 2.0)
     puma_worker_killer (1.0.0)
@@ -661,7 +659,7 @@ GEM
     tilt (2.6.1)
     timecop (0.9.10)
     timeliness (0.4.5)
-    timeout (0.4.3)
+    timeout (0.6.1)
     tsort (0.2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -709,9 +707,7 @@ DEPENDENCIES
   acts_as_list (~> 0.9.7)
   addressable
   after_commit_everywhere
-  akismetor
   audited (~> 5.3)
-  awesome_print
   aws-sdk-s3
   bcrypt
   bcrypt_pbkdf (>= 1.0, < 2.0)

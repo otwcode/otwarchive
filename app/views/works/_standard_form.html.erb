@@ -50,7 +50,7 @@
         <!-- if the user has open assignments? -->
         <dt class="collection">
           <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %>
-          <%= link_to_help "add-work-to-assignment" %>
+          <%= link_to_help_modal(help_works_assignment_path, t(".works_assignment_help_title")) %>
         </dt>
         <dd class="collection listbox group">
           <h4 class="heading"><%= ts("Open Assignments") %></h4>
@@ -63,7 +63,7 @@
         <!-- if the user has open claims? -->
         <dt class="collection">
           <%= f.label "challenge_claim_ids[]", ts("Fulfill a Claim") %>
-          <%= link_to_help "add-work-to-assignment" %>
+          <%= link_to_help_modal(help_works_assignment_path, t(".works_assignment_help_title")) %>
         </dt>
         <dd class="collection listbox group">
           <h4 class="heading"><%= ts("Open Claims") %></h4>
@@ -75,7 +75,7 @@
       <!-- Add collection -->
       <dt class="collection" title="<%= ts("post to collection or challenge") %>">
         <%= f.label :collection_names, ts("Post to Collections / Challenges") %>
-        <%= link_to_help "add-collectible-to-collection" %>
+        <%= link_to_help_modal(help_collectibles_add_to_collection_path, t(".collectibles_add_to_collection_help_title")) %>
       </dt>
       <dd class="collection" title="<%= ts("post to collection or challenge") %>">
         <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>
@@ -83,7 +83,7 @@
 
       <dt class="recipient" title="<%= ts("gift to") %>">
         <%= f.label :recipients, ts("Gift this work to") %>
-        <%= link_to_help "recipients" %>
+        <%= link_to_help_modal(help_works_recipients_path, t(".works_recipients_help_title")) %>
       </dt>
       <dd class="recipient" title="<%= ts("gift to") %>">
         <%= f.text_field :recipients, autocomplete_options("pseud", value: @work.recipients(for_form = true)) %>
@@ -94,8 +94,8 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), class: "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag "parent-options-show", ts("This work is a remix, a translation, a podfic, or was inspired by another work") %>
-        <%= link_to_help "parent-works-help" %>
+        <%= label_tag "parent-options-show", t(".header") %>
+        <%= link_to_help_modal(help_works_parents_path, t(".works_parents_help_title")) %>
 
         <!-- Toggles on with parent checkbox -->
         <fieldset id="parent-options">
@@ -121,7 +121,7 @@
 
               <dt>
                 <%= p.label :language_id, ts("Language") %>
-                <%= link_to_help "languages-help" %>
+                <%= link_to_help_modal(help_works_languages_path, t(".works_languages_help_title")) %>
               </dt>
               <dd>
                 <%= p.select(:language_id, language_options_for_select(sorted_languages, "id"), prompt: " ") %>
@@ -130,27 +130,27 @@
               <dt class="translation"><%= p.check_box :translation %></dt>
               <dd class="translation">
                 <%= p.label :translation, ts("This is a translation") %>
-                <%= link_to_help "translation-link" %>
+                <%= link_to_help_modal(help_works_translation_link_path, t(".works_translation_link_help_title")) %>
               </dd>
             <% end %>
 
             <% unless existing_parents.blank? %>
               <dt><%= ts("Current parent works") %></dt>
               <% existing_parents.each do |related_work| %>
-                <% if related_work.parent %>
-                  <dd>
-                    <ul class="actions" role="navigation">
-                      <li>
+                <dd>
+                  <ul class="actions">
+                    <li>
+                      <% if related_work.parent %>
                         <%= link_to related_work.parent.title, related_work.parent %>
-                      </li>
-                      <li>
-                        <%= link_to ts("Remove"), related_work,
-                                data: { confirm: ts("Are you sure you want to delete the connection to this work?") },
-                                method: :delete %>
-                      </li>
-                    </ul>
-                  </dd>
-                <% end %>
+                      <% else %>
+                        <%= t(".deleted_work") %>
+                      <% end %>
+                    </li>
+                    <li>
+                      <%= link_to t(".remove"), related_work, data: { confirm: t(".remove_confirm") }, method: :delete %>
+                    </li>
+                  </ul>
+                </dd>
               <% end %>
             <% end %>
           </dl>
@@ -164,7 +164,7 @@
       </dt>
       <dd class="serial">
         <%= label_tag "series-options-show", ts("This work is part of a series") %>
-        <%= link_to_help "choosing-series" %>
+        <%= link_to_help_modal(help_works_series_path, t(".works_series_help_title")) %>
 
         <!-- Toggles on with series checkbox -->
         <fieldset id="series-options">
@@ -226,7 +226,7 @@
         </dt>
         <dd class="backdate">
           <%= label_tag "backdate-options-show", ts("Set a different publication date") %>
-          <%= link_to_help "backdating-help" %>
+          <%= link_to_help_modal(help_works_backdating_path, t(".works_backdating_help_title")) %>
 
           <fieldset id="backdate-options" class="optional">
             <dl>
@@ -243,7 +243,7 @@
 
         <dt class="skin">
           <%= f.label :work_skin_id, t("works.skin.select") %>
-          <%= link_to_help "work-skins" %>
+          <%= link_to_help_modal(help_works_skins_path, t(".works_skins_help_title")) %>
         </dt>
         <dd class="skin">
           <%= f.collection_select :work_skin_id, all_coauthor_skins, :id, :title,
@@ -268,7 +268,7 @@
 
       <dd class="restrict">
         <%= f.label :restricted, t("works.permissions.visibility.restricted") %>
-        <%= link_to_help "registered-users" %>
+        <%= link_to_help_modal(help_privacy_restricted_work_path, t(".privacy_restricted_work_help_title")) %>
       </dd>
 
       <dt class="moderated comments">
@@ -276,12 +276,12 @@
       </dt>
       <dd class="moderated comments">
         <%= f.label :moderated_commenting_enabled, t("comments.commentable.permissions.moderated_commenting.enable") %>
-        <%= link_to_help "comments-moderated" %>
+        <%= link_to_help_modal(help_privacy_moderated_commenting_path, t(".privacy_moderated_commenting_help_title")) %>
       </dd>
 
       <dt class="permissions comments">
         <%= t("comments.commentable.permissions.options.label") %>
-        <%= link_to_help "who-can-comment-on-this-work" %>
+        <%= link_to_help_modal(help_privacy_restricted_commenting_path, t(".privacy_restricted_commenting_help_title")) %>
       </dt>
       <dd class="permissions comments">
         <fieldset>

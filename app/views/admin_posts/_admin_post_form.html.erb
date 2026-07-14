@@ -94,12 +94,6 @@
       </dl>
     </fieldset>
 
-    <fieldset>
-      <legend><%= ts('Post') %></legend>
-      <h3 class="landmark heading"><%= ts("Post") %></h3>
-      <p class="submit actions">
-        <%= submit_tag ts('Post'), :name => 'post_button' %>
-      </p>
-    </fieldset>
+    <%= render "posting_fieldset", form: f %>
   <% end %>
 </div>

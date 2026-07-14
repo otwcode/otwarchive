@@ -139,7 +139,9 @@ en:
           invite_user: Invite user
     admin_nav:
       ao3_news: AO3 News
+      ao3_news_drafts: AO3 News Drafts
       archive_faq: Archive FAQ
+      draft_ao3_news: Draft AO3 News
       faq:
         reorder_questions: Reorder Questions
       known_issues: Known Issues
@@ -157,7 +159,7 @@ en:
         work: Delete Work
       edit:
         external_work: Edit External Work
-      edit_tags: Edit Tags and Language
+      edit_work: Edit Work
       hide:
         bookmark: Hide Bookmark
         external_work: Hide External Work
@@ -339,9 +341,11 @@ en:
         locales: Locales
         posts:
           admin_posts: Admin Posts
+          draft_news: Draft AO3 News
           faqs: Archive FAQ
           known_issues: Known Issues
           news: AO3 News
+          news_drafts: AO3 News Drafts
           post_news: Post AO3 News
           wrangling_guidelines: Wrangling Guidelines
         settings: Settings
@@ -395,6 +399,8 @@ en:
           account_age_threshold_for_comment_spam_check_note: Enter 0 to turn off comment spam checks for all logged in users.
           account_creation_enabled: Account creation enabled
           cache_expiration: How often (in minutes) should we refresh caching
+          comment_count_threshold_for_comment_rate_limit: How many comments older accounts should have before we stop rate limiting them
+          comment_count_threshold_for_comment_rate_limit_note: Enter 0 to turn off additional comment rate limits based on comment count.
           creation_requires_invite: Account creation requires invitation
           days_to_purge_unactivated: How many weeks you have to activate your account before we purge it
           disable_support_form: Turn off support form
@@ -510,6 +516,11 @@ en:
         submit_multiple: Remove Pseuds
         submit_one: Yes, Remove Pseud
   admin_posts:
+    admin_index:
+      landmark: Manage News Postings
+      page_heading: AO3 News
+    admin_post:
+      published: 'Published:'
     admin_post_form:
       comment_permissions:
         label: Who can comment on this news post
@@ -521,19 +532,40 @@ en:
         footnote_comment_permissions: Comment permissions from the selected post will replace any permissions selected on this page.
         footnote_tags: Tags from the selected post will replace any tags entered on this page.
         label: Translation of
+    drafts:
+      landmark: Manage News Drafts
+      page_heading: AO3 News Drafts
+      page_title: AO3 News Drafts
+    index:
+      page_title: AO3 News
+    posting_fieldset:
+      actions:
+        cancel: Cancel
+        edit: Edit
+        post: Post
+        preview: Preview
+        save_draft: Save As Draft
+      legend: Post News
+    preview:
+      page_heading: Preview
     show:
+      draft_page_heading: AO3 News Draft
       navigation:
         admin:
           confirm_delete: Are you sure you want to delete this news post?
           delete: Delete Post
+          delete_draft: Delete Draft
           edit: Edit Post
+          edit_draft: Edit Draft
           landmark: Admin Actions
           unreviewed_comments:
             one: Unreviewed Comments (%{count})
             other: Unreviewed Comments (%{count})
         landmark: News Post Navigation
         next: Next Post
+        next_draft: Next Draft
         previous: Previous Post
+        previous_draft: Previous Draft
       page_heading: AO3 News
   admins:
     index:
@@ -644,8 +676,11 @@ en:
       save: Save
       saved: Saved
     external_work_fields:
+      categories_help_title: Categories help
+      characters_help_title: Characters help
       fandoms_help_title: Fandom help
       ratings_help_title: Rating help
+      relationships_help_title: Relationships help
     filters:
       from: From
       to: To
@@ -683,7 +718,7 @@ en:
         fandom: Fandom %{allowed_fandom_count}
   challenge_assignments:
     assignment_blurb:
-      header_draft_html: "%{title_link} (draft)"
+      header_draft_html: "%{title_link} (Draft)"
       stats:
         creation:
           posted: 'Posted:'
@@ -724,6 +759,9 @@ en:
       heading: Sign-up Summary for %{collection}
       no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
+    chapter_form:
+      publication_date: Chapter Publication Date
+      works_backdating_help_title: Publication Date Options
     posting_fieldset:
       actions:
         cancel: Cancel
@@ -735,10 +773,14 @@ en:
         update: Update
       content_policy: Content Policy
       legend: Post Chapter
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
     preview:
       page_heading: Preview
+  collectibles:
+    collectible_form:
+      add_to_collections: Add to collections
+      collectibles_add_to_collection_help_title: Adding To Collections
   collection_items:
     collection_item_form:
       add: Add
@@ -762,13 +804,23 @@ en:
         notice:
           unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
         page_heading: Items by %{username} in Collections
+  collection_participants:
+    participant_form:
+      remove:
+        confirm: Are you sure you want to remove %{participant}?
   collection_profile:
     show:
       meta:
         collection_tags: 'Collection tags:'
   collections:
     collection_blurb:
+      bookmarked_items: 'Bookmarked Items:'
+      challenges_subcollections: 'Challenges/Subcollections:'
       collection_tags: 'Collection Tags:'
+      prompts: 'Prompts:'
+      signups_close_at: 'Sign-ups close at:'
+      summary: Summary
+      works: 'Works:'
     filters:
       clear_filters: Clear Filters
       closed:
@@ -833,8 +885,9 @@ en:
       page_heading:
         collection: Collection
         collections_in_the: "%{collections} in the %{archive}"
-        sorry: Sorry, there were no collections found.
+        collections_including: Collections including %{work}
         subcollection: Subcollection
+        users_collections: "%{user}'s Collections"
     sidebar:
       bookmarks: Bookmarked Items (%{count})
       challenge_settings: Challenge Settings
@@ -887,11 +940,17 @@ en:
     commentable:
       actions:
         comment: Comment
+        next_draft: Next Draft
+        next_post: Next Post
+        previous_draft: Previous Draft
+        previous_post: Previous Post
       add_to_collections_link: Add to Collections
       blocked: Sorry, you have been blocked by one or more of this work's creators.
+      draft_news_index: Back to AO3 News Drafts
       guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
       logged_as_admin: Please log out of your admin account to comment.
+      news_index: Back to AO3 News Index
       permissions:
         admin_post:
           alt_action: You can however %{support_link} with any feedback or questions.
@@ -969,6 +1028,7 @@ en:
       end_notes_with_work_notes: more notes
       end_notes_without_work_notes: notes
       inspired_by:
+        deleted: Inspired by a deleted work
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
@@ -988,6 +1048,7 @@ en:
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
         unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
       translation_of:
+        deleted: A translation of a deleted work
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
@@ -1083,6 +1144,10 @@ en:
         one: Sign me up and give me my work!
         other: Sign me up and give me my works!
   external_works:
+    edit:
+      works_languages_help_title: Languages help
+    new:
+      page_heading: Bookmark External Work
     notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
   fandoms:
     index:
@@ -1144,6 +1209,12 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    collectibles_add_to_collection:
+      collection_names: Note that you need to use the collection's name, which gets used in the collection's URL, and not the collection's spiffy title (because different collections can have the same title). A collection's name is the equivalent of your user login. Names will be auto-completed for you if you have JavaScript turned on.
+      guidance: Enter collection names as a comma-separated list, and the item you are editing will be added to all the collections you specify.
+      moderated_and_anonymous_collections: 'Also note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically - it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
+      page_heading: Adding To Collections
+      removing_from_collection: If you change your mind about having an item in a collection, you can either edit the list of collections when editing it, or you can manage all your collected items under the "My Collections" page in your account.
     first_login:
       additional_info:
         header: Additional Browsing Information
@@ -1376,6 +1447,26 @@ en:
         no_fandom: Don't include the fandom.
         reverse_underscore: Start with fandom, then with author, then title, with underscores instead of dashes.
       page_heading: Work Title Format
+    privacy_moderated_commenting:
+      description: With this feature enabled, you will have to approve all comments before they appear publicly on your work.
+      page_heading: Comments Moderated
+    privacy_restricted_commenting:
+      default_option: This is the default option.
+      deleting_others_comments: Can I edit or delete a comment someone else left on one of my works?
+      disable_all:
+        description: This will disable all new comments on your work.
+        header: No one can comment
+      disable_anon:
+        description_html: "%{default_option_bold} With this enabled, only logged in users will be able to comment on your work."
+        header: Only registered users can comment
+      enable_all:
+        description: All users can comment on your work whether they are logged in or not.
+        header: Registered users and guests can comment
+      existing_unaffected_html: Changing these settings will not affect any existing comments. If there are comments on the work that you would like to remove, check out %{deleting_others_comments_link} to learn how.
+      page_heading: Who can comment on this work?
+    privacy_restricted_work:
+      description: A registered user is a person with an Archive account. If you check this box your story can only be viewed by a person who is logged in.
+      page_heading: Registered Users
     rte:
       description_html: 'The exact behavior of the Rich Text Editor (%{rte_abbreviation}) depends on your device, browser, and operating system as well as the source you''re pasting from. However, starting with a well-formatted document will help you get the most out of the %{rte_abbreviation_no_title}. Here are some general tips to ensure that as much of your formatting as possible will be retained:'
       enter_once:
@@ -1592,6 +1683,42 @@ en:
           non_con:
             acronym: non-con
             title: non-consensual sex
+    tags_additional:
+      description: Any other tags you want to give your work (for example, "Angst", "Crossover", or "Tentacles"). You may also use this field to warn for things not covered by the Archive Warnings. Please do not enter fandom, relationship, or character names in this field. Multiple tags should be separated by commas.
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags on the Archive FAQ
+      page_heading: Additional Tags
+    tags_categories:
+      description: 'There are 6 categories of works on the Archive. While here we have given an interpretation of the abbreviations, the exact definitions of these vary from fandom to fandom and fan to fan; use whichever you feel are applicable, or else none:'
+      femslash:
+        abbreviation: F/F
+        description: Female/Female relationships
+      general:
+        abbreviation: Gen
+        description: 'General: no romantic or sexual relationships, or relationships which are not the main focus of the work'
+      het:
+        abbreviation: F/M
+        description: Female/Male relationships
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags on the Archive FAQ
+      multiple:
+        abbreviation: Multi
+        description: More than one kind of relationship, or a relationship with multiple partners
+      other:
+        abbreviation: Other
+        description: Other relationships
+      page_heading: Category Tags
+      slash:
+        abbreviation: M/M
+        description: Male/Male relationships
+    tags_characters:
+      description: The main character(s) in your work, separated by commas. Full names (personal name and family name) are preferred.
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags on the Archive FAQ
+      page_heading: Characters Tags
     tags_fandoms:
       description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
       more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
@@ -1617,6 +1744,12 @@ en:
       teen_and_up_audiences:
         description: The content may be inappropriate for audiences under 13.
         header: Teen And Up Audiences
+    tags_relationships:
+      description: The relationships in your work. Full names are preferred (for example, "Mickey Mouse/Minnie Mouse" or "Rodney McKay & John Sheppard") when possible. You may list more than one relationship, separated by commas. Please note that all user-created tags must be 150 characters or less; if your work contains a large poly relationship or multiple characters with long names, you may want to consider shortening these names to just first names or surnames with initials to avoid going over the character limit while keeping the names recognizable.
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags on the Archive FAQ
+      page_heading: Relationships Tags
     tags_warnings:
       choose_not_to_use:
         description: Use this if you don't want to warn for anything. You may also choose this option if you don't know what you should warn for; if you don't like warning for certain topics or warnings in general; if you want to avoid some spoilers, but not others; etc.
@@ -1642,6 +1775,52 @@ en:
       underage_sex:
         description: This is for descriptions or depictions of sexual activity involving characters under the age of eighteen. (This doesn't include dating activity like kissing or vague references with no actual description or depiction.) This warning generally applies to humans; if you are creating a pornographic work about space aliens who only live for a month or thousand-year-old vampires with twelve-year-old bodies, please just use your best judgment. You are always free to specify characters' ages or to use "Choose Not to Use Archive Warnings".
         header: 'Underage Sex:'
+    works_assignment:
+      guidance: If you have any open challenge assignments, you can choose one of them here if the story you are posting is meant to fulfill one of them. This will automatically add your story to the challenge collection (or submit it for approval) and also mark your assignment as fulfilled for the challenge moderators.
+      moderated_and_anonymous_collections: 'Note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically — it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
+      page_heading: Fulfilling Assignments
+    works_backdating:
+      chapters: Any subsequent chapters you add will have that date pre-set on the form, though you will still have the option of overriding that date. This means that if you don't know or care exactly when each chapter was originally published, you can still backdate your work conveniently.
+      guidance: When posting a work, you have the option to set a different publication date — in other words, to backdate the work. You can also set publication dates for individual chapters. Please note that in both cases, this affects whether and where your work appears on your dashboard and the works page, etc. These pages which show the date when your work was last updated — the publication date of your work or of one of your chapters, whichever is the most recent date.
+      page_heading: Publication Date Options
+    works_languages:
+      contact_support: let us know via the Support form
+      page_heading: Languages
+      requesting_missing_language_html: Your language is not on the list? Please %{contact_support_link} and we'll be happy to add it! (Not to worry, you can post your work now and still change the language later.) You are not required to select a language for an external work.
+    works_parents:
+      about_inspirations: All the works you have added as inspirations will be listed below this form under the label "Current parent works".
+      adding_multiple_inspirations: If you are creating a new work, you can add only one inspiration now. If you want to add more, save your work first, then click "Edit" on your posted work and add the new inspiration like the previous one.
+      page_heading: Parent Works Help
+    works_recipients:
+      gift_recipients_html: If your story is a gift for someone else or in their honor, you can enter their name here, and it will be displayed on the work, right under the byline. Recipients do %{negation_bold} need to be registered users of the archive, although the autocomplete will offer you matching pseuds if there are any. We will notify registered users if they are selected as recipients of a work.
+      negation: not
+      page_heading: Recipients
+      recipient_names_as_list: Enter recipient names as a comma-separated list!
+    works_series:
+      about_series: A series is a set of related stories, each of which is complete on its own. You can make new series or add stories to your series anytime you like from inside your dashboard.
+      page_heading: Choosing Series
+      when_chaptered_story_instead: If you'd like to post a work in progress, or a story with chapters, you probably want a chaptered story instead.
+    works_skins:
+      description_html: You can create custom stylesheets, or "skins", for your works just like you can create skins for the Archive. The main difference is that work skins will change the way your work appears to %{other_bold} users, not just you.
+      example:
+        create_a_work_skin: Create a work skin
+        create_skin_with_html: "%{create_a_work_skin_link} with the following content: %{css_class_example_code}"
+        css_class_example: ".bluetext {color: blue;}"
+        html_class_example: I want <span class="bluetext">house</span> to be in blue
+        html_give_word_class_html: 'In the HTML of your text, you would then give the word this class: %{html_class_example_code}'
+        select_skin: Select this skin when posting your work.
+      for_example: 'For example, let''s say that you want to make a single word in your text bright blue. Here is what you might do:'
+      limitations_html: Work skins will %{only_bold} affect the body of the work they are applied to—you can't change the Archive navigation or background with them. What you can do, however, is create your own classes. For instance, you can change the color of some of your text, indent some paragraphs in a particular way, and so on.
+      only: only
+      other: other
+      page_heading: Work Skins
+      refer_tutorial_faq_html: Refer to %{tutorial_creating_skin_link} and %{skins_interface_faq_link} for more information.
+      skins_interface_faq: Skins and Archive Interface FAQ
+      tutorial_creating_skin: 'Tutorial: Creating a Work Skin'
+    works_translation_link:
+      about_translations: As well as citing a work that has inspired yours (e.g. if you are remixing another work) you can also state that your work is a translation of another work.
+      page_heading: Translations
+      translation_instructions: Just tick this box, fill in the details of the work, and make sure you select the language of your work further down the form, and the Archive will link them up.
   home:
     about:
       ao3:
@@ -1692,7 +1871,8 @@ en:
       effective: 'Effective: November 19, 2024'
       fanworks:
         bookmarks: Bookmarks
-        bookmarks_only_fanworks_html: "%{bookmarks_link} must only be created for fanworks. You may create %{external_bookmarks_link} for fanworks hosted on third-party sites."
+        bookmarks_only_fanworks_html: "%{bookmarks_link} must only be %{created_for_fanworks_link}. You may create %{external_bookmarks_link} for fanworks hosted on third-party sites."
+        created_for_fanworks: created for fanworks
         external_bookmarks: external bookmarks
         heading: II.B. Fanworks
         must_be_fanworks_html: Works must be fanworks. Posting a Work that primarily consists of %{non_fanwork_content_link} is not allowed.
@@ -1734,7 +1914,7 @@ en:
         technical_integrity: technical integrity
         tos_faq: FAQ for Section II.K
         tos_faq_in_parens_html: "(%{tos_faq_link})"
-        tos_faq_link_label: Offensive Content vs Illegal Content FAQ
+        tos_faq_link_label: Spam and Technical Integrity FAQ
         violates_us_law_html: If you encounter Content that you believe violates a specific law of the United States, you can %{report_it_to_us_link}.
       impersonation:
         function: function
@@ -1795,11 +1975,12 @@ en:
         tos_faq_link_label: Fannish Identities and Impersonation FAQ
       plagiarism:
         heading: II.E. Plagiarism
-        html: Plagiarism is the use of someone else's words, or %{their_expressions_of_their_ideas_link}, without attribution. Minor alterations (such as replacing names, substituting synonyms, or rearranging a few words) are insufficient to make a work your own. Plagiarism is not allowed. Deliberately creating a work using the same general idea as another work is not plagiarism, but citation may be appropriate.
+        html: Plagiarism is the use of someone else's words, or %{their_expressions_of_their_ideas_link}, without attribution. Minor alterations (such as replacing names, substituting synonyms, or rearranging a few words) are insufficient to make a work your own. Plagiarism is not allowed. Deliberately creating a work %{using_the_same_general_idea_link} as another work is not plagiarism, but citation may be appropriate.
         their_expressions_of_their_ideas: their expressions of their ideas
         tos_faq: FAQ for Section II.E
         tos_faq_in_parens_html: "(%{tos_faq_link})"
         tos_faq_link_label: Copyright Infringement and Plagiarism FAQ
+        using_the_same_general_idea: using the same general idea
       privacy_policy: Privacy Policy
       terms_of_service: Terms of Service
       toc:
@@ -1812,146 +1993,22 @@ en:
         tos_faq_in_parens_html: "(%{tos_faq_link})"
         tos_faq_link_label: Usernames, Icons, and Profiles FAQ
     diversity_statement:
-      archive_description_html: This archive is a permanent, panfandom place for fanworks, built by fans for fans. Whichever way you use the Archive, you're part of this, powering it, shaping it through your use and %{your_feedback_link}.
-      archive_for_you: 'No matter your appearance, circumstances, configuration or take on the world: if you enjoy consuming, creating or commenting on fanworks, the Archive is for you.'
-      archive_team: the Archive team
-      diversity_statement: Diversity Statement
-      dreamwidth: Dreamwidth's
-      dreamwidth_remix_html: This is a remix of %{dreamwidth_link} %{diversity_statement_link}.
-      few_restrictions: few restrictions
-      license:
-        creative_commons_by_sa: Creative Commons Attribution-Share Alike 3.0 Unported License
-        html: This work is licensed under a %{creative_commons_by_sa_link}.
-        image_alt: Creative Commons License
-      some_essential_parts: some essential parts
-      still_missing_html: 'We know that there are %{some_essential_parts_link} that are still missing to make the Archive truly panfandom: the ability to host fanworks other than text, an interface in languages other than English, and more ways for you to connect with each other, to name just a few. But with your support, we''ll get there.'
+      accessibility_commitment_html: We value making fannish activities and creations as accessible as possible to all those who wish to participate. We recognize that supporting diversity and inclusion is an ongoing responsibility, and we remain dedicated to developing AO3 and its policies in a way that reflects our commitment. As we %{update_ao3_link}, we will continue to prioritize features that improve the site's inclusivity and accessibility for everyone.
+      archive_description_html: AO3 is a permanent, panfandom archive for fanworks, %{built_by_link}. We want AO3 to be a place where all fannish works are recognized as legal and transformative, and where every fan of any media feels welcome, no matter who they are or how they use AO3. If you enjoy creating or engaging with fanworks, AO3 is for you.
+      built_by: built by fans, for fans
+      collaboration_statement_html: We dedicate our time to support AO3, but we can't do this work alone. All of us – %{donors_users_volunteers_link} – work together to foster a culture of inclusiveness on AO3 and the rest of the %{our_projects_link}.
+      content_policies: content policies
+      diversity_header: Diversity Statement
+      donors_users_volunteers: donors, users, and volunteers
+      feedback_statement_html: AO3 exists to support fans, fandoms, and fanworks of all kinds, and we welcome %{your_feedback_link} on how to make that possible.
+      inclusiveness_commitment_html: We take our commitment to %{maximum_inclusiveness_link} seriously. Our %{content_policies_link} are designed to give creators as much creative freedom as possible, while still allowing us to maintain our focus as a non-commercial fanwork archive. We strive to protect your rights to %{privacy_policy_link} and free expression, as outlined in our %{terms_of_service_link}.
+      maximum_inclusiveness: maximum inclusiveness of fanwork content
+      our_projects: Organization for Transformative Works' projects
+      privacy: privacy
       terms_of_service: Terms of Service
-      we_build_for: We are building this archive for you. Come be a part of it.
-      welcome_header: You are welcome at the Archive of Our Own.
-      what_we_do_html: We, %{archive_team_link}, know that we won't get everything right on the first try, and we won't be able to make everyone equally happy. But we strive to find a good balance, and we promise to respectfully consider your feedback and to take it seriously.
-      why_we_build: We are building this archive because we believe it's possible for people of all opinions and persuasions to come together and share with each other.
-      you_can_html: You are free to express your creativity within the %{few_restrictions_link} needed to keep the service viable for other users. The Archive strives to protect your rights to free expression and privacy; you can read about the details in our %{terms_of_service_link}.
+      update_ao3: update AO3
+      welcome_statement: You are welcome at the Archive of Our Own (AO3).
       your_feedback: your feedback
-    dmca:
-      appeal:
-        cannot: cannot
-        copyright: Copyright infringement
-        dispute_html: you %{cannot_italic} reupload or repost the content unless you have filed a DMCA counternotice to dispute the takedown
-        heading: I was notified that my work was removed from AO3 due to a DMCA takedown notice. What can I do?
-        lumen: Lumen
-        notify: remove the content and notify you by email
-        plagiarism: plagiarism
-        removal_html: If the OTW receives a valid DMCA takedown notice for content you uploaded to AO3, we will %{notify_link}. We may also send a redacted version of the DMCA takedown notice to %{lumen_link} and other third parties at our discretion.
-        reupload_html: If your content was removed due to a DMCA takedown notice, %{dispute_bold}. If you reupload or repost the content without filing a DMCA counternotice, we may %{suspend_link}.
-        suspend: suspend your account
-        tos: Terms of Service
-        tos_faq: Terms of Service FAQ
-        violations_html: "%{copyright_link} and %{plagiarism_link} are violations of Sections II.D and II.E of our %{tos_link}, respectively. For more information, please refer to our %{tos_faq_link}."
-      counternotice_instructions:
-        address_attn: 'Attention: Legal'
-        address_org: Organization for Transformative Works
-        address_state: New York, NY 10003-1502
-        address_street: '228 Park Ave S #18156'
-        consider_html: If you are considering whether to file a DMCA counternotice, we recommend that you contact an intellectual property lawyer licensed to practice in your jurisdiction, so that you are aware of your legal rights and obligations. You can also review the %{lumen_faq_link}.
-        contact_legal: the Legal committee's contact form
-        defend: you are willing to defend your use of the original copyrighted material in court
-        dispute_html: If you believe that your content does not infringe on the copyright owner's rights, you can file a DMCA counternotice to dispute the takedown. By filing a counternotice, you are indicating that %{defend_bold} if the party who submitted the original takedown notice chooses to pursue legal action against you.
-        heading: Filing a DMCA counternotice
-        initiate_html: 'To initiate a formal DMCA counter-notification request, contact the OTW''s designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:'
-        lumen_faq: Lumen DMCA Explanation and FAQ
-        prefer: We prefer to receive DMCA requests through the contact form or by email.
-        time_limit: You can file a DMCA counternotice at any point after your content has been removed; there is no time limit.
-      counternotice_process:
-        heading: DMCA counter-notification process
-        lumen: Lumen
-        notification_html: The original submitter will have 10 business days to prevent the restoration of your content by filing a lawsuit against you. If the original submitter does not file a lawsuit within 10 business days, the OTW will restore your content (or, if your content has already been deleted, allow you to reupload it) between 10 and 14 business days after we receive the counternotice. We may also send a redacted version of the DMCA counternotice to %{lumen_link} and other third parties at our discretion.
-        valid: If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify the party who submitted the original takedown notice.
-      counternotice_requirements:
-        consent: 'a statement that you consent to the jurisdiction of a U.S. federal court in either:'
-        contact: your name, address, and phone number;
-        heading: Requirements of a DMCA counternotice
-        intro: 'The counternotice must substantially comply with the requirements of 17 U.S.C. § 512(g)(3). You are also required to consent to the jurisdiction of a United States court. The legal requirements of a valid DMCA counternotice include:'
-        liability: Per 17 U.S.C. § 512(f), you may be subject to liability if you knowingly and materially misrepresent your claim that the content was removed due to a mistake or misidentification.
-        mistake_html: a statement, %{perjury_bold}, that the content was removed due to a mistake or misidentification;
-        new_york: Manhattan, New York
-        non_us_resident_html: the district where the OTW is located (%{new_york_link}), if you are not in the U.S.; and
-        perjury: made under penalty of perjury
-        service: a statement that you will accept service of process from the party who submitted the original takedown notice.
-        signature: your physical or electronic signature;
-        url: the URL(s) of the content that was removed;
-        usa_resident: the district where you live, if you are in the U.S.; or
-      intro:
-        contact_legal: contact the OTW Legal committee
-        legality_html: The OTW will respond promptly to notices of alleged copyright infringement that substantially comply with all %{requirements_link}. However, we believe that %{transformative_works_legal_link}, and we reserve the right to review the allegedly infringing content and independently determine whether it is infringing. If you have any questions about our DMCA Policy, please %{contact_legal_link}.
-        purpose_html: The Digital Millennium Copyright Act (DMCA) establishes the procedure the Organization for Transformative Works (OTW) must follow when users of our sites, including the Archive of Our Own (AO3), %{reproduce_unauthorized_link}. Specifically, %{uscode_link} protects the OTW from potential liability when infringing content is present on our sites.
-        reproduce_unauthorized: reproduce copyrighted material without authorization
-        requirements: legal requirements
-        transformative_works_legal: transformative fanworks are legal
-        uscode: 17 U.S.C. § 512
-      license:
-        cc_license: Creative Commons Attribution-ShareAlike 4.0 International License
-        credit_html: AO3's DMCA policy is licensed under the %{cc_license_link}. Material in this policy has been drawn from Dreamwidth, the Electronic Frontier Foundation, and Wikipedia.
-      page_heading: DMCA Policy
-      removal:
-        abuse_report_html: "%{submit_abuse_bold} Abuse reports are evaluated by the Policy & Abuse committee for violations of the %{tos_link}, and held to a very high %{confidentiality_link}. When submitting an Abuse report about copyright infringement, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq_link}."
-        confidentiality: standard of confidentiality
-        dmca_html: "%{file_dmca_bold} DMCA takedown notices can only be filed by the copyright owner or someone legally authorized to act on their behalf. DMCA notices must be sent to the OTW's designated agent and comply with all %{requirements_link}. DMCA notices are %{not_confidential_link}. The OTW reserves the right to make public all DMCA notices that we receive, though some information may be redacted for privacy."
-        do_not: do not
-        do_not_spam_html: Please %{do_not_bold} submit an Abuse report if you intend to file a DMCA notice. Submitting both an Abuse report and a DMCA notice about the same content may delay the processing of both requests.
-        file_dmca: File a DMCA takedown notice
-        file_dmca_html: "%{file_dmca_link}:"
-        heading: My work was posted on AO3 without my permission. What can I do?
-        intro: 'If you encounter content on AO3 that you believe infringes on your copyright, you have the following options:'
-        not_confidential: not subject to confidentiality
-        requirements: legal requirements
-        submit_abuse: Submit an Abuse report
-        submit_abuse_html: "%{submit_abuse_link}:"
-        tos: AO3 Terms of Service
-        tos_faq: Terms of Service FAQ
-      repeat:
-        heading: Repeat offenses
-        required_html: As required by 17 U.S.C. § 512(i)(1)(A), we may %{suspend_link} users who repeatedly violate others' copyright. The OTW has the discretion to decide what qualifies as a repeated offense.
-        suspend: suspend
-      takedown_instructions:
-        address_attn: 'Attention: Legal'
-        address_org: Organization for Transformative Works
-        address_state: New York, NY 10003-1502
-        address_street: '228 Park Ave S #18156'
-        contact_legal: the Legal committee's contact form
-        heading: Filing a DMCA takedown notice
-        initiate_html: 'To initiate a formal DMCA takedown request, contact the OTW''s designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:'
-        prefer: We prefer to receive DMCA requests through the contact form or by email.
-      takedown_process:
-        counternotify: If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify you. You will have 10 business days to file a lawsuit to prevent the restoration of the content. If you do not notify us within 10 business days that you have filed a lawsuit, we will allow the content to be restored in accordance with 17 U.S.C. § 512(g)(2)(B)-(C).
-        dispute: If the account owner believes that their content does not infringe upon your copyright, they may file a DMCA counternotice disputing the takedown. The account owner can file a DMCA counternotice at any point after the content has been removed; there is no time limit.
-        heading: DMCA takedown process
-        lumen: Lumen
-        notification_html: When the content is removed from AO3, the information you provided in the DMCA takedown notice will be forwarded to the owner of the account responsible for posting the content. We may also send a redacted version of the DMCA takedown notice to %{lumen_link} and other third parties at our discretion.
-        requirements: legal requirements
-        valid_html: If the OTW receives a DMCA takedown notice that fulfills all %{requirements_link}, we will remove the content once we review the validity of the infringement claim.
-      takedown_requirements:
-        accurate: a statement that the information you have provided is accurate.
-        authorized_html: a statement, %{perjury_bold}, that you are authorized to act on behalf of the copyright owner; and
-        contact: your contact information;
-        good_faith: a statement that you have a good-faith belief that the use of the content is not authorized by the copyright owner(s), their agent, or the law;
-        heading: Requirements of a DMCA takedown notice
-        intro: 'The takedown notice must substantially comply with the requirements of 17 U.S.C. § 512(c)(3)(A). You are also required to consent to the jurisdiction of a United States court. The legal requirements of a valid DMCA takedown notice include:'
-        liability: Per 17 U.S.C. § 512(f), you may be subject to liability if you knowingly and materially misrepresent your claim that the content infringes on your copyright.
-        perjury: made under penalty of perjury
-        signature: your physical or electronic signature;
-        source: identification of the copyrighted work being infringed upon (for example, a URL or publication listing);
-        url: the URL(s) of the specific content on our site that you believe to be infringing;
-      toc:
-        appeal: I was notified that my work was removed from AO3 due to a DMCA takedown notice. What can I do?
-        counternotice_instructions: Filing a DMCA counternotice
-        counternotice_process: DMCA counter-notification process
-        counternotice_requirements: Requirements of a DMCA counternotice
-        heading: Table of Contents
-        penalties: Repeat offenses
-        removal: My work was posted on AO3 without my permission. What can I do?
-        takedown_instructions: Filing a DMCA takedown notice
-        takedown_process: DMCA takedown process
-        takedown_requirements: Requirements of a DMCA takedown notice
     donate:
       general:
         text: There are two main ways to support the AO3 - donating your time or money.
@@ -1994,6 +2051,9 @@ en:
       intro_description: A non-profit, non-commercial archive for transformative fanworks; created by and for fans of books, music, art, games, shows, movies, real-person fiction (RPF), and other fandoms.
       parent_org: Organization for Transformative Works
       parent_org_intro_html: The Archive of Our Own (AO3) is a project of the %{parent_org_link}.
+    news_module:
+      news:
+        published_html: 'Published: %{publication_date}'
     privacy:
       account_termination:
         backup_copies_html: '"Active records" do not include the backup copies of Content created for legal and/or disaster recovery purposes (refer to the %{general_principles_link}).'
@@ -2112,17 +2172,20 @@ en:
         heading: III.E. Your rights under applicable data privacy laws
         other_rights: other rights regarding your Personal Information
         potential_other_rights_html: You may have %{other_rights_link} under the laws of the jurisdiction in which you are located. We will not discriminate against you for making a request under the data privacy laws of applicable jurisdictions.
-        request_data_html: You can request that the OTW assemble the data that AO3 has about you, and provide you with a copy in electronic format. We agree to provide such data to you within a reasonable time if you are a resident or citizen of the European Union or another %{applicable_jurisdiction_link}.
+        request_data: request that the OTW assemble the data that AO3 has about you
+        request_data_html: You can %{request_data_link}, and provide you with a copy in electronic format. We agree to provide such data to you within a reasonable time if you are a resident or citizen of the European Union or another %{applicable_jurisdiction_link}.
         require_user_specific_proof: We reserve the right to require user-specific proof of identity before providing Personal Information to a requester. This is necessary to protect the safety and privacy of our users and personnel.
     site_map:
       about:
         ao3_news: AO3 News
         archive_faq: Archive FAQ
         content_policy: Content Policy
+        diversity_statement: Diversity Statement
         header: About the Archive of Our Own
         known_issues: Known Issues
         privacy_policy: Privacy Policy
         project_of_otw_html: The Archive of Our Own is a project of the %{otw_link}
+        takedown_policy: DMCA & TIDA Policies
         terms_of_service: Terms of Service
         tos_faq: Terms of Service FAQ
       access_your_account:
@@ -2164,13 +2227,16 @@ en:
         abbreviated: OTW
         full: Organization for Transformative Works
       page_heading: Site Map
+    takedown:
+      page_title: DMCA & TIDA Policies
     tos:
       abuse_policy:
         answers_common_questions_html: Answers to common questions about the Abuse Policy can be found in the %{tos_faq_link}.
         appeals:
           appeal_decision: appeal a decision to the Policy & Abuse committee
+          decisions_are_final: PAC's decisions are final.
           heading: Appeals
-          html: The complainant or the subject of a complaint may %{appeal_decision_link}, in which case it will be reviewed by an additional PAC administrator. The original decision will remain in effect while an appeal is being reviewed. We will attempt to resolve appeals as speedily as possible, but we cannot guarantee any particular timeframe for a response. PAC's decisions are final.
+          html: The complainant or the subject of a complaint may %{appeal_decision_link}, in which case it will be reviewed by an additional PAC administrator. The original decision will remain in effect while an appeal is being reviewed. We will attempt to resolve appeals as speedily as possible, but we cannot guarantee any particular timeframe for a response. %{decisions_are_final_link}
         content_policy: Content Policy
         heading: I.I. Abuse Policy
         no_prescreen_html: We do not prescreen Content for violations of the Terms of Service, including violations of the %{content_policy_link}. Complaints are investigated only when they are submitted through the appropriate channels and with the appropriate information.
@@ -2193,7 +2259,8 @@ en:
           illegal_and_inappropriate_content_policy: Illegal and Inappropriate Content Policy
           immediate_removal: Non-Work Content, or any Content without valid contact information, that violates the TOS may be immediately removed.
           mandatory_tags_policy: Mandatory Tags Policy
-          potentially_legitimate_fanwork_html: If the Content that needs to be removed is a Work that includes potentially legitimate fanwork, the default will be to hide the Work. The Policy & Abuse committee has sole discretion to determine necessary exceptions to this default rule, which may include repeated violations of the TOS, any violations of the %{illegal_and_inappropriate_content_policy_link}, or any circumstances where the OTW reasonably believes that the Content is unlawful, including when it contains a true threat.
+          potentially_legitimate_fanwork_html: If the Content that needs to be removed is a Work that includes potentially legitimate fanwork, the default will be to hide the Work. The Policy & Abuse committee has sole discretion to determine necessary exceptions to this default rule, which may include repeated violations of the TOS, any violations of the %{illegal_and_inappropriate_content_policy_link}, or any circumstances where the OTW reasonably believes that the Content is unlawful, including when it contains a %{true_threat_link}.
+          true_threat: true threat
           voluntary_removal: When Content (whether a Work or otherwise) is hidden from public view, AO3 administrators may identify the nature of the problem with the Content and set a deadline for voluntary removal of the violating material. If the creator does not remove that material within the given deadline, AO3 administrators may permanently remove the Content. At the discretion of the Policy & Abuse committee, the creator may have the option to resubmit any non-violating material that was also removed.
         submitting_a_complaint:
           dmca_policy: DMCA Policy
@@ -2240,7 +2307,8 @@ en:
           agreement: 'Agreement:'
           any_other_form: any other form of content
           content_policy: Content Policy
-          html: '%{agreement} AO3 hosts and shares content created by fans, for fans. Our %{content_policy_link} and %{privacy_policy_link} are part of these Terms of Service (TOS). By submitting a work; bookmark; comment; tag; link; text, image, audio, or video file; username; fannish next-of-kin; %{personal_information_link} (such as an email address); or %{any_other_form_link} ("Content") to the Archive of Our Own service (hereinafter "Service", "AO3", or "Archive"), or by creating an account and/or accessing Content on AO3, you affirm, confirm, and state that you comply with and assent to the TOS.'
+          fnok: fannish next-of-kin
+          html: '%{agreement} AO3 hosts and shares content created by fans, for fans. Our %{content_policy_link} and %{privacy_policy_link} are part of these Terms of Service (TOS). By submitting a work; bookmark; comment; tag; link; text, image, audio, or video file; username; %{fannish_next_of_kin_link}; %{personal_information_link} (such as an email address); or %{any_other_form_link} ("Content") to the Archive of Our Own service (hereinafter "Service", "AO3", or "Archive"), or by creating an account and/or accessing Content on AO3, you affirm, confirm, and state that you comply with and assent to the TOS.'
           personal_information: Personal Information
           privacy_policy: Privacy Policy
         entirety_of_agreement:
@@ -2529,11 +2597,11 @@ en:
       about:
         content_policy: Content Policy
         diversity_statement: Diversity Statement
-        dmca_policy: DMCA Policy
         header: About the Archive
         privacy_policy: Privacy Policy
         site_map: Site Map
         status_page: Site Status
+        takedown_policy: DMCA & TIDA Policies
         tos: Terms of Service
       contact_us:
         header: Contact Us
@@ -2667,6 +2735,27 @@ en:
       nav: Pagination
     next: Next →
     prev: "← Previous"
+  potential_matches:
+    in_progress:
+      cancel: Cancel Potential Match Generation
+      generating_matches: The archive is generating potential matches for this challenge. This can take a long time, especially for a large challenge! We'll send an email to the collection maintainers when all potential matches have been generated.
+      generation_progress: 'Potential match generation progress:'
+      if_progress_doesnt_change: If the progress value below doesn't change when you reload the page after about 10 minutes, there may have been a problem. Please check again after an hour, and then contact archive support.
+    index:
+      assignments_generating:
+        heading: Assignments Generating
+        in_the_process: We're now in the process of generating assignments. This should take less time than potential matching.
+      cant_generate_matches: You can't generate matches while sign-up is still open. After you have closed sign-ups in Challenge Settings, you will be able to generate potential matches here.
+      need_two_people: You need at least two people to sign up before you can make assignments.
+      no_matches_yet:
+        heading: Potential Match Generation
+        no_matches_yet: No potential matches yet!
+      no_potential_matches:
+        heading: No Potential Matches
+        match_settings: Minimum Number to Match settings
+        no_matches_found: No potential matches were found.
+        please_try_again_html: Please update your challenge's %{match_settings_link} and try generating potential matches again.
+      page_heading: Matching for %{collection_title}
   preferences:
     index:
       browser_page_title_format: Browser page title format
@@ -2750,6 +2839,9 @@ en:
       edit_my_pseuds: Manage My Pseuds
       edit_my_works: Edit My Works
       edit_profile: Edit Profile
+  prompts:
+    prompt_form:
+      title_requirements: Up to %{maximum} characters, cannot begin with =, +, -, @ or a whitespace character.
   pseuds:
     delete_preview:
       cancel: Cancel
@@ -2892,6 +2984,11 @@ en:
         works: My Work Subscriptions
       series: "(Series)"
       work: "(Work)"
+  tag_sets:
+    nomination_review_heading:
+      already_approved_fandoms: Already Approved Fandoms
+      left_to_review: "%{type} (%{count} left to review)"
+      paginated: "%{from} - %{to} of %{total} %{type}"
   tag_wranglers:
     index:
       filters:
@@ -3315,6 +3412,9 @@ en:
         related_works: Related Works (%{related_works_number})
         sign_ups: Sign-ups (%{signup_number})
   works:
+    admin_edit_form:
+      associations_title: Associations
+      required_information: Required information
     adult:
       caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.
       footnote: If you accept cookies from our site and you choose "Yes, Continue", you will not be asked again during this session (that is, until you close your browser). If you log in you can store your preference and never be asked again.
@@ -3334,10 +3434,24 @@ en:
       page_heading: Unposted Draft
       please_note: 'Please note:'
       unposted_drafts_get_deleted: Unposted drafts are only saved for 30 days from the day they are first created, and then deleted from %{app_name}.
+    edit:
+      add_chapter: Add Chapter
+      delete_confirm: Are you sure you want to delete this work? This will destroy all comments and kudos on this work as well and CANNOT BE UNDONE!
+      delete_work: Delete Work
+      draft_chapter_position: "%{position} (Draft)"
+      edit_chapter: 'Edit Chapter:'
+      manage_chapters: Manage Chapters
+      orphan_work: Orphan Work
+      page_heading: Edit Work
+      remove_me_as_co_creator: Remove Me As Co-Creator
+    edit_multiple:
+      privacy_moderated_commenting_help_title: Comments moderated
+      privacy_restricted_commenting_help_title: Who can comment on these works
+      privacy_restricted_work_help_title: Registered users
+      works_languages_help_title: Languages help
+      works_skins_help_title: Work skins
     edit_tags:
-      page_heading:
-        edit_tags_and_language_html: Edit Work Tags and Language for %{title}
-        edit_tags_html: Edit Work Tags for %{title}
+      page_heading_html: Edit Work Tags for %{title}
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works
@@ -3346,12 +3460,14 @@ en:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
       navigation:
-        tag_bookmarks: Bookmarks
-        tag_collections: Collections
-        tag_works: Works
-        user_collection_works: Works in Collections
-        user_edit_works: Edit Works
-        user_works: Works
+        tag:
+          bookmarks: Bookmarks
+          collections: Collections
+          works: Works
+        user:
+          collection_works: Works in Collections
+          edit_works: Edit Works
+          works: Works
       recent_works_html: These are some of the latest works posted to the Archive. To find more works, %{choose_fandom_link} or %{advanced_search_link}.
     meta:
       original_creators:
@@ -3361,8 +3477,12 @@ en:
       page_heading_html: Chapter Index for %{work_link} by %{creators}
     new_import:
       content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      privacy_moderated_commenting_help_title: Comments moderated
+      privacy_restricted_commenting_help_title: Who can comment on these works
+      privacy_restricted_work_help_title: Registered users
       tos_faq: Terms of Service FAQ
+      works_languages_help_title: Languages help
     permissions:
       privacy: Privacy
       visibility:
@@ -3383,7 +3503,7 @@ en:
         update: Update
       content_policy: Content Policy
       legend: Post Work
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
     preface:
       title: Preface
@@ -3407,15 +3527,38 @@ en:
       no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
+    standard_form:
+      collectibles_add_to_collection_help_title: Adding To Collections
+      deleted_work: Deleted work
+      header: This work is a remix, a translation, a podfic, or was inspired by another work
+      privacy_moderated_commenting_help_title: Comments moderated
+      privacy_restricted_commenting_help_title: Who can comment on this work
+      privacy_restricted_work_help_title: Registered users
+      remove: Remove
+      remove_confirm: Are you sure you want to remove the connection to this work?
+      works_assignment_help_title: Fulfilling Assignments
+      works_backdating_help_title: Publication Date Options
+      works_languages_help_title: Languages help
+      works_parents_help_title: Parent works help
+      works_recipients_help_title: Recipients
+      works_series_help_title: Choosing series
+      works_skins_help_title: Work skins
+      works_translation_link_help_title: Translation link
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
+    work_form_associations_language:
+      works_languages_help_title: Languages help
     work_form_tags:
+      additional_tags_help_title: Additional tags help
+      categories_help_title: Categories help
+      characters_help_title: Characters help
       fandoms_help_title: Fandom help
       ratings_help_title: Rating help
+      relationships_help_title: Relationships help
       warnings_help_title: Warning help
     work_header_navigation:
       chapter_index:
@@ -3428,6 +3571,7 @@ en:
         heading: Download
     work_header_notes:
       inspired_by:
+        deleted: Inspired by a deleted work
         other_works_inspired_by_this_one: other works inspired by this one
         restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: Inspired by %{work_link} by %{creator_link}
@@ -3443,6 +3587,7 @@ en:
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
         unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
       translation_of:
+        deleted: A translation of a deleted work
         restricted_html: A translation of [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
