@@ -687,6 +687,41 @@ describe CommentsController do
         post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
       end
     end
+
+    context "when they comment on same work again in a small timeframe" do
+      let!(:previous_comment) do
+        create(:comment,
+               :on_admin_post,
+               :by_guest,
+               email: "sus@example.com",
+               comment_content: "lorem",
+               created_at: 15.seconds.ago)
+      end
+
+      subject do 
+        create(:comment,
+               :by_guest,
+               commentable: previous_comment.ultimate_parent,
+               email: "sus@example.com",
+               comment_content: "ipsum",
+               created_at: 0.seconds.ago)
+      end
+
+      before do
+        subject.update_attribute(:approved, false)
+        subject.update_attribute(:spam, true)
+        allow(subject).to receive(:save).and_return(false)
+      end
+
+      skip "marks both of the comments spam" do
+        post :create, params: { comment_id: subject.id, comment: subject.attributes }
+        previous_comment.reload
+
+        expect(subject.spam).to be_truthy
+        expect(subject.save).to be_falsey
+        expect(previous_comment.spam).to be_truthy
+      end
+    end
   end
 
   describe "DELETE #destroy" do
