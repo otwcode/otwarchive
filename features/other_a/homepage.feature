@@ -9,12 +9,12 @@ Feature: Various things on the homepage
 
   Given I am on the homepage
   When I follow "Diversity Statement"
-  Then I should see "You are welcome at the Archive of Our Own."
+  Then I should see "You are welcome at the Archive of Our Own (AO3)."
 
   Scenario: DMCA
 
   Given I am on the homepage
-  When I follow "DMCA Policy"
+  When I follow "DMCA & TIDA Policies"
   Then I should see "Filing a DMCA counternotice"
 
   Scenario: Donate

@@ -51,7 +51,8 @@
             content_policy_link: link_to(t(".general_terms.agreement.content_policy"), content_path),
             privacy_policy_link: link_to(t(".general_terms.agreement.privacy_policy"), privacy_path),
             personal_information_link: link_to(t(".general_terms.agreement.personal_information"), privacy_path(anchor: "III.A.1")),
-            any_other_form_link: link_to(t(".general_terms.agreement.any_other_form"), tos_faq_path(anchor: "define_content"))) %>
+            any_other_form_link: link_to(t(".general_terms.agreement.any_other_form"), tos_faq_path(anchor: "define_content")),
+            fannish_next_of_kin_link: link_to(t(".general_terms.agreement.fnok"), archive_faq_path("fannish-next-of-kin"))) %>
     </p>
   </li>
   <li id="I.A.2">
@@ -270,7 +271,7 @@
     <p>
       <%= t(".abuse_policy.submitting_a_complaint.html",
             policy_and_abuse_form_link: link_to(t(".abuse_policy.submitting_a_complaint.policy_and_abuse_form"), new_abuse_report_path),
-            dmca_policy_link: link_to(t(".abuse_policy.submitting_a_complaint.dmca_policy"), dmca_path)) %>
+            dmca_policy_link: link_to(t(".abuse_policy.submitting_a_complaint.dmca_policy"), takedown_path(anchor: "dmca_policy"))) %>
     </p>
   </li>
   <li id="I.I.2">
@@ -279,7 +280,7 @@
       <%= t(".abuse_policy.treatment_of_complaints.html",
             privacy_policy_link: link_to(t(".abuse_policy.treatment_of_complaints.privacy_policy"), privacy_path),
             pac_confidentiality_policy_link: link_to(t(".abuse_policy.treatment_of_complaints.pac_confidentiality_policy"),
-              "https://www.transformativeworks.org/committees/policy-abuse-confidentiality-policy/")) %>
+              "https://www.transformativeworks.org/committees/policy-abuse-committee/policy-abuse-confidentiality-policy/")) %>
     </p>
   </li>
   <li id="I.I.3">
@@ -292,7 +293,8 @@
     <p>
       <%= t(".abuse_policy.resolution_of_complaints.potentially_legitimate_fanwork_html",
             illegal_and_inappropriate_content_policy_link: link_to(t(".abuse_policy.resolution_of_complaints.illegal_and_inappropriate_content_policy"),
-              content_path(anchor: "II.K"))) %>
+              content_path(anchor: "II.K")),
+            true_threat_link: link_to(t(".abuse_policy.resolution_of_complaints.true_threat"), tos_faq_path(anchor: "true_threat"))) %>
     </p>
     <p><%= t(".abuse_policy.resolution_of_complaints.voluntary_removal") %></p>
     <p>
@@ -327,7 +329,8 @@
     <strong><%= t(".abuse_policy.appeals.heading") %></strong>
     <p>
       <%= t(".abuse_policy.appeals.html",
-            appeal_decision_link: link_to(t(".abuse_policy.appeals.appeal_decision"), tos_faq_path(anchor: "appeal"))) %>
+            appeal_decision_link: link_to(t(".abuse_policy.appeals.appeal_decision"), tos_faq_path(anchor: "appeal")),
+            decisions_are_final_link: link_to(t(".abuse_policy.appeals.decisions_are_final"), tos_faq_path(anchor: "appeal_rejections"))) %>
     </p>
   </li>
 </ol>

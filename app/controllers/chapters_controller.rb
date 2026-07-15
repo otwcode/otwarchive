@@ -1,9 +1,9 @@
 class ChaptersController < ApplicationController
   include WorksHelper
 
-  # only registered users and NOT admin should be able to create new chapters
-  before_action :users_only, except: [:index, :show, :destroy, :confirm_delete]
-  before_action :check_user_status, only: [:new, :create, :update, :update_positions]
+  # only registered users and NOT admin should be able to create and delete chapters
+  before_action :users_only, except: [:index, :show]
+  before_action :check_user_status, only: [:new, :create, :update, :update_positions, :post]
   before_action :check_user_not_suspended, only: [:edit, :remove_user_creatorship, :confirm_delete, :destroy]
   before_action :load_work
   # only authors of a work should be able to edit its chapters
@@ -145,7 +145,7 @@ class ChaptersController < ApplicationController
     elsif params[:preview_button]
       @preview_mode = true
       if @chapter.posted?
-        flash[:notice] = ts("This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.")
+        flash.now[:notice] = t(".preview_notice")
       else
         draft_flash_message(@work)
       end

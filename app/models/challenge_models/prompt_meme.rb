@@ -4,7 +4,7 @@ class PromptMeme < ApplicationRecord
 
   override_datetime_setters
 
-  has_one :collection, as: :challenge
+  has_one :collection, as: :challenge, dependent: :nullify
 
   # limits the kind of prompts users can submit
   belongs_to :request_restriction, class_name: "PromptRestriction", dependent: :destroy
@@ -35,14 +35,16 @@ class PromptMeme < ApplicationRecord
     end
   end
 
-  #  When Challenges are deleted, there are two references left behind that need to be reset to nil
-  before_destroy :clear_challenge_references
-
   def user_allowed_to_see_signups?(user)
     true
   end
 
   def user_allowed_to_see_claims?(user)
     user_allowed_to_see_assignments?(user)
+  end
+
+  validate :request_restriction_allows_fields
+  def request_restriction_allows_fields
+    errors.add(:base, :no_request_fields) unless request_restriction&.allows_prompt_fields?
   end
 end

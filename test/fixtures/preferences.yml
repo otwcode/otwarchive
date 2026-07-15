@@ -153,6 +153,28 @@ preference_484751136:
   minimize_search_engines: false
   hide_warnings: false
   disable_work_skins: false
+preference_484751137:
+  history_enabled: true
+  hide_freeform: false
+  comment_emails_off: false
+  created_at: 2010-10-13 11:37:58 Z
+  collection_inbox_off: false
+  collection_emails_off: false
+  skin_id: 1
+  comment_inbox_off: false
+  comment_copy_to_self_off: true
+  work_title_format: TITLE - AUTHOR - FANDOM
+  view_full_works: false
+  updated_at: 2010-10-13 11:37:58 Z
+  first_login: true
+  adult: true
+  id: 484751137
+  user_id: 34
+  recipient_emails_off: false
+  time_zone:
+  minimize_search_engines: false
+  hide_warnings: false
+  disable_work_skins: false
 preference_484751114: 
   history_enabled: true
   hide_freeform: false

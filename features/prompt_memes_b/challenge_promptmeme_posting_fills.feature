@@ -73,11 +73,15 @@ Feature: Prompt Meme Challenge
     And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "GhostSoup"
     And I fill in "Work Title" with "Kinky Story"
+    And I fill in "Additional Tags" with "yourkink1, yourkink2"
     And I fill in "content" with "Story written for your kinks, oh mystery reader!"
   When all emails have been delivered
     And I press "Post"
   Then 1 email should be delivered to "my1@e.org"
     And the email should have "A response to your prompt" in the subject
+    And the email should contain "Additional Tags:"
+    And the email should contain "yourkink1"
+    And the email should contain "yourkink2"
     And the email to "myname1" should be translated
 
   Scenario: Fulfilling a claim ticks the right boxes automatically
@@ -593,3 +597,22 @@ Feature: Prompt Meme Challenge
     And I uncheck "Battle 12 (prompter)"
     And I press "Update"
   Then I should see "For prompter."
+
+  Scenario: When a prompt is filled with a restricted work, the work should only be visible to logged-in users
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+    And I sign up for Battle 12
+    And I am logged in as "myname2"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim with "Restricted Fill"
+    And I lock the work
+    And I press "Post"
+  When I view prompts for "Battle 12"
+  Then I should see "Fulfilled By"
+    And I should see "Restricted Fill"
+  When I log out
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts ("
+  Then I should not see "Fulfilled By"
+    And I should not see "Restricted Fill"

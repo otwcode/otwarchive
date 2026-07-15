@@ -35,12 +35,18 @@
     <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
     <dl>
       <%= render "collectibles/collectible_form", form: form, collectibles: @works %>
-      <dt><%= form.label :language_id, t("works.associations.language.choose") %> <%= link_to_help "languages-help" %></dt>
+      <dt>
+        <%= form.label :language_id, t("works.associations.language.choose") %>
+        <%= link_to_help_modal(help_works_languages_path, t(".works_languages_help_title")) %>
+      </dt>
       <dd>
         <%= form.select :language_id, language_options_for_select(sorted_languages, "id"), { include_blank: true } %>
       </dd>
 
-      <dt><%= form.label :work_skin_id, t("works.skin.select") %> <%= link_to_help "work-skins" %></dt>
+      <dt>
+        <%= form.label :work_skin_id, t("works.skin.select") %>
+        <%= link_to_help_modal(help_works_skins_path, t(".works_skins_help_title")) %>
+      </dt>
       <dd>
         <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title,
               { include_blank: true } %>
@@ -53,7 +59,10 @@
     <h3 class="landmark heading"><%= t("works.permissions.privacy") %></h3>
     <dl>
 
-      <dt><%= t("works.permissions.visibility.label") %> <%= link_to_help "registered-users" %></dt>
+      <dt>
+        <%= t("works.permissions.visibility.label") %>
+        <%= link_to_help_modal(help_privacy_restricted_work_path, t(".privacy_restricted_work_help_title")) %>
+      </dt>
       <dd>
         <fieldset>
         <%= radio_button_list(form, :restricted, [
@@ -65,7 +74,10 @@
         </fieldset>
       </dd>
 
-      <dt><%= t("comments.commentable.permissions.moderated_commenting.label") %><%= link_to_help "comments-moderated" %></dt>
+      <dt>
+        <%= t("comments.commentable.permissions.moderated_commenting.label") %>
+        <%= link_to_help_modal(help_privacy_moderated_commenting_path, t(".privacy_moderated_commenting_help_title")) %>
+      </dt>
       <dd>
         <fieldset>
         <%= radio_button_list(form, :moderated_commenting_enabled, [
@@ -79,7 +91,7 @@
 
       <dt>
         <%= t("comments.commentable.permissions.options.multiple_works_label") %>
-        <%= link_to_help "who-can-comment-on-this-work" %>
+        <%= link_to_help_modal(help_privacy_restricted_commenting_path, t(".privacy_restricted_commenting_help_title")) %>
       </dt>
       <dd>
         <fieldset>

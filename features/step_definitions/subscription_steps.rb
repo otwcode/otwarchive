@@ -37,6 +37,11 @@ Then "the feed should have exactly {int} author(s)" do |int|
   expect(page).to have_selector(:xpath, "//author").exactly(int)
 end
 
+Then "the feed updated date should be should be the created date of {string}" do |work|
+  w = Work.find_by(title: work)
+  expect(find(:xpath, "//feed/updated")).to have_content(w.created_at.xmlschema)
+end
+
 # rubocop:disable Cucumber/RegexStepName
 Then /^the (\d+)(?:st|nd|rd|th) feed author should contain "([^"]*)"$/ do |n, text|
   within(:xpath, "//author[#{n}]") do

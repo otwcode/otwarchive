@@ -260,11 +260,12 @@ module CssCleaner
 
   def sanitize_css_content(value)
     # For now we only allow a single completely quoted string
-    return value if value =~ /^\'([^\']*)\'$/
-    return value if value =~ /^\"([^\"]*)\"$/
+    return value if value =~ /\A'([^']*)'\z/
+
+    return value if value =~ /\A"([^"]*)"\z/
 
     # or a valid img url
-    return value if value.match(Regexp.new("^#{URL_FUNCTION_REGEX}$"))
+    return value if value.match(/\A#{URL_FUNCTION_REGEX}\z/)
 
     # or "none"
     return value if value == "none"

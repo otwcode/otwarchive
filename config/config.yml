@@ -475,6 +475,7 @@ SUPPORTED_CSS_PROPERTIES:
 - drop-initial-value
 - elevation
 - empty-cells
+- fill
 - filter
 - fit
 - fit-position
@@ -571,6 +572,8 @@ SUPPORTED_CSS_PROPERTIES:
 - speech-rate
 - stress
 - string-set
+- stroke
+- stroke-width
 - tab-side
 - table-layout
 - target
@@ -620,8 +623,8 @@ SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 SUPPORTED_EXTERNAL_URLS: ["jpg", "jpeg", "png", "gif"]
 
 # variables for Askimet http://akismet.com/
-AKISMET_KEY: '6833ee7298cf'
-AKISMET_NAME: 'http://transformativeworks.org'
+AKISMET_KEY: ''
+AKISMET_NAME: ''
 
 # Abuse and Support ticket trackers; you may need to change
 # feedbacks_controller.rb and abuse_reports_controller.rb
@@ -809,3 +812,14 @@ PSEUD_SHARDS: 5
 TAG_SHARDS: 5
 USER_SHARDS: 5
 WORKS_SHARDS: 5
+
+# Placeholder values for active record encryption. THESE MUST BE OVERRIDDEN FOR PRODUCTION DEPLOYMENTS!
+ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: bEZjYLY9tCYGh6WlcMtEJpIi7GO2plZC
+ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: PpLWizzsQHIWnIihtECw8nDHZQd0amzf
+ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: 3S99KdpdEWLnCYudBgUfdCFDBWePWCud
+
+# The relative URL to redirect to when previewing a skin
+# e.g. /users/OTW_Translation/works ->
+# http://test.archiveofourown.org/users/OTW_Translation/works?site_skin=[skin_id]
+# This user is included in the fixtures for dev
+SKIN_PREVIEW_URL: '/users/OTW_Translation/works'
