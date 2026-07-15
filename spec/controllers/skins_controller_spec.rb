@@ -99,17 +99,17 @@ describe SkinsController do
   end
 
   describe "GET #index" do
-  context "when browsing skins when logged in, but the user does not exist" do
-    before do
-      fake_login
-    end
+    context "when browsing skins when logged in, but the user does not exist" do
+      before do
+        fake_login
+      end
 
-    it "redirects to 404" do
-      get :index, params: { user_id: "deleted_user" }
-      expect(response).to redirect_to("/404")
+      it "redirects to 404" do
+        get :index, params: { user_id: "deleted_user" }
+        expect(response).to redirect_to("/404")
+      end
     end
   end
-end
 
   describe "GET #edit" do
     subject { get :edit, params: { id: skin.id } }
