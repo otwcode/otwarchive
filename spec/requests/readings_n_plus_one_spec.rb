@@ -36,7 +36,7 @@ describe "n+1 queries in the readings controller" do
           create_list(:reading, n, user: user)
         end
 
-        it "performs around 12 queries per reading" do
+        it "performs around 10 queries per reading" do
           # TODO: Ideally, we'd like the uncached reading listings to also have a
           # constant number of queries, instead of the linear number of queries
           # we're checking for here. But we also don't want to put too much
@@ -45,7 +45,7 @@ describe "n+1 queries in the readings controller" do
           expect do
             subject.call
             expect(response.body.scan('<li id="work_').size).to eq(current_scale.to_i)
-          end.to perform_linear_number_of_queries(slope: 12).with_warming_up
+          end.to perform_linear_number_of_queries(slope: 10).with_warming_up
         end
       end
     end
