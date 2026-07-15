@@ -110,7 +110,6 @@ describe SkinsController do
     end
   end
 end
-s
 
   describe "GET #edit" do
     subject { get :edit, params: { id: skin.id } }
