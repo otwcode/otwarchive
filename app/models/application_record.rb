@@ -15,4 +15,8 @@ class ApplicationRecord < ActiveRecord::Base
   def self.random_order
     order(Arel.sql("RAND()"))
   end
+
+  def unmark_for_destruction
+    @marked_for_destruction = false
+  end
 end

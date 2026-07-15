@@ -30,6 +30,14 @@ module WorksHelper
     content_tag(:dl, list.to_s, class: 'stats').html_safe
   end
 
+  def collections_meta_tag(work)
+    collections_data = show_collections_data(work.approved_collections_after_saving)
+    return if collections_data.blank?
+
+    content_tag(:dt, "#{t('works_helper.collections_meta_tag.collections')} ", class: "collections") +
+      content_tag(:dd, collections_data, class: "collections")
+  end
+
   def work_page_title(work, title, options = {})
     fandoms = work.fandoms
     title_fandom = if fandoms.empty?
