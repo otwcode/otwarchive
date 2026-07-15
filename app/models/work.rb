@@ -50,10 +50,10 @@ class Work < ApplicationRecord
   belongs_to :work_skin
   validate :work_skin_allowed
   def work_skin_allowed
-    return if work_skin.blank?
+    return if work_skin.blank? || (work_skin.public? && work_skin.official?)
 
-    skin_users = pseuds_after_saving.filter_map(&:user).uniq
-    return if skin_users.include?(work_skin.author) || (work_skin.public? && work_skin.official?)
+    approved_work_creators = pseuds_after_saving.filter_map(&:user).uniq
+    return if approved_work_creators.include?(work_skin.author)
 
     errors.add(:base, :work_skin_not_allowed)
   end

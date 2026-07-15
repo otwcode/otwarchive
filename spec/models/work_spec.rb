@@ -308,28 +308,55 @@ describe Work do
       end
     end
 
-    context "when the work skin is approved" do
+    context "when the work skin is public and official" do
       it "is valid even when used by a different user" do
-        skin = create(:work_skin, author: skin_author, public: true, official: true)
+        skin = create(:work_skin, :public, author: skin_author)
         work = build(:work, work_skin_id: skin.id)
         expect(work).to be_valid
       end
     end
 
-    context "when the work skin is public but not official" do
-      # Bypass valid_public_preview validation which requires an icon for public skins
-      let(:skin) { create(:work_skin, author: skin_author).tap { |s| s.update_column(:public, true) } }
+    context "when the work skin is official but not public" do
+      let(:skin) { create(:work_skin, author: skin_author).tap { |s| s.update_column(:official, true) } }
 
       it "is valid when used by the skin author" do
         work = build(:work, authors: [skin_author.default_pseud], work_skin_id: skin.id)
-        work.valid?
-        expect(work.errors[:base]).not_to include("You do not have permission to use that custom work stylesheet.")
+        expect(work).to be_valid
       end
 
       it "is invalid when used by a different user" do
         work = build(:work, work_skin_id: skin.id)
-        work.valid?
-        expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
+        expect(work).to be_invalid
+        expect(work.errors[:base]).to include("You do not have permission to use that work skin.")
+      end
+    end
+
+    context "when the work skin is public but not official" do
+      let(:skin) { create(:work_skin, author: skin_author).tap { |s| s.update_column(:public, true) } }
+
+      it "is valid when used by the skin author" do
+        work = build(:work, authors: [skin_author.default_pseud], work_skin_id: skin.id)
+        expect(work).to be_valid
+      end
+
+      it "is invalid when used by a different user" do
+        work = build(:work, work_skin_id: skin.id)
+        expect(work).to be_invalid
+        expect(work.errors[:base]).to include("You do not have permission to use that work skin.")
+      end
+
+      it "is valid when the skin author is an approved co-creator" do
+        work = build(:work, authors: [create(:user).default_pseud, skin_author.default_pseud], work_skin_id: skin.id)
+        expect(work).to be_valid
+      end
+
+      it "is invalid when the skin author is a pending co-creator" do
+        work_author = create(:user)
+        User.current_user = work_author
+        work = build(:work, authors: [work_author.default_pseud], work_skin_id: skin.id)
+        work.creatorships.build(pseud: skin_author.default_pseud)
+        expect(work).to be_invalid
+        expect(work.errors[:base]).to include("You do not have permission to use that work skin.")
       end
     end
 
@@ -338,23 +365,27 @@ describe Work do
 
       it "is valid when used by the skin author" do
         work = build(:work, authors: [skin_author.default_pseud], work_skin_id: private_skin.id)
-        work.valid?
-        expect(work.errors[:base]).not_to include("You do not have permission to use that custom work stylesheet.")
+        expect(work).to be_valid
       end
 
       it "is invalid when used by another user" do
         work = build(:work, work_skin_id: private_skin.id)
-        work.valid?
-        expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
+        expect(work).to be_invalid
+        expect(work.errors[:base]).to include("You do not have permission to use that work skin.")
       end
 
-      it "is invalid when the skin author is a pending co-author" do
+      it "is valid when the skin author is an approved co-creator" do
+        work = build(:work, authors: [create(:user).default_pseud, skin_author.default_pseud], work_skin_id: private_skin.id)
+        expect(work).to be_valid
+      end
+
+      it "is invalid when the skin author is a pending co-creator" do
         work_author = create(:user)
         User.current_user = work_author
         work = build(:work, authors: [work_author.default_pseud], work_skin_id: private_skin.id)
         work.creatorships.build(pseud: skin_author.default_pseud)
-        work.valid?
-        expect(work.errors[:base]).to include("You do not have permission to use that custom work stylesheet.")
+        expect(work).to be_invalid
+        expect(work.errors[:base]).to include("You do not have permission to use that work skin.")
       end
     end
   end

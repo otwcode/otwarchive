@@ -271,7 +271,7 @@ en:
               at_most: must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them.
           blocked_gifts: "%{byline} does not accept gifts."
           blocked_your_gifts: "%{byline} does not accept gifts from you."
-          work_skin_not_allowed: You do not have permission to use that custom work stylesheet.
+          work_skin_not_allowed: You do not have permission to use that work skin.
         work/parent_work_relationships:
           format: "%{message}"
     models:
