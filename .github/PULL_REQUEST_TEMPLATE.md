@@ -8,6 +8,7 @@
   as the *first* thing in your pull request title (e.g. `AO3-1234 Fix thing`)
 * [ ] Do you have fewer than 5 pull requests already open? If not, please wait
   until they are reviewed and merged before creating new pull requests.
+* [ ] I acknowledge that submitting code created or modified with the help of AI is a bannable offense.
 
 ## Issue
 
