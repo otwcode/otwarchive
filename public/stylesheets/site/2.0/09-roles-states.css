@@ -2,7 +2,7 @@
 https://otwcode.github.io/docs/classes-taxonomy.html#modifiers
 */
 
-.own, .draft, .draft .wrapper, .unread, .child, .unwrangled, .unreviewed {
+.own, .draft, .unread, .child, .unwrangled, .unreviewed {
   background: #ededed;
     opacity: 0.95;
 }

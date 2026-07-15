@@ -119,7 +119,6 @@ module SkinWizard
         .javascript .work.navigation .download .secondary,
         .own,
         .draft,
-        .draft .wrapper,
         .unread,
         .child,
         .unwrangled,
