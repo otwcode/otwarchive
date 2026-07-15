@@ -22,16 +22,16 @@ class FeedbacksController < ApplicationController
     @feedback.ip_address = request.remote_ip
     @feedback.referer = nil unless @feedback.referer && ArchiveConfig.PERMITTED_HOSTS.include?(URI(@feedback.referer).host)
     @feedback.site_skin = helpers.current_skin
-    if @feedback.save
-      @feedback.email_and_send
-      flash[:notice] = t("successfully_sent",
-        default: "Your message was sent to the Archive team - thank you!")
-      redirect_to(url_from(@feedback.referer) || root_path)
-    else
-      flash[:error] = t("failure_send",
-        default: "Sorry, your message could not be saved - please try again!")
-      render action: "new"
+    if @feedback.valid?
+      if @feedback.email_and_send
+        flash[:notice] = t(".successfully_sent")
+        redirect_to(url_from(@feedback.referer) || root_path)
+        return
+      else
+        flash[:error] = t(".failure_send")
+      end
     end
+    render action: "new"
   end
 
   private
