@@ -104,6 +104,8 @@ module OtwSanitize
       # Just in case we're missing a protocol
       url = "https://" + url unless url =~ /http/
       Addressable::URI.parse(url).normalize.host
+    rescue Addressable::URI::InvalidURIError
+      nil
     end
 
     def banned_source?
