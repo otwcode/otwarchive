@@ -672,5 +672,29 @@ namespace :After do
   task(remove_noncanonical_fandom_wrangling_assignments: :environment) do
     WranglingAssignment.joins("LEFT JOIN tags ON (tags.id = wrangling_assignments.fandom_id)").where(tags: { canonical: false }).find_each(&:destroy!)
   end
+
+  desc "Backfill missing username-matching pseuds"
+  task(backfill_missing_pseuds: :environment) do
+    users = User.where(
+      "NOT EXISTS (SELECT 1 FROM pseuds WHERE pseuds.name = users.login AND pseuds.user_id = users.id LIMIT 1)"
+    )
+    total = users.count
+    puts "Backfilling pseuds: found #{total} #{'user'.pluralize(total)} missing a username-matching pseud"
+
+    created = 0
+    failed = 0
+    users.find_each do |user|
+      Pseud.create!(name: user.login, user_id: user.id)
+      created += 1
+      puts "  Created pseud \"#{user.login}\" for user #{user.id}"
+    rescue ActiveRecord::RecordInvalid => e
+      failed += 1
+      puts "  Failed to create pseud \"#{user.login}\" for user #{user.id}: #{e.message}"
+    end
+
+    puts "Done: #{created} created, #{failed} failed"
+    STDOUT.flush
+  end
+
   # This is the end that you have to put new tasks above.
 end
