@@ -242,6 +242,8 @@ en:
           attributes:
             base:
               taken_by_user: You have already submitted nominations for that tag set. Try editing them instead.
+              too_many_character_nominations_per_fandom: You can only nominate %{limit} character tags per fandom.
+              too_many_relationship_nominations_per_fandom: You can only nominate %{limit} relationship tags per fandom.
         user:
           attributes:
             age_over_13:
