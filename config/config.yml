@@ -317,7 +317,6 @@ MAX_SEARCH_RESULTS: 100000
 # integer ranges (e.g. word count). If the query is for works with
 # a parameter greater than this limit, the user will get the "no results
 # found" page.
-# Note: limit can't be greater than the max value of a long.
 MAX_SEARCH_INT_RANGE: 2000000000
 
 # This is used to determine how many works or how many authors have to be
