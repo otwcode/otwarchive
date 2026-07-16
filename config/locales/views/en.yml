@@ -676,8 +676,11 @@ en:
       save: Save
       saved: Saved
     external_work_fields:
+      categories_help_title: Categories help
+      characters_help_title: Characters help
       fandoms_help_title: Fandom help
       ratings_help_title: Rating help
+      relationships_help_title: Relationships help
     filters:
       from: From
       to: To
@@ -864,10 +867,23 @@ en:
         footnote: Use this if your collection is not fandom-specific.
         label: Multifandom
     index:
+      main_content:
+        landmark_heading: List of Collections
+      navigation:
+        actions:
+          collections: Collections
+          filters: Filters
+          manage_items: Manage Collection Items
+          new_collection: New Collection
+          new_subcollection: New Subcollection
+          open_challenges: Open Challenges
+        landmark_heading: Navigation
       page_heading:
         challenges_subcollections_in: Challenges/Subcollections in %{collection}
         collections_in_the: Collections in the %{archive}
         collections_including: Collections including %{work}
+        no_results: Sorry, there were no collections found.
+        search_header: Collection
         users_collections: "%{user}'s Collections"
     sidebar:
       bookmarks: Bookmarked Items (%{count})
@@ -1664,6 +1680,42 @@ en:
           non_con:
             acronym: non-con
             title: non-consensual sex
+    tags_additional:
+      description: Any other tags you want to give your work (for example, "Angst", "Crossover", or "Tentacles"). You may also use this field to warn for things not covered by the Archive Warnings. Please do not enter fandom, relationship, or character names in this field. Multiple tags should be separated by commas.
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags on the Archive FAQ
+      page_heading: Additional Tags
+    tags_categories:
+      description: 'There are 6 categories of works on the Archive. While here we have given an interpretation of the abbreviations, the exact definitions of these vary from fandom to fandom and fan to fan; use whichever you feel are applicable, or else none:'
+      femslash:
+        abbreviation: F/F
+        description: Female/Female relationships
+      general:
+        abbreviation: Gen
+        description: 'General: no romantic or sexual relationships, or relationships which are not the main focus of the work'
+      het:
+        abbreviation: F/M
+        description: Female/Male relationships
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags on the Archive FAQ
+      multiple:
+        abbreviation: Multi
+        description: More than one kind of relationship, or a relationship with multiple partners
+      other:
+        abbreviation: Other
+        description: Other relationships
+      page_heading: Category Tags
+      slash:
+        abbreviation: M/M
+        description: Male/Male relationships
+    tags_characters:
+      description: The main character(s) in your work, separated by commas. Full names (personal name and family name) are preferred.
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags on the Archive FAQ
+      page_heading: Characters Tags
     tags_fandoms:
       description: The name(s) of the fandom(s) to which your work belongs. Full names, rather than abbreviations, are preferred. You may list multiple fandoms, separated by commas (for example, if your work is a crossover).
       more_info_html: For more information regarding Tags, including how to add tags not currently on the Archive, please read our %{tags_faq_link}.
@@ -1689,6 +1741,12 @@ en:
       teen_and_up_audiences:
         description: The content may be inappropriate for audiences under 13.
         header: Teen And Up Audiences
+    tags_relationships:
+      description: The relationships in your work. Full names are preferred (for example, "Mickey Mouse/Minnie Mouse" or "Rodney McKay & John Sheppard") when possible. You may list more than one relationship, separated by commas. Please note that all user-created tags must be 150 characters or less; if your work contains a large poly relationship or multiple characters with long names, you may want to consider shortening these names to just first names or surnames with initials to avoid going over the character limit while keeping the names recognizable.
+      more_info:
+        html: "(For more information, see the %{tags_faq_section_link}.)"
+        tags_faq_section: Tags on the Archive FAQ
+      page_heading: Relationships Tags
     tags_warnings:
       choose_not_to_use:
         description: Use this if you don't want to warn for anything. You may also choose this option if you don't know what you should warn for; if you don't like warning for certain topics or warnings in general; if you want to avoid some spoilers, but not others; etc.
@@ -1810,7 +1868,8 @@ en:
       effective: 'Effective: November 19, 2024'
       fanworks:
         bookmarks: Bookmarks
-        bookmarks_only_fanworks_html: "%{bookmarks_link} must only be created for fanworks. You may create %{external_bookmarks_link} for fanworks hosted on third-party sites."
+        bookmarks_only_fanworks_html: "%{bookmarks_link} must only be %{created_for_fanworks_link}. You may create %{external_bookmarks_link} for fanworks hosted on third-party sites."
+        created_for_fanworks: created for fanworks
         external_bookmarks: external bookmarks
         heading: II.B. Fanworks
         must_be_fanworks_html: Works must be fanworks. Posting a Work that primarily consists of %{non_fanwork_content_link} is not allowed.
@@ -1852,7 +1911,7 @@ en:
         technical_integrity: technical integrity
         tos_faq: FAQ for Section II.K
         tos_faq_in_parens_html: "(%{tos_faq_link})"
-        tos_faq_link_label: Offensive Content vs Illegal Content FAQ
+        tos_faq_link_label: Spam and Technical Integrity FAQ
         violates_us_law_html: If you encounter Content that you believe violates a specific law of the United States, you can %{report_it_to_us_link}.
       impersonation:
         function: function
@@ -1913,11 +1972,12 @@ en:
         tos_faq_link_label: Fannish Identities and Impersonation FAQ
       plagiarism:
         heading: II.E. Plagiarism
-        html: Plagiarism is the use of someone else's words, or %{their_expressions_of_their_ideas_link}, without attribution. Minor alterations (such as replacing names, substituting synonyms, or rearranging a few words) are insufficient to make a work your own. Plagiarism is not allowed. Deliberately creating a work using the same general idea as another work is not plagiarism, but citation may be appropriate.
+        html: Plagiarism is the use of someone else's words, or %{their_expressions_of_their_ideas_link}, without attribution. Minor alterations (such as replacing names, substituting synonyms, or rearranging a few words) are insufficient to make a work your own. Plagiarism is not allowed. Deliberately creating a work %{using_the_same_general_idea_link} as another work is not plagiarism, but citation may be appropriate.
         their_expressions_of_their_ideas: their expressions of their ideas
         tos_faq: FAQ for Section II.E
         tos_faq_in_parens_html: "(%{tos_faq_link})"
         tos_faq_link_label: Copyright Infringement and Plagiarism FAQ
+        using_the_same_general_idea: using the same general idea
       privacy_policy: Privacy Policy
       terms_of_service: Terms of Service
       toc:
@@ -1930,25 +1990,21 @@ en:
         tos_faq_in_parens_html: "(%{tos_faq_link})"
         tos_faq_link_label: Usernames, Icons, and Profiles FAQ
     diversity_statement:
-      archive_description_html: This archive is a permanent, panfandom place for fanworks, built by fans for fans. Whichever way you use the Archive, you're part of this, powering it, shaping it through your use and %{your_feedback_link}.
-      archive_for_you: 'No matter your appearance, circumstances, configuration or take on the world: if you enjoy consuming, creating or commenting on fanworks, the Archive is for you.'
-      archive_team: the Archive team
-      diversity_statement: Diversity Statement
-      dreamwidth: Dreamwidth's
-      dreamwidth_remix_html: This is a remix of %{dreamwidth_link} %{diversity_statement_link}.
-      few_restrictions: few restrictions
-      license:
-        creative_commons_by_sa: Creative Commons Attribution-Share Alike 3.0 Unported License
-        html: This work is licensed under a %{creative_commons_by_sa_link}.
-        image_alt: Creative Commons License
-      some_essential_parts: some essential parts
-      still_missing_html: 'We know that there are %{some_essential_parts_link} that are still missing to make the Archive truly panfandom: the ability to host fanworks other than text, an interface in languages other than English, and more ways for you to connect with each other, to name just a few. But with your support, we''ll get there.'
+      accessibility_commitment_html: We value making fannish activities and creations as accessible as possible to all those who wish to participate. We recognize that supporting diversity and inclusion is an ongoing responsibility, and we remain dedicated to developing AO3 and its policies in a way that reflects our commitment. As we %{update_ao3_link}, we will continue to prioritize features that improve the site's inclusivity and accessibility for everyone.
+      archive_description_html: AO3 is a permanent, panfandom archive for fanworks, %{built_by_link}. We want AO3 to be a place where all fannish works are recognized as legal and transformative, and where every fan of any media feels welcome, no matter who they are or how they use AO3. If you enjoy creating or engaging with fanworks, AO3 is for you.
+      built_by: built by fans, for fans
+      collaboration_statement_html: We dedicate our time to support AO3, but we can't do this work alone. All of us – %{donors_users_volunteers_link} – work together to foster a culture of inclusiveness on AO3 and the rest of the %{our_projects_link}.
+      content_policies: content policies
+      diversity_header: Diversity Statement
+      donors_users_volunteers: donors, users, and volunteers
+      feedback_statement_html: AO3 exists to support fans, fandoms, and fanworks of all kinds, and we welcome %{your_feedback_link} on how to make that possible.
+      inclusiveness_commitment_html: We take our commitment to %{maximum_inclusiveness_link} seriously. Our %{content_policies_link} are designed to give creators as much creative freedom as possible, while still allowing us to maintain our focus as a non-commercial fanwork archive. We strive to protect your rights to %{privacy_policy_link} and free expression, as outlined in our %{terms_of_service_link}.
+      maximum_inclusiveness: maximum inclusiveness of fanwork content
+      our_projects: Organization for Transformative Works' projects
+      privacy: privacy
       terms_of_service: Terms of Service
-      we_build_for: We are building this archive for you. Come be a part of it.
-      welcome_header: You are welcome at the Archive of Our Own.
-      what_we_do_html: We, %{archive_team_link}, know that we won't get everything right on the first try, and we won't be able to make everyone equally happy. But we strive to find a good balance, and we promise to respectfully consider your feedback and to take it seriously.
-      why_we_build: We are building this archive because we believe it's possible for people of all opinions and persuasions to come together and share with each other.
-      you_can_html: You are free to express your creativity within the %{few_restrictions_link} needed to keep the service viable for other users. The Archive strives to protect your rights to free expression and privacy; you can read about the details in our %{terms_of_service_link}.
+      update_ao3: update AO3
+      welcome_statement: You are welcome at the Archive of Our Own (AO3).
       your_feedback: your feedback
     donate:
       general:
@@ -2113,13 +2169,15 @@ en:
         heading: III.E. Your rights under applicable data privacy laws
         other_rights: other rights regarding your Personal Information
         potential_other_rights_html: You may have %{other_rights_link} under the laws of the jurisdiction in which you are located. We will not discriminate against you for making a request under the data privacy laws of applicable jurisdictions.
-        request_data_html: You can request that the OTW assemble the data that AO3 has about you, and provide you with a copy in electronic format. We agree to provide such data to you within a reasonable time if you are a resident or citizen of the European Union or another %{applicable_jurisdiction_link}.
+        request_data: request that the OTW assemble the data that AO3 has about you
+        request_data_html: You can %{request_data_link}, and provide you with a copy in electronic format. We agree to provide such data to you within a reasonable time if you are a resident or citizen of the European Union or another %{applicable_jurisdiction_link}.
         require_user_specific_proof: We reserve the right to require user-specific proof of identity before providing Personal Information to a requester. This is necessary to protect the safety and privacy of our users and personnel.
     site_map:
       about:
         ao3_news: AO3 News
         archive_faq: Archive FAQ
         content_policy: Content Policy
+        diversity_statement: Diversity Statement
         header: About the Archive of Our Own
         known_issues: Known Issues
         privacy_policy: Privacy Policy
@@ -2173,8 +2231,9 @@ en:
         answers_common_questions_html: Answers to common questions about the Abuse Policy can be found in the %{tos_faq_link}.
         appeals:
           appeal_decision: appeal a decision to the Policy & Abuse committee
+          decisions_are_final: PAC's decisions are final.
           heading: Appeals
-          html: The complainant or the subject of a complaint may %{appeal_decision_link}, in which case it will be reviewed by an additional PAC administrator. The original decision will remain in effect while an appeal is being reviewed. We will attempt to resolve appeals as speedily as possible, but we cannot guarantee any particular timeframe for a response. PAC's decisions are final.
+          html: The complainant or the subject of a complaint may %{appeal_decision_link}, in which case it will be reviewed by an additional PAC administrator. The original decision will remain in effect while an appeal is being reviewed. We will attempt to resolve appeals as speedily as possible, but we cannot guarantee any particular timeframe for a response. %{decisions_are_final_link}
         content_policy: Content Policy
         heading: I.I. Abuse Policy
         no_prescreen_html: We do not prescreen Content for violations of the Terms of Service, including violations of the %{content_policy_link}. Complaints are investigated only when they are submitted through the appropriate channels and with the appropriate information.
@@ -2197,7 +2256,8 @@ en:
           illegal_and_inappropriate_content_policy: Illegal and Inappropriate Content Policy
           immediate_removal: Non-Work Content, or any Content without valid contact information, that violates the TOS may be immediately removed.
           mandatory_tags_policy: Mandatory Tags Policy
-          potentially_legitimate_fanwork_html: If the Content that needs to be removed is a Work that includes potentially legitimate fanwork, the default will be to hide the Work. The Policy & Abuse committee has sole discretion to determine necessary exceptions to this default rule, which may include repeated violations of the TOS, any violations of the %{illegal_and_inappropriate_content_policy_link}, or any circumstances where the OTW reasonably believes that the Content is unlawful, including when it contains a true threat.
+          potentially_legitimate_fanwork_html: If the Content that needs to be removed is a Work that includes potentially legitimate fanwork, the default will be to hide the Work. The Policy & Abuse committee has sole discretion to determine necessary exceptions to this default rule, which may include repeated violations of the TOS, any violations of the %{illegal_and_inappropriate_content_policy_link}, or any circumstances where the OTW reasonably believes that the Content is unlawful, including when it contains a %{true_threat_link}.
+          true_threat: true threat
           voluntary_removal: When Content (whether a Work or otherwise) is hidden from public view, AO3 administrators may identify the nature of the problem with the Content and set a deadline for voluntary removal of the violating material. If the creator does not remove that material within the given deadline, AO3 administrators may permanently remove the Content. At the discretion of the Policy & Abuse committee, the creator may have the option to resubmit any non-violating material that was also removed.
         submitting_a_complaint:
           dmca_policy: DMCA Policy
@@ -3474,8 +3534,12 @@ en:
     work_form_associations_language:
       works_languages_help_title: Languages help
     work_form_tags:
+      additional_tags_help_title: Additional tags help
+      categories_help_title: Categories help
+      characters_help_title: Characters help
       fandoms_help_title: Fandom help
       ratings_help_title: Rating help
+      relationships_help_title: Relationships help
       warnings_help_title: Warning help
     work_header_navigation:
       chapter_index:

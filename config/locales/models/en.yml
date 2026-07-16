@@ -185,6 +185,10 @@ en:
             muted_id:
               taken: You have already muted that user.
           format: "%{message}"
+        owned_tag_set:
+          attributes:
+            title:
+              restricted_characters: "^The title of a tag set cannot include the following restricted characters: , &#94; * < > { } = ` \\ %"
         prompt:
           attributes:
             title:
@@ -234,6 +238,10 @@ en:
             subscribable:
               blank: The item you tried to subscribe to does not exist. It may have been deleted.
               format: "%{message}"
+        tag_set_nomination:
+          attributes:
+            base:
+              taken_by_user: You have already submitted nominations for that tag set. Try editing them instead.
         user:
           attributes:
             age_over_13:

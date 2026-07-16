@@ -92,6 +92,8 @@ en:
       show: Show
     create:
       success: Admin Post was successfully created.
+    edit:
+      page_title: Edit AO3 News Post
     post:
       error: Sorry, that Admin Post could not be posted.
       success: Admin Post was successfully posted.
@@ -149,6 +151,8 @@ en:
     show:
       chapter_position: " - Chapter %{position}"
       unrevealed: Mystery Work
+    update:
+      preview_notice: This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.
   collection_items:
     create:
       invited: invited
@@ -245,6 +249,8 @@ en:
   home:
     content:
       page_title: Content Policy
+    diversity:
+      page_title: Diversity Statement
     privacy:
       page_title: Privacy Policy
     tos:
