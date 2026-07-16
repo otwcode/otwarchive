@@ -33,159 +33,152 @@
     </ul>
     <h4><a href="#repeat_offenses"><%= t(".toc.repeat_offenses") %></a></h4></nav>
   <h3 class="heading" id="dmca_policy"><%= t(".dmca_policy.heading") %></h3>
-  <p><%= t(".dmca_policy.html", 
-  copyright_infringement_link: link_to(t(".dmca_policy.copyright_infringement"), tos_faq_path(anchor: "copyright_plagiarism_faq"))) %></p>
-  <p><%= t(".dmca_policy.details_html", 
-  uscode_link: link_to(t(".dmca_policy.uscode"), "https://www.law.cornell.edu/uscode/text/17/512"), 
-  legal_requirements_link: link_to(t(".dmca_policy.legal_requirements"), takedown_path(anchor: "dmca_takedown_requirements")), 
-  transformative_fanworks_are_legal_link: link_to(t(".dmca_policy.transformative_fanworks_are_legal"), "https://www.transformativeworks.org/faq/#faq-WhydoestheOTWbelievethattransformativeworksarelegal"), 
-  contact_legal_committee_link: link_to(t(".dmca_policy.contact_legal_committee"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy")) %></p>
+  <p><%= t(".dmca_policy.html",
+           copyright_infringement_link: link_to(t(".dmca_policy.copyright_infringement"), tos_faq_path(anchor: "copyright_plagiarism_faq"))) %></p>
+  <p><%= t(".dmca_policy.details_html",
+           uscode_link: link_to(t(".dmca_policy.uscode"), "https://www.law.cornell.edu/uscode/text/17/512"),
+           legal_requirements_link: link_to(t(".dmca_policy.legal_requirements"), takedown_path(anchor: "dmca_takedown_requirements")),
+           transformative_fanworks_are_legal_link: link_to(t(".dmca_policy.transformative_fanworks_are_legal"), "https://www.transformativeworks.org/faq/#faq-WhydoestheOTWbelievethattransformativeworksarelegal"),
+           contact_legal_committee_link: link_to(t(".dmca_policy.contact_legal_committee"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy")) %></p>
   <h4 class="heading" id="dmca_removal_options"><%= t(".dmca_policy.dmca_removal_options.heading") %></h4>
   <p><%= t(".dmca_policy.dmca_removal_options.intro") %></p>
   <ul>
-    <li><strong><a href="/abuse_reports/new"><%= t(".dmca_policy.dmca_removal_options.submit_an_abuse_report")%></a></strong><%= t(".dmca_policy.dmca_removal_options.submit_an_abuse_report_html",
-    colon: tag.strong(t(".dmca_policy.dmca_removal_options.colon")),
-    tos_link: link_to(t(".dmca_policy.dmca_removal_options.tos"), tos_path),
-    standard_of_confidentiality_link: link_to(t(".dmca_policy.dmca_removal_options.standard_of_confidentiality"), tos_faq_path(anchor: "report_anonymity")),
-    copyright_infringement_link: link_to(t(".dmca_policy.dmca_removal_options.copyright_infringement"), tos_faq_path(anchor: "copyright_plagiarism_faq")),
-    tos_faq_link: link_to(t(".dmca_policy.dmca_removal_options.tos_faq"), tos_faq_path(anchor: "report_infringement")))%>
+    <li><strong><a href="/abuse_reports/new"><%= t(".dmca_policy.dmca_removal_options.submit_an_abuse_report") %></a></strong><%= t(".dmca_policy.dmca_removal_options.submit_an_abuse_report_html",
+                                                                                                                                    colon: tag.strong(t(".dmca_policy.dmca_removal_options.colon")),
+                                                                                                                                    tos_link: link_to(t(".dmca_policy.dmca_removal_options.tos"), tos_path),
+                                                                                                                                    standard_of_confidentiality_link: link_to(t(".dmca_policy.dmca_removal_options.standard_of_confidentiality"), tos_faq_path(anchor: "report_anonymity")),
+                                                                                                                                    copyright_infringement_link: link_to(t(".dmca_policy.dmca_removal_options.copyright_infringement"), tos_faq_path(anchor: "copyright_plagiarism_faq")),
+                                                                                                                                    tos_faq_link: link_to(t(".dmca_policy.dmca_removal_options.tos_faq"), tos_faq_path(anchor: "report_infringement"))) %>
     </li>
-    <li><strong><a href="#dmca_takedown_instructions"><%= t(".dmca_policy.dmca_removal_options.file_a_dmca_takedown_notice")%></a></strong><%= t(".dmca_policy.dmca_removal_options.file_a_dmca_takedown_notice_html",
-    colon: tag.strong(t(".dmca_policy.dmca_removal_options.colon")),
-    only: tag.strong(t(".dmca_policy.dmca_removal_options.only")),
-    legal_requirements_link: link_to(t(".dmca_policy.dmca_removal_options.legal_requirements"),takedown_path(anchor: "dmca_takedown_requirements")),
-    not_subject_to_confidentiality_link: link_to(t(".dmca_policy.dmca_removal_options.not_subject_to_confidentiality"), tos_faq_path(anchor: "dmca_complaint")))%>
+    <li><strong><a href="#dmca_takedown_instructions"><%= t(".dmca_policy.dmca_removal_options.file_a_dmca_takedown_notice") %></a></strong><%= t(".dmca_policy.dmca_removal_options.file_a_dmca_takedown_notice_html",
+                                                                                                                                                  colon: tag.strong(t(".dmca_policy.dmca_removal_options.colon")),
+                                                                                                                                                  only: tag.strong(t(".dmca_policy.dmca_removal_options.only")),
+                                                                                                                                                  legal_requirements_link: link_to(t(".dmca_policy.dmca_removal_options.legal_requirements"), takedown_path(anchor: "dmca_takedown_requirements")),
+                                                                                                                                                  not_subject_to_confidentiality_link: link_to(t(".dmca_policy.dmca_removal_options.not_subject_to_confidentiality"), tos_faq_path(anchor: "dmca_complaint"))) %>
     </li>
   </ul>
-  <p><%= t(".dmca_policy.dmca_removal_options.do_not_submit_both_html", do_not: tag.strong(t(".dmca_policy.dmca_removal_options.do_not")))%></p>
+  <p><%= t(".dmca_policy.dmca_removal_options.do_not_submit_both_html", do_not: tag.strong(t(".dmca_policy.dmca_removal_options.do_not"))) %></p>
   <h5 class="heading" id="dmca_takedown_instructions"><%= t(".dmca_policy.dmca_takedown_instructions.heading") %></h5>
-  <p><%= t(".dmca_policy.dmca_takedown_instructions.initiate_a_dmca_html", legal_contact_form_link: link_to(t(".dmca_policy.dmca_takedown_instructions.legal_contact_form"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy"))%></p>
+  <p><%= t(".dmca_policy.dmca_takedown_instructions.initiate_a_dmca_html", legal_contact_form_link: link_to(t(".dmca_policy.dmca_takedown_instructions.legal_contact_form"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy")) %></p>
   <address>
-    <%= t(".dmca_policy.dmca_takedown_instructions.otw")%><br />
-    <%= t(".dmca_policy.dmca_takedown_instructions.street")%><br />
-    <%= t(".dmca_policy.dmca_takedown_instructions.city")%><br />
-    <%= t(".dmca_policy.dmca_takedown_instructions.attention_legal")%>
+    <%= t(".dmca_policy.dmca_takedown_instructions.otw") %><br />
+    <%= t(".dmca_policy.dmca_takedown_instructions.street") %><br />
+    <%= t(".dmca_policy.dmca_takedown_instructions.city") %><br />
+    <%= t(".dmca_policy.dmca_takedown_instructions.attention_legal") %>
   </address>
-  <p><%= t(".dmca_policy.dmca_takedown_instructions.prefer_to_receive_dmca")%></p>
-  <h5 class="heading" id="dmca_takedown_requirements"><%= t(".dmca_policy.dmca_takedown_requirements.heading")%></h5>
-  <p><%= t(".dmca_policy.dmca_takedown_requirements.notice_must_comply")%></p>
+  <p><%= t(".dmca_policy.dmca_takedown_instructions.prefer_to_receive_dmca") %></p>
+  <h5 class="heading" id="dmca_takedown_requirements"><%= t(".dmca_policy.dmca_takedown_requirements.heading") %></h5>
+  <p><%= t(".dmca_policy.dmca_takedown_requirements.notice_must_comply") %></p>
   <ol>
-    <li><%=t(".dmca_policy.dmca_takedown_requirements.signature")%></li>
-    <li><%=t(".dmca_policy.dmca_takedown_requirements.contact")%></li>
-    <li><%=t(".dmca_policy.dmca_takedown_requirements.identification_of_work")%></li>
-    <li><%=t(".dmca_policy.dmca_takedown_requirements.url_on_our_site")%></li>
-    <li><%=t(".dmca_policy.dmca_takedown_requirements.statement_of_good_faith")%></li>
+    <li><%= t(".dmca_policy.dmca_takedown_requirements.signature") %></li>
+    <li><%= t(".dmca_policy.dmca_takedown_requirements.contact") %></li>
+    <li><%= t(".dmca_policy.dmca_takedown_requirements.identification_of_work") %></li>
+    <li><%= t(".dmca_policy.dmca_takedown_requirements.url_on_our_site") %></li>
+    <li><%= t(".dmca_policy.dmca_takedown_requirements.statement_of_good_faith") %></li>
     <li>
       <ol>
-        <li><%=t(".dmca_policy.dmca_takedown_requirements.perjury_statement_html", made_under_penalty_of_perjury: tag.strong(t(".dmca_policy.dmca_takedown_requirements.made_under_penalty_of_perjury")))%></li>
-        <li><%=t(".dmca_policy.dmca_takedown_requirements.accurate_statement")%></li>
+        <li><%= t(".dmca_policy.dmca_takedown_requirements.perjury_statement_html", made_under_penalty_of_perjury: tag.strong(t(".dmca_policy.dmca_takedown_requirements.made_under_penalty_of_perjury"))) %></li>
+        <li><%= t(".dmca_policy.dmca_takedown_requirements.accurate_statement") %></li>
       </ol>
     </li>
   </ol>
-  <p><%=t(".dmca_policy.dmca_takedown_requirements.subject_to_liability")%></p>
-  <h5 class="heading" id="dmca_takedown_process"><%=t(".dmca_policy.dmca_takedown_process.heading")%></h5>
-  <p><%=t(".dmca_policy.dmca_takedown_process.remove_the_content_html", legal_requirements_link: link_to(t(".dmca_policy.dmca_takedown_process.legal_requirements"), takedown_path(anchor: "dmca_takedown_requirements")))%></p>
-  <p><%=t(".dmca_policy.dmca_takedown_process.when_the_content_is_removed_html", lumen_link: link_to(t(".dmca_policy.dmca_takedown_process.lumen"), "https://lumendatabase.org/"))%></p>
-  <p><%=t(".dmca_policy.dmca_takedown_process.dmca_counternotice")%></p>
-  <p><%=t(".dmca_policy.dmca_takedown_process.if_receives_a_dmca_counternotice")%></p>
-  <h4 class="heading" id="dmca_appeal_options"><%=t(".dmca_policy.dmca_appeal_options.heading")%></h4>
-  <p><%=t(".dmca_policy.dmca_appeal_options.html", 
-  copyright_infringement_link: link_to(t(".dmca_policy.dmca_appeal_options.copyright_infringement"), content_path(anchor: "II.D")),
-  plagiarism_link: link_to(t(".dmca_policy.dmca_appeal_options.plagiarism"), content_path(anchor: "II.E")),
-  tos_link: link_to(t(".dmca_policy.dmca_appeal_options.tos"), tos_path),
-  tos_faq_link: link_to(t(".dmca_policy.dmca_appeal_options.tos_faq"), tos_faq_path(anchor: "copyright_plagiarism_faq"))
-  )%></p>
-  <p><%=t(".dmca_policy.dmca_appeal_options.remove_the_content_html",
-  notify_by_email_link: link_to(t(".dmca_policy.dmca_appeal_options.notify_by_email"), tos_faq_path(anchor: "complaint_notification")), 
-  lumen_link: link_to(t(".dmca_policy.dmca_appeal_options.lumen"), "https://lumendatabase.org/")
-  )%></p>
-  <p><%=t(".dmca_policy.dmca_appeal_options.cannot_reupload_html",
-  you: tag.strong(t(".dmca_policy.dmca_appeal_options.you")),
-  cannot: tag.em(tag.strong(t(".dmca_policy.dmca_appeal_options.cannot"))),
-  repost_until_counternotice: tag.strong(t(".dmca_policy.dmca_appeal_options.repost_until_counternotice")),
-  suspend_your_account_link: link_to(t(".dmca_policy.dmca_appeal_options.suspend_your_account"), takedown_path(anchor: "repeat_offenses"))
-  )%></p>
-  <h5 class="heading" id="dmca_counternotice_instructions"><%=t(".dmca_policy.dmca_counternotice_instructions.heading")%></h5>
-  <p><%=t(".dmca_policy.dmca_counternotice_instructions.counternotice_html",
-  willing_to_defend: tag.strong(t(".dmca_policy.dmca_counternotice_instructions.willing_to_defend")),
-  )%></p>
+  <p><%= t(".dmca_policy.dmca_takedown_requirements.subject_to_liability") %></p>
+  <h5 class="heading" id="dmca_takedown_process"><%= t(".dmca_policy.dmca_takedown_process.heading") %></h5>
+  <p><%= t(".dmca_policy.dmca_takedown_process.remove_the_content_html", legal_requirements_link: link_to(t(".dmca_policy.dmca_takedown_process.legal_requirements"), takedown_path(anchor: "dmca_takedown_requirements"))) %></p>
+  <p><%= t(".dmca_policy.dmca_takedown_process.when_the_content_is_removed_html", lumen_link: link_to(t(".dmca_policy.dmca_takedown_process.lumen"), "https://lumendatabase.org/")) %></p>
+  <p><%= t(".dmca_policy.dmca_takedown_process.dmca_counternotice") %></p>
+  <p><%= t(".dmca_policy.dmca_takedown_process.if_receives_a_dmca_counternotice") %></p>
+  <h4 class="heading" id="dmca_appeal_options"><%= t(".dmca_policy.dmca_appeal_options.heading") %></h4>
+  <p><%= t(".dmca_policy.dmca_appeal_options.html",
+           copyright_infringement_link: link_to(t(".dmca_policy.dmca_appeal_options.copyright_infringement"), content_path(anchor: "II.D")),
+           plagiarism_link: link_to(t(".dmca_policy.dmca_appeal_options.plagiarism"), content_path(anchor: "II.E")),
+           tos_link: link_to(t(".dmca_policy.dmca_appeal_options.tos"), tos_path),
+           tos_faq_link: link_to(t(".dmca_policy.dmca_appeal_options.tos_faq"), tos_faq_path(anchor: "copyright_plagiarism_faq"))) %></p>
+  <p><%= t(".dmca_policy.dmca_appeal_options.remove_the_content_html",
+           notify_by_email_link: link_to(t(".dmca_policy.dmca_appeal_options.notify_by_email"), tos_faq_path(anchor: "complaint_notification")),
+           lumen_link: link_to(t(".dmca_policy.dmca_appeal_options.lumen"), "https://lumendatabase.org/")) %></p>
+  <p><%= t(".dmca_policy.dmca_appeal_options.cannot_reupload_html",
+           you: tag.strong(t(".dmca_policy.dmca_appeal_options.you")),
+           cannot: tag.em(tag.strong(t(".dmca_policy.dmca_appeal_options.cannot"))),
+           repost_until_counternotice: tag.strong(t(".dmca_policy.dmca_appeal_options.repost_until_counternotice")),
+           suspend_your_account_link: link_to(t(".dmca_policy.dmca_appeal_options.suspend_your_account"), takedown_path(anchor: "repeat_offenses"))) %></p>
+  <h5 class="heading" id="dmca_counternotice_instructions"><%= t(".dmca_policy.dmca_counternotice_instructions.heading") %></h5>
+  <p><%= t(".dmca_policy.dmca_counternotice_instructions.counternotice_html",
+           willing_to_defend: tag.strong(t(".dmca_policy.dmca_counternotice_instructions.willing_to_defend"))) %></p>
   <p>
-  <%=t(".dmca_policy.dmca_counternotice_instructions.contact_lawyer_html",
-  lumen_dmca_link: link_to(t(".dmca_policy.dmca_counternotice_instructions.lumen_dmca"), "https://lumendatabase.org/topics/14")
-  )%></p>
+  <%= t(".dmca_policy.dmca_counternotice_instructions.contact_lawyer_html",
+        lumen_dmca_link: link_to(t(".dmca_policy.dmca_counternotice_instructions.lumen_dmca"), "https://lumendatabase.org/topics/14")) %></p>
   <p>
-  <%=t(".dmca_policy.dmca_counternotice_instructions.initiate_counter_request_html",
-  legal_contact_form_link: link_to(t(".dmca_policy.dmca_counternotice_instructions.legal_contact_form"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy")
-  )%></p>
+  <%= t(".dmca_policy.dmca_counternotice_instructions.initiate_counter_request_html",
+        legal_contact_form_link: link_to(t(".dmca_policy.dmca_counternotice_instructions.legal_contact_form"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy")) %></p>
   <address>
-    <%= t(".dmca_policy.dmca_counternotice_instructions.otw")%><br />
-    <%= t(".dmca_policy.dmca_counternotice_instructions.street")%><br />
-    <%= t(".dmca_policy.dmca_counternotice_instructions.city")%><br />
-    <%= t(".dmca_policy.dmca_counternotice_instructions.attention_legal")%>
+    <%= t(".dmca_policy.dmca_counternotice_instructions.otw") %><br />
+    <%= t(".dmca_policy.dmca_counternotice_instructions.street") %><br />
+    <%= t(".dmca_policy.dmca_counternotice_instructions.city") %><br />
+    <%= t(".dmca_policy.dmca_counternotice_instructions.attention_legal") %>
   </address>
-  <p><%= t(".dmca_policy.dmca_counternotice_instructions.prefer_to_receive_dmca")%></p>
-  <p><%= t(".dmca_policy.dmca_counternotice_instructions.no_time_limit_to_file")%></p>
-  <h5 class="heading" id="dmca_counternotice_requirements"><%=t(".dmca_policy.dmca_counternotice_requirements.heading")%></h5>
-  <p><%= t(".dmca_policy.dmca_counternotice_requirements.counternotice_comply")%></p>
+  <p><%= t(".dmca_policy.dmca_counternotice_instructions.prefer_to_receive_dmca") %></p>
+  <p><%= t(".dmca_policy.dmca_counternotice_instructions.no_time_limit_to_file") %></p>
+  <h5 class="heading" id="dmca_counternotice_requirements"><%= t(".dmca_policy.dmca_counternotice_requirements.heading") %></h5>
+  <p><%= t(".dmca_policy.dmca_counternotice_requirements.counternotice_comply") %></p>
   <ol>
-    <li><%= t(".dmca_policy.dmca_counternotice_requirements.signature")%></li>
-    <li><%= t(".dmca_policy.dmca_counternotice_requirements.name_info")%></li>
-    <li><%= t(".dmca_policy.dmca_counternotice_requirements.removed_url")%></li>
-    <li><%= t(".dmca_policy.dmca_counternotice_requirements.statement_html", made_under_penalty_of_perjury: tag.strong(t(".dmca_policy.dmca_counternotice_requirements.made_under_penalty_of_perjury")))%></li>
-    <li><%= t(".dmca_policy.dmca_counternotice_requirements.statement_of_consent")%>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.signature") %></li>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.name_info") %></li>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.removed_url") %></li>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.statement_html", made_under_penalty_of_perjury: tag.strong(t(".dmca_policy.dmca_counternotice_requirements.made_under_penalty_of_perjury"))) %></li>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.statement_of_consent") %>
       <ol>
-        <li><%= t(".dmca_policy.dmca_counternotice_requirements.district")%></li>
-        <li><%= t(".dmca_policy.dmca_counternotice_requirements.otw_district_html", manhattan_new_york_link: link_to(t(".dmca_policy.dmca_counternotice_requirements.manhattan_new_york"), tos_path(anchor: "I.A.3")))%></li>
+        <li><%= t(".dmca_policy.dmca_counternotice_requirements.district") %></li>
+        <li><%= t(".dmca_policy.dmca_counternotice_requirements.otw_district_html", manhattan_new_york_link: link_to(t(".dmca_policy.dmca_counternotice_requirements.manhattan_new_york"), tos_path(anchor: "I.A.3"))) %></li>
       </ol>
     </li>
-    <li><%= t(".dmca_policy.dmca_counternotice_requirements.statement_of_service")%></li>
+    <li><%= t(".dmca_policy.dmca_counternotice_requirements.statement_of_service") %></li>
   </ol>
-  <p><%= t(".dmca_policy.dmca_counternotice_requirements.subject_to_liability")%></p>
-  <h5 class="heading" id="dmca_counternotice_process"><%= t(".dmca_policy.dmca_counternotice_process.heading")%></h5>
-  <p><%= t(".dmca_policy.dmca_counternotice_process.counternotice_notification")%></p>
-  <p><%= t(".dmca_policy.dmca_counternotice_process.restore_content_html", lumen_link: link_to(t(".dmca_policy.dmca_counternotice_process.lumen"), "https://lumendatabase.org/"))%></p>
-  <h3 class="heading" id="tida_policy"><%=t(".tida_policy.heading")%></h3>
-  <p><%=t(".tida_policy.intro")%></p>
-  <h4 class="heading" id="tida_removal_options"><%=t(".tida_policy.tida_removal_options.heading")%></h4>
-  <p><%=t(".tida_policy.tida_removal_options.intro")%></p>
+  <p><%= t(".dmca_policy.dmca_counternotice_requirements.subject_to_liability") %></p>
+  <h5 class="heading" id="dmca_counternotice_process"><%= t(".dmca_policy.dmca_counternotice_process.heading") %></h5>
+  <p><%= t(".dmca_policy.dmca_counternotice_process.counternotice_notification") %></p>
+  <p><%= t(".dmca_policy.dmca_counternotice_process.restore_content_html", lumen_link: link_to(t(".dmca_policy.dmca_counternotice_process.lumen"), "https://lumendatabase.org/")) %></p>
+  <h3 class="heading" id="tida_policy"><%= t(".tida_policy.heading") %></h3>
+  <p><%= t(".tida_policy.intro") %></p>
+  <h4 class="heading" id="tida_removal_options"><%= t(".tida_policy.tida_removal_options.heading") %></h4>
+  <p><%= t(".tida_policy.tida_removal_options.intro") %></p>
   <ul>
-    <li><strong><a href="#tida_takedown_instructions"><%=t(".tida_policy.tida_removal_options.file_a_request_with_the_otw")%></a></strong><%=t(".tida_policy.tida_removal_options.file_a_request_with_the_otw_html", 
-    colon: tag.strong(t(".tida_policy.tida_removal_options.colon")), 
-    only: tag.strong(t(".tida_policy.tida_removal_options.only")),
-    legal_requirements_link: link_to(t(".tida_policy.tida_removal_options.legal_requirements"), takedown_path(anchor: "tida_takedown_requirements"))
-    )%></li>
-    <li><strong><%=t(".tida_policy.tida_removal_options.file_a_request_with_the_image_host")%></strong><%=t(".tida_policy.tida_removal_options.file_a_request_with_the_image_host_intro")%></li>
+    <li><strong><a href="#tida_takedown_instructions"><%= t(".tida_policy.tida_removal_options.file_a_request_with_the_otw") %></a></strong><%= t(".tida_policy.tida_removal_options.file_a_request_with_the_otw_html",
+                                                                                                                                                  colon: tag.strong(t(".tida_policy.tida_removal_options.colon")),
+                                                                                                                                                  only: tag.strong(t(".tida_policy.tida_removal_options.only")),
+                                                                                                                                                  legal_requirements_link: link_to(t(".tida_policy.tida_removal_options.legal_requirements"), takedown_path(anchor: "tida_takedown_requirements"))) %></li>
+    <li><strong><%= t(".tida_policy.tida_removal_options.file_a_request_with_the_image_host") %></strong><%= t(".tida_policy.tida_removal_options.file_a_request_with_the_image_host_intro") %></li>
   </ul>
-  <h5 class="heading" id="tida_takedown_instructions"><%=t(".tida_policy.tida_takedown_instructions.heading")%></h5>
-  <p><%=t(".tida_policy.tida_takedown_instructions.intro")%></p>
-  <p><%=t(".tida_policy.tida_takedown_instructions.legal_contact_html", legal_contact_form_link: link_to(t(".tida_policy.tida_takedown_instructions.legal_contact_form"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy"), will_not_process: tag.strong(t(".tida_policy.tida_takedown_instructions.will_not_process")))%></p>
-  <h5 class="heading" id="tida_takedown_requirements"><%=t(".tida_policy.tida_takedown_requirements.heading")%></h5>
-  <p><%=t(".tida_policy.tida_takedown_requirements.intro")%></p>
+  <h5 class="heading" id="tida_takedown_instructions"><%= t(".tida_policy.tida_takedown_instructions.heading") %></h5>
+  <p><%= t(".tida_policy.tida_takedown_instructions.intro") %></p>
+  <p><%= t(".tida_policy.tida_takedown_instructions.legal_contact_html", legal_contact_form_link: link_to(t(".tida_policy.tida_takedown_instructions.legal_contact_form"), "https://www.transformativeworks.org/contact_us/?who=Legal%20Advocacy"), will_not_process: tag.strong(t(".tida_policy.tida_takedown_instructions.will_not_process"))) %></p>
+  <h5 class="heading" id="tida_takedown_requirements"><%= t(".tida_policy.tida_takedown_requirements.heading") %></h5>
+  <p><%= t(".tida_policy.tida_takedown_requirements.intro") %></p>
   <ol>
-    <li><%=t(".tida_policy.tida_takedown_requirements.signature")%></li>
-    <li><%=t(".tida_policy.tida_takedown_requirements.contact_info")%></li>
-    <li><%=t(".tida_policy.tida_takedown_requirements.url_of_image")%></li>
-    <li><%=t(".tida_policy.tida_takedown_requirements.statement_html", made_by_individual: tag.strong(t(".tida_policy.tida_takedown_requirements.made_by_individual")))%>
+    <li><%= t(".tida_policy.tida_takedown_requirements.signature") %></li>
+    <li><%= t(".tida_policy.tida_takedown_requirements.contact_info") %></li>
+    <li><%= t(".tida_policy.tida_takedown_requirements.url_of_image") %></li>
+    <li><%= t(".tida_policy.tida_takedown_requirements.statement_html", made_by_individual: tag.strong(t(".tida_policy.tida_takedown_requirements.made_by_individual"))) %>
       <ol>
-        <li><%=t(".tida_policy.tida_takedown_requirements.image_in_question")%></li>
-        <li><%=t(".tida_policy.tida_takedown_requirements.good_faith_belief")%></li>
+        <li><%= t(".tida_policy.tida_takedown_requirements.image_in_question") %></li>
+        <li><%= t(".tida_policy.tida_takedown_requirements.good_faith_belief") %></li>
       </ol>
     </li>
   </ol>
-  <h5 class="heading" id="tida_takedown_process"><%=t(".tida_policy.tida_takedown_process.heading")%></h5>
-  <p><%=t(".tida_policy.tida_takedown_process.intro_html", legal_requirements_link: link_to(t(".tida_policy.tida_takedown_process.legal_requirements"), takedown_path(anchor: "tida_takedown_requirements")))%></p>
-  <p><%=t(".tida_policy.tida_takedown_process.reasonable_effort_to_notify")%></p>
-  <p><%=t(".tida_policy.tida_takedown_process.they_may_appeal")%></p>
-  <h4 class="heading" id="tida_appeal_options"><%=t(".tida_policy.tida_appeal_options.heading")%></h4>
-  <p><%=t(".tida_policy.tida_appeal_options.reasonable_effort_to_notify_html", notify_by_email_link: link_to(t(".tida_policy.tida_appeal_options.notify_by_email"), tos_faq_path(anchor: "complaint_notification")))%></p>
-  <p><%=t(".tida_policy.tida_appeal_options.following_options")%></p>
+  <h5 class="heading" id="tida_takedown_process"><%= t(".tida_policy.tida_takedown_process.heading") %></h5>
+  <p><%= t(".tida_policy.tida_takedown_process.intro_html", legal_requirements_link: link_to(t(".tida_policy.tida_takedown_process.legal_requirements"), takedown_path(anchor: "tida_takedown_requirements"))) %></p>
+  <p><%= t(".tida_policy.tida_takedown_process.reasonable_effort_to_notify") %></p>
+  <p><%= t(".tida_policy.tida_takedown_process.they_may_appeal") %></p>
+  <h4 class="heading" id="tida_appeal_options"><%= t(".tida_policy.tida_appeal_options.heading") %></h4>
+  <p><%= t(".tida_policy.tida_appeal_options.reasonable_effort_to_notify_html", notify_by_email_link: link_to(t(".tida_policy.tida_appeal_options.notify_by_email"), tos_faq_path(anchor: "complaint_notification"))) %></p>
+  <p><%= t(".tida_policy.tida_appeal_options.following_options") %></p>
   <ul>
-    <li><strong><%=t(".tida_policy.tida_appeal_options.remove_image")%></strong><%=t(".tida_policy.tida_appeal_options.remove_image_html", tos_link: link_to(t(".tida_policy.tida_appeal_options.tos"), tos_path))%></li>
-    <li><strong><%=t(".tida_policy.tida_appeal_options.submit_an_appeal")%></strong><%=t(".tida_policy.tida_appeal_options.submit_an_appeal_html", original_request_link: link_to(t(".tida_policy.tida_appeal_options.original_request"), takedown_path(anchor: "tida_takedown_requirements")))%></li>
+    <li><strong><%= t(".tida_policy.tida_appeal_options.remove_image") %></strong><%= t(".tida_policy.tida_appeal_options.remove_image_html", tos_link: link_to(t(".tida_policy.tida_appeal_options.tos"), tos_path)) %></li>
+    <li><strong><%= t(".tida_policy.tida_appeal_options.submit_an_appeal") %></strong><%= t(".tida_policy.tida_appeal_options.submit_an_appeal_html", original_request_link: link_to(t(".tida_policy.tida_appeal_options.original_request"), takedown_path(anchor: "tida_takedown_requirements"))) %></li>
   </ul>
-  <p><%=t(".tida_policy.tida_appeal_options.reupload_html", suspend_your_account_link: link_to(t(".tida_policy.tida_appeal_options.suspend_your_account"), takedown_path(anchor: "repeat_offenses")))%></p>
-  <h3 class="heading" id="repeat_offenses"><%=t(".repeat_offenses.heading")%></h3>
-  <p><%=t(".repeat_offenses.suspend_users_html", suspend_link: link_to(t(".repeat_offenses.suspend"), tos_faq_path(anchor: "penalty")))%></p>
+  <p><%= t(".tida_policy.tida_appeal_options.reupload_html", suspend_your_account_link: link_to(t(".tida_policy.tida_appeal_options.suspend_your_account"), takedown_path(anchor: "repeat_offenses"))) %></p>
+  <h3 class="heading" id="repeat_offenses"><%= t(".repeat_offenses.heading") %></h3>
+  <p><%= t(".repeat_offenses.suspend_users_html", suspend_link: link_to(t(".repeat_offenses.suspend"), tos_faq_path(anchor: "penalty"))) %></p>
   <hr />
-  <p><small><%=t(".license_html", cc_attribution_4_0_international_link: link_to(t(".cc_attribution_4_0_international"), "https://creativecommons.org/licenses/by-sa/4.0/"))%></small></p>
+  <p><small><%= t(".license_html", cc_attribution_4_0_international_link: link_to(t(".cc_attribution_4_0_international"), "https://creativecommons.org/licenses/by-sa/4.0/")) %></small></p>
 </div>
