@@ -1,15 +1,17 @@
-<h2 class="heading"><%= t(".heading.html", otw: tag.abbr(t(".heading.otw"), title: t(".heading.otw_long"))) %></h2>
+<h2 class="heading"><%= t(".heading.html", otw: t(".heading.otw")) %></h2>
 
 <div class="userstuff">
   <h3 class="heading" id="ao3"><%= t(".heading.about_ao3") %></h3>
 
-  <p><%= t(".ao3.description") %></p>
+  <p>
+    <%= t(".ao3.description_html",
+          archive_of_our_own_link: link_to(t(".ao3.archive_of_our_own"), "https://www.transformativeworks.org/our-projects/archive-of-our-own/")) %>
+  </p>
 
   <p>
-    <%= tag.strong(t(".ao3.inclusiveness_on_ao3_html",
-          inclusiveness_link: link_to(t(".ao3.inclusiveness"), tos_faq_path(anchor: "max_inclusiveness")))) %>
-
     <%= t(".ao3.inclusiveness_html",
+          inclusiveness_on_ao3_bold: tag.strong(t(".ao3.inclusiveness_on_ao3_html",
+            maximum_inclusiveness_link: link_to(t(".ao3.maximum_inclusiveness"), tos_faq_path(anchor: "max_inclusiveness")))),
           content_policy_link: link_to(t(".ao3.content_policy"), content_path),
           tos_link: link_to(t(".ao3.tos"), tos_path)) %>
   </p>
@@ -23,7 +25,7 @@
 
   <p>
     <%= t(".ao3.beta_html",
-          fanlore_ao3_link: link_to(t(".ao3.fanlore_ao3"), "https://fanlore.org/wiki/Archive_of_Our_Own")) %>
+          ao3_history_fanlore_link: link_to(t(".ao3.ao3_history_fanlore"), "https://fanlore.org/wiki/Archive_of_Our_Own")) %>
   </p>
 
   <h4 class="heading" id="our_team"><%= t(".heading.our_team") %></h4>
@@ -72,7 +74,7 @@
     </li>
     <li>
       <%= t(".our_team.user_response_details_html",
-            user_response_link: link_to(t(".our_team.user_response"), "https://www.transformativeworks.org/our-projects/archive-of-our-own/")) %>
+            user_response_link: link_to(t(".our_team.user_response"), "https://www.transformativeworks.org/committees/user-response-translation-committee/")) %>
     </li>
   </ul>
 
@@ -91,7 +93,7 @@
     <li>
       <%= t(".major_projects.fanlore_details_html",
             fanlore_link: link_to(t(".major_projects.fanlore"), "https://www.transformativeworks.org/our-projects/fanlore/"),
-            fanlore_visit_link: link_to(t(".major_projects.fanlore_visit"), "https://fanlore.org")) %>
+            visit_fanlore_link: link_to(t(".major_projects.visit_fanlore"), "https://fanlore.org")) %>
     </li>
     <li>
       <%= t(".major_projects.legal_details_html",
@@ -100,12 +102,12 @@
     <li>
       <%= t(".major_projects.open_doors_details_html",
             open_doors_link: link_to(t(".major_projects.open_doors"), "https://www.transformativeworks.org/our-projects/open-doors/"),
-            open_doors_visit_link: link_to(t(".major_projects.open_doors_visit"), "https://opendoors.transformativeworks.org")) %>
+            visit_open_doors_link: link_to(t(".major_projects.visit_open_doors"), "https://opendoors.transformativeworks.org")) %>
     </li>
     <li>
       <%= t(".major_projects.twc_details_html",
             twc_link: tag.cite(link_to(t(".major_projects.twc"), "https://www.transformativeworks.org/our-projects/twc/")),
-            twc_visit_link: link_to(t(".major_projects.twc_visit"), "https://journal.transformativeworks.org/index.php/twc")) %>
+            visit_twc_link: link_to(t(".major_projects.visit_twc"), "https://journal.transformativeworks.org/index.php/twc")) %>
     </li>
   </ul>
 
@@ -115,7 +117,7 @@
     <%= t(".learn_more.html",
           ao3_faq_link: link_to(t(".learn_more.ao3_faq"), archive_faqs_path),
           transformative_works_faq_link: link_to(t(".learn_more.transformative_works_faq"), "https://www.transformativeworks.org/faq/"),
-          donate_link: link_to(t(".learn_more.donate"), donate_path)) %>
+          donate_or_volunteer_link: link_to(t(".learn_more.donate_or_volunteer"), donate_path)) %>
   </p>
 
   <p>
