@@ -40,6 +40,8 @@ en:
         requests_num_required: Number of requests required per sign-up
       language:
         short: Abbreviation
+      locale:
+        interface_enabled: Use for interface
       meta_tagging:
         meta_tag: Metatag
         meta_tag_id: Metatag
@@ -98,6 +100,8 @@ en:
             comment_permissions:
               format: "%{message}"
               invalid_permissions: Comment permissions are invalid.
+            translated_post_id:
+              must_be_posted_first: cannot be posted before the original post
         block:
           attributes:
             blocked:
@@ -167,6 +171,10 @@ en:
               official: Please log out of your official account!
           format: "%{message}"
           taken: You have already left kudos here. :)
+        locale:
+          attributes:
+            interface_enabled:
+              only_if_email_enabled: can only be enabled if use for emails is also enabled.
         mute:
           attributes:
             muted:
@@ -177,7 +185,14 @@ en:
             muted_id:
               taken: You have already muted that user.
           format: "%{message}"
+        owned_tag_set:
+          attributes:
+            title:
+              restricted_characters: "^The title of a tag set cannot include the following restricted characters: , &#94; * < > { } = ` \\ %"
         prompt:
+          attributes:
+            title:
+              start_with_special_characters: cannot begin with =, +, -, @ or a whitespace character.
           tags_not_in_fandom: "^These %{tag_label} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)"
         prompt_meme:
           attributes:
@@ -223,6 +238,10 @@ en:
             subscribable:
               blank: The item you tried to subscribe to does not exist. It may have been deleted.
               format: "%{message}"
+        tag_set_nomination:
+          attributes:
+            base:
+              taken_by_user: You have already submitted nominations for that tag set. Try editing them instead.
         user:
           attributes:
             age_over_13:

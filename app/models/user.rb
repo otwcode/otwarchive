@@ -435,6 +435,12 @@ class User < ApplicationRecord
     (Time.current - created_at).seconds.in_days.to_i < AdminSetting.current.account_age_threshold_for_comment_spam_check
   end
 
+  def should_rate_limit_comments?
+    # When comment_count_threshold_for_comment_rate_limit is 0, no users should be rate limited based on comment count, so don't count the comments at all
+    based_on_comments_count = AdminSetting.current.comment_count_threshold_for_comment_rate_limit.zero? ? false : comments.count < AdminSetting.current.comment_count_threshold_for_comment_rate_limit
+    should_spam_check_comments? || based_on_comments_count
+  end
+
   # Creates log item tracking changes to user
   def create_log_item(options = {})
     options.reverse_merge! note: "System Generated", user_id: self.id

@@ -9,7 +9,7 @@ Feature: Various things on the homepage
 
   Given I am on the homepage
   When I follow "Diversity Statement"
-  Then I should see "You are welcome at the Archive of Our Own."
+  Then I should see "You are welcome at the Archive of Our Own (AO3)."
 
   Scenario: DMCA
 

@@ -125,4 +125,29 @@ describe OwnedTagSet do
       end
     end
   end
+
+  describe "#title_validation" do
+    context "given a title that contains restricted characters" do
+      it "is invalid and returns an error message about restricted characters" do
+        owned_tag_set.title = "Invalid Title*"
+        expect(owned_tag_set).not_to be_valid
+        expect(owned_tag_set.errors[:title].join).to match(/restricted characters/)
+      end
+    end
+
+    context "given an empty title" do
+      it "is invalid" do
+        owned_tag_set.title = ""
+        expect(owned_tag_set).not_to be_valid
+        expect(owned_tag_set.errors[:title].join).not_to match(/restricted characters/)
+      end
+    end
+
+    context "given a title that does not contain restricted characters" do
+      it "is valid" do
+        owned_tag_set.title = "My Tag Set"
+        expect(owned_tag_set).to be_valid
+      end
+    end
+  end
 end

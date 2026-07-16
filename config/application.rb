@@ -42,7 +42,7 @@ module Otwarchive
       :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi,
       :fil, :fr, :he, :hi, :hr, :hu, :id, :it, :ja, :ko, :lt, :lv, :mk,
       :mr, :ms, :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :scr, :sk, :sl,
-      :sv, :th, :tr, :uk, :vi, :"zh-CN"
+      :sv, :th, :tr, :uk, :vi, :"zh-Hans"
     ]
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
