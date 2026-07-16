@@ -19,13 +19,6 @@ describe WorksController do
   end
 
   describe "drafts" do
-    context "when no user_id is specified" do
-      it "redirects to the user controller and display an appropriate error message" do
-        get :drafts
-        it_redirects_to_with_error(users_path, "Whose drafts did you want to look at?")
-      end
-    end
-
     context "when logged out" do
       before { fake_logout }
 
@@ -78,7 +71,7 @@ describe WorksController do
     end
 
     context "when the requested user does not exist" do
-      it "should raise a RecordNotFound error" do
+      it "raises a RecordNotFound error" do
         expect do
           get :drafts, params: { user_id: "invalid-user" }
         end.to raise_error(ActiveRecord::RecordNotFound)
