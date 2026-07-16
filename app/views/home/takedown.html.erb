@@ -89,11 +89,11 @@
   <p><%=t(".dmca_policy.dmca_takedown_process.dmca_counternotice")%></p>
   <p><%=t(".dmca_policy.dmca_takedown_process.if_receives_a_dmca_counternotice")%></p>
   <h4 class="heading" id="dmca_appeal_options"><%=t(".dmca_policy.dmca_appeal_options.heading")%></h4>
-  <p><a href="/content#II.D"><%=t(".dmca_policy.dmca_appeal_options.html", 
-  copyright_infringement_link: link_to(t(".dmca_policy.dmca_appeal_options.copyright_infringement"), content_path(anchor: "#II.D")),
-  plagiarism_link: link_to(t(".dmca_policy.dmca_appeal_options.plagiarism"), content_path(anchor: "#II.E")),
+  <p><%=t(".dmca_policy.dmca_appeal_options.html", 
+  copyright_infringement_link: link_to(t(".dmca_policy.dmca_appeal_options.copyright_infringement"), content_path(anchor: "II.D")),
+  plagiarism_link: link_to(t(".dmca_policy.dmca_appeal_options.plagiarism"), content_path(anchor: "II.E")),
   tos_link: link_to(t(".dmca_policy.dmca_appeal_options.tos"), tos_path),
-  tos_faq_link: link_to(t(".dmca_policy.dmca_appeal_options.tos_faq"), tos_faq_path)
+  tos_faq_link: link_to(t(".dmca_policy.dmca_appeal_options.tos_faq"), tos_faq_path(anchor: "copyright_plagiarism_faq"))
   )%></p>
   <p><%=t(".dmca_policy.dmca_appeal_options.remove_the_content_html",
   notify_by_email_link: link_to(t(".dmca_policy.dmca_appeal_options.notify_by_email"), tos_faq_path(anchor: "complaint_notification")), 
@@ -173,7 +173,7 @@
     </li>
   </ol>
   <h5 class="heading" id="tida_takedown_process"><%=t(".tida_policy.tida_takedown_process.heading")%></h5>
-  <p><%=t(".tida_policy.tida_takedown_process.intro_html", legal_requirements_link: link_to(t(".tida_policy.tida_takedown_process.legal_requirements"), takedown_path(anchor: "takedown_requirements")))%></p>
+  <p><%=t(".tida_policy.tida_takedown_process.intro_html", legal_requirements_link: link_to(t(".tida_policy.tida_takedown_process.legal_requirements"), takedown_path(anchor: "tida_takedown_requirements")))%></p>
   <p><%=t(".tida_policy.tida_takedown_process.reasonable_effort_to_notify")%></p>
   <p><%=t(".tida_policy.tida_takedown_process.they_may_appeal")%></p>
   <h4 class="heading" id="tida_appeal_options"><%=t(".tida_policy.tida_appeal_options.heading")%></h4>
@@ -181,7 +181,7 @@
   <p><%=t(".tida_policy.tida_appeal_options.following_options")%></p>
   <ul>
     <li><strong><%=t(".tida_policy.tida_appeal_options.remove_image")%></strong><%=t(".tida_policy.tida_appeal_options.remove_image_html", tos_link: link_to(t(".tida_policy.tida_appeal_options.tos"), tos_path))%></li>
-    <li><strong><%=t(".tida_policy.tida_appeal_options.submit_an_appeal")%></strong><%=t(".tida_policy.tida_appeal_options.submit_an_appeal_html", original_request_link: link_to(t(".tida_policy.tida_appeal_options.original_request"), takedown_path(anchor: "takedown_requirements")))%></li>
+    <li><strong><%=t(".tida_policy.tida_appeal_options.submit_an_appeal")%></strong><%=t(".tida_policy.tida_appeal_options.submit_an_appeal_html", original_request_link: link_to(t(".tida_policy.tida_appeal_options.original_request"), takedown_path(anchor: "tida_takedown_requirements")))%></li>
   </ul>
   <p><%=t(".tida_policy.tida_appeal_options.reupload_html", suspend_your_account_link: link_to(t(".tida_policy.tida_appeal_options.suspend_your_account"), takedown_path(anchor: "repeat_offenses")))%></p>
   <h3 class="heading" id="repeat_offenses"><%=t(".repeat_offenses.heading")%></h3>
