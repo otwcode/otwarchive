@@ -889,7 +889,8 @@ describe "rake After:backfill_missing_pseuds" do
     let!(:user) { create(:user) }
 
     it "does not create any pseuds" do
-      expect { subject.invoke }.not_to change { Pseud.count }
+      expect { subject.invoke }
+        .not_to change { Pseud.count }
     end
   end
 
@@ -901,7 +902,9 @@ describe "rake After:backfill_missing_pseuds" do
     end
 
     it "creates a pseud matching the username" do
-      expect { subject.invoke }.to change { user.pseuds.reload.count }.by(1)
+      expect { subject.invoke }
+        .to change { user.pseuds.reload.count }
+        .by(1)
       expect(user.pseuds.find_by(name: user.login)).to be_present
     end
   end
@@ -916,7 +919,9 @@ describe "rake After:backfill_missing_pseuds" do
     end
 
     it "still creates a pseud for the affected user" do
-      expect { subject.invoke }.to change { affected_user.pseuds.reload.count }.by(1)
+      expect { subject.invoke }
+        .to change { affected_user.pseuds.reload.count }
+        .by(1)
       expect(affected_user.pseuds.find_by(name: affected_user.login)).to be_present
     end
   end

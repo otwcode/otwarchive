@@ -693,7 +693,7 @@ namespace :After do
     end
 
     puts "Done: #{created} created, #{failed} failed"
-    STDOUT.flush
+    $stdout.flush
   end
 
   # This is the end that you have to put new tasks above.
