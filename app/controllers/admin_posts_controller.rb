@@ -58,6 +58,7 @@ class AdminPostsController < Admin::BaseController
   def edit
     @admin_post = AdminPost.find(params[:id])
     authorize @admin_post
+    @page_subtitle = t(".page_title")
   end
 
   # POST /admin_posts

@@ -370,7 +370,7 @@ class WorksController < ApplicationController
     if params[:edit_button] || work_cannot_be_saved?
       render :edit
     elsif params[:preview_button]
-      flash[:notice] = t(".unposted_notice") unless @work.posted?
+      flash.now[:notice] = t(".unposted_notice") unless @work.posted?
 
       in_moderated_collection
       @preview_mode = true
@@ -409,9 +409,11 @@ class WorksController < ApplicationController
       @work.save
       flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
-    else # Save Draft
+    else
       @work.posted = true
       @work.minor_version = @work.minor_version + 1
+      @work.save
+      @work.word_count = @work.first_chapter.word_count
       @work.save
       flash[:notice] = ts('Work was successfully updated.')
       redirect_to(@work)
