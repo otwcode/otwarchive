@@ -461,6 +461,8 @@ $j(document).ready(function() {
 // data-destroy-value: text of button for destroying, e.g. Unfavorite, Unsubscribe
 // controller needs item_id and item_success_message for save success and
 // item_success_message for destroy success
+// Limit AJAX flash messages to #main > .flash so they don't get duplicated
+// when other flash-like banners are present
 $j(document).ready(function() {
   $j('form.ajax-create-destroy').on("click", function(event) {
     event.preventDefault();
@@ -470,7 +472,10 @@ $j(document).ready(function() {
     var formSubmit = form.find('[type="submit"]');
     var createValue = form.data('create-value');
     var destroyValue = form.data('destroy-value');
-    var flashContainer = $j('.flash');
+    var flashContainer = $j('#main > .flash').first();
+    if (flashContainer.length === 0) {
+      return;
+    }
 
     $j.ajax({
       type: 'POST',
