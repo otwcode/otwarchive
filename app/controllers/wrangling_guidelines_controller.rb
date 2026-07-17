@@ -9,6 +9,7 @@ class WranglingGuidelinesController < ApplicationController
   # GET /wrangling_guidelines/1
   def show
     @wrangling_guideline = WranglingGuideline.find(params[:id])
+    @page_subtitle = @wrangling_guideline.title
   end
 
   # GET /wrangling_guidelines/new

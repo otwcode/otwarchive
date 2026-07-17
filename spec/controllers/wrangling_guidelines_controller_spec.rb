@@ -26,6 +26,11 @@ describe WranglingGuidelinesController do
       expect(response).to render_template("show")
       expect(assigns(:wrangling_guideline)).to eq(guideline)
     end
+
+    it "assigns page subtitle using guideline title" do
+      get :show, params: { id: guideline.id }
+      expect(assigns[:page_subtitle]).to eq(guideline.title)
+    end
   end
 
   describe "GET #new" do
