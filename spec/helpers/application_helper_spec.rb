@@ -3,6 +3,36 @@
 require "spec_helper"
 
 describe ApplicationHelper do
+  describe "#browser_page_title" do
+    it "returns page_title if set" do
+      expect(helper.browser_page_title("Title", "Subtitle")).to eq("Title")
+    end
+
+    it "appends app name to page_subtitle" do
+      expect(helper.browser_page_title(nil, "Series Title - Author - Fandom"))
+        .to eq("Series Title - Author - Fandom | #{ArchiveConfig.APP_NAME}")
+    end
+
+    it "generates title from controller/action when no title or subtitle" do
+      controller = double("controller", action_name: "show", controller_name: "works")
+      allow(helper).to receive(:controller).and_return(controller)
+      allow(helper).to receive(:process_title).with("show").and_return("Show")
+      allow(helper).to receive(:process_title).with("work").and_return("Work")
+      
+      expect(helper.browser_page_title(nil, nil))
+        .to eq("Show Work | #{ArchiveConfig.APP_NAME}")
+    end
+
+    it "generates title from controller name for index action" do
+      controller = double("controller", action_name: "index", controller_name: "works")
+      allow(helper).to receive(:controller).and_return(controller)
+      allow(helper).to receive(:process_title).with("works").and_return("Works")
+      
+      expect(helper.browser_page_title(nil, nil))
+        .to eq("Works | #{ArchiveConfig.APP_NAME}")
+    end
+  end
+
   describe "#creation_id_for_css_classes" do
     context "when creation is ExternalWork" do
       let(:external_work) { create(:external_work) }

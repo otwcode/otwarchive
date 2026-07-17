@@ -177,11 +177,11 @@ class WorksController < ApplicationController
   # GET /works/1
   # GET /works/1.xml
   def show
-    if @work.unrevealed?
-      @page_subtitle = t(".page_title.unrevealed")
-    else
-      @page_title = work_page_title(@work, @work.title)
-    end
+    @page_subtitle = if @work.unrevealed?
+                       t(".page_title.unrevealed")
+                     else
+                       work_page_subtitle(@work, @work.title)
+                     end
 
     # Users must explicitly okay viewing of adult content
     if params[:view_adult]
