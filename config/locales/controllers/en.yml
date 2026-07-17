@@ -425,9 +425,37 @@ en:
         page_title: Account Created
       new:
         page_title: Create Account
+    sessions:
+      invalid_totp: Incorrect two-step verification code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
     status:
       ban_notice_html: Your account has been banned. You are not permitted to post or edit content on AO3. Please check your email or %{contact_abuse_link} for more information.
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You cannot post, edit, or delete content until your suspension has ended. Please check your email or %{contact_abuse_link} for more information.
+    totp:
+      access:
+        permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
+      already_disabled: TOTP two-step verification is already disabled.
+      already_enabled: TOTP two-step verification is already enabled.
+      confirm_disable:
+        page_title: Disable Two-Step Verification
+      confirm_reset_backup_codes:
+        page_title: Two-Step Verification Backup Codes
+      create:
+        incorrect_code: Incorrect verification code. Your code may have expired, or you may need to set up your authenticator app again.
+        page_title: Two-Step Verification Backup Codes
+        success: Successfully enabled two-step verification; please make note of your backup codes.
+      disable:
+        failure: Could not disable two-step verification.
+        incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
+        success: Successfully disabled two-step verification.
+      new:
+        page_title: Confirm Password
+      reauthenticate_create:
+        incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form.
+        page_title: Enable Two-Step Verification
+      reset_backup_codes:
+        not_enabled: Please enable two-step verification first.
+        page_title: Two-Step Verification Backup Codes
+        success: Successfully reset your backup codes; please make note of your new backup codes, your old backup codes will no longer work.
   works:
     create:
       draft_notice_html: Draft was successfully created. It will be %{scheduled_for_deletion_bold} on %{deletion_date}.

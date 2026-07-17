@@ -2755,6 +2755,13 @@ en:
       page_heading: Matching for %{collection_title}
   preferences:
     index:
+      account_security:
+        change_password: Change password
+        disable_two_step_verification: Disable two-step verification
+        enable_two_step_verification: Enable two-step verification
+        heading: Account Security
+        legend: Account Security
+        reset_backup_codes: Reset two-step verification backup codes
       browser_page_title_format: Browser page title format
       collections_challenges_gifts:
         allow_collection_invitation: Allow others to invite my works to collections.
@@ -2796,7 +2803,9 @@ en:
         change_email: Change Email
         change_password: Change Password
         change_username: Change Username
+        disable_two_step_verification: Disable Two-Step Verification
         edit_my_profile: Edit My Profile
+        enable_two_step_verification: Enable Two-Step Verification
         landmark: Navigation
         manage_my_pseuds: Manage My Pseuds
         muted_users: Muted Users
@@ -3360,6 +3369,11 @@ en:
         password: 'Password:'
         remember_me: Remember Me
         username_or_email: 'Username or email:'
+      totp:
+        enter_totp: Enter the verification code from your authenticator app to finish logging in to your account.
+        page_heading: Two-Step Verification
+        submit: Log In
+        totp_label: 6-digit verification code
     show:
       login_banner:
         contact_abuse: contact our Policy & Abuse team
@@ -3401,6 +3415,48 @@ en:
         co_creator_requests: Co-Creator Requests (%{count})
         related_works: Related Works (%{related_works_number})
         sign_ups: Sign-ups (%{signup_number})
+    totp:
+      confirm_disable:
+        page_heading: Disable Two-Step Verification
+        password_label: Password
+        required_before_disabling: Before disabling two-step verification, you need to verify your password.
+        submit: Disable Two-Step Verification
+      confirm_reset_backup_codes:
+        confirm: Yes, Reset Codes
+        confirm_html: Are you sure you want to reset your two-step verification backup codes? Your existing backup codes will no longer work.
+        page_heading: Reset Backup Codes
+      new:
+        page_heading: Confirm Password
+        password_label: Password
+        required_before_enabling: Before enabling two-step verification, you need to verify your password.
+        submit: Continue
+      reauthenticate_create:
+        about:
+          effects_of_enabling: When two-step verification is enabled, logging in to your %{app_name} account will require both your password and a verification code from your authenticator app.
+          general_info: Two-step verification, also called two-factor authentication, helps prevent other people from accessing your account even if they know your password. All you need to set it up is an authenticator app such as 1Password, Google Authenticator, or Twilio Authy.
+          heading: About Two-Step Verification
+        app_setup:
+          heading: 'Step 1: Set up your authenticator app'
+          instructions: Use your authenticator app to scan the QR code or enter the manual setup key. If you are using the same device the app is installed on, click the import settings button. The app will give you a 6-digit code, which you'll use in the next step.
+          key:
+            copied: Copied!
+            copy_to_clipboard: Copy
+            format_note: Spaces and capitalization don't matter
+            heading: Setup Key
+          qr_scan_note: Scan with your authenticator app
+        enter_code:
+          heading: 'Step 2: Enter your 6-digit code'
+          instructions: Enter the 6-digit code from your app to enable two-step verification.
+          label: 6-digit code
+          please_wait: Please wait...
+          submit: Enable Two-Step Verification
+        page_heading: Set Up Two-Step Verification
+      reset_backup_codes:
+        backup_codes_copied: Backup Codes Copied!
+        copy_to_clipboard: Copy Backup Codes to Clipboard
+        finish: Finish
+        page_heading: Two-Step Verification Backup Codes
+        write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
   works:
     admin_edit_form:
       associations_title: Associations

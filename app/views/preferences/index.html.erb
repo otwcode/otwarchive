@@ -12,6 +12,13 @@
   <li><%= link_to t(".navigation.blocked_users"), user_blocked_users_path %></li>
   <li><%= link_to t(".navigation.muted_users"), user_muted_users_path %></li>
   <li><%= link_to t(".navigation.change_username"), change_username_user_path(@user) %></li>
+  <li>
+    <% if @user.totp_enabled? %>
+      <%= link_to t(".navigation.disable_two_step_verification"), confirm_disable_user_totp_path %>
+    <% else %>
+      <%= link_to t(".navigation.enable_two_step_verification"), new_user_totp_path %>
+    <% end %>
+  </li>
   <li><%= link_to t(".navigation.change_password"), change_password_user_path(@user) %></li>
   <li><%= link_to t(".navigation.change_email"), change_email_user_path(@user) %></li>
 </ul>
@@ -19,6 +26,19 @@
 
 <!--main content-->
 <%= form_for(@preference, url: user_preference_path(@user, @preference), autocomplete: "off") do |f| %>
+  <fieldset>
+    <legend><%= t(".account_security.legend") %></legend>
+    <h4 class="heading"><%= t(".account_security.heading") %></h4>
+    <ul>
+      <% if @user.totp_enabled? %>
+        <li><%= link_to t(".account_security.disable_two_step_verification"), confirm_disable_user_totp_path %></li>
+        <li><%= link_to t(".account_security.reset_backup_codes"), confirm_reset_backup_codes_user_totp_path %></li>
+      <% else %>
+        <li><%= link_to t(".account_security.enable_two_step_verification"), new_user_totp_path %></li>
+      <% end %>
+      <li><%= link_to t(".account_security.change_password"), change_password_user_path(@user) %></li>
+    </ul>
+  </fieldset>
   <fieldset>
     <legend><%= t(".privacy.legend") %></legend>
     <h4 class="heading"><%= t(".privacy.heading") %> <%= link_to_help_modal(help_preferences_privacy_path, t(".privacy.help_title")) %></h4>
