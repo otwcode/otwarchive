@@ -57,8 +57,8 @@ en:
           html: "%{pseud_link} left the following comment on %{commentable_link}:"
           text: "%{pseud} left the following comment on %{title} (%{commentable_url}):"
         tag:
-          html: "%{pseud_link} left the following comment on the tag %{tag_link}:"
-          text: "%{pseud} left the following comment on the tag %{tag} (%{tag_url}):"
+          html: "%{pseud_link} left the following comment on the %{category} tag %{tag_link}:"
+          text: "%{pseud} left the following comment on the %{category} tag %{tag} (%{tag_url}):"
       subject:
         chapter: "[%{app_name}] Comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Comment on %{title}"
@@ -108,8 +108,8 @@ en:
           html: "%{pseud_link} replied to your comment on %{commentable_link}:"
           text: "%{pseud} replied to your comment on %{title} (%{commentable_url}):"
         tag:
-          html: "%{pseud_link} replied to your comment on the tag %{tag_link}:"
-          text: "%{pseud} replied to your comment on the tag %{tag} (%{tag_url}):"
+          html: "%{pseud_link} replied to your comment on the %{category} tag %{tag_link}:"
+          text: "%{pseud} replied to your comment on the %{category} tag %{tag} (%{tag_url}):"
       subject:
         chapter: "[%{app_name}] Reply to your comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Reply to your comment on %{title}"
@@ -131,8 +131,8 @@ en:
           html: 'You replied to a comment on %{commentable_link}:'
           text: 'You replied to a comment on %{title} (%{commentable_url}):'
         tag:
-          html: 'You replied to a comment on the tag %{tag_link}:'
-          text: 'You replied to a comment on the tag %{tag} (%{tag_url}):'
+          html: 'You replied to a comment on the %{category} tag %{tag_link}:'
+          text: 'You replied to a comment on the %{category} tag %{tag} (%{tag_url}):'
       subject:
         chapter: "[%{app_name}] Reply you left to a comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Reply you left to a comment on %{title}"
@@ -151,8 +151,8 @@ en:
           html: 'You left the following comment on %{commentable_link}:'
           text: 'You left the following comment on %{title} (%{commentable_url}):'
         tag:
-          html: 'You left the following comment on the tag %{tag_link}:'
-          text: 'You left the following comment on the tag %{tag} (%{tag_url}):'
+          html: 'You left the following comment on the %{category} tag %{tag_link}:'
+          text: 'You left the following comment on the %{category} tag %{tag} (%{tag_url}):'
       subject:
         chapter: "[%{app_name}] Comment you left on Chapter %{position} of %{title}"
         other: "[%{app_name}] Comment you left on %{title}"
@@ -170,8 +170,8 @@ en:
           html: "%{pseud_link} edited the following comment on %{commentable_link}:"
           text: "%{pseud} edited the following comment on %{title} (%{commentable_url}):"
         tag:
-          html: "%{pseud_link} edited the following comment on the tag %{tag_link}:"
-          text: "%{pseud} edited the following comment on the tag %{tag} (%{tag_url}):"
+          html: "%{pseud_link} edited the following comment on the %{category} tag %{tag_link}:"
+          text: "%{pseud} edited the following comment on the %{category} tag %{tag} (%{tag_url}):"
       subject:
         chapter: "[%{app_name}] Edited comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Edited comment on %{title}"
@@ -192,13 +192,24 @@ en:
           html: "%{pseud_link} edited their reply to your comment on %{commentable_link}:"
           text: "%{pseud} edited their reply to your comment on %{title} (%{commentable_url}):"
         tag:
-          html: "%{pseud_link} edited their reply to your comment on the tag %{tag_link}:"
-          text: "%{pseud} edited their reply to your comment on the tag %{tag} (%{tag_url}):"
+          html: "%{pseud_link} edited their reply to your comment on the %{category} tag %{tag_link}:"
+          text: "%{pseud} edited their reply to your comment on the %{category} tag %{tag} (%{tag_url}):"
       subject:
         chapter: "[%{app_name}] Edited reply to your comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Edited reply to your comment on %{title}"
         tag: "[%{app_name}] Edited reply to your comment on the tag %{name}"
       you_wrote: 'You wrote:'
+    tag_category:
+      archive_warning: Warning
+      banned: Banned
+      category: Category
+      character: Character
+      fandom: Fandom
+      freeform: Freeform
+      media: Media
+      rating: Rating
+      relationship: Relationship
+      unsorted_tag: Unsorted
   gift_exchange_mailer:
     assignment_default_notification:
       assign_pinch_hitter:
