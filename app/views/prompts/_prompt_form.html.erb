@@ -91,7 +91,8 @@
         %>
         <dt><%= form.label :anonymous, ts("Semi-anonymous Prompt?") %></dt>
         <dd>
-          <%= form.check_box :anonymous, :checked => @collection.challenge.anonymous? ? true : form.object.anonymous %>
+          <%# Default to the prompt's original anonymity value, unless we're making a new prompt and the challenge is anonymous. %>
+          <%= form.check_box :anonymous, checked: form.object.anonymous? || (form.object.new_record? && @collection.challenge.anonymous?) %>
   	      <p class="footnote"><%= ts("(Note: This is not totally secure, and is still guessable in some places.)") %></p>
   	    </dd>
       <% end %>     
