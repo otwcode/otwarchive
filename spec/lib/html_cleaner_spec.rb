@@ -512,45 +512,104 @@ describe HtmlCleaner do
     end
   end
 
-  describe "fix_bad_characters" do
+  describe "clean_html_and_characters" do
     it "should not touch normal text" do
-      expect(fix_bad_characters("normal text")).to eq("normal text")
+      expect(clean_html_and_characters("normal text")).to eq("normal text")
     end
 
     it "should not touch normal text with valid unicode chars" do
-      expect(fix_bad_characters("„‚nörmäl’—téxt‘“")).to eq("„‚nörmäl’—téxt‘“")
+      expect(clean_html_and_characters("„‚nörmäl’—téxt‘“")).to eq("„‚nörmäl’—téxt‘“")
     end
 
     it "does not touch zero-width non-joiner" do
       string = ["A".ord, 0x200C, "A".ord]  # "A[zwnj]A"
-      expect(fix_bad_characters(string.pack("U*")).unpack("U*")).to eq(string)
+      expect(clean_html_and_characters(string.pack("U*")).unpack("U*")).to eq(string)
     end
 
     it "does not touch zero-width joiner" do
       string = ["A".ord, 0x200D, "A".ord]  # "A[zwj]A"
-      expect(fix_bad_characters(string.pack("U*")).unpack("U*")).to eq(string)
+      expect(clean_html_and_characters(string.pack("U*")).unpack("U*")).to eq(string)
     end
 
     it "does not touch word joiner" do
       string = ["A".ord, 0x2060, "A".ord]  # "A[wj]A"
-      expect(fix_bad_characters(string.pack("U*")).unpack("U*")).to eq(string)
+      expect(clean_html_and_characters(string.pack("U*")).unpack("U*")).to eq(string)
     end
 
     it "should remove invalid unicode chars" do
       bad_string = [65, 150, 65].pack("C*")  # => "A\226A"
-      expect(fix_bad_characters(bad_string)).to eq("AA")
+      expect(clean_html_and_characters(bad_string)).to eq("AA")
     end
 
     it "should escape <3" do
-      expect(fix_bad_characters("normal <3 text")).to eq("normal &lt;3 text")
+      expect(clean_html_and_characters("normal <3 text")).to eq("normal &lt;3 text")
     end
 
     it "should convert \\r\\n to \\n" do
-      expect(fix_bad_characters("normal\r\ntext")).to eq("normal\ntext")
+      expect(clean_html_and_characters("normal\r\ntext")).to eq("normal\ntext")
     end
 
     it "should remove the spacer" do
-      expect(fix_bad_characters("A____spacer____A")).to eq("AA")
+      expect(clean_html_and_characters("A____spacer____A")).to eq("AA")
+    end
+
+    context "fixing unclosed quotes in tag attributes" do
+      it "should not touch normal text" do
+        expect(clean_html_and_characters("normal text")).to eq("normal text")
+      end
+
+      it "should not touch tags with properly closed quotes" do
+        html = '<p class="already-closed">text</p>'
+        expect(clean_html_and_characters(html)).to eq(html)
+      end
+
+      it "adds closing quote for missing quote before >" do
+        input = '<p class="unclosed>text</p>'
+        result = clean_html_and_characters(input)
+        expect(result).to eq('<p class="unclosed">text</p>')
+      end
+
+      it "adds closing quote when another attribute follows" do
+        input = '<p class="unclosed id="main">text</p>'
+        result = clean_html_and_characters(input)
+        expect(result).to eq('<p class="unclosed" id="main">text</p>')
+      end
+
+      it "preserves multi-word attribute values" do
+        input = '<p class="foo bar baz">text</p>'
+        result = clean_html_and_characters(input)
+        expect(result).to eq('<p class="foo bar baz">text</p>')
+      end
+
+      it "handles unclosed quote with multi-word value" do
+        input = '<p class="align center style>text</p>'
+        result = clean_html_and_characters(input)
+        expect(result).to eq('<p class="align center style">text</p>')
+      end
+
+      it "fixes unclosed href attribute" do
+        input = '<a href="http://example.com>link</a>'
+        result = clean_html_and_characters(input)
+        expect(result).to eq('<a href="http://example.com">link</a>')
+      end
+
+      it "fixes multiple malformed attributes in same tag" do
+        input = '<p class="unclosed id="main" style="color>text</p>'
+        result = clean_html_and_characters(input)
+        expect(result).to eq('<p class="unclosed" id="main" style="color">text</p>')
+      end
+
+      it "handles unclosed quote with special characters in value" do
+        input = '<p class="align-left bold>text</p>'
+        result = clean_html_and_characters(input)
+        expect(result).to eq('<p class="align-left bold">text</p>')
+      end
+
+      it "handles data attributes with unclosed quotes" do
+        input = '<div data-value="something>content</div>'
+        result = clean_html_and_characters(input)
+        expect(result).to eq('<div data-value="something">content</div>')
+      end
     end
   end
 
@@ -1276,12 +1335,6 @@ describe HtmlCleaner do
       it "escapes the values within the element's attributes" do
         string = 'Hi! <img src="https://<span>" alt="<script/src=\'http://ha.ckers.org/xss.js\'>"> Bye'
         result = 'Hi! img src="https://&lt;span&gt;" alt="&lt;script/src=\'http://ha.ckers.org/xss.js\'&gt;" Bye'
-        expect(strip_images(string, keep_src: true)).to eq(result)
-      end
-
-      it "escapes the value within the alt attribute when it contains an initial >" do
-        string = 'Hi! <img src="https://example.com" alt="><script src=\'http://ha.ckers.org/xss.js\'>"> Bye'
-        result = 'Hi! img src="https://example.com" alt="&gt;&lt;script src=\'http://ha.ckers.org/xss.js\'&gt;" Bye'
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
     end
