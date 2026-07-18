@@ -451,7 +451,10 @@ class User < ApplicationRecord
     return unless is_tag_wrangler?
 
     last_activity = LastWranglingActivity.find_or_create_by(user: self)
-    last_activity.touch
+    last_activity.notified_inactive_wrangler = false
+    last_activity.notified_inactive_supervisors = false
+    last_activity.touch unless last_activity.will_save_change_to_notified_inactive_wrangler? || last_activity.will_save_change_to_notified_inactive_supervisors?
+    last_activity.save!
   end
 
   # Returns true if user is the sole author of a work
@@ -612,7 +615,7 @@ class User < ApplicationRecord
   def send_wrangler_username_change_notification
     return unless saved_change_to_login? && login_before_last_save.present?
 
-    TagWranglingSupervisorMailer.wrangler_username_change_notification(login_before_last_save, login).deliver_now
+    TagWranglingLeadershipMailer.wrangler_username_change_notification(login_before_last_save, login).deliver_now
   end
 
   def log_email_change

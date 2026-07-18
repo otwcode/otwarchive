@@ -1,0 +1,31 @@
+<% content_for :message do %>
+<%= t("mailer.general.greeting.formal.addressed_html", name: @username) %>
+
+<%= t(".inactive", app_name: ArchiveConfig.APP_NAME, count: @inactivity_weeks, weeks: @inactivity_weeks_formatted, inactive_days: t(".inactive_days", count: @inactivity_days)) %>
+
+<%= t(".not_in_trouble") %>
+
+<%= t(".message_only_for_you") %>
+
+<%= t(".supervisors_notification", count: @supervisor_distance_weeks, weeks: @supervisor_distance_weeks_formatted, supervisors_notification_days: t(".supervisors_notification_days", count: @supervisor_distance_days)) %>
+
+<%= t(".please_reply.title") %>
+
+  - <%= t(".please_reply.technical_issues") %>
+  - <%= t(".please_reply.training") %>
+  - <%= t(".please_reply.more_tags") %>
+  - <%= t(".please_reply.mentor") %>
+  - <%= t(".please_reply.sent_in_error", count: @inactivity_weeks, weeks: @inactivity_weeks_formatted) %>
+  - <%= t(".please_reply.another_issue") %>
+
+<%= t(".already_on_break") %>
+
+<%= t(".request_hiatus.text", hiatus_form_url: ArchiveConfig.WRANGLING_HIATUS_FORM_URL) %>
+
+<%= t(".last_wrangled_date") %>
+
+<%= t(".thank_you") %>
+
+<%= t("mailer.general.closing.informal") %>
+<%= t("mailer.general.signature.app_short_name") %>
+<% end %>
