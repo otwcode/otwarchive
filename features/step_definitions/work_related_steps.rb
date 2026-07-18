@@ -189,8 +189,9 @@ end
 
 ### THEN
 
-Then /^the original author should be emailed$/ do
+Then /^the original author should receive a related work email$/ do
   step "1 email should be delivered"
+  step %{the email should have "Related work notification" in the subject}
 end
 
 Then /^approving the related work should succeed$/ do
