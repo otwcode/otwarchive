@@ -23,12 +23,21 @@ class BookmarkQuery < Query
 
   # Combine the filters and queries for both the bookmark and the bookmarkable.
   def filtered_query
-    make_bool(
-      # Score is based on our query + the bookmarkable query:
-      must: make_list(queries, bookmarkable_queries_and_filters),
-      filter: filters,
-      must_not: make_list(exclusion_filters, bookmarkable_exclusion_filters)
-    )
+    if sort_column == "word_count"
+      make_bool(
+        # Score is based on the bookmarkable query (specifically, score will be the word count)
+        must: bookmarkable_queries_and_filters,
+        filter: make_list(queries, filters),
+        must_not: make_list(exclusion_filters, bookmarkable_exclusion_filters)
+      )
+    else
+      make_bool(
+        # Score is based on our query + the bookmarkable query:
+        must: make_list(queries, bookmarkable_queries_and_filters),
+        filter: filters,
+        must_not: make_list(exclusion_filters, bookmarkable_exclusion_filters)
+      )
+    end
   end
 
   # Queries that apply only to the bookmark. Bookmarkable queries are handled
@@ -124,7 +133,13 @@ class BookmarkQuery < Query
   end
 
   def sort
-    sort_hash = { sort_column => { order: sort_direction } }
+    # Word count is only defined for the parent bookmarkable, so in order to sort by
+    # it, we set the score to be the bookmarkable's word_count, and then sort by score
+    sort_hash = if sort_column == "word_count"
+                  { _score: { order: sort_direction } }
+                else
+                  { sort_column => { order: sort_direction } }
+                end
 
     if %w(created_at bookmarkable_date).include?(sort_column)
       sort_hash[sort_column][:unmapped_type] = 'date'
@@ -176,6 +191,12 @@ class BookmarkQuery < Query
       must: bookmarkable_query.queries,
       filter: bookmarkable_query.filters
     )
+
+    # If we're sorting by word_count, we need to fetch the bookmarkables'
+    # word_count as the score of this query, so that we can sort by score (and
+    # therefore by the bookmarkables' word_count).
+    word_count_field = bookmarkable_query.include_restricted? ? "general_word_count" : "public_word_count"
+    bool = field_value_score(word_count_field, bool) if sort_column == "word_count"
 
     return if bool.nil?
 

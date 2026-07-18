@@ -36,6 +36,16 @@ describe Kudo do
           expect(kudo.errors[:user].first).to include("Please log out of your official account!")
         end
       end
+
+      context "when user has archivist role" do
+        let(:user) { create(:archivist) }
+        let(:kudo) { build(:kudo, user: user) }
+
+        it "does not save" do
+          expect(kudo.save).to be_falsy
+          expect(kudo.errors[:user].first).to include("Please log out of your archivist account!")
+        end
+      end
     end
 
     context "for a guest kudos giver" do

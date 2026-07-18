@@ -1,4 +1,7 @@
 class Preference < ApplicationRecord
+  # Ignore the email_visible and date_of_birth_visible fields until they can be deleted:
+  self.ignored_columns = [:email_visible, :date_of_birth_visible]
+
   belongs_to :user
   belongs_to :skin
   belongs_to :locale, foreign_key: "preferred_locale"

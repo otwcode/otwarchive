@@ -1,10 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-  <% if logged_in_as_admin? %>
-    <%= ts('Edit Work Tags and Language for %{title}', title: @work.title).html_safe %>
-  <% else %>
-    <%= ts('Edit Work Tags for %{title}', title: @work.title).html_safe %>
-  <% end %>
+  <%= t(".page_heading_html", title: @work.title) %>
 </h2>
 
 <%= error_messages_for :work %>
@@ -16,31 +12,7 @@
 
   <%= render 'work_form_tags', include_blank: false %>
 
-  <% if logged_in_as_admin? %>
-    <fieldset role="article">
-      <legend><%= t("works.associations.title") %></legend>
-      <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
-      <dl>
-        <%= render 'work_form_associations_language', f: f %>
-      </dl>
-    </fieldset>
-  <% end %>
+  <%= render "posting_fieldset" %>
 
-  <fieldset>
-    <legend><%= ts('Post Work') %></legend>
-      <p class="notice">
-        <%= t(".post_notice_html",
-              content_policy_link: link_to(t(".content_policy"), content_path),
-              tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
-      </p>
-    <ul class="actions">
-      <% unless @work.posted? %>
-        <li><%= submit_tag ts('Save As Draft'), name: 'save_button' %></li>
-      <% end %>
-      <li><%= submit_tag ts('Preview'), name: 'preview_button' %></li>
-      <li><%= submit_tag ts('Post'), name: 'update_button' %></li>
-      <li><%= submit_tag ts('Cancel'), name: 'cancel_button' %></li>
-    </ul>
-  </fieldset>
 <% end %>
 <!--/content-->

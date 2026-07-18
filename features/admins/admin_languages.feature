@@ -15,6 +15,7 @@ Scenario: An admin can add a language
   Then I should see "Language was successfully added."
     And I should see "Work Languages"
     And I should see "Klingon"
+    And I should see "Klingon (tlh)"
 
 Scenario: Adding Abuse support for a language
 

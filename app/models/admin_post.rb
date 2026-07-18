@@ -2,11 +2,11 @@ class AdminPost < ApplicationRecord
   self.per_page = 8 # option for WillPaginate
 
   acts_as_commentable
-  enum comment_permissions: {
+  enum :comment_permissions, {
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, _suffix: :comments
+  }, default: :disable_anon, suffix: :comments, validate: { message: :invalid_permissions }
 
   belongs_to :language
   belongs_to :translated_post, class_name: "AdminPost"
@@ -33,19 +33,27 @@ class AdminPost < ApplicationRecord
   validate :translated_post_must_exist
 
   validate :translated_post_language_must_differ
+  validate :translated_post_must_be_posted_first
 
   scope :non_translated, -> { where("translated_post_id IS NULL") }
 
-  scope :for_homepage, -> { order("created_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE) }
+  scope :for_homepage, -> { posted.order(published_at: :desc).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_ON_HOMEPAGE) }
 
-  before_save :inherit_translated_post_comment_permissions, :inherit_translated_post_tags
-  after_save :expire_cached_home_admin_posts, :update_translation_comment_permissions, :update_translation_tags
+  scope :unposted, -> { where(posted: false) }
+  scope :posted, -> { where(posted: true) }
+
+  before_validation :inherit_translated_post_attributes
+  before_save :apply_tag_list
+  before_save :set_published_at, if: :posted_changed?
   after_destroy :expire_cached_home_admin_posts
+  after_save :expire_cached_home_admin_posts, :update_translation_attributes
+  after_save :post_translations, if: :saved_change_to_posted?
 
   # Return the name to link comments to for this object
   def commentable_name
     self.title
   end
+
   def commentable_owners
     begin
         [Admin.find(self.admin_id)]
@@ -54,16 +62,29 @@ class AdminPost < ApplicationRecord
     end
   end
 
+  def draft?
+    !self.posted?
+  end
+
   def tag_list
-    tags.map{ |t| t.name }.join(", ")
+    @tag_list&.join(", ") || tags.map(&:name).join(", ")
   end
 
   def tag_list=(list)
-    return if translated_post_id.present?
-
-    self.tags = list.split(",").uniq.collect { |t|
-      AdminPostTag.fetch(name: t.strip, language_id: self.language_id, post: self)
-      }.compact
+    @tag_list = list.split(",").uniq if translated_post_id.blank?
+  end
+  
+  def tags=(tags)
+    @tag_list = nil
+    super(tags)
+  end
+  
+  def tags
+    return super unless @tag_list
+    
+    @tag_list.collect do |name|
+      AdminPostTag.fetch(name.strip, self.language_id)
+    end.compact
   end
 
   def translated_post_must_exist
@@ -75,8 +96,14 @@ class AdminPost < ApplicationRecord
   def translated_post_language_must_differ
     return if translated_post.blank?
     return unless translated_post.language == language
-          
+
     errors.add(:translated_post_id, "cannot be same language as original post")
+  end
+
+  def translated_post_must_be_posted_first
+    return if translated_post.blank?
+
+    errors.add(:translated_post_id, :must_be_posted_first) if translated_post.draft? && self.posted?
   end
 
   ####################
@@ -100,41 +127,44 @@ class AdminPost < ApplicationRecord
 
   def expire_cached_home_admin_posts
     unless Rails.env.development?
-      Rails.cache.delete("home/index/home_admin_posts")
+      Rails.cache.delete("v1/home/index/home_admin_posts")
     end
   end
 
-  def inherit_translated_post_comment_permissions
+  def inherit_translated_post_attributes
     return if translated_post.blank?
 
     self.comment_permissions = translated_post.comment_permissions
-  end
-
-  def inherit_translated_post_tags
-    return if translated_post.blank?
-
     self.tags = translated_post.tags
   end
+  
+  def apply_tag_list
+    return unless @tag_list
 
-  def update_translation_comment_permissions
+    self.tags = @tag_list.collect do |name|
+      AdminPostTag.fetch(name.strip, self.language_id)
+    end.compact
+  end
+
+  def update_translation_attributes
     return if translations.blank?
 
     transaction do
       translations.find_each do |post|
+        post.tags = self.tags
         post.comment_permissions = self.comment_permissions
         post.save
       end
     end
   end
 
-  def update_translation_tags
-    return if translations.blank?
+  def set_published_at
+    self.published_at = Time.current if self.posted && !self.published_at
+  end
 
-    transaction do
-      translations.find_each do |post|
-        post.tags = self.tags
-        post.save
-      end
-    end
+  def post_translations
+    return if translations.blank? || !self.posted
+
+    translations.update_all(posted: true, published_at: self.published_at)
   end
 end

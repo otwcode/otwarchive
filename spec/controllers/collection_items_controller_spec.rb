@@ -273,10 +273,16 @@ describe CollectionItemsController do
   describe "GET #new" do
     context "denies access for work that isn't visible to user" do
       subject { get :new, params: { work_id: work.id } }
+      let(:work) { create(:work) }
       let(:success) { expect(response).to render_template("new") }
-      let(:success_admin) { success }
+      let(:success_admin) { it_redirects_to_user_login_with_error }
 
       include_examples "denies access for work that isn't visible to user"
+
+      it "redirects to login if logged out" do
+        subject
+        it_redirects_to_user_login_with_error
+      end
     end
   end
 
@@ -619,5 +625,18 @@ describe CollectionItemsController do
                                     "Collection status updated!")
       end
     end
+  end
+
+  describe "admin access to manage items" do
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
+
+    subject { get :index, params: { collection_id: collection.name } }
+
+    let(:success) do
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:index)
+    end
+
+    it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
   end
 end

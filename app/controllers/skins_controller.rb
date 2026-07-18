@@ -1,9 +1,9 @@
 class SkinsController < ApplicationController
-  before_action :users_only, only: [:new, :create, :destroy]
+  before_action :users_only, only: [:new, :create, :destroy, :preview]
   before_action :load_skin, except: [:index, :new, :create, :unset]
   before_action :check_ownership_or_admin, only: [:edit, :update]
   before_action :check_ownership, only: [:confirm_delete, :destroy]
-  before_action :check_visibility, only: [:show]
+  before_action :check_visibility, only: [:show, :preview]
   before_action :check_editability, only: [:edit, :update, :confirm_delete, :destroy]
 
   #### ACTIONS
@@ -15,7 +15,8 @@ class SkinsController < ApplicationController
       @preference = current_user.preference
     end
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-      redirect_to new_user_session_path and return unless logged_in?
+      redirect_to new_user_session_path(return_to: request.fullpath) and return unless logged_in?
+
       if @user != current_user
         flash[:error] = "You can only browse your own skins and approved public skins."
         redirect_to skins_path and return
@@ -31,6 +32,7 @@ class SkinsController < ApplicationController
       if is_work_skin
         @skins = WorkSkin.approved_skins.sort_by_recent_featured.includes(:author).with_attached_icon
         @title = ts('Public Work Skins')
+        @page_subtitle = t(".public_work_page_title")
       else
         @skins = if logged_in?
                    Skin.approved_skins.usable.site_skins.sort_by_recent_featured.with_attached_icon
@@ -38,12 +40,14 @@ class SkinsController < ApplicationController
                    Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured.with_attached_icon
                  end
         @title = ts('Public Site Skins')
+        @page_subtitle = t(".public_site_page_title")
       end
     end
   end
 
   # GET /skins/1
   def show
+    @page_subtitle = @skin.title.html_safe
   end
 
   # GET /skins/new
@@ -84,6 +88,15 @@ class SkinsController < ApplicationController
         render :new
       end
     end
+  rescue ActiveRecord::RecordNotUnique
+    # If we pass Rails validations but get rejected by database unique indices, use the usual duplicate error message.
+    @skin.errors.add(:title, :taken)
+
+    if params[:wizard]
+      render :new_wizard
+    else
+      render :new
+    end
   end
 
   # GET /skins/1/edit
@@ -116,23 +129,30 @@ class SkinsController < ApplicationController
 
   # Get /skins/1/preview
   def preview
-    flash[:notice] = []
-    flash[:notice] << ts("You are previewing the skin %{title}. This is a randomly chosen page.", title: @skin.title)
-    flash[:notice] << ts("Go back or click any link to remove the skin.")
-    flash[:notice] << ts("Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above.")
-    flash[:notice] << "<a href='#{skin_path(@skin)}' class='action' role='button'>".html_safe + ts("Return To Skin To Use") + "</a>".html_safe
-    tag = FilterCount.where("public_works_count BETWEEN 10 AND 20").random_order.first.filter
-    redirect_to tag_works_path(tag, site_skin: @skin.id)
+    if @skin.is_a?(WorkSkin) || @skin.unusable?
+      flash[:error] = t(".cannot_preview")
+      redirect_to user_skins_path(current_user) and return
+    end
+
+    flash[:notice] = [
+      helpers.tag.ul(
+        helpers.tag.li(t(".skin_title", title: @skin.title)) +
+        helpers.tag.li(t(".remove_skin")) +
+        helpers.tag.li(t(".tip", site_skin_id: @skin.id))
+      ),
+      helpers.tag.p(helpers.link_to(t(".return_to_skin"), skin_path(@skin), class: "action"))
+    ].join("\n")
+    redirect_to "#{ArchiveConfig.SKIN_PREVIEW_URL}?site_skin=#{@skin.id}"
   end
 
   def set
     if @skin.cached?
-      flash[:notice] = ts("The skin %{title} has been set. This will last for your current session.", title: @skin.title)
+      flash[:notice] = t(".success_html", skin_title: @skin.title, skin_page_link: helpers.link_to(t(".skin_page", skin_title: @skin.title), skin_path(@skin)))
       session[:site_skin] = @skin.id
     else
-      flash[:error] = ts("Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{title} to be added!", title: @skin.title)
+      flash[:error] = t(".failure", skin_title: @skin.title)
     end
-    redirect_back_or_default @skin
+    redirect_back_or_to @skin
   end
 
   def unset
@@ -141,8 +161,8 @@ class SkinsController < ApplicationController
       current_user.preference.skin_id = AdminSetting.default_skin_id
       current_user.preference.save
     end
-    flash[:notice] = ts("You are now using the default Archive skin again!")
-    redirect_back_or_default "/"
+    flash[:notice] = t("skins.default_skin")
+    redirect_back_or_to root_path
   end
 
   # GET /skins/1/confirm_delete
@@ -169,15 +189,19 @@ class SkinsController < ApplicationController
   private
 
   def skin_params
-    params.require(:skin).permit(
-      :title, :description, :public, :css, :role, :ie_condition, :unusable,
-      :font, :base_em, :margin, :paragraph_margin, :background_color,
+    allowed_attributes = [
+      :title, :description, :css, :role, :ie_condition, :unusable, :font,
+      :base_em, :margin, :paragraph_margin, :background_color,
       :foreground_color, :headercolor, :accent_color, :icon,
       media: [],
       skin_parents_attributes: [
         :id, :position, :parent_skin_id, :parent_skin_title, :_destroy
       ]
-    )
+    ]
+
+    allowed_attributes += [:public] if current_user.is_a?(User) && current_user.official
+
+    params.require(:skin).permit(allowed_attributes)
   end
 
   def load_skin

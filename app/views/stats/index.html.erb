@@ -58,7 +58,7 @@
 
   <ul class="view actions" role="menu">
     <li><%= span_if_current ts("Fandoms View"), current_path_with(flat_view: nil), params[:flat_view].blank? %></li>
-    <li><%= span_if_current ts("Flat View"), current_path_with(flat_view: true) %></li>
+    <li><%= span_if_current t(".flat_view"), current_path_with(flat_view: true), params[:flat_view].present? %></li>
   </ul>
 </div>
 

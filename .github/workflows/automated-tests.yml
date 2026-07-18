@@ -10,6 +10,10 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   automated-tests:
     name: ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
@@ -34,7 +38,7 @@ jobs:
           - 3306:3306
 
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.26
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.3.0
         ports:
           - 9200:9200
         options: >-
@@ -100,31 +104,27 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - name: Install redis
-        uses: awalsh128/cache-apt-pkgs-action@7ca5f46d061ad9aa95863cd9b214dd48edef361d
-        with:
-          packages: redis-server
-          version: "1.0"
+      - name: Run apt-get update
+        run: sudo apt-get update
 
-      - name: Start up redis servers
-        run: ./script/gh-actions/multiple_redis.sh
+      - name: Install and start up redis servers
+        run: |
+          sudo apt-get install -y redis-server
+          ./script/gh-actions/multiple_redis.sh
 
       - name: Install ebook converters
         if: ${{ matrix.tests.ebook }}
-        uses: awalsh128/cache-apt-pkgs-action@7ca5f46d061ad9aa95863cd9b214dd48edef361d
-        with:
-          packages: calibre zip
-          version: "1.0"
+        run: sudo apt-get install -y calibre zip
 
       - name: Cache VCR cassettes
         if: ${{ matrix.tests.vcr }}
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: features/cassette_library
 
-          # Unfortunately, the actions/cache@v4 version doesn't allow the cache
+          # Unfortunately, the actions/cache@v6 version doesn't allow the cache
           # key to be overwritten if there's an exact match. So instead we add
           # a unique identifier to the key to always force a "cache miss", and
           # restore from related keys to make sure that we still get to load a
@@ -140,10 +140,7 @@ jobs:
 
       - name: Install libvips for image processing
         if: ${{ matrix.tests.libvips }}
-        uses: awalsh128/cache-apt-pkgs-action@7ca5f46d061ad9aa95863cd9b214dd48edef361d
-        with:
-          packages: libvips-dev
-          version: "1.0"
+        run: sudo apt-get install -y libvips-dev
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
@@ -166,7 +163,7 @@ jobs:
         run: bundle exec ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           # Optional for public repos. However, individual forks can set this
           # secret to reduce the chance of being rate-limited by GitHub.
@@ -177,7 +174,7 @@ jobs:
 
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.command == 'cucumber' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test failures ${{ hashFiles('tmp/capybara/*') }}
           path: tmp/capybara

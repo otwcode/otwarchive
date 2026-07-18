@@ -14,9 +14,11 @@
 
   <h3 class="heading"><%= t(".about.header") %></h3>
   <ul>
+    <li><%= link_to t(".about.diversity_statement"), diversity_path %></li>
     <li><%= link_to t(".about.terms_of_service"), tos_path %></li>
     <li><%= link_to t(".about.content_policy"), content_path %></li>
     <li><%= link_to t(".about.privacy_policy"), privacy_path %></li>
+    <li><%= link_to t(".about.takedown_policy"), takedown_path %></li>
     <li><%= link_to t(".about.tos_faq"), tos_faq_path %></li>
     <li><%= link_to t(".about.archive_faq"), archive_faqs_path %></li>
     <li><%= link_to t(".about.ao3_news"), admin_posts_path %></li>
@@ -48,7 +50,7 @@
 
     <h3 class="heading"><%= t(".change_your_account_settings.header") %></h3>
     <ul>
-      <li><%= link_to t(".change_your_account_settings.edit_my_profile"), edit_user_path(current_user) %></li>
+      <li><%= link_to t(".change_your_account_settings.edit_my_profile"), edit_user_profile_path(current_user) %></li>
       <li><%= link_to t(".change_your_account_settings.my_profile"), user_profile_path(current_user) %></li>
       <li><%= link_to t(".change_your_account_settings.manage_my_pseuds"), user_pseuds_path(current_user) %></li>
       <li>

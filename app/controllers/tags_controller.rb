@@ -4,25 +4,13 @@ class TagsController < ApplicationController
   before_action :load_collection
   before_action :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
   before_action :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
-  before_action :load_tag, only: [:edit, :update, :wrangle, :mass_update]
-  before_action :load_tag_and_subtags, only: [:show]
+  before_action :load_tag, only: [:show, :edit, :update, :wrangle, :mass_update]
   around_action :record_wrangling_activity, only: [:create, :update, :mass_update]
 
   caches_page :feed
 
   def load_tag
-    @tag = Tag.find_by_name(params[:id])
-    unless @tag && @tag.is_a?(Tag)
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
-    end
-  end
-
-  # improved performance for show page
-  def load_tag_and_subtags
-    @tag = Tag.includes(:direct_sub_tags).find_by_name(params[:id])
-    unless @tag && @tag.is_a?(Tag)
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
-    end
+    @tag = Tag.find_by_name!(params[:id])
   end
 
   # GET /tags
@@ -32,14 +20,18 @@ class TagsController < ApplicationController
       @page_subtitle = t(".collection_page_title", collection_title: @collection.title)
     else
       no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      @tags = no_fandom.children.by_type('Freeform').first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
-      # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
-      # and then sort again at the very end to make it alphabetic
-      @tags = if params[:show] == 'random'
-                @tags.random.canonical.sort
-              else
-                @tags.popular.canonical.sort
-              end
+      if no_fandom
+        @tags = no_fandom.children.by_type("Freeform").first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
+        # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
+        # and then sort again at the very end to make it alphabetic
+        @tags = if params[:show] == "random"
+                  @tags.random.canonical.sort
+                else
+                  @tags.popular.canonical.sort
+                end
+      else
+        @tags = []
+      end
     end
   end
 
@@ -63,7 +55,7 @@ class TagsController < ApplicationController
       flash[:error] = t("admin.access.not_admin_denied")
       redirect_to(tag_wranglings_path) && return
     end
-    # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
+    # if tag is NOT wrangled, prepare to show works, collections, and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
       @works = if logged_in? # current_user.is_a?User
                  @tag.works.visible_to_registered_user.paginate(page: params[:page])
@@ -73,32 +65,23 @@ class TagsController < ApplicationController
                  @tag.works.visible_to_all.paginate(page: params[:page])
                end
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
+      @collections = @tag.collections.paginate(page: params[:page])
     end
-    # cache the children, since it's a possibly massive query
-    @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
-      children = {}
-      (@tag.child_types - %w(SubTag)).each do |child_type|
-        tags = @tag.send(child_type.underscore.pluralize).order('taggings_count_cache DESC').limit(ArchiveConfig.TAG_LIST_LIMIT + 1)
-        children[child_type] = tags.to_a.uniq unless tags.blank?
-      end
-      children
-    end
+
+    @has_mergers = @tag.canonical && @tag.mergers.exists?
   end
 
   def feed
-    begin
-      @tag = Tag.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag with id '#{params[:id]}'"
-    end
+    @tag = Tag.find(params[:id])
     @tag = @tag.merger if !@tag.canonical? && @tag.merger
     # Temp for testing
     if %w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == 'F/F'
-      if @tag.canonical?
-        @works = @tag.filtered_works.visible_to_all.order('created_at DESC').limit(25)
-      else
-        @works = @tag.works.visible_to_all.order('created_at DESC').limit(25)
-      end
+      @works = if @tag.canonical?
+                 @tag.filtered_works
+               else
+                 @tag.works
+               end
+      @works = @works.visible_to_all.order(created_at: :desc).limit(25).includes(:tags, :language, :series)
     else
       redirect_to(tag_works_path(tag_id: @tag.to_param)) && return
     end
@@ -149,12 +132,7 @@ class TagsController < ApplicationController
       format.html do
         # This is just a quick fix to avoid script barf if JavaScript is disabled
         flash[:error] = ts('Sorry, you need to have JavaScript enabled for this.')
-        if request.env['HTTP_REFERER']
-          redirect_to(request.env['HTTP_REFERER'] || root_path)
-        else
-          # else branch needed to deal with bots, which don't have a referer
-          redirect_to '/'
-        end
+        redirect_back_or_to root_path
       end
       format.js
     end
@@ -218,12 +196,13 @@ class TagsController < ApplicationController
     end
 
     @counts = {}
-    @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works', 'Taggings Count']
+    @uses = ["Works", "Drafts", "Bookmarks", "Private Bookmarks", "External Works", "Collections", "Taggings Count"]
     @counts['Works'] = @tag.visible_works_count
     @counts['Drafts'] = @tag.works.unposted.count
     @counts['Bookmarks'] = @tag.visible_bookmarks_count
     @counts['Private Bookmarks'] = @tag.bookmarks.not_public.count
     @counts['External Works'] = @tag.visible_external_works_count
+    @counts["Collections"] = @tag.collections.count
     @counts['Taggings Count'] = @tag.taggings_count
 
     @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
@@ -292,16 +271,16 @@ class TagsController < ApplicationController
       end
       # this makes sure params[:status] is safe
       status = params[:status]
-      if %w(unfilterable canonical synonymous unwrangleable).include?(status)
-        @tags = @tag.send(show).order(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      elsif status == 'unwrangled'
-        @tags = @tag.unwrangled_tags(
-          params[:show].singularize.camelize,
-          params.permit!.slice(:sort_column, :sort_direction, :page)
-        )
-      else
-        @tags = @tag.send(show).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      end
+      @tags = if %w[unfilterable canonical synonymous unwrangleable].include?(status)
+                @tag.send(show).reorder(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+              elsif status == "unwrangled"
+                @tag.unwrangled_tags(
+                  params[:show].singularize.camelize,
+                  params.permit!.slice(:sort_column, :sort_direction, :page)
+                )
+              else
+                @tag.send(show).reorder(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+              end
     end
   end
 

@@ -50,7 +50,7 @@ a, a:link, a:visited {
   display: inline;
 }
 
-/*CSS3 perks, print urls after links*/
+/* CSS3 perks, print urls after links */
 
 a:after {
   content: " (" attr(href) ") ";

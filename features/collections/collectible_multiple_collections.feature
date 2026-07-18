@@ -26,7 +26,7 @@ Feature: Collectible items in multiple collections
       # remove it from the original collection by replacing the text in the
       # field
       And I fill in "Post to Collections / Challenges" with "ModeratedCollection, UnModeratedCollection"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Work was successfully updated. You have submitted your work to the moderated collection 'ModeratedCollection'. It will not become a part of the collection until it has been approved by a moderator."
       And I should see "UnModeratedCollection"
     When I go to "UnModeratedCollection" collection's page

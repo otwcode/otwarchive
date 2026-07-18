@@ -5,7 +5,7 @@ class UserInviteRequestsController < ApplicationController
   # GET /user_invite_requests
   # GET /user_invite_requests.xml
   def index
-    @user_invite_requests = UserInviteRequest.not_handled.page(params[:page])
+    @user_invite_requests = authorize UserInviteRequest.not_handled.page(params[:page])
   end
 
   # GET /user_invite_requests/new
@@ -18,8 +18,8 @@ class UserInviteRequestsController < ApplicationController
         @user_invite_request = @user.user_invite_requests.build
       else
         flash[:error] = ts("Please log in.")
-        redirect_to new_user_session_path
-     end
+        redirect_to new_user_session_path(return_to: request.fullpath)
+      end
     else
       flash[:error] = ts("Sorry, additional invitations are unavailable. Please <a href=\"#{invite_requests_path}\">use the queue</a>! If you are the mod of a challenge currently being run on the Archive, please <a href=\"#{new_feedback_report_path}\">contact Support</a>. If you are the maintainer of an at-risk archive, please <a href=\"http://opendoors.transformativeworks.org/contact-open-doors/\">contact Open Doors</a>.".html_safe)
       redirect_to root_path
@@ -34,7 +34,7 @@ class UserInviteRequestsController < ApplicationController
         @user_invite_request = @user.user_invite_requests.build(user_invite_request_params)
       else
         flash[:error] = "Please log in."
-        redirect_to new_user_session_path
+        redirect_to new_user_session_path(return_to: request.fullpath)
       end
       if @user_invite_request.save
         flash[:notice] = 'Request was successfully created.'
@@ -51,6 +51,8 @@ class UserInviteRequestsController < ApplicationController
   # PUT /user_invite_requests/1
   # PUT /user_invite_requests/1.xml
   def update
+    authorize UserInviteRequest
+
     if params[:decline_all]
       params[:requests].each_pair do |id, quantity|
         unless quantity.blank?

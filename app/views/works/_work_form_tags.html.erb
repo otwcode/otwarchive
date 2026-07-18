@@ -11,7 +11,7 @@
   <dl>
     <dt class="rating required">
       <label for="work_rating_string"><%= Rating::NAME %>*</label>
-      <%= link_to_help "rating-help" %>
+      <%= link_to_help_modal(help_tags_ratings_path, t(".ratings_help_title")) %>
     </dt>
     <dd class="rating required">
       <%= collection_select :work,
@@ -26,7 +26,7 @@
 
     <dt class="warning required">
       <label><%= ArchiveWarning::NAME.pluralize %>*</label>
-      <%= link_to_help "warning-help" %>
+      <%= link_to_help_modal(help_tags_warnings_path, t(".warnings_help_title")) %>
     </dt>
     <dd class="warning required">
       <fieldset class="warnings">
@@ -49,7 +49,7 @@
 
     <dt class="fandom required">
       <label for="work_fandom" title="<%= ts('fandoms') %>"><%= Fandom::NAME.pluralize %>*</label>
-      <%= link_to_help "fandom-help" %>
+      <%= link_to_help_modal(help_tags_fandoms_path, t(".fandoms_help_title")) %>
     </dt>
     <dd class="fandom required" title="<%= ts('fandoms') %>">
       <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, 
@@ -61,7 +61,7 @@
 
     <dt class="category">
       <label><%= Category::NAME.pluralize %></label>
-      <%= link_to_help "categories-help" %>
+      <%= link_to_help_modal(help_tags_categories_path, t(".categories_help_title")) %>
     </dt>
     <dd class="category">
       <fieldset>
@@ -84,7 +84,7 @@
 
     <dt class="relationship" title="<%= ts('relationships') %>">
       <label for="work_relationship"><%= Relationship::NAME.pluralize %></label>
-      <%= link_to_help "relationships-help" %>
+      <%= link_to_help_modal(help_tags_relationships_path, t(".relationships_help_title")) %>
     </dt>
     <dd class="relationship" title="<%= ts('relationships') %>">
       <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, 
@@ -96,7 +96,7 @@
 
     <dt class="character" title="<%= ts('characters') %>">
       <label for="work_character"><%= Character::NAME.pluralize %></label>
-      <%= link_to_help "characters-help" %>
+      <%= link_to_help_modal(help_tags_characters_path, t(".characters_help_title")) %>
     </dt>
     <dd class="character" title="<%= ts('characters') %>">
       <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, 
@@ -108,7 +108,7 @@
 
     <dt class="freeform" title="<%= ts('additional tags') %>">
       <label for="work_freeform"><%= Freeform::NAME %></label>
-      <%= link_to_help "additional-tags-help" %>
+      <%= link_to_help_modal(help_tags_additional_path, t(".additional_tags_help_title")) %>
     </dt>
     <dd class="freeform" title="<%= ts('additional tags') %>">
       <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, autocomplete_options('freeform',

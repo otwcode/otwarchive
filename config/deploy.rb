@@ -61,7 +61,7 @@ set :scm, :git
 set :repository, "https://github.com/otwcode/otwarchive.git"
 set :deploy_via, :remote_cache
 
-set :servers, -> { YAML.load_file(File.join(__dir__, "servers.yml")).deep_symbolize_keys[fetch(:stage)] }
+set :servers, -> { YAML.safe_load_file(File.join(__dir__, "servers.yml")).deep_symbolize_keys[fetch(:stage)] }
 
 # overwrite default capistrano deploy tasks
 namespace :deploy do

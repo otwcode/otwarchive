@@ -1,4 +1,3 @@
-# Beta invitations
 # http://railscasts.com/episodes/124-beta-invitations
 class Invitation < ApplicationRecord
   belongs_to :creator, polymorphic: true

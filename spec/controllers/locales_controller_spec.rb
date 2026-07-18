@@ -201,6 +201,15 @@ describe LocalesController do
           expect(assigns(:locale)).to eq(locale)
           expect(assigns(:languages)).to eq(Language.default_order)
         end
+
+        it "errors if use for interface is enabled but use for emails isn't" do
+          fake_login_admin(admin)
+          params = { name: "Tiếng Việt", email_enabled: false, interface_enabled: true }
+
+          put :update, params: { id: locale.iso, locale: params }
+          expect(response).to render_template("edit")
+          expect(assigns[:locale].errors[:interface_enabled]).to include("can only be enabled if use for emails is also enabled.")
+        end
       end
     end
   end

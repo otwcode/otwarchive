@@ -54,16 +54,6 @@ series_00005:
   complete: false
   summary: Series including both public and restricted works, unregistered users should see no trace of the restricted ones!
   hidden_by_admin: false
-series_00006: 
-  restricted: true
-  created_at: 2009-12-12 22:43:13 Z
-  title: NCIS and the...
-  updated_at: 2009-12-12 22:43:13 Z
-  series_notes: 
-  id: 6
-  complete: false
-  summary: 
-  hidden_by_admin: false
 series_00007: 
   restricted: false
   created_at: 2009-12-12 22:48:20 Z

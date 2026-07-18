@@ -109,7 +109,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname2"
     And I edit the work "Fulfilled Story"
     And I fill in "Additional Tags" with "My New Tag"
-    And I press "Post"
+    And I press "Update"
   Then I should see "Work was successfully updated."
     And I should see "My New Tag"
 

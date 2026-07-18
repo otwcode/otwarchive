@@ -46,6 +46,44 @@ Feature: Prompt Meme Challenge
     And 1 email should be delivered to "my1@e.org"
 # TODO: when work_anonymous is implemented, test that the prompt filler can be anon too
 
+  Scenario: Translated prompt notification email is sent
+  Given a locale with translated emails
+    And basic tags
+    And the following activated user exists
+      | login   | password | email     |
+      | myname1 | password | my1@e.org |
+    And the user "myname1" enables translated emails
+    And a fandom exists with name: "GhostSoup", canonical: true
+    And I am logged in as "mod1"
+    And I set up a basic promptmeme "The Kissing Game"
+  When I am logged in as "myname1"
+    And I go to "The Kissing Game" collection's page
+    And I follow "Sign Up"
+    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "GhostSoup"
+    And I check "challenge_signup_requests_attributes_0_anonymous"
+    And I press "Submit"
+  Then I should see "Sign-up was successfully created"
+  When I am logged in as "myname2"
+    And I go to "The Kissing Game" collection's page
+    And I follow "Prompts (1)"
+    And I press "Claim"
+  Then I should see "New claim made"
+    And I follow "Fulfill"
+    And I check "No Archive Warnings Apply"
+    And I select "English" from "Choose a language"
+    And I fill in "Fandoms" with "GhostSoup"
+    And I fill in "Work Title" with "Kinky Story"
+    And I fill in "Additional Tags" with "yourkink1, yourkink2"
+    And I fill in "content" with "Story written for your kinks, oh mystery reader!"
+  When all emails have been delivered
+    And I press "Post"
+  Then 1 email should be delivered to "my1@e.org"
+    And the email should have "A response to your prompt" in the subject
+    And the email should contain "Additional Tags:"
+    And the email should contain "yourkink1"
+    And the email should contain "yourkink2"
+    And the email to "myname1" should be translated
+
   Scenario: Fulfilling a claim ticks the right boxes automatically
 
   Given I have Battle 12 prompt meme fully set up
@@ -222,7 +260,7 @@ Feature: Prompt Meme Challenge
     And I should not see "Battle 12"
     And I edit the work "Existing Story"
     And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "Battle 12"
   Then I should see "Existing Story"
     And I should see "This work is part of an ongoing challenge"
@@ -241,7 +279,7 @@ Feature: Prompt Meme Challenge
     And I post the work "Existing Story" in the collection "Othercoll"
     And I edit the work "Existing Story"
     And I check "random SGA love in Battle 12 (Anonymous)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "Battle 12"
     And I should see "Othercoll"
 
@@ -512,7 +550,7 @@ Feature: Prompt Meme Challenge
   Then I should see "For prompter."
   When I follow "Edit"
     And I uncheck "Battle 12 (prompter)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "For prompter."
 
   Scenario: A creator cannot give a gift to a user who disallows gifts if the work is connected to a claim of an anonymous prompt belonging to the recipient
@@ -557,5 +595,24 @@ Feature: Prompt Meme Challenge
   Then I should see "For prompter."
   When I follow "Edit"
     And I uncheck "Battle 12 (prompter)"
-    And I press "Post"
+    And I press "Update"
   Then I should see "For prompter."
+
+  Scenario: When a prompt is filled with a restricted work, the work should only be visible to logged-in users
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+    And I sign up for Battle 12
+    And I am logged in as "myname2"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim with "Restricted Fill"
+    And I lock the work
+    And I press "Post"
+  When I view prompts for "Battle 12"
+  Then I should see "Fulfilled By"
+    And I should see "Restricted Fill"
+  When I log out
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts ("
+  Then I should not see "Fulfilled By"
+    And I should not see "Restricted Fill"

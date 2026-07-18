@@ -1,5 +1,6 @@
 class ArchiveFaqsController < ApplicationController
   before_action :admin_only, except: [:index, :show]
+  before_action :redirect_renamed_locales
   before_action :set_locale
   before_action :validate_locale, if: :logged_in_as_admin?
   before_action :require_language_id
@@ -42,13 +43,12 @@ class ArchiveFaqsController < ApplicationController
   protected
 
   def build_questions
-    notice = ""
     num_to_build = params["num_questions"] ? params["num_questions"].to_i : @archive_faq.questions.count
     if num_to_build < @archive_faq.questions.count
-      notice += ts("There are currently %{num} questions. You can only submit a number equal to or greater than %{num}. ", num: @archive_faq.questions.count)
+      notice = ts("There are currently %{num} questions. You can only submit a number equal to or greater than %{num}. ", num: @archive_faq.questions.count)
       num_to_build = @archive_faq.questions.count
     elsif params["num_questions"]
-      notice += ts("Set up %{num} questions. ", num: num_to_build)
+      notice = ts("Set up %{num} questions. ", num: num_to_build)
     end
     num_existing = @archive_faq.questions.count
     num_existing.upto(num_to_build-1) do
@@ -130,6 +130,18 @@ class ArchiveFaqsController < ApplicationController
     { language_id: set_locale.to_s }
   end
 
+  RENAMED_LOCALES = {
+    "sr" => "scr", # AO3-6720
+    "zh-CN" => "zh-Hans" # AO3-7525
+  }.freeze
+
+  def redirect_renamed_locales
+    return if params[:language_id].blank?
+
+    new_iso = RENAMED_LOCALES[params[:language_id]]
+    redirect_to helpers.current_path_with(language_id: new_iso) if new_iso
+  end
+
   # Set the locale as an instance variable first
   def set_locale
     session[:language_id] = params[:language_id] if Locale.exists?(iso: params[:language_id])
@@ -145,13 +157,13 @@ class ArchiveFaqsController < ApplicationController
     return if params[:language_id].blank? || Locale.exists?(iso: params[:language_id])
 
     flash[:error] = "The specified locale does not exist."
-    redirect_to url_for(request.query_parameters.merge(language_id: I18n.default_locale))
+    redirect_to helpers.current_path_with(language_id: I18n.default_locale)
   end
 
   def require_language_id
     return if params[:language_id].present? && Locale.exists?(iso: params[:language_id])
 
-    redirect_to url_for(request.query_parameters.merge(language_id: @i18n_locale.to_s))
+    redirect_to helpers.current_path_with(language_id: @i18n_locale.to_s)
   end
 
   def default_locale_only

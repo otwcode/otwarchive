@@ -1,7 +1,6 @@
 class AutocompleteController < ApplicationController
   respond_to :json
 
-  skip_before_action :store_location
   skip_around_action :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
   skip_before_action :sanitize_ac_params # can we dare!
 
@@ -111,7 +110,7 @@ class AutocompleteController < ApplicationController
         body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: search_list } } }
       )
       render_output((match + search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] }).uniq)
-    rescue Elasticsearch::Transport::Transport::Errors::BadRequest
+    rescue Elastic::Transport::Transport::Errors::BadRequest
       render_output(match)
     end
   end
@@ -120,9 +119,11 @@ class AutocompleteController < ApplicationController
 
   # look up collections ranked by number of items they contain
 
-  def collection_fullname
-    results = Collection.autocomplete_lookup(search_param: params[:term], autocomplete_prefix: "autocomplete_collection_all").map {|res| Collection.fullname_from_autocomplete(res)}
-    render_output(results)
+  def collection_title
+    results = Collection.autocomplete_lookup(search_param: params[:term], autocomplete_prefix: "autocomplete_collection_all").map do |res|
+      { id: Collection.title_from_autocomplete(res), name: Collection.fullname_from_autocomplete(res) }
+    end
+    respond_with(results)
   end
 
   # return collection names

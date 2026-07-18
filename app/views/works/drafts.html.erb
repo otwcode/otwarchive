@@ -1,9 +1,9 @@
 <!--Descriptive page names, messages and instructions-->
-<h2 class="heading"><%= search_header @works, nil, ts("Unposted Draft") %></h2>
+<h2 class="heading"><%= search_header @works, nil, t(".page_heading") %></h2>
 
 <p class="caution notice">
-  <strong><%= ts("Please note:") %></strong>
-  <%= ts("Unposted drafts are only saved for a month from the day they are first created, and then deleted from the Archive.") %>
+  <strong><%= t(".please_note") %></strong>
+  <%= t(".unposted_drafts_get_deleted", app_name: ArchiveConfig.APP_SHORT_NAME) %>
 </p>
 <!--/descriptions-->
 

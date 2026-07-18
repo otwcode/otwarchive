@@ -15,7 +15,7 @@ describe "Rack::Attack" do
   end
 
   def unique_user_params
-    { user: { login: generate(:login), password: "secret" } }
+    { user: { login: generate(:login), password: "secret12" } }
   end
 
   def unique_admin_params

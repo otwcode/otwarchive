@@ -1,4 +1,6 @@
 class ChallengeAssignment < ApplicationRecord
+  self.ignored_columns = [:pinch_request_signup_id]
+
   # We use "-1" to represent all the requested items matching
   ALL = -1
 
@@ -6,7 +8,6 @@ class ChallengeAssignment < ApplicationRecord
   belongs_to :offer_signup, class_name: "ChallengeSignup"
   belongs_to :request_signup, class_name: "ChallengeSignup"
   belongs_to :pinch_hitter, class_name: "Pseud"
-  belongs_to :pinch_request_signup, class_name: "ChallengeSignup" # TODO: AO3-6851 Remove pinch_request_signup association from the challenge_assignments table
   belongs_to :creation, polymorphic: true
 
   # Make sure that the signups are an actual match if we're in the process of assigning
@@ -368,15 +369,32 @@ class ChallengeAssignment < ApplicationRecord
     end
     REDIS_GENERAL.del(progress_key(collection))
 
+    no_potential_matches_found = collection.potential_matches.empty?
+    collection.challenge.no_potential_matches_found = no_potential_matches_found
+    collection.challenge.save!
+
+    if no_potential_matches_found
+      if collection.collection_email.present?
+        GiftExchangeMailer.no_potential_matches_notification(collection.id, collection.collection_email).deliver_later
+      else
+        collection.maintainers_list.each do |user|
+          I18n.with_locale(user.preference.locale_for_mails) do
+            GiftExchangeMailer.no_potential_matches_notification(collection.id, user.email).deliver_later
+          end
+        end
+      end
+      return
+    end
+
     if collection.collection_email.present?
-      UserMailer.potential_match_generation_notification(collection.id, collection.collection_email).deliver_later
+      GiftExchangeMailer.potential_match_generation_notification(collection.id, collection.collection_email).deliver_later
     else
       collection.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale_for_mails) do
-          UserMailer.potential_match_generation_notification(collection.id, user.email).deliver_later
+          GiftExchangeMailer.potential_match_generation_notification(collection.id, user.email).deliver_later
         end
-      end 
-    end 
+      end
+    end
   end
 
   # go through the request's potential matches in order from best to worst and try and assign

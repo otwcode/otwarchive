@@ -32,8 +32,7 @@ end
 
 Given /^invitations are required$/ do
   steps %{
-    Given I have no users
-      And account creation requires an invitation
+    Given account creation requires an invitation
       And users can request invitations
   }
 end
@@ -98,7 +97,13 @@ end
 Given "an invitation created by {string} and used by {string}" do |creator, invitee|
   creator = User.find_by(login: creator)
   invitee = User.find_by(login: invitee)
-  FactoryBot.create(:invitation, creator: creator, invitee: invitee)
+  invitation = FactoryBot.create(:invitation, creator: creator)
+  invitation.mark_as_redeemed(invitee)
+end
+
+Given "one user invite request" do
+  user = ensure_user("user1")
+  UserInviteRequest.create!(user: user, quantity: 3, reason: "I want them for a friend")
 end
 
 ### WHEN
@@ -114,9 +119,7 @@ When /^I use an already used invitation to sign up$/ do
       | invited  | password |
   }
   user = User.find_by(login: "invited")
-  invite.redeemed_at = Time.now
   invite.mark_as_redeemed(user)
-  invite.save
   visit signup_path(invite.token)
 end
 
@@ -145,7 +148,7 @@ When "as {string} I request some invites" do |user|
 end
 
 When /^I view requests as an admin$/ do
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "policy_and_abuse" admin}
   step %{I follow "Invitations"}
   step %{I follow "Manage Requests"}
 end

@@ -43,8 +43,8 @@ describe FilterCount do
       tag_small.build_filter_count.update!(public_works_count: 13)
       tag_large.build_filter_count.update!(public_works_count: 13)
 
-      FilterCount::REDIS.sadd(FilterCount::QUEUE_KEY_SMALL, tag_small.id)
-      FilterCount::REDIS.sadd(FilterCount::QUEUE_KEY_LARGE, tag_large.id)
+      FilterCount::REDIS.sadd?(FilterCount::QUEUE_KEY_SMALL, tag_small.id)
+      FilterCount::REDIS.sadd?(FilterCount::QUEUE_KEY_LARGE, tag_large.id)
     end
 
     context "for small tags" do

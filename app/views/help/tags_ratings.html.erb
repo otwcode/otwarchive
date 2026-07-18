@@ -1,0 +1,16 @@
+<h4><%= t(".page_heading") %></h4>
+
+<p><%= t(".more_info.html", ratings_and_warnings_tos_section_link: link_to(t(".more_info.ratings_and_warnings_tos_section", app_name: ArchiveConfig.APP_SHORT_NAME), content_path(anchor: "II.J"))) %></p>
+
+<dl id="help">
+  <dt><%= t(".not_rated.header") %></dt>
+  <dd><%= t(".not_rated.description") %></dd>
+  <dt><%= t(".general_audiences.header") %></dt>
+  <dd><%= t(".general_audiences.description") %></dd>
+  <dt><%= t(".teen_and_up_audiences.header") %></dt>
+  <dd><%= t(".teen_and_up_audiences.description") %></dd>
+  <dt><%= t(".mature.header") %></dt>
+  <dd><%= t(".mature.description") %></dd>
+  <dt><%= t(".explicit.header") %></dt>
+  <dd><%= t(".explicit.description") %></dd>
+</dl>

@@ -111,7 +111,7 @@ form.edit_preference ul {
   float: none;
 }
 
-#main.users-edit textarea#profile_attributes_about_me {
+#main.users-edit textarea#profile_about_me {
   height: 12em;
   width: 99%;
 }

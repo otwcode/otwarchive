@@ -50,7 +50,7 @@
 
     </h4>
 
-    <ul class="actions" role="menu">
+    <ul class="actions">
       <li>
         <%= form_tag user_reading_path(current_user, reading, page: params[:page]), method: 'delete', class: 'ajax-remove' do |f| %>
           <%= hidden_field_tag :reading, reading.id %>

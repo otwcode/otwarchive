@@ -1,24 +1,4 @@
 class AdminMailer < ApplicationMailer
-  # Sends email to an admin when a new comment is created on an admin post
-  def comment_notification(comment_id)
-    # admin = Admin.find(admin_id)
-    @comment = Comment.find(comment_id)
-    mail(
-      to: ArchiveConfig.ADMIN_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
-    )
-  end
-
-  # Sends email to an admin when a comment on an admin post is edited
-  def edited_comment_notification(comment_id)
-    # admin = Admin.find(admin_id)
-    @comment = Comment.find(comment_id)
-    mail(
-      to: ArchiveConfig.ADMIN_ADDRESS,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
-    )
-  end
-
   # Sends a spam report
   def send_spam_alert(spam)
     # Make sure that the keys of the spam array are integers, so that we can do
@@ -49,7 +29,19 @@ class AdminMailer < ApplicationMailer
 
     mail(
       to: @admin.email,
-      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME) 
+    )
+  end
+
+  # Sends an email to the admin who lost their 2FA device when a sysadmin runs
+  # the script in script/send_backup_codes_to_admin.rb
+  def totp_2fa_backup_codes(admin, codes)
+    @admin = admin
+    @codes = codes
+
+    mail(
+      to: @admin.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME) 
     )
   end
 end

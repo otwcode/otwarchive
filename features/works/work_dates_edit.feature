@@ -81,5 +81,5 @@ Feature: Edit Works Dates
     When I edit the work "Beauty and the Beast 2077"
       And I check "Set a different publication date"
       And I select "December" from "work_chapter_attributes_published_at_2i"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Sorry! We couldn't save this work because: Publication date can't be in the future."

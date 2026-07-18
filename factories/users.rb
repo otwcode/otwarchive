@@ -11,7 +11,7 @@ FactoryBot.define do
 
   factory :user do
     login { generate(:login) }
-    password { "password" }
+    password { SecureRandom.alphanumeric(10) }
     age_over_13 { "1" }
     data_processing { "1" }
     terms_of_service { "1" }

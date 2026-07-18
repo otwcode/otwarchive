@@ -12,14 +12,14 @@ describe ReadingsController do
         it "redirects to login page with error" do
           fake_login_admin(create(:admin))
           get :index, params: { user_id: user }
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+          it_redirects_to_user_login_with_error
         end
       end
 
       context "when logged out" do
         it "redirects to login page with error" do
           get :index, params: { user_id: user }
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+          it_redirects_to_user_login_with_error
         end
       end
 
@@ -190,7 +190,7 @@ describe ReadingsController do
       it "redirects to login page with error" do
         post :clear, params: { user_id: user }
 
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 

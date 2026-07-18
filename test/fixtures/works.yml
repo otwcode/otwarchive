@@ -14,7 +14,7 @@ work_00082:
   word_count: 683
   title_to_sort_on: all it's cracked up to be
   id: 82
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -212,7 +212,7 @@ work_00083:
   word_count: 218
   title_to_sort_on: best of men, the
   id: 83
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -300,7 +300,7 @@ work_00084:
   word_count: 5807
   title_to_sort_on: better man, the
   id: 84
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -344,7 +344,7 @@ work_00085:
   word_count: 862
   title_to_sort_on: mazes and monsters
   id: 85
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -542,7 +542,7 @@ work_00086:
   word_count: 209
   title_to_sort_on: not just a pretty face
   id: 86
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -801,7 +801,7 @@ work_00088:
   word_count: 2329
   title_to_sort_on: tapped out
   id: 88
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -1016,7 +1016,7 @@ work_00071:
   word_count: 501
   title_to_sort_on: sometimes
   id: 71
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -1266,7 +1266,7 @@ work_00072:
   word_count: 1774
   title_to_sort_on: gk christmas story
   id: 72
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -1398,7 +1398,7 @@ work_00073:
   word_count: 2028
   title_to_sort_on: celebrations
   id: 73
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -1489,7 +1489,7 @@ work_00074:
   word_count: 1131
   title_to_sort_on: light
   id: 74
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -1627,7 +1627,7 @@ work_00075:
   word_count: 5875
   title_to_sort_on: found again
   id: 75
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -1815,7 +1815,7 @@ work_00076:
   word_count: 1251
   title_to_sort_on: dreams of reality
   id: 76
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -1903,7 +1903,7 @@ work_00077:
   word_count: 625
   title_to_sort_on: bugged
   id: 77
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -1975,7 +1975,7 @@ work_00078:
   word_count: 1156
   title_to_sort_on: once more, with feeling
   id: 78
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -2063,7 +2063,7 @@ work_00080:
   word_count: 547
   title_to_sort_on: as it didn't happen
   id: 80
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -2085,7 +2085,7 @@ work_00079:
   word_count: 3909
   title_to_sort_on: murphy's law
   id: 79
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 
@@ -2107,7 +2107,7 @@ work_00081:
   word_count: 3980
   title_to_sort_on: friends
   id: 81
-  language_id: 
+  language_id: 1
   minor_version: 0
   complete: false
   summary: 

@@ -11,7 +11,7 @@ class RedisJobSpawner < ApplicationJob
     key ||= job_class.base_key
 
     # Bail out early if there's nothing to process:
-    return unless redis.exists(key)
+    return unless redis.exists?(key)
 
     # Rename the job to a unique name to avoid conflicts when this is called
     # multiple times in a short period:

@@ -1,0 +1,19 @@
+---
+question_00001:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  id: 1
+  archive_faq_id: 1
+  question: First testing question
+  content: <p>Some testing faq answer</p>
+  anchor: first-testing-anchor
+  position: 1
+question_00002:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  id: 2
+  archive_faq_id: 1
+  question: Second testing question
+  content: <p>Another testing faq answer</p>
+  anchor: second-testing-anchor
+  position: 2

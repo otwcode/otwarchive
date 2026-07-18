@@ -33,6 +33,13 @@ class Prompt < ApplicationRecord
     where("set_taggings.tag_id = ?", tag.id)
   }
 
+  # VIRTUAL ATTRIBUTES
+
+  # return title.html_safe to overcome escaping done by sanitiser
+  def title
+    self[:title].try(:html_safe)
+  end
+
   # VALIDATIONS
 
   before_validation :inherit_from_signup, on: :create, if: :challenge_signup
@@ -60,11 +67,16 @@ class Prompt < ApplicationRecord
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
 
+  validates :title, format: { without: /\A[=+-@\s＝＋－＠]/, message: :start_with_special_characters }
+
+  # i18n-tasks-use t("errors.attributes.url.invalid")
   validates :url, url_format: {allow_blank: true} # we validate the presence above, conditionally
 
   before_validation :cleanup_url
   def cleanup_url
     self.url = Addressable::URI.heuristic_parse(self.url) if self.url
+  rescue Addressable::URI::InvalidURIError
+    # url_format validation creates the error message
   end
 
   validate :correct_number_of_tags
@@ -172,6 +184,13 @@ class Prompt < ApplicationRecord
 
       # tag_type is one of a set set so we know it is safe for constantize
       allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
+
+      if restriction.send("#{tag_type}_restrict_to_tag_set")
+        allowed_tags = allowed_tags.where(
+          id: tag_set_associations.where(parent_tag_id: tag_set.fandom_taglist).select(:tag_id)
+        )
+      end
+
       disallowed_taglist = tag_set ? tag_set.send("#{tag_type}_taglist") - allowed_tags : []
 
       # check for tag set associations
@@ -206,6 +225,9 @@ class Prompt < ApplicationRecord
     self.request_claims.fulfilled
   end
 
+  def fulfilled_claims_visible_to_all
+    self.request_claims.fulfilled.work_visible_to_all
+  end
   # Computes the "full" tag set (tag_set + optional_tag_set), and stores the
   # result as an instance variable for speed. This is used by the matching
   # algorithm, which doesn't change any signup/prompt/tagset information, so

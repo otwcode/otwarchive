@@ -5,13 +5,27 @@ Feature: Delete a comment
   I want to be able to delete a comment I added
   As an author
   I want to be able to delete a comment a reader added to my work
-  
-  Scenario: User deletes a comment they added to a work
+
+  @no-js-emulation
+  Scenario: User deletes a comment they added to a work without Javascript
     When I am logged in as "author"
       And I post the work "Awesome story"
     When I am logged in as "commenter"
       And I post the comment "Fail comment" on the work "Awesome story"
-      And I delete the comment
+      And I follow "Delete"
+      And I press "Yes, delete!"
+    Then I should see "Comment deleted."
+      And I should not see "Comments:"
+      And I should not see a link "Hide Comments (1)"
+
+  Scenario: User deletes a comment they added to a work with JavaScript
+    Given the work "Awesome story" by "author"
+      And a comment "Fail comment" by "commenter" on the work "Awesome story"
+    When I am logged in as "commenter"
+      And I view the work "Awesome story" with comments
+    Then I should see "Fail comment"
+    When I follow "Delete"
+      And I press "Yes, delete!"
     Then I should see "Comment deleted."
       And I should not see "Comments:"
       And I should not see a link "Hide Comments (1)"
@@ -28,7 +42,7 @@ Feature: Delete a comment
       And I should see "I didn't mean that"
       And I should see "Comments:1"
       And I should see a link "Hide Comments (1)"
-      
+
   Scenario: Author deletes a comment another user added to their work
     When I am logged in as "author"
       And I post the work "Awesome story"
@@ -40,7 +54,7 @@ Feature: Delete a comment
     Then I should see "Comment deleted."
       And I should not see "Comments:"
       And I should not see a link "Hide Comments (1)"
-    
+
   Scenario: Author deletes a parent comment that another user added to their work
     When I am logged in as "author"
       And I post the work "Awesome story"

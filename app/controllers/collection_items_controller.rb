@@ -3,13 +3,14 @@ class CollectionItemsController < ApplicationController
   before_action :load_user, only: [:update_multiple]
   before_action :load_collectible_item, only: [:new, :create]
   before_action :check_parent_visible, only: [:new]
+  before_action :users_only, only: [:new]
 
   cache_sweeper :collection_sweeper
 
   def index
 
     # TODO: AO3-6507 Refactor to use send instead of case statements.
-    if @collection && @collection.user_is_maintainer?(current_user)
+    if @collection && (@collection.user_is_maintainer?(current_user) || privileged_collection_admin?)
       @collection_items = @collection.collection_items.include_for_works
       @collection_items = case params[:status]
                           when "approved"
@@ -38,6 +39,8 @@ class CollectionItemsController < ApplicationController
                             @collection_items.unreviewed_by_user
                           end
     else
+      admin_only_access_denied and return if logged_in_as_admin?
+
       flash[:error] = ts("You don't have permission to see that, sorry!")
       redirect_to collections_path and return
     end
@@ -70,11 +73,11 @@ class CollectionItemsController < ApplicationController
   def create
     unless params[:collection_names]
       flash[:error] = ts("What collections did you want to add?")
-      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+      redirect_back_or_to root_path and return
     end
     unless @item
       flash[:error] = ts("What did you want to add to a collection?")
-      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+      redirect_back_or_to root_path and return
     end
     if !current_user.archivist && @item.respond_to?(:allow_collection_invitation?) && !@item.allow_collection_invitation?
       flash[:error] = t(".invitation_not_sent", default: "This item could not be invited.")

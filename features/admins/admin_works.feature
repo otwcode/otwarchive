@@ -30,13 +30,13 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the email to "regular_user" should be translated
       And the email to "Another" should contain "you will be required to take action to correct the violation"
       And the email to "Another" should be non-translated
-    
+
     Examples:
       | role             |
       | superadmin       |
       | legal            |
       | policy_and_abuse |
-  
+
     Scenario Outline: Can hide works already marked as spam
     Given the work "ToS Violation + Spam" by "regular_user"
       And the work "ToS Violation + Spam" is marked as spam
@@ -50,7 +50,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And "regular_user" should see their work "ToS Violation + Spam" is hidden
       And 1 email should be delivered
       And the email should contain "you will be required to take action to correct the violation"
-    
+
     Examples:
       | role             |
       | superadmin       |
@@ -92,9 +92,9 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And all indexing jobs have been run
     Then I should see "Item was successfully deleted."
       And 2 emails should be delivered
-      And the email to "regular_user" should contain "deleted from the Archive by a site admin"
+      And the email to "regular_user" should contain "was deleted by an AO3 administrator"
       And the email to "regular_user" should be translated
-      And the email to "Another" should contain "deleted from the Archive by a site admin"
+      And the email to "Another" should contain "was deleted by an AO3 administrator"
       And the email to "Another" should be non-translated
     When I visit the last activities item
     Then I should see "destroy"
@@ -116,7 +116,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And all indexing jobs have been run
     Then I should see "Item was successfully deleted."
       And 1 email should be delivered
-      And the email should contain "deleted from the Archive by a site admin"
+      And the email should contain "was deleted by an AO3 administrator"
       And the email should not contain "translation missing"
     When I log out
       And I am on regular_user's works page
@@ -179,7 +179,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I post the work "Changes" with fandom "User-Added Fandom" with freeform "User-Added Freeform" with category "M/M"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Changes"
-      And I follow "Edit Tags and Language"
+      And I follow "Edit Work"
     When I select "Mature" from "Rating"
       And I uncheck "No Archive Warnings Apply"
       And I check "Choose Not To Use Archive Warnings"
@@ -189,7 +189,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I fill in "Additional Tags" with "Admin-Added Freeform"
       And I uncheck "M/M"
       And I check "Other"
-    When I press "Post"
+    When I press "Update"
     Then I should not see "User-Added Fandom"
       And I should see "Admin-Added Fandom"
       And I should not see "User-Added Freeform"
@@ -375,25 +375,86 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the work "Wrong Language"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Language"
-      And I follow "Edit Tags and Language"
-    Then I should see "Edit Work Tags and Language for "
+      And I follow "Edit Work"
+    Then I should see "Edit Work"
     When I select "Deutsch" from "Choose a language"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Deutsch"
       And I should not see "English"
+    When I follow "Activities"
+    Then I should see "edit language"
+    When I visit the last activities item
+    Then I should see "Old language: English"
+     And I should see "New language: Deutsch"
 
   Scenario: Admin can edit language on works when previewing first
     Given basic languages
       And the work "Wrong Language"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Language"
-      And I follow "Edit Tags and Language"
+      And I follow "Edit Work"
     When I select "Deutsch" from "Choose a language"
       And I press "Preview"
     Then I should see "Preview Tags and Language"
     When I press "Update"
     Then I should see "Deutsch"
       And I should not see "English"
+
+  Scenario: When admin edits tags and language on works at the same time, both Activities entries are added
+    Given basic languages
+      And the work "Wrong Tags and Language"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Wrong Tags and Language"
+      And I follow "Edit Work"
+    When I select "Mature" from "Rating"
+      And I select "Deutsch" from "Choose a language"
+      And I press "Update"
+      And I follow "Activities"
+    Then I should see "update_tags"
+      And I should see "edit language"
+
+  Scenario: When admin does not edit tags or language and posts without previewing, no Activities entries are added
+    Given the work "Nothing Wrong"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Nothing Wrong"
+      And I follow "Edit Work"
+      And I press "Update"
+      And I follow "Activities"
+    Then I should not see "update_tags"
+      And I should not see "edit language"
+
+  Scenario: When admin does not edit tags or language, previews and then posts, no Activities entries are added
+    Given the work "Nothing Wrong"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Nothing Wrong"
+      And I follow "Edit Work"
+      And I press "Preview"
+      And I press "Update"
+      And I follow "Activities"
+    Then I should not see "update_tags"
+      And I should not see "edit language"
+
+  Scenario: When admin tries to make an invalid edit, no Activities entries are added
+    Given the work "Some Fic"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Some Fic"
+      And I follow "Edit Work"
+      And I uncheck "No Archive Warnings Apply"
+    When I press "Update"
+      And I follow "Activities"
+    Then I should see 0 admin activity log entries
+
+  Scenario: When admin previews without saving, no Activities entries are added
+    Given basic languages
+      And the work "Some Fic"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Some Fic"
+      And I follow "Edit Work"
+      And I select "Mature" from "Rating"
+      And I select "Deutsch" from "Choose a language"
+    When I press "Preview"
+      And I follow "Activities"
+    Then I should see 0 admin activity log entries
 
   Scenario: can mark a work as spam
   Given the work "Spammity Spam"
@@ -521,6 +582,24 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "Over Tag Limit: No"
     When I view the work "Over the Limit"
     Then I should see "Over Tag Limit: Yes"
+
+  Scenario Outline: Certain admins can edit a work that has too many tags
+    Given the user-defined tag limit is 2
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 3 fandom tags
+    When I am logged in as a "<role>" admin
+      And I view the work "Over the Limit"
+      And I follow "Edit Work"
+      And I select "Mature" from "Rating"
+      And I press "Update"
+    Then I should see "Work was successfully updated."
+      And I should see "Mature"
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
 
   Scenario Outline: Certain admins can see original work creators
     Given a work "Orphaned" with the original creator "orphaneer"

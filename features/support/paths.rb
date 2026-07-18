@@ -21,18 +21,21 @@ module NavigationHelpers
     when /^the search works page$/i
       step %{all indexing jobs have been run}
       search_works_path
+    when /^the collections page$/i
+      step %{all indexing jobs have been run}
+      collections_path
     when /^the search people page$/i
       step %{all indexing jobs have been run}
       search_people_path
     when /^the bookmarks page$/i
       # This cached page only expires by time, not by any user action;
       # just clear it every time.
-      Rails.cache.delete "bookmarks/index/latest/v2_true"
+      Rails.cache.delete "bookmarks/index/latest/v3"
       bookmarks_path
     when /^the works page$/i
       # This cached page only expires by time, not by any user action;
       # just clear it every time.
-      Rails.cache.delete "works/index/latest/v1"
+      Rails.cache.delete "works/index/latest/v2"
       works_path
     when /^the admin login page$/i
       new_admin_session_path
@@ -119,6 +122,8 @@ module NavigationHelpers
       work = Work.find_by(title: $2)
       chapter = work.chapters_in_order(include_content: false)[$1.to_i - 1]
       work_chapter_path(work, chapter)
+    when /^the bookmarks page for the work "(.*)"$/i
+      work_bookmarks_path(Work.find_by(title: Regexp.last_match(1)))
     when /^the bookmarks page for user "(.*)" with pseud "(.*)"$/i
       step %{all indexing jobs have been run}
       user_pseud_bookmarks_path(user_id: $1, pseud_id: $2)
@@ -150,6 +155,8 @@ module NavigationHelpers
       user_profile_path(user_id: $1)
     when /^(.*)'s skins page/
       user_skins_path(user_id: $1)
+    when /^(.*)'s edit multiple works page/
+      show_multiple_user_works_path(user_id: Regexp.last_match(1))
     when /^"(.*)" skin page/
       skin_path(Skin.find_by(title: $1))
     when /^the new skin page/
@@ -162,6 +169,9 @@ module NavigationHelpers
       edit_skin_path(Skin.find_by(title: $1), wizard: true)
     when /^the new collection page/
       new_collection_path
+    when /^(.*?)(?:'s)? collections page$/i
+      step %{all indexing jobs have been run}
+      user_collections_path(user_id: Regexp.last_match(1))
     when /^"(.*)" collection's page$/i                         # e.g. when I go to "Collection name" collection's page
       step %{all indexing jobs have been run} # reindex to show recent works/bookmarks
       collection_path(Collection.find_by(title: $1))
@@ -173,29 +183,41 @@ module NavigationHelpers
       collection_requests_path(Collection.find_by(title: $1))
     when /^the "(.*)" assignments page$/i                      # e.g. when I go to the "Collection name" assignments page
       collection_assignments_path(Collection.find_by(title: $1))
+    when /^the first assignment page for "(.*?)"$/i
+      collection = Collection.find_by(title: Regexp.last_match(1))
+      collection_assignment_path(collection, collection.assignments.first)
     when /^the "(.*)" participants page$/i                      # e.g. when I go to the "Collection name" participants page
       collection_participants_path(Collection.find_by(title: $1))
     when /^"(.*)" collection's url$/i                          # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by(title: $1))
+    when /^the "(.*)" claims page for the current user$/       # e.g. when I go to the "Collection name" claims page for the current user
+      collection_claims_path(Collection.find_by(title: Regexp.last_match(1)), for_user: true)
     when /^"(.*)" gift exchange edit page$/i
       edit_collection_gift_exchange_path(Collection.find_by(title: $1))
     when /^"(.*)" gift exchange matching page$/i
       collection_potential_matches_path(Collection.find_by(title: $1))
+    when /^"(.*)" prompt meme edit page$/i
+      edit_collection_prompt_meme_path(Collection.find_by(title: $1))
+    when /^the "(.*)" claims page$/i
+      collection_claims_path(Collection.find_by(title: $1))
     when /^the works tagged "(.*?)" in collection "(.*?)"$/i
       step %{all indexing jobs have been run}
       collection_tag_works_path(Collection.find_by(title: $2), Tag.find_by_name($1))
     when /^the works tagged "(.*)"$/i
       step %{all indexing jobs have been run}
       tag_works_path(Tag.find_by_name($1))
-    when /^the bookmarks tagged "(.*)"$/i
+    when /^the bookmarks (?:tagged|page for the tag) "(.*)"$/i
       step %{all indexing jobs have been run}
-      tag_bookmarks_path(Tag.find_by_name($1))
+      tag_bookmarks_path(Tag.find_by_name(Regexp.last_match(1)))
     when /^the bookmarks in collection "(.*)"$/i
       step %{all indexing jobs have been run}
       collection_bookmarks_path(Collection.find_by(title: $1))
     when /^the first bookmark for the work "(.*?)"$/i
       work = Work.find_by(title: Regexp.last_match(1))
       bookmark_path(work.bookmarks.first)
+    when /^the first bookmark for the series "(.*?)"$/i
+      series = Series.find_by(title: Regexp.last_match(1))
+      bookmark_path(series.bookmarks.first)
     when /^the new bookmark page for work "(.*?)"$/i
       new_work_bookmark_path(Work.find_by(title: Regexp.last_match(1)))
     when /^the tag comments? page for "(.*)"$/i
@@ -254,7 +276,7 @@ module NavigationHelpers
       external_works_path
     when /^the external works page with only duplicates$/i
       external_works_path(show: :duplicates)
-    when /^the new user password page$/i
+    when /^the forgot password page$/i
       new_user_password_path
     when /^the edit user password page$/i
       edit_user_password_path
@@ -264,10 +286,16 @@ module NavigationHelpers
       tags_path
     when /^the orphan all works page$/i
       new_orphan_path
+    when /^the activation page for "(.*)"$/i
+      activate_path(id: User.find_by(login: Regexp.last_match(1)).confirmation_token)
+    when /^the first login help page$/i
+      help_first_login_path
 
     # Admin Pages
     when /^the admin-posts page$/i
       admin_posts_path
+    when /^the admin-post drafts page$/i
+      drafts_admin_posts_path
     when /^the "(.*)" admin post page$/i
       admin_post_path(AdminPost.find_by(title: Regexp.last_match(1)))
     when /^the unreviewed comments page for the admin post "(.*)"$/i
@@ -279,6 +307,7 @@ module NavigationHelpers
     when /^the admin-blacklist page$/i
       admin_blacklisted_emails_path
     when /^the manage users page$/
+      step "all indexing jobs have been run"
       admin_users_path
     when /^the bulk email search page$/i
       bulk_search_admin_users_path
@@ -288,6 +317,8 @@ module NavigationHelpers
       new_admin_password_path
     when /^the edit admin password page$/i
       edit_admin_password_path
+    when /^the support notices page$/i
+      admin_support_notices_path
 
     # Here is an example that pulls values out of the Regexp:
     #

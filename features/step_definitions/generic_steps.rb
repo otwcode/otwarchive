@@ -71,6 +71,10 @@ Then /^I should see Posted now$/ do
   step "I should see \"Posted #{now}\""
 end
 
+When "I fill in {string} with {string} repeated {int} times" do |field, str, count|
+  fill_in(field, with: (str * count))
+end
+
 When /^I fill in "([^\"]*)" with$/ do |field, value|
   fill_in(field, with: value)
 end
@@ -132,6 +136,10 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
 end
 
+Then "I should see in the {string} input" do |labeltext, content|
+  find_field(labeltext).value.should == content
+end
+
 Then /^I should see a button with text "(.*?)"(?: within "(.*?)")?$/ do |text, selector|
   assure_xpath_present("input", "value", text, selector)
 end
@@ -142,6 +150,22 @@ end
 
 Then "I should see a link to {string} within {string}" do |url, selector|
   assure_xpath_present("a", "href", url, selector)
+end
+
+Then /^I should see a page link to (.+) within "(.*?)"$/ do |page_name, selector| # rubocop:disable Cucumber/RegexStepName
+  expect(page.find(selector)).to have_link("", href: path_to(page_name))
+end
+
+Then /^I should not see a page link to (.+) within "(.*?)"$/ do |page_name, selector| # rubocop:disable Cucumber/RegexStepName
+  expect(page.find(selector)).to_not have_link("", href: path_to(page_name))
+end
+
+Then "I should see a link {string} within {string}" do |text, selector|
+  expect(page.find(selector)).to have_link(text)
+end
+
+Then "I should not see a link {string} within {string}" do |text, selector|
+  expect(page.find(selector)).to_not have_link(text)
 end
 
 Then "the {string} input should be blank" do |label|
@@ -231,12 +255,11 @@ When /^I submit$/ do
   page.all("p.submit input[type='submit']")[0].click
 end
 
-# we want greedy matching for this one so we can handle tags that have attributes in them
-Then /^I should see the text with tags "(.*)"$/ do |text|
+Then "I should see the text with tags {string}" do |text|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
-Then /^I should see the text with tags '(.*)'$/ do |text|
+Then "I should see the text with tags" do |text|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
 

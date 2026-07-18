@@ -9,6 +9,8 @@ Feature: Image safety mode
     When I view <commentable> with comments
     Then I should see the image "src" text "https://example.com/image.jpg"
       And I should not see "OMG! img src="
+      And I should see "Plain text with limited HTML" within ".new_comment"
+      But I should not see "Embedded images (<img> tags) will be displayed as HTML" within ".new_comment"
     When I go to the homepage
     Then I should see the image "src" text "https://example.com/image.jpg"
       And I should not see "OMG! img src="
@@ -19,6 +21,7 @@ Feature: Image safety mode
     Then I should not see the image "src" text "https://example.com/image.jpg"
       But I should see "OMG! img src="
       And I should see "https://example.com/image.jpg"
+      And I should see "Embedded images (<img> tags) will be displayed as HTML" within ".new_comment"
     When I go to the homepage
     Then I should not see the image "src" text "https://example.com/image.jpg"
       But I should see "OMG! img src="
@@ -41,6 +44,7 @@ Feature: Image safety mode
     Then I should not see the image "src" text "https://example.com/image.jpg"
       But I should see "OMG! img src="
       And I should see "https://example.com/image.jpg"
+      And I should see "Embedded images (<img> tags) will be displayed as HTML" within ".new_comment"
     When I go to the homepage
     Then I should not see the image "src" text "https://example.com/image.jpg"
       But I should see "OMG! img src="
@@ -53,6 +57,8 @@ Feature: Image safety mode
       And I view <commentable> with comments
     Then I should see the image "src" text "https://example.com/image.jpg"
       And I should not see "OMG! img src="
+      And I should see "Plain text with limited HTML" within ".new_comment"
+      But I should not see "Embedded images (<img> tags) will be displayed as HTML" within ".new_comment"
     When I go to the homepage
     Then I should see the image "src" text "https://example.com/image.jpg"
       And I should not see "OMG! img src="

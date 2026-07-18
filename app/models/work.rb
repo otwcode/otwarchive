@@ -63,6 +63,8 @@ class Work < ApplicationRecord
   end
   # moderation
   has_one :moderated_work, dependent: :destroy
+  # imported url
+  has_one :imported_url, dependent: :destroy
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -165,7 +167,8 @@ class Work < ApplicationRecord
   end
 
   validates :user_defined_tags_count,
-            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
+            at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } },
+            unless: -> { User.current_user.is_a?(Admin) }
 
   # If the recipient doesn't allow gifts, it should not be possible to give them
   # a gift work unless it fulfills a gift exchange assignment or non-anonymous
@@ -216,11 +219,11 @@ class Work < ApplicationRecord
     end
   end
 
-  enum comment_permissions: {
+  enum :comment_permissions, {
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, _suffix: :comments, _default: 1
+  }, suffix: :comments, default: 1, validate: { message: :invalid_permissions }
 
   ########################################################################
   # HOOKS
@@ -244,8 +247,8 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series, :touch_related_works
-  after_destroy :expire_caches, :update_pseud_index
+  after_destroy :expire_caches, :update_pseud_and_collection_indexes
+  after_save :notify_recipients, :expire_caches, :update_pseud_and_collection_indexes, :update_series_indexes, :update_tag_index, :touch_series, :touch_related_works
 
   before_destroy :send_deleted_work_notification, prepend: true
   def send_deleted_work_notification
@@ -298,18 +301,28 @@ class Work < ApplicationRecord
     Work.flush_find_by_url_cache unless imported_from_url.blank?
   end
 
-  def update_pseud_index
-    return unless should_reindex_pseuds?
+  def update_pseud_and_collection_indexes
+    return unless should_update_pseud_and_collection_indexes?
+
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
+    IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end
 
   # Visibility has changed, which means we need to reindex
-  # the work's pseuds, to update their work counts, as well as
-  # the work's bookmarker pseuds, to update their bookmark counts.
-  def should_reindex_pseuds?
-    pertinent_attributes = %w(id posted restricted in_anon_collection
-                              in_unrevealed_collection hidden_by_admin)
+  # * the work's pseuds, to update their work counts, as well as
+  # * the work's bookmarker pseuds, to update their bookmark counts
+  # * the work's associated collections to update their bookmark counts.
+  def should_update_pseud_and_collection_indexes?
+    pertinent_attributes = %w[id posted restricted in_anon_collection
+                              in_unrevealed_collection hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  def update_series_indexes
+    return unless should_update_series_indexes?
+
+    series_ids = SerialWork.where(work_id: id).pluck(:series_id)
+    IndexQueue.enqueue_ids(Series, series_ids, :background)
   end
 
   # If the work gets posted, (un)hidden, or (un)revealed, we should (potentially) reindex the tags,
@@ -396,7 +409,7 @@ class Work < ApplicationRecord
 
   def self.find_by_url_cache_key(url)
     url = UrlFormatter.new(url)
-    "/v1/find_by_url/#{Work.find_by_url_generation}/#{url.encoded}"
+    "/v2/find_by_url/#{Work.find_by_url_generation}/#{url.encoded}"
   end
 
   # Match `url` to a work's imported_from_url field using progressively fuzzier matching:
@@ -437,7 +450,11 @@ class Work < ApplicationRecord
   # need to update the chapter to add the other creators on the work.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
-    raise Exception.new("Sorry, we can't remove all creators of a work.") if pseuds_with_author_removed.empty?
+
+    if pseuds_with_author_removed.empty?
+      errors.add(:base, ts("Sorry, we can't remove all creators of a work."))
+      raise ActiveRecord::RecordInvalid, self
+    end
 
     transaction do
       chapters.each do |chapter|
@@ -888,7 +905,7 @@ class Work < ApplicationRecord
   # Note that because the two filter counts both include unrevealed works, we
   # don't need to check whether in_unrevealed_collection has changed -- it
   # won't change the counts either way.
-  # (Modelled on Work.should_reindex_pseuds?)
+  # (Modelled on Work.should_update_pseud_and_collection_indexes?)
   def should_reset_filters?
     pertinent_attributes = %w(id posted restricted hidden_by_admin)
     (saved_changes.keys & pertinent_attributes).present?
@@ -1106,8 +1123,6 @@ class Work < ApplicationRecord
     user = users.first
     {
       comment_type: "fanwork-post",
-      key: ArchiveConfig.AKISMET_KEY,
-      blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_role: "user",
       comment_date_gmt: created_at.to_time.iso8601,
@@ -1123,8 +1138,7 @@ class Work < ApplicationRecord
   end
 
   def check_for_spam
-    return unless %w(staging production).include?(Rails.env)
-    self.spam = Akismetor.spam?(akismet_attributes)
+    self.spam = AkismetClient.spam?(akismet_attributes)
     self.spam_checked_at = Time.now
     save
   end
@@ -1147,15 +1161,13 @@ class Work < ApplicationRecord
   def mark_as_spam!
     update_attribute(:spam, true)
     ModeratedWork.mark_reviewed(self)
-    # don't submit spam reports unless in production mode
-    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+    AkismetClient.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
     update(spam: false, hidden_by_admin: false)
     ModeratedWork.mark_approved(self)
-    # don't submit ham reports unless in production mode
-    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+    AkismetClient.submit_ham(akismet_attributes)
   end
 
   def notify_of_hiding
@@ -1189,25 +1201,44 @@ class Work < ApplicationRecord
   end
 
   def bookmarkable_json
+    # If the work is unrevealed, it should not have any information that can be searched on
+    if unrevealed?
+      return as_json(
+        root: false,
+        bookmarkable_type: "Work",
+        unrevealed: true,
+        bookmarkable_join: { name: "bookmarkable" }
+      ) 
+    end
+
+    methods = %i[collection_ids work_types]
+    %w[general public].each do |visibility|
+      methods << :"#{visibility}_tags"
+      methods << :"#{visibility}_filter_ids"
+
+      Tag::FILTERS.each do |tag_type|
+        methods << :"#{visibility}_#{tag_type.underscore}_ids"
+      end
+    end
+
     as_json(
       root: false,
       only: [
         :title, :summary, :hidden_by_admin, :restricted, :posted,
-        :created_at, :revised_at, :word_count, :complete
+        :created_at, :revised_at, :complete
       ],
-      methods: [
-        :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
-        :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
-        :creators, :collection_ids, :work_types
-      ]
+      methods: methods
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
+      creators: indexed_creators,
       unrevealed: unrevealed?,
-      pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
-      user_ids: anonymous? || unrevealed? ? nil : user_ids,
-      bookmarkable_type: 'Work',
-      bookmarkable_join: { name: "bookmarkable" }
+      pseud_ids: anonymous? ? nil : pseud_ids,
+      user_ids: anonymous? ? nil : user_ids,
+      bookmarkable_type: "Work",
+      bookmarkable_join: { name: "bookmarkable" },
+      public_word_count: word_count,
+      general_word_count: word_count
     )
   end
 
@@ -1222,7 +1253,7 @@ class Work < ApplicationRecord
     stat_counter&.hit_count
   end
 
-  def creators
+  def indexed_creators
     if anonymous?
       ["Anonymous"]
     else
@@ -1233,38 +1264,7 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    # Short-circuit the check if there's only one fandom tag:
-    return false if fandoms.size == 1
-
-    # Replace fandoms with their mergers if possible,
-    # as synonyms should have no meta tags themselves
-    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
-
-    # For each fandom, find the set of all meta tags for that fandom (including
-    # the fandom itself).
-    meta_tag_groups = all_without_syns.map do |f|
-      # TODO: This is more complicated than it has to be. Once the
-      # meta_taggings table is fixed so that the inherited meta-tags are
-      # correctly calculated, this can be simplified.
-      boundary = [f] + f.meta_tags
-      all_meta_tags = []
-
-      until boundary.empty?
-        all_meta_tags.concat(boundary)
-        boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
-      end
-
-      all_meta_tags.uniq
-    end
-
-    # Two fandoms are "related" if they share at least one meta tag. A work is
-    # considered a crossover if there is no single fandom on the work that all
-    # the other fandoms on the work are "related" to.
-    meta_tag_groups.none? do |meta_tags1|
-      meta_tag_groups.all? do |meta_tags2|
-        (meta_tags1 & meta_tags2).any?
-      end
-    end
+    FandomCrossover.check_for_crossover(fandoms)
   end
 
   # Does this work have only one relationship tag?
@@ -1309,6 +1309,12 @@ class Work < ApplicationRecord
   end
 
   private
+
+  # Visibility or word count has changed, so we need to update series word counts
+  def should_update_series_indexes?
+    pertinent_attributes = %w[id posted restricted word_count hidden_by_admin]
+    (saved_changes.keys & pertinent_attributes).present?
+  end
 
   def challenge_bypass(gift)
     self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud) ||

@@ -88,14 +88,14 @@ class PotentialMatch < ApplicationRecord
     invalid_signup_ids = collection.signups.reject(&:valid?)
       .collect(&:id)
     if invalid_signup_ids.present?
-      invalid_signup_ids.each { |sid| REDIS_GENERAL.sadd invalid_signup_key(collection), sid }
+      invalid_signup_ids.each { |sid| REDIS_GENERAL.sadd?(invalid_signup_key(collection), sid) }
       
       if collection.collection_email.present?
-        UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, collection.collection_email).deliver_later
+        GiftExchangeMailer.invalid_signup_notification(collection.id, invalid_signup_ids, collection.collection_email).deliver_later
       else
         collection.maintainers_list.each do |user|
           I18n.with_locale(user.preference.locale_for_mails) do
-            UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, user.email).deliver_later
+            GiftExchangeMailer.invalid_signup_notification(collection.id, invalid_signup_ids, user.email).deliver_later
           end
         end
       end

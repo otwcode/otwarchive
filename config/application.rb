@@ -8,8 +8,8 @@ Bundler.require(*Rails.groups)
 
 module Otwarchive
   class Application < Rails::Application
-    app_config = YAML.load_file(Rails.root.join("config/config.yml"))
-    app_config.merge!(YAML.load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
+    app_config = YAML.safe_load_file(Rails.root.join("config/config.yml"))
+    app_config.merge!(YAML.safe_load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
     ::ArchiveConfig = OpenStruct.new(app_config)
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
@@ -22,10 +22,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 7.0
-
-    # TODO: Remove in Rails 7.1, where it's false by default.
-    config.add_autoload_paths_to_load_path = false
+    config.load_defaults 8.1
 
     %w[
       app/models/challenge_models
@@ -45,7 +42,7 @@ module Otwarchive
       :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi,
       :fil, :fr, :he, :hi, :hr, :hu, :id, :it, :ja, :ko, :lt, :lv, :mk,
       :mr, :ms, :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :scr, :sk, :sl,
-      :sv, :th, :tr, :uk, :vi, :"zh-CN"
+      :sv, :th, :tr, :uk, :vi, :"zh-Hans"
     ]
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
@@ -67,8 +64,9 @@ module Otwarchive
 
     config.action_view.automatically_disable_submit_tag = false
 
-    # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:content, :password, :terms_of_service_non_production]
+    # Add autocomplete="off" attributes to hidden fields
+    # Workaround for a Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=654072
+    config.action_view.remove_hidden_field_autocomplete = false
 
     # Disable dumping schemas after migrations.
     # This can cause problems since we don't always update versions on merge.
@@ -81,6 +79,9 @@ module Otwarchive
     # Keeps updated_at in cache keys
     config.active_record.cache_versioning = false
 
+    # Setting this to true (the default) breaks series orphaning
+    config.active_record.before_committed_on_all_records = false
+
     # This class is not allowed by default when upgrading Rails to 6.0.5.1 patch
     config.active_record.yaml_column_permitted_classes = [
       ActiveSupport::TimeWithZone,
@@ -88,6 +89,10 @@ module Otwarchive
       ActiveSupport::TimeZone,
       BCrypt::Password
     ]
+
+    config.active_record.encryption.primary_key = ArchiveConfig.ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+    config.active_record.encryption.deterministic_key = ArchiveConfig.ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+    config.active_record.encryption.key_derivation_salt = ArchiveConfig.ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
 
     # handle errors with custom error pages:
     config.exceptions_app = self.routes
@@ -110,7 +115,7 @@ module Otwarchive
 
     config.active_model.i18n_customize_full_message = true
 
-    config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST }
+    config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST, protocol: "https" }
 
     # Use "mailer" instead of "mailers" as the Resque queue for emails:
     config.action_mailer.deliver_later_queue_name = :mailer
@@ -141,6 +146,8 @@ module Otwarchive
     config.active_storage.queues.preview_image = :active_storage
     config.active_storage.queues.purge = :active_storage
     config.active_storage.queues.transform = :active_storage
+
+    config.active_storage.web_image_content_types = %w[image/png image/jpeg image/gif]
 
     # Use secret from archive config
     config.secret_key_base = ArchiveConfig.SESSION_SECRET
