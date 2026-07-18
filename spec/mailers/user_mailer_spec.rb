@@ -1350,7 +1350,7 @@ describe UserMailer do
     end
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Wrangling absence notice - automatic hiatus in 7 days"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Wrangling activity reminder"
       expect(email).to have_subject(subject)
     end
 

@@ -722,9 +722,7 @@ en:
       request_hiatus:
         html: If you're in need of an extended break or you need to take a formal hiatus, you can reply to this email or use the %{hiatus_form_link}.
         text: 'If you''re in need of an extended break or you need to take a formal hiatus, you can reply to this email or use the Wrangler Hiatus & Retirement Form: %{hiatus_form_url}.'
-      subject:
-        one: "[%{app_name}] Wrangling absence notice - automatic hiatus in %{count} day"
-        other: "[%{app_name}] Wrangling absence notice - automatic hiatus in %{count} days"
+      subject: "[%{app_name}] Wrangling activity reminder"
       supervisors_notification:
         one: As a reminder, wrangling policies ask everyone to wrangle at least once every two weeks. If there's still no sign of wrangling activity on your account a week from today %{supervisors_notification_days}, a note will go out to the wrangling Supervisors to follow up and check-in with you.
         other: As a reminder, wrangling policies ask everyone to wrangle at least once every two weeks. If there's still no sign of wrangling activity on your account %{weeks} weeks from today %{supervisors_notification_days}, a note will go out to the wrangling Supervisors to follow up and check-in with you.

@@ -388,7 +388,7 @@ class UserMailer < ApplicationMailer
     mail(
       to: user.email,
       reply_to: ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS,
-      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, count: @supervisor_distance_days)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 end
