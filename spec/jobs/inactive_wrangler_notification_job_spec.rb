@@ -2,6 +2,9 @@ require "spec_helper"
 
 describe InactiveWranglerNotificationJob do
   include ActiveJob::TestHelper
+  def queue_adapter_for_test
+    ActiveJob::QueueAdapters::TestAdapter.new
+  end
 
   let!(:user) { create(:tag_wrangler) }
 
@@ -68,6 +71,16 @@ describe InactiveWranglerNotificationJob do
       let(:user) { create(:tag_wrangler, login: system_username) }
 
       before { allow(ArchiveConfig).to receive(:USERS_EXCLUDED_FROM_WRANGLING_INACTIVITY).and_return([system_username, "some_other_system_user"]) }
+
+      it "does nothing" do
+        expect(user.reload.last_wrangling_activity.updated_at).to be <= 60.days.ago
+        expect { InactiveWranglerNotificationJob.perform_now }
+          .not_to have_enqueued_mail(UserMailer, :inactive_wrangler_notification)
+      end
+    end
+
+    context "inactivity threshold is set to 0" do
+      before { allow(ArchiveConfig).to receive(:WRANGLING_INACTIVITY_THRESHOLD).and_return(0) }
 
       it "does nothing" do
         expect(user.reload.last_wrangling_activity.updated_at).to be <= 60.days.ago

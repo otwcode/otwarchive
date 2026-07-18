@@ -1,5 +1,7 @@
 class InactiveWranglerNotificationJob < ApplicationJob
   def perform
+    return if ArchiveConfig.WRANGLING_INACTIVITY_THRESHOLD.zero?
+
     inactive = User.joins(:last_wrangling_activity)
       .where(last_wrangling_activity: { updated_at: ..ArchiveConfig.WRANGLING_INACTIVITY_THRESHOLD.days.ago, notified_inactive_wrangler: false })
       .where.not(login: ArchiveConfig.USERS_EXCLUDED_FROM_WRANGLING_INACTIVITY)
