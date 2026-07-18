@@ -8,14 +8,14 @@ describe InactiveWranglerSupervisorNotificationJob do
   context "freshly created wrangler" do
     it "does nothing" do
       expect { InactiveWranglerSupervisorNotificationJob.perform_now }
-        .not_to have_enqueued_mail(TagWranglingSupervisorMailer, :inactive_wrangler_notification)
+        .not_to have_enqueued_mail(TagWranglingLeadershipMailer, :inactive_wrangler_notification)
     end
 
     context "wrangler never wrangles" do
       it "notifies the supervisors" do
         travel_to(40.days.from_now) do
           expect { InactiveWranglerSupervisorNotificationJob.perform_now }
-            .to have_enqueued_mail(TagWranglingSupervisorMailer, :inactive_wrangler_notification).with([user.login]).exactly(1)
+            .to have_enqueued_mail(TagWranglingLeadershipMailer, :inactive_wrangler_notification).with([user.login]).exactly(1)
         end
       end
     end
@@ -29,7 +29,7 @@ describe InactiveWranglerSupervisorNotificationJob do
 
     it "does nothing" do
       expect { InactiveWranglerSupervisorNotificationJob.perform_now }
-        .not_to have_enqueued_mail(TagWranglingSupervisorMailer, :inactive_wrangler_notification)
+        .not_to have_enqueued_mail(TagWranglingLeadershipMailer, :inactive_wrangler_notification)
     end
   end
 
@@ -41,7 +41,7 @@ describe InactiveWranglerSupervisorNotificationJob do
 
     it "enqueues the email" do
       expect { InactiveWranglerSupervisorNotificationJob.perform_now }
-        .to have_enqueued_mail(TagWranglingSupervisorMailer, :inactive_wrangler_notification).with([user.login]).exactly(1)
+        .to have_enqueued_mail(TagWranglingLeadershipMailer, :inactive_wrangler_notification).with([user.login]).exactly(1)
     end
 
     it "does not change the timestamp of the last wrangling activity" do
@@ -52,13 +52,13 @@ describe InactiveWranglerSupervisorNotificationJob do
     context "supervisors have already been notified" do
       before do
         expect { InactiveWranglerSupervisorNotificationJob.perform_now }
-          .to have_enqueued_mail(TagWranglingSupervisorMailer, :inactive_wrangler_notification).with([user.login]).exactly(1)
+          .to have_enqueued_mail(TagWranglingLeadershipMailer, :inactive_wrangler_notification).with([user.login]).exactly(1)
       end
 
       it "doesn't notify the supervisors again" do
         travel_to(40.days.from_now) do
           expect { InactiveWranglerSupervisorNotificationJob.perform_now }
-            .not_to have_enqueued_mail(TagWranglingSupervisorMailer, :inactive_wrangler_notification)
+            .not_to have_enqueued_mail(TagWranglingLeadershipMailer, :inactive_wrangler_notification)
         end
       end
     end
@@ -72,7 +72,7 @@ describe InactiveWranglerSupervisorNotificationJob do
       it "does nothing" do
         expect(user.reload.last_wrangling_activity.updated_at).to be <= 60.days.ago
         expect { InactiveWranglerSupervisorNotificationJob.perform_now  }
-          .not_to have_enqueued_mail(TagWranglingSupervisorMailer, :inactive_wrangler_notification)
+          .not_to have_enqueued_mail(TagWranglingLeadershipMailer, :inactive_wrangler_notification)
       end
     end
   end
@@ -89,7 +89,7 @@ describe InactiveWranglerSupervisorNotificationJob do
 
     it "enqueues one email" do
       expect { InactiveWranglerSupervisorNotificationJob.perform_now }
-        .to have_enqueued_mail(TagWranglingSupervisorMailer, :inactive_wrangler_notification).with(array_including(user.login, user2.login)).exactly(1)
+        .to have_enqueued_mail(TagWranglingLeadershipMailer, :inactive_wrangler_notification).with(array_including(user.login, user2.login)).exactly(1)
     end
   end
 end

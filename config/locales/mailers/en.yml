@@ -326,7 +326,7 @@ en:
     guest_with_parens: "(Guest)"
     official_with_parens: "(Official)"
     registered_with_parens: "(Registered User)"
-  tag_wrangling_supervisor_mailer:
+  tag_wrangling_leadership_mailer:
     inactive_wrangler_notification:
       inactive_wranglers:
         one: 'The following wranglers have not been recorded as wrangling any tags in the past %{weeks} week:'

@@ -72,8 +72,8 @@ Then "{string} should not be emailed" do |user|
   expect(emails("to: \"#{email_for(@user.email)}\"")).to be_empty
 end
 
-Then "tag wrangling supervisors should receive {int} email(s)" do |count|
-  step %{#{count} email should be delivered to "#{ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS}"}
+Then "tag wrangling chairs should receive {int} email(s)" do |count|
+  step %{#{count} email should be delivered to "#{ArchiveConfig.TAG_WRANGLING_CHAIRS_ADDRESS}"}
 end
 
 Then "the email to {string} should contain {string}" do |user, text|

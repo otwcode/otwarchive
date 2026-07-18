@@ -185,14 +185,14 @@ Feature: Tag wrangling
       And the scheduled inactive wrangler notification jobs are run
     Then 1 email should be delivered to "katti"
       And the email should contain "no wrangling activity has been logged on your account in the past 3 weeks"
-      And tag wrangling supervisors should receive 0 emails
+      And tag wrangling chairs should receive 0 emails
     When it is currently 1 day from now
       And the scheduled inactive wrangler notification jobs are run
     Then 0 emails should be delivered
     When it is currently 40 days from now
       And the scheduled inactive wrangler notification jobs are run
     Then 0 emails should be delivered to "katti"
-      And tag wrangling supervisors should receive 1 email
+      And tag wrangling chairs should receive 1 email
       And the email should contain "not been recorded as wrangling any tags in the past 4 weeks:"
       And the email should contain "katti"
     When it is currently 40 days from now
@@ -213,7 +213,7 @@ Feature: Tag wrangling
         And the scheduled inactive wrangler notification jobs are run
       Then 1 email should be delivered to "katti"
         And the email to "katti" should contain "no wrangling activity has been logged on your account in the past 3 weeks"
-        And tag wrangling supervisors should receive 1 email
+        And tag wrangling chairs should receive 1 email
         And the last email should contain "not been recorded as wrangling any tags in the past 4 weeks:"
         And the last email should contain "katti"
       When I am logged in as "katti"
@@ -224,6 +224,6 @@ Feature: Tag wrangling
         And the scheduled inactive wrangler notification jobs are run
       Then 1 email should be delivered to "katti"
         And the email to "katti" should contain "no wrangling activity has been logged on your account in the past 3 weeks"
-        And tag wrangling supervisors should receive 1 email
+        And tag wrangling chairs should receive 1 email
         And the last email should contain "not been recorded as wrangling any tags in the past 4 weeks:"
         And the last email should contain "katti"

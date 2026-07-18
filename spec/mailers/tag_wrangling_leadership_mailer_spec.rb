@@ -1,8 +1,8 @@
 require "spec_helper"
 
-describe TagWranglingSupervisorMailer do
+describe TagWranglingLeadershipMailer do
   describe "#wrangler_username_change_notification" do
-    let(:email) { TagWranglingSupervisorMailer.wrangler_username_change_notification(old_name, new_name) }
+    let(:email) { TagWranglingLeadershipMailer.wrangler_username_change_notification(old_name, new_name) }
     let(:old_name) { "fast" }
     let(:new_name) { "express" }
 
@@ -35,7 +35,7 @@ describe TagWranglingSupervisorMailer do
   end
 
   describe "#inactive_wrangler_notification" do
-    let(:email) { TagWranglingSupervisorMailer.inactive_wrangler_notification([user1, user2]) }
+    let(:email) { TagWranglingLeadershipMailer.inactive_wrangler_notification([user1, user2]) }
     let(:user1) { "niki" }
     let(:user2) { "fed" }
 
@@ -49,7 +49,7 @@ describe TagWranglingSupervisorMailer do
     end
 
     it "delivers to the correct address" do
-      expect(email).to deliver_to ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS
+      expect(email).to deliver_to ArchiveConfig.TAG_WRANGLING_CHAIRS_ADDRESS
     end
 
     describe "HTML version" do

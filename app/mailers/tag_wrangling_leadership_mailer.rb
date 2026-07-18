@@ -1,4 +1,4 @@
-class TagWranglingSupervisorMailer < ApplicationMailer
+class TagWranglingLeadershipMailer < ApplicationMailer
   default to: ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS
 
   include ActiveSupport::NumberHelper
@@ -17,6 +17,7 @@ class TagWranglingSupervisorMailer < ApplicationMailer
     @hiatus_weeks = ArchiveConfig.WRANGLING_INACTIVITY_SUPERVISOR_NOTIFICATION_THRESHOLD.days.in_weeks
     @hiatus_weeks_formatted = number_to_human(@hiatus_weeks)
     mail(
+      to: ArchiveConfig.TAG_WRANGLING_CHAIRS_ADDRESS,
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, count: @hiatus_weeks, weeks: @hiatus_weeks_formatted)
     )
   end

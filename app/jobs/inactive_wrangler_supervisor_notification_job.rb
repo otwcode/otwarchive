@@ -5,7 +5,7 @@ class InactiveWranglerSupervisorNotificationJob < ApplicationJob
       .where.not(login: ArchiveConfig.USERS_EXCLUDED_FROM_WRANGLING_INACTIVITY)
     return if inactive.blank?
 
-    TagWranglingSupervisorMailer.inactive_wrangler_notification(inactive.map(&:login)).deliver_later
+    TagWranglingLeadershipMailer.inactive_wrangler_notification(inactive.map(&:login)).deliver_later
     LastWranglingActivity.where(user: inactive.map(&:id)).update_all(notified_inactive_supervisors: true)
   end
 end
