@@ -15,47 +15,13 @@ describe ExternalWork do
     end
   end
 
+  context "with an unreachable URL" do
+    UNREACHABLE_URLS.each do |url|
+      it "saves #{url}" do
+        external_work = build(:external_work, url: url)
 
-  context "inactive url" do
-    INACTIVE_URLS.each do |url|
-      let(:inactive_url) {build(:external_work, url: url)}
-      it "is not saved" do
-        expect(inactive_url.save).to be_falsey
-        expect(inactive_url.errors[:url]).to include("could not be reached. If the URL is correct and the site is currently down, please try again later.")
+        expect(external_work.save).to be_truthy
       end
     end
   end
-
-  context "for bypassed URLs" do
-    BYPASSED_URLS.each do |url|
-      context "for #{url}" do
-        let(:bypassed_url) { build(:external_work, url: url) }
-
-        before do
-          WebMock.stub_request(:any, bypassed_url.url).to_return(status: 403)
-        end
-
-        it "saves" do
-          expect(bypassed_url.save).to be_truthy
-        end
-      end
-    end
-  end
-
-  context "for valid URLs" do
-    [200, 301, 302, 307, 308].each do |status|
-      context "returning #{status}" do
-        let(:external_work) { build(:external_work) }
-  
-        before do
-          WebMock.stub_request(:any, external_work.url).to_return(status: status)
-        end
-  
-        it "saves" do
-          expect(external_work.save).to be_truthy
-        end
-      end
-    end
-  end
-
 end

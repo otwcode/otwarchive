@@ -287,16 +287,6 @@ Scenario: Listing external works as inspirations
     And I should see "Inspired by Worldbuilding Two by BNF"
   When I view my related works
   Then I should see "From N/A to English"
-  # inactive URL should give a helpful message (AO3-1783)
-  # unreachable URL should give a more helpful message (A03-3536)
-  When I edit the work "Followup"
-    And I check "parent-options-show"
-    And I fill in "URL" with "http://example.org/404"
-    And I fill in "Title" with "Worldbuilding Two"
-    And I fill in "Author" with "BNF"
-    And I press "Preview"
-  Then I should see "Parent work URL could not be reached. If the URL is correct and the site is currently down, please try again later."
-
 Scenario: External work language
 
   Given basic tags
