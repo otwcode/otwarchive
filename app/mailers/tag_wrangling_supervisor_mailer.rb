@@ -14,7 +14,7 @@ class TagWranglingSupervisorMailer < ApplicationMailer
 
   def inactive_wrangler_notification(users)
     @users = users
-    @hiatus_weeks = ArchiveConfig.WRANGLING_HIATUS_THRESHOLD.days.in_weeks
+    @hiatus_weeks = ArchiveConfig.WRANGLING_INACTIVITY_SUPERVISOR_NOTIFICATION_THRESHOLD.days.in_weeks
     @hiatus_weeks_formatted = number_to_human(@hiatus_weeks)
     mail(
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, count: @hiatus_weeks, weeks: @hiatus_weeks_formatted)

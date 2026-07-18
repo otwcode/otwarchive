@@ -1361,13 +1361,13 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("detected any wrangling from you in the past 2 weeks.")
+        expect(email).to have_html_part_content("no wrangling activity has been logged on your account in the past 3 weeks (21 days).")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("detected any wrangling from you in the past 2 weeks.")
+        expect(email).to have_text_part_content("no wrangling activity has been logged on your account in the past 3 weeks (21 days).")
       end
     end
   end

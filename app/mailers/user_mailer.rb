@@ -379,15 +379,16 @@ class UserMailer < ApplicationMailer
 
   def inactive_wrangler_notification(user)
     @username = user.login
-    hiatus_distance = ArchiveConfig.WRANGLING_HIATUS_THRESHOLD - ArchiveConfig.WRANGLING_INACTIVITY_THRESHOLD
-    @hiatus_distance_weeks = hiatus_distance.days.in_weeks
-    @hiatus_distance_weeks_formatted = number_to_human(@hiatus_distance_weeks)
-    @inactivity_weeks = ArchiveConfig.WRANGLING_INACTIVITY_THRESHOLD.days.in_weeks
+    @inactivity_days = ArchiveConfig.WRANGLING_INACTIVITY_THRESHOLD
+    @inactivity_weeks = @inactivity_days.days.in_weeks
     @inactivity_weeks_formatted = number_to_human(@inactivity_weeks)
+    @supervisor_distance_days = ArchiveConfig.WRANGLING_INACTIVITY_SUPERVISOR_NOTIFICATION_THRESHOLD - ArchiveConfig.WRANGLING_INACTIVITY_THRESHOLD
+    @supervisor_distance_weeks = @supervisor_distance_days.days.in_weeks
+    @supervisor_distance_formatted = number_to_human(@supervisor_distance_weeks)
     mail(
       to: user.email,
       reply_to: ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS,
-      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, count: hiatus_distance)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, count: @supervisor_distance_days)
     )
   end
 end

@@ -44,7 +44,7 @@ describe TagWranglingSupervisorMailer do
     it_behaves_like "a translated email"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Wranglers who have not wrangled in 3 weeks"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Wranglers who have not wrangled in 4 weeks"
       expect(email).to have_subject(subject)
     end
 
@@ -54,7 +54,7 @@ describe TagWranglingSupervisorMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("The following wranglers have not been recorded as wrangling any tags in the past 3 weeks")
+        expect(email).to have_html_part_content("The following wranglers have not been recorded as wrangling any tags in the past 4 weeks")
         expect(email).to have_html_part_content("<li>#{user1}</li>")
         expect(email).to have_html_part_content("<li>#{user2}</li>")
       end
@@ -62,7 +62,7 @@ describe TagWranglingSupervisorMailer do
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("The following wranglers have not been recorded as wrangling any tags in the past 3 weeks")
+        expect(email).to have_text_part_content("The following wranglers have not been recorded as wrangling any tags in the past 4 weeks")
         expect(email).to have_text_part_content("  - #{user1}")
         expect(email).to have_text_part_content("  - #{user2}")
       end
