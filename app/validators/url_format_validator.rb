@@ -1,6 +1,5 @@
 # Validate format of URLs
 class UrlFormatValidator < ActiveModel::EachValidator
-
   # Just do a fast and dirty check.
   def validate_each(record,attribute,value)
     return true if (value.blank? && options[:allow_blank]) 

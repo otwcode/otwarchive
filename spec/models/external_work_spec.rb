@@ -16,7 +16,9 @@ describe ExternalWork do
   end
 
   context "with an unreachable URL" do
-    UNREACHABLE_URLS.each do |url|
+    unreachable_urls = %w[http://foo.invalid http://foo.test/].freeze
+
+    unreachable_urls.each do |url|
       it "saves #{url}" do
         external_work = build(:external_work, url: url)
 
