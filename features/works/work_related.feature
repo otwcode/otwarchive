@@ -9,7 +9,30 @@ Scenario: Posting a remix / related work emails the creator of the original work
   Given I have related works setup
   When I post a related work as remixer
   Then a parent related work should be seen
-    And the original author should be emailed
+    And the original author should receive a related work email
+
+Scenario: Posting a remix in a variatey of ways should always send related work emails the creator of the original work and list the parent work in the proper location on the remix / related work
+
+  Given I have related works setup
+    And all emails have been delivered
+  When I post a related work as remixer without previewing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+
+  Given all emails have been delivered
+  When I post a related work as remixer after saving it as a draft
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+
+  Given all emails have been delivered
+  When I post a related work as remixer after saving it as a draft and then editing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+    
+  Given all emails have been delivered
+  When I post a related work as remixer after previewing it and then editing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
 
 Scenario: Remixer can see their remix / related work on their related works page
 
@@ -44,7 +67,7 @@ Scenario: Posting a translation emails the creator of the original work and list
   Given I have related works setup
   When I post a translation as translator
   Then a parent translated work should be seen
-    And the original author should be emailed
+    And the original author should receive a related work email
 
 Scenario: Translator can see their translation on their related works page
 
