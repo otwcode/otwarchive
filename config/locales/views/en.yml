@@ -1821,31 +1821,76 @@ en:
   home:
     about:
       ao3:
-        github_repository: GitHub repository
-        html: The Archive of Our Own offers a noncommercial and nonprofit central hosting place for fanworks using open-source archiving software. We welcome contributions to our %{github_repository_link}, and a list of open tasks is available on our %{jira_project_link}.
+        ao3_history_fanlore: AO3's history on Fanlore
+        archive_of_our_own: Archive of Our Own
+        archiving_software: open-source archiving software
+        beta_html: AO3 entered open beta in November 2009 and exited beta in April 2026. You can read more about %{ao3_history_fanlore_link}.
+        content_policy: Content Policy
+        contribute: contribute
+        description_html: The %{archive_of_our_own_link} (AO3) is a non-profit, non-commercial fanwork archive for transformative fanworks; created by and for fans of books, music, art, games, shows, movies, real-person fiction (RPF), and other fandoms.
+        inclusiveness_html: "%{inclusiveness_on_ao3_bold} Fanworks that do not violate the %{content_policy_link} or some other part of the %{tos_link} will not be removed from AO3, even if someone believes they are offensive or objectionable."
+        inclusiveness_on_ao3_html: AO3 is built upon the principle of %{maximum_inclusiveness_link}.
         jira_project: Jira project
-      details: We are proactive and innovative in protecting and defending our work from commercial exploitation and legal challenge. We preserve our fannish economy, values, and creative expression by protecting and nurturing our fellow fans, our work, our commentary, our history, and our identity while providing the broadest possible access to fannish activity for all fans.
-      general: The Organization for Transformative Works (OTW) is a nonprofit organization, established by fans in 2007, to serve the interests of fans by providing access to and preserving the history of fanworks and fan culture in its myriad forms. We believe that fanworks are transformative and that transformative works are legitimate.
+        maximum_inclusiveness: maximum inclusiveness of fanwork content
+        open_source_html: AO3 runs on %{archiving_software_link} developed by the Organization for Transformative Works (OTW). Anyone is welcome to %{contribute_link} by working on the unclaimed tasks in our %{jira_project_link}.
+        tos: Terms of Service
       heading:
-        html: About the %{otw}
-        otw: OTW
-        otw_long: Organization for Transformative Works
+        about_ao3: About AO3
+        about_otw: About the OTW
+        learn_more: Learn More
+        our_team: Our Team
+      learn_more:
+        ao3_faq: Archive FAQs
+        contact_communications: contact Communications
+        contact_policy_abuse: contact Policy & Abuse
+        contact_support: contact Support
+        donate_or_volunteer: Donate or Volunteer
+        html: You can find information on using AO3 in the %{ao3_faq_link}, or visit the %{transformative_works_faq_link} to learn more about our organization. If you want to get involved, you can %{donate_or_volunteer_link}.
+        technical_help_html: For technical help using AO3, including bug reports and feature requests, please %{contact_support_link}. For questions or reports about violations of the AO3 Terms of Service, %{contact_policy_abuse_link}. If you have any other questions, please %{contact_communications_link}.
+        transformative_works_faq: OTW FAQs
       major_projects:
         fanlore: Fanlore
-        fanlore_details_html: "%{fanlore_link}, a fandom wiki devoted to preserving the history of transformative fanworks and the fandoms from which they have arisen."
+        fanlore_details_html: "%{fanlore_link}, a fandom wiki devoted to preserving the history of transformative fanworks and the fandoms from which they have arisen. %{visit_fanlore_link}"
         legal_advocacy: Legal Advocacy
-        legal_details_html: "%{legal_advocacy_link} committed to protecting and defending fanworks from commercial exploitation and legal challenge."
+        legal_details_html: "%{legal_advocacy_link}, which is committed to protecting and defending fanworks from commercial exploitation and legal challenges. They also strive to educate fans about developments in law that could affect fandom."
         open_doors: Open Doors
-        open_doors_details_html: "%{open_doors_link}, which offers shelter to at-risk fannish projects."
+        open_doors_details_html: "%{open_doors_link}, which offers shelter to at-risk fannish projects and archives. Through several subprojects, they preserve different kinds of fanworks and artifacts of fan culture. %{visit_open_doors_link}"
         title: 'Our other major projects include:'
         twc: Transformative Works and Cultures
-        twc_details_html: "%{twc_link}, a peer-reviewed academic journal that seeks to promote scholarship on fanworks and practices."
-      more_info:
-        communications_team: Communications team
-        faq_page: FAQ page
-        html: You can find out more about the OTW and its projects at its website, %{transformative_works_link}, and learn about how your financial support is vital to the continuation and expansion of the OTW's work on its %{faq_page_link}. If you have a media or research question, please contact the %{communications_team_link}.
-        transformative_works: transformativeworks.org
-      page_title: About the OTW
+        twc_details_html: "%{twc_link} (TWC), an international, peer-reviewed journal that publishes articles about transformative works and fan communities. %{visit_twc_link}"
+        visit_fanlore: Visit Fanlore.
+        visit_open_doors: Visit Open Doors.
+        visit_twc: Visit TWC.
+      otw:
+        donations: donations
+        html: The OTW is a 501(c)(3) non-profit organization, fully supported by %{donations_link} and run by and for fans. The %{mission_link} is to preserve and protect %{transformative_fanworks_link} and fan culture in their myriad forms. We believe that fanworks are transformative and that transformative works are legitimate.
+        mission: OTW's mission
+        transformative_fanworks: transformative fanworks
+      our_team:
+        adt: Accessibility, Design, & Technology
+        adt_details_html: "%{adt_link} designs, maintains, and develops AO3's code."
+        committees: committees
+        communications: Communications
+        communications_details_html: "%{communications_link} publishes news posts on AO3 and communicates with users about AO3-related updates."
+        documentation: AO3 Documentation
+        documentation_details_html: "%{documentation_link} creates and maintains AO3's FAQs, help pop-ups, and tutorials."
+        intro_html: 'Behind the scenes, AO3 is run by volunteers serving on %{committees_link}, which collaborate to support AO3 in different ways:'
+        open_doors: Open Doors
+        open_doors_details_html: "%{open_doors_link} imports at-risk archives and fanzines to AO3."
+        policy_abuse: Policy & Abuse
+        policy_abuse_details_html: "%{policy_abuse_link} addresses questions and reports about potential violations of the AO3 Terms of Service."
+        support: Support
+        support_details_html: "%{support_link} helps users resolve technical problems and passes on user feedback to other AO3 committees."
+        systems: Systems
+        systems_details_html: "%{systems_link} manages the servers that AO3 runs on."
+        tag_wrangling: Tag Wrangling
+        tag_wrangling_details_html: "%{tag_wrangling_link} sorts and organizes tags on AO3, linking related tags together for better filtering and searching."
+        translation: Translation
+        translation_details_html: "%{translation_link} helps committees communicate with users in non-English languages and translates news and information about AO3."
+        user_response: User Response Translation
+        user_response_details_html: "%{user_response_link} addresses Policy & Abuse and Support's translation needs in specific high-need languages."
+      page_heading: About AO3 and the OTW
+      page_title: About AO3 and the OTW
     content:
       cc_attribution_4_0_international: Creative Commons Attribution 4.0 International License
       commercial_promotion:
@@ -2174,6 +2219,7 @@ en:
         require_user_specific_proof: We reserve the right to require user-specific proof of identity before providing Personal Information to a requester. This is necessary to protect the safety and privacy of our users and personnel.
     site_map:
       about:
+        about_us: About Us
         ao3_news: AO3 News
         archive_faq: Archive FAQ
         content_policy: Content Policy
