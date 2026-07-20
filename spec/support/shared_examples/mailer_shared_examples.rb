@@ -5,7 +5,7 @@ shared_examples_for "a multipart email" do
   end
 
   it "disables phone number detection in the HTML version" do
-    expect(email.html_part).to have_xpath("//meta[@name='format-detection'][@content='telephone=no']")
+    expect(email).to have_html_part_content('<meta name="format-detection" content="telephone=no" />')
   end
 
   it "does not have exposed HTML" do
