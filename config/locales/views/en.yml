@@ -1837,9 +1837,7 @@ en:
       heading:
         about_ao3: About AO3
         about_otw: About the OTW
-        html: About AO3 and the %{otw}
         learn_more: Learn More
-        otw: OTW
         our_team: Our Team
       learn_more:
         ao3_faq: Archive FAQs
@@ -1891,6 +1889,7 @@ en:
         translation_details_html: "%{translation_link} helps committees communicate with users in non-English languages and translates news and information about AO3."
         user_response: User Response Translation
         user_response_details_html: "%{user_response_link} addresses Policy & Abuse and Support's translation needs in specific high-need languages."
+      page_heading: About AO3 and the OTW
       page_title: About AO3 and the OTW
     content:
       cc_attribution_4_0_international: Creative Commons Attribution 4.0 International License
