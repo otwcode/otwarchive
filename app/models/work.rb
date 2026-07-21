@@ -1082,9 +1082,9 @@ class Work < ApplicationRecord
            :in_unrevealed_collection, :summary_sanitizer_version)
   }
 
-  scope :with_includes_for_blurb, lambda {
-    includes(:pseuds, :approved_collections, :approved_unrevealed_collections, :stat_counter)
-  }
+  BLURB_INCLUDES = [:pseuds, :approved_collections, :approved_unrevealed_collections, :stat_counter].freeze
+
+  scope :with_includes_for_blurb, -> { includes(*BLURB_INCLUDES) }
 
   scope :for_blurb, -> { with_columns_for_blurb.with_includes_for_blurb }
 

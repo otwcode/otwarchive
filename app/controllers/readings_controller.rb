@@ -16,9 +16,7 @@ class ReadingsController < ApplicationController
       @readings = @readings.where(toread: true)
       @page_subtitle = t(".marked_for_later_page_title", username: @user.login)
     end
-    @readings = @readings.order("last_viewed DESC").includes(
-      work: [:pseuds, :approved_collections, :approved_unrevealed_collections, :stat_counter]
-    )
+    @readings = @readings.order("last_viewed DESC").includes(work: Work::BLURB_INCLUDES)
     @pagy, @readings = pagy(@readings)
   end
 
