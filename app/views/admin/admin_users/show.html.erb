@@ -15,9 +15,11 @@
     <li>
       <%= button_to t(".navigation.activate"), { action: "activate", id: @user }, disabled: @user.active? %>
     </li>
-    <li>
-      <%= link_to t(".navigation.rename"), change_username_user_path(@user) %>
-    </li>
+    <% if policy(@user).can_change_username? %>
+      <li>
+        <%= link_to t(".navigation.rename"), change_username_user_path(@user) %>
+      </li>
+    <% end %>
     <li>
       <%= link_to t(".navigation.roles"), { action: "index", user_id: @user.id } %>
     </li>
