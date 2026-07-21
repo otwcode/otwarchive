@@ -436,7 +436,13 @@ class CommentsController < ApplicationController
             elsif @comment.unreviewed?
               redirect_to_all_comments(@commentable)
             else
-              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
+              # rubocop:disable Metrics/BlockNesting
+              view_full_work = params[:view_full_work] == "true"
+              parent = view_full_work || current_user&.preference&.view_full_works? ? @comment.ultimate_parent : @comment.parent
+              # if this comment starts a new top-level thread, it will always be on the last page of comments
+              page = parent.comments.reviewed.count.ceildiv(Comment.per_page) if @comment.thread == @comment.id
+              redirect_to_comment(@comment, { view_full_work: view_full_work, page: page || params[:page] })
+              # rubocop:enable Metrics/BlockNesting
             end
           end
         end
