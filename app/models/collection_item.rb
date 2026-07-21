@@ -44,11 +44,16 @@ class CollectionItem < ApplicationRecord
 
   def self.preload_item_blurbs(collection_items)
     records = Array(collection_items)
-    work_items = records.filter_map do |collection_item|
-      collection_item.item if collection_item.item_type == "Work"
-    end
-    bookmark_items = records.filter_map do |collection_item|
-      collection_item.item if collection_item.item_type == "Bookmark"
+    work_items = []
+    bookmark_items = []
+
+    records.each do |collection_item|
+      case collection_item.item_type
+      when "Work"
+        work_items << collection_item.item
+      when "Bookmark"
+        bookmark_items << collection_item.item
+      end
     end
 
     ActiveRecord::Associations::Preloader.new(
