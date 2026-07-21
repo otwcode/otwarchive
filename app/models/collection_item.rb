@@ -38,7 +38,7 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  scope :include_for_works, -> { includes(:item).extending(BlurbPreloads) }
+  scope :with_item_blurb_preloads, -> { includes(:item).extending(BlurbPreloads) }
   scope :unrevealed, -> { where(unrevealed: true) }
   scope :anonymous, -> { where(anonymous:  true) }
 

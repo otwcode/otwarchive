@@ -11,7 +11,7 @@ class CollectionItemsController < ApplicationController
 
     # TODO: AO3-6507 Refactor to use send instead of case statements.
     if @collection && (@collection.user_is_maintainer?(current_user) || privileged_collection_admin?)
-      @collection_items = @collection.collection_items.include_for_works
+      @collection_items = @collection.collection_items.with_item_blurb_preloads
       @collection_items = case params[:status]
                           when "approved"
                             @collection_items.approved_by_both
@@ -25,7 +25,7 @@ class CollectionItemsController < ApplicationController
                             @collection_items.unreviewed_by_collection
                           end
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id])) && @user == current_user
-      @collection_items = CollectionItem.for_user(@user).include_for_works.includes(:collection).merge(Collection.with_attached_icon)
+      @collection_items = CollectionItem.for_user(@user).with_item_blurb_preloads.includes(:collection).merge(Collection.with_attached_icon)
       @collection_items = case params[:status]
                           when "approved"
                             @collection_items.approved_by_both
