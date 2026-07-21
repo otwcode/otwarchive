@@ -2,7 +2,7 @@
 <div class="mystery header picture module">
   <h4 class="heading"><%= ts("Mystery Work") %></h4>
   <% if approved_unrevealed_collections.any? %>
-    <h5 class="heading"><%= h(t(".part_of")) + show_collections_data(approved_unrevealed_collections) %></h5>
+    <h5 class="heading"><%= t(".part_of_html", collection_links: show_collections_data(approved_unrevealed_collections)) %></h5>
   <% end %>
   <div class="icon"></div>
 </div>
