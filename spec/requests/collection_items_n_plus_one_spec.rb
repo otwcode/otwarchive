@@ -6,6 +6,8 @@ describe "n+1 queries in the collection items controller" do
   include LoginMacros
 
   describe "#index" do
+    # This test demonstrates that rendering does not raise when the
+    # approved_unrevealed_collections association uses strict loading.
     it "renders bookmark items whose bookmarkable is an unrevealed work" do
       user = create(:user)
       collection = create(:unrevealed_collection)
