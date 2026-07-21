@@ -24,7 +24,7 @@ class GiftsController < ApplicationController
                @works.visible_to_registered_user
              end
     @works = @works.in_collection(@collection) if @collection
-    @works = @works.order("revised_at DESC").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+    @works = @works.for_blurb.order("revised_at DESC").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end
 
   def toggle_rejected

@@ -3454,6 +3454,8 @@ en:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    mystery_blurb:
+      part_of_html: "Part of %{collection_links}"
     navigate:
       page_heading_html: Chapter Index for %{work_link} by %{creators}
     new_import:
