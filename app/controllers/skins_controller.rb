@@ -15,8 +15,7 @@ class SkinsController < ApplicationController
       @preference = current_user.preference
     end
 
-    if params[:user_id] 
-      @user = User.find_by!(login: params[:user_id])
+    if params[:user_id] && (@user = User.find_by!(login: params[:user_id]))
       redirect_to new_user_session_path(return_to: request.fullpath) and return unless logged_in?
       
       if @user != current_user
