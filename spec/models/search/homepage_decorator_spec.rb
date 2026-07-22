@@ -3,6 +3,24 @@ require "spec_helper"
 describe Homepage do
   let(:user) { create(:user) }
 
+  describe "#rounded_counts" do
+    it "counts users that are not banned" do
+      user
+      create(:user)
+
+      homepage = Homepage.new(user)
+      expect(homepage.rounded_counts.first).to eq(2)
+    end
+
+    it "excludes banned users from the user count" do
+      user
+      create(:user, banned: true)
+
+      homepage = Homepage.new(user)
+      expect(homepage.rounded_counts.first).to eq(1)
+    end
+  end
+
   describe "#readings" do
     it "includes user's toread readings" do
       reading1 = create(:reading, user: user, toread: true)
