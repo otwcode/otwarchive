@@ -105,10 +105,8 @@ describe SkinsController do
       end
 
       it "raises ActiveRecord::RecordNotFound" do
-        expect {
-          get :index, params: { user_id: "deleted_user" }
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
+        expect do get :index, params: { user_id: "deleted_user" } 
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
