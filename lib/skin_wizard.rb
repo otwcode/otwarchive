@@ -154,7 +154,7 @@ module SkinWizard
         .secondary,
         .work.navigation .download,
         .javascript .work.navigation .download .secondary,
-        .wrapper {
+        .wrapper:has(> table, > .meta) {
           box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5)
         }
 

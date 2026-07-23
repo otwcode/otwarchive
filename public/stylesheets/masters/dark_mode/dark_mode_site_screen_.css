@@ -476,7 +476,7 @@ a.tag:hover,
   color: #111;
 }
 
-.wrapper {
+.wrapper:has(> table, > .meta) {
     box-shadow: 1px 1px 3px #000;
 }
 
