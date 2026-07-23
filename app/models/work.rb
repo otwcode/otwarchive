@@ -764,6 +764,11 @@ class Work < ApplicationRecord
     self.creator_comments.each { |c| c.touch }
   end
 
+  def poke_cached_creator_comments_for_user(user_id)
+    pseud_ids = Pseud.where(user_id: user_id).pluck(:id)
+    find_all_comments.where(pseud_id: pseud_ids).find_each(&:touch)
+  end
+
   # Get the total number of chapters for a work
   def number_of_chapters
     Rails.cache.fetch(key_for_chapter_total_counting(self)) do
