@@ -200,7 +200,7 @@ describe CssCleaner do
 
       context "with aspect-ratio property" do
         it "allows permitted values" do
-          skin = build(:work_skin, css: [
+          skin = build(:skin, css: [
             "div { aspect-ratio: auto }",
             "div { aspect-ratio: initial }",
             "div { aspect-ratio: 1 }",
