@@ -221,7 +221,7 @@ describe CssCleaner do
         end
 
         it "strips nonsensical values" do
-          skin = build(:work_skin, css: [
+          skin = build(:skin, css: [
             "div { aspect-ratio: 1,300 }",
             "div { aspect-ratio: 100% }"
           ].join("\n"))
