@@ -8,6 +8,7 @@ module CssCleaner
   ALPHA_REGEX = Regexp.new('[a-z\-]+')
   UNITS_REGEX = Regexp.new('deg|cm|em|ex|in|mm|pc|pt|px|s|%', Regexp::IGNORECASE)
   NUMBER_REGEX = Regexp.new('-?\.?\d{1,3}\.?\d{0,3}')
+  NUMBER_OR_RATIO_REGEX = Regexp.new("#{NUMBER_REGEX}(\s*\/\s*#{NUMBER_REGEX})?")
   NUMBER_WITH_UNIT_REGEX = Regexp.new("#{NUMBER_REGEX}\s*#{UNITS_REGEX}?\s*,?\s*")
   PAREN_NUMBER_REGEX = Regexp.new('\(\s*' + NUMBER_WITH_UNIT_REGEX.to_s + '+\s*\)')
   PREFIX_REGEX = Regexp.new('moz|ms|o|webkit')
@@ -136,6 +137,8 @@ module CssCleaner
     if property == "font-family"
       # preserve the original capitalization
       clean = value if sanitize_css_font(value).present?
+    elsif property == "aspect-ratio"
+      clean = value if value.match(/\A(#{ALPHA_REGEX}|(auto\s+)?#{NUMBER_OR_RATIO_REGEX}(\s+auto)?)\z/i)
     elsif property == "content"
       # don't allow var() function
       clean = value.match(/\bvar\b/i) ? "" : sanitize_css_content(value)

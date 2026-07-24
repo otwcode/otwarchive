@@ -1582,6 +1582,7 @@ en:
         header: You can create new skins for the Archive using our wizard, or by writing your own CSS (cascading style sheets) code
       numeric_values:
         description:
+          aspect_ratio_html: For the %{aspect_ratio_code} property, you can specify ratios using numeric values up to three decimal places.
           em_unit_html: 'PS: we highly encourage learning about and using %{em_code}, which lets you set things relative to the viewer''s current font size! It will make your layouts much more flexible and responsive to different browser/font settings.'
           precision_html: 'You can specify numeric values up to two decimal places, either as percentages or in %{various_units_link}: %{units_list_code}'
           units_list: cm, em, ex, in, mm, pc, pt, px
