@@ -315,6 +315,21 @@ describe Comment do
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
         end
+
+        it "has blog_lang from the work's language" do
+          expect(subject.akismet_attributes[:blog_lang]).to eq(subject.ultimate_parent.language.short)
+        end
+
+        it "has permalink with the chapter path" do
+          chapter = subject.commentable
+          expect(subject.akismet_attributes[:permalink]).to eq("https://#{ArchiveConfig.APP_HOST}/works/#{chapter.work_id}/chapters/#{chapter.id}")
+        end
+
+        it "uses request_host in permalink when available" do
+          subject.request_host = "archiveofourown.gay"
+          chapter = subject.commentable
+          expect(subject.akismet_attributes[:permalink]).to eq("https://archiveofourown.gay/works/#{chapter.work_id}/chapters/#{chapter.id}")
+        end
       end
 
       context "when the commentable is an admin post" do
@@ -330,6 +345,15 @@ describe Comment do
 
         it "has comment_post_modified_gmt as the admin post's creation time" do
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
+        end
+
+        it "has blog_lang from the admin post's language" do
+          expect(subject.akismet_attributes[:blog_lang]).to eq(subject.ultimate_parent.language.short)
+        end
+
+        it "has permalink with the admin post path" do
+          admin_post = subject.commentable
+          expect(subject.akismet_attributes[:permalink]).to eq("https://#{ArchiveConfig.APP_HOST}/admin_posts/#{admin_post.id}")
         end
       end
 
@@ -350,6 +374,15 @@ describe Comment do
             expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
             expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
           end
+
+          it "has permalink with the original chapter path" do
+            chapter = subject.commentable.commentable
+            expect(subject.akismet_attributes[:permalink]).to eq("https://#{ArchiveConfig.APP_HOST}/works/#{chapter.work_id}/chapters/#{chapter.id}")
+          end
+
+          it "has blog_lang from the work's language" do
+            expect(subject.akismet_attributes[:blog_lang]).to eq(subject.ultimate_parent.language.short)
+          end
         end
 
         context "when the comment is on an admin post" do
@@ -366,6 +399,22 @@ describe Comment do
           it "has comment_post_modified_gmt as the admin post's creation time" do
             expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
           end
+
+          it "has permalink with the original admin post path" do
+            admin_post = subject.commentable.commentable
+            expect(subject.akismet_attributes[:permalink]).to eq("https://#{ArchiveConfig.APP_HOST}/admin_posts/#{admin_post.id}")
+          end
+
+          it "has blog_lang from the admin post's language" do
+            expect(subject.akismet_attributes[:blog_lang]).to eq(subject.ultimate_parent.language.short)
+          end
+        end
+      end
+
+      context "when the parent has no language" do
+        it "omits blog_lang" do
+          allow(subject.ultimate_parent).to receive(:language).and_return(nil)
+          expect(subject.akismet_attributes).not_to have_key(:blog_lang)
         end
       end
 

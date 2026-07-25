@@ -406,6 +406,7 @@ class CommentsController < ApplicationController
       @comment.cloudflare_bot_score = request.env["HTTP_CF_BOT_SCORE"]
       @comment.cloudflare_ja3_hash = request.env["HTTP_CF_JA3_HASH"]
       @comment.cloudflare_ja4 = request.env["HTTP_CF_JA4"]
+      @comment.request_host = request.host
       @comment.commentable = Comment.commentable_object(@commentable)
       @controller_name = params[:controller_name]
 
@@ -450,6 +451,7 @@ class CommentsController < ApplicationController
   # PUT /comments/1
   # PUT /comments/1.xml
   def update
+    @comment.request_host = request.host
     updated_comment_params = comment_params.merge(edited_at: Time.current)
     if @comment.update(updated_comment_params)
       flash[:comment_notice] = ts('Comment was successfully updated.')
