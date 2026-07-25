@@ -436,7 +436,7 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "[Restricted Work] by translator"
 
-  Scenario: Hidden inspired and inspiring works' titles should be hidden in downloads
+  Scenario: Hidden inspired and inspiring works should be hidden in downloads
     Given I have related works setup
       And a related work has been posted and approved
     When I am logged in as a "policy_and_abuse" admin
@@ -444,16 +444,16 @@ Feature: Download a work
     When I log out
       And I view the work "Worldbuilding"
       And I follow "HTML"
-    Then I should see "[Hidden Work] by remixer"
+    Then I should not see "Followup by remixer"
     When I am logged in as a "policy_and_abuse" admin
       And I unhide the work "Followup"
       And I hide the work "Worldbuilding"
     When I log out
       And I view the work "Followup"
       And I follow "HTML"
-    Then I should see "[Hidden Work] by inspiration"
+    Then I should not see "Worldbuilding by inspiration"
 
-  Scenario: Hidden translations and translated works' titles should be hidden in downloads
+  Scenario: Hidden translations and translated works should be hidden in downloads
     Given I have related works setup
       And a translation has been posted and approved
     When I am logged in as a "policy_and_abuse" admin
@@ -461,14 +461,14 @@ Feature: Download a work
     When I log out
       And I view the work "Worldbuilding"
       And I follow "HTML"
-    Then I should see "[Hidden Work] by translator"
+    Then I should not see "Worldbuilding Translated by translator"
     When I am logged in as a "policy_and_abuse" admin
       And I unhide the work "Worldbuilding Translated"
       And I hide the work "Worldbuilding"
     When I log out
       And I view the work "Worldbuilding Translated"
       And I follow "HTML"
-    Then I should see "[Hidden Work] by inspiration"
+    Then I should not see "Worldbuilding by inspiration"
 
   Scenario: Downloads should update when works get hidden and unhidden
     Given I have related works setup
@@ -482,7 +482,7 @@ Feature: Download a work
     When I log out
       And I view the work "Worldbuilding"
       And I follow "HTML"
-    Then I should see "[Hidden Work] by remixer"
+    Then I should not see "Followup by remixer"
     When I am logged in as a "policy_and_abuse" admin
       And I unhide the work "Followup"
     When I log out

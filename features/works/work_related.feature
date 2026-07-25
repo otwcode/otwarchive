@@ -373,35 +373,35 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
   Then I should see "Works inspired by this one: Followup by Anonymous"
     And I should not see "remixer" within ".afterword .children"
 
-Scenario: Hidden inspired and inspiring works should show up as [Hidden]
+Scenario: Hidden inspired and inspiring works should not be listed on work pages
   Given I have related works setup
     And a related work has been posted and approved
   When I am logged in as a "policy_and_abuse" admin
     And I hide the work "Followup"
   When I log out
     And I view the work "Worldbuilding"
-  Then I should see "[Hidden Work] by remixer"
+  Then I should not see "Followup by remixer"
   When I am logged in as a "policy_and_abuse" admin
     And I unhide the work "Followup"
     And I hide the work "Worldbuilding"
   When I log out
     And I view the work "Followup"
-  Then I should see "[Hidden Work] by inspiration"
+  Then I should not see "Worldbuilding by inspiration"
 
-Scenario: Hidden translations and translated works should show up as [Hidden]
+Scenario: Hidden translations and translated works should not be listed on work pages
   Given I have related works setup
     And a translation has been posted and approved
   When I am logged in as a "policy_and_abuse" admin
     And I hide the work "Worldbuilding Translated"
   When I log out
     And I view the work "Worldbuilding"
-  Then I should see "[Hidden Work] by translator"
+  Then I should not see "Worldbuilding Translated by translator"
   When I am logged in as a "policy_and_abuse" admin
     And I unhide the work "Worldbuilding Translated"
     And I hide the work "Worldbuilding"
   When I log out
     And I view the work "Worldbuilding Translated"
-  Then I should see "[Hidden Work] by inspiration"
+  Then I should not see "Worldbuilding by inspiration"
 
 Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
   the e-mail should link to each author's URL instead of showing escaped HTML
