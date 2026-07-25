@@ -18,7 +18,7 @@
 
       <dt class="required">
         <%= collection_form.label :name, ts("Collection name" + "*") %>
-        <%= link_to_help "collection-name" %>
+        <%= link_to_help_modal(help_collections_name_path, t(".collections_name_help_title")) %>
       </dt>
       <dd>
         <%= collection_form.text_field :name, "aria-describedby" => "name-field-notes" %>
@@ -87,7 +87,7 @@
 
     <dt>
       <%= collection_form.label :icon_alt_text, ts("Icon alt text") %>
-      <%= link_to_help "icon-alt-text" %>
+      <%= link_to_help_modal(help_icon_alt_text_path, t(".icon_alt_text_help_title")) %>
     </dt>
     <dd>
       <%= collection_form.text_field :icon_alt_text, class: "observe_textlength" %>
@@ -96,7 +96,7 @@
 
     <dt>
       <%= collection_form.label :icon_comment_text, ts("Icon comment text") %>
-      <%= link_to_help "pseud-icon-comment" %>
+      <%= link_to_help_modal(help_icon_comment_text_path, t(".icon_comment_text_help_title")) %>
     </dt>
     <dd>
       <%= collection_form.text_field :icon_comment_text, class: "observe_textlength" %>
