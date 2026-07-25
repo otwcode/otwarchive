@@ -1004,6 +1004,7 @@ en:
       comment: drop by the Archive and comment
       end_notes: End Notes
       inspired_by:
+        restricted_html: "[Restricted Work] by %{creator_link}"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
@@ -3528,6 +3529,7 @@ en:
       works_translation_link_help_title: Translation link
     work_approved_children:
       inspired_by:
+        restricted_html: "[Restricted Work] by %{creator_link}"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
