@@ -54,6 +54,8 @@ en:
   tags_helper:
     get_symbol_link:
       title: Symbols key
+    wrangler_list:
+      wrangler_noncanon_fandom: Non-canonical fandoms cannot be assigned.
   users_helper:
     collections_link: Collections (%{coll_number})
     gifts_link: Gifts (%{gift_number})
@@ -77,6 +79,8 @@ en:
       validated: Account Validated
       warn: Warned
   works_helper:
+    collections_meta_tag:
+      collections: 'Collections:'
     mark_as_read_button: Mark as Read
     mark_for_later_button: Mark for Later
     work_page_title:

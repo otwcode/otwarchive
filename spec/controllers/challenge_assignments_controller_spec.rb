@@ -410,6 +410,12 @@ describe ChallengeAssignmentsController do
         expect(assigns[:challenge_assignments]).not_to include(defaulted_assignment)
         expect(response).to render_template(:index)
       end
+
+      it "shows the username in the page title" do
+        get :index, params: { user_id: user.login }
+        expect(response).to have_http_status(:success)
+        expect(assigns[:page_subtitle]).to eq("#{user.login} - Challenge Assignments")
+      end
     end
 
     context "when logged in as the owner of a defaulted assignment" do
@@ -450,6 +456,36 @@ describe ChallengeAssignmentsController do
                                      "Sorry, you don't have permission to access the page you were trying to reach.")
         end
       end
+    end
+  end
+
+  describe "admin access to assignments pages" do
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
+    let(:gift_exchange) { create(:gift_exchange, assignments_sent_at: Faker::Time.backward) }
+    let(:user) { other_user }
+
+    before { fake_logout }
+
+    describe "GET #index" do
+      subject { get :index, params: { collection_id: collection.name } }
+
+      let(:success) do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
+    end
+
+    describe "GET #show" do
+      subject { get :show, params: { id: assignment.id, collection_id: collection.name } }
+
+      let(:success) do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:show)
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
     end
   end
 end
