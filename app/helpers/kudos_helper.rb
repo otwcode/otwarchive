@@ -1,5 +1,6 @@
 module KudosHelper
-  # Returns a comma-separated list of kudos. Restricts the list to the first
+  # Returns an array containing two items: a comma-separated list of kudos
+  # and the total kudos count. Restricts the list to the first
   # ArchiveConfig.MAX_KUDOS_TO_SHOW entries, with a link to view more.
   #
   # When showing_more is true, returns a list with a connector at the front,
