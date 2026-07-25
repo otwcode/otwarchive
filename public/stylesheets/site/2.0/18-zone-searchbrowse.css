@@ -68,6 +68,7 @@ li.search fieldset {
 form.filters {
   width: 23%;
   float: right;
+  clear: right;
 }
 
 .filters h4 {
