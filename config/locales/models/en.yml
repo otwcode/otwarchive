@@ -116,10 +116,21 @@ en:
           attributes:
             pseud:
               required: can't be blank
+        bookmark/collection_items:
+          format: "%{message}"
         collection:
           attributes:
             header_image_url:
               file_format: can only point to a gif, jpg, jpeg, or png file.
+        collection_item:
+          attributes:
+            collection:
+              blank: The collection can't be blank.
+              closed: The collection %{title} is not currently open.
+              not_found: We couldn't find the collection %{name}.
+            collection_id:
+              taken: The collection already contains this item.
+          format: "%{message}"
         comment:
           attributes:
             comment_content:
@@ -275,6 +286,8 @@ en:
               at_most: must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them.
           blocked_gifts: "%{byline} does not accept gifts."
           blocked_your_gifts: "%{byline} does not accept gifts from you."
+        work/collection_items:
+          format: "%{message}"
         work/parent_work_relationships:
           format: "%{message}"
     models:
