@@ -144,6 +144,34 @@ Feature: Prompt Meme Challenge
     And I follow "Fulfilled Claims"
   Then I should see "Fulfilled Story"
 
+  Scenario: Fulfilled claim should show back up as unfulfilled when work is deleted
+
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I am on myname4's user page
+  Then I should see "Claims (0)"
+  When I follow "Claims"
+    And I follow "Fulfilled Claims"
+  Then I should see "Fulfilled Story"
+  When I am on myname4's user page
+    And I follow "Claims"
+  Then I should not see "Request"
+    And I should not see "random SGA love"
+  When I delete the work "Fulfilled Story"
+  When I am on myname4's user page
+  Then I should see "Claims (1)"
+  When I follow "Claims"
+    And I follow "Fulfilled Claims"
+  Then I should not see "Fulfilled Story"
+  When I am on myname4's user page
+    And I follow "Claims"
+  Then I should see "Request"
+    And I should see "random SGA love"
+
   Scenario: Claim shows as fulfilled to another user
 
   Given I have Battle 12 prompt meme fully set up
@@ -597,3 +625,22 @@ Feature: Prompt Meme Challenge
     And I uncheck "Battle 12 (prompter)"
     And I press "Update"
   Then I should see "For prompter."
+
+  Scenario: When a prompt is filled with a restricted work, the work should only be visible to logged-in users
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+    And I sign up for Battle 12
+    And I am logged in as "myname2"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim with "Restricted Fill"
+    And I lock the work
+    And I press "Post"
+  When I view prompts for "Battle 12"
+  Then I should see "Fulfilled By"
+    And I should see "Restricted Fill"
+  When I log out
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts ("
+  Then I should not see "Fulfilled By"
+    And I should not see "Restricted Fill"

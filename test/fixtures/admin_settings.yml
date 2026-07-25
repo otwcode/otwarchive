@@ -21,3 +21,4 @@ admin_setting_3:
   hide_spam: false
   guest_comments_off: false
   account_age_threshold_for_comment_spam_check: 0
+  comment_count_threshold_for_comment_rate_limit: 0
