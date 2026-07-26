@@ -8,7 +8,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<% unless @translations_of_user.blank? || @translations_of_user.all? { |related_work| related_work.parent.nil? || related_work.work.nil? } %>
+<% unless @translations_of_user.blank? %>
   <h3 class="heading"><%= ts("Translations of %{user_login}'s works", :user_login => @user.login) %></h3>
   <% # FRONT END!!!
     # This page is:
@@ -99,7 +99,7 @@
   </table>
 <% end %>
 
-<% unless @remixes_of_user.blank?  || @remixes_of_user.all? { |related_work| related_work.parent.nil? || related_work.work.nil? } %>
+<% unless @remixes_of_user.blank? %>
   <h3 class="heading"><%= ts("Works inspired by %{user_login}", :user_login => @user.login) %></h3>
   <dl class="inspired index group">
     <% @remixes_of_user.each do |related_work| %>
