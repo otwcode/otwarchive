@@ -12,6 +12,11 @@ class RelatedWork < ActiveRecord::Base
     where("child_works.posted = 1")
   }
 
+  scope :with_existing_parent, -> {
+    where(parent_type: "ExternalWork")
+      .or(where(parent_type: "Work").where(parent_id: Work.select(:id)))
+  }
+
   before_validation :set_parent, if: :new_record?
   def set_parent
     return if parent
