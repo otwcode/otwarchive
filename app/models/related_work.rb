@@ -7,12 +7,12 @@ class RelatedWork < ActiveRecord::Base
   attribute :author, :string
   attribute :language_id, :integer
 
-  scope :posted, -> {
+  scope :posted, lambda {
     joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`").
     where("child_works.posted = 1")
   }
 
-  scope :with_existing_parent, -> {
+  scope :with_existing_parent, lambda {
     where(parent_type: "ExternalWork")
       .or(where(parent_type: "Work").where(parent_id: Work.select(:id)))
   }
