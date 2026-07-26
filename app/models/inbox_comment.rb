@@ -42,9 +42,9 @@ class InboxComment < ApplicationRecord
         { pseud: [
           { user: %i[roles block_of_current_user] },
           { icon_attachment: { blob: {
-              variant_records: { image_attachment: :blob },
-              preview_image_attachment: { blob: { variant_records: { image_attachment: :blob } } }
-            } } }
+            variant_records: { image_attachment: :blob },
+            preview_image_attachment: { blob: { variant_records: { image_attachment: :blob } } }
+          } } }
         ] },
         { parent: { work: { users: :block_of_current_user } } }
       ]
