@@ -305,7 +305,7 @@ Feature: User dashboard
       And I should see "First login help" within "#modal"
       And I should see "Close" within "#modal"
 
-  Scenario: The sidebar's related work count should remain accurate even when the parent's of related works are deleted
+  Scenario: The sidebar's related work count should remain accurate even when the parents of related works are deleted
     Given I have related works setup
       And I post a related work as remixer
       And I post a translation as translator
