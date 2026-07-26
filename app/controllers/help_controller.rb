@@ -18,8 +18,12 @@ class HelpController < ApplicationController
     skins_creating
     skins_parents
     symbols_key
+    tags_additional
+    tags_categories
+    tags_characters
     tags_fandoms
     tags_ratings
+    tags_relationships
     tags_warnings
     works_assignment
     works_backdating

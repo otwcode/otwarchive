@@ -225,12 +225,25 @@ Given /^I have posted an admin post with guest comments disabled$/ do
   step %{I log out}
 end
 
+Given "I have posted an admin post with guest comments enabled" do
+  step %{I am logged in as a "communications" admin}
+  step %{I start to make an admin post}
+  choose("Registered users and guests can comment")
+  click_button("Post")
+  step %{I log out}
+end
+
 Given /^I have posted an admin post with comments disabled$/ do
   step %{I am logged in as a "communications" admin}
   step %{I start to make an admin post}
   choose("No one can comment")
   click_button("Post")
   step %{I log out}
+end
+
+Given "comment moderation on the admin post {string} is enabled" do |title|
+  admin_post = AdminPost.find_by!(title: title)
+  admin_post.update_attribute(:moderated_commenting_enabled, true)
 end
 
 Given "an abuse ticket ID exists" do

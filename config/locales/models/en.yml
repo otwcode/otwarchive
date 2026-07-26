@@ -123,6 +123,8 @@ en:
           attributes:
             pseud:
               required: can't be blank
+        bookmark/collection_items:
+          format: "%{message}"
         collection:
           attributes:
             base:
@@ -153,6 +155,15 @@ en:
               no_title_entered: "^Please enter a title to be displayed for your collection."
               too_long: must be less than %{max} characters long.
               too_short: must be at least %{min} characters long.
+        collection_item:
+          attributes:
+            collection:
+              blank: The collection can't be blank.
+              closed: The collection %{title} is not currently open.
+              not_found: We couldn't find the collection %{name}.
+            collection_id:
+              taken: The collection already contains this item.
+          format: "%{message}"
         comment:
           attributes:
             comment_content:
@@ -218,6 +229,10 @@ en:
             muted_id:
               taken: You have already muted that user.
           format: "%{message}"
+        owned_tag_set:
+          attributes:
+            title:
+              restricted_characters: "^The title of a tag set cannot include the following restricted characters: , &#94; * < > { } = ` \\ %"
         prompt:
           attributes:
             title:
@@ -267,6 +282,10 @@ en:
             subscribable:
               blank: The item you tried to subscribe to does not exist. It may have been deleted.
               format: "%{message}"
+        tag_set_nomination:
+          attributes:
+            base:
+              taken_by_user: You have already submitted nominations for that tag set. Try editing them instead.
         user:
           attributes:
             age_over_13:
@@ -300,6 +319,9 @@ en:
               at_most: must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them.
           blocked_gifts: "%{byline} does not accept gifts."
           blocked_your_gifts: "%{byline} does not accept gifts from you."
+          work_skin_not_allowed: You do not have permission to use that work skin.
+        work/collection_items:
+          format: "%{message}"
         work/parent_work_relationships:
           format: "%{message}"
     models:
