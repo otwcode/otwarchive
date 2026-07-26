@@ -962,6 +962,31 @@ describe Comment do
         comment.mark_as_spam!
       end
     end
+
+    context "when the commenter is deleted" do
+      let(:user) { create(:user) }
+      let(:comment) { create(:comment, pseud: user.default_pseud, approved: true, spam: false) }
+
+      before { user.delete }
+
+      it "flags the comment as spam" do
+        comment.mark_as_spam!
+        comment.reload
+        expect(comment.approved).to be_falsey
+        expect(comment.spam).to be_truthy
+      end
+
+      it "submits the comment to Akismet" do
+        expect(AkismetClient).to receive(:submit_spam)
+
+        comment.mark_as_spam!
+      end
+
+      it "has nil as name and email in akismet_attributes" do
+        expect(comment.akismet_attributes[:comment_author]).to eq(nil)
+        expect(comment.akismet_attributes[:comment_author_email]).to eq(nil)
+      end
+    end
   end
 
   describe "#mark_as_ham!" do
