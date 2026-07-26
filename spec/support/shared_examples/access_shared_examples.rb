@@ -33,6 +33,26 @@ shared_examples "an action only authorized admins can access" do |authorized_rol
   end
 end
 
+shared_examples "an action that non-admins cannot access" do
+  context "as a registered user" do
+    let(:user) { create(:user) }
+
+    it "redirects with an error" do
+      fake_login_known_user(user)
+      subject
+      it_redirects_to_simple(root_path)
+    end
+  end
+
+  context "as a guest" do
+    it "redirects with an error" do
+      fake_logout
+      subject
+      it_redirects_to_simple(root_path)
+    end
+  end
+end
+
 shared_examples "denies access for work that isn't visible to user" do
   shared_examples "denies access to random user" do
     it "allows access for work creator" do
