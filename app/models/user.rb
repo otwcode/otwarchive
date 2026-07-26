@@ -665,9 +665,9 @@ class User < ApplicationRecord
   def clear_readings
     readings.order(:work_id).each(&:delete)
   end
-end
 
-def visible_related_works_count
-  related_works.posted.count +
-    parent_work_relationships.posted.with_existing_parent.count
+  def visible_related_works_count
+    related_works.posted.count +
+      parent_work_relationships.posted.with_existing_parent.count
+  end
 end
