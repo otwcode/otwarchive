@@ -544,6 +544,11 @@ class User < ApplicationRecord
     end
   end
 
+  def visible_related_works_count
+    related_works.posted.count +
+      parent_work_relationships.posted.with_existing_parent.count
+  end
+
   private
 
   # Override the default Justifiable enabled check, because we only need to justify
@@ -664,10 +669,5 @@ class User < ApplicationRecord
 
   def clear_readings
     readings.order(:work_id).each(&:delete)
-  end
-
-  def visible_related_works_count
-    related_works.posted.count +
-      parent_work_relationships.posted.with_existing_parent.count
   end
 end
