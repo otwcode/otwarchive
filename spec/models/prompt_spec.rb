@@ -105,4 +105,20 @@ describe Prompt do
       end
     end
   end
+
+  describe "title" do
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup, collection: collection) }
+
+    it "cannot begin with a restricted character" do
+      prompt = build(:offer, title: "@disallowed", challenge_signup: signup, collection: collection)
+      expect(prompt).not_to be_valid
+      expect(prompt.errors[:title]).to include("cannot begin with =, +, -, @ or a whitespace character.")
+    end
+
+    it "can contain restricted characters after the first character" do
+      prompt = build(:offer, title: "accept@ble", challenge_signup: signup, collection: collection)
+      expect(prompt).to be_valid
+    end
+  end
 end

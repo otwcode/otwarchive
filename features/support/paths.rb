@@ -169,6 +169,9 @@ module NavigationHelpers
       edit_skin_path(Skin.find_by(title: $1), wizard: true)
     when /^the new collection page/
       new_collection_path
+    when /^(.*?)(?:'s)? collections page$/i
+      step %{all indexing jobs have been run}
+      user_collections_path(user_id: Regexp.last_match(1))
     when /^"(.*)" collection's page$/i                         # e.g. when I go to "Collection name" collection's page
       step %{all indexing jobs have been run} # reindex to show recent works/bookmarks
       collection_path(Collection.find_by(title: $1))
@@ -291,6 +294,8 @@ module NavigationHelpers
     # Admin Pages
     when /^the admin-posts page$/i
       admin_posts_path
+    when /^the admin-post drafts page$/i
+      drafts_admin_posts_path
     when /^the "(.*)" admin post page$/i
       admin_post_path(AdminPost.find_by(title: Regexp.last_match(1)))
     when /^the unreviewed comments page for the admin post "(.*)"$/i

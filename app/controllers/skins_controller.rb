@@ -135,11 +135,13 @@ class SkinsController < ApplicationController
     end
 
     flash[:notice] = [
-      t(".skin_title", title: @skin.title),
-      t(".remove_skin"),
-      t(".tip", site_skin_id: @skin.id),
-      helpers.link_to(t(".return_to_skin"), skin_path(@skin), class: "action")
-    ].join("<br />")
+      helpers.tag.ul(
+        helpers.tag.li(t(".skin_title", title: @skin.title)) +
+        helpers.tag.li(t(".remove_skin")) +
+        helpers.tag.li(t(".tip", site_skin_id: @skin.id))
+      ),
+      helpers.tag.p(helpers.link_to(t(".return_to_skin"), skin_path(@skin), class: "action"))
+    ].join("\n")
     redirect_to "#{ArchiveConfig.SKIN_PREVIEW_URL}?site_skin=#{@skin.id}"
   end
 
