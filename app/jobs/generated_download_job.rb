@@ -38,7 +38,8 @@ class GeneratedDownloadJob < ApplicationJob
       generated_download.file.attach(
         io: file,
         filename: generated_download.filename,
-        content_type: download.mime_type
+        content_type: download.mime_type,
+        identify: false
       )
     end
   ensure
@@ -53,7 +54,8 @@ class GeneratedDownloadJob < ApplicationJob
     generated_download.file.attach(
       io: tempfile,
       filename: generated_download.filename,
-      content_type: "text/csv; charset=utf-16le"
+      content_type: "text/csv; charset=utf-16le",
+      identify: false
     )
   ensure
     tempfile&.close!
