@@ -10,6 +10,16 @@ describe GeneratedDownload do
     expect(download.expires_at).to be_within(1.second).of(GeneratedDownload::EXPIRATION.from_now)
   end
 
+  it "round trips non-empty job arguments" do
+    download = GeneratedDownload.create!(
+      kind: "test",
+      arguments: { user_id: 42 },
+      filename: "test.csv"
+    )
+
+    expect(download.reload.arguments).to eq("user_id" => 42)
+  end
+
   describe ".cleanup" do
     it "removes expired records" do
       expired = GeneratedDownload.create!(

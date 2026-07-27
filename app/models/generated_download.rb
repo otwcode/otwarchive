@@ -6,6 +6,8 @@ class GeneratedDownload < ApplicationRecord
 
   has_one_attached :file
 
+  serialize :arguments, coder: JSON
+
   validates :token, :kind, :filename, :expires_at, presence: true
   validates :token, uniqueness: true
   validates :status, inclusion: { in: STATUSES }

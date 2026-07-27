@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_27_000000) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_28_000000) do
   create_table "abuse_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "email"
     t.string "url", limit: 2080, null: false
@@ -579,7 +579,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_27_000000) do
   create_table "generated_downloads", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "token", null: false
     t.string "kind", null: false
-    t.json "arguments", null: false
+    t.text "arguments", null: false
     t.string "filename", null: false
     t.string "status", default: "pending", null: false
     t.text "error"
