@@ -1,0 +1,16 @@
+<% content_for :head do %>
+  <% unless @generated_download.status == "failed" %>
+    <meta http-equiv="refresh" content="5">
+  <% end %>
+<% end %>
+
+<h2 class="heading"><%= ts("Preparing download") %></h2>
+
+<% if @generated_download.status == "failed" %>
+  <p class="error"><%= ts("We were not able to prepare this download. Please try again.") %></p>
+<% else %>
+  <p class="notice">
+    <%= ts("Your file is being prepared. This page will download it automatically when it is ready.") %>
+  </p>
+  <p><%= link_to ts("Check download status"), generated_download_path(token: @generated_download.token) %></p>
+<% end %>
