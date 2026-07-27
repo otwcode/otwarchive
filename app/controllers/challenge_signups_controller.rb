@@ -119,7 +119,7 @@ class ChallengeSignupsController < ApplicationController
         if privileged_collection_admin? ||
            (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) ||
         (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
-          filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
+          filename = "#{@collection.name}_signups_#{Time.current.strftime('%Y-%m-%d-%H%M')}.csv"
           queue_csv_download(
             kind: "challenge_signups",
             arguments: { collection_id: @collection.id },

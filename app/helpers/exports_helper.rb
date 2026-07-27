@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-module ExportsHelper
 
+module ExportsHelper
   def queue_csv_download(kind:, arguments:, filename:)
     generated_download = GeneratedDownload.create!(
       kind: kind,
@@ -24,9 +24,10 @@ module ExportsHelper
   def self.write_csv(io, rows)
     io.write("\uFEFF".encode("utf-16le"))
     rows.each do |row|
-      io.write(row.to_csv(col_sep: "\t", encoding: "utf-8").encode(
+      encoded_row = row.to_csv(col_sep: "\t", encoding: "utf-8").encode(
         "utf-16le", "utf-8", invalid: :replace, undef: :replace, replace: ""
-      ))
+      )
+      io.write(encoded_row)
     end
   end
 end

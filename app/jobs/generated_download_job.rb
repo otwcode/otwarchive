@@ -18,8 +18,8 @@ class GeneratedDownloadJob < ApplicationJob
     end
 
     generated_download.update!(status: "ready")
-  rescue StandardError => error
-    generated_download.update_columns(status: "failed", error: error.message, updated_at: Time.current)
+  rescue StandardError => e
+    generated_download.update_columns(status: "failed", error: e.message, updated_at: Time.current)
     raise
   end
 
@@ -72,12 +72,14 @@ class GeneratedDownloadJob < ApplicationJob
 
   def tag_wrangler_rows(user_id)
     wrangler = User.find(user_id)
-    rows = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
+    rows = [["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"]]
     Tag.where(last_wrangler: wrangler)
       .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
       .includes(:merger, :parents)
       .find_each(order: :desc) do |tag|
-        fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }.join(", ")
+        fandoms = tag.parents
+          .filter_map { |parent| parent.name if parent.is_a?(Fandom) }
+          .join(", ")
         rows << [tag.name, tag.updated_at, tag.type, tag.merger&.name || "", fandoms, tag.unwrangleable]
       end
     rows

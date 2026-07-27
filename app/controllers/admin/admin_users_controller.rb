@@ -49,7 +49,7 @@ class Admin::AdminUsersController < Admin::BaseController
         queue_csv_download(
           kind: "bulk_user_search",
           arguments: { emails: @emails },
-          filename: "bulk_user_search_#{Time.now.strftime("%Y-%m-%d-%H%M")}.csv"
+          filename: "bulk_user_search_#{Time.current.strftime('%Y-%m-%d-%H%M')}.csv"
         )
         return
       end
