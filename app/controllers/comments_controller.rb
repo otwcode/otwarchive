@@ -68,7 +68,7 @@ class CommentsController < ApplicationController
 
     return false unless logged_in? # Guest comment rate limits are not handled here
 
-    return false unless current_user.should_spam_check_comments?
+    return false unless current_user.should_rate_limit_comments?
 
     parent = find_parent
     return false if parent.is_a?(Tag)

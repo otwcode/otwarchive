@@ -67,6 +67,8 @@ class Prompt < ApplicationRecord
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
 
+  validates :title, format: { without: /\A[=+-@\s＝＋－＠]/, message: :start_with_special_characters }
+
   # i18n-tasks-use t("errors.attributes.url.invalid")
   validates :url, url_format: {allow_blank: true} # we validate the presence above, conditionally
 

@@ -687,7 +687,7 @@ describe "rake After:add_collection_tags" do
 
     it "tags the collection with the work's fandoms" do
       subject.invoke
-      expect(collection.tags).to include(*items.flat_map(&:fandoms))
+      expect(collection.reload.tags).to include(*items.flat_map(&:fandoms))
     end
 
     shared_examples "does not tag the collection" do
@@ -728,6 +728,7 @@ describe "rake After:add_collection_tags" do
 
     it "tags the collection with the bookmark's AND bookmarked item's fandoms" do
       subject.invoke
+      collection.reload
       expect(collection.tags).to include(*items.flat_map(&:fandoms))
       expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
     end
@@ -778,6 +779,7 @@ describe "rake After:add_collection_tags" do
 
     it "includes the bookmark's and series's fandoms" do
       subject.invoke
+      collection.reload
       expect(collection.tags).to include(*bookmark.fandoms)
       expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map { |s| s.work_tags.where(type: "Fandom") })
     end
@@ -863,5 +865,23 @@ describe "rake After:add_canonical_email" do
     expect(user2.canonical_email).to eq("b@gmail.com")
     expect(user3.canonical_email).to eq("c@example.com")
     expect(user4.canonical_email).to eq("dlastname@gmail.com")
+  end
+end
+  
+describe "rake After:remove_noncanonical_fandom_wrangling_assignments" do
+  let!(:fandom1) { create(:fandom, canonical: false) }
+  let!(:assignment1) { create(:wrangling_assignment, fandom: fandom1) }
+
+  it "deletes wrangling assignments of noncanonical fandoms" do
+    subject.invoke
+    expect(WranglingAssignment.all).not_to include(assignment1)
+  end
+
+  let!(:fandom2) { create(:canonical_fandom) }
+  let!(:assignment2) { create(:wrangling_assignment, fandom: fandom2) }
+
+  it "doesn't delete wrangling assignments of canonical fandoms" do
+    subject.invoke
+    expect(WranglingAssignment.all).to include(assignment2)
   end
 end
