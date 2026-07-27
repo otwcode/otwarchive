@@ -11,7 +11,7 @@ class GeneratedDownloadsController < ApplicationController
       blob = @generated_download.file.blob
       redirect_to rails_storage_redirect_path(
         blob.signed_id,
-        blob.filename,
+        blob.filename.to_s,
         disposition: :attachment
       )
     elsif @generated_download.status == "failed"
