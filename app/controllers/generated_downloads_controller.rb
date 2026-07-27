@@ -12,7 +12,7 @@ class GeneratedDownloadsController < ApplicationController
       redirect_to rails_storage_redirect_path(
         blob.signed_id,
         blob.filename.to_s,
-        disposition: :attachment
+        disposition: "attachment"
       )
     elsif @generated_download.status == "failed"
       render :show, status: :unprocessable_content

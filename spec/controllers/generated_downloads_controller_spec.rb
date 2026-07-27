@@ -42,7 +42,7 @@ describe GeneratedDownloadsController do
       get :show, params: { token: download.token }
 
       expect(response).to redirect_to(
-        rails_storage_redirect_path(blob.signed_id, blob.filename.to_s, disposition: :attachment)
+        rails_storage_redirect_path(blob.signed_id, blob.filename.to_s, disposition: "attachment")
       )
     end
   end
