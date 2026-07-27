@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_27_000000) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_07_100830) do
   create_table "abuse_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "email"
     t.string "url", limit: 2080, null: false
@@ -574,20 +574,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_27_000000) do
     t.integer "signup_instructions_requests_sanitizer_version", limit: 2, default: 0, null: false
     t.integer "signup_instructions_offers_sanitizer_version", limit: 2, default: 0, null: false
     t.boolean "requests_summary_visible", default: false, null: false
-  end
-
-  create_table "generated_downloads", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "token", null: false
-    t.string "kind", null: false
-    t.text "arguments", null: false
-    t.string "filename", null: false
-    t.string "status", default: "pending", null: false
-    t.text "error"
-    t.datetime "expires_at", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["expires_at"], name: "index_generated_downloads_on_expires_at"
-    t.index ["token"], name: "index_generated_downloads_on_token", unique: true
   end
 
   create_table "gifts", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|

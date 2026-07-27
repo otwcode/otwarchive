@@ -8,10 +8,12 @@ class GeneratedDownloadsController < ApplicationController
       @generated_download.file.purge_later if @generated_download.file.attached?
       head :gone
     elsif @generated_download.status == "ready" && @generated_download.file.attached?
-      redirect_to @generated_download.file.blob.url(
-        disposition: :attachment,
-        filename: @generated_download.filename
-      ), allow_other_host: true
+      blob = @generated_download.file.blob
+      redirect_to rails_storage_redirect_path(
+        blob.signed_id,
+        blob.filename,
+        disposition: :attachment
+      )
     elsif @generated_download.status == "failed"
       render :show, status: :unprocessable_content
     else

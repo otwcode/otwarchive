@@ -33,7 +33,8 @@ class GeneratedDownloadJob < ApplicationJob
     ).generate
     raise "Download generation failed" unless download.exists?
 
-    File.open(download.file_path, "rb") do |file|
+    file_path = File.join(download.dir, File.basename(download.file_path))
+    File.open(file_path, "rb") do |file|
       generated_download.file.attach(
         io: file,
         filename: generated_download.filename,
