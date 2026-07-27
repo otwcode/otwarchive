@@ -18,7 +18,7 @@ module ExportsHelper
   def export_csv(content_array)
     io = StringIO.new("".b)
     ExportsHelper.write_csv(io, content_array)
-    io.string
+    io.string.force_encoding("utf-16le")
   end
 
   def self.write_csv(io, rows)
