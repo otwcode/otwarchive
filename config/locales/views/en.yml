@@ -539,7 +539,12 @@ en:
       page_heading: AO3 News Drafts
       page_title: AO3 News Drafts
     index:
+      landmark: Comment
+      page_heading: AO3 News
       page_title: AO3 News
+      read_comments:
+        one: Read %{count} Comment
+        other: Read %{count} Comments
     posting_fieldset:
       actions:
         cancel: Cancel
