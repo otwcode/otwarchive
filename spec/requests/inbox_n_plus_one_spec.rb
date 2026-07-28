@@ -19,6 +19,7 @@ describe "n+1 queries in the InboxController" do
         it "produces a constant number of queries" do
           expect do
             get user_inbox_path(user)
+            expect(response.body.scan('id="feedback_comment_').size).to eq(current_scale.to_i)
           end.to perform_constant_number_of_queries
         end
       end

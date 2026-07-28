@@ -23,7 +23,7 @@ class InboxComment < ApplicationRecord
       feedback_comment: [
         { pseud: [
           { user: %i[roles block_of_current_user] },
-          { icon_attachment: :blob }
+          *Pseud.with_attached_icon.includes_values
         ] },
         { parent: { work: { users: :block_of_current_user } } }
       ]
