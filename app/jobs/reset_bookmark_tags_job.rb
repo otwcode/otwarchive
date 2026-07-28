@@ -3,8 +3,8 @@ class ResetBookmarkTagsJob < ApplicationJob
 
   def perform(tag_ids)
     base_scope = Tag.nonsynonymous
-                    .where(canonical: false)
-                    .where("NOT EXISTS (
+      .where(canonical: false)
+      .where("NOT EXISTS (
                       SELECT 1 FROM taggings 
                       WHERE taggings.tagger_id = tags.id 
                       AND taggings.taggable_type IN ('Work', 'ExternalWork')
@@ -17,7 +17,7 @@ class ResetBookmarkTagsJob < ApplicationJob
       next unless has_type || has_parents
         
       tag.common_taggings.destroy_all
-      tag.update(type: "Tag")
+      tag.update(type: "UnsortedTag")
     end
   end
 end
