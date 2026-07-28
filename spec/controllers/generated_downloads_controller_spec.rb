@@ -25,7 +25,7 @@ describe GeneratedDownloadsController do
       expect(response).to have_http_status(:gone)
     end
 
-    it "redirects ready downloads through the Active Storage redirect endpoint" do
+    it "redirects ready downloads to the storage service" do
       download = GeneratedDownload.create!(
         kind: "test",
         arguments: {},
@@ -38,11 +38,18 @@ describe GeneratedDownloadsController do
         content_type: "text/csv"
       )
       blob = download.file.blob
+      service_url = "https://downloads.example.test/test.csv"
+      allow(blob.service).to receive(:url).and_return(service_url)
 
       get :show, params: { token: download.token }
 
-      expect(response).to redirect_to(
-        rails_storage_redirect_path(blob, disposition: "attachment")
+      expect(response).to redirect_to(service_url)
+      expect(blob.service).to have_received(:url).with(
+        blob.key,
+        expires_in: ActiveStorage.service_urls_expire_in,
+        filename: blob.filename,
+        content_type: blob.content_type,
+        disposition: :attachment
       )
     end
   end

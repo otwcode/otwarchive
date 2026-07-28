@@ -35,12 +35,7 @@ class GeneratedDownloadJob < ApplicationJob
 
     file_path = File.join(download.dir, File.basename(download.file_path))
     File.open(file_path, "rb") do |file|
-      generated_download.file.attach(
-        io: file,
-        filename: generated_download.filename,
-        content_type: download.mime_type,
-        identify: false
-      )
+      attach_file(generated_download, file, download.mime_type)
     end
   ensure
     download&.remove
@@ -51,14 +46,31 @@ class GeneratedDownloadJob < ApplicationJob
     tempfile.binmode
     ExportsHelper.write_csv(tempfile, csv_rows(generated_download))
     tempfile.rewind
-    generated_download.file.attach(
-      io: tempfile,
-      filename: generated_download.filename,
-      content_type: "text/csv; charset=utf-16le",
-      identify: false
-    )
+    attach_file(generated_download, tempfile, "text/csv; charset=utf-16le")
   ensure
     tempfile&.close!
+  end
+
+  def attach_file(generated_download, io, content_type)
+    blob = ActiveStorage::Blob.create_after_unfurling!(
+      io: io,
+      filename: generated_download.filename,
+      content_type: content_type,
+      identify: false
+    )
+    io.rewind
+    blob.service.upload(
+      blob.key,
+      io,
+      checksum: blob.checksum,
+      filename: blob.filename,
+      content_type: content_type,
+      disposition: :attachment
+    )
+    generated_download.file.attach(blob)
+  rescue StandardError
+    blob&.purge
+    raise
   end
 
   def csv_rows(generated_download)
