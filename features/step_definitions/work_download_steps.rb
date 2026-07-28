@@ -14,6 +14,8 @@ end
 
 Then /^I should receive a file of type "(.*?)"$/ do |filetype|
   mime_type = Marcel::MimeType.for(name: "foo.#{filetype}").to_s
+  # Active Storage deliberately serves HTML as binary to prevent stored XSS.
+  mime_type = "application/octet-stream" if filetype == "html"
   expect(page.response_headers['Content-Disposition']).to match(/filename=.+\.#{filetype}/)
   expect(page.response_headers['Content-Length'].to_i).to be_positive
   expect(page.response_headers['Content-Type']).to eq(mime_type)
