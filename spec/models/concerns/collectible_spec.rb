@@ -14,9 +14,8 @@ describe Collectible do
     fake_name = "blah_blah_blah_not_an_existing_name"
     work = create(:work)
     work.collection_names = fake_name
-    expect(work.errors[:base].first).to match("find") # use a very basic part of the error message
-    expect(work.errors[:base].first).to match(fake_name)
-    expect(work.save).to be_truthy
+    expect(work.save).to be_falsey
+    expect(work.errors.full_messages).to include("We couldn't find the collection #{fake_name}.")
     work.reload
     expect(work.collection_names).not_to include(fake_name)
   end

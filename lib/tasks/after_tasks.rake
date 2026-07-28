@@ -738,6 +738,11 @@ namespace :After do
     puts "Job complete."
   end
 
+  desc "Remove wrangling assigments of non-canonical fandoms"
+  task(remove_noncanonical_fandom_wrangling_assignments: :environment) do
+    WranglingAssignment.joins("LEFT JOIN tags ON (tags.id = wrangling_assignments.fandom_id)").where(tags: { canonical: false }).find_each(&:destroy!)
+  end
+
   desc "Backfill reportable for AbuseReports"
   task(set_reportable: :environment) do
     AbuseReport.find_in_batches.with_index do |batch, index|
