@@ -209,7 +209,7 @@ module NavigationHelpers
     when /^the bookmarks (?:tagged|page for the tag) "(.*)"$/i
       step %{all indexing jobs have been run}
       tag_bookmarks_path(Tag.find_by_name(Regexp.last_match(1)))
-    when /^the collections "(.*)"$/i
+    when /^the collections tagged "(.*)"$/i
       step %{all indexing jobs have been run}
       tag_collections_path(Tag.find_by_name(Regexp.last_match(1)))
     when /^the bookmarks in collection "(.*)"$/i

@@ -40,41 +40,33 @@ class CollectionsController < ApplicationController
 
     @page_subtitle = case @owner
                      when Collection
-                       t(".subcollection", collection_title: @collection.title)
+                       t(".page_title.subcollection", collection_title: @collection.title)
                      when User
-                       t(".user", user_name: @user.login)
+                       t(".page_title.user", username: @user.login)
                      when Tag
-                       t(".tag", tag_name: @tag.name)
+                       t(".page_title.tag", tag_name: @tag.name)
                      else
-                       t(".general")
+                       t(".page_title.general")
                      end
-
-    if @work.present?
-      @collections = @work.approved_collections
-        .by_title
-        .for_blurb
-        .paginate(page: params[:page])
-    elsif @user.present?
-      # maybe find a way to merge this elsif branch
-      # into the @owner.present? one below it later
-      @sort_and_filter = true
-      @search = CollectionSearchForm.new(options.merge({ maintainer_id: @user.id }))
-      @collections = @search.search_results.scope(:for_search)
-      flash_search_warnings(@collections)
-    elsif @owner.present?
-      # include "|| @user.present?" in this one later after deleting above
-      @sort_and_filter = @tag.present?
-      @search = CollectionSearchForm.new(options.merge(parent: @owner))
-      @collections = @search.search_results.scope(:for_search)
-      flash_search_warnings(@collections)
-      @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
+    
+    if @owner.present?
+      @sort_and_filter = @user.present? || @tag.present?
+      if @work.present?
+        @collections = @work.approved_collections
+          .by_title
+          .for_blurb
+          .paginate(page: params[:page])
+      else
+        @search = CollectionSearchForm.new(options.merge(parent: @owner))
+        @collections = @search.search_results.scope(:for_search)
+      end
     else
       @sort_and_filter = true
       @search = CollectionSearchForm.new(options)
       @collections = @search.search_results.scope(:for_search)
-      flash_search_warnings(@collections)
-      @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
     end
+    flash_search_warnings(@collections) if @sort_and_filter
+    @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
   end
 
   # display challenges that are currently taking signups
@@ -219,8 +211,7 @@ class CollectionsController < ApplicationController
     @work = Work.find(params[:work_id]) if params[:work_id].present?
     @collection = Collection.find_by!(name: params[:collection_id]) if params[:collection_id].present?
     if params[:tag_id].present?
-      @tag = Tag.find_by_name(params[:tag_id])
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'" unless @tag.is_a?(Tag)
+      @tag = Tag.find_by_name!(params[:tag_id])
 
       unless @tag.canonical?
         redirect_path = @tag.merger.present? ? tag_collections_path(@tag.merger) : tag_path(@tag)
@@ -228,6 +219,23 @@ class CollectionsController < ApplicationController
       end
     end
     @owner = @user || @work || @collection || @tag
+  end
+
+  def add_owner
+    owner = options[:parent]
+    case owner
+    when Tag
+      options[:filter_ids] ||= []
+      options[:filter_ids] << owner.id
+    when User
+      options[:maintainer_id] = owner.id
+      options[:sort_column] = "title.keyword"
+      options[:sort_direction] = "asc"
+    when Collection
+      options[:parent_id] = owner.id
+      options[:sort_column] = "title.keyword"
+      options[:sort_direction] = "asc"
+    end
   end
 
   private
