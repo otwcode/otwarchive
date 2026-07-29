@@ -11,7 +11,7 @@ class ResetBookmarkTagsJob < ApplicationJob
                     )")
     
     base_scope.where(id: tag_ids).each do |tag|
-      has_type = tag.type.present? && tag.type != "Tag"
+      has_type = tag.type.present? && tag.type != "UnsortedTag"
       has_parents = tag.common_taggings.exists?
       
       next unless has_type || has_parents
