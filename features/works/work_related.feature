@@ -250,7 +250,7 @@ Scenario: Related draft works should not show up on the related works page
   When I view my related works
   Then I should not see "Worldbuilding Translated"
 
-Scenario: Parent draft works should not show up on the related works page
+Scenario: A user's parent draft works should only be visible to them on their related works page
 
   Given I have related works setup
     And I am logged in as "inspiration"
