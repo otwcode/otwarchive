@@ -12,7 +12,7 @@ class ReadingsController < ApplicationController
   def index
     @readings = @user.readings.visible
     @page_subtitle = t(".history_page_title", username: @user.login)
-    if params[:show] == 'to-read'
+    if params[:show] == "to-read"
       @readings = @readings.where(toread: true)
       @page_subtitle = t(".marked_for_later_page_title", username: @user.login)
     end
@@ -64,10 +64,9 @@ class ReadingsController < ApplicationController
 
   # checks if user has history enabled and redirects to preferences if not, so they can potentially change it
   def check_history_enabled
-    unless current_user.preference.history_enabled?
-      flash[:notice] = t(".history_disabled_warning")
-      redirect_to user_preferences_path(current_user)
-    end
+    return if current_user.preference.history_enabled?
+    
+    flash[:notice] = t(".history_disabled_warning")
+    redirect_to user_preferences_path(current_user)
   end
-
 end
