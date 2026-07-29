@@ -23,7 +23,7 @@ class ReadingsController < ApplicationController
   def destroy
     @reading = @user.readings.find(params[:id])
     if @reading.destroy
-      success_message = ts('Work successfully deleted from your history.')
+      success_message = t(".success")
       respond_to do |format|
         format.html { redirect_back_or_to(user_readings_path(current_user, page: params[:page]), notice: success_message) }
         format.json { render json: { item_success_message: success_message }, status: :ok }
@@ -65,7 +65,7 @@ class ReadingsController < ApplicationController
   # checks if user has history enabled and redirects to preferences if not, so they can potentially change it
   def check_history_enabled
     unless current_user.preference.history_enabled?
-      flash[:notice] = ts("You have reading history disabled in your preferences. Change it below if you'd like us to keep track of it.")
+      flash[:notice] = t(".history_disabled_warning")
       redirect_to user_preferences_path(current_user)
     end
   end
