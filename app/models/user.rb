@@ -143,8 +143,17 @@ class User < ApplicationRecord
   has_many :series, -> { distinct }, through: :pseuds
   has_many :chapters, through: :pseuds
 
-  has_many :related_works, through: :works
-  has_many :parent_work_relationships, through: :works
+  has_many :related_works, through: :works do
+    def for_user_page(user)
+      children_for_user_page.user_works_for_user_page(user)
+    end
+  end
+
+  has_many :parent_work_relationships, through: :works do
+    def for_user_page(user)
+      parents_for_user_page.user_works_for_user_page(user)
+    end
+  end
 
   has_many :tags, through: :works
   has_many :filters, through: :works

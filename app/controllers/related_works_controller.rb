@@ -7,15 +7,13 @@ class RelatedWorksController < ApplicationController
   def index
     @page_subtitle = t(".page_title", login: @user.login)
 
-    related_works = @user.related_works.visible_on_user_page(@user).visible_works
-    parent_work_relationships = @user.parent_work_relationships.visible_on_user_page(@user)
-    local_parent_work_relationships = parent_work_relationships.of_visible_local_works
-    external_parent_work_relationships = parent_work_relationships.of_visible_external_works
+    related_works = @user.related_works.for_user_page(@user)
+    parent_work_relationships = @user.parent_work_relationships.for_user_page(@user)
 
     @translations_of_user = related_works.translations
     @remixes_of_user = related_works.remixes
-    @translations_by_user = (local_parent_work_relationships.translations + external_parent_work_relationships.translations).sort
-    @remixes_by_user = (local_parent_work_relationships.remixes + external_parent_work_relationships.remixes).sort
+    @translations_by_user = parent_work_relationships.translations
+    @remixes_by_user = parent_work_relationships.remixes
   end
 
   # GET /related_works/1

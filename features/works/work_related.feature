@@ -239,7 +239,7 @@ Scenario: Translate your own work
     And I approve a related work
   Then approving the related work should succeed
 
-Scenario: Draft works should not show up on related works
+Scenario: Related draft works should not show up on the related works page
 
   Given I have related works setup
     And I am logged in as "translator"
@@ -249,6 +249,26 @@ Scenario: Draft works should not show up on related works
   Then I should not see "Related Works (1)"
   When I view my related works
   Then I should not see "Worldbuilding Translated"
+
+Scenario: Parent draft works should not show up on the related works page
+
+  Given I have related works setup
+    And I am logged in as "inspiration"
+    And the draft "Worldbuilding Draft"
+  When I set up the draft "Followup"
+    And I list the work "Worldbuilding Draft" as inspiration
+    And I press "Post"
+    And I view my related works
+    And I follow "Approve"
+    And I press "Yes, link me!"
+  When I am logged in as "translator"
+    And I go to inspiration's related works page
+  Then I should not see "Related Works (1)"
+  Then I should not see "Followup"
+  When I log out
+    And I go to inspiration's related works page
+  Then I should not see "Related Works (1)"
+  Then I should not see "Followup"
 
 Scenario: Listing external works as inspirations
 
