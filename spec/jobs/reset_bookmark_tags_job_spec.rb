@@ -9,7 +9,7 @@ describe ResetBookmarkTagsJob do
                          name: "Dirty Tag",
                          type: "Character",
                          canonical: false,
-                         taggings_count_cache: 0)
+                         taggings_count_cache: 1)
 
       create(:common_tagging, common_tag: dirty_tag, filterable: fandom)
       ResetBookmarkTagsJob.perform_now(Tag.pluck(:id))
