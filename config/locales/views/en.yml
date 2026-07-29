@@ -3078,6 +3078,8 @@ en:
       wrangling_tools: Wrangling Tools
   tags:
     edit:
+      last_canonized: Last canonized on %{date} UTC.
+      last_decanonized: Last decanonized on %{date} UTC.
       save_changes: Save changes
       submit_legend: Submit
     index:

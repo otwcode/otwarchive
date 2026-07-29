@@ -52,15 +52,19 @@ class TagQuery < Query
     when "created_at"
       column = "created_at"
       direction ||= "desc"
+    when "canonized_at"
+      column = "canonized_at"
+      direction ||= "desc"
+    when "decanonized_at"
+      column = "decanonized_at"
+      direction ||= "desc"
     else
       column = "name.keyword"
       direction ||= "asc"
     end
     sort_hash = { column => { order: direction } }
 
-    if column == "created_at"
-      sort_hash[column][:unmapped_type] = "date"
-    end
+    sort_hash[column][:unmapped_type] = "date" if %w[created_at canonized_at decanonized_at].include?(column)
 
     sort_by_id = { id: { order: direction } }
 
