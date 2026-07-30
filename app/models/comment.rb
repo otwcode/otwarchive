@@ -140,9 +140,9 @@ class Comment < ApplicationRecord
 
     parent_object = ultimate_parent
     blog_lang = parent_object.respond_to?(:language) ? parent_object.language&.short : nil
-    attributes[:blog_lang] = blog_lang if blog_lang
+    attributes[:blog_lang] = blog_lang if blog_lang && ArchiveConfig.AKISMET_VALID_BLOG_LANGS.include?(blog_lang)
 
-    permalink = comment_permalink
+    permalink = parent_permalink
     attributes[:permalink] = permalink if permalink
 
     attributes[:cloudflare_bot_score] = cloudflare_bot_score if cloudflare_bot_score
@@ -586,7 +586,7 @@ class Comment < ApplicationRecord
 
   private
 
-  def comment_permalink
+  def parent_permalink
     host = request_host || ArchiveConfig.APP_HOST
     base_url = "https://#{host}"
     original = original_ultimate_parent

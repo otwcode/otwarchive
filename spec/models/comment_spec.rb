@@ -418,6 +418,14 @@ describe Comment do
         end
       end
 
+      context "when the language code is not a valid ISO 639-1 code" do
+        it "omits blog_lang" do
+          non_iso_language = build(:language, short: "tlh")
+          allow(subject.ultimate_parent).to receive(:language).and_return(non_iso_language)
+          expect(subject.akismet_attributes).not_to have_key(:blog_lang)
+        end
+      end
+
       context "when cloudflare headers are available" do
         before do
           subject.cloudflare_bot_score = "42"
