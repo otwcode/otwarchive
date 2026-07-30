@@ -925,4 +925,34 @@ describe "rake After:backfill_missing_pseuds" do
       expect(affected_user.pseuds.find_by(name: affected_user.login)).to be_present
     end
   end
+
+  # Scenarios from before AO3-6359 / PR #5534: username rename left a pseud that
+  # matched only by case or diacritics, so the exact-match delete guard failed.
+  context "when the user has a pseud matching the username except for capitalization" do
+    let!(:user) { create(:user, login: "Name") }
+
+    before do
+      user.pseuds.find_by(name: "Name").update_column(:name, "name")
+    end
+
+    it "updates the pseud name to exactly match the username" do
+      expect { subject.invoke }
+        .not_to change { user.pseuds.reload.count }
+      expect(user.pseuds.reload.map(&:name)).to contain_exactly("Name")
+    end
+  end
+
+  context "when the user has a pseud matching the username except for diacritics" do
+    let!(:user) { create(:user, login: "Name") }
+
+    before do
+      user.pseuds.find_by(name: "Name").update_column(:name, "Näme")
+    end
+
+    it "updates the pseud name to exactly match the username" do
+      expect { subject.invoke }
+        .not_to change { user.pseuds.reload.count }
+      expect(user.pseuds.reload.map(&:name)).to contain_exactly("Name")
+    end
+  end
 end

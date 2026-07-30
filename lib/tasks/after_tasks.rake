@@ -675,24 +675,35 @@ namespace :After do
 
   desc "Backfill missing username-matching pseuds"
   task(backfill_missing_pseuds: :environment) do
+    # BINARY: also include users whose only match differs by case/diacritics
     users = User.where(
-      "NOT EXISTS (SELECT 1 FROM pseuds WHERE pseuds.name = users.login AND pseuds.user_id = users.id LIMIT 1)"
+      "NOT EXISTS (SELECT 1 FROM pseuds WHERE BINARY pseuds.name = BINARY users.login AND pseuds.user_id = users.id LIMIT 1)"
     )
     total = users.count
-    puts "Backfilling pseuds: found #{total} #{'user'.pluralize(total)} missing a username-matching pseud"
+    puts "Backfilling pseuds: found #{total} #{'user'.pluralize(total)} missing an exact username-matching pseud"
 
     created = 0
+    updated = 0
     failed = 0
     users.find_each do |user|
-      Pseud.create!(name: user.login, user_id: user.id)
-      created += 1
-      puts "  Created pseud \"#{user.login}\" for user #{user.id}"
-    rescue ActiveRecord::RecordInvalid => e
+      # Collation-aware: matches ignoring case/diacritics
+      existing = user.pseuds.where(name: user.login).first
+      if existing
+        existing.name = user.login
+        existing.save!(validate: false)
+        updated += 1
+        puts "  Updated pseud to \"#{user.login}\" for user #{user.id}"
+      else
+        Pseud.create!(name: user.login, user_id: user.id)
+        created += 1
+        puts "  Created pseud \"#{user.login}\" for user #{user.id}"
+      end
+    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved => e
       failed += 1
-      puts "  Failed to create pseud \"#{user.login}\" for user #{user.id}: #{e.message}"
+      puts "  Failed to backfill pseud \"#{user.login}\" for user #{user.id}: #{e.message}"
     end
 
-    puts "Done: #{created} created, #{failed} failed"
+    puts "Done: #{created} created, #{updated} updated, #{failed} failed"
     $stdout.flush
   end
 
