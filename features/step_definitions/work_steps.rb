@@ -392,14 +392,6 @@ When /^I post the(?: draft)? chapter$/ do
   step "the periodic tag count task is run"
 end
 
-Then /^I should see the default work content$/ do
-  page.should have_content(DEFAULT_CONTENT)
-end
-
-Then /^I should not see the default work content$/ do
-  page.should_not have_content(DEFAULT_CONTENT)
-end
-
 When /^I fill in basic work tags$/ do
   select(DEFAULT_RATING, from: "Rating")
   fill_in("Fandoms", with: DEFAULT_FANDOM)
