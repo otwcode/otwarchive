@@ -7,7 +7,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if !current_user.readings.empty? %>
+<% if @readings.present? %>
 <ul class="navigation actions">
   <li>
     <%= span_if_current t(".history.navigation"), user_readings_path(@user), params[:show].blank? %>
