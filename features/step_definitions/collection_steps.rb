@@ -164,7 +164,6 @@ Given "a set of collections for searching" do
                     :moderated,
                     name: "surprisetest",
                     title: "Surprise Presents",
-                    tag_string: "TBT",
                     challenge: FactoryBot.create(:gift_exchange))
   FactoryBot.create(:collection,
                     name: "swaptest",
@@ -194,7 +193,7 @@ Given "a set of collections for tag page searching" do
                     tag_string: "My Beautiful Canonical Tag",
                     collection_profile: profile)
   FactoryBot.create(:collection,
-                    name: "bntagtest",
+                    name: "mtagtest",
                     title: "Multiple Tag Test Collection",
                     tag_string: "My Beautiful Canonical Tag, a noncanonical tag")
   FactoryBot.create(:collection,

@@ -55,10 +55,10 @@ class CollectionsController < ApplicationController
         @collections = @work.approved_collections
           .by_title
           .for_blurb
-          .paginate(page: params[:page])
+          .paginate(base_options)
       elsif @collection.present?
         @sort_and_filter = false
-        @search = CollectionSearchForm.new({ parent_id: @collection.id, sort_column: "title.keyword" }.merge(page: params[:page]))
+        @search = CollectionSearchForm.new({ parent_id: @collection.id, sort_column: "title.keyword" }.merge(base_options))
         @collections = @search.search_results.scope(:for_search)
       elsif @user.present? || @tag.present?
         @sort_and_filter = true
