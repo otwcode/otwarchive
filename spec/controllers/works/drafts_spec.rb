@@ -86,8 +86,6 @@ describe WorksController do
     it "should display an error if the current user is not the owner of the specified work" do
       random_work = create(:draft)
       put :post_draft, params: { id: random_work.id }
-      # There is code to return a different message in the action, but it is unreachable using a web request
-      # as the application_controller redirects the user first
       it_redirects_to_with_error(work_path(random_work),
                                  "Sorry, you don't have permission to access the page you were trying to reach.")
     end

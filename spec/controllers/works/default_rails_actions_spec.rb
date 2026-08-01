@@ -387,6 +387,20 @@ describe WorksController, work_search: true do
         end.to raise_error ActiveRecord::RecordNotFound
       end
     end
+
+    context "when collection is given but the work is not in the collection" do
+      let(:unrelated_collection) { create(:collection) }
+
+      before do
+        work.update!(collections: [create(:collection)])
+      end
+
+      it "redirects to the work" do
+        get :show, params: { id: work.id, collection_id: unrelated_collection.name }
+
+        it_redirects_to work_path(work)
+      end
+    end
   end
 
   describe "share" do
