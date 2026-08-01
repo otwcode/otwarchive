@@ -33,7 +33,7 @@ Feature: Basic collection navigation
     And I should see "Maintainers: mod"
   When I follow "Subcollections (0)"
   Then I should see "Subcollections in My Collection"
-    And I should see "0 Collections"
+    And I should see "0 Subcollections"
   When I follow "Fandoms (1)"
   Then I should see "New Fandom (1)"
   When I follow "Works (1)"
