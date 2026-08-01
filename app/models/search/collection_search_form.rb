@@ -7,11 +7,10 @@ class CollectionSearchForm
     challenge_type
     closed
     maintainer_id
-    filter_ids
-    parent_id
     moderated
     multifandom
     page
+    parent_id
     per_page
     signup_open
     sort_column

@@ -1,9 +1,11 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <% if @user || @tag || @work %>
+  <% if @user || @tag %>
     <%= search_header(@collections, @query, t(".page_heading.collection"), @owner) %>
   <% elsif @collection %>
     <%= search_header(@collections, @query, t(".page_heading.subcollection"), @owner) %>
+  <% elsif @work %>
+    <%= t(".page_heading.collections_including", work: @work.title) %>
   <% else %>
     <%= t(".page_heading.collections_in_the", collections: search_header(@collections, @query, t(".page_heading.collection"), @owner), archive: ArchiveConfig.APP_NAME) %>
   <% end %>

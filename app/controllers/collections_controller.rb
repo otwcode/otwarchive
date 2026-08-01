@@ -48,16 +48,22 @@ class CollectionsController < ApplicationController
                      else
                        t(".page_title.general")
                      end
-    
+
     if @owner.present?
-      @sort_and_filter = @user.present? || @tag.present?
       if @work.present?
+        @sort_and_filter = false
         @collections = @work.approved_collections
           .by_title
           .for_blurb
           .paginate(page: params[:page])
-      else
-        @search = CollectionSearchForm.new(options.merge(parent: @owner))
+      elsif @collection.present?
+        @sort_and_filter = false
+        @search = CollectionSearchForm.new({ parent_id: @collection.id, sort_column: "title.keyword" }.merge(page: params[:page]))
+        @collections = @search.search_results.scope(:for_search)
+      elsif @user.present? || @tag.present?
+        @sort_and_filter = true
+        add_owner options
+        @search = CollectionSearchForm.new(options)
         @collections = @search.search_results.scope(:for_search)
       end
     else
@@ -65,6 +71,7 @@ class CollectionsController < ApplicationController
       @search = CollectionSearchForm.new(options)
       @collections = @search.search_results.scope(:for_search)
     end
+
     flash_search_warnings(@collections) if @sort_and_filter
     @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
   end
@@ -221,20 +228,13 @@ class CollectionsController < ApplicationController
     @owner = @user || @work || @collection || @tag
   end
 
-  def add_owner
-    owner = options[:parent]
-    case owner
+  def add_owner(options)
+    case @owner
     when Tag
       options[:filter_ids] ||= []
-      options[:filter_ids] << owner.id
+      options[:filter_ids] << @owner.id
     when User
-      options[:maintainer_id] = owner.id
-      options[:sort_column] = "title.keyword"
-      options[:sort_direction] = "asc"
-    when Collection
-      options[:parent_id] = owner.id
-      options[:sort_column] = "title.keyword"
-      options[:sort_direction] = "asc"
+      options[:maintainer_id] = @owner.id
     end
   end
 
