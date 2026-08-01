@@ -14,13 +14,36 @@ Feature: Collection
     Then I should see "Open Challenges"
       And I should not see "New Collection"
 
-  Scenario: Open Challenges link should not appear on subcollections page
+  Scenario: Open Challenges and overall Collections link should not appear on subcollections page
     Given I have a collection "Some Test Collection" with name "sometest"
     When I am logged in as the owner of "Some Test Collection"
       And I add the subcollection "Subcollection" to the parent collection named "sometest"
       And all indexing jobs have been run
       And I go to the "Some Test Collection" subcollections page
-    Then I should not see "Open Challenges"
+    Then I should not see "Open Challenges" within "#main .navigation.actions"
+      And I should not see "Collections" within "#main .navigation.actions"
+      But I should see "New Subcollection" within "#main .navigation.actions"
+      And I should see "Subcollections" within "#main .navigation.actions"
+
+  Scenario: Open Challenges and overall Collections link should not appear on user's collections page
+    Given I have a collection "Some Test Collection" with name "sometest"
+    When I go to moderator's collections page
+    Then I should not see "Open Challenges" within "#main .navigation.actions"
+      And I should not see a page link to the collections page within "#main .navigation.actions"
+      But I should see "Collections" within "#main .navigation.actions"
+    When I am logged in as "onlooker"
+      And I go to moderator's collections page
+    Then I should not see "Open Challenges" within "#main .navigation.actions"
+      And I should not see a page link to the collections page within "#main .navigation.actions"
+      But I should see "Collections" within "#main .navigation.actions"
+      And I should see "New Collection" within "#main .navigation.actions"
+    When I am logged in as "moderator"
+      And I go to moderator's collections page
+    Then I should not see "Open Challenges" within "#main .navigation.actions"
+      And I should not see a page link to the collections page within "#main .navigation.actions"
+      But I should see "Collections" within "#main .navigation.actions"
+      And I should see "Manage Collection Items" within "#main .navigation.actions"
+      And I should see "New Collection" within "#main .navigation.actions"
 
   Scenario: Filter collections index to only show prompt memes
 
