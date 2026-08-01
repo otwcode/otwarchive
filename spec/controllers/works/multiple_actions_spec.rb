@@ -251,6 +251,7 @@ describe WorksController do
       end
 
       let(:other_editor_pseud) { create(:pseud, user: multiple_works_user) }
+
       let(:work_params) {
         {
           work: {

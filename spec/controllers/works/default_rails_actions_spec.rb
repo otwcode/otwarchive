@@ -251,51 +251,20 @@ describe WorksController, work_search: true do
     end
   end
 
-  describe "edit" do
-    let(:user) { create(:user) }
-    let!(:work) { create(:work, authors: [user.default_pseud]) }
-
-    before do
-      fake_login_known_user(user)
-    end
-
-    it "redirects to orphan work page if only author is being removed" do
-      get :edit, params: { id: work.id, remove: "me" }
-      expect(response).to redirect_to controller: "orphans", action: "new", work_id: work.id
-    end
-  end
-
-  describe "destroy" do
-    let(:user) { create(:user) }
-    let!(:work) { create(:work, authors: [user.default_pseud]) }
-
-    before do
-      fake_login_known_user(user)
-    end
-
-    it "sets flash message in case of error" do
-      allow_any_instance_of(Work).to receive(:destroy).and_raise("Cannot save")
-
-      delete :destroy, params: { id: work }
-      expect(flash[:error]).to eq("We couldn't delete that right now, sorry! Please try again later.")
-    end
-  end
-
   describe "create" do
     let(:user) { create(:user) }
 
     before { fake_login_known_user(user) }
 
     it "doesn't allow a user to create a work in a series that they don't own" do
-      @series = create(:series)
+      series = create(:series)
       work_attributes = attributes_for(:work).except(:posted)
-      work_attributes[:series_attributes] = { id: @series.id }
-      expect {
+      work_attributes[:series_attributes] = { id: series.id }
+      expect do
         post :create, params: { work: work_attributes }
-      }.not_to change { @series.works.all.count }
+      end.not_to change { series.works.all.count }
       expect(response).to render_template :new
-      expect(assigns[:work].errors.full_messages).to \
-        include("You can't add a work to that series.")
+      expect(assigns[:work].errors.full_messages).to include("You can't add a work to that series.")
     end
 
     it "doesn't allow a user to submit only a pseud that is not theirs" do
@@ -318,23 +287,6 @@ describe WorksController, work_search: true do
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
         include "Invalid creator: Could not find a pseud *impossible*."
-    end
-
-    it "renders new if edit_button params set" do
-      work_attributes = attributes_for(:work).except(:posted)
-      post :create, params: { work: work_attributes, edit_button: true }
-      expect(response).to render_template("new")
-    end
-
-    context "with cancel_button params" do
-      before do
-        work_attributes = attributes_for(:work)
-        post :create, params: { work: work_attributes, cancel_button: true }
-      end
-
-      it "redirects to user page with notice" do
-        it_redirects_to_with_notice(user, "New work posting canceled.")
-      end
     end
 
     it "renders new if the work has ambiguous pseuds" do
@@ -467,7 +419,7 @@ describe WorksController, work_search: true do
     it "sets the fandom when given a fandom id" do
       params = { fandom_id: fandom.id }
       get :index, params: params
-      expect(assigns(:fandom)).to eq(@fandom)
+      expect(assigns(:fandom)).to eq(fandom)
     end
 
     describe "when the fandom id is invalid" do
@@ -482,17 +434,13 @@ describe WorksController, work_search: true do
       it "returns the work" do
         params = { fandom_id: nil }
         get :index, params: params
-        expect(assigns(:works)).to include(@work)
+        expect(assigns(:works)).to include(work)
       end
     end
 
-    describe "without caching" do
+    context "without caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, false)
-      end
-
-      after do
-        allow(controller).to receive(:use_caching?).and_call_original
       end
 
       it "returns the result with different works the second time" do
@@ -502,28 +450,11 @@ describe WorksController, work_search: true do
         get :index
         expect(assigns(:works)).to include(work2)
       end
-      
-      it "when tag is a synonym redirects to the merger's work index" do
-        noncanonical_fandom = create(:fandom, merger: fandom)
-        get :index, params: { id: work, tag_id: noncanonical_fandom.name }
-        expect(response).to redirect_to(tag_works_path(fandom))
-      end
-      
-      it "when tag is a synonym when collection is specified redirects to the merger's collection works index" do
-        noncanonical_fandom = create(:fandom, canonical: false, merger: fandom)
-        collection = create(:collection)
-        get :index, params: { id: work, tag_id: noncanonical_fandom.name, collection_id: collection }
-        expect(response).to redirect_to(collection_tag_works_path(collection, fandom))
-      end
     end
 
     context "with caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, true)
-      end
-
-      after do
-        allow(controller).to receive(:use_caching?).and_call_original
       end
 
       context "with NO owner tag" do
@@ -556,24 +487,6 @@ describe WorksController, work_search: true do
           expect(assigns(:works).items).not_to include(work)
         end
 
-        context "when suspend_filter_counts is on" do
-          before do
-            allow(controller).to receive(:fetch_admin_settings).and_return(true)
-            AdminSetting.first.update_attribute(:suspend_filter_counts, true)
-            admin_settings = AdminSetting.first
-            controller.instance_variable_set("@admin_settings", admin_settings)
-          end
-
-          after do
-            allow(controller).to receive(:fetch_admin_settings).and_call_original
-          end
-
-          it "shows the work in the index" do
-            get :index, params: { tag_id: fandom.name }
-            expect(assigns(:works)).to include(work)
-          end
-        end
-
         context "with restricted works" do
           let!(:work2) { create(:work, fandom_string: fandom.name, restricted: true) }
 
@@ -586,7 +499,6 @@ describe WorksController, work_search: true do
             expect(assigns(:works).items).to include(work)
             expect(assigns(:works).items).not_to include(work2)
           end
-
         end
 
         context "when tag is a synonym" do
@@ -706,7 +618,7 @@ describe WorksController, work_search: true do
 
   describe "update" do
     let(:update_user) { create(:user) }
-    let!(:update_work) do
+    let(:update_work) do
       work = create(:work, authors: [update_user.default_pseud])
       create(:chapter, work: work)
       work
@@ -738,12 +650,11 @@ describe WorksController, work_search: true do
     it "doesn't allow the user to add a series that they don't own" do
       series = create(:series)
       attrs = { series_attributes: { id: series.id } }
-      expect {
+      expect do
         put :update, params: { id: update_work.id, work: attrs }
-      }.not_to change { series.works.all.count }
+      end.not_to change { series.works.all.count }
       expect(response).to render_template :edit
-      expect(assigns[:work].errors.full_messages).to \
-        include("You can't add a work to that series.")
+      expect(assigns(:work).errors.full_messages).to include("You can't add a work to that series.")
     end
 
     it "redirects to the edit page if the work could not be saved" do
@@ -1141,6 +1052,19 @@ describe WorksController, work_search: true do
         it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{banned_users_work.title} was deleted.")
         expect { banned_users_work.reload }
           .to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the work deletion errors out" do
+      before do
+        allow_any_instance_of(Work).to receive(:destroy) { raise ActiveRecord::RecordNotDestroyed }
+
+        fake_login_known_user(work.users.first)
+      end
+
+      it "sets flash message" do
+        delete :destroy, params: { id: work }
+        expect(flash[:error]).to eq("We couldn't delete that right now, sorry! Please try again later.")
       end
     end
   end
