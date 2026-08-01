@@ -1,6 +1,6 @@
 class CollectionsController < ApplicationController
   before_action :load_owner, only: [:index]
-  before_action :users_only, only: [:new, :edit, :create, :update]
+  before_action :users_only, only: [:new, :create]
   before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :collection_owners_or_privileged_admins_only, only: [:edit]
   before_action :collection_owners_only, only: [:update, :destroy, :confirm_delete]
