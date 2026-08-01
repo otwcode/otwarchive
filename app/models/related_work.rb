@@ -7,6 +7,10 @@ class RelatedWork < ActiveRecord::Base
   attribute :author, :string
   attribute :language_id, :integer
 
+  scope :posted, -> {
+    joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`").
+    where("child_works.posted = 1")
+  }
   scope :translations, -> { where(translation: true) }
   scope :remixes, -> { where(translation: false) }
   scope :reciprocal, -> { where(reciprocal: true) }
