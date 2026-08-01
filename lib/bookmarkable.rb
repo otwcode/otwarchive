@@ -30,12 +30,13 @@ module Bookmarkable
     return unless respond_to?(:should_update_pseud_and_collection_indexes?)
     return unless should_update_pseud_and_collection_indexes?
 
-    collection_ids = Collection.joins(collection_items: :bookmark).where(collection_items: {
-                                                                           bookmarks: { bookmarkable_id: id },
-                                                                           item_type: "Bookmark",
-                                                                           user_approval_status: 1,
-                                                                           collection_approval_status: 1
-                                                                         }).pluck(:id, :parent_id).flatten.uniq.compact
+    collection_ids = Collection
+      .joins(:collection_items)
+      .joins("INNER JOIN bookmarks ON bookmarks.id = collection_items.item_id AND collection_items.item_type = 'Bookmark'")
+      .where(bookmarks: { bookmarkable_id: id, bookmarkable_type: self.class.name })
+      .where(collection_items: { user_approval_status: 1, collection_approval_status: 1 })
+      .pluck("collections.id", "collections.parent_id")
+      .flatten.uniq.compact
 
     IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end
