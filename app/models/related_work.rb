@@ -7,9 +7,41 @@ class RelatedWork < ActiveRecord::Base
   attribute :author, :string
   attribute :language_id, :integer
 
-  scope :posted, -> {
-    joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`").
-    where("child_works.posted = 1")
+  scope :translations, -> { where(translation: true) }
+  scope :remixes, -> { where(translation: false) }
+  scope :reciprocal, -> { where(reciprocal: true) }
+
+  scope :posted_children, -> { joins(:work).where(work: { posted: true }) }
+  scope :unhidden_children, -> { joins(:work).where(work: { hidden_by_admin: false }) }
+  scope :unrestricted_children, -> { joins(:work).where(work: { restricted: false }) }
+
+  scope :join_parents_for_work_page, lambda {
+    joins("LEFT JOIN works parent_works ON (related_works.parent_type = 'Work' AND parent_works.id = related_works.parent_id)")
+      .joins("LEFT JOIN external_works parent_external_works ON (related_works.parent_type = 'ExternalWork' AND parent_external_works.id = related_works.parent_id)")
+  }
+
+  scope :posted_or_deleted_parents, lambda {
+    join_parents_for_work_page.where("parent_works.posted = true OR parent_works.id IS NULL")
+  }
+
+  scope :unhidden_or_deleted_parents, lambda {
+    join_parents_for_work_page.where("parent_works.hidden_by_admin = false OR parent_works.id IS NULL")
+  }
+
+  scope :children_for_work_page, lambda {
+    if User.current_user.is_a?(Admin)
+      reciprocal.posted_children
+    else
+      reciprocal.posted_children.unhidden_children
+    end
+  }
+
+  scope :parents_for_work_page, lambda {
+    if User.current_user.is_a?(Admin)
+      posted_or_deleted_parents
+    else
+      posted_or_deleted_parents.unhidden_or_deleted_parents
+    end
   }
 
   before_validation :set_parent, if: :new_record?

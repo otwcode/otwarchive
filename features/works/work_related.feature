@@ -403,6 +403,19 @@ Scenario: Hidden translations and translated works should not be listed on work 
     And I view the work "Worldbuilding Translated"
   Then I should not see "Worldbuilding by inspiration"
 
+Scenario: Draft parent related works should not be listed on work pages
+  Given I have related works setup
+    And I am logged in as "inspiration"
+    And the draft "Worldbuilding Draft"
+  When I set up the draft "Followup"
+    And I list the work "Worldbuilding Draft" as inspiration
+    And I press "Post"
+    And I view my related works
+    And I follow "Approve"
+    And I press "Yes, link me!"
+  When I view the work "Worldbuilding"
+  Then I should not see "Followup"
+
 Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
   the e-mail should link to each author's URL instead of showing escaped HTML
   Given I have related works setup

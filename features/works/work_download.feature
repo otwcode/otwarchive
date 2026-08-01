@@ -490,6 +490,20 @@ Feature: Download a work
       And I follow "HTML"
     Then I should see "Followup by remixer"
 
+  Scenario: Draft parent related works should not be listed in downloads
+    Given I have related works setup
+      And I am logged in as "inspiration"
+      And the draft "Worldbuilding Draft"
+    When I set up the draft "Followup"
+      And I list the work "Worldbuilding Draft" as inspiration
+      And I press "Post"
+      And I view my related works
+      And I follow "Approve"
+      And I press "Yes, link me!"
+    When I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should not see "Followup"
+
   Scenario: Download multi-chapter work with mixed chapter titles (one without, one with)
   
   Given I am logged in as "myname"

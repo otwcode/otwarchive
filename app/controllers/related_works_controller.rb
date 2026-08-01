@@ -6,10 +6,10 @@ class RelatedWorksController < ApplicationController
 
   def index
     @page_subtitle = t(".page_title", login: @user.login)
-    @translations_of_user = @user.related_works.posted.where(translation: true)
-    @remixes_of_user = @user.related_works.posted.where(translation: false)
-    @translations_by_user = @user.parent_work_relationships.posted.where(translation: true)
-    @remixes_by_user = @user.parent_work_relationships.posted.where(translation: false)
+    @translations_of_user = @user.related_works.posted_children.where(translation: true)
+    @remixes_of_user = @user.related_works.posted_children.where(translation: false)
+    @translations_by_user = @user.parent_work_relationships.posted_children.where(translation: true)
+    @remixes_by_user = @user.parent_work_relationships.posted_children.where(translation: false)
 
     return if @user == current_user
 
