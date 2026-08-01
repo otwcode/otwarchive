@@ -15,17 +15,17 @@ class RelatedWork < ActiveRecord::Base
   scope :unhidden_children, -> { joins(:work).where(work: { hidden_by_admin: false }) }
   scope :unrestricted_children, -> { joins(:work).where(work: { restricted: false }) }
 
-  scope :join_parents_for_work_page, lambda {
+  scope :join_parents, lambda {
     joins("LEFT JOIN works parent_works ON (related_works.parent_type = 'Work' AND parent_works.id = related_works.parent_id)")
       .joins("LEFT JOIN external_works parent_external_works ON (related_works.parent_type = 'ExternalWork' AND parent_external_works.id = related_works.parent_id)")
   }
 
   scope :posted_or_deleted_parents, lambda {
-    join_parents_for_work_page.where("parent_works.posted = true OR parent_works.id IS NULL")
+    join_parents.where("parent_works.posted = true OR parent_works.id IS NULL")
   }
 
   scope :unhidden_or_deleted_parents, lambda {
-    join_parents_for_work_page.where("parent_works.hidden_by_admin = false OR parent_works.id IS NULL")
+    join_parents.where("parent_works.hidden_by_admin = false OR parent_works.id IS NULL")
   }
 
   scope :children_for_work_page, lambda {
