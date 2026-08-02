@@ -1611,7 +1611,7 @@ en:
       default_fonts: "'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont'"
       default_html: 'The default is: %{default_fonts}'
       description: Put any font name in here, and if it's installed on your computer, it'll work for you. If you use several different devices, specify some fall-back fonts, with commas in between the names, in case one of your devices doesn't have the first font.
-      single_or_double_quotes_html: You can use either single or double quotation marks around fonts with multi-word names, e.g. %{double_quote_example} or %{single_quote_example}.
+      single_or_double_quotes_html: You can use either single or double quotation marks around fonts with multi-word names, e.g. %{single_quote_example} or %{double_quote_example}.
     skins_wizard_font_size:
       default_html: 'The default is: %{one_hundred_percent}'
       description_html: Font sizes on the Archive are based on a percentage of your browser's default font size. Use a number smaller than 100 to make the Archive's text smaller, or use a number larger than 100 to make the text larger. Entering %{one_hundred_typed} will keep the Archive's default font sizes.
