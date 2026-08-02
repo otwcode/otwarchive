@@ -27,10 +27,10 @@ class RelatedWork < ApplicationRecord
   # visible parent works in User.parent_work_relationships
   scope :parents_for_user_page, lambda {
     visible_work_ids = if User.current_user.present?
-                      Work.visible_to_registered_user.select(:id)
-                    else
-                      Work.visible_to_all.select(:id)
-                    end
+                         Work.visible_to_registered_user.select(:id)
+                       else
+                         Work.visible_to_all.select(:id)
+                       end
 
     where(parent_type: "Work").where(parent_id: visible_work_ids)
       .or(where(parent_type: "ExternalWork").where(parent_id: ExternalWork.visible.select(:id)))
