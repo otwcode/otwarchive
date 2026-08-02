@@ -67,8 +67,6 @@ describe WorksOwner do
     shared_examples_for "an owner collection" do
       it "should change after a new work is created" do
         FactoryBot.create(:work, collection_names: @owner.name)
-        @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
-        @child.collection_items.each {|ci| ci.approve(nil); ci.save} if @child
         expect(@original_cache_key).not_to eq(@owner.works_index_cache_key)
       end
     end
@@ -126,11 +124,6 @@ describe WorksOwner do
         travel_to(10.minutes.ago)
         @owner = FactoryBot.create(:collection)
         @work = FactoryBot.create(:work, collection_names: @owner.name)
-
-        # we have to approve the collection items before we get a change in
-        # the cache key, since it uses approved works
-        @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
-
         @original_cache_key = @owner.works_index_cache_key
         travel_back
       end
@@ -150,7 +143,6 @@ describe WorksOwner do
           @owner.reload
           @work1 = @work
           @work = FactoryBot.create(:work, collection_names: @child.name)
-          @child.collection_items.each {|ci| ci.approve(nil); ci.save}
           @original_cache_key = @owner.works_index_cache_key
           travel_back
         end
@@ -175,7 +167,6 @@ describe WorksOwner do
           before do
             travel_to(1.second.from_now)
             @work2 = FactoryBot.create(:work, fandom_string: @fandom.name, collection_names: @owner.name)
-            @owner.collection_items.each {|ci| ci.approve(nil); ci.save}
             travel_back
           end
 
@@ -190,7 +181,6 @@ describe WorksOwner do
             @fandom2 = FactoryBot.create(:fandom)
             travel_to(1.second.from_now)
             @work2 = FactoryBot.create(:work, fandom_string: @fandom2.name, collection_names: @owner.name)
-            @owner.collection_items.each { |ci| ci.approve(nil); ci.save }
             travel_back
           end
 
