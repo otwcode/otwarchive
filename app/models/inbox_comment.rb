@@ -37,19 +37,16 @@ class InboxComment < ApplicationRecord
 
   # Remove comments that do not exist, were flagged as spam, or hidden by admin
   def self.with_bad_comments_removed
-    includes(
-      feedback_comment: [
-        { pseud: [
-          { user: %i[roles block_of_current_user] },
-          { icon_attachment: { blob: {
-            variant_records: { image_attachment: :blob },
-            preview_image_attachment: { blob: { variant_records: { image_attachment: :blob } } }
-          } } }
-        ] },
-        { parent: { work: { users: :block_of_current_user } } }
-      ]
-    )
-      .joins("LEFT JOIN comments ON comments.id = inbox_comments.feedback_comment_id")
+    joins("LEFT JOIN comments ON comments.id = inbox_comments.feedback_comment_id")
       .where("comments.id IS NOT NULL AND comments.is_deleted = 0 AND comments.approved AND NOT comments.hidden_by_admin")
+      .includes(
+        feedback_comment: [
+          { pseud: [
+            { user: %i[roles block_of_current_user] },
+            *Pseud.with_attached_icon.includes_values
+          ] },
+          { parent: { work: { users: :block_of_current_user } } }
+        ]
+      )
   end
 end
