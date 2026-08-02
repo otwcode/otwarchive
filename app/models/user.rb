@@ -143,17 +143,8 @@ class User < ApplicationRecord
   has_many :series, -> { distinct }, through: :pseuds
   has_many :chapters, through: :pseuds
 
-  has_many :related_works, through: :works do
-    def for_user_page(user)
-      children_for_user_page.user_works_for_user_page(user)
-    end
-  end
-
-  has_many :parent_work_relationships, through: :works do
-    def for_user_page(user)
-      parents_for_user_page.user_works_for_user_page(user)
-    end
-  end
+  has_many :related_works, through: :works
+  has_many :parent_work_relationships, through: :works
 
   has_many :tags, through: :works
   has_many :filters, through: :works
@@ -551,6 +542,19 @@ class User < ApplicationRecord
     when "email"
       past_emails.pluck(:email_address).uniq
     end
+  end
+
+  def related_works_for_user_page
+    related_works.children_for_user_page.user_works_for_user_page(self)
+  end
+
+  def parent_work_relationships_for_user_page
+    parent_work_relationships.parents_for_user_page.user_works_for_user_page(self)
+  end
+
+  def visible_related_works_count
+    related_works_for_user_page.count +
+      parent_work_relationships_for_user_page.count
   end
 
   private

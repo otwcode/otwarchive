@@ -7,8 +7,8 @@ class RelatedWorksController < ApplicationController
   def index
     @page_subtitle = t(".page_title", login: @user.login)
 
-    related_works = @user.related_works.for_user_page(@user)
-    parent_work_relationships = @user.parent_work_relationships.for_user_page(@user)
+    related_works = @user.related_works_for_user_page
+    parent_work_relationships = @user.parent_work_relationships_for_user_page
 
     @translations_of_user = related_works.translations
     @remixes_of_user = related_works.remixes

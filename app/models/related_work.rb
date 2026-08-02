@@ -15,23 +15,6 @@ class RelatedWork < ApplicationRecord
   scope :unhidden_children, -> { joins(:work).where(work: { hidden_by_admin: false }) }
   scope :unrestricted_children, -> { joins(:work).where(work: { restricted: false }) }
 
-  scope :join_parents, lambda {
-    joins("LEFT JOIN works parent_works ON (related_works.parent_type = 'Work' AND parent_works.id = related_works.parent_id)")
-      .joins("LEFT JOIN external_works parent_external_works ON (related_works.parent_type = 'ExternalWork' AND parent_external_works.id = related_works.parent_id)")
-  }
-
-  scope :posted_parents, lambda {
-    join_parents.where("parent_works.posted = true OR parent_external_works.id IS NOT NULL")
-  }
-
-  scope :unhidden_parents, lambda {
-    join_parents.where("parent_works.hidden_by_admin = false OR parent_external_works.hidden_by_admin = false")
-  }
-
-  scope :unrestricted_parents, lambda {
-    join_parents.where("parent_works.restricted = false OR parent_external_works.id IS NOT NULL")
-  }
-
   # visible child works in User.related_works
   scope :children_for_user_page, lambda {
     if User.current_user.present?
@@ -43,11 +26,14 @@ class RelatedWork < ApplicationRecord
 
   # visible parent works in User.parent_work_relationships
   scope :parents_for_user_page, lambda {
-    if User.current_user.present?
-      posted_parents.unhidden_parents
-    else
-      posted_parents.unhidden_parents.unrestricted_parents
-    end
+    visible_work_ids = if User.current_user.present?
+                      Work.visible_to_registered_user.select(:id)
+                    else
+                      Work.visible_to_all.select(:id)
+                    end
+
+    where(parent_type: "Work").where(parent_id: visible_work_ids)
+      .or(where(parent_type: "ExternalWork").where(parent_id: ExternalWork.visible.select(:id)))
   }
 
   # visible user's own works in User.related_works and User.parent_work_relationships
