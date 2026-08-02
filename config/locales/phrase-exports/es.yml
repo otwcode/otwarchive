@@ -92,8 +92,6 @@ es:
       chapter:
         titled: 'Capítulo %{position}: %{title}'
         untitled: Capítulo %{position}
-      commenter_edited_response:
-        text: "%{commenter} editó su respuesta a:"
       commenter_responded:
         html: "%{pseud_link} respondió a tu comentario en la etiqueta %{tag_link}:"
         text: "%{commenter} respondió:"
@@ -192,6 +190,7 @@ es:
         untitled: Capítulo %{position}
       commenter_edited_response:
         html: "%{commenter_link} editó su respuesta a:"
+        text: "%{commenter} editó su respuesta a:"
       content:
         chapter:
           html: "%{pseud_link} editó su respuesta a tu comentario en %{chapter_link}
@@ -499,6 +498,13 @@ es:
         text: '%{offer_byline} ha incumplido su tarea para %{request_byline} en tu
           intercambio de regalos "%{collection_title}" (%{collection_url}).'
       subject: "[%{app_name}][%{collection_title}] Tarea incumplida por %{offer_byline}"
+    assignments_sent_notification:
+      all_sent_out:
+        html: Todas las tareas para tu intercambio de regalos %{collection_link} han
+          sido enviadas.
+        text: Todas las tareas para tu intercambio de regalos "%{collection_title}"
+          (%{collection_url}) han sido enviadas
+      subject: "[%{app_name}][%{collection_title}] Tareas enviadas"
     batch_subscription_notification:
       chapter_summary: Resumen del capítulo
       footer_note:
@@ -899,6 +905,19 @@ es:
           tu obra %{work_link} en su colección!"
         text: ¡Las personas responsables de "%{collection_title}" (%{collection_url})
           quisieran incluir tu obra"%{work_title}" (%{work_url}) en su colección!
+    potential_match_generation_notification:
+      finished_generating:
+        html: Hemos terminado de generar las potenciales tareas para tu intercambio
+          de regalos {collection_link}.
+        text: Hemos terminado de generar las potenciales tareas para tu intercambio
+          de regalos "%{collection_title}" (%{collection_url}).
+      matches_available:
+        html: Las potenciales combinaciones y conjuntos de tareas están disponibles
+          en la %{matching_page_link}.
+        matching_page: página de Matching (Combinaciones) del intercambio de regalos
+        text: 'Las potenciales combinaciones y conjuntos de tareas están disponibles
+          en la página de Matching (Combinaciones) del intercambio de regalos: %{matching_page_url}.'
+      subject: "[%{app_name}][%{collection_title}] Generación de potencial tarea completada"
     prompter_notification:
       a_response_to_your_prompt:
         collection:
@@ -919,6 +938,17 @@ es:
         collection: "[%{app_name}][%{collection_title}] Tienes una obra de regalo
           de %{collection_title}"
         no_collection: "[%{app_name}] Tienes una obra de regalo"
+    related_work_notification:
+      anonymous: unx creadorx anónimx
+      approve:
+        html: Aprueba el vínculo y enlaza esta obra con la tuya.
+        text: 'Aprueba el vínculo y enlaza esta obra con la tuya: %{related_work_url}'
+      can_come_back: "(Puedes regresar a esta página si cambias de opinión)."
+      subject: "[%{app_name}] Notificación de obra relacionada"
+      work_listed:
+        html: Tu obra %{work_link} fue marcada como inspiración de %{related_work_link}
+          de %{work_creators}.
+        text: "(Puedes regresar a esta página si cambias de opinión)."
   users:
     mailer:
       confirmation_instructions:

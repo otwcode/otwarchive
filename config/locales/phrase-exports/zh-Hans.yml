@@ -24,6 +24,161 @@ zh-Hans:
         other: 配对
       series:
         other: 系列
+  comment_mailer:
+    comment_notification_footer:
+      comment_thread:
+        html: 从这条评论开始查看相关评论串
+        text: 从这条评论开始查看相关评论串：%{url}
+      last_edited: 最后编辑时间：%{datetime}
+      parent_thread:
+        html: 查看此评论所属评论串：
+        text: 查看此评论所属评论串：
+      posted: 发布时间：%{datetime}
+      read_all_comments:
+        chapter:
+          html: 查看%{title}第%{position}章的所有评论
+          text: 查看"%{title}"第%{position}章的所有评论：%{url}
+        other:
+          html: 查看%{title}的所有评论
+          text: 查看"%{title}"的所有评论：%{url}
+        tag:
+          html: 查看标签%{tag}的所有评论：%{url}
+      reply:
+        html: 回复此评论
+        text: 回复此评论：%{url}
+      review:
+        html: 审核%{title}的评论
+        text: 审核"%{title}"的评论：%{url}
+      unreviewed:
+        admin_post: 该新闻贴下的评论将接受审核，经批准后方可显示。
+        work: 该作品下的评论将接受审核，经创作者批准后方可显示。
+        work_owner: 该作品下的评论将接受审核，经您批准后方可显示。
+    comment_notification:
+      chapter:
+        titled: 第%{position}章"%{title}"
+        untitled: 第%{position}章
+      content:
+        chapter:
+          html: "%{pseud_link}为{work_link}的章节%{chapter_link}留下了以下评论："
+          titled_text: '%{pseud}为%{work}的第%{chapter_position}章"%{chapter_title}"留下了以下评论（%{chapter_url})）：'
+          untitled_text: "%{pseud}为%{work}的第%{chapter_position}章留下了以下评论（%{chapter_url}）："
+        other:
+          html: "%{pseud_link}为%{commentable_link}留下了以下评论："
+          text: "%{pseud}为%{title}留下了以下评论（%{commentable_url}）："
+        tag:
+          html: "%{pseud_link}为标签%{tag_link}留下了以下评论："
+          text: "%{pseud}为标签%{tag}留下了以下评论（%{tag_url}）："
+      subject:
+        chapter: "[%{app_name}] %{title}第%{position}章收到了评论"
+        other: "[%{app_name}] %{title}收到了评论"
+        tag: "[%{app_name}] 标签%{name}收到了评论"
+    comment_reply_notification:
+      chapter:
+        titled: 第%{position}章"%{title}"
+        untitled: 第%{position}章
+      commenter_responded:
+        html: "%{commenter_link}的回复：:"
+        text: "%{commenter}的回复："
+      content:
+        chapter:
+          html: "%{pseud_link}回复了您对%{work_link}章节%{chapter_link}的评论："
+          titled_text: '%{pseud}回复了您对%{work}第%{chapter_position}章"%{chapter_title}"的评论（%{chapter_url}）：'
+          untitled_text: "%{pseud}回复了您对%{work}第%{chapter_position}章的评论（%{chapter_url}）："
+        other:
+          html: "%{pseud_link}回复了您对%{commentable_link}的评论:"
+          text: "%{pseud}回复了您对%{title}的评论（%{commentable_url}）："
+        tag:
+          html: "%{pseud_link}回复了您对标签%{tag_link}的评论："
+          text: "%{pseud}回复了您对标签%{tag}的评论（%{tag_url}）："
+      subject:
+        chapter: "[%{app_name}] 您对%{title}第%{position}章的评论收到了回复"
+        other: "[%{app_name}] 您对%{title}的评论收到了回复"
+        tag: "[%{app_name}] 您对标签%{name}的评论收到了回复"
+      you_wrote: 您的评论：
+    comment_reply_sent_notification:
+      chapter:
+        titled: 第%{position}章"%{title}"
+        untitled: 第%{position}章
+      commenter_wrote:
+        html: "%{commenter_link}的评论："
+        text: "%{commenter}的评论："
+      content:
+        chapter:
+          html: 您回复了%{work_link}章节%{chapter_link}的评论：
+          titled_text: 您回复了%{work}第%{chapter_position}章"%{chapter_title}"的评论（%{chapter_url}）：
+          untitled_text: 您回复了%{work}第%{chapter_position}章的评论（%{chapter_url}）：
+        other:
+          html: 您回复了%{commentable_link}的评论：
+          text: 您回复了标签%{tag_link}的评论：
+        tag:
+          html: 您回复了标签%{tag_link}的评论：
+          text: 您回复了标签%{tag}的评论（%{tag_url}）：
+      subject:
+        chapter: "[%{app_name}]您对%{title}第%{position}章评论的回复"
+        other: "[%{app_name}]您对%{title}评论的回复"
+        tag: "[%{app_name}]您对标签%{name}的评论的回复"
+      you_responded: 您的回复：
+    comment_sent_notification:
+      chapter:
+        titled: 第%{position}章"%{title}"
+        untitled: 第%{position}章
+      content:
+        chapter:
+          html: 您为%{work_link}的章节%{chapter_link}留下了以下评论：
+          titled_text: 您为%{work}的第%{chapter_position}章" %{chapter_title}"留下了以下评论（%{chapter_url}））：
+          untitled_text: 您为%{work}的第%{chapter_position}章留下了以下评论（%{chapter_url}）：
+        other:
+          html: 您在%{commentable_link}留下了以下评论：
+          text: 您为%{title}留下了以下评论（%{commentable_url}）：
+        tag:
+          html: 您为标签%{tag_link}留下了以下评论：
+          text: 您为标签%{tag}留下了以下评论（%{tag_url}））：
+      subject:
+        chapter: "[%{app_name}] 您为%{title}第%{position}章留下的评论"
+        other: "[%{app_name}] 您为%{title}留下的评论"
+        tag: "[%{app_name}] 您为标签%{name}留下的评论"
+    edited_comment_notification:
+      chapter:
+        titled: 第%{position}章"%{title}"
+        untitled: 第%{position}章
+      content:
+        chapter:
+          html: "%{pseud_link}编辑了对%{work_link}章节%{chapter_link}的评论："
+          titled_text: '%{pseud}编辑了对%{work}第%{chapter_position}章"%{chapter_title}"的评论（%{chapter_url}）：'
+          untitled_text: "%{pseud}编辑了对%{work}第%{chapter_position}章的评论（%{chapter_url}）："
+        other:
+          html: "%{pseud_link}编辑了对%{commentable_link}的评论："
+          text: "%{pseud}编辑了对%{title}的评论（%{commentable_url}）："
+        tag:
+          html: "%{pseud_link}编辑了对标签%{tag_link}的评论："
+          text: "%{pseud}编辑了对标签%{tag}的评论（%{tag_url}）："
+      subject:
+        chapter: "[%{app_name}] %{title}第%{position}章的评论已被编辑"
+        other: "[%{app_name}] %{title}的评论已被编辑"
+        tag: "[%{app_name}] 标签%{name}的评论已被编辑"
+    edited_comment_reply_notification:
+      chapter:
+        titled: 第%{position}章"%{title}"
+        untitled: 第%{position}章
+      commenter_edited_response:
+        html: "%{commenter_link}将其回复编辑为："
+        text: "%{commenter}将其回复编辑为："
+      content:
+        chapter:
+          html: "%{pseud_link}编辑了其对您为%{work_link}章节%{chapter_link}发布的评论的回复:"
+          titled_text: '%{pseud}编辑了其对您为%{work}第%{chapter_position}章"%{chapter_title}"发布的评论的回复（%{chapter_url}）:'
+          untitled_text: "%{pseud}编辑了其对您为%{work}第%{chapter_position}章发布的评论的回复（%{chapter_url}）:"
+        other:
+          html: "%{pseud_link}编辑了其对您为%{commentable_link}发布的评论的回复:"
+          text: "%{pseud}编辑了其对您为%{title}发布的评论的回复（%{commentable_url}）:"
+        tag:
+          html: "%{pseud_link}编辑了其对您为标签%{tag_link}发布的评论的回复:"
+          text: "%{pseud}编辑了其对您为标签%{tag}发布的评论的回复（%{tag_url}）:"
+      subject:
+        chapter: "[%{app_name}] 您对%{title}第%{position}章的评论所获回复已被编辑"
+        other: "[%{app_name}] 您对%{title}的评论所获回复已被编辑"
+        tag: "[%{app_name}] 您对标签%{name}的评论所获回复已被编辑"
+      you_wrote: 您的评论：
   help:
     preferences_locale:
       locale:
@@ -59,6 +214,12 @@ zh-Hans:
       creation:
         attribution:
           anon: 匿名作者
+          named:
+            html:
+              her: 作者 %{creator_links}
+              other: 作者 %{creator_links}
+            text:
+              other: 作者 %{creators}
         link_with_word_count: "%{creation_link}（%{word_count}）"
         title_with_chapter_number: "%{title}的第%{position}章"
         title_with_word_count: '"%{creation_title}"（%{word_count}）'
@@ -90,8 +251,34 @@ zh-Hans:
         open_doors: Open Doors拯救计划团队
         parent_org: OTW再创作组织
   preferences:
+    index:
+      locale_help_title: 区域设置偏好帮助
     locale_help_title: 区域设置偏好帮助
+  roles:
+    anonymous_creator: 匿名创作者
+    commenter_name:
+      html: "%{name​​}​%{role_with_parens}"
+      text: "%{name​}​%{role_with_parens}"
+    guest_with_parens: "（游客）"
+    official_with_parens: "（官方账号）"
+    registered_with_parens: "（注册用户）"
   user_mailer:
+    admin_deleted_work_notification:
+      check_email:
+        html: 如果您不了解作品被删除的原因，并还未收到说明原因的单独电邮，请检查您的电子邮箱（包括垃圾邮件文件夹）或者直接%{contact_abuse_link}。
+        text: 如果您不了解作品被删除的原因，并还未收到说明原因的单独电邮，请检查您的电子邮箱（包括垃圾邮件文件夹）或者直接联系条款执行与违规行为处理委员会：%{contact_abuse_url}。
+      contact_abuse: 联系条款执行与违规行为处理委员会
+      content_policy: 内容政策
+      deleted:
+        html: 您的作品%{title}已被%{app_name}管理员删除。此电邮中已附上您的作品副本。
+        text: 您的作品"%{title}"已被"%{app_name}"管理员删除。此电邮中已附上您的作品副本。
+      may_not_repost: 您不得在对违规行为予以纠正之前重新发布该作品
+      subject: "[%{app_name}] 您的作品已被管理员删除"
+      tos: "%{app_name}服务条款"
+      tos_faq: 服务条款常见问题
+      tos_violation:
+        html: 如果您作品被删除的理由为违反%{tos_link} （包括%{content_policy_link}）， %{may_not_repost_bold}。如欲了解更多信息，请参阅%{tos_faq_link}。
+        text: 如果您的作品被删除的理由为违反%{app_name}服务条款（%{tos_url}），包括内容政策（%{content_policy_url}），您不得在对违规行为予以纠正之前重新发布该作品。如欲了解更多信息，请参阅服务条款常见问题%{tos_faq_url}。
     admin_hidden_work_notification:
       access:
         other: 在您的作品被隐藏期间，您依然可以通过上方链接访问。不过其他用户将无法访问该作品，它也不会出现在您的作品页面上。
@@ -117,7 +304,7 @@ zh-Hans:
         html:
           other: 如果您的作品因违反%{tos_link}（包括%{content_policy_link}）而被隐藏，您须采取行动纠正违规行为。如未能使作品符合服务条款规定，您的作品可能会被移除出AO3作品库。若想了解更多信息，请参阅%{tos_faq_link}。
         text:
-          other: 如果您的作品因违反AO3服务条款（%{tos_link}），包括内容政策（%{content_policy_link}），而被隐藏，您须采取行动纠正违规行为。如未能使作品符合服务条款规定，您的作品可能会被移除出AO3作品库。若想了解更多信息，请参阅服务条款常见问题：%{tos_faq_link}。
+          other: 如果您的作品因违反AO3服务条款（%{tos_url}），包括内容政策（%{content_policy_url}），而被隐藏，您须采取行动纠正违规行为。如未能使作品符合服务条款规定，您的作品可能会被移除出AO3作品库。若想了解更多信息，请参阅服务条款常见问题：%{tos_faq_url}。
       work_info: "-《%{title}》（%{work_url}）"
     anonymous_or_unrevealed_notification:
       anonymous_info: 匿名作品在标签列表中可见，但不会显示在您的作品页面上。在作品页，您的用户名将被替换为"Anonymous"（佚名）。
@@ -162,6 +349,69 @@ zh-Hans:
       work_added:
         html: "%{collection_link}的作品集维护员已将您的作品%{work_link} 添加到他们的作品集。"
         text: '"%{collection_title}" (%{collection_url})的作品集维护员已将您的作品"%{work_title}"(%{work_url})添加到他们的作品集!'
+    batch_subscription_notification:
+      chapter_summary: 章节简介
+      footer_note:
+        html: 您之所以会收到这封邮件，是因为您订阅了 %{subscription_link}。如果您不想继续接收相关通知，请点击该链接以取消订阅。
+        text: 您之所以会收到这封邮件，是因为您订阅了 %{subscription_name}的账号。如果您不想继续接收相关通知，请点击该链接以取消订阅：%{unsubscribe_url}
+      preface:
+        anon:
+          chapter:
+            html: 匿名作者发布了%{work_link_with_word_count}的新章节：
+            text: 匿名作者发布了%{work_link_with_word_count}的新章节：
+          work:
+            backdated: 匿名作者发布了一篇发布日期倒填的作品
+            new: 匿名作者发布了一篇新作品：
+        named:
+          chapter:
+            html:
+              other: "%{creator_links}发布了%{work_link_with_word_count}的新章节："
+            text:
+              other: "%{creators}发布了%{work_link_with_word_count}的新章节："
+          work:
+            backdated:
+              html:
+                other: "%{creator_links}发布了一篇发布日期倒填的作品"
+              text:
+                other: "%{creator_links}发布了一篇发布日期倒填的作品"
+            new:
+              html:
+                other: "%{creators} 发布了一篇新作品："
+      subject:
+        anon:
+          chapter:
+            multiple_entries: "[%{app_name}] 匿名作者发布了%{work_title}的第%{chapter_position}章%{more}"
+            one_entry: "[%{app_name}] 匿名作者发布了%{work_title}的第%{chapter_position}章"
+          series:
+            chapter:
+              multiple_entries: "[%{app_name}] 匿名作者在%{series_title}系列中发布了%{work_title}的第%{chapter_position}章%{more}"
+              one_entry: "[%{app_name}] 匿名作者在%{series_title}系列中发布了%{work_title}的第%{chapter_position}章"
+          work:
+            multiple_entries: "[%{app_name}] 匿名作者在%{series_title}系列中发布了%{work_title}​%{more}"
+        more:
+          other: 以及另外%{count}篇作品
+        named:
+          chapter:
+            multiple_entries:
+              other: "[%{app_name}] %{creators}发布了{work_title}的第%{chapter_position}章%{more}"
+            one_entry:
+              other: "[%{app_name}] %{creators}发布了{work_title}的第%{chapter_position}章"
+          series:
+            chapter:
+              multiple_entries:
+                other: "[%{app_name}] %{creators}在%{series_title}系列中发布了%{work_title}的第%{chapter_position}章%{more}"
+              one_entry:
+                other: "[%{app_name}] %{creators}在%{series_title}系列中发布了%{work_title}的第%{chapter_position}章"
+            work:
+              multiple_entries:
+                other: "[%{app_name}] %{creators}在%{series_title}系列中发布了%{work_title}​​%{more}"
+              one_entry:
+                other: "[%{app_name}] %{creators}在%{series_title}系列中发布了%{work_title}"
+          work:
+            multiple_entries:
+              other: "[%{app_name}] %{creators}发布了%{work_title} %{more}"
+            one_entry:
+              other: "[%{app_name}] %{creators}发布了%{work_title}"
     challenge_assignment_notification:
       any: 任意
       assignment:
@@ -280,3 +530,42 @@ zh-Hans:
             other: 如果您提交了此请求，请在%{count}天内登录并%{confirm_email_change_url}。
         request_to_change_email_html: 有人已请求将与%{app_name}账号%{username}关联的电子邮箱地址更改为此电子邮箱地址。
         subject: "[%{app_name}] 确认您的电子邮箱更改"
+      password_change:
+        changed: 您的%{app_name}账号密码已于%{date}被更改。
+        did_not_make_change:
+          contact_policy_abuse: 联系条款执行与违规行为处理委员会
+          html: 若您并未更改密码，则其他人可能拥有您%{app_name}账号的访问权限。请%{reset_password_link}或 %{contact_policy_abuse_link}。
+          reset_password: 立刻重置密码
+          text: 若您并未更改密码，则其他人可能拥有您%{app_name}账号的访问权限。请立刻重置密码（%{reset_password_url}）或联系条款执行与违规行为处理委员会：%{contact_policy_abuse_url}。
+        made_change:
+          contact_support: 联系支持委员会
+          html: 若是您本人更改了密码，您可以%{login_link}。若您忘记了密码，请%{reset_password_link}。若您遇到了技术上的问题，请%{contact_support_link}。
+          login: 使用新密码登入账号
+          reset_password: 重置它
+          text: 若是您本人更改了密码，您可以使用新密码登入账号（%{login_url}）。若您忘记了密码，请重置它（%{reset_password_url}）。若您遇到了技术上的问题，请联系支持委员会：%{contact_support_url}
+        subject: "[%{app_name}] 您的密码已被更改"
+      reset_password_instructions:
+        change_your_password: 更换您的密码
+        choose_new_password_imperative: 使用此链接设置新密码
+        choose_new_password_imperative_modal: 使用此链接设置新密码
+        contact_policy_abuse: 联系条款执行与违规行为处理委员会
+        contact_policy_abuse_instructions:
+          html: 如果您因其他原因相信目前他人能访问您的%{app_name}账号，请%{contact_policy_abuse_link}并提供所有相关信息。
+          text: 如果您因其他原因相信目前他人能访问您的%{app_name}账号，请联系条款执行与违规行为处理委员会并提供所有相关信息：%{contact_policy_abuse_url}。
+        contact_support: 联系支持团队
+        ignore_if_not_requested:
+          html: "%{safely_ignore_bold}他人有可能误输入了您的电子邮箱地址。"
+          safely_ignore: 如果您并没有提出此申请，您可以放心无视并删除此邮件。
+          text: 如果您没有提出此申请，您可以放心无视并删除此邮件。他人有可能误输入了您的电子邮箱地址。
+        instructions:
+          html: "%{intro_bold}如果此邮件内的链接已过期，您需要%{new_password_reset_link}。如果您遇到了技术问题，请等待几个小时再重新尝试。如果问题持续超过一天，请%{contact_support_link}获得进一步协助。"
+          intro:
+            other: 如果是您提出了此申请，请在%{count}天内%{choose_new_password_link_imperative} 。
+          text:
+            other: 如果是您提出了此申请，请在%{count}天内使用此链接设置新密码：%{choose_new_password_url}。 如果此邮件内的链接已过期，您将需要重新申请重置密码：%{new_password_reset_url}。如果您遇到了技术问题，请等待几个小时再重新尝试。如果问题持续超过一天，请联系支持团队以获得进一步协助：%{contact_support_link}。
+        intro: 有人申请重置您的%{app_name}账号密码。
+        new_password_reset: 重新申请重置密码
+        reset_emails_clarification:
+          html: 收到您未提出的重置密码邮件并不一定代表您的%{app_name}账号存在风险。只要只有您本人可以访问您的电子邮箱账号，您的%{app_name}账号将不受影响，您的密码也不会只因您收到此重置密码邮件而自动更换。不过，您还是能够%{choose_new_password_link_modal}或者登录账号并%{change_your_password_link}。两者都将使您的账号从所有设备上退出。
+          text: 收到您未提出的重置密码邮件并不一定代表您的%{app_name}账号存在风险。只要只有您本人可以访问您的电子邮箱账号，您的%{app_name}账号将不受影响，您的密码也不会只因您收到此重置密码邮件而自动更换。不过您还是能够使用此链接设置新密码（%{choose_new_password_url}）或者登录账号并更换您的密码（%{change_your_password_url}）。两者都将使您的账号从所有设备上退出。
+        subject: "[%{app_name}] 重置您的密码"

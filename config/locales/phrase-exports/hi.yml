@@ -92,8 +92,6 @@ hi:
       chapter:
         titled: 'अध्याय %{position}: %{title}'
         untitled: अध्याय %{position}
-      commenter_edited_response:
-        text: "%{commenter} ने अपने उत्तर को संपादित करके लिखा:"
       commenter_responded:
         html: "%{commenter_link} ने उत्तर दिया:"
         text: "%{commenter} ने उत्तर दिया:"
@@ -196,6 +194,7 @@ hi:
         untitled: अध्याय %{position}
       commenter_edited_response:
         html: "%{commenter_link} ने अपने उत्तर को संपादित करके लिखा:"
+        text: "%{commenter} ने अपने उत्तर को संपादित करके लिखा:"
       content:
         chapter:
           html: "%{pseud_link} ने %{work_link} के %{chapter_link} पर आपकी टिप्पणी
@@ -942,6 +941,20 @@ hi:
           संग्रह में शामिल करना पसंद करेंगे!"
         text: '"%{collection_title}" (%{collection_url}) के संग्रह अनुरक्षक आपका "%{work_title}"
           (%{work_url}) कार्य अपने संग्रह में शामिल करना पसंद करेंगे!'
+    potential_match_generation_notification:
+      finished_generating:
+        html: हमने आपके उपहार विनिमय %{collection_link} के लिए संभावित असाइनमेंट का
+          निर्माण पूरा किया है।
+        text: हमने आपके उपहार विनिमय "%{collection_title}" (%{collection_url}) के
+          लिए संभावित असाइनमेंट का निर्माण पूरा किया है।
+      matches_available:
+        html: संभावित मेल और तय किए गए असाइनमेंट इसके %{matching_page_link} पर उपलब्ध
+          हैं।
+        matching_page: Matching (मेल मिलाना) पृष्ठ
+        text: 'संभावित मेल और तय किए गए असाइनमेंट इसके Matching (मेल मिलाना) पृष्ठ
+          पर उपलब्ध हैं: %{matching_page_url}।'
+      subject: "[%{app_name}][%{collection_title}] संभावित असाइनमेंट का निर्माण पूरा
+        हो गया है"
     prompter_notification:
       a_response_to_your_prompt:
         collection:
