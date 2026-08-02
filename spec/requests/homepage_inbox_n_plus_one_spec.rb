@@ -11,7 +11,7 @@ describe "n+1 queries in the inbox controller for the homepage: " do
         before { fake_login_known_user(user) }
 
         populate do |n|
-          create_list(:inbox_comment, n, user: user, feedback_comment: build_feedback_comment.call)
+          n.times { create(:inbox_comment, user: user, feedback_comment: build_feedback_comment.call) }
         end
 
         warmup { get root_path }
