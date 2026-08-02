@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "n+1 queries in the inbox controller for the homepage: " do
+describe "n+1 queries in the inbox module on the homepage: " do
   include LoginMacros
 
   describe "#show", n_plus_one: true do
