@@ -14,16 +14,12 @@ describe "n+1 queries in the inbox controller for the homepage: " do
           create_list(:inbox_comment, n, user: user, feedback_comment: build_feedback_comment.call)
         end
 
-        warmup { get "/" }
-
-        it "displys the right number of comments" do
-          get "/"
-          expect(response.body.scan('id="feedback_comment_').size).to eq(current_scale.to_i)
-        end
+        warmup { get root_path }
 
         it "produces a constant number of queries" do
           expect do
-            get "/"
+            get root_path
+            expect(response.body.scan('id="feedback_comment_').size).to eq(current_scale.to_i)
           end.to perform_constant_number_of_queries
         end
       end
