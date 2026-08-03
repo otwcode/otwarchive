@@ -44,6 +44,15 @@ describe PreferencesController do
 
         expect(assigns(:available_skins)).to include(parent_only_skin)
       end
+
+      it "does not add a nil entry when the user's skin has been deleted" do
+        user.preference.update(skin_id: 9999)
+
+        get :index, params: { user_id: user.login }
+
+        expect(assigns(:available_skins)).not_to include(nil)
+        expect(response).to be_successful
+      end
     end
 
     context "as a guest" do
