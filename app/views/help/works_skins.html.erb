@@ -1,0 +1,23 @@
+<h4><%= t(".page_heading") %></h4>
+
+<p><%= t(".description_html", other_bold: tag.strong(t(".other"))) %></p>
+
+<p><%= t(".limitations_html", only_bold: tag.strong(t(".only"))) %></p>
+
+<p><%= t(".for_example") %></p>
+
+<ul>
+  <li>
+    <%= t(".example.create_skin_with_html", create_a_work_skin_link: link_to(t(".example.create_a_work_skin"), new_skin_path(skin_type: "WorkSkin")), css_class_example_code: tag.code(t(".example.css_class_example"))) %>
+  </li>
+  <li>
+    <%= t(".example.select_skin") %>
+  </li>
+  <li>
+    <%= t(".example.html_give_word_class_html", html_class_example_code: tag.code(t(".example.html_class_example"))) %>
+  </li>
+</ul>
+
+<p>
+  <%= t(".refer_tutorial_faq_html", tutorial_creating_skin_link: link_to(t(".tutorial_creating_skin"), archive_faq_path("tutorial-creating-a-work-skin")), skins_interface_faq_link: link_to(t(".skins_interface_faq"), archive_faq_path("skins-and-archive-interface"))) %>
+</p>

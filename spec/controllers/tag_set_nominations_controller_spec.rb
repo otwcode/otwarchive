@@ -841,6 +841,35 @@ describe TagSetNominationsController do
         end
       end
 
+      context "when user already has a nomination under a different pseud" do
+        let(:second_pseud) { create(:pseud, user: random_user) }
+
+        before do
+          fake_login_known_user(random_user)
+          create(:tag_set_nomination, pseud: second_pseud, owned_tag_set: owned_tag_set)
+        end
+
+        it "does not create a new nomination" do
+          expect do
+            post :create, params: {
+              tag_set_id: owned_tag_set.id,
+              tag_set_nomination: { pseud_id: random_user.default_pseud.id }
+            }
+          end.not_to change(TagSetNomination, :count)
+        end
+
+        it "renders new with an error" do
+          post :create, params: {
+            tag_set_id: owned_tag_set.id,
+            tag_set_nomination: { pseud_id: random_user.default_pseud.id }
+          }
+          expect(response).to render_template("new")
+          expect(assigns(:tag_set_nomination).errors[:base]).to include(
+            "You have already submitted nominations for that tag set. Try editing them instead."
+          )
+        end
+      end
+
       context 'valid params' do
         before do
           fake_login_known_user(random_user)

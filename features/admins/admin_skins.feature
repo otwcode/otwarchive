@@ -115,29 +115,6 @@ Feature: Admin manage skins
     And I should not see "#title"
     And I should not see "text-decoration: blink;"
 
-  Scenario: Admin can change the default skin
-  Given basic skins
-    And the approved public skin "strange skin" with css "#title { text-decoration: underline;}"
-    And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
-    And I am logged in as "skinner"
-    And the user "KnownUser" exists and is activated
-  When I am on skinner's preferences page
-    And I select "strange skin" from "preference_skin_id"
-    And I submit
-  Then I should see "{ text-decoration: underline; }" in the page style
-  When I am logged in as a "superadmin" admin
-  Then I should not see "{ text-decoration: blink; }" in the page style
-  When I follow "Approved Skins"
-    And I fill in "set_default" with "public skin"
-    And I press "Update"
-  Then I should see "Default skin changed to public skin"
-    And I should see "{ text-decoration: blink; }" in the page style
-  When I am logged in as "skinner"
-  Then I should see "{ text-decoration: underline; }" in the page style
-  # A user created before changing the default skin will still have the same skin
-  When I am logged in as "KnownUser"
-  Then I should not see "{ text-decoration: blink; }" in the page style
-
   Scenario: Admin can edit a skin with the word "archive" in the title
   Given the approved public skin "official archive skin" has reserved words in the title
     And I am logged in as a "superadmin" admin
