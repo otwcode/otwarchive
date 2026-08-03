@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # This script is for downloading and updating Unicode's confusables list which
-# we use for checking guest comment names' likeness to forbidden names at 
+# we use for checking guest comment names' likeness to forbidden names at
 # app/validators/not_forbidden_name_validator.rb
 #
 # Run this script with:
