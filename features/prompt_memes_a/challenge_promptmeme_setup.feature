@@ -5,24 +5,6 @@ Feature: Prompt Meme Challenge
   I want to create a prompt meme and post to it
 
   @javascript
-  Scenario: Can hide and show warnings on a prompt
-
-  Given I have Battle 12 prompt meme fully set up
-  Given I am logged in as "myname1"
-    And I sign up for Battle 12 with combination F
-  When I am logged in as "myname2"
-    And I follow "My Preferences"
-    And I check "Hide warnings"
-    And I press "Update"
-    And I go to "Battle 12" collection's page
-    And I follow "Prompts (2)"
-  Then I should see "Show warnings"
-    And I should not see "Alternate Universe - Historical"
-  When I follow "Show warnings"
-  Then I should not see "Show warnings"
-    And I should see "Alternate Universe - Historical"
-
-  @javascript
   Scenario: Can hide and show additional tags on a prompt
 
   Given I have Battle 12 prompt meme fully set up

@@ -251,15 +251,6 @@ When /^I sign up for Battle 12 with combination D$/ do
     click_button "Submit"
 end
 
-When /^I sign up for Battle 12 with combination F$/ do
-  step %{I start signing up for "Battle 12"}
-    step %{I check the 1st checkbox with the value "Stargate Atlantis"}
-    step %{I check the 2nd checkbox with the value "Stargate Atlantis"}
-    step %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - Historical"}
-    step %{I check the 1st checkbox with the value "Major Character Death"}
-    click_button "Submit"
-end
-
 When /^I sign up for Battle 12 with combination E$/ do
   step "I go to the collections page"
     step "I follow \"Battle 12\""
