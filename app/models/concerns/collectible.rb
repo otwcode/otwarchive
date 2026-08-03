@@ -24,8 +24,7 @@ module Collectible
     has_many :approved_unrevealed_collections,
              through: :approved_unrevealed_collection_items,
              source: :collection,
-             strict_loading: true,
-             dependent: :destroy
+             strict_loading: true
     has_many :user_approved_collections,
              through: :user_approved_collection_items,
              source: :collection,
