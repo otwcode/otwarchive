@@ -154,7 +154,7 @@ describe "n+1 queries in the WorksController" do
     it_behaves_like "displaying multiple works efficiently", queries_per_work: 1
   end
 
-  describe "#search" do
+  describe "#search", work_search: true, bookmark_search: true do
     subject do
       proc do
         get search_works_path(work_search: { query: fandom.name })
