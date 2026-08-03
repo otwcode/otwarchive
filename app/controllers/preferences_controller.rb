@@ -41,7 +41,10 @@ class PreferencesController < ApplicationController
   private
 
   def available_skins
-    (@user.skins.site_skins.usable +
-    Skin.approved_skins.site_skins.usable).uniq
+    skins = (@user.skins.site_skins.usable +
+             Skin.approved_skins.site_skins.usable).uniq
+    current_skin = @user.preference.skin
+    skins << current_skin if current_skin&.type.nil? && skins.exclude?(current_skin)
+    skins
   end
 end

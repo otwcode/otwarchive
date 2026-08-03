@@ -35,6 +35,15 @@ describe PreferencesController do
         expect(assigns(:available_skins)).to include(usable_skin)
         expect(assigns(:available_skins)).not_to include(parent_only_skin)
       end
+
+      it "includes the user's current skin even if it is parent-only" do
+        parent_only_skin = create(:skin, author: user, unusable: true)
+        user.preference.update(skin_id: parent_only_skin.id)
+
+        get :index, params: { user_id: user.login }
+
+        expect(assigns(:available_skins)).to include(parent_only_skin)
+      end
     end
 
     context "as a guest" do
