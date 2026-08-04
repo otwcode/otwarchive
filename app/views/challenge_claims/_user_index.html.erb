@@ -9,7 +9,7 @@
       <%= span_if_current ts("Unfulfilled Claims"), user_claims_path(current_user), params[:posted].blank? %>
     </li>
     <li id="posted-link">
-      <%= span_if_current ts("Fulfilled Claims"), user_claims_path(current_user, :posted => true), params[:posted].present? %>
+      <%= span_if_current ts("Fulfilled Claims"), user_claims_path(current_user, posted: true), params[:posted].present? %>
     </li>
 	</ul>
 <% end %>
