@@ -429,7 +429,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Given I have related works setup
     And the user "inspiration" is a protected user
   When I post a related work as remixer
-  Then I should see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should see "This work cannot be listed as an inspiration."
 
   Scenario: When editing a work with an existing citation of a protected user's work, the citation remains
   Given I have related works setup
@@ -479,7 +479,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding" to be in the collection "Anonymous"
   When I post a related work as remixer
-  Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should not see "This work cannot be listed as an inspiration."
   When I am logged in as "remixer"
     And I go to remixer's related works page
   Then I should see "Works that inspired remixer"
@@ -493,7 +493,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding" to be in the collection "Hidden"
   When I post a related work as remixer
-  Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should not see "This work cannot be listed as an inspiration."
   When I am logged in as "remixer"
     And I go to remixer's related works page
   Then I should see "Works that inspired remixer"
