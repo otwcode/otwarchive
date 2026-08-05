@@ -10,6 +10,7 @@
 
 <!--main content-->
 <%= form_for @prompt, :as => :prompt, :url => collection_prompts_path(@collection), :html => {:method => :post} do |form| %>
+  <%= error_messages_for @prompt %>
   <%= render "prompt_form", :form => form, :required => true, :index => @index %>
   <%= submit_fieldset form %>
 <% end %>

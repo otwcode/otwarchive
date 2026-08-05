@@ -13,7 +13,7 @@ class AdminSetting < ApplicationRecord
 
   belongs_to :default_skin, class_name: 'Skin'
 
-  CACHE_KEY = "admin_settings-v4".freeze
+  CACHE_KEY = "admin_settings-v5".freeze
 
   DEFAULT_SETTINGS = {
     invite_from_queue_enabled?: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,

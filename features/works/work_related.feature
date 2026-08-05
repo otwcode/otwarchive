@@ -429,7 +429,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Given I have related works setup
     And the user "inspiration" is a protected user
   When I post a related work as remixer
-  Then I should see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should see "This work cannot be listed as an inspiration."
 
   Scenario: When editing a work with an existing citation of a protected user's work, the citation remains
   Given I have related works setup
@@ -479,7 +479,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding" to be in the collection "Anonymous"
   When I post a related work as remixer
-  Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should not see "This work cannot be listed as an inspiration."
   When I am logged in as "remixer"
     And I go to remixer's related works page
   Then I should see "Works that inspired remixer"
@@ -493,7 +493,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding" to be in the collection "Hidden"
   When I post a related work as remixer
-  Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should not see "This work cannot be listed as an inspiration."
   When I am logged in as "remixer"
     And I go to remixer's related works page
   Then I should see "Works that inspired remixer"
@@ -545,6 +545,17 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Then I should see "Works inspired by inspiration"
       And I should see "A work in an unrevealed collection"
       And I should not see "remixer"
+
+  Scenario: When an unrevealed work is cited, its title is not visible on the remixer's work edit page
+    Given a hidden collection "Hidden"
+      And I have related works setup
+      And I post a related work as remixer
+      And I am logged in as "inspiration"
+      And I edit the work "Worldbuilding" to be in the collection "Hidden"
+    When I am logged in as "remixer"
+      And I edit the work "Followup"
+    Then I should see "Mystery Work"
+      And I should not see "Worldbuilding"
 
   Scenario: A remix of an anonymous work is shown on the remixer's related works page, but not on the original creator's related works page
     Given an anonymous collection "Anonymous"
@@ -802,3 +813,41 @@ Scenario: Notification emails for translations are translated
     And "encouragement" should receive 2 emails
     And the last email to "encouragement" should be non-translated
     And the last email should have "Related work notification" in the subject
+
+Scenario: A note appears on deleted inspirations and translations
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  When I view the work "Followup"
+  Then I should see "Inspired by a deleted work"
+  When I view the work "Worldbuilding Translated"
+  Then I should see "A translation of a deleted work"
+
+Scenario: Downloaded works with a deleted inspiration display the correct note when downloaded
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  Then I should be able to download all versions of "Followup"
+  When I view the work "Followup" 
+    And I follow "HTML"
+  Then I should see "Inspired by a deleted work"
+
+Scenario: Deleted inspiration relationships can be deleted from the Edit Work page
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  When I am logged in as "remixer"
+    And I view the work "Followup"
+    And I follow "Edit"
+  Then I should see "Deleted work"
+  When I follow "Remove" within "#parent-options"
+  Then I should not see "Deleted work"

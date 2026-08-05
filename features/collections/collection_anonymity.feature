@@ -370,10 +370,12 @@ Feature: Collection
       And I press "Preview"
     Then I should see "Anonymous Collection"
       And I should see "Anonymous [creator]"
+
     When I follow "Cancel"
-    # This is not the desired behavior (AO3-5556), but we want to make sure it doesn't get broken worse
-    Then I should see "Anonymous Collection"
-      And I should see "Anonymous [creator]"
+      And I view the work "My Work"
+
+    Then I should not see "Anonymous Collection"
+      And I should not see "Anonymous [creator]"
 
   Scenario: When an anonymous collection is deleted, works in the collection stop being anonymous.
     Given I have an anonymous collection "Anonymous Collection"
