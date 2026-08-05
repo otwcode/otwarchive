@@ -27,6 +27,8 @@ describe AuditsCleanupJob do
   let(:no_cleanup_user) { create(:user) }
 
   before do
+    ActiveJob::Base.queue_adapter = :test
+
     ArchiveConfig.USER_KEEP_AUDIT_UPDATES_DAYS = 30
     ArchiveConfig.USER_KEEP_AUDIT_CREATES_DESTROYS_DAYS = 30
   end
@@ -53,31 +55,45 @@ describe AuditsCleanupJob do
       expect(existing_user.audits.where(action: %w[create destroy]).count).to eq(2)
     end
 
-    it "respects per-query and per-job delete limits" do
-      ArchiveConfig.USER_KEEP_AUDIT_UPDATES_DAYS = 0
-      ArchiveConfig.USER_KEEP_AUDIT_CREATES_DESTROYS_DAYS = 0
+    context "configured to delete all audits" do
+      before do
+        ArchiveConfig.USER_KEEP_AUDIT_UPDATES_DAYS = 0
+        ArchiveConfig.USER_KEEP_AUDIT_CREATES_DESTROYS_DAYS = 0
+      end
 
-      AuditsCleanupJob.perform(query_delete_limit: 1, job_delete_limit: 2)
-      expect(existing_user.audits.count).to eq(2)
+      it "respects per-query and per-job delete limits" do
+        AuditsCleanupJob.perform(query_delete_limit: 1, job_delete_limit: 2)
+        expect(existing_user.audits.count).to eq(2)
+      end
+
+      it "reenqueues itself if job delete limit is reached" do
+        AuditsCleanupJob.perform(query_delete_limit: 1, job_delete_limit: 2)
+        expect(AuditsCleanupJob).to have_been_enqueued.with(query_delete_limit: 1, job_delete_limit: 2)
+      end
+
+      it "doesn't reenqueue itself if job delete limit is not reached" do
+        AuditsCleanupJob.perform(query_delete_limit: 1, job_delete_limit: 1000)
+        expect(AuditsCleanupJob).not_to have_been_enqueued
+      end
     end
   end
 
   context "when audits exist for protected users" do
     before do
       admin_setting = AdminSetting.default
-      admin_setting.preserve_audit_records_usernames = [no_cleanup_user.login, "non_existing_user"].join(", ")
+      admin_setting.preserve_audit_records_user_ids = [no_cleanup_user.id.to_s, "999999"].join(", ")
       admin_setting.save(validate: false)
 
       create_audits(existing_user)
       create_audits(no_cleanup_user)
     end
 
-    it "doesn't delete audit records for users whose usernames are in preserve_audit_records_usernames admin setting" do
+    it "doesn't delete audit records for users whose usernames are in preserve_audit_records_user_ids admin setting" do
       AuditsCleanupJob.perform
       expect(no_cleanup_user.audits.count).to eq(4)
     end
 
-    it "does delete audit records for users whose username are not in preserve_audit_records_usernames admin setting" do
+    it "does delete audit records for users whose username are not in preserve_audit_records_user_ids admin setting" do
       AuditsCleanupJob.perform
       expect(existing_user.audits.count).to eq(2)
     end

@@ -5,7 +5,7 @@ class AdminSettingPolicy < ApplicationPolicy
   # Define which roles can update which settings.
   ALLOWED_SETTINGS_BY_ROLES = {
     "policy_and_abuse" => %i[
-      preserve_audit_records_usernames
+      preserve_audit_records_user_ids
       hide_spam
       invite_from_queue_enabled
       invite_from_queue_number
@@ -17,7 +17,7 @@ class AdminSettingPolicy < ApplicationPolicy
       cache_expiration
       creation_requires_invite
       days_to_purge_unactivated
-      preserve_audit_records_usernames
+      preserve_audit_records_user_ids
       disable_support_form
       disabled_support_form_text
       downloads_enabled
@@ -34,7 +34,7 @@ class AdminSettingPolicy < ApplicationPolicy
     ],
     "support" => %i[disable_support_form disabled_support_form_text],
     "tag_wrangling" => %i[tag_wrangling_off],
-    "legal" => %i[preserve_audit_records_usernames]
+    "legal" => %i[preserve_audit_records_user_ids]
   }.freeze
 
   def can_view_settings?

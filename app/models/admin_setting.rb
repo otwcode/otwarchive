@@ -5,6 +5,8 @@ class AdminSetting < ApplicationRecord
   validates_presence_of :last_updated_by
   validates :invite_from_queue_number, numericality: { greater_than_or_equal_to: 1,
     allow_nil: false, message: "must be greater than 0. To <strong>disable</strong> invites, uncheck the appropriate setting." }
+  validates :preserve_audit_records_user_ids, format: { with: /\A\s*(\d+\s*,\s*)*(\d+)\s*\z/,
+    message: 'must be numeric user IDs separated by commas and optional whitespace' }, allow_blank: true
 
   before_save :update_invite_date
   before_update :check_filter_status
@@ -21,7 +23,6 @@ class AdminSetting < ApplicationRecord
     invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
     account_creation_enabled?: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
     days_to_purge_unactivated: 2,
-    preserve_audit_records_usernames: nil,
     suspend_filter_counts?: false,
     enable_test_caching?: false,
     cache_expiration: 10,

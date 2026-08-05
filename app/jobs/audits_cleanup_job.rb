@@ -2,11 +2,10 @@ class AuditsCleanupJob < ApplicationJob
   QUERY_DELETE_LIMIT = 5_000
   JOB_DELETE_LIMIT = QUERY_DELETE_LIMIT * 10
 
-  queue_as :utilities
+  queue_as @queue
 
   def self.perform(query_delete_limit: QUERY_DELETE_LIMIT, job_delete_limit: JOB_DELETE_LIMIT)
-    preserve_usernames = AdminSetting.current.preserve_audit_records_usernames&.split(/,\s*/) || []
-    preserve_user_ids = User.where(login: preserve_usernames).select(:id).map(&:id)
+    preserve_user_ids = AdminSetting.current.preserve_audit_records_user_ids&.split(/\s*,\s*/)&.map { it.to_i } || []
 
     query = Audited.audit_class.where("0")
 
@@ -50,5 +49,7 @@ class AuditsCleanupJob < ApplicationJob
       job_delete_count += query_delete_count
       break unless job_delete_count < job_delete_limit
     end
+
+    perform_later(query_delete_limit: query_delete_limit, job_delete_limit: job_delete_limit) if job_delete_count == job_delete_limit
   end
 end
