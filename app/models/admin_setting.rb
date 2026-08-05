@@ -5,8 +5,11 @@ class AdminSetting < ApplicationRecord
   validates_presence_of :last_updated_by
   validates :invite_from_queue_number, numericality: { greater_than_or_equal_to: 1,
     allow_nil: false, message: "must be greater than 0. To <strong>disable</strong> invites, uncheck the appropriate setting." }
-  validates :preserve_audit_records_user_ids, format: { with: /\A\s*(\d+\s*,\s*)*(\d+)\s*\z/,
-    message: 'must be numeric user IDs separated by commas and optional whitespace' }, allow_blank: true
+  validates :preserve_audit_records_user_ids, format: {
+    allow_blank: true,
+    with: /\A\s*(\d+\s*,\s*)*(\d+)\s*\z/,
+    message: "must be numeric user IDs separated by commas and optional whitespace"
+  }
 
   before_save :update_invite_date
   before_update :check_filter_status
