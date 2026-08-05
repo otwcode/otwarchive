@@ -546,6 +546,17 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I should see "A work in an unrevealed collection"
       And I should not see "remixer"
 
+  Scenario: When an unrevealed work is cited, its title is not visible on the remixer's work edit page
+    Given a hidden collection "Hidden"
+      And I have related works setup
+      And I post a related work as remixer
+      And I am logged in as "inspiration"
+      And I edit the work "Worldbuilding" to be in the collection "Hidden"
+    When I am logged in as "remixer"
+      And I edit the work "Followup"
+    Then I should see "Mystery Work"
+      And I should not see "Worldbuilding"
+
   Scenario: A remix of an anonymous work is shown on the remixer's related works page, but not on the original creator's related works page
     Given an anonymous collection "Anonymous"
       And I have related works setup
