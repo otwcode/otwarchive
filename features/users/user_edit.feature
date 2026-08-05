@@ -211,12 +211,8 @@ Feature:
       And I should not see "before" within "#main"
 
   Scenario: Changing only username updates series blurbs
-    Given I have no users
-      And the following activated user exists
-        | login         | password | id |
-        | oldusername   | password | 1  |
-      And a pseud exists with name: "newusername", user_id: 1
-      And I am logged in as "oldusername"
+    Given I am logged in as "oldusername" with password "password"
+      And "oldusername" has the pseud "newusername"
       And I add the work "Great Work" to series "Best Series"
     When I go to the dashboard page for user "oldusername" with pseud "oldusername"
       And I follow "Series"
@@ -227,8 +223,7 @@ Feature:
     Then I should see "Best Series by oldusername (newusername)"
 
   Scenario: Changing username and pseud updates series blurbs
-    Given I have no users
-      And I am logged in as "oldusername" with password "password"
+    Given I am logged in as "oldusername" with password "password"
       And I add the work "Great Work" to series "Best Series"
     When I go to the dashboard page for user "oldusername" with pseud "oldusername"
       And I follow "Series"
@@ -257,14 +252,9 @@ Feature:
     Then I should see "Chapter by after"
 
   Scenario: Changing only username updates gift blurbs
-    Given I have no users
-      And the following activated users exist
-        | login      | password    | email                | id |
-        | gifter     | something   | gifter@example.com   | 1  |
-        | giftee1    | password    | giftee1@example.com  | 2  |
-      And a pseud exists with name: "newusername", user_id: 2
+    Given "giftee1" has the pseud "newusername"
       And the user "giftee1" allows gifts
-      And I am logged in as "gifter" with password "something"
+      And I am logged in as "gifter"
       And I set up the draft "GiftStory1"
       And I give the work to "giftee1"
       And I press "Post"
@@ -278,13 +268,12 @@ Feature:
     Then I should see "GiftStory1 by gifter for giftee1 (newusername)"
 
   Scenario: Changing username and pseud updates gift blurbs
-    Given I have no users
-      And the following activated users exist
-        | login      | password    | email                | id |
-        | gifter     | something   | gifter@example.com   | 1  |
-        | giftee1    | password    | giftee1@example.com  | 2  |
+    Given the following activated users exist
+        | login      |
+        | gifter     |
+        | giftee1    |
       And the user "giftee1" allows gifts
-      And I am logged in as "gifter" with password "something"
+      And I am logged in as "gifter"
       And I set up the draft "GiftStory1"
       And I give the work to "giftee1"
       And I press "Post"
@@ -299,8 +288,7 @@ Feature:
       And I should not see "GiftStory1 by gifter for giftee1"
 
   Scenario: Changing the username from a forbidden name to non-forbidden
-    Given I have no users
-      And the following activated user exists
+    Given the following activated user exists
         | login     | password |
         | forbidden | secret12 |
       And the username "forbidden" is on the forbidden list

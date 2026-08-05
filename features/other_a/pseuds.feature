@@ -255,18 +255,13 @@ Scenario: Edit pseud updates series blurbs
   Then I should see "Best Series by Me3 (Myself)"
 
 Scenario: Edit pseud updates gift blurbs
-  Given I have no users
-    And the following activated users exist
-      | login      | password    | email                | id |
-      | gifter     | something   | gifter@example.com   | 1  |
-      | giftee1    | something   | giftee1@example.com  | 2  |
-    And a pseud exists with name: "Me2", user_id: 2
+  Given "giftee1" has the pseud "Me2"
     And the user "giftee1" allows gifts
-    And I am logged in as "gifter" with password "something"
+    And I am logged in as "gifter"
     And I set up the draft "GiftStory1"
     And I give the work to "Me2 (giftee1)"
     And I press "Post"
-    And I am logged in as "giftee1" with password "something"
+    And I am logged in as "giftee1"
   When I go to giftee1's gifts page
   Then I should see "GiftStory1 by gifter for Me2 (giftee1)"
   When I view my profile

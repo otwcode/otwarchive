@@ -131,18 +131,16 @@ Scenario: Delete a user who has coauthored a work
     Then I should not see "You have successfully deleted your account"
 
   Scenario: Deleting a user updates gift blurbs
-    Given I have no users
-      And I have no works or comments
-      And the following activated users exist
-        | login      | password    | email                | id |
-        | gifter     | something   | gifter@example.com   | 1  |
-        | giftee1    | something   | giftee1@example.com  | 2  |
+    Given the following activated users exist
+        | login   |
+        | gifter  |
+        | giftee1 |
       And the user "giftee1" allows gifts
-      And I am logged in as "gifter" with password "something"
+      And I am logged in as "gifter"
       And I set up the draft "GiftStory1"
       And I give the work to "giftee1"
       And I press "Post"
-      And I am logged in as "giftee1" with password "something"
+      And I am logged in as "giftee1"
     When I am on gifter's works page
     Then I should see "GiftStory1 by gifter for giftee1"
     When I try to delete my account as giftee1
