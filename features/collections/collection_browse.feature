@@ -18,7 +18,6 @@ Feature: Collection
     Given I have a collection "Some Test Collection" with name "sometest"
     When I am logged in as the owner of "Some Test Collection"
       And I add the subcollection "Subcollection" to the parent collection named "sometest"
-      And all indexing jobs have been run
       And I go to the "Some Test Collection" subcollections page
     Then I should not see "Open Challenges" within "#main .navigation.actions"
       And I should not see "Collections" within "#main .navigation.actions"
