@@ -49,6 +49,10 @@ module CssCleaner
   URL_REGEX = Regexp.new(URI_REGEX.to_s + '|"' + URI_REGEX.to_s + '"|\'' + URI_REGEX.to_s + '\'')
   URL_FUNCTION_REGEX = Regexp.new('url\(\s*' + URL_REGEX.to_s + '\s*\)')
 
+  # Unless we have a reason to allow a new value syntax for all or most
+  # properties, sanitization should be handled on a per-property basis in 
+  # sanitize_css_declaration_value. While invalid values are typically harmless,
+  # including new syntax in VALUE_REGEX risks allowing unwanted valid values.
   VALUE_REGEX = Regexp.new("#{TRANSFORM_FUNCTION_REGEX}|#{URL_FUNCTION_REGEX}|#{COLOR_STOP_FUNCTION_REGEX}|#{COLOR_REGEX}|#{NUMBER_WITH_UNIT_REGEX}|#{ALPHA_REGEX}|#{SHAPE_FUNCTION_REGEX}|#{FILTER_FUNCTION_REGEX}|#{DROP_SHADOW_FUNCTION_REGEX}|#{VAR_FUNCTION_REGEX}")
 
 
