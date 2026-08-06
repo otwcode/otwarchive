@@ -53,6 +53,7 @@ Given /^a work inspired by an external work has been posted$/ do
 end
 
 Given /^a translation of an external work has been posted$/ do
+  step %{basic tags}
   step %{mock websites with no content}
   step %{I am logged in as "translator"}
   step %{I set up the draft "Worldbuilding Translated"}
