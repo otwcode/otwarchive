@@ -40,7 +40,7 @@ end
 
 # given for external works
 
-Given /^a work inspired by an external work has been posted$/ do
+Given "a work inspired by an external work has been posted" do
   step %{basic tags}
   step %{mock websites with no content}
   step %{I am logged in as "remixer"}
@@ -52,7 +52,7 @@ Given /^a work inspired by an external work has been posted$/ do
   step %{I press "Post"}
 end
 
-Given /^a translation of an external work has been posted$/ do
+Given "a translation of an external work has been posted" do
   step %{basic tags}
   step %{mock websites with no content}
   step %{I am logged in as "translator"}
