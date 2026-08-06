@@ -955,4 +955,18 @@ describe "rake After:backfill_missing_pseuds" do
       expect(user.pseuds.reload.map(&:name)).to contain_exactly("Name")
     end
   end
+
+  context "when the pseud fails to save" do
+    let!(:user) { create(:user) }
+
+    before do
+      user.pseuds.find_by(name: user.login).delete
+      allow(Pseud).to receive(:create!).and_raise(ActiveRecord::RecordNotSaved.new("Validation failed"))
+    end
+
+    it "reports the failure and does not crash" do
+      expect { subject.invoke }
+        .to output(/Failed to backfill pseud/).to_stdout
+    end
+  end
 end
