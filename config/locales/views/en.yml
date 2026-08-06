@@ -2399,8 +2399,8 @@ en:
       type: Type
       wrangling_status: Wrangling status
     show:
-      canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
-      canonical_html_no_filters: It's a %{canonical_tag_link}.
+      canonical_html: It's a %{canonical_tag_link}.
+      filterable_html: You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
       canonical_tag: canonical tag
       fandom_relationship_tags: Relationship tags in this fandom
       filter_bookmarks: filter bookmarks
