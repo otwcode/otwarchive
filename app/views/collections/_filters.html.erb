@@ -1,5 +1,11 @@
 <%= form_for @search, as: :collection_search,
-  url: (@user ? user_collections_path(@user) : collections_path),
+  url: (if @user
+          user_collections_path(@user)
+        elsif @tag
+          tag_collections_path(@tag)
+        else
+          collections_path
+        end),
   html: {
     method: :get,
     class: "narrow-hidden filters",

@@ -31,6 +31,7 @@
     <% if @tag %>
       <li><%= span_if_current t(".navigation.works"), tag_works_path(@tag) %></li>
       <li><%= span_if_current t(".navigation.bookmarks"), tag_bookmarks_path(@tag) %></li>
+      <li><%= span_if_current t(".navigation.collections"), tag_collections_path(@tag) %></li>
     <% end %>
     <% if @facets.present? %>
       <% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>

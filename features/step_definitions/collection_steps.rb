@@ -179,6 +179,37 @@ Given "a set of collections for searching" do
   step %{all indexing jobs have been run}
 end
 
+Given "a set of collections for tag page searching" do
+  beautiful = Fandom.where(name: "My Beautiful Canonical Tag", canonical: true).first_or_create
+  gorgeous = Fandom.find_or_create_by(name: "My Gorgeous Synonymous Tag")
+  gorgeous.reload.merger = beautiful
+  gorgeous.save
+  profile = CollectionProfile.create!(faq: "FAQ goes here",
+                                      intro: "Intro goes here",
+                                      rules: "Rules go here")
+  FactoryBot.create(:collection,
+                    name: "btagtest",
+                    title: "Beautiful Tag Test Collection",
+                    tag_string: "My Beautiful Canonical Tag",
+                    collection_profile: profile)
+  FactoryBot.create(:collection,
+                    name: "mtagtest",
+                    title: "Multiple Tag Test Collection",
+                    tag_string: "My Beautiful Canonical Tag, a noncanonical tag")
+  FactoryBot.create(:collection,
+                    name: "ntagtest",
+                    title: "Noncanonical Tag Test Collection",
+                    tag_string: "a noncanonical tag",
+                    challenge: FactoryBot.create(:gift_exchange))
+  FactoryBot.create(:collection,
+                    name: "gtagtest",
+                    title: "Gorgeous Tag Test Collection",
+                    tag_string: "My Gorgeous Synonymous Tag",
+                    challenge: FactoryBot.create(:gift_exchange))
+
+  step %{all indexing jobs have been run}
+end
+
 ### WHEN
 
 When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|

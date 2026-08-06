@@ -52,22 +52,20 @@ module SearchHelper
     )
   end
 
-  def collections_original_path
-    url_for(
-      controller: :collections,
-      action: :index,
-      only_path: true,
-      **params.slice(:title, :challenge_type, :moderated, :multifandom, :closed, :tag,
-                     :sort_column, :sort_direction).permit!
-    )
-  end
-
   def bookmarks_original_path
     url_for(
       controller: :bookmarks,
       action: :index,
       only_path: true,
       **params.slice(:tag_id, :collection_id, :pseud_id, :user_id).permit!
+    )
+  end
+
+  def collections_original_path
+    url_for(
+      controller: :collections,
+      action: :index,
+      only_path: true
     )
   end
 end

@@ -316,7 +316,7 @@ Feature: Collection
     And the 2nd collection result should contain "The Hobbit"
   When I fill in "Filter by title" with "Not Mine!"
     And I press "Sort and Filter"
-  Then I should see "Sorry, there were no collections found."
+  Then I should see "0 Collections"
 
   Scenario: Default sorting is different from collections page and user collections page
 
