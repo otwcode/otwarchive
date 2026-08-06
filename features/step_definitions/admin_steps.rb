@@ -414,6 +414,18 @@ When "I unhide the work {string}" do |title|
   step %{I follow "Make Work Visible"}
 end
 
+When "I hide the external work {string}" do |title|
+  external_work = ExternalWork.find_by(title: title)
+  visit external_work_path(external_work)
+  step %{I follow "Hide External Work"}
+end
+
+When "I unhide the external work {string}" do |title|
+  external_work = ExternalWork.find_by(title: title)
+  visit external_work_path(external_work)
+  step %{I follow "Make External Work Visible"}
+end
+
 When "the search criteria contains the ID for {string}" do |login|
   user_id = User.find_by(login: login).id
   fill_in("user_id", with: user_id)

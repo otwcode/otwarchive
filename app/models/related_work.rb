@@ -29,7 +29,7 @@ class RelatedWork < ActiveRecord::Base
   }
 
   scope :unhidden_or_deleted_parents, lambda {
-    join_parents.where("parent_works.hidden_by_admin = false OR parent_works.id IS NULL")
+    join_parents.where("parent_works.hidden_by_admin = false OR parent_external_works.hidden_by_admin = false OR (parent_works.id IS NULL AND parent_external_works.id IS NULL)")
   }
 
   scope :children_for_work_page, lambda {

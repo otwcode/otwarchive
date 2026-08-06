@@ -470,6 +470,24 @@ Feature: Download a work
       And I follow "HTML"
     Then I should not see "Worldbuilding by inspiration"
 
+  Scenario: Hidden external inspirations should be hidden in downloads
+    Given a work inspired by an external work has been posted
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the external work "Worldbuilding"
+    When I log out
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should not see "Worldbuilding by external_inspiration"
+
+  Scenario: Hidden external translated works should be hidden in downloads
+    Given a translation of an external work has been posted
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the external work "Worldbuilding"
+    When I log out
+      And I view the work "Worldbuilding Translated"
+      And I follow "HTML"
+    Then I should not see "Worldbuilding by external_inspiration"
+
   Scenario: Downloads should update when works get hidden and unhidden
     Given I have related works setup
       And a related work has been posted and approved
@@ -489,6 +507,25 @@ Feature: Download a work
       And I view the work "Worldbuilding"
       And I follow "HTML"
     Then I should see "Followup by remixer"
+
+  Scenario: Downloads should update when external works get hidden and unhidden
+    Given a work inspired by an external work has been posted
+    When I log out
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should see "Worldbuilding by external_inspiration"
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the external work "Worldbuilding"
+    When I log out
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should not see "Worldbuilding by external_inspiration"
+    When I am logged in as a "policy_and_abuse" admin
+      And I unhide the external work "Worldbuilding"
+    When I log out
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should see "Worldbuilding by external_inspiration"
 
   Scenario: Draft parent related works should not be listed in downloads
     Given I have related works setup
