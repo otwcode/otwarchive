@@ -390,8 +390,6 @@ en:
       ban_notice_html: Your account has been banned. You are not permitted to post or edit content on AO3. Please check your email or %{contact_abuse_link} for more information.
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You cannot post, edit, or delete content until your suspension has ended. Please check your email or %{contact_abuse_link} for more information.
     totp:
-      access:
-        permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
       already_disabled: TOTP two-step verification is already disabled.
       already_enabled: TOTP two-step verification is already enabled.
       confirm_disable:
