@@ -1749,6 +1749,48 @@ en:
         html: "(For more information, see the %{tags_faq_section_link}.)"
         tags_faq_section: Tags on the Archive FAQ
       page_heading: Relationships Tags
+    tags_search_results:
+      canonical:
+        description_html: "%{highlighted_canonical} tags are canonical."
+        highlighted: Highlighted
+      page_heading: Tag Search Results
+      refine: If there are too many tags, try refining your search, rather than paging through the results.
+      sorting: Very new tags will be at the top of the list. Otherwise the list is sorted alphabetically by type and then name.
+    tags_search_text:
+      asterisk:
+        book: book
+        book_query: book*
+        booking: booking
+        books: books
+        description_html: "%{book_query_kbd} will find %{book_samp} and %{books_samp} and %{booking_samp}."
+        header: '*: any characters'
+      not:
+        description_html: "%{query_kbd} will find %{harry_potter_samp} but not %{harry_lockhart_samp} or %{relationship_samp}."
+        harry_lockhart: Harry Lockhart
+        harry_potter: Harry Potter
+        header: 'NOT: NOT'
+        query: Harry NOT Lockhart
+        relationship: Gilderoy Lockhart/Harry Potter
+      or:
+        description_html: "%{query_kbd} will find %{harry_samp}, %{harry_potter_samp}, and %{potter_samp}."
+        harry: Harry
+        harry_potter: Harry Potter
+        header: '||: OR (not exclusive)'
+        potter: Potter
+        query: Harry || Potter
+      page_heading: Tag Search Text
+      quotes:
+        description_html: "%{query_kbd} will find %{harry_lockhart_samp} but not %{relationship_samp}."
+        harry_lockhart: '"Harry Lockhart"'
+        header: '": words in exact sequence'
+        query: '"Harry Lockhart"'
+        relationship: Harry Potter/Gilderoy Lockhart
+      space:
+        description_html: "%{harry_potter_query_kbd} will find %{harry_potter_samp} and %{harry_james_potter_samp} but not %{harry_samp}."
+        harry: Harry
+        harry_james_potter: Harry James Potter
+        harry_potter: Harry Potter
+        header: 'space: a space acts like AND'
     tags_warnings:
       choose_not_to_use:
         description: Use this if you don't want to warn for anything. You may also choose this option if you don't know what you should warn for; if you don't like warning for certain topics or warnings in general; if you want to avoid some spoilers, but not others; etc.
@@ -3087,6 +3129,8 @@ en:
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
         random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
+    search:
+      tags_search_results_help_title: Tag search results help
     search_form:
       fandoms: Fandoms
       fandoms_footnote: Find tags wrangled to specific canonical fandoms.
@@ -3103,6 +3147,7 @@ en:
         synonymous: Synonymous
         unwrangleable: Unwrangleable
       tag_name: Tag name
+      tags_search_text_help_title: Tag search text help
       type: Type
       wrangling_status: Wrangling status
     show:
