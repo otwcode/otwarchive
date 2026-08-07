@@ -124,12 +124,12 @@ describe Users::TotpController do
         fake_login_known_user(user)
         post :create, params: { user_id: user.login, totp_attempt: user.current_otp }
         expect(user.reload.totp_enabled?).to be_truthy
-        expect(flash[:notice]).to eq("Successfully enabled two-step verification; please make note of your backup codes.")
+        expect(flash[:notice]).to eq("Two-step verification was successfully enabled. Please save your backup codes in case you lose access to your authenticator app.")
       end
 
       it "audits and redacts otp_secret" do
         fake_login_known_user(user)
-        post :reset_backup_codes, params: { user_id: user.login }
+        post :create, params: { user_id: user.login }
         
         last_change = user.audits.pluck(:audited_changes).last
 

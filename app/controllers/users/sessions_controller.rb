@@ -3,7 +3,7 @@ class Users::SessionsController < Devise::SessionsController
   before_action :admin_logout_required
 
   prepend_before_action :authenticate_with_totp_two_factor, 
-                        if: -> { action_name == "create" && totp_two_factor_enabled? }
+                        if: -> { action_name == "create" }
   
   protect_from_forgery with: :exception, prepend: true, except: :destroy
 
@@ -37,6 +37,8 @@ class Users::SessionsController < Devise::SessionsController
   def authenticate_with_totp_two_factor
     user = self.resource = find_user
 
+    return unless user&.totp_enabled?
+
     if params.key?(:totp_attempt) && session[:otp_user_id]
       authenticate_user_with_otp_two_factor(user)
     elsif user&.valid_password?(user_params[:password])
@@ -56,7 +58,12 @@ class Users::SessionsController < Devise::SessionsController
 
     session[:otp_user_id] = user.id
     
-    session[:pwned] = user.respond_to?(:password_pwned?) && user.password_pwned?(user_params[:password]) if params[:user] && params[:user][:password]
+    if params[:user] && params[:user][:password]
+      session[:pwned] = (
+        user.respond_to?(:password_pwned?) && 
+        user.password_pwned?(params[:user][:password])
+      ) 
+    end
 
     render "users/sessions/totp"
   end
@@ -97,13 +104,9 @@ class Users::SessionsController < Devise::SessionsController
 
   def find_user
     if session[:otp_user_id]
-      User.find(session[:otp_user_id])
+      User.find_by(id: session[:otp_user_id])
     elsif user_params[:login]
-      User.find_by(login: user_params[:login])
+      User.find_first_by_auth_conditions(login: user_params[:login])
     end
-  end
-
-  def totp_two_factor_enabled?
-    find_user&.totp_enabled?
   end
 end

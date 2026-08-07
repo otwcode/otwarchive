@@ -14,7 +14,7 @@ Feature: Authenticate Users With TOTP 2FA
     Then I should see "Set Up Two-Step Verification"
     When I fill in a valid TOTP two-step verification code for user "user"
       And I press "Enable Two-Step Verification"
-    Then I should see "Successfully enabled two-step verification; please make note of your backup codes."
+    Then I should see "Two-step verification was successfully enabled"
       And I should see "Finish"
     When I follow "Finish"
     Then I should see "Set My Preferences"

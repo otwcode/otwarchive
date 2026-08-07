@@ -80,13 +80,6 @@ class Users::TotpController < ApplicationController
 
   private
 
-  def require_user_owner
-    return if params[:user_id] == current_user.login
-
-    flash[:error] = t("users.totp.access.permission_denied_generic")
-    redirect_to root_path
-  end
-
   def check_totp_enabled
     return if current_user.totp_enabled?
 

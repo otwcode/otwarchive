@@ -185,7 +185,7 @@ class User < ApplicationRecord
 
   serialize :otp_backup_codes, type: Array, coder: YAML, yaml: { permitted_classes: [String] }
   
-  # Generate a TOTP secret it it does not already exist
+  # Generate a TOTP secret if it does not already exist
   def generate_totp_secret_if_missing!
     return unless otp_secret.nil?
 

@@ -26,9 +26,9 @@
           <%= t(".app_setup.key.copy_to_clipboard") %>
         </button>
       </p>
-      <h4 class="heading">Setup on This Device</h4>
+      <h4 class="heading"><%= t(".app_setup.button.heading") %></h4>
       <p class="actions">
-        <a href="<%= current_user.totp_qr_code_uri %>">Import Settings</a>
+        <%= link_to(t(".app_setup.button.label"), current_user.totp_qr_code_uri) %>
       </p>
     </div>
   </div>
