@@ -2861,6 +2861,7 @@ en:
     prompt_restriction_form:
       tag_options:
         gift_exchange_help_title: Prompt restriction tag set gift exchange
+        landmark: Tag Options
         legend: Tag Options
         prompt_meme_help_title: Prompt restriction tag set prompt meme
   prompts:
