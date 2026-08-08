@@ -325,6 +325,12 @@ COMMENT_MODERATION_THRESHOLD: 10
 # whether a comment should be spam checked again when edited
 EDITED_COMMENT_SPAM_CHECK_THRESHOLD: 10
 
+# This is used to determine when submitting comment spam checks to akismet
+# the contents of comments on the same work/admin post they left in the
+# last how many minutes should be included in the API call. It also sets
+# the recheck_reason to edit if it finds any in that timeframe.
+RECENT_COMMENTS_ON_SAME_WORK_TIMEFRAME: 10
+
 # SANITIZER VERSION
 SANITIZER_VERSION: 4
 

@@ -315,6 +315,50 @@ describe Comment do
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
         end
+
+        context "when they comment on the same chapter again in a short timeframe" do
+          let(:chapter) { create(:chapter) }
+          context "when the comment is from a guest" do
+            let!(:comment_sharing_email) { create(:comment, :by_guest, commentable: chapter, email: "sus@example.com", comment_content: "Ipsum", created_at: 15.seconds.ago) }
+            let!(:comment_sharing_ip) { create(:comment, :by_guest, commentable: chapter, ip_address: "1.2.3.4", comment_content: "Dolor", created_at: 15.seconds.ago) }
+            subject do
+              create(:comment,
+                     :by_guest,
+                     commentable: chapter,
+                     email: "sus@example.com",
+                     ip_address: "1.2.3.4",
+                     comment_content: "Sit",
+                     created_at: 0.seconds.ago)
+            end
+
+            it "has comment_content as combined content of both of the comments" do
+              expect(subject.akismet_attributes[:comment_content]).to eq("IpsumDolorSit")
+            end
+
+            it "sets recheck_reason to 'edit'" do
+              expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
+            end
+          end
+
+          context "when the comment is from a new user" do
+            let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+            before do
+              admin_setting.update_attribute(:account_age_threshold_for_comment_spam_check, 10)
+            end
+
+            let(:user) { create(:user, created_at: 2.days.ago) }
+            let!(:comment_sharing_pseud) { create(:comment, commentable: chapter, pseud: user.default_pseud, comment_content: "Lorem", created_at: 15.seconds.ago) }
+            subject { create(:comment, commentable: chapter, pseud: user.default_pseud, comment_content: "Ipsum", created_at: 0.seconds.ago) }
+
+            it "has comment_content as combined content of both of the comments" do
+              expect(subject.akismet_attributes[:comment_content]).to eq("LoremIpsum")
+            end
+
+            it "sets recheck_reason to 'edit'" do
+              expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
+            end
+          end
+        end
       end
 
       context "when the commentable is an admin post" do
@@ -330,6 +374,50 @@ describe Comment do
 
         it "has comment_post_modified_gmt as the admin post's creation time" do
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
+        end
+
+        context "when they comment on the same admin post again in a short timeframe" do
+          let(:admin_post) { create(:admin_post) }
+          context "when the comment is from a guest" do
+            let!(:comment_sharing_email) { create(:comment, :by_guest, commentable: admin_post, created_at: 15.seconds.ago, email: "sus@example.com", comment_content: "Ipsum") }
+            let!(:comment_sharing_ip) { create(:comment, :by_guest, commentable: admin_post, created_at: 15.seconds.ago, ip_address: "1.2.3.4", comment_content: "Dolor") }
+            subject do
+              create(:comment,
+                     :by_guest,
+                     commentable: admin_post,
+                     email: "sus@example.com",
+                     ip_address: "1.2.3.4",
+                     comment_content: "Sit",
+                     created_at: 0.seconds.ago)
+            end
+
+            it "has comment_content as combined content of both of the comments" do
+              expect(subject.akismet_attributes[:comment_content]).to eq("IpsumDolorSit")
+            end
+
+            it "sets recheck_reason to 'edit'" do
+              expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
+            end
+          end
+
+          context "when the comment is from a new user" do
+            let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+            before do
+              admin_setting.update_attribute(:account_age_threshold_for_comment_spam_check, 10)
+            end
+
+            let(:user) { create(:user, created_at: 10.minutes.ago) }
+            let!(:comment_sharing_pseud) { create(:comment, commentable: admin_post, pseud: user.default_pseud, comment_content: "Lorem", created_at: 15.seconds.ago) }
+            subject { create(:comment, commentable: admin_post, pseud: user.default_pseud, comment_content: "Ipsum", created_at: 0.seconds.ago) }
+
+            it "has comment_content as combined content of both of the comments" do
+              expect(subject.akismet_attributes[:comment_content]).to eq("LoremIpsum")
+            end
+
+            it "sets recheck_reason to 'edit'" do
+              expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
+            end
+          end
         end
       end
 
