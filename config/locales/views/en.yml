@@ -1466,6 +1466,25 @@ en:
     privacy_restricted_work:
       description: A registered user is a person with an Archive account. If you check this box your story can only be viewed by a person who is logged in.
       page_heading: Registered Users
+    prompt_restriction_tag_set_gift_exchange:
+      limit_tags: If you want to limit the tags that users can choose from when signing up, you can either use an existing tag set or make one of your own, or a combination. Once you have the tag sets you want to use ready, you can add them to your challenge here.
+      negation: NOT
+      other_tag_types: You do NOT have to specify tags for every kind of tag you have allowed. For instance, you can put in five specific fandoms, and also allow one character tag without putting in tag options. Then the person signing up will have to choose one of the five fandoms, but can just type in a character tag.
+      page_heading: Tag Options
+      request_offers_same_set: The same group of tag sets is used for both requests and offers, since otherwise offers and requests can't match against each other. (People can choose different tags in their requests and offers, but they have to choose from the same set.)
+      use_only_html: 'Note: if you are running a challenge that is specifically for one given fandom or relationship or character, you do %{negation_bold} need to use tag sets -- just set that kind of tag to 0 tags required/allowed above. Tag options should only be used where you want users to have a choice.'
+    prompt_restriction_tag_set_prompt_meme:
+      limit_tags_html: If you want to limit the %{tags_link} that users can choose from when signing up, you can either use an existing %{tag_set_link}, make one of your own, or use a combination of the two. Once you have the tag sets you want to use ready, you can add them to your %{prompt_meme_link}.
+      more_information_html: For more information on character and relationship tag settings, refer to the %{tag_options_link} section of %{tutorial_prompt_meme_link}.
+      other_tag_types: You don't have to specify tags for every kind of tag you have allowed. For instance, if you only add fandom tags to your tag set, participants will be able to choose any canonical character or relationship within those fandoms while signing up.
+      page_heading: Tag Options
+      prompt_meme: Prompt Meme
+      request_offers_same_set: The same group of tag sets is used for both requests and offers, since otherwise offers and requests can't match against each other. People can choose different tags in their requests and offers, but they have to choose from the same set.
+      tag_options: Tag Options
+      tag_set: tag set
+      tags: tags
+      tutorial_prompt_meme: 'Tutorial: Running a Prompt Meme on AO3'
+      use_only: Tag sets should only be used where you want users to have a choice. If you're running a Prompt Meme for a specific relationship or character, set that kind of tag to 0 tags required/allowed instead.
     rte:
       description_html: 'The exact behavior of the Rich Text Editor (%{rte_abbreviation}) depends on your device, browser, and operating system as well as the source you''re pasting from. However, starting with a well-formatted document will help you get the most out of the %{rte_abbreviation_no_title}. Here are some general tips to ensure that as much of your formatting as possible will be retained:'
       enter_once:
@@ -2838,6 +2857,12 @@ en:
       edit_my_pseuds: Manage My Pseuds
       edit_my_works: Edit My Works
       edit_profile: Edit Profile
+  prompt_restrictions:
+    prompt_restriction_form:
+      tag_options:
+        gift_exchange_help_title: Prompt restriction tag set gift exchange
+        legend: Tag Options
+        prompt_meme_help_title: Prompt restriction tag set prompt meme
   prompts:
     prompt_form:
       title_requirements: Up to %{maximum} characters, cannot begin with =, +, -, @ or a whitespace character.

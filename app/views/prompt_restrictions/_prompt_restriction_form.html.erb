@@ -50,8 +50,8 @@ is verbose-->
 
   <% if show_tag_options %>
     <fieldset>
-      <legend><%= ts("Tag Options") %></legend>
-      <h3 class="landmark"><%= ts("Tag Options") %> <%= link_to_help("prompt-restriction-tag-set" + (type == "gift_exchange" ? "" : "-promptmeme")) %> </h3>
+      <legend><%= t(".tag_options.legend") %> <%= link_to_help_modal(type == "gift_exchange" ? help_prompt_restriction_tag_set_gift_exchange_path : help_prompt_restriction_tag_set_prompt_meme_path, t(".tag_options.#{type}_help_title")) %></legend>
+      <h3 class="landmark"><%= ts("Tag Options") %></h3>
       <p class="note">
      <%= link_to(ts("Tag sets"), tag_sets_path) %> <%= ts("show what tags can be used in
         your challenge. You can make your own or use any public tag set. Beware: owners can change the contents of their public tag set without warning.") %>
