@@ -879,6 +879,7 @@ en:
           new_collection: New Collection
           new_subcollection: New Subcollection
           open_challenges: Open Challenges
+          subcollections: Subcollections
         landmark_heading: Navigation
       page_heading:
         challenges_subcollections_in: Challenges/Subcollections in %{collection}
