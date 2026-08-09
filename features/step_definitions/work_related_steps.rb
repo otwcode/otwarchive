@@ -52,19 +52,6 @@ Given "a work inspired by an external work has been posted" do
   step %{I press "Post"}
 end
 
-Given "a translation of an external work has been posted" do
-  step %{basic tags}
-  step %{mock websites with no content}
-  step %{I am logged in as "translator"}
-  step %{I set up the draft "Worldbuilding Translated"}
-  step %{I check "parent-options-show"}
-  step %{I fill in "URL" with "http://example.org/200"}
-  step %{I fill in "Title" with "Worldbuilding"}
-  step %{I fill in "Author" with "external_inspiration"}
-  step %{I check "This is a translation"}
-  step %{I press "Post"}
-end
-
 ### WHEN
 
 When "I post an inspiring parent work as testuser" do

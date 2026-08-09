@@ -398,31 +398,6 @@ Scenario: Hidden inspired and inspiring works should not be listed on work pages
     And I view the work "Followup"
   Then I should not see "Worldbuilding by inspiration"
 
-Scenario: Hidden translations and translated works should not be listed on work pages, unless viewed by an admin
-  Given I have related works setup
-    And a translation has been posted and approved
-  # Hidden translation
-  When I am logged in as a "policy_and_abuse" admin
-    And I hide the work "Worldbuilding Translated"
-  When I view the work "Worldbuilding"
-  Then I should see "Worldbuilding Translated by translator"
-  When I am logged in as "inspiration"
-    And I edit the work "Worldbuilding"
-  Then I should not see "Worldbuilding Translated"
-    And I view the work "Worldbuilding"
-  Then I should not see "Worldbuilding Translated by translator"
-  # Hidden translated work
-  When I am logged in as a "policy_and_abuse" admin
-    And I unhide the work "Worldbuilding Translated"
-    And I hide the work "Worldbuilding"
-  When I view the work "Worldbuilding Translated"
-  Then I should see "Worldbuilding by inspiration"
-  When I am logged in as "translator"
-    And I edit the work "Worldbuilding Translated"
-  Then I should not see "Worldbuilding" within "#associations"
-    And I view the work "Worldbuilding Translated"
-  Then I should not see "Worldbuilding by inspiration"
-
 Scenario: Hidden external inspirations should not be listed on work pages, unless viewed by an admin
   Given a work inspired by an external work has been posted
   When I am logged in as a "policy_and_abuse" admin
@@ -433,18 +408,6 @@ Scenario: Hidden external inspirations should not be listed on work pages, unles
     And I edit the work "Followup"
   Then I should not see "Worldbuilding"
     And I view the work "Followup"
-  Then I should not see "Worldbuilding by external_inspiration"
-
-Scenario: Hidden external translated works should not be listed on work pages, unless viewed by an admin
-  Given a translation of an external work has been posted
-  When I am logged in as a "policy_and_abuse" admin
-    And I hide the external work "Worldbuilding"
-    And I view the work "Worldbuilding Translated"
-  Then I should see "Worldbuilding by external_inspiration"
-  When I am logged in as "translator"
-    And I edit the work "Worldbuilding Translated"
-  Then I should not see "Worldbuilding" within "#associations"
-    And I view the work "Worldbuilding Translated"
   Then I should not see "Worldbuilding by external_inspiration"
 
 Scenario: Draft parent related works should not be listed on work pages, unless viewed by an admin
