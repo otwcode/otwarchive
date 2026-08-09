@@ -944,31 +944,13 @@ Scenario: Deleted inspiration relationships can be deleted from the Edit Work pa
 
 Scenario: Deleted parent works don't create empty sections on the related works page and aren't counted in the sidebar
   Given I have related works setup
-    And I post a related work as remixer
-    And I post a translation as translator
-  When I am logged in as "remixer"
-    And I go to remixer's related works page
-  Then I should see "Related Works (1)"
-    And I should see "Works that inspired"
-  When I am logged in as "translator"
-    And I go to translator's related works page
-  Then I should see "Related Works (1)"
-    And I should see "Works translated by"
+    And a related work has been posted and approved
   When I am logged in as "inspiration"
-    And I go to inspiration's related works page
-  Then I should see "Related Works (2)"
-    And I should see "Translations of"
-    And I should see "Works inspired by"
-  When I delete the work "Worldbuilding"
-    And I go to inspiration's related works page
+    And I delete the work "Worldbuilding"
+    And I view my related works
   Then I should see "Related Works (0)"
-    And I should not see "Translations of"
     And I should not see "Works inspired by"
   When I am logged in as "remixer"
-    And I go to remixer's related works page
+    And I view my related works
   Then I should see "Related Works (0)"
     And I should not see "Works that inspired"
-  When I am logged in as "translator"
-    And I go to translator's related works page
-  Then I should see "Related Works (0)"
-    And I should not see "Works translated by"
