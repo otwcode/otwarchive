@@ -6,8 +6,13 @@ en:
       not_admin_denied: Please log in as admin
       page_access_denied: Sorry, only an authorized admin can access the page you were trying to reach.
     admin_invitations:
+      create:
+        no_email: Please enter an email address.
+        sent: An invitation was sent to %{email_address}
       find:
         user_not_found: No results were found. Try another search.
+      grant_invites_to_users:
+        invites_created: Invitations successfully created.
       invite_from_queue:
         success:
           one: "%{count} person from the invite queue is being invited."
