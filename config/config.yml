@@ -426,6 +426,7 @@ SUPPORTED_CSS_PROPERTIES:
 - alignment-adjust
 - alignment-baseline
 - appearance
+- aspect-ratio
 - azimuth
 - baseline-shift
 - behavior
