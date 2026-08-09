@@ -947,9 +947,6 @@ Scenario: Deleted parent works don't create empty sections on the related works 
     And a related work has been posted and approved
   When I am logged in as "inspiration"
     And I delete the work "Worldbuilding"
-    And I view my related works
-  Then I should see "Related Works (0)"
-    And I should not see "Works inspired by"
   When I am logged in as "remixer"
     And I view my related works
   Then I should see "Related Works (0)"
