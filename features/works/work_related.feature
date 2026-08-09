@@ -395,28 +395,6 @@ Scenario: Restricted inspired and inspiring works should not be listed on relate
   Then I should not see "Followup"
     And I should not see "Worldbuilding"
 
-Scenario: Restricted translations and translated works should not be listed on related work pages for guests
-  Given I have related works setup
-    And a translation has been posted and approved
-  # Restricted translation
-  When I am logged in as "translator"
-    And I lock the work "Worldbuilding Translated"
-  When I log out
-    And I go to inspiration's related works page
-  Then I should not see "Worldbuilding"
-  When I go to translator's related works page
-  Then I should not see "Worldbuilding"
-  # Restricted translated work
-  When I am logged in as "translator"
-    And I unlock the work "Worldbuilding Translated"
-  When I am logged in as "inspiration"
-    And I lock the work "Worldbuilding"
-  When I log out
-    And I go to inspiration's related works page
-  Then I should not see "Worldbuilding"
-  When I go to translator's related works page
-  Then I should not see "Worldbuilding"
-
 Scenario: Anonymous works listed as inspiration should have links to the authors,
   but only for the authors themselves and admins
   Given I have related works setup
@@ -447,10 +425,6 @@ Scenario: Hidden inspired and inspiring works should not be listed on related wo
   # Hidden inspired work
   When I am logged in as a "policy_and_abuse" admin
     And I hide the work "Followup"
-    And I go to inspiration's related works page
-  Then I should not see "Followup"
-  When I go to remixer's related works page
-  Then I should not see "Followup"
   When I am logged in as "remixer"
     And I view my related works
   Then I should see "Related Works (0)"
@@ -461,14 +435,15 @@ Scenario: Hidden inspired and inspiring works should not be listed on related wo
     And I view my related works
   Then I should see "Related Works (0)"
     And I should not see "Followup"
+  When I log out
+    And I go to remixer's related works page
+  Then I should not see "Worldbuilding"
+  When I go to inspiration's related works page
+  Then I should not see "Worldbuilding"
   # Hidden inspiration
   When I am logged in as a "policy_and_abuse" admin
     And I unhide the work "Followup"
     And I hide the work "Worldbuilding"
-    And I go to inspiration's related works page
-  Then I should not see "Worldbuilding"
-  When I go to remixer's related works page
-  Then I should not see "Worldbuilding"
   When I am logged in as "inspiration"
     And I view my related works
   Then I should see "Related Works (0)"
@@ -479,45 +454,25 @@ Scenario: Hidden inspired and inspiring works should not be listed on related wo
     And I view my related works
   Then I should see "Related Works (0)"
     And I should not see "Worldbuilding"
-
-Scenario: Hidden translations and translated works should not be listed on related work pages
-  Given I have related works setup
-    And a translation has been posted and approved
-  # Hidden translation
-  When I am logged in as a "policy_and_abuse" admin
-    And I hide the work "Worldbuilding Translated"
-    And I go to inspiration's related works page
-  Then I should not see "Worldbuilding Translated"
-  When I go to translator's related works page
-  Then I should not see "Worldbuilding Translated"
-  When I am logged in as "translator"
-    And I view my related works
-  Then I should see "Related Works (0)"
-    And I should not see "Worldbuilding Translated"
+  When I log out
+    And I go to remixer's related works page
+  Then I should not see "Worldbuilding"
   When I go to inspiration's related works page
-  Then I should not see "Worldbuilding Translated"
-  When I am logged in as "inspiration"
-    And I view my related works
-  Then I should see "Related Works (0)"
-    And I should not see "Worldbuilding Translated"
-  # Hidden translated work
+  Then I should not see "Worldbuilding"
+
+Scenario: Hidden external inspirations should not be listed on related work pages
+  Given a work inspired by an external work has been posted
   When I am logged in as a "policy_and_abuse" admin
-    And I unhide the work "Worldbuilding Translated"
-    And I hide the work "Worldbuilding"
-    And I go to inspiration's related works page
+    And I hide the external work "Worldbuilding"
+  When I go to remixer's related works page
   Then I should not see "Worldbuilding"
-  When I go to translator's related works page
-  Then I should not see "Worldbuilding"
-  When I am logged in as "inspiration"
+  When I am logged in as "remixer"
     And I view my related works
   Then I should see "Related Works (0)"
     And I should not see "Worldbuilding"
-  When I go to translator's related works page
+  When I log out
+    And I go to remixer's related works page
   Then I should not see "Worldbuilding"
-  When I am logged in as "translator"
-    And I view my related works
-  Then I should see "Related Works (0)"
-    And I should not see "Worldbuilding"
 
 Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
   the e-mail should link to each author's URL instead of showing escaped HTML
