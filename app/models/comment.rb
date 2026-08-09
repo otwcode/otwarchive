@@ -123,7 +123,7 @@ class Comment < ApplicationRecord
       comment_author = name
     else
       user_role = "user"
-      comment_author = user.login
+      comment_author = user.try(:login)
     end
 
     attributes = {
