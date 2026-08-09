@@ -25,10 +25,6 @@ FactoryBot.define do
       authors { [] }
     end
 
-    factory :custom_work_skin do
-      work_skin_id { 1 }
-    end
-
     factory :draft do
       posted { false }
     end
