@@ -30,12 +30,16 @@
 
     <% %w(cast fandom character relationship freeform).each do |tag_type| %>
       <% if @nominations[tag_type] && @nominations[tag_type].count > 0 %>
-        <fieldset class="<%= tag_type %> listbox group">
-          <% heading = tag_type == "cast" ? ts("Already Approved Fandoms") : ts("#{tag_type_label_name(tag_type).pluralize} (%{count} left to review)", :count => @tag_set.send("#{tag_type}_nominations").unreviewed.count) %>
+        <fieldset class="<%= tag_type %> listbox group" id="<%= tag_type %>_nominations">
+          <% heading = nomination_review_heading(tag_type, @paginations[tag_type]) %>
           <legend><%= heading %></legend>
           <h3 class="heading"><%= heading %></h3>
           <%= check_all_none("Reject All", "Reject None", "reject") %>
           <%= check_all_none("Approve All", "Approve None", "approve") %>
+          <% if @paginations&.dig(tag_type) %>
+            <%== pagy_nav(@paginations[tag_type],
+                   fragment: "##{tag_type}_nominations") %>
+          <% end %>
           <ol class="tags index group">
             <% if tag_type == "fandom" %>
               <%= render "review_fandoms", :fandoms => @nominations[:fandom] %>
@@ -47,6 +51,10 @@
               <% end %>
             <% end %>
           </ol>
+          <% if @paginations&.dig(tag_type) %>
+            <%== pagy_nav(@paginations[tag_type],
+                   fragment: "##{tag_type}_nominations") %>
+          <% end %>
         </fieldset>
       <% end %>
     <% end %>

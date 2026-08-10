@@ -75,23 +75,6 @@ class Admin::SkinsController < Admin::BaseController
 
     flash[:notice] << ts("The following skins were updated: %{titles}", titles: modified_skin_titles.join(', '))
 
-    # set default
-    if params[:set_default].present? && params[:set_default] != AdminSetting.default_skin&.title
-      authorize Skin, :set_default?
-
-      skin = Skin.find_by(title: params[:set_default], official: true)
-      @admin_setting = AdminSetting.first
-      if skin && @admin_setting
-        @admin_setting.default_skin = skin
-        @admin_setting.last_updated_by = params[:last_updated_by]
-        if @admin_setting.save
-          flash[:notice] << ts("Default skin changed to %{title}", title: skin.title)
-        else
-          flash[:error] = ts("We couldn't save the default skin change.")
-        end
-      end
-    end
-
     redirect_to admin_skins_path
   end
 

@@ -36,7 +36,10 @@
             <%= form.label :title, ts("Title:") %>
           <% end %>
         </dt>
-        <dd><%= form.text_field :title %></dd>
+        <dd>
+          <%= form.text_field :title, "aria-describedby": "title-field-description" %>
+          <p class="footnote" id="title-field-description"><%= t(".title_requirements", maximum: ArchiveConfig.TITLE_MAX) %></p>
+        </dd>
       <% end %>    
     
       <!-- tags section -->

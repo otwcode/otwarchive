@@ -1,7 +1,7 @@
 class SeriesController < ApplicationController
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_series, only: [:show, :edit, :remove_user_creatorship, :update, :manage, :destroy, :confirm_delete]
-  before_action :check_ownership, only: [:edit, :update, :manage, :destroy, :confirm_delete]
+  before_action :load_series, only: [:show, :edit, :remove_user_creatorship, :update, :manage, :update_positions, :confirm_delete, :destroy]
+  before_action :check_ownership, except: [:index, :show, :new, :create]
   before_action :check_visibility, only: [:show]
 
   def load_series
@@ -116,7 +116,6 @@ class SeriesController < ApplicationController
 
   def update_positions
     if params[:serial_works]
-      @series = Series.find(params[:id])
       @series.reorder_list(params[:serial_works])
       flash[:notice] = ts("Series order has been successfully updated.")
     elsif params[:serial]

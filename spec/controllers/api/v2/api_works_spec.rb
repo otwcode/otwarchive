@@ -22,7 +22,7 @@ describe "API v2 WorksController - Create works", type: :request do
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
-            chapter_urls: ["http://foo"] }
+            chapter_urls: ["http://foo.com"] }
         ]
       }
 
@@ -37,7 +37,7 @@ describe "API v2 WorksController - Create works", type: :request do
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
-            chapter_urls: ["http://bar"] }
+            chapter_urls: ["http://bar.com"] }
         ]
       }
 
@@ -52,10 +52,10 @@ describe "API v2 WorksController - Create works", type: :request do
         works: [
           { external_author_name: "bar",
             external_author_email: "bar@foo.com",
-            chapter_urls: ["http://foo"] },
+            chapter_urls: ["http://foo.com"] },
           { external_author_name: "bar2",
             external_author_email: "bar2@foo.com",
-            chapter_urls: ["http://foo"] }
+            chapter_urls: ["http://foo.com"] }
         ]
       }
 
@@ -71,7 +71,7 @@ describe "API v2 WorksController - Create works", type: :request do
           { id: "123",
             external_author_name: "bar",
             external_author_email: "bar@foo.com",
-            chapter_urls: ["http://foo"] }
+            chapter_urls: ["http://foo.com"] }
         ]
       }
 
@@ -88,7 +88,7 @@ describe "API v2 WorksController - Create works", type: :request do
           { id: "123",
             external_author_name: "bar",
             external_author_email: "bar@foo.com",
-            chapter_urls: ["http://foo"] }
+            chapter_urls: ["http://foo.com"] }
         ]
       }
 
@@ -106,7 +106,7 @@ describe "API v2 WorksController - Create works", type: :request do
           { id: "123",
             external_author_name: "bar",
             external_author_email: "send_invite@ao3.org",
-            chapter_urls: ["http://foo"] }
+            chapter_urls: ["http://foo.com"] }
         ]
       }
 
@@ -167,7 +167,7 @@ describe "API v2 WorksController - Create works", type: :request do
               external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
               notes: api_fields[:notes],
-              chapter_urls: ["http://foo"]
+              chapter_urls: ["http://foo.com"]
             }
           ]
         }
@@ -233,7 +233,7 @@ describe "API v2 WorksController - Create works", type: :request do
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
-              chapter_urls: ["http://foo"] }
+              chapter_urls: ["http://foo.com"] }
           ]
         }
 
@@ -298,7 +298,7 @@ describe "API v2 WorksController - Create works", type: :request do
           works: [
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
-              chapter_urls: ["http://no-metadata"] }
+              chapter_urls: ["http://no-metadata.com"] }
           ]
         }
 
@@ -379,7 +379,7 @@ describe "API v2 WorksController - Create works", type: :request do
               external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
               notes: api_fields[:notes],
-              chapter_urls: ["http://foo"] }
+              chapter_urls: ["http://foo.com"] }
           ]
         }
 
@@ -446,7 +446,7 @@ describe "API v2 WorksController - Create works", type: :request do
             { external_author_name: api_fields[:external_author_name],
               external_author_email: api_fields[:external_author_email],
               detect_tags: false,
-              chapter_urls: ["http://foo"] }
+              chapter_urls: ["http://foo.com"] }
           ]
         }
 
@@ -514,8 +514,8 @@ describe "API v2 WorksController - Unit Tests", type: :request do
   end
 
   it "work_url_from_external returns the work url when a work is found" do
-    work1 = create(:work, imported_from_url: "http://foo")
-    work_url_response = @under_test.instance_eval { find_work_by_import_url("http://foo") }
+    work1 = create(:work, imported_from_url: "http://foo.com")
+    work_url_response = @under_test.instance_eval { find_work_by_import_url("http://foo.com") }
     expect(work_url_response[:works].first).to eq work1
   end
 

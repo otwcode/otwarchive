@@ -145,20 +145,31 @@ Feature: Nominating and reviewing nominations for a tag set
     And I press "Yes, Clear Tag Set Nominations"
   Then I should see "All nominations for this Tag Set have been cleared"
 
-  Scenario: Owner of a tag set with over 30 nominations sees a message that they can't all be displayed on one page
+  Scenario: Fandom nominations are paginated on the review page
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 6 fandom noms and 6 character noms
+    And there are 2 nominations per page
   When there are 36 unreviewed nominations
   Given I am logged in as "tagsetter"
     And I review nominations for "Nominated Tags"
-  Then I should see "There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some"
+  Then I should see "Next" within "fieldset.fandom .pagination"
+  When I follow "Next" within "fieldset.fandom .pagination"
+  Then I should see "Fandoms" within "fieldset.fandom"
+
+  Scenario: Freeform nominations are paginated on the review page
+  Given I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 0 character noms
+    And the tag set "Nominated Tags" has 3 unreviewed freeform nominations
+    And there are 2 nominations per page
+  When I review nominations for "Nominated Tags"
+  Then I should see "Next" within "fieldset.freeform .pagination"
 
   Scenario: If a set has received nominations, a moderator should be able to review nominated tags
   Given I have the nominated tag set "Nominated Tags"
     And I am logged in as "tagsetter"
   When I go to the "Nominated Tags" tag set page
     And I follow "Review Nominations"
-  Then I should see "left to review"
+  Then I should see "Fandoms (3 left to review)"
 
   Scenario: If a moderator approves a nominated tag it should no longer appear on the review page and should appear on the tag set page
   Given I am logged in as "tagsetter"
@@ -196,7 +207,7 @@ Feature: Nominating and reviewing nominations for a tag set
     And I check "fandom_approve_Bar__LBRACKETFoo_RBRACKET"
     And I check "character_approve_Bat__LBRACKETBar_RBRACKET"
     And I submit
-  Then I should see "Successfully added to set: Bar [Foo], Foo [Bar]"
+  Then I should see "Successfully added to set: Foo [Bar], Bar [Foo]"
     And I should see "Successfully added to set: Bat [Bar]"
     And I should see "Successfully rejected: Yar [Bar]"
   When I go to the "Nominated Tags" tag set page
