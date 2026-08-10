@@ -79,6 +79,8 @@ module OtwSanitize
       return unless media_node?
       return if banned_source?
 
+      node.remove_attribute("src") if source_url.present? && !valid_source_url?
+
       config = Sanitize::Config.merge(Sanitize::Config::ARCHIVE, ALLOWLIST_CONFIG)
       Sanitize.clean_node!(node, config)
       tidy_boolean_attributes(node)
@@ -97,13 +99,20 @@ module OtwSanitize
       node["src"] || ""
     end
 
+    def valid_source_url?
+      source_host.present?
+    end
+
     def source_host
       url = source_url
       return nil if url.blank?
 
       # Just in case we're missing a protocol
       url = "https://" + url unless url =~ /http/
-      Addressable::URI.parse(url).normalize.host
+      host = Addressable::URI.parse(url).normalize.host
+      return nil if host.blank? || host =~ /\s/
+      
+      host
     rescue Addressable::URI::InvalidURIError
       nil
     end
