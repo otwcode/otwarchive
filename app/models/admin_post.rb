@@ -9,6 +9,7 @@ class AdminPost < ApplicationRecord
   }, default: :disable_anon, suffix: :comments, validate: { message: :invalid_permissions }
 
   belongs_to :locale_language, foreign_key: :language_id, inverse_of: :admin_posts
+  alias language locale_language
   belongs_to :translated_post, class_name: "AdminPost"
   has_many :translations, class_name: "AdminPost", foreign_key: "translated_post_id", dependent: :destroy
   has_many :admin_post_taggings
