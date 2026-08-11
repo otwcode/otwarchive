@@ -1,0 +1,38 @@
+<h4><%= t(".page_heading") %></h4>
+
+<dl>
+  <dt>
+    <%= t(".asterisk.title") %>
+  </dt>
+  <dd>
+    <%= t(".asterisk.description_html", book_query_kbd: tag.kbd(t(".asterisk.book_query_kbd")), book_samp: tag.samp(t(".asterisk.book_samp")), books_samp: tag.samp(t(".asterisk.books_samp")), booking_samp: tag.samp(t(".asterisk.booking_samp"))) %>
+  </dd>
+
+  <dt>
+    <%= t(".and.title") %>
+  </dt>
+  <dd>
+    <%= t(".and.description_html", harry_potter_kbd: tag.kbd(t(".and.harry_potter_kbd")), harry_potter_samp: tag.samp(t(".and.harry_potter_samp")), harry_james_potter_samp: tag.samp(t(".and.harry_james_potter_samp")), harry_samp: tag.samp(t(".and.harry_samp"))) %>
+  </dd>
+
+  <dt>
+    <%= t(".or.title") %>
+  </dt>
+  <dd>
+    <%= t(".or.description_html",  harry_potter_kbd: tag.kbd(t(".or.harry_potter_kbd")), harry_samp: tag.samp(t(".or.harry_samp")), harry_potter_samp: tag.samp(t(".or.harry_potter_samp")), potter_samp: tag.samp(t(".or.potter_samp"))) %>
+  </dd>
+
+  <dt>
+    <%= t(".double_quote.title") %>
+  </dt>
+  <dd>
+    <%= t(".double_quote.description_html", harry_lockhart_kbd: tag.kbd(t(".double_quote.harry_lockhart_kbd")), harry_lockhart_samp: tag.samp(t(".double_quote.harry_lockhart_samp")), harry_potter_gilderoy_lockhart_samp: tag.samp(t(".double_quote.harry_potter_gilderoy_lockhart_samp"))) %>
+  </dd>
+
+  <dt>
+    <%= t(".not.title") %>
+  </dt>
+  <dd>
+    <%= t(".not.description_html", harry_not_lockhart_kbd: tag.kbd(t(".not.harry_not_lockhart_kbd")), harry_potter_samp: tag.samp(t(".not.harry_potter_samp")), harry_lockhart_samp: tag.samp(t(".not.harry_lockhart_samp")), gilderoy_lockhart_harry_potter_samp: tag.samp(t(".not.gilderoy_lockhart_harry_potter_samp"))) %>
+  </dd>
+</dl>

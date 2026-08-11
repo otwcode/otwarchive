@@ -1756,6 +1756,42 @@ en:
       page_heading: Tag Search Results
       refine: If there are too many tags, try refining your search, rather than paging through the results.
       sorting: Very new tags will be at the top of the list. Otherwise the list is sorted alphabetically by type and then name.
+    tags_search_text:
+      and:
+        description_html: "%{harry_potter_kbd} will find %{harry_potter_samp} and %{harry_james_potter_samp} but not %{harry_samp}."
+        harry_james_potter_samp: Harry James Potter
+        harry_potter_kbd: Harry Potter
+        harry_potter_samp: Harry Potter
+        harry_samp: Harry
+        title: 'space: a space acts like AND'
+      asterisk:
+        book_query_kbd: book*
+        book_samp: book
+        booking_samp: booking
+        books_samp: books
+        description_html: "%{book_query_kbd} will find %{book_samp} and %{books_samp} and %{booking_samp}."
+        title: '*: any characters'
+      double_quote:
+        description_html: '%{harry_lockhart_kbd} will find %{harry_lockhart_samp} but not %{harry_potter_gilderoy_lockhart_samp}.'
+        harry_lockhart_kbd: '"Harry Lockhart"'
+        harry_lockhart_samp: '"Harry Lockhart"'
+        harry_potter_gilderoy_lockhart_samp: Harry Potter/Gilderoy Lockhart
+        title: '": words in exact sequence'
+      not:
+        description_html: '%{harry_not_lockhart_kbd} will find %{harry_potter_samp} but not %{harry_lockhart_samp} or %{gilderoy_lockhart_harry_potter_samp}.'
+        gilderoy_lockhart_harry_potter_samp: Gilderoy Lockhart/Harry Potter
+        harry_lockhart_samp: Harry Lockhart
+        harry_not_lockhart_kbd: 'Harry NOT Lockhart'
+        harry_potter_samp: Harry Potter
+        title: 'NOT: NOT'
+      or:
+        description_html: '%{harry_potter_kbd} will find %{harry_samp}, %{harry_potter_samp}, and %{potter_samp}.'
+        harry_potter_kbd: 'Harry || Potter'
+        harry_potter_samp: Harry Potter
+        harry_samp: Harry
+        potter_samp: Potter
+        title: '||: OR (not exclusive)'
+      page_heading: Tag Search Text
     tags_warnings:
       choose_not_to_use:
         description: Use this if you don't want to warn for anything. You may also choose this option if you don't know what you should warn for; if you don't like warning for certain topics or warnings in general; if you want to avoid some spoilers, but not others; etc.
@@ -3112,6 +3148,7 @@ en:
         synonymous: Synonymous
         unwrangleable: Unwrangleable
       tag_name: Tag name
+      tags_search_text_help_title: Tag search text help
       type: Type
       wrangling_status: Wrangling status
     show:

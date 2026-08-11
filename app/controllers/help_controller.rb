@@ -25,6 +25,7 @@ class HelpController < ApplicationController
     tags_ratings
     tags_relationships
     tags_search_results
+    tags_search_text
     tags_warnings
     works_assignment
     works_backdating
