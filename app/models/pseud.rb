@@ -101,7 +101,7 @@ class Pseud < ApplicationRecord
   end
 
   def to_param
-    name
+    name_in_database
   end
 
   scope :public_work_count_for, -> (pseud_ids) {

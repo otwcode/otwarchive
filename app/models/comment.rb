@@ -24,7 +24,7 @@ class Comment < ApplicationRecord
 
   delegate :user, to: :pseud, allow_nil: true
 
-  attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4
+  attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4, :request_host
 
   # Whether the writer of the comment this is replying to allows guest replies
   validate :guest_can_reply, if: :reply_comment?, unless: :pseud_id, on: :create
@@ -123,7 +123,7 @@ class Comment < ApplicationRecord
       comment_author = name
     else
       user_role = "user"
-      comment_author = user.login
+      comment_author = user.try(:login)
     end
 
     attributes = {
@@ -137,6 +137,13 @@ class Comment < ApplicationRecord
       comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
       comment_post_modified_gmt: comment_post_modified_gmt
     }
+
+    parent_object = ultimate_parent
+    blog_lang = parent_object.respond_to?(:language) ? parent_object.language&.short : nil
+    attributes[:blog_lang] = blog_lang if blog_lang && ArchiveConfig.AKISMET_VALID_BLOG_LANGS.include?(blog_lang)
+
+    permalink = parent_permalink
+    attributes[:permalink] = permalink if permalink
 
     attributes[:cloudflare_bot_score] = cloudflare_bot_score if cloudflare_bot_score
     attributes[:cloudflare_ja3_hash] = cloudflare_ja3_hash if cloudflare_ja3_hash
@@ -510,6 +517,8 @@ class Comment < ApplicationRecord
   end
 
   def submit_spam
+    return unless approved && !is_deleted
+
     AkismetClient.submit_spam(akismet_attributes)
   end
 
@@ -574,4 +583,18 @@ class Comment < ApplicationRecord
   end
 
   include Responder
+
+  private
+
+  def parent_permalink
+    host = request_host || ArchiveConfig.APP_HOST
+    base_url = "https://#{host}"
+    original = original_ultimate_parent
+    case original
+    when Chapter
+      "#{base_url}/works/#{original.work_id}/chapters/#{original.id}"
+    when AdminPost
+      "#{base_url}/admin_posts/#{original.id}"
+    end
+  end
 end

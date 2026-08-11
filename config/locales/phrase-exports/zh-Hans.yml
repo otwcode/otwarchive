@@ -1,5 +1,5 @@
 ---
-zh-CN:
+zh-Hans:
   activerecord:
     attributes:
       archive_warning:
