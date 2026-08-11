@@ -1770,27 +1770,27 @@ en:
         booking_samp: booking
         books_samp: books
         description_html: "%{book_query_kbd} will find %{book_samp} and %{books_samp} and %{booking_samp}."
-        title: '*: any characters'
+        title: "*: any characters"
       double_quote:
-        description_html: '%{harry_lockhart_kbd} will find %{harry_lockhart_samp} but not %{harry_potter_gilderoy_lockhart_samp}.'
+        description_html: "%{harry_lockhart_kbd} will find %{harry_lockhart_samp} but not %{harry_potter_gilderoy_lockhart_samp}."
         harry_lockhart_kbd: '"Harry Lockhart"'
         harry_lockhart_samp: '"Harry Lockhart"'
         harry_potter_gilderoy_lockhart_samp: Harry Potter/Gilderoy Lockhart
-        title: '": words in exact sequence'
+        title: "\": words in exact sequence"
       not:
-        description_html: '%{harry_not_lockhart_kbd} will find %{harry_potter_samp} but not %{harry_lockhart_samp} or %{gilderoy_lockhart_harry_potter_samp}.'
+        description_html: "%{harry_not_lockhart_kbd} will find %{harry_potter_samp} but not %{harry_lockhart_samp} or %{gilderoy_lockhart_harry_potter_samp}."
         gilderoy_lockhart_harry_potter_samp: Gilderoy Lockhart/Harry Potter
         harry_lockhart_samp: Harry Lockhart
-        harry_not_lockhart_kbd: 'Harry NOT Lockhart'
+        harry_not_lockhart_kbd: Harry NOT Lockhart
         harry_potter_samp: Harry Potter
         title: 'NOT: NOT'
       or:
-        description_html: '%{harry_potter_kbd} will find %{harry_samp}, %{harry_potter_samp}, and %{potter_samp}.'
-        harry_potter_kbd: 'Harry || Potter'
+        description_html: "%{harry_potter_kbd} will find %{harry_samp}, %{harry_potter_samp}, and %{potter_samp}."
+        harry_potter_kbd: Harry || Potter
         harry_potter_samp: Harry Potter
         harry_samp: Harry
         potter_samp: Potter
-        title: '||: OR (not exclusive)'
+        title: "||: OR (not exclusive)"
       page_heading: Tag Search Text
     tags_warnings:
       choose_not_to_use:
