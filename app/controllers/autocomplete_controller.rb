@@ -110,7 +110,8 @@ class AutocompleteController < ApplicationController
         body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: search_list } } }
       )
       render_output((match + search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] }).uniq)
-    rescue Elastic::Transport::Transport::Errors::BadRequest
+    rescue Elastic::Transport::Transport::Errors::BadRequest => e
+      Sentry.capture_exception(e) if defined?(Sentry)
       render_output(match)
     end
   end
