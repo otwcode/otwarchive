@@ -26,6 +26,13 @@ Given /^I have single-prompt prompt meme fully set up$/ do
   step "I fill in single-prompt challenge options"
 end
 
+Given /^I have custom-labels prompt meme fully set up$/ do
+  step %{I am logged in as "mod1"}
+  step "I have standard challenge tags setup"
+  step "I set up Battle 12 promptmeme collection"
+  step "I fill in custom-labels challenge options"
+end
+
 Given /^everyone has signed up for Battle 12$/ do
   # no anon
   step %{I am logged in as "myname1"}
@@ -168,6 +175,15 @@ When /^I fill in single-prompt challenge options$/ do
   step %{I fill in "prompt_meme_requests_num_required" with "1"}
     step %{I check "Sign-up open?"}
     check("prompt_meme_request_restriction_attributes_title_allowed")
+    fill_in("Sign-up opens:", with: Date.yesterday)
+    fill_in("Sign-up closes:", with: Date.tomorrow)
+    step %{I submit}
+end
+
+When /^I fill in custom-labels challenge options$/ do
+  step %{I check "Sign-up open?"}
+    fill_in("prompt_meme_request_url_label", with: "Custom Request URL Label")
+    fill_in("prompt_meme_request_description_label", with: "Custom Request Description Label")
     fill_in("Sign-up opens:", with: Date.yesterday)
     fill_in("Sign-up closes:", with: Date.tomorrow)
     step %{I submit}

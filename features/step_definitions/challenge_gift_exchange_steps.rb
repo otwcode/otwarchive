@@ -41,7 +41,7 @@ Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I have created the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
-Given /^I have created the standard-labels gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
+Given /^I have created the custom-labels gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   step %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   step "I fill in gift exchange challenge options"
   fill_in("gift_exchange_request_url_label", with: "Custom Request URL Label")
@@ -52,8 +52,8 @@ Given /^I have created the standard-labels gift exchange "([^\"]*)" with name "(
   step %{I should see "Challenge was successfully created"}
 end
 
-Given /^I have created the standard-labels gift exchange "([^\"]*)"$/ do |challengename|
-  step %{I have created the standard-labels gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
+Given /^I have created the custom-labels gift exchange "([^\"]*)"$/ do |challengename|
+  step %{I have created the custom-labels gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
 Given /^I have created the tagless gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|

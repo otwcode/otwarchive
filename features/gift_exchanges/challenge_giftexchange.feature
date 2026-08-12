@@ -367,7 +367,7 @@ Feature: Gift Exchange Challenge
 
   Scenario: Assignments can be sent, with custom labels too
     Given I am logged in as "mod1"
-      And I have created the standard-labels gift exchange "Awesome Gift Exchange"
+      And I have created the custom-labels gift exchange "Awesome Gift Exchange"
       And I open signups for "Awesome Gift Exchange"
       And everyone has signed up for the gift exchange "Awesome Gift Exchange"
       And I have generated matches for "Awesome Gift Exchange"
