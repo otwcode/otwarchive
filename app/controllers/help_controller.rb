@@ -3,6 +3,7 @@ class HelpController < ApplicationController
     collectibles_add_to_collection
     first_login
     html
+    people_search_all_fields
     preferences_collection
     preferences_comment
     preferences_display
