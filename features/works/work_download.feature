@@ -450,6 +450,20 @@ Feature: Download a work
       And I follow "HTML"
     Then I should not see "Worldbuilding by inspiration"
 
+  Scenario: Hidden translations and translated works should be hidden in downloads
+    Given I have related works setup
+      And a translation has been posted and approved
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the work "Worldbuilding Translated"
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should not see "Worldbuilding Translated by translator"
+    When I unhide the work "Worldbuilding Translated"
+      And I hide the work "Worldbuilding"
+      And I view the work "Worldbuilding Translated"
+      And I follow "HTML"
+    Then I should not see "Worldbuilding by inspiration"
+
   Scenario: Hidden external inspirations should be hidden in downloads
     Given a work inspired by an external work has been posted
     When I am logged in as a "policy_and_abuse" admin
