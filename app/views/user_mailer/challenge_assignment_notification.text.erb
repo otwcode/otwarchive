@@ -18,8 +18,8 @@
 <% categories = prompt.any_category ? t(".any") : (tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil) %>
 <% atags = prompt.any_freeform ? t(".any") : tag_list(tag_groups["Freeform"]) %>
 <% otags = prompt.optional_tag_set ? tag_list(prompt.optional_tag_set.tags) : nil %>
-<% url_label = prompt.request_url_label.blank? ? t(".prompt_url") : prompt.request_url_label %>
-<% desc_label = prompt.request_desciption_label.blank? ? t(".description") : prompt.request_description_label %>
+<% url_label = @collection.challenge.send("request_url_label") %>
+<% desc_label = @collection.challenge.send("request_description_label") %>
 <%= text_divider %>
 
 <%= index + 1 %>. <%= prompt.title %>
@@ -49,10 +49,10 @@
 <%= metadata_label(t(".optional_tags")) %><%= otags %>
 <% end %>
 <% if prompt.url && !prompt.url.blank? %>
-<%= metadata_label(url_label) %><%= prompt.url %>
+<%= metadata_label(url_label.presence || t(".prompt_url")) %><%= prompt.url %>
 <% end %>
 <% if prompt.description && !prompt.description.blank? %>
-<%= metadata_label(desc_label) %>
+<%= metadata_label(desc_label.presence || t(".description")) %>
     <%= to_plain_text(prompt.description) %>
 <% end %>
 
