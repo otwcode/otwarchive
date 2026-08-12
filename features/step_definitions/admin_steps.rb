@@ -54,15 +54,15 @@ Given "admin {string} has TOTP 2FA enabled" do |login|
   admin.enable_totp!
 end
 
-Given /^basic languages$/ do
+Given "basic languages" do
   Language.default
-  german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
+  german = Language.find_or_create_by(short: "DE", name: "Deutsch", sortable_name: "Deutsch", support_available: true, abuse_support_available: true)
   Locale.create(iso: "de", name: "Deutsch", language: german)
 end
 
-Given /^Persian language$/ do
+Given "Persian language" do
   Language.default
-  persian = Language.find_or_create_by(short: "fa", name: "Persian", support_available: true, abuse_support_available: true)
+  persian = Language.find_or_create_by(short: "fa", name: "Persian", sortable_name: "Farsi", support_available: true, abuse_support_available: true)
   Locale.create(iso: "fa", name: "Persian", language: persian)
 end
 
