@@ -10,9 +10,15 @@ describe AutocompleteController do
           .and_raise(Elastic::Transport::Transport::Errors::BadRequest)
       end
 
-      it "returns an empty result" do
+      it "returns an empty result when there is no exact match" do
         get :noncanonical_tag, params: { term: "test", type: "freeform", format: :json }
         expect(JSON.parse(response.body)).to eq([])
+      end
+
+      it "falls back to the exact database match" do
+        create(:freeform, name: "test", canonical: false)
+        get :noncanonical_tag, params: { term: "test", type: "freeform", format: :json }
+        expect(JSON.parse(response.body)).to eq([{ "id" => "test", "name" => "test" }])
       end
 
       it "reports the exception to Sentry" do
