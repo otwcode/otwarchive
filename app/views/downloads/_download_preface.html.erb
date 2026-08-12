@@ -72,8 +72,8 @@
     <%# i18n-tasks-use t("downloads.download_preface.translation_of.restricted_html") %>
     <%# i18n-tasks-use t("downloads.download_preface.translation_of.revealed_html") %>
     <%# i18n-tasks-use t("downloads.download_preface.translation_of.unrevealed") %>
-    <% translations = @work.related_works.visible.translations %>
-    <% related_works = @work.parent_work_relationships.visible %>
+    <% translations = @work.related_works.visible(nil).translations %>
+    <% related_works = @work.parent_work_relationships.visible(nil) %>
     <% if translations.any? || related_works.any? %>
       <ul>
         <% translations.each do |related_work| %>

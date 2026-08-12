@@ -388,7 +388,7 @@ Feature: Download a work
     And a related work has been posted and approved
     And I am logged in as "remixer"
     And I lock the work "Followup"
-  When I log out
+  When I am logged out
     And I view the work "Worldbuilding"
     And I follow "HTML"
   Then I should see "[Restricted Work] by remixer"
@@ -396,7 +396,7 @@ Feature: Download a work
     And I lock the work "Worldbuilding"
     And I am logged in as "remixer"
     And I unlock the work "Followup"
-    And I log out
+    And I am logged out
     And I view the work "Followup"
     And I follow "HTML"
   Then I should see "Inspired by [Restricted Work] by inspiration"
@@ -431,7 +431,7 @@ Feature: Download a work
     And a translation has been posted and approved
     And I am logged in as "translator"
     And I lock the work "Worldbuilding Translated"
-  When I log out
+  When I am logged out
     And I view the work "Worldbuilding"
     And I follow "HTML"
   Then I should see "[Restricted Work] by translator"
@@ -441,14 +441,11 @@ Feature: Download a work
       And a related work has been posted and approved
     When I am logged in as a "policy_and_abuse" admin
       And I hide the work "Followup"
-    When I log out
       And I view the work "Worldbuilding"
       And I follow "HTML"
     Then I should not see "Followup by remixer"
-    When I am logged in as a "policy_and_abuse" admin
-      And I unhide the work "Followup"
+    When I unhide the work "Followup"
       And I hide the work "Worldbuilding"
-    When I log out
       And I view the work "Followup"
       And I follow "HTML"
     Then I should not see "Worldbuilding by inspiration"
@@ -457,8 +454,7 @@ Feature: Download a work
     Given a work inspired by an external work has been posted
     When I am logged in as a "policy_and_abuse" admin
       And I hide the external work "Worldbuilding"
-    When I log out
-      And I view the work "Followup"
+    When I view the work "Followup"
       And I follow "HTML"
     Then I should not see "Worldbuilding by external_inspiration"
 
@@ -472,8 +468,7 @@ Feature: Download a work
       And I view my related works
       And I follow "Approve"
       And I press "Yes, link me!"
-    When I log out
-      And I view the work "Worldbuilding"
+    When I view the work "Worldbuilding"
       And I follow "HTML"
     Then I should not see "Followup"
 

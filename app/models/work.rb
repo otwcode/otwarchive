@@ -24,14 +24,14 @@ class Work < ApplicationRecord
   has_many :series, through: :serial_works
 
   has_many :related_works, as: :parent, dependent: :nullify do
-    def visible
-      children_for_work_page
+    def visible(user = User.current_user)
+      children_for_work_page(user)
     end
   end
 
   has_many :parent_work_relationships, class_name: "RelatedWork", dependent: :destroy do
-    def visible
-      parents_for_work_page
+    def visible(user = User.current_user)
+      parents_for_work_page(user)
     end
   end
 
@@ -999,8 +999,8 @@ class Work < ApplicationRecord
     parent_work_relationships.reject(&:marked_for_destruction?)
   end
 
-  def visible_parents_after_saving
-    parent_work_relationships.visible.reject(&:marked_for_destruction?) +
+  def visible_parents_after_saving(user = User.current_user)
+    parent_work_relationships.visible(user).reject(&:marked_for_destruction?) +
       parent_work_relationships.select(&:new_record?)
   end
 

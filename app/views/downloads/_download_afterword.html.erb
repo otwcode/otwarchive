@@ -1,7 +1,8 @@
 <div id="afterword">
   <h2 class="toc-heading"><%= t(".afterword") %></h2>
 
-  <% unless @work.endnotes.blank? && @work.related_works.visible.blank? %>
+  <% related_works = @work.related_works.visible(nil) %>
+  <% unless @work.endnotes.blank? && related_works.blank? %>
     <div class="meta">
       <% unless @work.endnotes.blank? %>
         <div id="endnotes">
@@ -13,10 +14,10 @@
       <%# i18n-tasks-use t("downloads.download_afterword.inspired_by.restricted_html") %>
       <%# i18n-tasks-use t("downloads.download_afterword.inspired_by.revealed_html") %>
       <%# i18n-tasks-use t("downloads.download_afterword.inspired_by.unrevealed") %>
-      <% if @work.related_works.visible.present? %>
+      <% if related_works.present? %>
         <dl>
           <dt><%= t(".inspired_by.title") %></dt>
-          <% for child_work in @work.related_works.visible %>
+          <% for child_work in related_works %>
             <% next if child_work.translation %>
 
             <dd>

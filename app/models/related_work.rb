@@ -32,21 +32,21 @@ class RelatedWork < ActiveRecord::Base
     join_parents.where("parent_works.hidden_by_admin = false OR parent_external_works.hidden_by_admin = false OR (parent_works.id IS NULL AND parent_external_works.id IS NULL)")
   }
 
-  scope :children_for_work_page, lambda {
-    if User.current_user.is_a?(Admin)
+  def self.children_for_work_page(user)
+    if user.is_a?(Admin)
       reciprocal.posted_children
     else
       reciprocal.posted_children.unhidden_children
     end
-  }
+  end
 
-  scope :parents_for_work_page, lambda {
-    if User.current_user.is_a?(Admin)
+  def self.parents_for_work_page(user)
+    if user.is_a?(Admin)
       posted_or_deleted_parents
     else
       posted_or_deleted_parents.unhidden_or_deleted_parents
     end
-  }
+  end
 
   before_validation :set_parent, if: :new_record?
   def set_parent
