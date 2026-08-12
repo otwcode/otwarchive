@@ -1,0 +1,16 @@
+<h4><%= t(".page_heading") %></h4>
+
+<p><%= t(".page_description") %></p>
+
+<p><%= t(".page_note") %></p>
+
+<dl>
+  <dt><%= t(".any.title") %></dt>
+  <dd><%= t(".any.description_html", user_any_kbd: tag.kbd(t(".any.user_any_kbd")), user_samp: tag.samp(t(".any.user_samp")), users_samp: tag.samp(t(".any.users_samp")), username_samp: tag.samp(t(".any.username_samp"))) %></dd>
+  <dt><%= t(".and.title") %></dt>
+  <dd><%= t(".and.description_html", a_user_kbd: tag.kbd(t(".and.a_user_kbd")), a_user_samp: tag.samp(t(".and.a_user_samp")), a_test_user_samp: tag.samp(t(".and.a_test_user_samp")), user_samp: tag.samp(t(".and.user_samp"))) %></dd>
+  <dt><%= t(".or.title") %></dt>
+  <dd><%= t(".or.description_html", user_a_or_kbd: tag.kbd(t(".or.user_a_or_kbd")), a_user_samp: tag.samp(t(".or.a_user_samp")), user_samp: tag.samp(t(".or.user_samp")), a_samp: tag.samp(t(".or.a_samp"))) %></dd>
+  <dt><%= t(".exact.title") %></dt>
+  <dd><%= t(".exact.description_html", a_user_kbd: tag.kbd(t(".exact.a_user_kbd")), a_user_samp: tag.samp(t(".exact.a_user_samp")), a_test_user_samp: tag.samp(t(".exact.a_test_user_samp"))) %></dd>
+</dl>
