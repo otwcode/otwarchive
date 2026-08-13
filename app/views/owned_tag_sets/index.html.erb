@@ -17,16 +17,16 @@
   <!--Subnavigation, sorting and actions-->
   <ul class="navigation actions" role="navigation">
     <li class="search" role="search">
-      <%= form_tag tag_sets_path, :class => "simple search", :method => :get do |form| %>
+      <%= form_tag tag_sets_path, class:"simple search", :method => :get do |form| %>
         <fieldset>
-          <%= text_field_tag "query", @query, :title => t(".search_title") %>
+          <%= text_field_tag "query", @query, title: t(".search_title") %>
           <%= submit_tag t(".search_submit") %>
         </fieldset>
       <% end %>
     </li>
     <% if logged_in? %>
-  	  <li><%= link_to t(".new_tag_set_link"), new_tag_set_path %></li>
-  	  <li><%= link_to t(".tags_link"), tags_path %></li>
+      <li><%= link_to t(".new_tag_set_link"), new_tag_set_path %></li>
+      <li><%= link_to t(".tags_link"), tags_path %></li>
     <% end %>
   </ul>
   <!--/subnav-->
