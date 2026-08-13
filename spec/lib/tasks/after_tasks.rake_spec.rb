@@ -909,6 +909,26 @@ describe "rake After:backfill_missing_pseuds" do
         .by(1)
       expect(user.pseuds.find_by(name: user.login)).to be_present
     end
+
+    it "marks the created pseud as default" do
+      subject.invoke
+      expect(user.reload.default_pseud).to be_present
+      expect(user.default_pseud.name).to eq(user.login)
+    end
+  end
+
+  context "when a user is missing a username-matching pseud but has another default pseud" do
+    let!(:user) { create(:user) }
+    let!(:other_pseud) { create(:pseud, user: user, is_default: true) }
+
+    before do
+      user.pseuds.find_by(name: user.login).delete
+    end
+
+    it "does not change the existing default pseud" do
+      subject.invoke
+      expect(user.reload.default_pseud).to eq(other_pseud)
+    end
   end
 
   context "when another user has a pseud with the same name as the affected user's login" do

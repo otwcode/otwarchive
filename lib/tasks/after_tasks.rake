@@ -694,7 +694,7 @@ namespace :After do
         updated += 1
         puts "  Updated pseud to \"#{user.login}\" for user #{user.id}"
       else
-        Pseud.create!(name: user.login, user_id: user.id)
+        Pseud.create!(name: user.login, user_id: user.id, is_default: !user.default_pseud)
         created += 1
         puts "  Created pseud \"#{user.login}\" for user #{user.id}"
       end
