@@ -1687,6 +1687,13 @@ en:
           non_con:
             acronym: non-con
             title: non-consensual sex
+    tag_sets_about:
+      delete_tag_set_warning_strong: can delete the tag set or change it without warning
+      page_heading: About Tag Sets
+      sharing_tag_sets_html: Some users may choose to make their tag set publicly available for others to use in their challenges. Please note that the owners of a tag set %{delete_tag_set_warning_strong}, so before you use someone else's tag set for your challenge, please be sure that you trust them not to change it.
+      what_are_tag_sets: If you've ever wanted to run a challenge on the Archive, that's what tag sets are for. You create a tag set to hold a list of all the tags that should be available for sign-up, even if those tags haven't been used on the Archive before now, and then add the tag set to your challenge. Tags in the tag set will then automatically show up in the sign-up form.
+      where_to_find_tag_sets: All tag sets are listed on the main tag sets page. You can browse them to get a better idea of how they work.
+      who_manages_tag_sets: You can add as many moderators as you want to help you manage your tag set, and they don't need to have access to the challenge settings. You can also allow the participants in your challenge to nominate tags to be added to your set. You and any co-owners and moderators can review those nominations, and approve or reject them. You can add fandom associations to new tags in your Tag Set, or you can leave them for tag wranglers to make the associations (this may take some time).
     tags_additional:
       description: Any other tags you want to give your work (for example, "Angst", "Crossover", or "Tentacles"). You may also use this field to warn for things not covered by the Archive Warnings. Please do not enter fandom, relationship, or character names in this field. Multiple tags should be separated by commas.
       more_info:
@@ -2734,6 +2741,20 @@ en:
     orphan_user:
       orphaning_bylines_only_message_html: Orphaning will automatically remove your personal information from <strong>bylines only</strong>. It will <strong>not</strong> automatically remove your personal information from anywhere else in the work(s). Social media accounts, contact information, email addresses, names, and any other personal information posted in the title, summary, notes, tags, work body, or comment text will <strong>not</strong> be automatically removed. Comments posted by other users will also <strong>not</strong> be affected by Orphaning. If you want information removed from these places, you should edit or delete it prior to Orphaning. <strong>Once you Orphan the work(s), you will no longer be able to delete information in these places yourself</strong>.
       orphaning_works_message_html: 'Orphaning will <strong>permanently</strong> remove your username and/or pseud from the bylines of: the following work(s), their chapters, associated series, and any comments you may have left on them while logged into this account.'
+  owned_tag_sets:
+    index:
+      in_archive_name: in the %{archive_name}
+      listing_tag_sets_heading: Listing Tag Sets
+      new_tag_set_link: New Tag Set
+      no_tag_sets_found: No tag sets found.
+      page_heading_challenge: Tag Sets Used In This Challenge
+      page_heading_default: Tag Sets
+      page_heading_query: Tag Set
+      page_heading_user: "%{user_name}'s Tag Sets"
+      search_submit: Search
+      search_title: search
+      tag_sets_about_help_title: Tagset about
+      tags_link: Tags
   pagy:
     aria_label:
       nav: Pagination

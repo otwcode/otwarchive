@@ -676,6 +676,7 @@ Rails.application.routes.draw do
   get "/help/skins-creating.html", to: redirect("/help/skins_creating")
   get "/help/skins-parents.html", to: redirect("/help/skins_parents")
   get "/help/symbols-key.html", to: redirect("/help/symbols_key")
+  get "/help/tagset-about.html", to: redirect("/help/tag_sets_about")
   get "/help/additional-tags-help.html", to: redirect("/help/tags_additional")
   get "/help/categories-help.html", to: redirect("/help/tags_categories")
   get "/help/characters-help.html", to: redirect("/help/tags_characters")

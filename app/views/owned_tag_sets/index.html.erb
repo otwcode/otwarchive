@@ -3,13 +3,13 @@
   <!--Descriptive page name and system messages, descriptions, and instructions.-->
   <h2 class="heading">
     <% if @user %>
-      <%= ts('%{user_name}\'s Tag Sets', :user_name => @user.login) %> <%= link_to_help 'tagset-about' %>
+      <%= t(".page_heading_user", user_name: @user.login) %> <%= link_to_help_modal(help_tag_sets_about_path, t(".tag_sets_about_help_title")) %>
     <% elsif @restriction %>
-      <%= ts('Tag Sets Used In This Challenge') %>
+      <%= t(".page_heading_challenge") %>
     <% elsif @query %>
-      <%= search_header @tag_sets, nil, ts('Tag Set') %> <%= link_to_help 'tagset-about' %>
+      <%= search_header @tag_sets, nil, t(".page_heading_query") %> <%= link_to_help_modal(help_tag_sets_about_path, t(".tag_sets_about_help_title")) %>
     <% else %>
-      <%= ts('Tag Sets') %> <%= link_to_help 'tagset-about' %> <%= ts('in the %{archive_name}', :archive_name => ArchiveConfig.APP_NAME) %>
+      <%= t(".page_heading_default") %> <%= link_to_help_modal(help_tag_sets_about_path, t(".tag_sets_about_help_title")) %> <%= t(".in_archive_name", archive_name: ArchiveConfig.APP_NAME) %>
     <% end %>
   </h2>
   <!--/descriptions-->
@@ -19,27 +19,27 @@
     <li class="search" role="search">
       <%= form_tag tag_sets_path, :class => "simple search", :method => :get do |form| %>
         <fieldset>
-          <%= text_field_tag "query", @query, :title => ts('search') %>
-          <%= submit_tag ts('Search') %>
+          <%= text_field_tag "query", @query, :title => t(".search_title") %>
+          <%= submit_tag t(".search_submit") %>
         </fieldset>
       <% end %>
     </li>
     <% if logged_in? %>
-  	  <li><%= link_to ts('New Tag Set'), new_tag_set_path %></li>
-  	  <li><%= link_to ts('Tags'), tags_path %></li>
+  	  <li><%= link_to t(".new_tag_set_link"), new_tag_set_path %></li>
+  	  <li><%= link_to t(".tags_link"), tags_path %></li>
     <% end %>
   </ul>
   <!--/subnav-->
 
   <!--main content-->
   <% if @tag_sets.empty? %>
-    <p><%= ts('No tag sets found.') %></p>
+    <p><%= t(".no_tag_sets_found") %></p>
   <% else %>
     <% if @tag_sets.respond_to?(:total_pages) %>
       <%= will_paginate @tag_sets %>
     <% end %>
 
-    <h3 class="landmark heading"><%= ts('Listing Tag Sets') %></h3>
+    <h3 class="landmark heading"><%= t(".listing_tag_sets_heading") %></h3>
 	  <ul class="index group">
       <% @tag_sets.each do |tag_set| %>
         <%= render 'tag_set_blurb', :tag_set => tag_set %>
