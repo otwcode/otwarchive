@@ -32,11 +32,7 @@
 <%== pagy_nav @pagy %>
 
 <dl class="assignment index group">
-
-  <% @challenge_assignments.each do |assignment| %>
-    <%= render "assignment_blurb", assignment: assignment %>
-  <% end %>
-
+  <%= render partial: "assignment_blurb", collection: @challenge_assignments, as: :assignment %>
 </dl>
 
 <%== pagy_nav @pagy %>
