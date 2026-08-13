@@ -17,7 +17,7 @@
   <!--Subnavigation, sorting and actions-->
   <ul class="navigation actions" role="navigation">
     <li class="search" role="search">
-      <%= form_tag tag_sets_path, class:"simple search", :method => :get do |form| %>
+      <%= form_tag tag_sets_path, class: "simple search", method: :get do |form| %>
         <fieldset>
           <%= text_field_tag "query", @query, title: t(".search_title") %>
           <%= submit_tag t(".search_submit") %>
