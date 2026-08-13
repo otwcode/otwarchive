@@ -678,6 +678,7 @@ Rails.application.routes.draw do
   get "/help/symbols-key.html", to: redirect("/help/symbols_key")
   get "/help/tagset-about.html", to: redirect("/help/tag_sets_about")
   get "/help/tagset-tag-associations.html", to: redirect("/help/tag_sets_associations")
+  get "/help/tagset-batch-load.html", to: redirect("/help/tag_sets_batch_load")
   get "/help/additional-tags-help.html", to: redirect("/help/tags_additional")
   get "/help/categories-help.html", to: redirect("/help/tags_categories")
   get "/help/characters-help.html", to: redirect("/help/tags_characters")

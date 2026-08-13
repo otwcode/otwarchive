@@ -1699,6 +1699,13 @@ en:
       page_heading: Tag Set Associations
       tip: If you're not sure how this might work, try adding a few fandoms and characters and setting up some associations, and then set up your challenge and try out the sign-up form!
       what_are_tag_set_associations: Tag associations let you set up associations between the fandoms, characters, and relationships in your tag set, which then lets your participants pick from only the characters and relationships in a given fandom.
+    tag_sets_batch_load:
+      add_new_tags_note: If you really want to add some new tags to the Archive, you can add them to your tag set first, and then batch load the associations here afterwards.
+      already_associated_note: If two tags are already associated in the Archive or in your tag set, it won't associate them again.
+      load_tag_associations_note: You can only batch load tag associations if the tags already exist. This is to avoid mass-adding piles of wrong tags to the Archive.
+      loading_error_note: If the batch load is taking too long and you're getting 502 errors, please split up the number of tags you're trying to load!
+      page_heading: Batch Loading
+      submit_note: Only the associations that didn't work will remain in the form after you select the "Submit" button.
     tags_additional:
       description: Any other tags you want to give your work (for example, "Angst", "Crossover", or "Tentacles"). You may also use this field to warn for things not covered by the Archive Warnings. Please do not enter fandom, relationship, or character names in this field. Multiple tags should be separated by commas.
       more_info:
@@ -2747,6 +2754,9 @@ en:
       orphaning_bylines_only_message_html: Orphaning will automatically remove your personal information from <strong>bylines only</strong>. It will <strong>not</strong> automatically remove your personal information from anywhere else in the work(s). Social media accounts, contact information, email addresses, names, and any other personal information posted in the title, summary, notes, tags, work body, or comment text will <strong>not</strong> be automatically removed. Comments posted by other users will also <strong>not</strong> be affected by Orphaning. If you want information removed from these places, you should edit or delete it prior to Orphaning. <strong>Once you Orphan the work(s), you will no longer be able to delete information in these places yourself</strong>.
       orphaning_works_message_html: 'Orphaning will <strong>permanently</strong> remove your username and/or pseud from the bylines of: the following work(s), their chapters, associated series, and any comments you may have left on them while logged into this account.'
   owned_tag_sets:
+    batch_load:
+      page_heading: Batch Loading
+      tag_sets_batch_load_help_title: Tagset batch load
     index:
       in_archive_name: in the %{archive_name}
       listing_tag_sets_heading: Listing Tag Sets
