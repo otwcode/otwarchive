@@ -14,7 +14,8 @@ class Query
         body: generated_query,
         track_total_hits: true
       )
-    rescue Elastic::Transport::Transport::Errors::BadRequest
+    rescue Elastic::Transport::Transport::Errors::BadRequest => e
+      Sentry.capture_exception(e) if defined?(Sentry)
       { error: "Your search failed because of a syntax error. Please try again." }
     end
   end
