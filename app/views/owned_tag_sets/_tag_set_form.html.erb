@@ -44,7 +44,7 @@
   <fieldset>
     <% associations_for_remove = @tag_set.tag_set_associations.reject {|assoc| assoc.new_record?} %>
     <% associations_for_add = @tag_set.tag_set_associations.select {|assoc| assoc.new_record?} %>
-    <legend>Tag Associations <%= associations_for_remove.empty? ? '' : t(".check_to_remove") %> <%= link_to_help_modal(help_tag_sets_associations_path, t(".tag_sets_associations_help_title"))%></legend>
+    <legend>Tag Associations <%= associations_for_remove.empty? ? "" : t(".check_to_remove") %> <%= link_to_help_modal(help_tag_sets_associations_path, t(".tag_sets_associations_help_title")) %></legend>
 
     <h3 class="landmark heading"><%= ts('Tag Associations') %> </h3>
     <% unless associations_for_remove.empty? %>
