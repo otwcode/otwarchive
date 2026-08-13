@@ -34,6 +34,7 @@ class AdminPostsController < Admin::BaseController
       @next_admin_post = admin_posts.unposted.order(created_at: :asc).where("created_at > ?", @admin_post.created_at).first
       @page_subtitle = t(".page_title_draft", title: @admin_post.title.html_safe)
     end
+    @kudos = @admin_post.kudos.with_user.includes(:user).order(created_at: :desc)
     respond_to do |format|
       format.html # show.html.erb
       format.js

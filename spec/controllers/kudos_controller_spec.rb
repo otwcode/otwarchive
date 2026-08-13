@@ -248,5 +248,26 @@ describe KudosController do
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
+
+    context "denies access for admin post that is a draft" do
+      let(:admin_post) { create(:admin_post, :draft) }
+
+      it "redirects guests" do
+        get :index, params: { admin_post_id: admin_post }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+
+      it "redirects users" do
+        fake_login
+        get :index, params: { admin_post_id: admin_post }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+
+      it "redirects admin" do
+        fake_login_admin(create(:admin))
+        get :index, params: { admin_post_id: admin_post }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
   end
 end
