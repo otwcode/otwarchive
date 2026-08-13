@@ -23,8 +23,8 @@
     <% categories = prompt.any_category ? t(".any") : (tag_groups["Category"] ? get_title_string(tag_groups["Category"]) : nil) %>
     <% atags = prompt.any_freeform ? t(".any") : styled_tag_list(tag_groups["Freeform"]) %>
     <% otags = prompt.optional_tag_set ? styled_tag_list(prompt.optional_tag_set.tags) : nil %>
-    <% url_label = @collection.challenge.send("request_url_label") %>
-    <% desc_label = @collection.challenge.send("request_description_label") %>
+    <% url_label = @collection.challenge.request_url_label.presence || t(".prompt_url") %>
+    <% desc_label = @collection.challenge.request_description_label.presence || t(".description") %>
 
     <%= styled_divider %>
     <%= index + 1 %>. <%= style_bold(prompt.title) %>
@@ -63,11 +63,11 @@
         <br />
       <% end %>
       <% if prompt.url && !prompt.url.blank? %>
-        <%= style_metadata_label(url_label.presence || t(".prompt_url")) %><%= style_link(prompt.url, prompt.url) %>
+        <%= style_metadata_label(url_label) %><%= style_link(prompt.url, prompt.url) %>
         <br />
       <% end %>
       <% if prompt.description && !prompt.description.blank? %>
-        <%= style_metadata_label(desc_label.presence || t(".description")) %>
+        <%= style_metadata_label(desc_label) %>
         <%= style_quote(prompt.description) %>
       <% end %>
     </p>

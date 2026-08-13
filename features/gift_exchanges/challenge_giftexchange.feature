@@ -172,6 +172,62 @@ Feature: Gift Exchange Challenge
       And I submit
     Then I should see "Offer URL does not appear to be a valid URL."
 
+  Scenario: Custom labels are used in emails when available
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I edit settings for "Awesome Gift Exchange" challenge
+      And I check "gift_exchange[request_restriction_attributes][url_allowed]"
+      And I fill in "gift_exchange[request_url_label]" with "Custom Request URL Label"
+      And I fill in "gift_exchange[request_description_label]" with "Custom Request Description Label"
+      And I submit
+    When I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with combination A
+      And I follow "Edit Sign-up"
+      And I fill in "Custom Request URL Label" with "https://example.com/myname1_prompt"
+      And I fill in "Custom Request Description Label" with "myname1 wrote a description!"
+      And I submit
+    When I am logged in as "myname2"
+      And I sign up for "Awesome Gift Exchange" with combination B
+      And I follow "Edit Sign-up"
+      And I fill in "Custom Request URL Label" with "https://example.com/myname2_prompt"
+      And I fill in "Custom Request Description Label" with "myname2 wrote a description!"
+      And I submit
+    When I am logged in as "mod1"
+      And I have generated matches for "Awesome Gift Exchange"
+    When I press "Send Assignments"
+    Then I should see "Assignments are now being sent out"
+    When I reload the page
+    Then I should not see "Assignments are now being sent out"
+      And 1 email should be delivered to "myname1"
+      And the email should contain "Custom Request URL Label"
+      And the email should contain "Custom Request Description Label"
+
+  Scenario: But when custom labels aren't there, the defaults still show up in emails
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I edit settings for "Awesome Gift Exchange" challenge
+      And I check "gift_exchange[request_restriction_attributes][url_allowed]"
+      And I submit
+    When I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with combination A
+      And I follow "Edit Sign-up"
+      And I fill in "Prompt URL:" with "https://example.com/myname1_prompt"
+      And I fill in "Description:" with "myname1 wrote a description!"
+      And I submit
+    When I am logged in as "myname2"
+      And I sign up for "Awesome Gift Exchange" with combination B
+      And I follow "Edit Sign-up"
+      And I fill in "Prompt URL:" with "https://example.com/myname2_prompt"
+      And I fill in "Description:" with "myname2 wrote a description!"
+      And I submit
+    When I am logged in as "mod1"
+      And I have generated matches for "Awesome Gift Exchange"
+    When I press "Send Assignments"
+    Then I should see "Assignments are now being sent out"
+    When I reload the page
+    Then I should not see "Assignments are now being sent out"
+      And 1 email should be delivered to "myname1"
+      And the email should contain "Prompt URL"
+      And the email should contain "Description"
+
   Scenario: Sign-ups can be seen in the dashboard
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
     When I am logged in as "myname1"
@@ -365,11 +421,8 @@ Feature: Gift Exchange Challenge
       And I should not see "No Potential Recipients"
       And I should see "Complete"
 
-  Scenario: Assignments can be sent, with custom labels too
-    Given I am logged in as "mod1"
-      And I have created the custom-labels gift exchange "Awesome Gift Exchange"
-      And I open signups for "Awesome Gift Exchange"
-      And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+  Scenario: Assignments can be sent
+    Given the gift exchange "Awesome Gift Exchange" is ready for matching
       And I have generated matches for "Awesome Gift Exchange"
     When I press "Send Assignments"
     Then I should see "Assignments are now being sent out"
@@ -391,10 +444,6 @@ Feature: Gift Exchange Challenge
       And the email should contain "Additional Tag"
       And the email should contain "Something else weird"
       And the email should not contain "translation missing"
-      # Custom labels should be used
-      And the email should contain "Custom Request URL Label"
-      And the email should contain "Custom Description URL Label"
-      # Check the other emails
       And 1 email should be delivered to "myname2"
       And 1 email should be delivered to "myname3"
       And 1 email should be delivered to "myname4"
