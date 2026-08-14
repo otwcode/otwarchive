@@ -81,7 +81,7 @@
                             else
                               @work.find_all_comments.unreviewed_only.not_spam.count
                             end %>
-      <%= link_to t("works.work_header_navigation.unreviewed_comments", count: unreviewed_count), unreviewed_work_comments_path(@work) %>
+      <%= link_to t(".unreviewed_comments", count: unreviewed_count), unreviewed_work_comments_path(@work) %>
     </li>
   <% end %>
 
@@ -110,7 +110,7 @@
     </li>
   <% end %>
 
-  <%# The li, noscript, and button tags MUST be on the same line here %>
+  <%# The li, noscript, and button tags MUST be on the same line here to avoid the behavior described in https://otwarchive.atlassian.net/browse/AO3-4629?focusedCommentId=372231 %>
   <% if downloadable? && AdminSetting.current.downloads_enabled? %>
     <li class="download"><noscript><h4 class="heading"><%= t(".download.heading") %></h4></noscript><button class="hidden"><%= t(".download.button") %></button>
       <ul class="expandable secondary">
