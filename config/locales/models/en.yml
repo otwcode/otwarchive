@@ -1,5 +1,14 @@
 ---
 en:
+  activemodel:
+    errors:
+      models:
+        feedback:
+          attributes:
+            base:
+              spam: This report looks like spam to our system!
+            summary:
+              too_long: must be less than %{max_displayed} characters long.
   activerecord:
     attributes:
       admin/role:

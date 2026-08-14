@@ -39,7 +39,6 @@ describe "rake resanitize:all" do
   end
 
   {
-    abuse_report: [:summary, :comment],
     admin_activity: [:summary],
     admin_banner: [:content],
     admin_post: [:content],
@@ -49,7 +48,6 @@ describe "rake resanitize:all" do
     collection_profile: [:intro, :faq, :rules],
     comment: [:comment_content],
     external_work: [:summary],
-    feedback: [:summary, :comment],
     gift_exchange: [:signup_instructions_general,
                     :signup_instructions_requests,
                     :signup_instructions_offers],
