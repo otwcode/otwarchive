@@ -399,6 +399,16 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     When I press "Update"
     Then I should see "Deutsch"
       And I should not see "English"
+    
+  Scenario: Admin can't post user's draft work
+    Given I am logged in as "regular_user"
+      And the draft "unfinished"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "unfinished"
+      And I follow "Edit Work"
+    Then I should not see a "Post" button within ".work .actions"
+    When I press "Preview"
+    Then I should not see a "Post" button within ".edit_work .actions"
 
   Scenario: When admin edits tags and language on works at the same time, both Activities entries are added
     Given basic languages
