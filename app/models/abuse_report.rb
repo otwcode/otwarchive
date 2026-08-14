@@ -143,6 +143,8 @@ class AbuseReport < ApplicationRecord
 
   def creator_ids
     if (work_id = reported_work_id)
+      return if url[%r{/comments/}, 0]
+
       work = Work.find_by(id: work_id)
       return "deletedwork" unless work
 
@@ -180,11 +182,9 @@ class AbuseReport < ApplicationRecord
     end
   end
 
-  # ID of the reported work, unless the report is about comment(s) or bookmark(s) on the work
+  # ID of the reported work
   def reported_work_id
-    comments = url[%r{/comments/}, 0]
-    bookmarks = url[%r{/bookmarks/}, 0]
-    url[%r{/works/(\d+)}, 1] if comments.nil? && bookmarks.nil?
+    url[%r{/works/(\d+)}, 1]
   end
 
   # ID of the reported comment
@@ -196,10 +196,22 @@ class AbuseReport < ApplicationRecord
   def reported_series_id
     url[%r{/series/(\d+)}, 1]
   end
+
+  # ID of the reported bookmark
+  def reported_bookmark_id
+    url[%r{/bookmarks/(\d+)}, 1]
+  end
   
   # Username (aka. login) of the reported user
   def reported_user_login
-    url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
+    url[%r{/users/(\w+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
+  end
+
+  # ID of the reported user
+  def reported_user_id
+    user = User.find_by!(login: reported_user_login)
+
+    user.id
   end
 
   def attach_work_download(ticket_id)
@@ -256,7 +268,6 @@ class AbuseReport < ApplicationRecord
                                                  series_report_period,
                                                  "%#{series_params_only}%").count
       errors.add(:base, :over_reported_series) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_SERIES_MAX
-    end
   end
 
   def email_is_not_over_reporting
