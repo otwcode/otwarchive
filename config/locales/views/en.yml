@@ -540,6 +540,9 @@ en:
       page_title: AO3 News Drafts
     index:
       page_title: AO3 News
+    new:
+      page_heading: New AO3 News Post
+      page_title: New AO3 News Post
     posting_fieldset:
       actions:
         cancel: Cancel
@@ -879,6 +882,7 @@ en:
           new_collection: New Collection
           new_subcollection: New Subcollection
           open_challenges: Open Challenges
+          subcollections: Subcollections
         landmark_heading: Navigation
       page_heading:
         challenges_subcollections_in: Challenges/Subcollections in %{collection}
@@ -1584,6 +1588,7 @@ en:
         header: You can create new skins for the Archive using our wizard, or by writing your own CSS (cascading style sheets) code
       numeric_values:
         description:
+          aspect_ratio_html: For the %{aspect_ratio_code} property, you can specify ratios using numeric values up to three decimal places.
           em_unit_html: 'PS: we highly encourage learning about and using %{em_code}, which lets you set things relative to the viewer''s current font size! It will make your layouts much more flexible and responsive to different browser/font settings.'
           precision_html: 'You can specify numeric values up to two decimal places, either as percentages or in %{various_units_link}: %{units_list_code}'
           units_list: cm, em, ex, in, mm, pc, pt, px
@@ -2575,6 +2580,7 @@ en:
       required_notice: Required information
       short: Abbreviation
       sortable_name: Name for alphabetical sorting
+      sortable_name_description: This should be the language name or (if applicable) its name transliterated into the Latin alphabet. If the language's first character has diacritics, remove the diacritics.
       submit:
         create: Create Language
         update: Update Language
@@ -3519,6 +3525,7 @@ en:
       privacy_restricted_work_help_title: Registered users
       remove: Remove
       remove_confirm: Are you sure you want to remove the connection to this work?
+      unrevealed_work: Mystery Work
       works_assignment_help_title: Fulfilling Assignments
       works_backdating_help_title: Publication Date Options
       works_languages_help_title: Languages help

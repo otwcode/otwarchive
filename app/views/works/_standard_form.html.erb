@@ -141,7 +141,11 @@
                   <ul class="actions">
                     <li>
                       <% if related_work.parent %>
-                        <%= link_to related_work.parent.title, related_work.parent %>
+                        <% if related_work.parent.try(:unrevealed?) %>
+                          <%= link_to t(".unrevealed_work"), related_work.parent %>
+                        <%  else %>
+                          <%= link_to related_work.parent.title, related_work.parent %>
+                        <% end %>
                       <% else %>
                         <%= t(".deleted_work") %>
                       <% end %>

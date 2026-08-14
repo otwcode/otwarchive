@@ -15,7 +15,7 @@
       <dt class="original translations"><%= ts("Original:") %></dt>
       <dd class="original translations"><%= link_to admin_post.translated_post.title.html_safe, admin_post.translated_post %></dd>
     <% else %>
-      <% translations = sorted_translations(admin_post) %>
+      <% translations = admin_post.posted? ? admin_post.translations.posted : admin_post.translations %>
       <% unless translations.blank? %>
       <dt class="translations"><%= ts("Translations:") %></dt>
       <dd class="translations">

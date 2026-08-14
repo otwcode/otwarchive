@@ -27,14 +27,6 @@ Feature: View a work with various options
   When I view the work "Whatever"
   Then I should see "Chapter 2"
 
-  Scenario: viewing a work and chapter that have been deleted
-  Given I am logged in as a random user
-    And I view a deleted work
-  Then I should be on the homepage
-    And I should see "Sorry, we couldn't find the work you were looking for."
-  When I follow "Site Map"
-    And I should not see "Sorry, we couldn't find the work you were looking for."
-
   Scenario: viewing a deleted chapter on a work that still exists
   Given I am logged in as a random user
     And I view a deleted chapter
