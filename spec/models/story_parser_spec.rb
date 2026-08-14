@@ -117,19 +117,22 @@ describe StoryParser do
     let(:location_partial_match) { "http://testme.org/welcome_to_test_vale/12345" }
 
     it "should recognise previously imported www. works" do
-      @work = FactoryBot.create(:work, imported_from_url: location_with_www)
+      @work = FactoryBot.create(:work)
+      @work.imported_url = ImportedUrl.new(original: location_with_www)
 
       expect { @sp.check_for_previous_import(location_no_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should recognise previously imported non-www. works" do
-      @work = FactoryBot.create(:work, imported_from_url: location_no_www)
+      @work = FactoryBot.create(:work)
+      @work.imported_url = ImportedUrl.new(original: location_no_www)
 
       expect { @sp.check_for_previous_import(location_with_www) }.to raise_exception(StoryParser::Error)
     end
 
     it "should not perform a partial match on work import locations" do
-      @work = create(:work, imported_from_url: location_partial_match)
+      @work = create(:work)
+      @work.imported_url = ImportedUrl.new(original: location_partial_match)
 
       expect { @sp.check_for_previous_import("http://testme.org/welcome_to_test_vale/123") }.to_not raise_exception
     end
