@@ -4,11 +4,11 @@
 
 <!--subnav-->
 <% unless params[:for_user] %>
-	<ul class="navigation actions" role="navigation">
-    <li id="unposted-link">
+  <ul class="navigation actions">
+    <li>
       <%= span_if_current t(".navigation.unfulfilled"), user_claims_path(current_user), params[:posted].blank? %>
     </li>
-    <li id="posted-link">
+    <li>
       <%= span_if_current t(".navigation.fulfilled"), user_claims_path(current_user, posted: true), params[:posted].present? %>
     </li>
 	</ul>
