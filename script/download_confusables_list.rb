@@ -51,5 +51,11 @@ end
 
 unless gets.chomp == "n"
   File.open(CONFUSABLES_DIRECTORY, "wb") { |f| f.write(response.body) }
-  puts File.exist?(CONFUSABLES_DIRECTORY) ? "Save successful." : "Save failed."
+  if File.exist?(CONFUSABLES_DIRECTORY)
+    Rails.cache.delete("confusables_hash")
+    # TODO make sure we can access that cache from here
+    puts "Save successful. Cache expired."
+  else
+    "Save failed."
+  end
 end
