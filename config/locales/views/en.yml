@@ -2756,6 +2756,7 @@ en:
   owned_tag_sets:
     batch_load:
       page_heading: Batch Loading
+      submit: Submit
       tag_sets_batch_load_help_title: Tagset batch load
     index:
       in_archive_name: in the %{archive_name}
