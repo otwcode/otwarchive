@@ -168,8 +168,6 @@ end
 gem 'capistrano-gitflow_version', '>=0.0.3', require: false
 gem 'rvm-capistrano'
 
-# Use unicorn as the web server
-gem 'unicorn', '~> 5.5', require: false
 # Install puma so we can migrate to it
 gem "puma", "~> 6.5.0"
 # Use god as the monitor
@@ -184,3 +182,6 @@ end
 
 gem "image_processing", "~> 1.14"
 gem "ostruct"
+
+# Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", require: false
