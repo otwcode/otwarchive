@@ -288,6 +288,7 @@ describe CommentsController do
           expect(comment.email).to eq anon_comment_attributes[:email]
           expect(comment.comment_content).to include anon_comment_attributes[:comment_content]
           path = comments_path(tag_id: fandom.to_param,
+                               page: 1,
                                anchor: "comment_#{comment.id}")
           expect(response).to redirect_to path
         end
@@ -520,7 +521,7 @@ describe CommentsController do
             post :create, params: { work_id: work.id, comment: comment_attributes }
             comment = Comment.last
             expect(flash[:error]).to be_nil
-            expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"))
+            expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, view_full_work: false, page: 1, anchor: "comment_#{comment.id}"))
           end
         end
       end
@@ -638,7 +639,7 @@ describe CommentsController do
           fake_login_known_user(user)
           post :create, params: { work_id: work.id, comment: comment_attributes }
           comment = assigns[:comment]
-          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
+          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, page: 1, anchor: "comment_#{comment.id}"), "Comment created!")
           expect(comment.user_agent.length).to eq(500)
         end
       end
@@ -656,7 +657,7 @@ describe CommentsController do
           fake_login_known_user(user)
           post :create, params: { work_id: work.id, comment: comment_attributes }
           comment = assigns[:comment]
-          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
+          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, page: 1, anchor: "comment_#{comment.id}"), "Comment created!")
           expect(comment.user_agent).to be_nil
         end
       end
