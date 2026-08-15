@@ -12,9 +12,9 @@ describe ExternalWorksController do
     context "when the URL has an external work" do
       let!(:external_work) { create(:external_work, url: url) }
 
-      it "responds with json" do
-        get :fetch, params: { external_work_url: url, format: :json }
-        expect(response.content_type).to match("application/json")
+      it "responds with javascript" do
+        get :fetch, xhr: true, params: { external_work_url: url, format: :js }
+        expect(response.content_type).to match("text/javascript")
       end
 
       it "responds with the matching work" do
@@ -34,13 +34,22 @@ describe ExternalWorksController do
     end
 
     context "when the URL doesn't have an exteral work" do
-      it "responds with json" do
-        get :fetch, params: { external_work_url: url, format: :json }
-        expect(response.content_type).to match("application/json")
+      it "responds with javascript" do
+        get :fetch, xhr: true, params: { external_work_url: url, format: :js }
+        expect(response.content_type).to match("text/javascript")
       end
 
       it "responds with blank" do
         get :fetch, params: { external_work_url: url, format: :json }
+        expect(assigns(:external_work)).to be_nil
+      end
+    end
+
+    context "when the URL is invalid" do
+      it "does not error and does not set an external work" do
+        get :fetch, xhr: true, params: { external_work_url: "Invalid URL.", format: :js }
+
+        expect(response).to have_http_status(:ok)
         expect(assigns(:external_work)).to be_nil
       end
     end

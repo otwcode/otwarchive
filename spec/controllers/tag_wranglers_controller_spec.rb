@@ -4,7 +4,68 @@ describe TagWranglersController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  wrangling_roles = %w[superadmin tag_wrangling]
+
   let(:user) { create(:tag_wrangler) }
+
+  shared_examples "denies access to unauthorized admins" do
+    context "when logged in as an admin with no role" do
+      let(:admin) { create(:admin) }
+
+      it "redirects with an error" do
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
+
+    (Admin::VALID_ROLES - wrangling_roles).each do |admin_role|
+      context "when logged in as an admin with role #{admin_role}" do
+        let(:admin) { create(:admin, roles: [admin_role]) }
+
+        it "redirects with an error" do
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
+      end
+    end
+  end
+
+  describe "#index" do
+    before do
+      Role.create!(name: "tag_wrangler")
+    end
+
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        get :index
+      end
+    end
+
+    wrangling_roles.each do |admin_role|
+      context "when logged in as an admin with role #{admin_role}" do
+        let(:admin) { create(:admin, roles: [admin_role]) }
+
+        before do
+          fake_login_admin(admin)
+        end
+
+        it "allows access" do
+          get :index
+          expect(response).to have_http_status(:success)
+        end
+      end
+    end
+
+    context "when logged in as a tag wrangler" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "allows access" do
+        get :index
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
 
   describe "#show" do
     before { fake_login_known_user(user) }
@@ -14,6 +75,28 @@ describe TagWranglersController do
         expect do
           get :show, params: { id: -1 }
         end.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        get :show, params: { id: user.login }
+      end
+    end
+
+    wrangling_roles.each do |admin_role|
+      context "when logged in as an admin with role #{admin_role}" do
+        let(:admin) { create(:admin, roles: [admin_role]) }
+
+        before do
+          fake_login_admin(admin)
+        end
+
+        it "allows access" do
+          get :show, params: { id: user.login }
+          expect(response).to have_http_status(:success)
+        end
       end
     end
   end
@@ -36,28 +119,17 @@ describe TagWranglersController do
       it_behaves_like "prevents access to the report"
     end
 
-    context "when logged in as an admin without proper authorization" do
-      before { fake_login_admin(admin) }
-
-      context "with no role" do
-        let(:admin) { create(:admin) }
-
-        it_behaves_like "prevents access to the report"
-      end
-
-      (Admin::VALID_ROLES - %w[superadmin tag_wrangling]).each do |admin_role|
-        context "with role #{admin_role}" do
-          let(:admin) { create(:admin, roles: [admin_role]) }
-
-          it_behaves_like "prevents access to the report"
-        end
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        get :report_csv, params: { id: user.login }
       end
     end
 
     context "when logged in as an admin with proper authorization" do
       before { fake_login_admin(admin) }
 
-      %w[superadmin tag_wrangling].each do |admin_role|
+      wrangling_roles.each do |admin_role|
         context "with role #{admin_role}" do
           let(:admin) { create(:admin, roles: [admin_role]) }
 
@@ -75,7 +147,7 @@ describe TagWranglersController do
             result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
 
             expect(result)
-              .to eq([%w[Name Last\ Updated Type Merger Fandoms Unwrangleable],
+              .to eq([["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"],
                       [tag1.name, tag1.updated_at.to_s, tag1.type, "", "", "false"]])
           end
 
@@ -100,7 +172,7 @@ describe TagWranglersController do
             result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
 
             expect(result)
-              .to eq([%w[Name Last\ Updated Type Merger Fandoms Unwrangleable],
+              .to eq([["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"],
                       [tag2.name, tag2.updated_at.to_s, tag2.type, tag1.name, "", "false"],
                       [tag1.name, tag1.updated_at.to_s, tag1.type, "", "", "false"]])
           end
@@ -114,7 +186,7 @@ describe TagWranglersController do
             result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
 
             expect(result)
-              .to eq([%w[Name Last\ Updated Type Merger Fandoms Unwrangleable],
+              .to eq([["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"],
                       [tag.name, tag.updated_at.to_s, tag.type, "", fandom.name, "false"]])
           end
 
@@ -129,7 +201,7 @@ describe TagWranglersController do
             result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
 
             expect(result)
-              .to eq([%w[Name Last\ Updated Type Merger Fandoms Unwrangleable],
+              .to eq([["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"],
                       [tag.name, tag.updated_at.to_s, tag.type, "", "#{fandom1.name}, #{fandom2.name}", "false"]])
           end
 
@@ -151,10 +223,84 @@ describe TagWranglersController do
             result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
 
             expect(result)
-              .to eq([%w[Name Last\ Updated Type Merger Fandoms Unwrangleable],
+              .to eq([["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"],
                       [tag.name, tag.updated_at.to_s, tag.type, "", "", "true"]])
           end
         end
+      end
+    end
+  end
+
+  describe "#create" do
+    let(:fandom) { create(:fandom) }
+
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        post :create, params: { assignments: { fandom.id.to_s => [user.login] } }
+      end
+    end
+
+    wrangling_roles.each do |admin_role|
+      context "when logged in as an admin with role #{admin_role}" do
+        let(:admin) { create(:admin, roles: [admin_role]) }
+
+        before do
+          fake_login_admin(admin)
+        end
+
+        it "creates wrangling assignments" do
+          post :create, params: { assignments: { fandom.id.to_s => [user.login] } }
+          it_redirects_to_with_notice(tag_wranglers_path, "Wranglers were successfully assigned!")
+        end
+      end
+    end
+
+    context "when logged in as another tag wrangler" do
+      before do
+        fake_login_known_user(create(:tag_wrangler))
+      end
+
+      it "allows access" do
+        post :create, params: { assignments: { fandom.id.to_s => [user.login] } }
+        it_redirects_to_with_notice(tag_wranglers_path, "Wranglers were successfully assigned!")
+      end
+    end
+  end
+
+  describe "#destroy" do
+    let(:wrangling_assignment) { create(:wrangling_assignment) }
+
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        delete :destroy, params: { id: wrangling_assignment.user.login, fandom_id: wrangling_assignment.fandom.id }
+      end
+    end
+
+    wrangling_roles.each do |admin_role|
+      context "when logged in as an admin with role #{admin_role}" do
+        let(:admin) { create(:admin, roles: [admin_role]) }
+
+        before do
+          fake_login_admin(admin)
+        end
+
+        it "removes the wrangling assignment" do
+          delete :destroy, params: { id: wrangling_assignment.user.login, fandom_id: wrangling_assignment.fandom.id }
+          it_redirects_to_with_notice(tag_wranglers_path, "Wranglers were successfully unassigned!")
+        end
+      end
+    end
+
+    context "when logged in as another tag wrangler" do
+      before do
+        fake_login_known_user(create(:tag_wrangler))
+      end
+
+      it "allows access" do
+        delete :destroy, params: { id: wrangling_assignment.user.login, fandom_id: wrangling_assignment.fandom.id }
+        it_redirects_to_with_notice(tag_wranglers_path, "Wranglers were successfully unassigned!")
       end
     end
   end

@@ -27,14 +27,6 @@ Feature: View a work with various options
   When I view the work "Whatever"
   Then I should see "Chapter 2"
 
-  Scenario: viewing a work and chapter that have been deleted
-  Given I am logged in as a random user
-    And I view a deleted work
-  Then I should be on the homepage
-    And I should see "Sorry, we couldn't find the work you were looking for."
-  When I follow "Site Map"
-    And I should not see "Sorry, we couldn't find the work you were looking for."
-
   Scenario: viewing a deleted chapter on a work that still exists
   Given I am logged in as a random user
     And I view a deleted chapter
@@ -69,3 +61,43 @@ Feature: View a work with various options
     And I view the work "Imported Work"
   Then I should see a link "Add to Collections"
     And I should see the "new_collection_item" form
+
+  Scenario: chapter title displays in View Full Work mode when chaptered work has one published chapter
+  Given I am logged in as a random user
+    And I set my preferences to View Full Work mode by default
+  When I set up the draft "multiChap"
+    And I check "This work has multiple chapters"
+    And I fill in "Chapter Title" with "cool chapter title"
+    And I fill in "Chapter 1 of" with "?"
+    And I press "Post"
+  Then I should see "Chapter 1: "
+    And I should see "cool chapter title"
+
+  Scenario: Works and chapters include the navigation, meta, work skin CSS, and
+  preface, except in preview mode, which contains more limited information.
+    Given the work skin "Flair" by "carbon"
+      And I am logged in as "carbon"
+      And I set up the draft "Elemental"
+      And I select "Flair" from "Select work skin"
+    When I press "Preview"
+    Then I should see the work meta
+      And I should see the work preface
+      And I should see the work styles
+      But I should not see the work header navigation
+    When I press "Post"
+    Then I should see the work header navigation
+      And I should see the work meta
+      And I should see the work preface
+      And I should see the work styles
+    When I follow "Add Chapter"
+      And I fill in "content" with "My chapter's text."
+      And I press "Preview"
+    Then I should see the work styles
+      But I should not see the work header navigation
+      And I should not see the work meta
+      And I should not see the work preface
+    When I press "Post"
+    Then I should see the work header navigation
+      And I should see the work meta
+      And I should see the work preface
+      And I should see the work styles

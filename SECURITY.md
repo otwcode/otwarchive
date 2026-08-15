@@ -5,7 +5,7 @@ with details and reproduction steps. We will get back to you as soon as possible
 and we may ask for additional information or guidance.
 
 Please avoid testing for security issues on the Archive of Our Own itself,
-as you risk disrupting other users and violating the [Terms of Service](https://archiveofourown.org/tos#IV.C.).
+as you risk disrupting other users and violating the [Terms of Service](https://archiveofourown.org/content#II.K.1).
 
 Please give us a reasonable amount of time to address the issue before any
 disclosure to the public or a third-party.

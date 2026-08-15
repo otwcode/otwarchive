@@ -1,0 +1,8 @@
+---
+archive_faq_00001:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  id: 1
+  title: Test FAQ category
+  slug: test-faq-category
+  position: 1

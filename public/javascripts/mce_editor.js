@@ -74,6 +74,14 @@ tinyMCE.init({
     // As of version 5.0, TinyMCE has a very limited mobile version it inflicts on Android and iOS phones by default.
     // This forces the desktop version. Note that this is only implicitly documented and may break.
     theme: "silver",
+  },
+
+  setup: function (editor) {
+    // Update character count when switching to and editing in TinyMCE
+    editor.on('init change undo redo', function() {
+      editor.save();
+      $j(editor.getElement()).trigger('change');
+    });
   }
 });
 

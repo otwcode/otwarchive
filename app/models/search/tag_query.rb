@@ -1,7 +1,7 @@
 class TagQuery < Query
 
   def klass
-    'Tag'
+    "TagDecorator"
   end
 
   def index_name
@@ -15,8 +15,7 @@ class TagQuery < Query
   def filters
     [
       type_filter,
-      canonical_filter,
-      unwrangleable_filter,
+      wrangling_status_filter,
       posted_works_filter,
       media_filter,
       fandom_filter,
@@ -24,7 +23,8 @@ class TagQuery < Query
       suggested_fandom_filter,
       suggested_character_filter,
       in_use_filter,
-      unwrangled_filter
+      unwrangled_filter,
+      synonymous_filter
     ].flatten.compact
   end
 
@@ -77,12 +77,25 @@ class TagQuery < Query
     { term: { tag_type: options[:type] } } if options[:type]
   end
 
-  def canonical_filter
-    term_filter(:canonical, bool_value(options[:canonical])) if options[:canonical].present?
-  end
-
-  def unwrangleable_filter
-    term_filter(:unwrangleable, bool_value(options[:unwrangleable])) unless options[:unwrangleable].nil?
+  def wrangling_status_filter
+    case options[:wrangling_status]
+    when "canonical"
+      term_filter(:canonical, true)
+    when "noncanonical"
+      term_filter(:canonical, false)
+    when "synonymous"
+      [exists_filter("merger_id"), term_filter(:canonical, false)]
+    when "canonical_synonymous"
+      { bool: { should: [exists_filter("merger_id"), term_filter(:canonical, true)] } }
+    when "noncanonical_nonsynonymous"
+      [{ bool: { must_not: exists_filter("merger_id") } }, term_filter(:canonical, false)]
+    when "unwrangleable"
+      term_filter(:unwrangleable, true)
+    when "noncanonical_nonsynonymous_not_unwrangleable"
+      [term_filter(:canonical, false), { bool: { must_not: exists_filter("merger_id") } }, term_filter(:unwrangleable, false)]
+    when "wrangleable"
+      [term_filter(:unwrangleable, false)]
+    end
   end
 
   def posted_works_filter
@@ -130,7 +143,11 @@ class TagQuery < Query
   # the fandom exists, because this particular filter is included in the
   # exclusion_filters section.
   def wrangled_filter
-    { exists: { field: "fandom_ids" } } unless options[:wrangled].nil?
+    exists_filter("fandom_ids") unless options[:wrangled].nil?
+  end
+
+  def synonymous_filter
+    term_filter(:merger_id, options[:merger_id]) unless options[:merger_id].nil?
   end
 
   ################

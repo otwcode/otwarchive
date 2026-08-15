@@ -18,8 +18,9 @@ class CreatorshipsController < ApplicationController
   # Update the selected creatorships.
   def update
     @creatorships = @creatorships.where(id: params[:selected])
-
-    if params[:accept]
+    if @creatorships.blank?
+      flash[:caution] = t(".must_select_request")
+    elsif params[:accept]
       accept_update
     elsif params[:reject]
       reject_update

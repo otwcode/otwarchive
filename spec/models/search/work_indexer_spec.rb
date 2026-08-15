@@ -23,7 +23,13 @@ describe WorkIndexer, work_search: true do
     end
 
     context "with multiple works in a batch", :n_plus_one do
-      populate { |n| create_list(:work, n) }
+      let(:relationships) do
+        rel1 = create(:canonical_relationship, name: "aa/bb")
+        syn = create(:relationship, name: "a/b", merger: rel1)
+        rel2 = create(:relationship, name: "test")
+        [syn, rel2] # so that Work#otp doesn't take an early return
+      end
+      populate { |n| create_list(:work, n, relationships: relationships) }
 
       it "generates a constant number of database queries" do
         expect do

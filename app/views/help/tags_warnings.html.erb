@@ -1,0 +1,20 @@
+<h4><%= t(".page_heading") %></h4>
+
+<p><%= t(".description", app_name: ArchiveConfig.APP_NAME) %></p>
+
+<dl>
+  <dt><%= t(".choose_not_to_use.header") %></dt>
+  <dd><%= t(".choose_not_to_use.description") %></dd>
+  <dt><%= t(".graphic_depictions_of_violence.header") %></dt>
+  <dd><%= t(".graphic_depictions_of_violence.description") %></dd>
+  <dt><%= t(".major_character_death.header") %></dt>
+  <dd><%= t(".major_character_death.description") %></dd>
+  <dt><%= t(".no_archive_warnings_apply.header") %></dt>
+  <dd><%= t(".no_archive_warnings_apply.description") %></dd>
+  <dt><%= t(".rape_non_con.header") %></dt>
+  <dd><%= t(".rape_non_con.description") %></dd>
+  <dt><%= t(".underage_sex.header") %></dt>
+  <dd><%= t(".underage_sex.description") %></dd>
+</dl>
+
+<p><%= t(".other_warnings.html", tos_link: link_to(t(".other_warnings.tos"), content_path(anchor: "II.J")), tos_faq_link: link_to(t(".other_warnings.tos_faq"), tos_faq_path(anchor: "ratings_warnings_faq"))) %></p>

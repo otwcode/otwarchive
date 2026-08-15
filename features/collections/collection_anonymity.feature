@@ -246,7 +246,7 @@ Feature: Collection
     When I edit the work "Cone of Silence"
       And I follow "2" within "div#main.works-edit.region"
       And I invite the co-author "Amos"
-      And I press "Post"
+      And I press "Update"
       And the user "Amos" accepts all co-creator requests
     Then the author of "Cone of Silence" should be visible to me on the work page
     When I am logged out
@@ -365,30 +365,24 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Collection"
       And I am logged in as "creator"
       And I post the work "My Work"
-
     When I edit the work "My Work"
       And I fill in "Post to Collections / Challenges" with "anonymous_collection"
       And I press "Preview"
-
     Then I should see "Anonymous Collection"
       And I should see "Anonymous [creator]"
 
-    When I press "Cancel"
+    When I follow "Cancel"
+      And I view the work "My Work"
 
-    Then I should see "The work was not updated."
-
-    When I view the work "My Work"
-
-    # This is not the desired behavior (AO3-5556), but we want to make sure it doesn't get broken worse
-    Then I should see "Anonymous Collection"
-      And I should see "Anonymous [creator]"
+    Then I should not see "Anonymous Collection"
+      And I should not see "Anonymous [creator]"
 
   Scenario: When an anonymous collection is deleted, works in the collection stop being anonymous.
     Given I have an anonymous collection "Anonymous Collection"
       And I am logged in as "creator"
       And I post the work "Secret Work" to the collection "Anonymous Collection"
 
-    When I go to my works page
+    When I go to creator's works page
     Then I should not see "Secret Work"
 
     When I am logged in as the owner of "Anonymous Collection"
@@ -420,7 +414,7 @@ Feature: Collection
       And I am logged in as "creator"
       And I post the work "Secret Work" to the collection "Anonymous Collection"
 
-    When I go to my works page
+    When I go to creator's works page
     Then I should not see "Secret Work"
 
     When I am logged in as the owner of "Anonymous Collection"
@@ -456,15 +450,15 @@ Feature: Collection
       And I set up the draft "Secret Work"
       And I fill in "Collections" with "Anonymizing,Fluffy"
       And I press "Post"
-      And I go to my works page
+      And I go to creator's works page
     Then I should not see "Secret Work"
 
     When I edit the work "Secret Work"
       And I fill in "Collections" with "Holidays,Fluffy"
       # Delay before posting to make sure the cache is expired
       And it is currently 1 second from now
-      And I press "Post"
-      And I go to my works page
+      And I press "Update"
+      And I go to creator's works page
     Then I should see "Secret Work"
 
   Scenario: Changing a collection item to anonymous triggers a notification

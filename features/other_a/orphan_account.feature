@@ -18,8 +18,7 @@ Scenario: Orphan all works belonging to a user
     And I should see "Shenanigans"
     And I should see "Shenanigans 2"
     And I should see "Shenanigans - the early years"
-  When I follow "Preferences"
-  When I follow "Orphan My Works"
+  When I go to the orphan all works page
   Then I should see "Orphan All Works"
     And I should see "Are you really sure you want to"
   When I choose "Take my pseud off as well"
@@ -51,8 +50,7 @@ Given I have an orphan account
     And I should see "Shenanigans"
     And I should see "Shenanigans 2"
     And I should see "Shenanigans - the early years"
-  When I follow "Preferences"
-  When I follow "Orphan My Works"
+  When I go to the orphan all works page
   Then I should see "Orphan All Works"
     And I should see "Are you really sure you want to"
   When I choose "Leave a copy of my pseud on"
@@ -69,3 +67,12 @@ Given I have an orphan account
   When I view the work "Shenanigans - the early years"
   Then I should see "orphaneer (orphan_account)"
     And I should not see "orphaneer" within ".userstuff"
+
+Scenario: Cancelling user orphan redirects to edit multiple works page
+  Given I have an orphan account
+    And the work "Work" by "orphaneer"
+    And I am logged in as "orphaneer"
+  When I go to the orphan all works page
+  Then I should see "Orphan All Works"
+  When I follow "Cancel"
+  Then I should be on orphaneer's edit multiple works page

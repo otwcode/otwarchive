@@ -127,7 +127,7 @@ describe IndexSweeper do
     expect(AsyncIndexer).to receive(:new).with(StatCounterIndexer, "failures").at_least(:once).and_return(indexer)
     expect(indexer).to receive(:enqueue_ids).with([work.stat_counter.id]).at_least(:once).and_call_original
 
-    expect(sweeper.process_batch).to be(true)
+    sweeper.process_batch
   end
 
   it "doesn't trigger an error if the batch results are empty" do

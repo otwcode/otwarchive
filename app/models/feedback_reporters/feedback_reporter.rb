@@ -13,7 +13,8 @@ class FeedbackReporter
                 :language,
                 :category,
                 :username,
-                :url
+                :url,
+                :ip_address
 
   def initialize(attrs = {})
     attrs.each_pair do |key, val|
@@ -33,6 +34,13 @@ class FeedbackReporter
     zoho_resource_client.create_ticket(ticket_attributes: report_attributes)
   end
 
+  def send_attachment!(id, filename, download)
+    zoho_resource_client.create_ticket_attachment(
+      ticket_id: id,
+      attachment_attributes: attachment_attributes(filename, download)
+    )
+  end
+
   def report_attributes
     {
       "email" => email,
@@ -42,6 +50,14 @@ class FeedbackReporter
         "cf_name" => username.presence || "Anonymous user"
       }
     }
+  end
+
+  def attachment_attributes(filename, download)
+    attachment = StringIO.new(download)
+    # Workaround for HTTParty not recognizing StringIO as a file-like object:
+    # https://github.com/jnunemaker/httparty/issues/675#issuecomment-590757288
+    attachment.define_singleton_method(:path) { filename }
+    { file: attachment }
   end
 
   private

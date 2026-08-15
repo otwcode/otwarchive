@@ -3,93 +3,7 @@
 require "spec_helper"
 
 describe AdminMailer do
-  describe "#comment_notification" do
-    let(:email) { described_class.comment_notification(comment.id) }
-
-    context "when the comment is on an admin post" do
-      let(:comment) { create(:comment, :on_admin_post) }
-
-      context "and the comment's contents contain an image" do
-        let(:image_url) { "an_image.png" }
-        let(:image_tag) { "<img src=\"#{image_url}\" />" }
-
-        before do
-          comment.comment_content += image_tag
-          comment.save!
-        end
-
-        context "when image safety mode is enabled for admin post comments" do
-          before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
-
-          it "strips the image from the email message but leaves its URL" do
-            expect(email).not_to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_tag)
-            expect(email).to have_html_part_content(image_url)
-            expect(email).to have_text_part_content(image_url)
-          end
-        end
-
-        context "when image safety mode is not enabled for admin post comments" do
-          it "embeds the image when image safety mode is completely disabled" do
-            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
-            expect(email).to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_url)
-          end
-
-          it "embeds the image when image safety mode is enabled for other types of comments" do
-            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[Chapter Tag])
-            expect(email).to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_url)
-          end
-        end
-      end
-    end
-  end
-
-  describe "#edited_comment_notification" do
-    let(:email) { described_class.edited_comment_notification(comment.id) }
-
-    context "when the comment is on an admin post" do
-      let(:comment) { create(:comment, :on_admin_post) }
-
-      context "with an image in the comment content" do
-        let(:image_url) { "an_image.png" }
-        let(:image_tag) { "<img src=\"#{image_url}\" />" }
-
-        before do
-          comment.comment_content += image_tag
-          comment.save!
-        end
-
-        context "when image safety mode is enabled for admin post comments" do
-          before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
-
-          it "strips the image from the email message but leaves its URL" do
-            expect(email).not_to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_tag)
-            expect(email).to have_html_part_content(image_url)
-            expect(email).to have_text_part_content(image_url)
-          end
-        end
-
-        context "when image safety mode is not enabled for admin post comments" do
-          it "embeds the image in the HTML email when image safety mode is completely disabled" do
-            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
-            expect(email).to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_url)
-          end
-
-          it "embeds the image in the HTML email when image safety mode is enabled for other types of comments" do
-            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[Chapter Tag])
-            expect(email).to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_url)
-          end
-        end
-      end
-    end
-  end
-
-  describe "send_spam_alert" do
+  describe "#send_spam_alert" do
     let(:spam_user) { create(:user) }
 
     let(:spam1) do
@@ -216,7 +130,7 @@ describe AdminMailer do
     end
   end
 
-  describe "set_password_notification" do
+  describe "#set_password_notification" do
     subject(:email) { AdminMailer.set_password_notification(admin, token) }
 
     let(:admin) { create(:admin) }
@@ -243,7 +157,7 @@ describe AdminMailer do
       it "has the correct content" do
         expect(email).to have_html_part_content("username: </b>#{admin.login}")
         expect(email).to have_html_part_content("URL: </b><a")
-        expect(email).to have_html_part_content(">http://www.example.com/admin/login</a>")
+        expect(email).to have_html_part_content(">https://www.example.com/admin/login</a>")
         expect(email).to have_html_part_content("</a> so you can log in.")
         expect(email).to have_html_part_content(token)
       end
@@ -252,9 +166,52 @@ describe AdminMailer do
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("Admin username: #{admin.login}")
-        expect(email).to have_text_part_content("Admin login URL: http://www.example.com/admin/login")
+        expect(email).to have_text_part_content("Admin login URL: https://www.example.com/admin/login")
         expect(email).to have_text_part_content("so you can log in:")
         expect(email).to have_text_part_content(token)
+      end
+    end
+  end
+
+  describe "#totp_2fa_backup_codes" do
+    subject(:email) { AdminMailer.totp_2fa_backup_codes(admin, codes) }
+
+    let(:admin) { create(:admin) }
+    let(:codes) { %w[code1 code2 code3 code4] }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "delivers to the correct address" do
+      expect(email).to deliver_to(admin.email)
+    end
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your admin account backup codes"
+      expect(email).to have_subject(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("A set of new backup codes has been requested")
+        expect(email).to have_html_part_content("<li><code>")
+        codes.each do |code|
+          expect(email).to have_html_part_content(code)
+        end
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("A set of new backup codes has been requested")
+        codes.each do |code|
+          expect(email).to have_html_part_content(code)
+        end
       end
     end
   end

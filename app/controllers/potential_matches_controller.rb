@@ -1,8 +1,8 @@
 class PotentialMatchesController < ApplicationController
 
-  before_action :users_only
   before_action :load_collection
-  before_action :collection_maintainers_only
+  before_action :collection_maintainers_or_privileged_admins_only, only: [:index]
+  before_action :collection_maintainers_only, except: [:index]
   before_action :load_challenge
   before_action :check_assignments_not_sent
   before_action :check_signup_closed, only: [:generate]
@@ -65,6 +65,8 @@ class PotentialMatchesController < ApplicationController
       @assignment_in_progress = true
     elsif @collection.potential_matches.count > 0 && @collection.assignments.count == 0
       flash[:error] = ts("There has been an error in the potential matching. Please first try regenerating assignments, and if that doesn't work, all potential matches. If the problem persists, please contact Support.")
+    elsif @collection.challenge.no_potential_matches_found?
+      @no_potential_matches_found = true
     elsif @collection.potential_matches.count > 0
       # we have potential_matches and assignments
 

@@ -1,17 +1,21 @@
-<h2 class="heading"><%= ts('About the') %> <abbr title="<%= ts("Organization for Transformative Works")%>"><%= ts("OTW") %></abbr></h2>
+<h2 class="heading"><%= t(".heading.html", otw: tag.abbr(t(".heading.otw"), title: t(".heading.otw_long"))) %></h2>
 
 <div class="userstuff">
-  <p><%= ts("The Organization for Transformative Works (OTW) is a nonprofit organization, established by fans in 2007, to serve the interests of fans by providing access to and preserving the history of fanworks and fan culture in its myriad forms. We believe that fanworks are transformative and that transformative works are legitimate.") %></p>
-  <p><%= ts("We are proactive and innovative in protecting and defending our work from commercial exploitation and legal challenge. We preserve our fannish economy, values, and creative expression by protecting and nurturing our fellow fans, our work, our commentary, our history, and our identity while providing the broadest possible access to fannish activity for all fans.") %></p>
-  <p><%= ts("The Archive of Our Own offers a noncommercial and nonprofit central hosting place for fanworks using open-source archiving software.") %></p>
-  <p><%= ts("Our other major projects include:") %>
+  <p><%= t(".general") %></p>
+  <p><%= t(".details") %></p>
+  <p><%= t(".ao3.html",
+           github_repository_link: link_to(t(".ao3.github_repository"), "https://github.com/otwcode/otwarchive"),
+           jira_project_link: link_to(t(".ao3.jira_project"), "https://otwarchive.atlassian.net/browse/AO3")) %></p>
+  <p><%= t(".major_projects.title") %>
     <ul>
-      <li><%= ts("%{fanlore}, a fandom wiki devoted to preserving the history of transformative fanworks and the fandoms from which they have arisen.", :fanlore => link_to(ts("Fanlore"), "http://fanlore.org")).html_safe %></li>
-      <li><%= ts("%{legal_advocacy} committed to protecting and defending fanworks from commercial exploitation and legal challenge.", :legal_advocacy => link_to(ts("Legal Advocacy"), "http://transformativeworks.org/projects/legal")).html_safe %></li>
-      <li><%= ts("%{open_doors}, which offers shelter to at-risk fannish projects.", :open_doors => link_to(ts("Open Doors"), "http://opendoors.transformativeworks.org")).html_safe %></li>
-      <li><%= ts("%{twc}, a peer-reviewed academic journal
-that seeks to promote scholarship on fanworks and practices.", :twc => link_to(ts("Transformative Works and Cultures"), "http://journal.transformativeworks.org/index.php/twc")).html_safe %></li>
+      <li><%= t(".major_projects.fanlore_details_html", fanlore_link: link_to(t(".major_projects.fanlore"), "https://fanlore.org")) %></li>
+      <li><%= t(".major_projects.legal_details_html", legal_advocacy_link: link_to(t(".major_projects.legal_advocacy"), "https://transformativeworks.org/projects/legal")) %></li>
+      <li><%= t(".major_projects.open_doors_details_html", open_doors_link: link_to(t(".major_projects.open_doors"), "https://opendoors.transformativeworks.org")) %></li>
+      <li><%= t(".major_projects.twc_details_html", twc_link: link_to(t(".major_projects.twc"), "https://journal.transformativeworks.org/index.php/twc")) %></li>
     </ul>
   </p>
-  <p><%= ts("You can find out more about the OTW and its projects at its website, %{transformative_works}, and learn about how your financial support is vital to the continuation and expansion of the OTW's work on its %{faq}. If you have a media or research question, please contact the %{communications_team}.", :transformative_works => link_to(ts("transformativeworks.org"), "http://transformativeworks.org"), :faq => link_to(ts("FAQ page"), "http://transformativeworks.org/faq"), :communications_team => link_to(ts("Communications team"), "http://transformativeworks.org/contact_us/")).html_safe %></p>
+  <p><%= t(".more_info.html",
+           transformative_works_link: link_to(t(".more_info.transformative_works"), "https://www.transformativeworks.org"),
+           faq_page_link: link_to(t(".more_info.faq_page"), "https://www.transformativeworks.org/faq"),
+           communications_team_link: link_to(t(".more_info.communications_team"), "https://www.transformativeworks.org/contact_us/")) %></p>
 </div>

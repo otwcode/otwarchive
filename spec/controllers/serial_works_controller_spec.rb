@@ -5,7 +5,7 @@ describe SerialWorksController do
   include RedirectExpectationHelper
   let(:user) { create(:user) }
   let(:series) { create(:series, authors: user.pseuds) }
-  let!(:first_work) { create(:serial_work, series: series) }
+  let!(:first_work) { series.serial_works.first }
   let!(:second_work) { create(:serial_work, series: series) }
   
   it "will fail if you're not the owner" do

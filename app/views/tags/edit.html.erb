@@ -16,7 +16,12 @@
 <% end %>
 
 <%= form_for @tag, as: :tag, url: { action: "update", id: @tag}, html: { method: :put } do |f| %>
-
+<fieldset>
+    <legend><%= t(".submit_legend") %></legend>
+    <p class="submit actions">
+      <%= submit_tag t(".save_changes") %>
+    </p>
+  </fieldset>
   <fieldset>
     <legend><%= ts("Tag Info") %></legend>
     <h3 class="landmark heading"><%= ts("Tag Info") %></h3>
@@ -47,9 +52,10 @@
 
       <dt><%= ts("Category") %></dt>
       <dd>
+        <% types = logged_in_as_admin? ? (Tag::USER_DEFINED + %w[Media]) : Tag::USER_DEFINED %>
         <% if @tag.can_change_type? %>
           <%= f.select :type,
-                options_for_select(%w(Fandom Character Relationship Freeform UnsortedTag),
+                options_for_select(types + %w[UnsortedTag],
                 @tag.type.to_s) %>
         <% else %>
           <strong><%= ts("%{tag_type}", tag_type: tag_type_label_name(@tag.type.tableize)) %></strong>
@@ -217,9 +223,9 @@
   <% end %>
 
   <fieldset>
-    <legend><%= ts("Submit") %></legend>
+    <legend><%= t(".submit_legend") %></legend>
     <p class="submit actions">
-      <%= submit_tag ts("Save changes") %>
+      <%= submit_tag t(".save_changes") %>
     </p>
   </fieldset>
 <% end %>

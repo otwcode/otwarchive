@@ -1,15 +1,13 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.formal", name: @user.login) %>
+<%= t("mailer.general.greeting.formal.addressed_html", name: @user.login) %>
 
-<%= (@work.pseuds.count > 1 && @user != User.current_user) ?
-t('.deleted_other.text',
-        title: @work.title,
-        pseud: text_pseud(User.current_user.default_pseud)) :
-t('.deleted_yourself.text',
-        title: @work.title) %>
-
-<%= t('.questions.text', support: t('.support'), url: new_feedback_report_url) %>
-
-<%= t('.attachment') %>
+<% if @user == @deleter || !@deleter %>
+<%= t(".deleted_yourself.text", title: @work.title) %>
+<% else %>
+<%= t(".deleted_other.text", title: @work.title, pseud: text_pseud(@deleter.default_pseud)) %>
 <% end %>
 
+<%= t(".questions.text", support: t(".support"), url: new_feedback_report_url) %>
+
+<%= t(".attachment") %>
+<% end %>

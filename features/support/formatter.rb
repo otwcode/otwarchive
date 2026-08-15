@@ -1,13 +1,14 @@
 # Adapted from https://github.com/tpope/fivemat
 require "cucumber/formatter/progress"
+require_relative "./elapsed_time"
 
 module Ao3Cucumber
   class Formatter < ::Cucumber::Formatter::Progress
-    include ElapsedTime
+    include ::ElapsedTime
 
     def on_test_case_started(event)
       super
-      feature = event.test_case.feature
+      feature = gherkin_document.feature
 
       return if same_feature_as_previous_test_case?(feature)
 
@@ -24,10 +25,10 @@ module Ao3Cucumber
 
     def before_feature(feature)
       # Print the feature's file name.
-      @io.puts feature.location.file
+      @io.puts current_feature_uri
       @io.flush
       @current_feature = feature
-      @start_time = Time.now
+      @start_time = Time.current
     end
 
     def after_feature

@@ -1,9 +1,73 @@
 --- 
 admin_00001: 
-  password_salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   created_at: 2008-11-09 01:26:01 Z
-  encrypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
   updated_at: 2008-11-09 01:26:01 Z
+  encrypted_password: <%= Devise::Encryptor.digest(Admin, "testadmin") %>
   id: 1
-  login: testadmin
-  email: user1@example.com
+  login: admin-testadmin
+  email: testadmin@example.com
+  roles:
+    - superadmin
+communications:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  encrypted_password: <%= Devise::Encryptor.digest(Admin, "testadmin") %>
+  id: 2
+  login: admin-comms
+  email: admin-comms@example.com
+  roles:
+    - communications
+development_and_membership:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  encrypted_password: <%= Devise::Encryptor.digest(Admin, "testadmin") %>
+  id: 3
+  login: admin-devmem
+  email: admin-devmem@example.com
+  roles:
+    - development_and_membership
+docs:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  encrypted_password: <%= Devise::Encryptor.digest(Admin, "testadmin") %>
+  id: 4
+  login: admin-docs
+  email: admin-docs@example.com
+  roles:
+    - docs
+policy_and_abuse:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  encrypted_password: <%= Devise::Encryptor.digest(Admin, "testadmin") %>
+  id: 5
+  login: admin-pac
+  email: admin-pac@example.com
+  roles:
+    - policy_and_abuse
+support:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  encrypted_password: <%= Devise::Encryptor.digest(Admin, "testadmin") %>
+  id: 6
+  login: admin-support
+  email: admin-support@example.com
+  roles:
+    - support
+tag_wrangling:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  encrypted_password: <%= Devise::Encryptor.digest(Admin, "testadmin") %>
+  id: 7
+  login: admin-wrangling
+  email: admin-wrangling@example.com
+  roles:
+    - tag_wrangling
+translation:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  encrypted_password: <%= Devise::Encryptor.digest(Admin, "testadmin") %>
+  id: 8
+  login: admin-translation
+  email: admin-translation@example.com
+  roles:
+    - translation

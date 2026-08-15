@@ -43,7 +43,7 @@ Feature: Gift Exchange Challenge with Tag Sets
   When I go to the "HockeyExchangeTags" tag set page
   Then I should see "About HockeyExchangeTags"
     And I should see "Celebrities & Real People" within ".index"
-  When I follow "↓" within ".index"
+  When I press "↓" within ".index"
   Then I should see "Hockey RPF"
   When I have set up the gift exchange "My Hockey Exchange"
     And I fill in single-fandom gift exchange challenge options

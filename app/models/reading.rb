@@ -5,11 +5,13 @@ class Reading < ApplicationRecord
   after_save :expire_cached_home_marked_for_later, if: :saved_change_to_toread?
   after_destroy :expire_cached_home_marked_for_later, if: :toread?
 
+  scope :visible, -> { left_joins(:work).merge(Work.visible_to_registered_user.or(Work.where(id: nil))) }
+
   # called from show in work controller
   def self.update_or_create(work, user)
     if user && user.preference.try(:history_enabled) && !user.is_author_of?(work)
       reading_json = [user.id, Time.now, work.id, work.major_version, work.minor_version, false].to_json
-      REDIS_GENERAL.sadd("Reading:new", reading_json)
+      REDIS_GENERAL.sadd?("Reading:new", reading_json)
     end
   end
 
@@ -44,7 +46,7 @@ class Reading < ApplicationRecord
 
   def expire_cached_home_marked_for_later
     unless Rails.env.development?
-      Rails.cache.delete("home/index/#{user_id}/home_marked_for_later")
+      Rails.cache.delete("v1/home/index/#{user_id}/home_marked_for_later")
     end
   end
 end

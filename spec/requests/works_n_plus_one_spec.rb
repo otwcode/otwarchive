@@ -3,27 +3,34 @@ require "spec_helper"
 describe "n+1 queries in the WorksController" do
   include LoginMacros
 
-  shared_examples "displaying multiple works efficiently" do
+  shared_examples "displaying multiple works efficiently" do |queries_per_work: nil|
     context "when all works are cached", :n_plus_one do
       populate do |n|
-        User.current_user = nil # prevent treating the logged-in user as the work creator
         WorkIndexer.prepare_for_testing
         create_list(:work, n, **work_attributes)
         run_all_indexing_jobs
         subject.call
       end
 
-      it "performs a constant number of queries" do
-        expect do
-          subject.call
-          expect(response.body.scan('<li id="work_').size).to eq(current_scale.to_i)
-        end.to perform_constant_number_of_queries
+      if queries_per_work
+        it "performs #{queries_per_work} query per work" do
+          expect do
+            subject.call
+            expect(response.body.scan('<li id="work_').size).to eq(current_scale.to_i)
+          end.to perform_linear_number_of_queries(slope: queries_per_work)
+        end
+      else
+        it "performs a constant number of queries" do
+          expect do
+            subject.call
+            expect(response.body.scan('<li id="work_').size).to eq(current_scale.to_i)
+          end.to perform_constant_number_of_queries
+        end
       end
     end
 
     context "when no works are cached", :n_plus_one do
       populate do |n|
-        User.current_user = nil # prevent treating the logged-in user as the work creator
         WorkIndexer.prepare_for_testing
         create_list(:work, n, **work_attributes)
         run_all_indexing_jobs
@@ -84,6 +91,29 @@ describe "n+1 queries in the WorksController" do
         it_behaves_like "displaying multiple works efficiently"
       end
     end
+
+    context "when viewing imported recent works" do
+      subject do
+        proc do
+          get works_path
+        end
+      end
+
+      let!(:work_attributes) do
+        archivist = create(:archivist)
+        { authors: [archivist.default_pseud], external_creatorships: [create(:external_creatorship, archivist: archivist)] }
+      end
+
+      context "when logged in" do
+        before { fake_login }
+
+        it_behaves_like "displaying multiple works efficiently"
+      end
+
+      context "when logged out" do
+        it_behaves_like "displaying multiple works efficiently"
+      end
+    end
   end
 
   describe "#collected" do
@@ -119,7 +149,9 @@ describe "n+1 queries in the WorksController" do
     let!(:work_attributes) { { authors: [user.default_pseud], posted: false } }
     let!(:user) { create(:user) }
 
-    it_behaves_like "displaying multiple works efficiently"
+    # Drafts have 0 posted chapters, which we intentionally don't cache
+    # to avoid persisting stale data after posting.
+    it_behaves_like "displaying multiple works efficiently", queries_per_work: 1
   end
 
   describe "#search" do

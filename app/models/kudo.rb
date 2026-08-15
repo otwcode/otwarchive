@@ -46,6 +46,20 @@ class Kudo < ApplicationRecord
             uniqueness: { scope: [:commentable_id, :commentable_type] },
             if: proc { |kudo| kudo.user.present? }
 
+  validate :cannot_be_official_user, on: :create
+  def cannot_be_official_user
+    return unless user&.official
+
+    errors.add(:user, :official)
+  end
+
+  validate :cannot_be_archivist_account, on: :create
+  def cannot_be_archivist_account
+    return unless user&.archivist
+
+    errors.add(:user, :archivist)
+  end
+
   scope :with_user, -> { where("user_id IS NOT NULL") }
   scope :by_guest, -> { where("user_id IS NULL") }
 

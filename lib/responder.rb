@@ -2,7 +2,7 @@ module Responder
   def update_work_stats
     work = get_work
     return unless work.present?
-    REDIS_GENERAL.sadd('works_to_update_stats', work.id)
+    REDIS_GENERAL.sadd?("works_to_update_stats", work.id)
   end
 
   def get_work

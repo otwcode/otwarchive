@@ -67,7 +67,7 @@ Feature: Comment Blocking
     When I am logged in as "pest"
       And I view the work "Aftermath" with comments
       And I follow "Delete"
-      And I follow "Yes, delete!"
+      And I press "Yes, delete!"
     Then I should see "Comment deleted."
 
   Scenario: Blocked users can comment on works shared with their blocker
@@ -95,7 +95,7 @@ Feature: Comment Blocking
       And I go to the homepage
     Then I should see "OMG!"
       But I should not see a link "Reply"
-    When I go to my inbox page
+    When I go to pest's inbox page
     Then I should see "OMG!"
       But I should not see a link "Reply"
 
@@ -108,6 +108,6 @@ Feature: Comment Blocking
       And I go to the homepage
     Then I should see "OMG!"
       But I should not see a link "Reply"
-    When I go to my inbox page
+    When I go to pest's inbox page
     Then I should see "OMG!"
       But I should not see a link "Reply"

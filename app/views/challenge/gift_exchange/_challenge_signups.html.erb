@@ -1,25 +1,25 @@
 <!--descriptions-->
 <h2 class="heading">
   <% if @query %>
-    <%= search_header @challenge_signups, nil, "Sign-up" %>
+    <%= search_header @challenge_signups, nil, t(".heading.for_search") %>
   <% else %>
-    <%= ts("Sign-ups for %{collection}", collection: @collection.title) %>
+    <%= t(".heading.for_collection", collection: @collection.title) %>
   <% end %>
 </h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <ul class="navigation actions">
-  <li class="search" role="search">
+  <li class="search">
     <%= form_tag collection_signups_path(@collection), class: "simple search", method: :get do |form| %>
       <fieldset>
-        <%= text_field_tag "query", @query, title: "search" %>
-        <%= submit_tag ts("Search By Pseud") %>
+        <%= text_field_tag "query", @query, title: t(".navigation.search"), autocomplete: "off" %>
+        <%= submit_tag t(".navigation.search_by_pseud") %>
       </fieldset>
     <% end %>
   </li>
   <li>
-    <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, format: :csv) %> 
+    <%= link_to t(".navigation.download_csv"), collection_signups_path(@collection, format: :csv) %>
     <%= link_to_help "csv-download" %>
   </li>
 </ul>
@@ -27,26 +27,26 @@
 
 <!--main content-->
 <% if @challenge_signups.empty? %>
-  <p><%= ts("No sign-ups yet!")%></p>
+  <p><%= t(".no_sign_ups_yet") %></p>
 <% else %>
   <%= will_paginate(@challenge_signups) %>
 
   <dl class="index group">
     <% @challenge_signups.each do |signup| %>
-      <dt class="participant" title="<%= ts("user name") %>">
-        <%= link_to signup.pseud.name, collection_signup_path(@collection, signup) %>
+      <dt class="participant">
+        <%= link_to signup.pseud.byline, collection_signup_path(@collection, signup) %>
         <%= mailto_link signup.pseud.user, subject: "[#{h(@collection.title)}] Message from Collection Maintainer" %>
       </dt>
       <dd>
         <%= render "challenge_signups/signup_controls", challenge_signup: signup, subnav: false %>
         <ul class="actions">
           <li>
-            <%= link_to h(ts("Requests")) + ' &#8595;'.html_safe, "#", class: "requests_#{signup.id}_open" %>
-            <%= link_to h(ts("Close Requests")) + ' &#8593;'.html_safe, "#", class: "requests_#{signup.id}_close" %>
+            <%= link_to t(".requests_html"), "#", class: "requests_#{signup.id}_open" %>
+            <%= link_to t(".close_requests_html"), "#", class: "requests_#{signup.id}_close" %>
           </li>
           <li>
-            <%= link_to h(ts("Offers")) + ' &#8595;'.html_safe, "#", class: "offers_#{signup.id}_open" %>
-            <%= link_to h(ts("Close Offers")) + ' &#8593;'.html_safe, "#", class: "offers_#{signup.id}_close" %>
+            <%= link_to t(".offers_html"), "#", class: "offers_#{signup.id}_open" %>
+            <%= link_to t(".close_offers_html"), "#", class: "offers_#{signup.id}_close" %>
           </li>
         </ul>
         <div class="toggled" id="<%= "requests_#{signup.id}" %>">
@@ -62,4 +62,3 @@
   <%= will_paginate(@challenge_signups) %>
 <% end %>
 <!--/content-->
-

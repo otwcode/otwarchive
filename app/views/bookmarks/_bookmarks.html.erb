@@ -7,14 +7,7 @@
   <%= render 'series/series_blurb', :series => @bookmarkable %>
 <% end %>
 
-<% if params[:show_recent] %>
-  <% # The javascript expanded view that shows more bookmarks for a particular work on an aggregated view %>  
-  <% # because this isn't rendered inside the index view we need to put a ul around it %>
-  <ul class="index group">
-    <%= render partial: 'bookmarks/bookmark_blurb_short', collection: @bookmarks, as: :bookmark %>
-  </ul>
-
-<% elsif @bookmarkable %>
+<% if @bookmarkable %>
   <% # show only partial view for each bookmark since the bookmarked object is already shown above %>
   <%= render partial: 'bookmarks/bookmark_blurb_short', collection: @bookmarks, as: :bookmark %>
 

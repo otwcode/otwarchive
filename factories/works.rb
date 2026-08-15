@@ -25,10 +25,6 @@ FactoryBot.define do
       authors { [] }
     end
 
-    factory :custom_work_skin do
-      work_skin_id { 1 }
-    end
-
     factory :draft do
       posted { false }
     end
@@ -58,6 +54,7 @@ FactoryBot.define do
 
   factory :external_author_name do |f|
     f.association :external_author
+    name { Faker::Name.first_name }
   end
 
   factory :external_creatorship do |f|

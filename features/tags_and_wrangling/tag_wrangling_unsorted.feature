@@ -58,3 +58,49 @@ Feature: Tag Wrangling - Unsorted Tags
     When I select "UnsortedTag" from "tag_type"
       And I press "Save changes"
     Then I should see "Tag was updated."
+
+  Scenario Outline: Editing unsorted tags as a fully authorized admin
+    Given an unsorted_tag exists with name: "Admin unsorted tag"
+      And I am logged in as a "<role>" admin
+    When I go to the unsorted_tags page
+      And I select "Freeform" for the unsorted tag "Admin unsorted tag"
+      And I press "Update"
+    Then I should see "Tags were successfully sorted"
+      And the "Admin unsorted tag" tag should be a "Freeform" tag
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | tag_wrangling    |
+
+  Scenario Outline: Editing unsorted tags as a view-only admin
+    Given an unsorted_tag exists with name: "Admin unsorted tag"
+      And I am logged in as a "<role>" admin
+    When I go to the unsorted_tags page
+      And I select "Freeform" for the unsorted tag "Admin unsorted tag"
+      And I press "Update"
+    Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
+      And the "Admin unsorted tag" tag should be an unsorted tag
+
+    Examples:
+      | role             |
+      | policy_and_abuse |
+
+  Scenario Outline: Editing unsorted tags as an unauthorized admin
+    Given an unsorted_tag exists with name: "Admin unsorted tag"
+      And I am logged in as a "<role>" admin
+    When I go to the unsorted_tags page
+    Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
+
+    Examples:
+      | role                       |
+      | board                      |
+      | board_assistants_team      |
+      | communications             |
+      | development_and_membership |
+      | docs                       |
+      | elections                  |
+      | legal                      |
+      | translation                |
+      | support                    |
+      | open_doors                 |

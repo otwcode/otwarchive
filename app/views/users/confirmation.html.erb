@@ -12,7 +12,7 @@
   <p>
     <%# We do days_to_purge_unactivated * 7 because it's actually weeks %>
     <strong><%= t(".important")%></strong>
-    <%= t(".must_activate", count: AdminSetting.current.days_to_purge_unactivated? ? (AdminSetting.current.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED) %>
+    <%= t(".must_activate", count: AdminSetting.current.days_to_purge_unactivated * 7) %>
   </p>
   <p>
     <%= link_to t(".go_back"), root_path %>

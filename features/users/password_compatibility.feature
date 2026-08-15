@@ -10,7 +10,7 @@ Feature:
       | login | password |
       | user1 | password |
     When I am on the homepage
-      And I fill in "User name or email:" with "user1"
+      And I fill in "Username or email:" with "user1"
       And I fill in "Password:" with "password"
       And I press "Log In"
     Then I should see "Successfully logged in."
@@ -21,7 +21,7 @@ Feature:
       | login | password |
       | user1 | password |
     When I am on the homepage
-      And I fill in "User name or email:" with "user1"
+      And I fill in "Username or email:" with "user1"
       And I fill in "Password:" with "password"
       And I press "Log In"
     Then I should see "Successfully logged in."
@@ -32,7 +32,7 @@ Feature:
       | login | password |
       | user1 | password |
     When I am on the homepage
-      And I fill in "User name or email:" with "user1"
+      And I fill in "Username or email:" with "user1"
       And I fill in "Password:" with "password"
       And I press "Log In"
     Then I should see "Successfully logged in."

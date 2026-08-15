@@ -1,0 +1,19 @@
+<h4><%= t(".page_heading") %></h4>
+
+<dl id="help">
+  <dt><%= t(".hide_work_from_search_engines.header") %></dt>
+  <dd><%= t(".hide_work_from_search_engines.description") %></dd>
+  <dt><%= t(".hide_share_buttons.header") %></dt>
+  <dd>
+    <p><%= t(".hide_share_buttons.description") %></p>
+    <p><%= t(".hide_share_buttons.note") %></p>
+  </dd>
+  <dt><%= t(".allow_co_creator_invite.header") %></dt>
+  <dd>
+    <p><%= t(".allow_co_creator_invite.enabling", app_name: ArchiveConfig.APP_SHORT_NAME) %></p>
+    <p><%= t(".allow_co_creator_invite.disabling") %></p>
+    <p><%= t(".allow_co_creator_invite.changing") %></p>
+  </dd>
+</dl>
+
+<p><%= t(".more_information_html", preferences_faq_link: link_to(t(".preferences_faq"), archive_faq_path("preferences"))) %></p>

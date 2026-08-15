@@ -12,9 +12,9 @@ RSpec::Matchers.define :add_to_reindex_queue do |item, queue|
 
     # Stub sadd so that we can track whether it was ever called with the right
     # arguments:
-    allow(IndexQueue::REDIS).to receive(:sadd).and_call_original
+    allow(IndexQueue::REDIS).to receive(:sadd?).and_call_original
     given_proc.call
-    expect(IndexQueue::REDIS).to have_received(:sadd).with(
+    expect(IndexQueue::REDIS).to have_received(:sadd?).with(
       queue_key, eq(item.id).or(include(item.id))
     ).at_least(:once)
   end

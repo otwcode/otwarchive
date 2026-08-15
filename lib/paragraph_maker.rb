@@ -102,7 +102,7 @@ module ParagraphMaker
           node.add_previous_sibling(piece)
         when 1
           # One newline, replace it with a <br>.
-          node.add_previous_sibling("<br>")
+          node.add_previous_sibling("<br>\n")
         when 2
           # Two newlines, replace it with a special tag (to be processed later)
           # that marks the paragraph to be split at this location.
@@ -245,15 +245,15 @@ module ParagraphMaker
   # merge_br_tags. Either way, we use extract_from_paragraph to split its
   # parents until we reach the paragraph tag that contains it. If the split is
   # marked as "long," we need to insert a <p>&nbsp;</p> blank paragraph.
-  # Otherwise, just delete it.
+  # Reintroduce newlines instead to preserve chunks in separate lines.
   def replace_splits(root)
     root.css("split").each do |node|
       extract_from_paragraph(node)
 
       if node.attribute("long")
-        node.replace("<p>&nbsp;</p>")
+        node.replace("\n<p>&nbsp;</p>\n")
       else
-        node.unlink
+        node.replace("\n")
       end
     end
   end

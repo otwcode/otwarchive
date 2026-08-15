@@ -190,4 +190,11 @@ namespace :skins do
     Skin.where("id != ?", default_id).update_all(:official => false)
   end
 
+  desc "Clear unofficial public skins"
+  task(clear_unofficial_public_skins: :environment) do
+    Skin.where(public: true, official: false).update_all(rejected: false, public: false)
+
+    puts "Finished clearing unofficial public skins."
+    $stdout.flush
+  end
 end

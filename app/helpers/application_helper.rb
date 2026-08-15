@@ -19,34 +19,48 @@ module ApplicationHelper
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
 
-    show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
-    class_names += " dashboard" if show_sidebar
+    # Rails/HelperInstanceVariable is disabled for the the following line given this warning is raised for reusing helpers. This function is only used once in application.html.erb
+    # Whether or not the sidebar should be shown
+    class_names += " dashboard" if !@hide_dashboard && (@user || @admin_posts || @collection || show_wrangling_dashboard) # rubocop:disable Rails/HelperInstanceVariable
+    # Whether or not the page will have filters
+    class_names += " filtered" if page_has_filters?
 
-    if page_has_filters?
-      class_names += " filtered"
-    end
-
-    if %w(abuse_reports feedbacks known_issues).include?(controller.controller_name)
-      class_names = "system support " + controller.controller_name + ' ' + controller.action_name
-    end
-    if controller.controller_name == "archive_faqs"
-      class_names = "system docs support faq " + controller.action_name
-    end
-    if controller.controller_name == "wrangling_guidelines"
-      class_names = "system docs guideline " + controller.action_name
-    end
-    if controller.controller_name == "home"
-      class_names = "system docs " + controller.action_name
-    end
-    if controller.controller_name == "errors"
-      class_names = "system " + controller.controller_name + " error-" + controller.action_name
+    case controller.controller_name
+    when "abuse_reports", "feedbacks", "known_issues"
+      class_names = "system support #{controller.controller_name} #{controller.action_name}"
+    when "archive_faqs"
+      class_names = "system docs support faq #{controller.action_name}"
+    when "wrangling_guidelines"
+      class_names = "system docs guideline #{controller.action_name}"
+    when "home"
+      class_names = if %w(content privacy).include?(controller.action_name)
+                      "system docs tos tos-#{controller.action_name}"
+                    else
+                      "system docs #{controller.action_name}"
+                    end
+    when "errors"
+      class_names = "system #{controller.controller_name} error-#{controller.action_name}"
+    # If you edit these classes, you may need to edit the main div's classes in layouts/session
+    when "sessions"
+      class_names = if controller.action_name == "create"
+                      "#{class_names} system session authentication"
+                    else
+                      class_names
+                    end
+    when "totp"
+      class_names = if %w(confirm_disable create disable new).include?(controller.action_name)
+                      "#{class_names} system session authentication reauthentication"
+                    else
+                      class_names
+                    end
     end
 
     class_names
   end
 
   def page_has_filters?
-    @facets.present? || (controller.action_name == 'index' && controller.controller_name == 'collections') || (controller.action_name == 'unassigned' && controller.controller_name == 'fandoms')
+    # This function is currently only used for classes_for_main, the linting error is disabled for the same reason
+    @facets.present? || (@sort_and_filter && controller.controller_name == "collections") || (controller.action_name == "unassigned" && controller.controller_name == "fandoms") # rubocop:disable Rails/HelperInstanceVariable
   end
 
   # This is used to make the current page we're on (determined by the path or by the specified condition) a span with class "current" and it allows us to add a title attribute to the link or the span
@@ -61,111 +75,41 @@ module ApplicationHelper
     link_to content_tag(:span, ts("RSS Feed")), link_to_feed, title: ts("RSS Feed"), class: "rss"
   end
 
-  # 1: default shows just the link to help
-  # 2: show_text = true: shows "plain text with limited html" and link to help
-  def allowed_html_instructions(show_text = true)
-    (show_text ? h(ts("Plain text with limited HTML")) : "".html_safe) +
-      link_to_help("html-help")
+  def allowed_html_instructions(strip_images: false)
+    # i18n-tasks-use t("application_helper.text_limited_html")
+    # i18n-tasks-use t("application_helper.text_limited_html_strip_images_html")
+    t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help_modal(help_html_path, t("application_helper.allowed_html_instructions.html_help_title")))
   end
 
-  # Byline helpers
-  def byline(creation, options={})
-    if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous").html_safe
-      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
-        anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
-      end
-      return anon_byline
-    end
-    non_anonymous_byline(creation, options[:only_path])
-  end
-
-  def non_anonymous_byline(creation, url_path = nil)
-    only_path = url_path.nil? ? true : url_path
-
-    if @preview_mode
-      # Skip cache in preview mode
-      return byline_text(creation, only_path)
-    end
-
-    Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
-      byline_text(creation, only_path)
-    end
-  end
-
-  def byline_text(creation, only_path, text_only = false)
-    if creation.respond_to?(:author)
-      creation.author
-    else
-      pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a
-      pseuds = pseuds.flatten.uniq.sort
-
-      archivists = Hash.new []
-      if creation.is_a?(Work)
-        external_creatorships = creation.external_creatorships.select { |ec| !ec.claimed? }
-        external_creatorships.each do |ec|
-          archivist_pseud = pseuds.select { |p| ec.archivist.pseuds.include?(p) }.first
-          archivists[archivist_pseud] += [ec.author_name]
-        end
-      end
-
-      pseuds.map { |pseud|
-        pseud_byline = text_only ? pseud.byline : pseud_link(pseud, only_path)
-        if archivists[pseud].empty?
-          pseud_byline
-        else
-          archivists[pseud].map { |ext_author|
-            ts("%{ext_author} [archived by %{name}]", ext_author: ext_author, name: pseud_byline)
-          }.join(', ')
-        end
-      }.join(', ').html_safe
-    end
-  end
-
-  def pseud_link(pseud, only_path = true)
-    if only_path
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
-    else
-      link_to(pseud.byline, user_pseud_url(pseud.user, pseud), rel: "author")
-    end
-  end
-
-  # A plain text version of the byline, for when we don't want to deliver a linkified version.
-  def text_byline(creation, options={})
-    if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous")
-      if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline += " [#{non_anonymous_byline(creation)}]".html_safe
-      end
-      anon_byline
-    else
-      only_path = false
-      text_only = true
-      byline_text(creation, only_path, text_only)
-    end
+  # Returns instructions and help button that is shown above the RTE window
+  def rich_text_instructions
+    t("application_helper.rich_text_instructions.type_paste_rich_text_html", help_link: link_to_help_modal(help_rte_path, t("application_helper.rich_text_instructions.rte_help_title")))
   end
 
   def link_to_modal(content = "", options = {})
     options[:class] ||= ""
     options[:for] ||= ""
-    options[:title] ||= options[:for]
 
     html_options = { class: "#{options[:class]} modal", title: options[:title] }
+    html_options[:"aria-label"] = options[:aria_label] if options[:aria_label]
+
     link_to content, options[:for], html_options
   end
 
-  # Currently, help files are static. We may eventually want to make these dynamic?
+  # TODO: AO3-7208 Make help modals dynamic and translatable and use link_to_help_modal instead of this method
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
     help_file = ""
-    #if Locale.active && Locale.active.language
-    #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
-    #end
 
     unless !help_file.blank? && File.exists?("#{Rails.root}/public/#{help_file}")
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
 
-    " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
+    " ".html_safe + link_to_modal(link, for: help_file, aria_label: help_entry.split("-").join(" ").capitalize, class: "help symbol question").html_safe
+  end
+
+  def link_to_help_modal(help_path, title)
+    link = tag.span(tag.span(t("application_helper.help_modal.help_symbol")), class: %w[symbol question])
+    " ".html_safe + link_to_modal(link, for: help_path, aria_label: title, class: "help symbol question")
   end
 
   # Inserts the flash alert messages for flash[:key] wherever
@@ -253,20 +197,24 @@ module ApplicationHelper
   end
 
   # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc)
-  def expand_contract_all(target="index")
-    expand_all = content_tag(:a, ts("Expand All"), href: "#", class: "expand_all", "target_class" => target, role: "button")
-    contract_all = content_tag(:a, ts("Contract All"), href: "#", class: "contract_all", "target_class" => target, role: "button")
-    content_tag(:span, expand_all + "\n".html_safe + contract_all, class: "actions hidden showme", role: "menu")
+  def expand_contract_all(target = "listbox")
+    expand_all = button_tag(ts("Expand All"), class: "expand_all", data: { target_class: target })
+    contract_all = button_tag(ts("Contract All"), class: "contract_all", data: { target_class: target })
+
+    expand_all + contract_all
   end
 
   # Sets up expand/contract/shuffle buttons for any list whose id is passed in
   # See the jquery code in application.js
   # Note that these start hidden because if javascript is not available, we
   # don't want to show the user the buttons at all.
-  def expand_contract_shuffle(list_id, shuffle=true)
-    ('<span class="action expand hidden" title="expand" action_target="#' + list_id + '"><a href="#" role="button">&#8595;</a></span>
-    <span class="action contract hidden" title="contract" action_target="#' + list_id + '"><a href="#" role="button">&#8593;</a></span>').html_safe +
-    (shuffle ? ('<span class="action shuffle hidden" title="shuffle" action_target="#' + list_id + '"><a href="#" role="button">&#8646;</a></span>') : '').html_safe
+  def expand_contract_shuffle(list_id, shuffle: true)
+    target = "##{list_id}"
+    expander = button_tag("&#8595;".html_safe, class: "expand hidden", title: "expand", data: { action_target: target })
+    contractor = button_tag("&#8593;".html_safe, class: "contract hidden", title: "contract", data: { action_target: target })
+    shuffler = button_tag("&#8646;".html_safe, class: "shuffle hidden", title: "shuffle", data: { action_target: target }) if shuffle
+
+    expander + contractor + shuffler
   end
 
   # returns the default autocomplete attributes, all of which can be overridden
@@ -343,12 +291,27 @@ module ApplicationHelper
     name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
   end
 
-  def field_id(form, attribute)
-    name_to_id(field_name(form, attribute))
+  def field_id(form_or_object_name, attribute, index: nil, **_kwargs)
+    name_to_id(field_name(form_or_object_name, attribute, index: index))
   end
 
-  def field_name(form, attribute)
-    "#{form.object_name}[#{field_attribute(attribute)}]"
+  # This is a partial re-implementation of ActionView::Helpers::FormTagHelper#field_name.
+  # The method contract changed in Rails 7.0, but we can't use the default because it sometimes
+  # includes other information that -- at a minimum -- wreaks havoc on the Cucumber feature tests.
+  # It is used in when constructing forms, like in app/views/tags/new.html.erb.
+  def field_name(form_or_object_name, attribute, *_method_names, multiple: false, index: nil)
+    object_name = if form_or_object_name.respond_to?(:object_name)
+                    form_or_object_name.object_name
+                  else
+                    form_or_object_name
+                  end
+    if object_name.blank?
+      "#{field_attribute(attribute)}#{multiple ? '[]' : ''}"
+    elsif index
+      "#{object_name}[#{index}][#{field_attribute(attribute)}]#{multiple ? '[]' : ''}"
+    else
+      "#{object_name}[#{field_attribute(attribute)}]#{multiple ? '[]' : ''}"
+    end
   end
 
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
@@ -491,7 +454,7 @@ module ApplicationHelper
 
   def first_paragraph(full_text, placeholder_text = 'No preview available.')
     # is there a paragraph that does not have a child image?
-    paragraph = Nokogiri::HTML.parse(full_text).at_xpath('//p[not(img)]')
+    paragraph = Nokogiri::HTML5.parse(full_text).at_xpath("//p[not(img)]")
     if paragraph.present?
       # if so, get its text and put it in a fresh p tag
       paragraph_text = paragraph.text
@@ -500,18 +463,6 @@ module ApplicationHelper
       # if not, put the placeholder text in a p tag with the placeholder class
       return content_tag(:p, ts(placeholder_text), class: 'placeholder')
     end
-  end
-
-  # change the default link renderer for will_paginate
-  def will_paginate(collection_or_options = nil, options = {})
-    if collection_or_options.is_a? Hash
-      options = collection_or_options
-      collection_or_options = nil
-    end
-    unless options[:renderer]
-      options = options.merge renderer: PaginationListLinkRenderer
-    end
-    super(*[collection_or_options, options].compact)
   end
 
   # spans for nesting a checkbox or radio button inside its label to make custom
@@ -551,7 +502,7 @@ module ApplicationHelper
     # series.
     return [] if creation.is_a?(Work) && creation.unrevealed?
 
-    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
+    creation.pseuds.pluck(:user_id).uniq.map { |id| "user-#{id}" }
   end
 
   def css_classes_for_creation_blurb(creation)
@@ -616,4 +567,33 @@ module ApplicationHelper
       item.users.all? { |u| u&.preference&.minimize_search_engines? }
     end
   end
-end # end of ApplicationHelper
+
+  # Determines if the page (controller and action combination) does not need
+  # to show the ToS (Terms of Service) popup.
+  def tos_exempt_page?
+    case params[:controller]
+    when "home"
+      %w[index content privacy takedown tos tos_faq].include?(params[:action])
+    when "abuse_reports", "feedbacks", "users/sessions"
+      %w[new create].include?(params[:action])
+    when "archive_faqs"
+      %w[index show].include?(params[:action])
+    end
+  end
+
+  def browser_page_title(page_title, page_subtitle)
+    return page_title if page_title
+
+    page = if page_subtitle
+             page_subtitle
+           elsif controller.action_name == "index"
+             process_title(controller.controller_name)
+           else
+             "#{process_title(controller.action_name)} #{process_title(controller.controller_name.singularize)}"
+           end
+    # page_subtitle sometimes contains user (including admin) content, so let's
+    # not html_safe the entire string. Let's require html_safe be called when
+    # we set @page_subtitle, so we're conscious of what we're doing.
+    page + " | #{ArchiveConfig.APP_NAME}"
+  end
+end

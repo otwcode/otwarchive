@@ -15,7 +15,7 @@ jobs:
       BUNDLE_ONLY: linters
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
@@ -23,28 +23,31 @@ jobs:
           bundler-cache: true
 
       - name: rubocop
-        uses: reviewdog/action-rubocop@708a61f1f3bc4127205f5ec59f4f8617478ebdda
+        uses: reviewdog/action-rubocop@b6d5e953a5fc0bf3ab65254e77730ea2174d6d6d
         with:
           use_bundler: true
           reporter: github-pr-check
           skip_install: true
+          fail_level: any
 
-  erb-lint:
+  erb_lint:
     name: ERB Lint runner
     runs-on: ubuntu-latest
     env:
       BUNDLE_ONLY: linters
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
 
-      - name: erb-lint
-        uses: tk0miya/action-erblint@667687e73b44e7b7a710a1204b180f49f80ebb5e
+      - name: erb_lint
+        uses: otwcode/action-erblint@ece7c46883ef6a311194b9be3e6a2837945898e7
         with:
           use_bundler: true
-          reporter: github-pr-check # default
+          reporter: github-pr-check
+          fail_level: any
+          config_file: .erb-lint.yml

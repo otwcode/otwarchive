@@ -2,13 +2,13 @@
 <% works = pseud.works.to_a %>
 <h2 class="heading"><%= ts("Orphan All Works by %{name}", name: pseud.name) %></h2>
 
-<p class="caution">
+<p class="caution notice">
   <%= ts("Orphaning all works by %{name} will", name: pseud.name)%>
   <strong><%= ts("permanently")%></strong>
   <%= ts("remove the pseud %{name} from the following work(s), their chapters, associated series, and any feedback replies you may have left on them.", name: pseud.name) %>
 </p>
 
-<p class="caution">
+<p class="caution notice">
   <%= ts("Unless another one of your pseuds is listed as a creator on the work(s) below, orphaning them will remove them from your account and re-attach them to the specially created orphan_account. Please note that this is")%>
   <strong><%= ts("permanent and irreversible.")%></strong>
   <%= ts("You are giving up control over the work(s),")%>
@@ -17,7 +17,7 @@
 
 <%= render "works/work_abbreviated_list", works: works %>
 
-<p class="caution">
+<p class="caution notice">
   <%= ts("Are you")%>
   <strong><%= ts("really")%></strong>
   <%= ts("sure you want to do this?")%>

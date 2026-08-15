@@ -70,7 +70,7 @@ describe Feedback do
     let(:safe_report) { build(:feedback, username: 'viagra-test-123', email: legit_user.email) }
 
     before do
-      allow(Akismetor).to receive(:spam?).and_return(true)
+      allow(AkismetClient).to receive(:spam?).and_return(true)
     end
 
     it "is not valid if Akismet flags it as spam" do
@@ -81,6 +81,23 @@ describe Feedback do
     it "is valid even with spam if logged in and providing correct email" do
       User.current_user = legit_user
       expect(safe_report.save).to be_truthy
+    end
+  end
+
+  context "when report is submitted to Akismet" do
+    let(:report) { build(:feedback) }
+
+    it "has comment_type \"contact-form\"" do
+      expect(report.akismet_attributes[:comment_type]).to eq("contact-form")
+    end
+
+    it "has user_role \"user-with-nonmatching-email\" when reporter is logged in" do
+      User.current_user = create(:user)
+      expect(report.akismet_attributes[:user_role]).to eq("user-with-nonmatching-email")
+    end
+
+    it "has user_role \"guest\" when reporter is logged out" do
+      expect(report.akismet_attributes[:user_role]).to eq("guest")
     end
   end
 end

@@ -15,19 +15,21 @@ FactoryBot.define do
   end
 
   factory :collection_preference do |f|
-    collection
   end
 
   factory :collection_profile do |f|
-    collection
   end
 
   factory :collection do |f|
     name { generate(:collection_name) }
     title { generate(:collection_title) }
 
-    after(:build) do |collection|
-      collection.collection_participants.build(pseud_id: create(:pseud).id, participant_role: "Owner")
+    transient do
+      owner { build(:pseud) }
+    end
+
+    after(:build) do |collection, evaluator|
+      collection.collection_participants.build(pseud: evaluator.owner, participant_role: "Owner")
     end
 
     factory :anonymous_collection do
@@ -41,10 +43,18 @@ FactoryBot.define do
     factory :anonymous_unrevealed_collection do
       association :collection_preference, unrevealed: true, anonymous: true
     end
+
+    trait :closed do
+      association :collection_preference, closed: true
+    end
+
+    trait :moderated do
+      association :collection_preference, moderated: true
+    end
   end
 
   factory :collection_item do
-    item_type { "Work" }
+    item { create(:work) }
     collection
   end
 end

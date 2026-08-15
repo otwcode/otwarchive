@@ -12,10 +12,6 @@ class SkinPolicy < ApplicationPolicy
       user_has_roles?(MANAGE_WORK_SKINS) && @record.is_a?(WorkSkin)
   end
 
-  def set_default?
-    user_has_roles?(MANAGE_SITE_SKINS)
-  end
-
   alias index_approved? index?
   alias index_rejected? index?
 end

@@ -13,9 +13,9 @@ class WorkIndexer < Indexer
       :stat_counter,
       :tags,
       :users,
+      :relationships,
       fandoms: { meta_tags: :meta_tags, merger: { meta_tags: :meta_tags } },
       pseuds: :user,
-      relationships: :merger,
       serial_works: :series
     )
   end
@@ -23,7 +23,7 @@ class WorkIndexer < Indexer
   def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
-      create_index(shards: 12)
+      create_index(shards: ArchiveConfig.WORKS_SHARDS)
     end
     options[:skip_delete] = true
     super(options)
@@ -38,7 +38,7 @@ class WorkIndexer < Indexer
         },
         title: {
           type: "text",
-          analyzer: "simple"
+          analyzer: "standard"
         },
         creators: {
           type: "text"
@@ -84,29 +84,29 @@ class WorkIndexer < Indexer
       ],
       methods: [
         :authors_to_sort_on,
-        :rating_ids,
-        :archive_warning_ids,
-        :category_ids,
-        :fandom_ids,
-        :character_ids,
-        :relationship_ids,
-        :freeform_ids,
-        :filter_ids,
-        :tag,
         :collection_ids,
         :hits,
         :comments_count,
         :kudos_count,
         :bookmarks_count,
-        :creators,
         :crossover,
         :otp,
         :work_types,
         :nonfiction
       ]
     ).merge(
+      creators: object.indexed_creators,
+      rating_ids: object.general_rating_ids,
+      archive_warning_ids: object.general_archive_warning_ids,
+      category_ids: object.general_category_ids,
+      fandom_ids: object.general_fandom_ids,
+      character_ids: object.general_character_ids,
+      relationship_ids: object.general_relationship_ids,
+      freeform_ids: object.general_freeform_ids,
+      filter_ids: object.general_filter_ids,
       language_id: object.language&.short,
       series: series_data(object),
+      tag: object.general_tags,
       creator_join: { name: :work }
     ).merge(creator_data(object))
   end

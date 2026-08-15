@@ -1,20 +1,43 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("My Assignments") %> <%= @collection ? ts("in %{collection_link}", :collection_link => link_to(@collection.title, @collection)).html_safe : "" %></h2>
+<h2 class="heading">
+  <% if @collection %>
+    <%= t(".page_heading.collection_html", collection_link: link_to(@collection.title, @collection)) %>
+  <% else %>
+    <%= t(".page_heading.all") %>
+  <% end %>
+</h2>
 <!--/descriptions-->
 
 <!--subnav-->
+<h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
+<ul class="navigation actions">
+  <li>
+    <%= span_if_current(t(".navigation.unposted"),
+          user_assignments_path(@user, collection_id: params[:collection_id]),
+          params[:posted] != "true") %>
+  </li>
+  <li>
+    <%= span_if_current(t(".navigation.completed"),
+          user_assignments_path(@user, collection_id: params[:collection_id], posted: true),
+          params[:posted] == "true") %>
+  </li>
+</ul>
 <!--/subnav-->
 
 <!--main content-->
 <% unless @collection %>
-  <p class="note"><%= ts('Looking for prompts you claimed in a prompt meme? Try') %> <%= link_to ts("My Claims"), user_claims_path(@user) %></p>
+  <p class="notes"><%= t(".claims_note_html", claims_link: link_to(t(".claims"), user_claims_path(@user))) %></p>
 <% end %>
+
+<%== pagy_nav @pagy %>
 
 <dl class="assignment index group">
 
   <% @challenge_assignments.each do |assignment| %>
-    <%= render "assignment_blurb", :assignment => assignment %>
+    <%= render "assignment_blurb", assignment: assignment %>
   <% end %>
 
 </dl>
+
+<%== pagy_nav @pagy %>
 <!--/content-->

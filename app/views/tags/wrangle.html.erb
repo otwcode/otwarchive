@@ -136,7 +136,7 @@
             <td title="<%= ts("taggings") %>"><%= tag.taggings_count_cache %></td>
 
             <td>
-              <ul class="actions" role="menu">
+              <ul class="actions">
                 <% unless params[:status] == 'unwrangled' %>
                   <li>
                     <label for="remove_associated_<%= tag.id %>">
@@ -145,9 +145,10 @@
                     </label>
                   </li>
                 <% end %>
-                <li><%= link_to ts('Edit'), {controller: :tags, action: :edit, id: tag} %></li>
-                <li><%= link_to ts('Wrangle'), {controller: :tags, action: :wrangle, id: tag} %></li>
-                <li><%= link_to ts('Works'), {controller: :works, action: :index, tag_id: tag} %></li>
+                <li><%= link_to t(".manage.edit"), edit_tag_path(tag) %></li>
+                <li><%= link_to t(".manage.wrangle"), wrangle_tag_path(tag) %></li>
+                <li><%= link_to t(".manage.works"), tag_works_path(tag) %></li>
+                <li><%= link_to t(".manage.comments", count: tag.count_visible_comments), tag_comments_path(tag) %></li>
               </ul>
             </td>
           </tr>

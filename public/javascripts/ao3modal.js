@@ -197,7 +197,7 @@ jQuery(document).ready(function() {
                     .filter(function() {
                         return $(this).closest('.userstuff').length === 0;
                     }).click(function(event){
-                        _show($(this).attr('href'), $(this).attr('title'));
+                        _show($(this).attr('href'), $(this).attr('title') ? $(this).attr('title') : $(this).attr('aria-label'));
                         event.preventDefault();
                     });
 

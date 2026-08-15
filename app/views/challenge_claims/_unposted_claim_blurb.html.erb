@@ -35,7 +35,7 @@
     </p>
 
     <div class="icon">
-      <%= image_tag(claim.collection.icon.url(:standard), :size => "100x100", :alt => claim.collection.icon_alt_text, :class => "icon", skip_pipeline: true) %>
+      <%= collection_icon_display(claim.collection) %>
     </div>
   </div>
 

@@ -2,13 +2,15 @@ class CollectionItemsController < ApplicationController
   before_action :load_collection
   before_action :load_user, only: [:update_multiple]
   before_action :load_collectible_item, only: [:new, :create]
+  before_action :check_parent_visible, only: [:new]
+  before_action :users_only, only: [:new]
 
   cache_sweeper :collection_sweeper
 
   def index
 
     # TODO: AO3-6507 Refactor to use send instead of case statements.
-    if @collection && @collection.user_is_maintainer?(current_user)
+    if @collection && (@collection.user_is_maintainer?(current_user) || privileged_collection_admin?)
       @collection_items = @collection.collection_items.include_for_works
       @collection_items = case params[:status]
                           when "approved"
@@ -23,7 +25,7 @@ class CollectionItemsController < ApplicationController
                             @collection_items.unreviewed_by_collection
                           end
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id])) && @user == current_user
-      @collection_items = CollectionItem.for_user(@user).includes(:collection)
+      @collection_items = CollectionItem.for_user(@user).includes(:collection).merge(Collection.with_attached_icon)
       @collection_items = case params[:status]
                           when "approved"
                             @collection_items.approved_by_both
@@ -37,6 +39,8 @@ class CollectionItemsController < ApplicationController
                             @collection_items.unreviewed_by_user
                           end
     else
+      admin_only_access_denied and return if logged_in_as_admin?
+
       flash[:error] = ts("You don't have permission to see that, sorry!")
       redirect_to collections_path and return
     end
@@ -53,6 +57,10 @@ class CollectionItemsController < ApplicationController
     end
   end
 
+  def check_parent_visible
+    check_visibility_for(@item)
+  end
+
   def load_user
     unless @collection
       @user = User.find_by(login: params[:user_id])
@@ -65,11 +73,11 @@ class CollectionItemsController < ApplicationController
   def create
     unless params[:collection_names]
       flash[:error] = ts("What collections did you want to add?")
-      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+      redirect_back_or_to root_path and return
     end
     unless @item
       flash[:error] = ts("What did you want to add to a collection?")
-      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+      redirect_back_or_to root_path and return
     end
     if !current_user.archivist && @item.respond_to?(:allow_collection_invitation?) && !@item.allow_collection_invitation?
       flash[:error] = t(".invitation_not_sent", default: "This item could not be invited.")
@@ -101,8 +109,8 @@ class CollectionItemsController < ApplicationController
         errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", collection_title: collection.title)
       elsif @item.is_a?(Work) && @item.anonymous? && !current_user.is_author_of?(@item)
         errors << ts("%{collection_title}, because you don't own this item and the item is anonymous.", collection_title: collection.title)
-      # add the work to a collection, and try to save it
-      elsif @item.add_to_collection(collection) && @item.save(validate: false)
+      # add the work to a collection
+      elsif @item.add_to_collection(collection)
         # approved_by_user? and approved_by_collection? are both true.
         # This is will be true for archivists adding works to collections they maintain
         # or creators adding their works to a collection with auto-approval.

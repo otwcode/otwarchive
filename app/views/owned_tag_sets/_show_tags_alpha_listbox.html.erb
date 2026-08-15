@@ -10,22 +10,22 @@
   # in a list item
 %>
 <% itemcount ||= 30 %>
-<li class="<%= tag_type_css_class(tag_type) %> alphabet tagset index group listbox">
-  <h3>
+<li class="<%= tag_type_css_class(tag_type) %> alphabet listbox group">
+  <h3 class="heading">
     <%= ts("%{tag_type}", tag_type: tag_type_label_name(tag_type).pluralize) %>
-    <%= expand_contract_all %>
+    <span class="actions"><%= expand_contract_all %></span>
   </h3>
   <ol class="index group">
     <% slice_index = 0 %>
     <% tagname_list.each_slice(itemcount) do |tagnames| %>
-      <li class="<%= tag_type_css_class(tag_type) %> letter range listbox">
-        <h3 class="expander_parent heading">
+      <li class="<%= tag_type_css_class(tag_type) %> letter range listbox group">
+        <h4 class="heading">
           <span class="range">
             <%= tagnames.first %>
             <% unless tagnames.size < 2 %> &#8594; <%= tagnames.last %><% end %>
           </span>
-          <%= expand_contract_shuffle("list_for_#{tag_type}_#{slice_index}") %>
-        </h3>
+          <span class="actions"><%= expand_contract_shuffle("list_for_#{tag_type}_#{slice_index}") %></span>
+        </h4>
         <ol id="list_for_<%= tag_type %>_<%= slice_index %>" class="tags index group">
           <%= tagnames.map {|tn| content_tag(:li, tn)}.join(" ").html_safe %>
         </ol>

@@ -1,7 +1,7 @@
 @admin @comments
 Feature: Admin Actions to Post News
   In order to post news items
-  As an an admin
+  As an admin
   I want to be able to use the Admin Posts screen
 
   Scenario: Must be authorized to post
@@ -25,7 +25,8 @@ Feature: Admin Actions to Post News
       And I fill in "Comment" with "Excellent, my dear!"
       And I press "Comment"
     # notification to the admin list for admin post
-    Then 1 email should be delivered to "admin@example.org"
+    Then 0 emails should be delivered to "testadmin-communications@example.org"
+      But 1 email should be delivered to "admin@example.org"
       And the email should contain "Excellent"
 
     # regular user edits their comment
@@ -33,28 +34,8 @@ Feature: Admin Actions to Post News
       And I follow "Edit"
       And I press "Update"
     # notification to the admin list for admin post
-    Then 1 email should be delivered to "admin@example.org"
-
-  Scenario: Evil user can impersonate admin in comments
-  # However, they can't use an icon, so the admin's icon is the guarantee that they're real
-  # also their username will be plain text and not a link
-
-    Given I have posted an admin post
-    When I am logged in as "happyuser"
-      And I go to the admin-posts page
-    When I follow "Default Admin Post"
-      And I fill in "Comment" with "Excellent, my dear!"
-      And I press "Comment"
-    When I log out
-      And I go to the admin-posts page
-      And I follow "Default Admin Post"
-      And I fill in "Comment" with "Behold, ye mighty, and despair!"
-      And I fill in "Guest name" with "admin"
-      And I fill in "Guest email" with "admin@example.com"
-      And I press "Comment"
-    Then I should see "Comment created!"
-      And I should see "admin"
-      And I should see "Behold, ye mighty, and despair!"
+    Then 0 emails should be delivered to "testadmin-communications@example.org"
+      But 1 email should be delivered to "admin@example.org"
 
   Scenario: User views RSS of admin posts
 
@@ -242,3 +223,114 @@ Feature: Admin Actions to Post News
     Then I should see "Admin Post was successfully created."
       And I should see "باشید" within "div.admin.home div.userstuff"
       And the user content should be shown as right-to-left
+
+  Scenario: Moderating comments on an admin post
+    Given I am logged in as a "communications" admin
+    When I start to make an admin post
+      And I check "Enable comment moderation"
+      And I choose "Registered users and guests can comment"
+      And I press "Post"
+    Then I should see "Admin Post was successfully created."
+      And I should not see "Unreviewed Comments"
+
+    # Leave a guest comment on a moderated admin post
+    When I log out
+      And I go to the "Default Admin Post" admin post page
+    Then I should see "Comments on this news post are moderated. Your comment will not appear until it has been approved."
+    When I fill in "Comment" with "Perfectly nice comment"
+      And I fill in "Guest name" with "lovely"
+      And I fill in "Guest email" with "email@example.com"
+      And I press "Comment"
+    Then I should see "Your comment was received! It will appear publicly after it has been approved."
+      And I should be on the "Default Admin Post" admin post page
+      And 1 email should be delivered to "admin@example.org"
+
+    # Leave a logged in comment on a moderated admin post
+    When I am logged in as "commenter"
+      And I go to the "Default Admin Post" admin post page
+    Then I should see "Comments on this news post are moderated. Your comment will not appear until it has been approved."
+    When I fill in "Comment" with "Second perfectly nice comment"
+      And I press "Comment"
+    Then I should see "Your comment was received! It will appear publicly after it has been approved."
+      And I should see "Second perfectly nice comment"
+
+    # Access unreviewed comments
+    When I am logged in as a "legal" admin
+      And I go to the "Default Admin Post" admin post page
+      And I follow "Unreviewed Comments (2)"
+    Then I should see "Unreviewed Comments on Default Admin Post"
+      And I should see "Please note that comments cannot be unapproved once you have approved them. After you delete any comments you do not wish to appear on the news post, you can approve all that remain."
+
+    # Approve a single comment
+    When I press "Approve"
+    Then I should see "Comment approved."
+      And I should be on the unreviewed comments page for the admin post "Default Admin Post"
+    When I go to the "Default Admin Post" admin post page
+    Then I should see "Comments (1)"
+      And I should see "Unreviewed Comments (1)"
+
+    # Approve All Unreviewed Comments
+    When I go to the unreviewed comments page for the admin post "Default Admin Post"
+      And I press "Approve All Unreviewed Comments"
+    Then I should see "All moderated comments approved."
+      And I should be on the "Default Admin Post" admin post page
+      And I should see "Comments (2)"
+      And I should not see "Unreviewed Comments"
+
+  Scenario: Admin posts are sorted by publication date, newest first
+    Given time is frozen at "2026-05-16 03:30:00"
+      And the draft admin post "First News Post"
+      And time is frozen at "2026-05-17 04:30:00"
+      And the admin post "Second News Post"
+      And time is frozen at "2026-05-18 05:30:00"
+      And I am logged in as a "communications" admin
+      And I am on the admin-post drafts page
+    Then I should see "First News Post"
+      And I should not see "Second News Post"
+    When I follow "Post Draft"
+    Then I should see "Admin Post was successfully posted."
+    When I follow "Back to AO3 News Index"
+    Then "First News Post" should appear before "Second News Post"
+      And I should see "Published on Mon, 18 May 2026 05:30:00 +0000 (Created on Sat, 16 May 2026 03:30:00 +0000 and updated on Mon, 18 May 2026 05:30:00 +0000)"
+    When I log out
+      And I am on the homepage
+    Then "First News Post" should appear before "Second News Post"
+      And I should see "Published: Mon 18 May 2026 05:30AM UTC"
+
+Scenario: Preview of a translation of an admin post keeps tags of original post
+    Given I have posted an admin post with tags "original1, original2"
+      And basic languages
+      And I am logged in as a "translation" admin
+    When I set up a translation of an admin post with tags "ooops"
+      And I press "Preview"
+    Then I should see "original1 original2" within "dd.tags"
+      And I should not see "ooops"
+    When I press "Edit"
+    Then I should not see the input with id "admin_post_tag_list"
+      And I should not see "Tags from the selected post will replace any tags entered on this page."
+
+Scenario: Preview of a new admin post does not immediately create tags
+    Given basic languages
+      And I am logged in as a "translation" admin
+    When I start to make an admin post
+      And I fill in "Tags" with "never seen before"
+      And I press "Preview"
+    Then I should see "never seen before" within "dd.tags"
+    When I follow "Cancel"
+    Then "never seen before" should not be an option within "Tag"
+
+Scenario: Preview of an edit to an admin post does not immediately create tags
+    Given I have posted an admin post with tags "original1, original2"
+      And basic languages
+      And I am logged in as a "translation" admin
+    When I go to the admin-posts page
+      And I follow "Edit"
+      And I fill in "Tags" with "never seen before"
+      And I press "Preview"
+    Then I should see "never seen before" within "dd.tags"
+    When I follow "Cancel"
+    Then I should see "original1 original2" within "dd.tags"
+    When I go to the admin-posts page
+    Then "never seen before" should not be an option within "Tag"
+      And "original1" should be an option within "Tag"
+      And "original2" should be an option within "Tag"

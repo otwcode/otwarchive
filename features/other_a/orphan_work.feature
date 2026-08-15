@@ -55,7 +55,7 @@ Feature: Orphan work
     When I choose "Leave a copy of my pseud on"
     And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
-    When I am on my works page
+    When I go to orphaneer's works page
     Then I should not see "Shenanigans2"
     When I view the work "Shenanigans2"
     Then I should see "orphaneer (orphan_account)"
@@ -125,7 +125,7 @@ Feature: Orphan work
     And I post the work "Glorious" with fandom "SGA"
     And I post the work "Excellent" with fandom "Star Trek"
     And I post the work "Lovely" with fandom "Steven Universe"
-    And I go to my works page
+    And I go to author's works page
   When I follow "Edit Works"
   Then I should see "Edit Multiple Works"
   When I select "Glorious" for editing
@@ -142,7 +142,7 @@ Feature: Orphan work
   When I press "Yes, I'm sure"
     And all indexing jobs have been run
   Then I should see "Orphaning was successful."
-  When I go to my works page
+  When I go to author's works page
   Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"
@@ -160,3 +160,24 @@ Feature: Orphan work
       And I orphan the work "Half-Orphaned"
     Then "orphan_account" should be a co-creator of Chapter 1 of "Half-Orphaned"
       But "orphan_account" should not be a co-creator of Chapter 2 of "Half-Orphaned"
+
+  Scenario: Cancelling multiple work orphan redirects to edit multiple works page
+    Given the work "Work1" by "orphaneer"
+      And the work "Work2" by "orphaneer"
+      And I am logged in as "orphaneer"
+    When I go to orphaneer's edit multiple works page
+    When I check "work_ids[]" within "//label[@title='select Work1']"
+      And I check "work_ids[]" within "//label[@title='select Work2']"
+      And I press "Orphan"
+    Then I should see "Orphaning will permanently remove all identifying data from the following work(s),"
+    When I follow "Cancel"
+    Then I should be on orphaneer's edit multiple works page
+
+  Scenario: Cancelling single work orphan redirects to the work's edit page
+    Given the work "Work1" by "orphaneer"
+      And I am logged in as "orphaneer"
+    When I edit the work "Work1"
+      And I follow "Orphan Work"
+    Then I should see "Orphaning will permanently remove all identifying data from the following work(s),"
+    When I follow "Cancel"
+    Then the page title should include "Edit Work"

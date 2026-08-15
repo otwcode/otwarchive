@@ -61,14 +61,16 @@
         <dl>
           <dt><%= f.label :bookmarker_notes, ts("Notes"), for: notes_id %></dt>
           <dd>
-            <p class="footnote" id="notes-field-description">
-              <% if bookmarkable.class != ExternalWork %>
+            <% if bookmarkable.class != ExternalWork %>
+              <p class="footnote" id="notes-field-description-summary">
                 <%= ts("The creator's summary is added automatically.") %>
-              <% end %>
-              <%= allowed_html_instructions %>
+              </p>
+            <% end %>
+            <p class="footnote" id="notes-field-description-html">
+              <%= allowed_html_instructions(strip_images: true) %>
             </p>
             <%= f.text_area :bookmarker_notes, rows: 4, id: notes_id, class: "observe_textlength",
-                "aria-describedby" => "notes-field-description" %>
+                aria: { describedby: "notes-field-description-summary notes-field-description-html" } %>
             <%= generate_countdown_html(notes_id, ArchiveConfig.NOTES_MAX) %>
           </dd>
 
