@@ -11,7 +11,11 @@ class AdminPost < ApplicationRecord
   belongs_to :locale_language, foreign_key: :language_id, inverse_of: :admin_posts
   alias language locale_language
   belongs_to :translated_post, class_name: "AdminPost"
-  has_many :translations, class_name: "AdminPost", foreign_key: "translated_post_id", dependent: :destroy
+  has_many :translations, -> { includes(:locale_language).order("locale_languages.sortable_name") },
+           class_name: "AdminPost",
+           foreign_key: "translated_post_id",
+           inverse_of: :translated_post,
+           dependent: :destroy
   has_many :admin_post_taggings
   has_many :tags, through: :admin_post_taggings, source: :admin_post_tag
 

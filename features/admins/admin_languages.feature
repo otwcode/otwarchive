@@ -11,6 +11,7 @@ Scenario: An admin can add a work language
     And I follow "Add a Language"
     And I fill in "Name" with "Klingon"
     And I fill in "Abbreviation" with "tlh"
+    And I fill in "Name for alphabetical sorting" with "Klingon"
     And I press "Create Language"
   Then I should see "Language was successfully added."
     And I should see "Work Languages"

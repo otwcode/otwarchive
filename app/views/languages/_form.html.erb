@@ -20,11 +20,12 @@
         <%= f.text_field :short %>
       </dd>
 
-      <dt>
-        <%= f.label :sortable_name, t(".sortable_name") %>
+      <dt class="required">
+        <%= f.label :sortable_name, "#{t('.sortable_name')} *" %>
       </dt>
       <dd>
         <%= f.text_field :sortable_name %>
+        <p class="footnote"><%= t(".sortable_name_description") %></p>
       </dd>
     </dl>
     <p class="submit actions">

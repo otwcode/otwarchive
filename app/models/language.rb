@@ -2,17 +2,20 @@ class Language < ApplicationRecord
   include WorksOwner
   validates :short, presence: true, uniqueness: true, length: { maximum: 4 }
   validates :name, presence: true, uniqueness: true
+  validates :sortable_name, presence: true
 
   has_many :works
 
-  scope :default_order, -> { order(Arel.sql("COALESCE(NULLIF(sortable_name,''), short)")) }
+  scope :default_order, -> { order(:sortable_name) }
 
   def to_param
     short
   end
 
   def self.default
-    self.find_or_create_by(short: ArchiveConfig.DEFAULT_LANGUAGE_SHORT, name: ArchiveConfig.DEFAULT_LANGUAGE_NAME)
+    self.find_or_create_by(short: ArchiveConfig.DEFAULT_LANGUAGE_SHORT,
+                           name: ArchiveConfig.DEFAULT_LANGUAGE_NAME,
+                           sortable_name: ArchiveConfig.DEFAULT_LANGUAGE_NAME)
   end
 
   def work_count

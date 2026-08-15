@@ -68,7 +68,7 @@ describe AdminPost do
       admin_post.update!(posted: true)
       expect(admin_post.published_at).to eq(Time.current)
     end
-    
+
     it "keeps existing publication dates" do
       admin_post.update!(posted: true, published_at: 1.day.ago)
       expect(admin_post.published_at).to eq(1.day.ago)
@@ -83,6 +83,18 @@ describe AdminPost do
       admin_post.reload.update!(posted: true)
       expect(translation.reload.posted?).to be_truthy
       expect(translation.published_at).to eq(admin_post.published_at)
+    end
+  end
+
+  describe "#translations" do
+    let(:language1) { create(:locale_language, name: "Arabic", short: "ar", sortable_name: "arabic") }
+    let(:language2) { create(:locale_language, name: "Finnish", short: "fi", sortable_name: "Suomi") }
+    let(:parent_post) { create(:admin_post) }
+    let!(:language1_post) { create(:admin_post, locale_language: language1, translated_post: parent_post) }
+    let!(:language2_post) { create(:admin_post, locale_language: language2, translated_post: parent_post) }
+
+    it "sorts by the post's locale language sortable name, case-insensitive" do
+      expect(parent_post.reload.translations).to eq([language1_post, language2_post])
     end
   end
 end
