@@ -79,10 +79,56 @@ describe CommentsController do
   end
 
   describe "GET #cancel_comment_delete" do
-    it "redirects to the comment on the commentable without an error" do
-      get :cancel_comment_delete, params: { id: comment.id }
-      expect(flash[:error]).to be_nil
-      expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+    context "when cancelling from chapter by chapter view" do
+      before do
+        request.env["HTTP_REFERER"] = "/works/1/chapters/1"
+      end
+
+      it "redirects to the comment on the chapter view without an error" do
+        get :cancel_comment_delete, params: { id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+      end
+    end
+
+    context "when cancelling from the work view" do
+      before do
+        request.env["HTTP_REFERER"] = "/works/1"
+      end
+
+      it "redirects to the comment on the work view without an error" do
+        get :cancel_comment_delete, params: { id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(work_path(comment.commentable.work, show_comments: true, anchor: "comment_#{comment.id}"))
+      end
+    end
+
+    context "when cancelling from comments view" do
+      before do
+        request.env["HTTP_REFERER"] = "/comments/1"
+      end
+
+      context "when user set preference to full work view" do
+        before do
+          known_user = create(:user)
+          known_user.preference.update!(view_full_works: true)
+          fake_login_known_user(known_user)
+        end
+
+        it "redirects to the comment on the work view without an error" do
+          get :cancel_comment_delete, params: { id: comment.id }
+          expect(flash[:error]).to be_nil
+          expect(response).to redirect_to(work_path(comment.commentable.work, show_comments: true, anchor: "comment_#{comment.id}"))
+        end
+      end
+
+      context "when user set preference to chapter by chapter view" do
+        it "redirects to the comment on the chapter view without an error" do
+          get :cancel_comment_delete, params: { id: comment.id }
+          expect(flash[:error]).to be_nil
+          expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+        end
+      end
     end
   end
 
@@ -91,10 +137,54 @@ describe CommentsController do
       before { fake_login_known_user(comment.pseud.user) }
 
       context "when the format is html" do
-        it "redirects to the comment on the commentable without an error" do
-          get :cancel_comment_edit, params: { id: comment.id }
-          expect(flash[:error]).to be_nil
-          expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+        context "when user is navigating from chapter view" do
+          before do
+            request.env["HTTP_REFERER"] = "/works/1/chapters/1"
+          end
+
+          it "redirects to the comment on the chapter view without an error" do
+            get :cancel_comment_edit, params: { id: comment.id }
+            expect(flash[:error]).to be_nil
+            expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+          end
+        end
+
+        context "when user is navigating from work view" do
+          before do
+            request.env["HTTP_REFERER"] = "/works/1"
+          end
+
+          it "redirects to the comment on the full work view without error" do
+            get :cancel_comment_edit, params: { id: comment.id }
+            expect(flash[:error]).to be_nil
+            expect(response).to redirect_to(work_path(comment.commentable.work, show_comments: true, anchor: "comment_#{comment.id}"))
+          end
+        end
+
+        context "when user is navigating from comment view" do
+          before do
+            request.env["HTTP_REFERER"] = "/comments/1"
+          end
+
+          context "when user preference is full work view" do
+            before do
+              comment.pseud.user.preference.update!(view_full_works: true)
+            end
+
+            it "redirects to the comment on the full work view without error" do
+              get :cancel_comment_edit, params: { id: comment.id }
+              expect(flash[:error]).to be_nil
+              expect(response).to redirect_to(work_path(comment.commentable.work, show_comments: true, anchor: "comment_#{comment.id}"))
+            end
+          end
+
+          context "when user preference is not full work view" do
+            it "redirects to the comment on the chapter view without error" do
+              get :cancel_comment_edit, params: { id: comment.id }
+              expect(flash[:error]).to be_nil
+              expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+            end
+          end
         end
       end
 
@@ -298,7 +388,8 @@ describe CommentsController do
         delete :destroy, params: { id: comment.id }
         expect(flash[:comment_notice]).to eq "Comment deleted."
         it_redirects_to_simple(work_path(work, show_comments: true, anchor: :comments))
-        expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect { comment.reload }
+          .to raise_exception(ActiveRecord::RecordNotFound)
       end
 
       it "GET #add_comment_reply redirects to the work with an error" do
@@ -382,7 +473,8 @@ describe CommentsController do
             delete :destroy, params: { id: comment.id }
             expect(flash[:comment_notice]).to eq "Comment deleted."
             it_redirects_to_simple(work_path(work, show_comments: true, anchor: :comments))
-            expect { comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+            expect { comment.reload }
+              .to raise_exception(ActiveRecord::RecordNotFound)
           end
         end
       end

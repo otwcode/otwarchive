@@ -325,6 +325,106 @@ describe CommentsController do
         end
       end
 
+      context "when work is not restricted for a logged in user" do
+        let(:work) { create(:work) }
+        let(:user) { create(:user) }
+        let(:comment_attributes) do
+          {
+            pseud_id: user.default_pseud_id,
+            comment_content: "Hello fellow human!"
+          }
+        end
+        before { fake_login_known_user(user) }
+
+        context "when user is commenting from a work view" do
+          before do
+            request.env["HTTP_REFERER"] = "/works/1"
+          end
+
+          it "redirects to the work view" do
+            post :create, params: { work_id: work.id, comment: comment_attributes }
+            commentable_chapter = work.chapters.last
+            created_comment = user.comments.where(commentable: commentable_chapter).last
+            it_redirects_to_with_comment_notice(
+              work_path(work.id, show_comments: true, anchor: "comment_#{created_comment.id}"),
+              "Comment created!"
+            )
+          end
+        end
+
+        context "when user is commenting from a chapter view" do
+          before do
+            request.env["HTTP_REFERER"] = "/works/1/chapters/2"
+          end
+
+          it "redirects to the chapter view" do
+            post :create, params: { work_id: work.id, comment: comment_attributes }
+            commentable_chapter = work.chapters.last
+            created_comment = user.comments.where(commentable: commentable_chapter).last
+            it_redirects_to_with_comment_notice(
+              chapter_path(commentable_chapter.id, show_comments: true, anchor: "comment_#{created_comment.id}"),
+              "Comment created!"
+            )
+          end
+        end
+
+        context "when user is commenting from neither a work view nor chapter view" do
+          context "when param view_full_work == true" do
+            it "redirects to the work view" do
+              post :create, params: { work_id: work.id, comment: comment_attributes, view_full_work: true }
+              commentable_chapter = work.chapters.last
+              created_comment = user.comments.where(commentable: commentable_chapter).last
+              it_redirects_to_with_comment_notice(
+                work_path(work.id, show_comments: true, anchor: "comment_#{created_comment.id}", view_full_work: true),
+                "Comment created!"
+              )
+            end
+          end
+
+          context "when param view_full_work == false" do
+            it "redirects to the chapter view" do
+              post :create, params: { work_id: work.id, comment: comment_attributes, view_full_work: false }
+              commentable_chapter = work.chapters.last
+              created_comment = user.comments.where(commentable: commentable_chapter).last
+              it_redirects_to_with_comment_notice(
+                chapter_path(commentable_chapter.id, show_comments: true, anchor: "comment_#{created_comment.id}", view_full_work: false),
+                "Comment created!"
+              )
+            end
+          end
+
+          context "when param view_full_work is nil" do
+            context "when user preference is set to view full work" do
+              before do
+                user.preference.update!(view_full_works: true)
+              end
+
+              it "redirects to the full work view" do
+                post :create, params: { work_id: work.id, comment: comment_attributes }
+                commentable_chapter = work.chapters.last
+                created_comment = user.comments.where(commentable: commentable_chapter).last
+                it_redirects_to_with_comment_notice(
+                  work_path(work.id, show_comments: true, anchor: "comment_#{created_comment.id}"),
+                  "Comment created!"
+                )
+              end
+            end
+
+            context "when user preference is not set to view full work" do
+              it "redirects to the chapter view" do
+                post :create, params: { work_id: work.id, comment: comment_attributes }
+                commentable_chapter = work.chapters.last
+                created_comment = user.comments.where(commentable: commentable_chapter).last
+                it_redirects_to_with_comment_notice(
+                  chapter_path(commentable_chapter.id, show_comments: true, anchor: "comment_#{created_comment.id}"),
+                  "Comment created!"
+                )
+              end
+            end
+          end
+        end
+      end
+
       context "when the work has all comments disabled" do
         let(:work) { create(:work, comment_permissions: :disable_all) }
 
@@ -520,7 +620,7 @@ describe CommentsController do
             post :create, params: { work_id: work.id, comment: comment_attributes }
             comment = Comment.last
             expect(flash[:error]).to be_nil
-            expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"))
+            expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
           end
         end
       end
@@ -638,7 +738,7 @@ describe CommentsController do
           fake_login_known_user(user)
           post :create, params: { work_id: work.id, comment: comment_attributes }
           comment = assigns[:comment]
-          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
+          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"), "Comment created!")
           expect(comment.user_agent.length).to eq(500)
         end
       end
@@ -656,7 +756,7 @@ describe CommentsController do
           fake_login_known_user(user)
           post :create, params: { work_id: work.id, comment: comment_attributes }
           comment = assigns[:comment]
-          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
+          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"), "Comment created!")
           expect(comment.user_agent).to be_nil
         end
       end
