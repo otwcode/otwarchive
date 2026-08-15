@@ -10,7 +10,7 @@
       </li>
     <% end %>
 
-    <% if policy(Invitation).index? %>
+    <% if policy(Invitation).index? || policy(UserInviteRequest).index? || policy(InviteRequest).can_manage? %>
       <li class="dropdown">
         <%= link_to t(".nav.invitations.invitations"), admin_invitations_path %>
         <ul class="menu">
