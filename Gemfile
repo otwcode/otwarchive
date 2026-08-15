@@ -171,7 +171,7 @@ gem 'rvm-capistrano'
 # Use unicorn as the web server
 gem 'unicorn', '~> 5.5', require: false
 # Install puma so we can migrate to it
-gem "puma", "~> 6.5.0"
+gem "puma", "~> 7.2.1"
 # Use god as the monitor
 gem 'god', '~> 0.13.7'
 
