@@ -16,7 +16,9 @@
 
     <ol class="prompt index group">
       <% challenge_signup.requests.each_with_index do |request, index| %>
-        <%= render "prompts/prompt_blurb", :prompt => request, :index => index %>
+        <% if !request.anonymous? || (current_user == request.pseud.user || @collection.user_is_maintainer?(current_user)) %>
+          <%= render "prompts/prompt_blurb", :prompt => request, :index => index %>
+        <% end %>
       <% end %>
     </ol>
   </div>

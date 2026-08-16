@@ -1,6 +1,6 @@
 <% # Only gift exchanges link to this page, but you can manually enter collections/name/signups/# to view for prompt memes %>
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Sign-up for %{person}", :person => @challenge_signup.pseud.byline) %></h2>
+<h2 class="heading"><%= t(".signup_for", :person => @challenge_signup.pseud.byline) %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -9,5 +9,7 @@
 
 <!--main content-->
 <%= render "show_requests", :challenge_signup => @challenge_signup %>
-<%= render "show_offers", :challenge_signup => @challenge_signup %>
+<% if current_user == @challenge_signup.pseud.user || @collection.user_is_maintainer?(current_user) %>
+  <%= render "show_offers", :challenge_signup => @challenge_signup %>
+<% end %>
 <!--/content-->

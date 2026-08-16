@@ -8,13 +8,14 @@
         <%= link_to ts("#{prompt.class.to_s}%{index}", :index => (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
       <% end %>
       <% if prompt.anonymous? %>
-        <%= ts("by Anonymous") %>
+        <%= t(".header.by_anonymous") %>
       <% else %>
-        <%= ts("by") %>
-        <%= pseud_link(prompt.pseud ? prompt.pseud : prompt.challenge_signup.pseud) %>
+        <%= t(".header.by_pseud_html",
+              pseud_link: link_to(prompt.pseud.byline, user_pseud_url(prompt.pseud.user, prompt.pseud), class: "byline")) %>
       <% end %>
       <% unless @collection %>
-        <%= ts("in") %> <%= link_to prompt.collection.title, collection_path(prompt.collection) %>
+        <%= t(".header.in_collection_html",
+              collection_link: link_to(prompt.collection.title, collection_path(prompt.collection))) %>
       <% end %>
     </h4>
 

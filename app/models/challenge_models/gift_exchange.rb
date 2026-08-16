@@ -71,9 +71,9 @@ class GiftExchange < ApplicationRecord
     self.collection.user_is_maintainer?(user) || self.requests_summary_visible?
   end
 
-  def user_allowed_to_see_prompt?(user, prompt)
-    self.collection.user_is_maintainer?(user) || prompt.pseud.user == user
-  end
+  # def user_allowed_to_see_prompt?(user, prompt)
+  #   true
+  # end
 
   validate :request_restriction_allows_fields
   def request_restriction_allows_fields

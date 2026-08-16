@@ -7,7 +7,7 @@ class PromptsController < ApplicationController
   before_action :load_signup, except: [:destroy, :show]
   # before_action :promptmeme_only, except: [:new]
   before_action :allowed_to_destroy, only: [:destroy]
-  before_action :allowed_to_view, only: [:show]
+  # before_action :allowed_to_view, only: [:show]
   before_action :signup_owner_only, only: [:edit, :update]
   before_action :check_signup_open, only: [:new, :create, :edit, :update]
   before_action :check_prompt_in_collection, only: [:show, :edit, :update, :destroy]
@@ -89,11 +89,11 @@ class PromptsController < ApplicationController
     end
   end
 
-  def allowed_to_view
-    unless @challenge.user_allowed_to_see_prompt?(current_user, @prompt)
-      access_denied(redirect: @collection)
-    end
-  end
+  # def allowed_to_view
+  #   unless @challenge.user_allowed_to_see_prompt?(current_user, @prompt)
+  #     access_denied(redirect: @collection)
+  #   end
+  # end
 
   #### ACTIONS
 
