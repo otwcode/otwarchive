@@ -62,9 +62,7 @@
     </p>
   <% end %>
 
-  <% if logged_in? %>
-    <%= render "prompts/prompt_controls", :challenge_signup => prompt.challenge_signup, :prompt => prompt %>
-  <% end %>
+  <%= render "prompts/prompt_controls", :challenge_signup => prompt.challenge_signup, :prompt => prompt %>
 
   <% unless (suppress_claims ||= false) %>
     <% # if prompt has been claimed list by whom %>

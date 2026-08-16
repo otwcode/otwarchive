@@ -4,16 +4,16 @@
 <% challenge = collection.challenge %>
 <% user = challenge_signup.pseud.user %>
 
-<% if challenge.signup_open || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || collection.challenge_type == "PromptMeme" %>
-  <ul class="actions" role="menu">
-    <%# The view-all-requests link should show up if the prompt is not anonymous or if the current user owns it %>
-    <%# TODO: should perhaps also be visible when signups are closed, and to people who aren't logged in? %>
-    <% if (!prompt.anonymous || user == current_user) %>
-      <li>
-        <%= link_to(t(".navigation.all_requests"), collection_signup_path(collection, challenge_signup)) %>
-      </li>
-    <% end %>
+<ul class="actions" role="menu">
+  <%# The view-all-requests link should show up if the prompt is not anonymous or if the current user owns it %>
+  <%# TODO: should perhaps also be visible when signups are closed, and to people who aren't logged in? %>
+  <% if (!prompt.anonymous || user == current_user) %>
+    <li>
+      <%= link_to(t(".navigation.all_requests"), collection_signup_path(collection, challenge_signup)) %>
+    </li>
+  <% end %>
 
+  <% if logged_in? && (collection.challenge_type == "PromptMeme" || challenge.signup_open || collection.user_is_maintainer?(current_user)) %>
     <% # The edit link should show up if signups are open and the current user owns the prompt, OR if the challenge is a gift exchange and signups are closed and the current user is the maintainer %>
     <% if (challenge.signup_open && user == current_user) || (collection.challenge_type == "GiftExchange" && !challenge.signup_open && collection.user_is_maintainer?(current_user)) %>
       <li>
@@ -59,6 +59,5 @@
         </li>
       <% end %>
     <% end %>
-
-  </ul>
-<% end %>
+  <% end %>
+</ul>

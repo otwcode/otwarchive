@@ -5,13 +5,12 @@ class ChallengeSignupsController < ApplicationController
   include ExportsHelper
 
   before_action :users_only, except: [:summary, :index, :show]
-  before_action :users_or_privileged_collection_admins_only, only: [:index, :show]
+  before_action :users_or_privileged_collection_admins_only, only: [:index]
   before_action :load_collection, except: [:index]
   before_action :load_challenge, except: [:index]
   before_action :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :allowed_to_destroy, only: [:destroy, :confirm_delete]
   before_action :signup_owner_only, only: [:edit, :update]
-  # before_action :maintainer_or_signup_owner_only, only: [:show]
   before_action :check_signup_open, only: [:new, :create, :edit, :update]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :check_signup_in_collection, only: [:show, :edit, :update, :destroy, :confirm_delete]
