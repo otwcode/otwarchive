@@ -65,21 +65,21 @@ class CollectionsController < ApplicationController
     @hide_dashboard = true
     @sort_and_filter = true
     @show_type_filter = true
-    @search = CollectionSearchForm.new(challenge_filter_params.merge(signup_open: true, sort_column: "signups_close_at", page: params[:page]))
+    @search = ChallengeSearchForm.new(challenge_filter_params.merge(signup_open: true, page: params[:page]))
     @challenge_collections = @search.search_results
   end
 
   def list_ge_challenges
     @page_subtitle = "Open Gift Exchange Challenges"
     @sort_and_filter = true
-    @search = CollectionSearchForm.new(challenge_filter_params.merge(challenge_type: "GiftExchange", signup_open: true, sort_column: "signups_close_at", page: params[:page]))
+    @search = ChallengeSearchForm.new(challenge_filter_params.merge(challenge_type: "GiftExchange", signup_open: true, page: params[:page]))
     @challenge_collections = @search.search_results
   end
 
   def list_pm_challenges
     @page_subtitle = "Open Prompt Meme Challenges"
     @sort_and_filter = true
-    @search = CollectionSearchForm.new(challenge_filter_params.merge(challenge_type: "PromptMeme", signup_open: true, sort_column: "signups_close_at", page: params[:page]))
+    @search = ChallengeSearchForm.new(challenge_filter_params.merge(challenge_type: "PromptMeme", signup_open: true, page: params[:page]))
     @challenge_collections = @search.search_results
   end
 
@@ -226,7 +226,8 @@ class CollectionsController < ApplicationController
 
   def challenge_filter_params
     params.permit(:commit, collection_search: [
-      :title, :tag, :challenge_type, :moderated, :multifandom, :closed
+      :title, :tag, :challenge_type, :moderated, :multifandom, :closed,
+      :sort_column, :sort_direction
     ])[:collection_search] || {}
   end
 end

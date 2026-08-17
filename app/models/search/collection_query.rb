@@ -146,6 +146,10 @@ class CollectionQuery < Query
                   else
                     "desc"
                   end
-    [{ column => { order: direction } }, { "id" => { order: direction } }]
+
+    column_sort_options = { order: direction }
+    column_sort_options[:missing] = "_first" if column == "signups_close_at" && direction == "desc"
+
+    [{ column => column_sort_options }, { "id" => { order: direction } }]
   end
 end

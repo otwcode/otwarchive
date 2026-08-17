@@ -5,6 +5,19 @@
       <dt class="landmark"><%= t("collections.filters.submit.landmark") %></dt>
       <dd class="submit actions"><%= submit_tag t("collections.filters.submit.button") %></dd>
 
+      <dt class="sort">
+        <%= f.label :sort_column, t("collections.filters.sort.column") %>
+      </dt>
+      <dd class="sort">
+        <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
+      </dd>
+      <dt class="sort">
+        <%= f.label :sort_direction, t("collections.filters.sort.direction.label") %>
+      </dt>
+      <dd class="sort">
+        <%= f.select :sort_direction, options_for_select({ t("collections.filters.sort.direction.ascending") => "asc", t("collections.filters.sort.direction.descending") => "desc" }, @search.sort_direction) %>
+      </dd>
+
       <dt class="autocomplete search">
         <%= f.label "title", t("collections.filters.title") %>
       </dt>
