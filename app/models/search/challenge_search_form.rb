@@ -14,6 +14,7 @@ class ChallengeSearchForm < CollectionSearchForm
 
   def default_sort_direction
     return "desc" if sort_column == "signups_close_at"
+
     super
   end
 end
