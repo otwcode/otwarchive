@@ -280,6 +280,24 @@ describe StoryParser do
     end
   end
 
+  describe "#convert_revised_at" do
+    it "converts an all-digit date to a Time" do
+      expect(@sp.send(:convert_revised_at, "300106").to_date).to eq(Date.new(1970, 1, 4))
+    end
+
+    it "converts a well-formed date to a Date" do
+      expect(@sp.send(:convert_revised_at, "2001-01-10 13:45")).to eq(Date.new(2001, 1, 10))
+    end
+
+    it "returns an empty string for a date in the future" do
+      expect(@sp.send(:convert_revised_at, "2100-01-01")).to eq("")
+    end
+
+    it "returns an empty string for an unparseable date" do
+      expect(@sp.send(:convert_revised_at, "not a date")).to eq("")
+    end
+  end
+
   # Let the test get at external sites, but stub out anything containing certain keywords
   def mock_external
     curly_quotes = "String with non-ASCII “Curly quotes” and apostrophes’"
