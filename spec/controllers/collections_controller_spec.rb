@@ -325,6 +325,24 @@ describe CollectionsController, collection_search: true do
         expect(assigns(:challenge_collections)).not_to include gift_exchange_collection
       end
     end
+
+    context "sorting" do
+      it "sorts by signups_close_at descending by default" do
+        get :list_challenges
+        expect(assigns(:search).sort_column).to eq("signups_close_at")
+        expect(assigns(:search).sort_direction).to eq("desc")
+      end
+
+      it "respects an explicit sort_column param" do
+        get :list_challenges, params: { collection_search: { sort_column: "title.keyword" } }
+        expect(assigns(:search).sort_column).to eq("title.keyword")
+      end
+
+      it "respects an explicit sort_direction param" do
+        get :list_challenges, params: { collection_search: { sort_direction: "asc" } }
+        expect(assigns(:search).sort_direction).to eq("asc")
+      end
+    end
   end
 
   describe "GET #show" do

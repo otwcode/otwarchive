@@ -41,11 +41,12 @@ Feature: Open Challenges
     When I view open challenges
     Then I should not see "No Challenge"
 
-  Scenario: Sort options are not shown on open challenges filter
+  Scenario: Sort options are shown on open challenges filter
 
     Given a set of open challenges for searching
     When I view open challenges
-    Then I should not see "Sort by"
+    Then I should see "Sort by"
+    And I should see "Date Sign-ups Close"
 
   # filtering
 
