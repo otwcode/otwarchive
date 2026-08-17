@@ -29,8 +29,53 @@ describe User do
       end
     end
 
-    context "internal skeleton" do
-      expect(NotForbiddenNameValidator.intern)
+    context "with a username confusable to a forbidden one" do
+      let(:forbidden_username) { "admin" }
+
+      before do
+        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_username])
+      end
+
+      # TODO TODO TODO not working
+      it { is_expected.not_to allow_values("admın", "ad.min", "adrnin").for(:login) }
+    end
+
+    context "with a username not confusable to a forbidden one" do
+      # TODO
+    end
+
+    context "it's internal skeleton" do
+      it "has itself in latin words" do
+        expect(NotForbiddenNameValidator.internal_skeleton("Support")).to eq("Support")
+      end
+
+      it "has it's latin counterpart for cyrcillic letters" do
+        # notice the P being uppercase since letter case standardizing isn't in internal_skeleton
+        expect(NotForbiddenNameValidator.internal_skeleton("SupРort")).to eq("SupPort")
+      end
+
+      it "has separated characters for confusables with combined characters" do
+        expect(NotForbiddenNameValidator.internal_skeleton("admin")).to eq("adrnin")
+      end
+
+    end
+
+    context "in confusable check" do
+      it "classifies two words with a cyrillic/latin difference as confusable" do
+        expect(NotForbiddenNameValidator.confusable?("SupРort", "Support")).to be_truthy
+      end
+
+      it "removes punctuations" do
+        expect(NotForbiddenNameValidator.confusable?("Sup.port", "Support")).to be_truthy
+      end
+
+      it "removes blank characters" do
+        expect(NotForbiddenNameValidator.confusable?("Sup port", "Support")).to be_truthy
+      end
+
+      it "removes dialectics" do
+        expect(NotForbiddenNameValidator.confusable?("Suppört", "Support")).to be_truthy
+      end
     end
   end
 

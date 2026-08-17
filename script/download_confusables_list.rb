@@ -54,6 +54,7 @@ unless gets.chomp == "n"
   if File.exist?(CONFUSABLES_DIRECTORY)
     Rails.cache.delete("confusables_hash")
     # TODO make sure we can access that cache from here
+    # TODO there's no way I just expired the cache of prod in a script meant for dev
     puts "Save successful. Cache expired."
   else
     "Save failed."
