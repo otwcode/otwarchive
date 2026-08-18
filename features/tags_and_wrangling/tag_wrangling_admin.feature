@@ -41,12 +41,10 @@ Feature: Tag wrangling
     And I should not see "Last decanonized on"
   When I check "Canonical"
     And I press "Save changes"
-    And I edit the tag "Amelie"
   Then I should see "Last canonized on"
     And I should not see "Last decanonized on"
   When I uncheck "Canonical"
     And I press "Save changes"
-    And I edit the tag "Amelie"
   Then I should see "Last canonized on"
     And I should see "Last decanonized on"
 
