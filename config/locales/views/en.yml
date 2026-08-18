@@ -2852,6 +2852,21 @@ en:
         by_anonymous: by Anonymous
         by_pseud_html: by %{pseud_link}
         in_collection_html: in %{collection_link}
+        offer_title: Offer%{index}
+        request_title: Request%{index}
+      body:
+        any_tag_type: Any %{tag_type}
+        fandom: Fandom
+        optional_tags: 'Optional Tags:'
+        summary: Summary
+        tags: Tags
+        url: 'URL:'
+      footer:
+        anonymous_claimant_count:
+          one: "%{count} anonymous claimant"
+          other: "%{count} anonymous claimants"
+        claimed_by: Claimed By
+        fulfilled_by: Fulfilled By
     prompt_controls:
       confirm:
         delete_prompt: Are you sure? All information in this prompt will be lost.

@@ -160,9 +160,10 @@ class ChallengeSignup < ApplicationRecord
     (self.pseud.user == current_user) || self.collection.user_is_maintainer?(current_user)
   end
 
-  def user_allowed_to_see?(current_user)
-    (self.pseud.user == current_user) || user_allowed_to_see_signups?(current_user)
-  end
+  # This is never used:
+  # def user_allowed_to_see?(current_user)
+  #   (self.pseud.user == current_user) || user_allowed_to_see_signups?(current_user)
+  # end
 
   def user_allowed_to_see_signups?(user)
     self.collection.user_is_maintainer?(user) ||

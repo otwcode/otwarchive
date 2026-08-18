@@ -5,7 +5,11 @@
       <% if !prompt.title.blank? %>
         <%= link_to prompt.title, collection_prompt_path(prompt.collection, prompt) %>
       <% else %>
-        <%= link_to ts("#{prompt.class.to_s}%{index}", :index => (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
+        <% if prompt.class.to_s == "Offer" %>
+          <%= link_to t(".header.offer_title", :index => (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
+        <% else %>
+          <%= link_to t(".header.request_title", :index => (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
+        <% end %>
       <% end %>
       <% if prompt.anonymous? %>
         <%= t(".header.by_anonymous") %>
@@ -23,7 +27,7 @@
 
     <% # eventually we should let mod specify topmost tag type to display -- ie chars and rels for single-fandom meme, freeforms for single-relationship meme  %>
     <h5 class="fandoms heading">
-      <span class="landmark"><%= ts('Fandom') %>:</span>
+      <span class="landmark"><%= t(".body.fandom") %>:</span>
       <%= tag_groups['Fandom'].collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe if tag_groups['Fandom'] %>
       &nbsp;
     </h5>
@@ -33,23 +37,24 @@
     <p class="datetime"><%= set_format_for_date(prompt.created_at) %></p>
   </div>
 
-  <h6 class="landmark heading"><%= ts("Tags") %></h6>
+  <h6 class="landmark heading"><%= t(".body.tags") %></h6>
   <ul class="tags commas">
     <%= blurb_tag_block(prompt, tag_groups) %>
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
     <% unless any_types.empty? %>
-      <%= any_types.map { |type| content_tag(:li, ts("Any %{tag_type}", tag_type: tag_type_label_name(type)), :class => "tag") }.join("\n").html_safe %>
+      <%# This still isn't fully i18n'd since the inserted tag types are always English. %>
+      <%= any_types.map { |type| content_tag(:li, t(".body.any_tag_type", tag_type: tag_type_label_name(type)), :class => "tag") }.join("\n").html_safe %>
     <% end %>
   </ul>
   <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
-    <h6 class="optional heading"><%= ts("Optional Tags:") %></h6>
+    <h6 class="optional heading"><%= t(".body.optional_tags") %></h6>
     <ul class="optional tags commas">
       <%= tag_link_list(prompt.optional_tag_set.tags, link_to_works=true) %>
     </ul>
   <% end %>
 
   <% unless prompt.description.blank? %>
-    <h6 class="landmark heading"><%= ts("Summary") %></h6>
+    <h6 class="landmark heading"><%= t(".body.summary") %></h6>
     <blockquote class="userstuff summary">
       <%=raw sanitize_field(prompt, :description) %>
     </blockquote>
@@ -57,7 +62,7 @@
 
   <% unless prompt.url.blank? %>
     <p>
-      <% url_label = prompt.collection.challenge.send("request_url_label") %><%= url_label.blank? ? ts("URL:") : url_label %>
+      <% url_label = prompt.collection.challenge.request_url_label %><%= url_label.blank? ? t(".body.url") : url_label %>
       <%= link_to(prompt.url, prompt.url) %>
     </p>
   <% end %>
@@ -68,10 +73,10 @@
     <% # if prompt has been claimed list by whom %>
     <% unless prompt.unfulfilled_claims.empty? %>
       <div class="claims listbox group">
-        <h5 class="heading"><%= ts("Claimed By")%></h5>
+        <h5 class="heading"><%= t(".footer.claimed_by")%></h5>
         <ul class="commas index group">
           <% if prompt.collection.anonymous? %>
-            <%= ts("%{count} anonymous claimants", :count => prompt.unfulfilled_claims.count) %>
+            <%= t(".footer.anonymous_claimant_count", :count => prompt.unfulfilled_claims.count) %>
           <% else %>
             <%= User.for_claims(prompt.unfulfilled_claims.pluck(:id)).pluck(:login).map {|user| content_tag(:li, user)}.join("\n").html_safe %>
           <% end %>
@@ -82,7 +87,7 @@
     <% # if prompt has been fulfilled list works %>
     <% unless prompt.unfulfilled? || (guest? && prompt.fulfilled_claims_visible_to_all.empty?) %>
       <div class="work listbox group">
-        <h5 class="heading"><%= ts("Fulfilled By")%></h5>
+        <h5 class="heading"><%= t(".footer.fulfilled_by")%></h5>
         <ul class="index group">
           <% prompt.fulfilled_claims.map(&:creation).each do |creation| %>
             <% if creation.is_a?(Work) %>
