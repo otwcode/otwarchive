@@ -66,7 +66,7 @@ class ReadingsController < ApplicationController
   def check_history_enabled
     return if current_user.preference.history_enabled?
     
-    flash[:notice] = t(".history_disabled_warning")
+    flash[:notice] = t("readings.check_history_enabled.history_disabled_warning")
     redirect_to user_preferences_path(current_user)
   end
 end
