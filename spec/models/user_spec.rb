@@ -37,7 +37,7 @@ describe User do
       end
 
       # TODO TODO TODO not working
-      it { is_expected.not_to allow_values("admın", "ad.min", "adrnin").for(:login) }
+      it { is_expected.not_to allow_values("admin", "admın", "ad.min", "adrnin", "ADMIN").for(:login) }
     end
 
     context "with a username not confusable to a forbidden one" do
