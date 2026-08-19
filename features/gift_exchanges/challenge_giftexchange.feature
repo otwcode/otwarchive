@@ -172,7 +172,7 @@ Feature: Gift Exchange Challenge
       And I submit
     Then I should see "Offer URL does not appear to be a valid URL."
 
-  Scenario: Custom labels are used in emails when available
+  Scenario: Custom URL and description labels are used in emails when available
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
       And I edit settings for "Awesome Gift Exchange" challenge
       And I check "gift_exchange[request_restriction_attributes][url_allowed]"
@@ -201,7 +201,7 @@ Feature: Gift Exchange Challenge
       And the email should contain "Custom Request URL Label"
       And the email should contain "Custom Request Description Label"
 
-  Scenario: But when custom labels aren't there, the defaults still show up in emails
+  Scenario: When custom URL and description labels aren't set, the default values for them show up in emails
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
       And I edit settings for "Awesome Gift Exchange" challenge
       And I check "gift_exchange[request_restriction_attributes][url_allowed]"
