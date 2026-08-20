@@ -20,7 +20,7 @@
   </li>
   <li>
     <%= link_to t(".navigation.download_csv"), collection_signups_path(@collection, format: :csv) %>
-    <%= link_to_help "csv-download" %>
+    <%= link_to_help_modal(help_csv_download_path, t(".csv_downlaod_help_title")) %>
   </li>
 </ul>
 <!--/subnav-->

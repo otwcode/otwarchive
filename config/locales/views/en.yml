@@ -707,6 +707,7 @@ en:
       challenge_signups:
         close_offers_html: Close Offers &#8593;
         close_requests_html: Close Requests &#8593;
+        csv_downlaod_help_title: CSV Downloads
         heading:
           for_collection: Sign-ups for %{collection}
           for_search: Sign-up
@@ -717,8 +718,12 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+    prompt_meme:
+      challenge_signups:
+        csv_downlaod_help_title: CSV Downloads
     shared:
       challenge_requests:
+        csv_downlaod_help_title: CSV Downloads
         fandom: Fandom %{allowed_fandom_count}
   challenge_assignments:
     assignment_blurb:
@@ -1218,6 +1223,8 @@ en:
       moderated_and_anonymous_collections: 'Also note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically - it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
       page_heading: Adding To Collections
       removing_from_collection: If you change your mind about having an item in a collection, you can either edit the list of collections when editing it, or you can manage all your collected items under the "My Collections" page in your account.
+    csv_download:
+      how_to_open: To open the file properly, you might need to tell your program that the file is TAB-separated. In Open Office and Neo Office, for example, choose the TAB separator in the File Open Wizard. In Google Docs, use "Import" instead of "Open" to be able to set the separator to TAB.
     first_login:
       additional_info:
         header: Additional Browsing Information
