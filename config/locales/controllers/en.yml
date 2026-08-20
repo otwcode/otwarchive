@@ -353,8 +353,8 @@ en:
     index:
       public_site_page_title: Public Site Skins
       public_work_page_title: Public Work Skins
-      site_page_title: "%{username} - My Site Skins"
-      work_page_title: "%{username} - My Work Skins"
+      site_page_title: "%{username} - Site Skins"
+      work_page_title: "%{username} - Work Skins"
     preview:
       cannot_preview: Sorry, you can't preview that skin.
       remove_skin: Go back or follow any link to remove the skin.
