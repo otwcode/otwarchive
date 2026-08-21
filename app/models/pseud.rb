@@ -79,10 +79,10 @@ class Pseud < ApplicationRecord
   before_update :cleanup_autocomplete, if: :will_save_change_to_name?
   after_update :add_to_autocomplete, if: :saved_change_to_name?
   after_update :check_default_pseud
-  after_update :expire_caches
   after_update :reindex_user, if: :saved_change_to_name?
   before_destroy :remove_from_autocomplete
   after_destroy :reindex_user
+  after_commit :expire_caches, on: [:update, :destroy]
   after_commit :reindex_creations, :touch_comments
 
   scope :alphabetical, -> { order(:name) }
@@ -420,11 +420,15 @@ class Pseud < ApplicationRecord
   end
 
   def expire_caches
-    if saved_change_to_name?
-      works.touch_all
-      series.each(&:expire_byline_cache)
-      chapters.each(&:expire_byline_cache)
-    end
+    return unless saved_change_to_name? || (destroyed? && !user.nil?)
+
+    pseud = destroyed? ? user.default_pseud : self
+    return if pseud.nil?
+
+    pseud.works.touch_all
+    pseud.series.each(&:expire_byline_cache)
+    pseud.chapters.each(&:expire_byline_cache)
+    pseud.gift_works.touch_all
   end
 
   def touch_comments

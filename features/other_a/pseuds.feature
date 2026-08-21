@@ -278,6 +278,25 @@ Scenario: Edit pseud updates series blurbs
   When I follow "Series"
   Then I should see "Best Series by Me3 (Myself)"
 
+Scenario: Edit pseud updates gift blurbs
+  Given "giftee1" has the pseud "Me2"
+    And the user "giftee1" allows gifts
+    And I am logged in as "gifter"
+    And I set up the draft "GiftStory1"
+    And I give the work to "Me2 (giftee1)"
+    And I press "Post"
+    And I am logged in as "giftee1"
+  When I go to giftee1's gifts page
+  Then I should see "GiftStory1 by gifter for Me2 (giftee1)"
+  When I view my profile
+    And I follow "Manage My Pseuds"
+    And I follow "Edit Me2"
+    And I fill in "Name" with "Me3"
+    And I press "Update"
+  Then I should see "Pseud was successfully updated."
+  When I go to giftee1's gifts page
+  Then I should see "GiftStory1 by gifter for Me3 (giftee1)"
+
 Scenario: Change details as an admin
 
   Given "someone" has the pseud "alt"
