@@ -1914,7 +1914,9 @@ en:
       copyright_infringement:
         epigraphs_small_quotations_allowed: Epigraphs and short quotations are allowed, as is Content that is set within or based on an existing work.
         heading: II.D. Copyright Infringement
-        not_allowed: Reproductions of large excerpts of copyrighted works are not allowed without the consent of the copyright owner. This includes stories, artwork, songs, poems, transcripts, and other copyrighted material. Crediting the original creator does not give you the right to upload, podfic, or translate someone else's work without permission, regardless of whether the source is a fanwork or a professionally published work.
+        not_allowed_html: Reproductions of large excerpts of copyrighted works are not allowed without the consent of the copyright owner. This includes stories, artwork, songs, poems, transcripts, and other copyrighted material. Crediting the original creator does not give you %{the_right_to_upload_link}, podfic, or translate someone else's work without %{permission_link}, regardless of whether the source is a fanwork or a professionally published work.
+        permission: permission
+        the_right_to_upload: the right to upload
         tos_faq: FAQ for Section II.D
         tos_faq_in_parens_html: "(%{tos_faq_link})"
         tos_faq_link_label: Copyright Infringement and Plagiarism FAQ
