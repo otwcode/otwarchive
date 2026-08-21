@@ -98,6 +98,18 @@ describe SkinsController do
     end
   end
 
+  describe "GET #index" do
+    context "when browsing skins when logged in, but the user does not exist" do
+      before do
+        fake_login
+      end
+
+      it "raises ActiveRecord::RecordNotFound" do
+        expect do get :index, params: { user_id: "deleted_user" } 
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "GET #edit" do
     subject { get :edit, params: { id: skin.id } }
     let(:success) { expect(response).to render_template(:edit) }
