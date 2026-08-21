@@ -23,17 +23,22 @@
 <!--Subnavigation, sorting and actions-->
 <h3 class="landmark heading"><%= t(".navigation.landmark_heading") %></h3>
 <ul class="navigation actions">
-  <%# Collections and Open Challenges links unless a logged in user viewing own collections page %>
-  <% unless logged_in? && @user && @user == current_user %>
+  <% if @collection %>
+    <%# Collection subcollections index gets link for Subcollections %>
+    <li><%= span_if_current t(".navigation.actions.subcollections"), collection_collections_path(@collection) %></li>
+  <% elsif @user %>
+    <%# User collections index gets link for user Collections %>
+    <li><%= span_if_current t(".navigation.actions.collections"), user_collections_path(@user) %></li>
+    <%# Logged in user on own collections index gets link for Manage Collections Item %>
+    <% if logged_in? && @user == current_user %>
+      <li><%= link_to t(".navigation.actions.manage_items"), user_collection_items_path(@user) %></li>
+    <% end %>
+  <% else %>
+    <%# Collections and Open Challenges link unless on a user's collections page or collection's subcollections page %>
     <li><%= span_if_current t(".navigation.actions.collections"), collections_path %></li>
     <li><%= link_to t(".navigation.actions.open_challenges"), list_challenges_collections_path %></li>
   <% end %>
   <% if logged_in? %>
-    <%# Logged in user on own collections index gets links for user Collections and Manage Collection Items %>
-    <% if @user && @user == current_user %>
-      <li><%= span_if_current t(".navigation.actions.collections"), user_collections_path(@user) %></li>
-      <li><%= link_to t(".navigation.actions.manage_items"), user_collection_items_path(@user) %></li>
-    <% end %>
     <%# Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
     <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
       <li><%= link_to t(".navigation.actions.new_subcollection"), new_collection_collection_path(@collection) %></li>
@@ -54,15 +59,13 @@
   <!--main content-->
   <h3 class="landmark heading"><%= t(".main_content.landmark_heading") %></h3>
   <ul class="collection picture index group">
-    <% @collections.each do |collection| %>
-      <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>
-    <% end %>
+    <%= render partial: "collection_blurb", collection: @collections, as: :collection %>
   </ul>
 <% end %>
 
 <% if @sort_and_filter %>
   <!--filters subnav-->
-  <%= render 'collections/filters' %>
+  <%= render "collections/filters" %>
   <!---/subnav-->
 <% end %>
 

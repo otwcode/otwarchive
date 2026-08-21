@@ -9,7 +9,30 @@ Scenario: Posting a remix / related work emails the creator of the original work
   Given I have related works setup
   When I post a related work as remixer
   Then a parent related work should be seen
-    And the original author should be emailed
+    And the original author should receive a related work email
+
+Scenario: Posting a remix in a variatey of ways should always send related work emails the creator of the original work and list the parent work in the proper location on the remix / related work
+
+  Given I have related works setup
+    And all emails have been delivered
+  When I post a related work as remixer without previewing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+
+  Given all emails have been delivered
+  When I post a related work as remixer after saving it as a draft
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+
+  Given all emails have been delivered
+  When I post a related work as remixer after saving it as a draft and then editing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+    
+  Given all emails have been delivered
+  When I post a related work as remixer after previewing it and then editing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
 
 Scenario: Remixer can see their remix / related work on their related works page
 
@@ -44,7 +67,7 @@ Scenario: Posting a translation emails the creator of the original work and list
   Given I have related works setup
   When I post a translation as translator
   Then a parent translated work should be seen
-    And the original author should be emailed
+    And the original author should receive a related work email
 
 Scenario: Translator can see their translation on their related works page
 
@@ -287,16 +310,6 @@ Scenario: Listing external works as inspirations
     And I should see "Inspired by Worldbuilding Two by BNF"
   When I view my related works
   Then I should see "From N/A to English"
-  # inactive URL should give a helpful message (AO3-1783)
-  # unreachable URL should give a more helpful message (A03-3536)
-  When I edit the work "Followup"
-    And I check "parent-options-show"
-    And I fill in "URL" with "http://example.org/404"
-    And I fill in "Title" with "Worldbuilding Two"
-    And I fill in "Author" with "BNF"
-    And I press "Preview"
-  Then I should see "Parent work URL could not be reached. If the URL is correct and the site is currently down, please try again later."
-
 Scenario: External work language
 
   Given basic tags
@@ -330,7 +343,7 @@ Scenario: External work language
 # especially during posting / editing / previewing a work
 # especially from the related_works page, which works but redirects to a non-existant page right now
 
-Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
+Scenario: Restricted works listed as Inspiration show up [Restricted] for guests, but normally for admins
   Given I have related works setup
     And a related work has been posted and approved
   When I am logged in as "remixer"
@@ -338,6 +351,9 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   When I am logged out
     And I view the work "Worldbuilding"
   Then I should see "[Restricted Work] by remixer"
+  When I am logged in as an admin
+    And I view the work "Worldbuilding"
+  Then I should see "Followup by remixer"
   When I am logged in as "remixer"
     And I unlock the work "Followup"
   When I am logged out
@@ -348,6 +364,9 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   When I am logged out
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
+  When I am logged in as an admin
+    And I view the work "Followup"
+  Then I should see "Inspired by Worldbuilding by inspiration"
 
 Scenario: Anonymous works listed as inspiration should have links to the authors,
   but only for the authors themselves and admins

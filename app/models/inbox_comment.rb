@@ -19,9 +19,17 @@ class InboxComment < ApplicationRecord
     end
     direction = (filters[:date]&.upcase == "ASC" ? "created_at ASC" : "created_at DESC")
 
-    includes(feedback_comment: :pseud).
-      order(direction).
-      where(read: read, replied_to: replied_to)
+    includes(
+      feedback_comment: [
+        { pseud: [
+          { user: %i[roles block_of_current_user] },
+          *Pseud.with_attached_icon.includes_values
+        ] },
+        { parent: { work: { users: :block_of_current_user } } }
+      ]
+    )
+      .order(direction)
+      .where(read: read, replied_to: replied_to)
   }
 
   scope :for_homepage, -> {
@@ -39,5 +47,14 @@ class InboxComment < ApplicationRecord
   def self.with_bad_comments_removed
     joins("LEFT JOIN comments ON comments.id = inbox_comments.feedback_comment_id")
       .where("comments.id IS NOT NULL AND comments.is_deleted = 0 AND comments.approved AND NOT comments.hidden_by_admin")
+      .includes(
+        feedback_comment: [
+          { pseud: [
+            { user: %i[roles block_of_current_user] },
+            *Pseud.with_attached_icon.includes_values
+          ] },
+          { parent: { work: { users: :block_of_current_user } } }
+        ]
+      )
   end
 end
