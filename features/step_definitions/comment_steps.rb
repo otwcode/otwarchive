@@ -106,10 +106,6 @@ Then /^I should see Last Edited nowish$/ do
   step "I should see \"Last Edited #{nowish}\""
 end
 
-Then /^I should see the comment form$/ do
-  step %{I should see "New comment on"}
-end
-
 Then /^I should see the reply to comment form$/ do
   step %{I should see "Comment as" within ".odd"}
 end
@@ -197,6 +193,11 @@ When /^I reply to a comment with "([^"]*)"$/ do |comment_text|
     fill_in("comment[comment_content]", with: comment_text)
     click_button("Comment")
   end
+end
+
+When "I visit the comments page for the work {string}" do |work|
+  work = Work.find_by(title: work)
+  visit work_comments_path(work, only_path: false)
 end
 
 When /^I visit the new comment page for the work "([^"]+)"$/ do |work|
