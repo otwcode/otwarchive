@@ -39,7 +39,7 @@ describe CollectionsController, collection_search: true do
     let!(:participant) { create(:collection_participant, collection: prompt_meme_collection) }
     let!(:moderator) { create(:collection_participant, participant_role: CollectionParticipant::MODERATOR, collection: prompt_meme_collection) }
     let!(:item) do
-      create(:collection_item, user_approval_status: "approved", collection_approval_status: "approved", work: create(:work, restricted: false), collection: prompt_meme_collection)
+      create(:collection_item, user_approval_status: "approved", collection_approval_status: "approved", item: create(:work, restricted: false), collection: prompt_meme_collection)
     end
 
     before do
@@ -106,6 +106,38 @@ describe CollectionsController, collection_search: true do
         sorted_collection_titles = Collection.order("title DESC").map(&:title)
 
         get :index, params: { collection_search: { sort_column: "title.keyword", sort_direction: "DESC" } }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
+      end
+
+      it "sorts collections by Works, DESC by default" do
+        sorted_collection_titles = Collection.all.sort_by(&:public_works_count).reverse.map(&:title)
+
+        get :index, params: { collection_search: { sort_column: "public_works_count" } }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
+      end
+
+      it "sorts collections by Works" do
+        sorted_collection_titles = Collection.all.sort_by(&:public_works_count).map(&:title)
+
+        get :index, params: { collection_search: { sort_column: "public_works_count", sort_direction: "ASC" } }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
+      end
+
+      it "sorts collections by Bookmarks, DESC by default" do
+        sorted_collection_titles = Collection.all.sort_by(&:public_bookmarked_items_count).reverse.map(&:title)
+
+        get :index, params: { collection_search: { sort_column: "public_bookmarked_items_count" } }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
+      end
+
+      it "sorts collections by Bookmarks" do
+        sorted_collection_titles = Collection.all.sort_by(&:public_bookmarked_items_count).map(&:title)
+
+        get :index, params: { collection_search: { sort_column: "public_bookmarked_items_count", sort_direction: "ASC" } }
         expect(response).to have_http_status(:success)
         expect(assigns(:collections).map(&:title)).to eq sorted_collection_titles
       end
@@ -287,6 +319,30 @@ describe CollectionsController, collection_search: true do
           get :show, params: { id: "nonexistent" }
         end.to raise_error ActiveRecord::RecordNotFound
       end
+    end
+  end
+
+  describe "admin access to owner pages" do
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
+    let(:collection) { create(:collection) }
+
+    describe "GET #edit" do
+      subject { get :edit, params: { id: collection.name } }
+
+      let(:success) do
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:edit)
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
+    end
+
+    it "does not allow support admins to update" do
+      fake_login_admin(create(:support_admin))
+
+      put :update, params: { id: collection.name, collection: { title: "Changed title" } }
+
+      it_redirects_to_user_login_with_error
     end
   end
 end

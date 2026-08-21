@@ -38,7 +38,7 @@
     And I press "Submit"
   Then I should see "New members invited: moderator_pseud (moderator)"
   When I give "moderator_pseud (moderator)" the "Owner" role in the collection "Such a nice collection"
-  Then I should see "Updated moderator_pseud."
+  Then I should see "Updated moderator_pseud (moderator)."
     And "moderator_pseud (moderator)" should have the "Owner" role in the collection "Such a nice collection"
   When the dashboard counts have expired
     And I follow "My Dashboard"

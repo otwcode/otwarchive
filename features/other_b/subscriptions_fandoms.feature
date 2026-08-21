@@ -17,13 +17,17 @@ Feature: Subscriptions
   Scenario: Subscribe to a test fandom when there are works in it
 
   When I am logged in as "author"
+    And time is frozen at 2026-04-11 16:00
     And I post a work "My Work Title" with category "F/F"
+    And time is frozen at 2026-04-11 17:00
+    And I post a work "Silly Games" with category "F/F"
   When I am logged in as "reader"
     And I view the "F/F" works index
   Then I should see "RSS Feed"
   When I follow "RSS Feed"
   Then I should see "My Work Title"
     And I should see "Stargate SG-1"
+    And the feed updated date should be should be the created date of "Silly Games"
 
   Scenario: Subscribe to a non-test fandom
 

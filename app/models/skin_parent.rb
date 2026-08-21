@@ -15,6 +15,14 @@ class SkinParent < ApplicationRecord
     errors.add(:base, :site_parent, title: parent_skin.title)
   end
 
+  validate :parent_skin_is_accessible
+  def parent_skin_is_accessible
+    return if parent_skin.blank? || child_skin.blank? || parent_skin.author_id.blank?
+    return if parent_skin.approved_or_owned_by?(child_skin.author)
+
+    errors.add(:base, :inaccessible_parent, title: parent_skin.title)
+  end
+
   validate :no_circular_skin
   def no_circular_skin
     if parent_skin == child_skin

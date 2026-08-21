@@ -19,6 +19,28 @@ describe CollectionQuery do
     expect(q.generated_query[:sort]).to eq([{ "title.keyword" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
+  it "sorts by bookmarked items" do
+    q = CollectionQuery.new(sort_column: "bookmarked_items_count", sort_direction: "desc")
+    expect(q.generated_query[:sort]).to eq([{ "public_bookmarked_items_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
+  end
+
+  it "sorts by works" do
+    q = CollectionQuery.new(sort_column: "works_count", sort_direction: "desc")
+    expect(q.generated_query[:sort]).to eq([{ "public_works_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
+  end
+
+  it "sorts by general bookmarked items when logged in" do
+    User.current_user = build_stubbed(:user)
+    q = CollectionQuery.new(sort_column: "bookmarked_items_count", sort_direction: "desc")
+    expect(q.generated_query[:sort]).to eq([{ "general_bookmarked_items_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
+  end
+
+  it "sorts by general works when logged in" do
+    User.current_user = build_stubbed(:user)
+    q = CollectionQuery.new(sort_column: "works_count", sort_direction: "desc")
+    expect(q.generated_query[:sort]).to eq([{ "general_works_count" => { order: "desc" } }, { "id" => { order: "desc" } }])
+  end
+
   describe "filtering", collection_search: true do
     let!(:gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.current - 2.days, signups_close_at: Time.current + 1.week) }
     let!(:gift_exchange_collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
@@ -34,10 +56,10 @@ describe CollectionQuery do
     let!(:participant) { create(:collection_participant, collection: prompt_meme_collection) }
     let!(:moderator) { create(:collection_participant, participant_role: CollectionParticipant::MODERATOR, collection: prompt_meme_collection) }
     let!(:item) do
-      create(:collection_item, user_approval_status: "approved", collection_approval_status: "approved", work: create(:work, restricted: false), collection: prompt_meme_collection)
+      create(:collection_item, user_approval_status: "approved", collection_approval_status: "approved", item: create(:work, restricted: false), collection: prompt_meme_collection)
     end
     let!(:item2) do
-      create(:collection_item, user_approval_status: "approved", collection_approval_status: "approved", work: create(:work, restricted: true), collection: gift_exchange_collection)
+      create(:collection_item, user_approval_status: "approved", collection_approval_status: "approved", item: create(:work, restricted: true), collection: gift_exchange_collection)
     end
 
     before do

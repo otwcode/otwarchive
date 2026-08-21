@@ -425,7 +425,6 @@ input[type="submit"] {
 
 .own,
 .draft,
-.draft .wrapper,
 .unread,
 .child,
 .unwrangled,
@@ -477,7 +476,7 @@ a.tag:hover,
   color: #111;
 }
 
-.wrapper {
+.wrapper:has(> table, > .meta) {
     box-shadow: 1px 1px 3px #000;
 }
 
@@ -712,7 +711,7 @@ form.filters fieldset {
   border-bottom-color: #555;
 }
 
-.userstuff blockquote {
+.userstuff blockquote, .userstuff address {
   border-left-color: #555;
 }
 

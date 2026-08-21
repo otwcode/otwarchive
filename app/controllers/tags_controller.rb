@@ -72,19 +72,16 @@ class TagsController < ApplicationController
   end
 
   def feed
-    begin
-      @tag = Tag.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag with id '#{params[:id]}'"
-    end
+    @tag = Tag.find(params[:id])
     @tag = @tag.merger if !@tag.canonical? && @tag.merger
     # Temp for testing
     if %w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == 'F/F'
-      if @tag.canonical?
-        @works = @tag.filtered_works.visible_to_all.order('created_at DESC').limit(25)
-      else
-        @works = @tag.works.visible_to_all.order('created_at DESC').limit(25)
-      end
+      @works = if @tag.canonical?
+                 @tag.filtered_works
+               else
+                 @tag.works
+               end
+      @works = @works.visible_to_all.order(created_at: :desc).limit(25).includes(:tags, :language, :series)
     else
       redirect_to(tag_works_path(tag_id: @tag.to_param)) && return
     end
