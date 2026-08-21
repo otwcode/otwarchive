@@ -86,7 +86,7 @@ namespace :Tag do
 
   desc "Delete unused admin post tags"
   task(delete_unused_admin_post_tags: :environment) do
-    AdminPostTag.joins("LEFT JOIN `admin_post_taggings` ON admin_post_taggings.admin_post_tag_id = admin_post_tags.id").where("admin_post_taggings.id IS NULL").destroy_all
+    AdminPostTag.delete_unused
   end
 
   desc "Clean up orphaned taggings"
