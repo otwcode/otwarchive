@@ -601,11 +601,6 @@ class WorksController < ApplicationController
     @user = current_user
     @work = Work.find(params[:id])
 
-    unless @user.is_author_of?(@work)
-      flash[:error] = ts('You can only post your own works.')
-      redirect_to(current_user) && return
-    end
-
     if @work.posted
       flash[:error] = ts('That work is already posted. Do you want to edit it instead?')
       redirect_to(edit_user_work_path(@user, @work)) && return
