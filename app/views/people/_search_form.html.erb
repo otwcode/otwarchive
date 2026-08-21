@@ -4,7 +4,7 @@
     <dl>
       <dt>
         <%= f.label :query, ts("Search all fields") %>
-        <%= link_to_help "people-search-all-fields" %>
+        <%= link_to_help_modal(help_people_search_all_fields_path, t(".people_search_all_fields_help_title")) %>
       </dt>
       <dd>
         <%= f.text_field :query %>

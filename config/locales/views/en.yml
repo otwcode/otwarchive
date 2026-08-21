@@ -764,6 +764,8 @@ en:
       no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
     chapter_form:
+      chapter_title: Chapter Title
+      chapters_title_help_title: Chapter title
       publication_date: Chapter Publication Date
       works_backdating_help_title: Publication Date Options
     posting_fieldset:
@@ -1212,6 +1214,9 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    chapters_title:
+      description: You can add a chapter title, but it's not required.
+      page_heading: Chapter Title
     collectibles_add_to_collection:
       collection_names: Note that you need to use the collection's name, which gets used in the collection's URL, and not the collection's spiffy title (because different collections can have the same title). A collection's name is the equivalent of your user login. Names will be auto-completed for you if you have JavaScript turned on.
       guidance: Enter collection names as a comma-separated list, and the item you are editing will be added to all the collections you specify.
@@ -1355,6 +1360,37 @@ en:
         unwanted_larger_text: If one bit of your text shows up larger than the rest, probably our formatter couldn't figure out to put paragraph tags around it. You can fix this by manually putting in the paragraph tags around that one bit.
         unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
       page_heading: HTML on the Archive
+    people_search_all_fields:
+      and:
+        a_test_user_samp: A. Test User
+        a_user_kbd: A. User
+        a_user_samp: A. User
+        description_html: "%{a_user_kbd} will find %{a_user_samp} and %{a_test_user_samp} but not %{user_samp}."
+        title: 'space: a space acts like AND'
+        user_samp: User
+      any:
+        description_html: "%{user_any_kbd} will find %{user_samp} and %{users_samp} and %{username_samp}."
+        title: "*: any characters"
+        user_any_kbd: User*
+        user_samp: User
+        username_samp: Username
+        users_samp: Users
+      exact:
+        a_test_user_samp: A. Test User
+        a_user_kbd: '"A. User"'
+        a_user_samp: '"A. User"'
+        description_html: "%{a_user_kbd} will find %{a_user_samp} but not %{a_test_user_samp}."
+        title: "\": words in exact sequence"
+      or:
+        a_samp: A.
+        a_user_samp: A. User
+        description_html: "%{user_a_or_kbd} will find %{a_samp}, %{a_user_samp}, and %{user_samp}."
+        title: "|: OR (not exclusive)"
+        user_a_or_kbd: A. | User
+        user_samp: User
+      page_description: Enter text in "Search all fields" to find people with usernames, pseuds, or pseud descriptions containing your search terms.
+      page_heading: 'People Search: Search All Fields'
+      page_note: The characters ":" and "@" have special meanings. Leave them out of your search or you will get unexpected results.
     preferences_collection:
       allow_collection_invitation:
         changing: Changing this setting won't affect any existing works in collections.
@@ -2740,6 +2776,9 @@ en:
       nav: Pagination
     next: Next →
     prev: "← Previous"
+  people:
+    search_form:
+      people_search_all_fields_help_title: People search all fields help
   potential_matches:
     in_progress:
       cancel: Cancel Potential Match Generation
