@@ -330,3 +330,21 @@ Feature: Comment Moderation
       And I view the work "Moderation"
       And I follow "Unreviewed Comments (1)"
     Then I should not see "Parent Thread"
+
+  Scenario: Creator marks an unreviewed comment as spam and the count updates
+    Given the moderated work "Spam Trap" by "spam_catcher"
+    When I post the comment "Fake spam" on the work "Spam Trap" as a guest
+    When I am logged in as "spam_catcher"
+      And I view the work "Spam Trap"
+    Then I should see "Unreviewed Comments (1)"
+    When I follow "Unreviewed Comments"
+      And I follow "Spam"
+    Then I should see "Unreviewed Comments (0)"
+      And I should not see "Fake spam"
+      And I am logged out
+    When I am logged in as an admin
+      And I view the work "Spam Trap"
+    Then I should see "Unreviewed Comments (1)"
+    When I follow "Unreviewed Comments"
+    Then I should see "Fake spam"
+      And I should see "This comment has been marked as spam"
