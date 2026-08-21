@@ -199,12 +199,12 @@ describe TagQuery do
 
     it "allows you to sort by Date Canonized" do
       q = TagQuery.new(sort_column: "canonized_at")
-      expect(q.generated_query[:sort]).to eq([{ "canonized_at" => { order: "desc", unmapped_type: "date" } }, { id: { order: "desc" } }])
+      expect(q.generated_query[:sort]).to eq([{ "canonized_at" => { order: "desc", unmapped_type: "date", missing: "_last" } }, { id: { order: "desc" } }])
     end
 
     it "allows you to sort by Date Decanonized" do
       q = TagQuery.new(sort_column: "decanonized_at")
-      expect(q.generated_query[:sort]).to eq([{ "decanonized_at" => { order: "desc", unmapped_type: "date" } }, { id: { order: "desc" } }])
+      expect(q.generated_query[:sort]).to eq([{ "decanonized_at" => { order: "desc", unmapped_type: "date", missing: "_last" } }, { id: { order: "desc" } }])
     end
 
     it "allows you to sort by Uses" do

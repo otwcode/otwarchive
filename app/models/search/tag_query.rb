@@ -64,7 +64,10 @@ class TagQuery < Query
     end
     sort_hash = { column => { order: direction } }
 
-    sort_hash[column][:unmapped_type] = "date" if %w[created_at canonized_at decanonized_at].include?(column)
+    if %w[created_at canonized_at decanonized_at].include?(column)
+      sort_hash[column][:unmapped_type] = "date"
+      sort_hash[column][:missing] = "_last" unless column == "created_at"
+    end
 
     sort_by_id = { id: { order: direction } }
 
