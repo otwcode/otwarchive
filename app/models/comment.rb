@@ -24,7 +24,7 @@ class Comment < ApplicationRecord
 
   delegate :user, to: :pseud, allow_nil: true
 
-  attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4
+  attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4, :request_host
 
   # Whether the writer of the comment this is replying to allows guest replies
   validate :guest_can_reply, if: :reply_comment?, unless: :pseud_id, on: :create
@@ -91,6 +91,7 @@ class Comment < ApplicationRecord
   scope :top_level,       -> { where.not(commentable_type: "Comment") }
   scope :include_pseud,   -> { includes(:pseud) }
   scope :not_deleted,     -> { where(is_deleted: false) }
+  scope :not_spam,        -> { where(approved: true) }
   scope :reviewed,        -> { where(unreviewed: false) }
   scope :unreviewed_only, -> { where(unreviewed: true) }
 
@@ -123,13 +124,11 @@ class Comment < ApplicationRecord
       comment_author = name
     else
       user_role = "user"
-      comment_author = user.login
+      comment_author = user.try(:login)
     end
 
     attributes = {
       comment_type: comment_type,
-      key: ArchiveConfig.AKISMET_KEY,
-      blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_agent: user_agent,
       user_role: user_role,
@@ -139,6 +138,13 @@ class Comment < ApplicationRecord
       comment_date_gmt: created_at&.iso8601 || Time.current.iso8601,
       comment_post_modified_gmt: comment_post_modified_gmt
     }
+
+    parent_object = ultimate_parent
+    blog_lang = parent_object.respond_to?(:language) ? parent_object.language&.short : nil
+    attributes[:blog_lang] = blog_lang if blog_lang && ArchiveConfig.AKISMET_VALID_BLOG_LANGS.include?(blog_lang)
+
+    permalink = parent_permalink
+    attributes[:permalink] = permalink if permalink
 
     attributes[:cloudflare_bot_score] = cloudflare_bot_score if cloudflare_bot_score
     attributes[:cloudflare_ja3_hash] = cloudflare_ja3_hash if cloudflare_ja3_hash
@@ -400,6 +406,9 @@ class Comment < ApplicationRecord
       end
     end
 
+    # Avoid duplicate inbox notifications when parent comment owner is a work creator who has already received the same notification with the approval request
+    return if self.saved_change_to_unreviewed? && !self.unreviewed? && self.ultimate_parent.commentable_owners.include?(parent_comment_owner)
+
     if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
       if self.saved_change_to_edited_at?
         update_feedback_in_inbox(parent_comment_owner)
@@ -508,19 +517,17 @@ class Comment < ApplicationRecord
   end
 
   def spam?
-    return false unless %w[staging production].include?(Rails.env)
-
-    Akismetor.spam?(akismet_attributes)
+    AkismetClient.spam?(akismet_attributes)
   end
 
   def submit_spam
     return unless approved && !is_deleted
-    
-    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+
+    AkismetClient.submit_spam(akismet_attributes)
   end
 
   def submit_ham
-    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+    AkismetClient.submit_ham(akismet_attributes)
   end
 
   def mark_as_spam!
@@ -580,4 +587,18 @@ class Comment < ApplicationRecord
   end
 
   include Responder
+
+  private
+
+  def parent_permalink
+    host = request_host || ArchiveConfig.APP_HOST
+    base_url = "https://#{host}"
+    original = original_ultimate_parent
+    case original
+    when Chapter
+      "#{base_url}/works/#{original.work_id}/chapters/#{original.id}"
+    when AdminPost
+      "#{base_url}/admin_posts/#{original.id}"
+    end
+  end
 end

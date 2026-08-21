@@ -81,19 +81,6 @@
     </table>
   </fieldset>
 
-  <% if policy(Skin).set_default? %>
-    <fieldset>
-      <legend><%= ts("Set Default Archive Skin") %></legend>
-      <h3 class="heading"><%= ts("Set Default Archive Skin") %></h3>
-      <p class="note"><%= ts("This will change the default skin FOR ALL USERS! Don't use unless you are REALLY SURE.") %></p>
-      <p>
-        <%= label_tag "set_default", ts("Default Skin Title: ") %>
-        <%= text_field_tag "set_default", AdminSetting.default_skin.try(:title), autocomplete_options("site_skins", data: { autocomplete_token_limit: 1 }) %>
-        <%= hidden_field_tag :last_updated_by, current_admin.id %>
-      </p>
-    </fieldset>
-  <% end %>
-
   <p class="submit"><%= submit_tag ts("Update") %></p>
 
 <% end %>

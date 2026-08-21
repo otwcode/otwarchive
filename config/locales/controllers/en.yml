@@ -78,6 +78,31 @@ en:
         success:
           one: Successfully removed pseud %{pseuds} from this work.
           other: Successfully removed pseuds %{pseuds} from this work.
+  admin_posts:
+    admin_post_blurb:
+      confirm_delete: Are you sure?
+      delete: Delete
+      draft:
+        delete: Delete Draft
+        post: Post Draft
+      edit: Edit
+      meta:
+        draft: Created on %{created_date} and updated on %{updated_date}
+        published: Published on %{publication_date} (Created on %{created_date} and updated on %{updated_date})
+      show: Show
+    create:
+      success: Admin Post was successfully created.
+    edit:
+      page_title: Edit AO3 News Post
+    post:
+      error: Sorry, that Admin Post could not be posted.
+      success: Admin Post was successfully posted.
+    preview:
+      page_title: "%{title} (Preview)"
+    show:
+      page_title_draft: "%{title} (Draft)"
+    update:
+      success: Admin Post was successfully updated.
   application:
     access_denied:
       access_denied:
@@ -103,9 +128,15 @@ en:
       success: Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.
       warnings:
         private_bookmark_added_to_collection: " Please note: private bookmarks are not listed in collections."
+    new_moderated_collections_message_html:
+      one: You have submitted your bookmark to the moderated collection '%{collections}'. It will not become a part of the collection until it has been approved by a moderator.
+      other: You have submitted your bookmark to moderated collections (%{collections}). It will not become a part of those collections until it has been approved by a moderator.
+    update:
+      bookmark_updated: Bookmark was successfully updated.
   challenge_assignments:
     index:
       access_denied_user: You aren't allowed to see that user's assignments.
+      page_title: "%{username} - Challenge Assignments"
     update_multiple:
       approve_error: We couldn't approve the assignment for %{request}.
     validation:
@@ -114,6 +145,8 @@ en:
     index:
       page_title: "%{username} - Challenge Claims"
   challenge_signups:
+    index:
+      page_title: "%{username} - Challenge Sign-ups"
     new:
       page_title: New Challenge Sign-up
   chapters:
@@ -125,6 +158,8 @@ en:
     show:
       chapter_position: " - Chapter %{position}"
       unrevealed: Mystery Work
+    update:
+      preview_notice: This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.
   collection_items:
     create:
       invited: invited
@@ -203,6 +238,8 @@ en:
     timeout_error:
       browser_title: Timeout Error
   external_works:
+    new:
+      page_title: Bookmark External Work
     update:
       successfully_updated: External work was successfully updated.
   fandoms:
@@ -219,6 +256,8 @@ en:
   home:
     content:
       page_title: Content Policy
+    diversity:
+      page_title: Diversity Statement
     privacy:
       page_title: Privacy Policy
     tos:
@@ -314,6 +353,16 @@ en:
     index:
       public_site_page_title: Public Site Skins
       public_work_page_title: Public Work Skins
+    preview:
+      cannot_preview: Sorry, you can't preview that skin.
+      remove_skin: Go back or follow any link to remove the skin.
+      return_to_skin: Return to Skin to Use
+      skin_title: You are previewing the skin %{title}.
+      tip: 'Tip: You can preview any archive page you want by adding "?site_skin=%{site_skin_id}" to the end of the URL.'
+    set:
+      failure: Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{skin_title} to be added!
+      skin_page: "%{skin_title} skin page"
+      success_html: You're now using the %{skin_title} skin. This will last for 2 weeks even if you close your browser. If you'd like to keep it longer, go to the %{skin_page_link} and select the "Use" button at the bottom of the page.
   stats:
     index:
       page_title: "%{username} - Stats"
@@ -324,12 +373,20 @@ en:
     index:
       page_title: "%{username} - Subscriptions"
       subscription_type_page_title: "%{username} - %{subscription_type} Subscriptions"
+  tag_wranglers:
+    create:
+      noncanonical_fandoms_tried_assignment:
+        one: Could not assign fandom %{fandom_list}. Non-canonical fandoms cannot be assigned.
+        other: Could not assign fandoms %{fandom_list}. Non-canonical fandoms cannot be assigned.
   tag_wranglings:
     index:
       page_subtitle: fandoms
   tags:
     index:
       collection_page_title: "%{collection_title} - Tags"
+  user_invite_requests:
+    new:
+      page_title: Request Invitations
   users:
     change_email:
       page_title: Change Email
@@ -390,13 +447,18 @@ en:
       page_title: "%{username} - Drafts"
     edit_tags:
       page_title: Edit Work Tags
+    moderated_collections_message_html:
+      one: You have submitted your work to the moderated collection '%{collections}'. It will not become a part of the collection until it has been approved by a moderator.
+      other: You have submitted your work to moderated collections (%{collections}). It will not become a part of those collections until it has been approved by a moderator.
     new:
       closed_collection: Sorry, the collection %{collection_title} is closed. New works cannot be added to it.
     show:
       page_title:
         unrevealed: Mystery Work
     update:
+      tags_updated: Tags were successfully updated.
       unposted_notice: Your changes have not been saved. Please post your work or save the draft if you want to keep them.
+      work_updated: Work was successfully updated.
     update_tags:
       page_title: Preview Work Tags
   wrangling_guidelines:

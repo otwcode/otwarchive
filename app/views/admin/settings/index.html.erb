@@ -81,6 +81,12 @@
         <%= admin_setting_text_field(f, :account_age_threshold_for_comment_spam_check, size: "3", "aria-describedby": "account-age-threshold-for-comment-spam-check-note") %>
         <p id="account-age-threshold-for-comment-spam-check-note" class="footnote"><%= t(".fields.account_age_threshold_for_comment_spam_check_note") %></p>
       </dd>
+
+      <dt><%= f.label :comment_count_threshold_for_comment_rate_limit, t(".fields.comment_count_threshold_for_comment_rate_limit") %></dt>
+      <dd>
+        <%= admin_setting_text_field(f, :comment_count_threshold_for_comment_rate_limit, size: "3", "aria-describedby": "comment-count-threshold-for-comment-rate-limit-note") %>
+        <p id="comment-count-threshold-for-comment-rate-limit-note" class="footnote"><%= t(".fields.comment_count_threshold_for_comment_rate_limit_note") %></p>
+      </dd>
     </dl>
   </fieldset>
 

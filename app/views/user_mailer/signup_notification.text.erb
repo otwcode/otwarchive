@@ -1,16 +1,16 @@
 <% content_for :message do %>
-<%= t('.welcome',
+<%= t(".welcome.text",
            login: @user.login) %>
 
-<%= t('.activate.text',
+<%= t(".activate.text",
            activate_account_url: activate_url(id: @user.confirmation_token)) %>
 
-<%= t('.features.text') %>
+<%= t(".features.text") %>
 
-<%= t('.information.text',
+<%= t(".information.text",
            faq_url: archive_faqs_url,
            admin_posts_url: admin_posts_url, 
            contact_support_url: new_feedback_report_url) %>
 
-<%= t('.bye') %>
+<%= t(".bye") %>
 <% end %>

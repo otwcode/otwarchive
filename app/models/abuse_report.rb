@@ -26,7 +26,7 @@ class AbuseReport < ApplicationRecord
 
   validate :check_for_spam
   def check_for_spam
-    approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
+    approved = logged_in_with_matching_email? || !AkismetClient.spam?(akismet_attributes)
     errors.add(:base, ts("This report looks like spam to our system!")) unless approved
   end
 
@@ -41,8 +41,6 @@ class AbuseReport < ApplicationRecord
     role = User.current_user.present? ? "user-with-nonmatching-email" : "guest"
     {
       comment_type: "contact-form",
-      key: ArchiveConfig.AKISMET_KEY,
-      blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_role: role,
       comment_author: name,
@@ -182,10 +180,11 @@ class AbuseReport < ApplicationRecord
     end
   end
 
-  # ID of the reported work, unless the report is about comment(s) on the work
+  # ID of the reported work, unless the report is about comment(s) or bookmark(s) on the work
   def reported_work_id
     comments = url[%r{/comments/}, 0]
-    url[%r{/works/(\d+)}, 1] if comments.nil?
+    bookmarks = url[%r{/bookmarks/}, 0]
+    url[%r{/works/(\d+)}, 1] if comments.nil? && bookmarks.nil?
   end
 
   # ID of the reported comment

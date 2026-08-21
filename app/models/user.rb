@@ -24,7 +24,9 @@ class User < ApplicationRecord
   # Allows other models to get the current user with User.current_user
   thread_cattr_accessor :current_user
 
-  after_validation :canonicalize_email, if: :will_save_change_to_email?
+  # Devise confirmable may undo email modifications in before_update, so canonicalize_email has to run after it
+  before_create :canonicalize_email
+  before_update :canonicalize_email, if: :will_save_change_to_email?
 
   # Authorization plugin
   acts_as_authorized_user
@@ -433,6 +435,12 @@ class User < ApplicationRecord
   def should_spam_check_comments?
     # When account_age_threshold_for_comment_spam_check is 0, no users' comments should be spam-checked
     (Time.current - created_at).seconds.in_days.to_i < AdminSetting.current.account_age_threshold_for_comment_spam_check
+  end
+
+  def should_rate_limit_comments?
+    # When comment_count_threshold_for_comment_rate_limit is 0, no users should be rate limited based on comment count, so don't count the comments at all
+    based_on_comments_count = AdminSetting.current.comment_count_threshold_for_comment_rate_limit.zero? ? false : comments.count < AdminSetting.current.comment_count_threshold_for_comment_rate_limit
+    should_spam_check_comments? || based_on_comments_count
   end
 
   # Creates log item tracking changes to user

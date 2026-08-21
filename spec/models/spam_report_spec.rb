@@ -2,15 +2,15 @@ require "spec_helper"
 
 describe SpamReport do
   let(:author) { create(:user).default_pseud }
-  let!(:first_spam) { create(:work, spam: true, authors: [author]) }
-  let!(:second_spam) { create(:work, spam: true, authors: [author]) }
-  let!(:third_spam) { create(:work, spam: true, authors: [author]) }
+  let!(:first_spam) { create(:work, spam: true, spam_checked_at: Time.current, authors: [author]) }
+  let!(:second_spam) { create(:work, spam: true, spam_checked_at: Time.current, authors: [author]) }
+  let!(:third_spam) { create(:work, spam: true, spam_checked_at: Time.current, authors: [author]) }
 
   let(:message_double) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
 
   before do
     allow(ArchiveConfig).to receive(:SPAM_THRESHOLD).and_return(10)
-    create(:work, spam: false)
+    create(:work, spam: false, spam_checked_at: Time.current)
   end
 
   it "has a recent date after the new date" do
@@ -48,7 +48,7 @@ describe SpamReport do
                                   work_ids: [first_spam.id, second_spam.id, third_spam.id] } })
       .and_return(message_double)
     SpamReport.run
-    create(:work, spam: false, authors: [author], created_at: 3.days.ago)
+    create(:work, spam: false, spam_checked_at: Time.current, authors: [author], created_at: 3.days.ago)
     expect(AdminMailer).to receive(:send_spam_alert)
       .with({ author.user_id => { score: 11,
                                   work_ids: [first_spam.id, second_spam.id, third_spam.id] } })
