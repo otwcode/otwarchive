@@ -11,6 +11,7 @@ jobs:
   rubocop:
     name: Rubocop
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     env:
       BUNDLE_ONLY: linters
     steps:
@@ -33,6 +34,7 @@ jobs:
   erb_lint:
     name: ERB Lint runner
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     env:
       BUNDLE_ONLY: linters
     steps:
