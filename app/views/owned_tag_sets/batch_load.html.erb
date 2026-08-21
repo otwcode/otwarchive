@@ -1,7 +1,7 @@
 <!--ZONE TAG: tagset POST/CREATE-->
 <div class="tag tagset">
   <!--Descriptive page name and system messages, descriptions, and instructions.-->
-  <h2 class="heading"><%= ts('Batch Loading') %> <%= link_to_help "tagset-batch-load" %></h2>
+  <h2 class="heading"><%= t(".page_heading") %> <%= link_to_help_modal(help_tag_sets_batch_load_path, t(".tag_sets_batch_load_help_title")) %></h2>
   <!-- /descriptions-->
 
   <!--subnav-->
@@ -21,10 +21,10 @@
         </dd>
         <dt><%= label_tag "batch_do_relationships", ts('Relationships instead?') %></dt>
         <dd><%= check_box_tag "batch_do_relationships" %></dd>
-        <dt class="landmark"><%= ts('Submit') %></dt> 
-        <dd class="submit actions"><%= form.submit ts('Submit') %></dd>
+        <dt class="landmark"><%= t(".submit") %></dt>
+        <dd class="submit actions"><%= form.submit t(".submit") %></dd>
       </dl>
     </fieldset>
-    
+
   <% end %>
 </div>
