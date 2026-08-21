@@ -5,13 +5,13 @@ describe StoryParser do
 
   # Temporarily make the methods we want to test public
   before(:all) do
-    class StoryParser
+    StoryParser.class_eval do
       public :get_source_if_known, :check_for_previous_import, :parse_common, :parse_author, :convert_revised_at
     end
   end
 
   after(:all) do
-    class StoryParser
+    StoryParser.class_eval do
       protected :get_source_if_known, :check_for_previous_import, :parse_common, :parse_author, :convert_revised_at
     end
   end
