@@ -137,6 +137,22 @@ Feature: Comment Moderation
       And I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
 
+  Scenario: Authors with moderated comments should not see duplicate inbox notifications for approved replies to their comments
+    Given the moderated work "Moderation" by "author"
+      And I am logged in as "author"
+      And I post the comment "Author comment" on the work "Moderation"
+    When I am logged in as "commenter"
+      And I view the work "Moderation"
+      And I follow "Comments (1)"
+      And I follow "Reply" within ".odd"
+      And I fill in "Comment" with "A moderated reply" within ".odd"
+      And I press "Comment" within ".odd"
+    When I am logged in as "author"
+      And I view the unreviewed comments page for "Moderation"
+      And I press "Approve"
+      And I go to author's inbox page
+    Then I should see "(1 comments, 0 unread)"
+
   Scenario: Comments can be approved from the home page inbox
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
