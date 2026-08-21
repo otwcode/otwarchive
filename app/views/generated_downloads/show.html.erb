@@ -1,0 +1,16 @@
+<% content_for :head do %>
+  <% unless @generated_download.status == "failed" %>
+    <meta http-equiv="refresh" content="5" />
+  <% end %>
+<% end %>
+
+<h2 class="heading"><%= t(".heading") %></h2>
+
+<% if @generated_download.status == "failed" %>
+  <p class="error"><%= t(".failed") %></p>
+<% else %>
+  <p class="notice">
+    <%= t(".processing") %>
+  </p>
+  <p><%= link_to t(".check_status"), generated_download_path(token: @generated_download.token) %></p>
+<% end %>
