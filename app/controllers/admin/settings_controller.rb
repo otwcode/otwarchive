@@ -1,5 +1,6 @@
 class Admin::SettingsController < Admin::BaseController
   before_action :load_admin_setting
+  before_action :load_preserved_users
 
   def index
     authorize @admin_setting
@@ -20,5 +21,10 @@ class Admin::SettingsController < Admin::BaseController
 
   def load_admin_setting
     @admin_setting = AdminSetting.first || AdminSetting.create(last_updated_by: Admin.first)
+  end
+
+  def load_preserved_users
+    preserved_ids = AdminSetting.current.preserve_audit_records_user_ids&.split(/\s*,\s*/) || []
+    @audit_records_preserved_users_by_id = preserved_ids.map { [it, User.find_by(id: it.to_i)] }
   end
 end

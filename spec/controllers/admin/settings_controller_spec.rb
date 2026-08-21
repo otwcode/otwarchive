@@ -57,6 +57,7 @@ describe Admin::SettingsController do
               invite_from_queue_number: "10",
               invite_from_queue_frequency: "7",
               days_to_purge_unactivated: "7",
+              preserve_audit_records_user_ids: "1",
               disable_support_form: "1",
               disabled_support_form_text: "Disable support",
               suspend_filter_counts: "0",
@@ -97,7 +98,8 @@ describe Admin::SettingsController do
           hide_spam: 1,
           invite_from_queue_enabled: 0,
           invite_from_queue_number: 11,
-          request_invite_enabled: 1
+          request_invite_enabled: 1,
+          preserve_audit_records_user_ids: "1"
         }.each_pair do |field, value|
           it "allows admins with policy_and_abuse role to update #{field}" do
             put :update, params: { id: setting.id, admin_setting: { field => value } }
@@ -116,6 +118,7 @@ describe Admin::SettingsController do
           guest_comments_off: true,
           tag_wrangling_off: true,
           account_age_threshold_for_comment_spam_check: 10,
+          preserve_audit_records_user_ids: "1",
           comment_count_threshold_for_comment_rate_limit: 3
         }.each_pair do |field, value|
           it "prevents admins with support role from updating #{field}" do
@@ -149,6 +152,7 @@ describe Admin::SettingsController do
           hide_spam: true,
           guest_comments_off: true,
           account_age_threshold_for_comment_spam_check: 10,
+          preserve_audit_records_user_ids: "1",
           comment_count_threshold_for_comment_rate_limit: 3
         }.each_pair do |field, value|
           it "prevents admins with tag_wrangling role from updating #{field}" do
@@ -163,6 +167,48 @@ describe Admin::SettingsController do
           put :update, params: { id: setting.id, admin_setting: { tag_wrangling_off: "1" } }
           expect(setting.reload.tag_wrangling_off?).to be_truthy
           it_redirects_to_with_notice(admin_settings_path, "Archive settings were successfully updated.")
+        end
+      end
+
+      context "when admin has legal role" do
+        before { admin.update!(roles: ["legal"]) }
+
+        {
+          account_creation_enabled: "1",
+          creation_requires_invite: "1",
+          request_invite_enabled: "0",
+          invite_from_queue_enabled: "1",
+          invite_from_queue_number: "10",
+          invite_from_queue_frequency: "7",
+          days_to_purge_unactivated: "7",
+          disable_support_form: "1",
+          disabled_support_form_text: "Disable support",
+          suspend_filter_counts: "0",
+          tag_wrangling_off: "0",
+          downloads_enabled: "1",
+          enable_test_caching: "0",
+          cache_expiration: "10",
+          hide_spam: "1",
+          guest_comments_off: "1",
+          account_age_threshold_for_comment_spam_check: "7",
+          comment_count_threshold_for_comment_rate_limit: 3
+        }.each_pair do |field, value|
+          it "prevents admins with legal role from updating #{field}" do
+            expect do
+              put :update, params: { id: setting.id, admin_setting: { field => value } }
+            end.to raise_exception(ActionController::UnpermittedParameters)
+            expect(setting.reload.send(field)).not_to eq(value)
+          end
+        end
+
+        {
+          preserve_audit_records_user_ids: "1"
+        }.each_pair do |field, value|
+          it "allows admins with legal role to update #{field}" do
+            put :update, params: { id: setting.id, admin_setting: { field => value } }
+            expect(setting.reload.read_attribute_before_type_cast(field)).to eq(value)
+            it_redirects_to_with_notice(admin_settings_path, "Archive settings were successfully updated.")
+          end
         end
       end
     end

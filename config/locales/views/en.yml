@@ -394,6 +394,7 @@ en:
         totp_label: 6-digit verification code
     settings:
       index:
+        deleted_user: Deleted user
         fields:
           account_age_threshold_for_comment_spam_check: How old (in days) accounts should be before we stop checking comments for spam
           account_age_threshold_for_comment_spam_check_note: Enter 0 to turn off comment spam checks for all logged in users.
@@ -402,6 +403,7 @@ en:
           comment_count_threshold_for_comment_rate_limit: How many comments older accounts should have before we stop rate limiting them
           comment_count_threshold_for_comment_rate_limit_note: Enter 0 to turn off additional comment rate limits based on comment count.
           creation_requires_invite: Account creation requires invitation
+          currently_preserved_audit_records_user_ids: Users currently excluded from audit record cleanup
           days_to_purge_unactivated: How many weeks you have to activate your account before we purge it
           disable_support_form: Turn off support form
           disabled_support_form_text: Disabled support form text
@@ -412,6 +414,7 @@ en:
           invite_from_queue_enabled: Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)
           invite_from_queue_frequency: How often (in hours) should we invite people from the queue
           invite_from_queue_number: Number of people to invite from the queue at once
+          preserve_audit_records_user_ids: Exclude these user IDs from audit record cleanup (comma separated)
           request_invite_enabled: Users can request invitations
           suspend_filter_counts: Suspend some filter tracking due to high posting volume
           tag_wrangling_off: Turn off tag wrangling for non-admins

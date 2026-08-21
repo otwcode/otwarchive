@@ -247,6 +247,12 @@ TAGGINGS_COUNT_REINDEX_LIMIT: 1000
 # How many rows we should get from audits for backfilling user history tables
 USER_HISTORIC_VALUES_LIMIT: 10_000
 
+# How many days should we keep user update audit records. Set to -1 to keep forever
+USER_KEEP_AUDIT_UPDATES_DAYS: 1460
+
+# How many days should we keep user create and destroy audit records. Set to -1 to keep forever
+USER_KEEP_AUDIT_CREATES_DESTROYS_DAYS: -1
+
 # how many signups in a challenge before we move to static summaries generated hourly
 MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 
