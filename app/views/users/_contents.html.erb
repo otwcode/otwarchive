@@ -38,7 +38,7 @@
   <div class="work listbox group" id="user-works">
     <h3 class="heading"><%= ts("Recent works") %></h3>
     <ul class="index group">
-      <%= render partial: 'works/work_blurb', collection: @works, as: :work %>
+      <%= render WorkBlurbPresenter.new(@works) %>
     </ul>
     <% if @pseud %>
       <% if @pseud.works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
