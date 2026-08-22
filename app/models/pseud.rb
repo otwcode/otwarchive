@@ -411,7 +411,7 @@ class Pseud < ApplicationRecord
   end
 
   def change_tag_set_nominations
-    default_pseud_id = user.default_pseud.id
+    default_pseud_id = user.default_pseud_id
     existing_tag_set_ids = TagSetNomination.where(pseud_id: default_pseud_id).pluck(:owned_tag_set_id)
     tag_set_nominations.where(owned_tag_set_id: existing_tag_set_ids).destroy_all
     tag_set_nominations.update_all(pseud_id: default_pseud_id)
