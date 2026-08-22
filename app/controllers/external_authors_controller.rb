@@ -43,6 +43,7 @@ class ExternalAuthorsController < ApplicationController
   end
 
   def claim
+    @works = @external_author.works.for_blurb
   end
 
   def complete_claim
