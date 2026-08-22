@@ -863,11 +863,14 @@ en:
         no_challenge: No Challenge
         prompt_meme: Prompt Meme Challenge
     form:
+      collections_name_help_title: Collection name help
       header_image_url:
         footnote: PNG, JPEG, GIF
         label: Custom header URL
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
+      icon_alt_text_help_title: Icon alt text help
+      icon_comment_text_help_title: Icon comment text help
       multifandom:
         footnote: Use this if your collection is not fandom-specific.
         label: Multifandom
@@ -1221,6 +1224,10 @@ en:
       moderated_and_anonymous_collections: 'Also note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically - it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
       page_heading: Adding To Collections
       removing_from_collection: If you change your mind about having an item in a collection, you can either edit the list of collections when editing it, or you can manage all your collected items under the "My Collections" page in your account.
+    collections_name:
+      changing_collection_name: The name of the collection can be changed at a later point, but that will break links to the collection.
+      collection_name_rules: The name can consist only of ASCII letters (a-z, A-Z), numbers and underscores, and cannot contain spaces.
+      page_heading: Collection Name
     first_login:
       additional_info:
         header: Additional Browsing Information
@@ -1358,6 +1365,13 @@ en:
         unwanted_larger_text: If one bit of your text shows up larger than the rest, probably our formatter couldn't figure out to put paragraph tags around it. You can fix this by manually putting in the paragraph tags around that one bit.
         unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
       page_heading: HTML on the Archive
+    icon_alt_text:
+      alt_text_example: 'For example, the AO3 logo has the following alt text: "Archive of Our Own".'
+      alt_text_explanation: The purpose of alt text is to explain the meaning of an image if the image isn't showing. This is used by people browsing with images turned off, or visually impaired people using screenreader technology. Please do not use alt text for attribution!
+      page_heading: Icon Alt Text
+    icon_comment_text:
+      description: You can put anything extra you have about your icon here, like credit for the maker of the icon.
+      page_heading: Icon Comment Text
     preferences_collection:
       allow_collection_invitation:
         changing: Changing this setting won't affect any existing works in collections.
@@ -2933,7 +2947,9 @@ en:
       description: Description
       icon: Icon
       icon_alt: Icon alt text
+      icon_alt_text_help_title: Icon alt text help
       icon_comment: Icon comment text
+      icon_comment_text_help_title: Icon comment text help
       icon_delete: Delete your icon and revert to our default. This will also remove your icon alt text and comment text.
       icon_notes:
         current: This is your icon.

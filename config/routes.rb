@@ -691,6 +691,9 @@ Rails.application.routes.draw do
   get "/help/choosing-series.html", to: redirect("/help/works_series")
   get "/help/work-skins.html", to: redirect("/help/works_skins")
   get "/help/translation-link.html", to: redirect("/help/works_translation_link")
+  get "help/pseud-icon-comment.html", to: redirect("help/icon_comment_text")
+  get "help/collection-name.html", to: redirect("help/collections_name")
+  get "help/icon-alt-text.html", to: redirect("help/icon_alt_text")
 
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
