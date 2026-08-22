@@ -5,14 +5,14 @@ describe StoryParser do
 
   # Temporarily make the methods we want to test public
   before(:all) do
-    class StoryParser
-      public :get_source_if_known, :check_for_previous_import, :parse_common, :parse_author
+    StoryParser.class_eval do
+      public :get_source_if_known, :check_for_previous_import, :parse_common, :parse_author, :convert_revised_at
     end
   end
 
   after(:all) do
-    class StoryParser
-      protected :get_source_if_known, :check_for_previous_import, :parse_common, :parse_author
+    StoryParser.class_eval do
+      protected :get_source_if_known, :check_for_previous_import, :parse_common, :parse_author, :convert_revised_at
     end
   end
 
@@ -277,6 +277,24 @@ describe StoryParser do
       expect do
         @sp.parse_author("", "!!!!", "")
       end.to raise_exception(StoryParser::Error, "No author email specified")
+    end
+  end
+
+  describe "#convert_revised_at" do
+    it "converts an all-digit date to a Time" do
+      expect(@sp.convert_revised_at("300106").to_date).to eq(Date.new(1970, 1, 4))
+    end
+
+    it "converts a well-formed date to a Date" do
+      expect(@sp.convert_revised_at("2001-01-10 13:45")).to eq(Date.new(2001, 1, 10))
+    end
+
+    it "returns an empty string for a date in the future" do
+      expect(@sp.convert_revised_at("2100-01-01")).to eq("")
+    end
+
+    it "returns an empty string for an unparseable date" do
+      expect(@sp.convert_revised_at("not a date")).to eq("")
     end
   end
 
