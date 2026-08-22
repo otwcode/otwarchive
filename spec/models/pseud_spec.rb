@@ -107,26 +107,28 @@ describe Pseud do
       expect(nomination.reload.pseud_id).to eq(default_pseud.id)
     end
 
-    it "destroys nominations that conflict with the default pseud" do
-      tag_set = create(:owned_tag_set)
-      create(:tag_set_nomination, pseud: default_pseud, owned_tag_set: tag_set)
-      conflicting = create(:tag_set_nomination, pseud: pseud, owned_tag_set: tag_set)
+    context "when the default pseud has nominations in the same tag set" do
+      it "destroys nominations for that tag set" do
+        tag_set = create(:owned_tag_set)
+        create(:tag_set_nomination, pseud: default_pseud, owned_tag_set: tag_set)
+        conflicting = create(:tag_set_nomination, pseud: pseud, owned_tag_set: tag_set)
 
-      pseud.change_tag_set_nominations
+        pseud.change_tag_set_nominations
 
-      expect(TagSetNomination.find_by(id: conflicting.id)).to be_nil
-    end
+        expect(TagSetNomination.find_by(id: conflicting.id)).to be_nil
+      end
 
-    it "reassigns non-conflicting nominations to the default pseud and destroys conflicting ones" do
-      tag_set = create(:owned_tag_set)
-      create(:tag_set_nomination, pseud: default_pseud, owned_tag_set: tag_set)
-      conflicting = create(:tag_set_nomination, pseud: pseud, owned_tag_set: tag_set)
-      other_nomination = create(:tag_set_nomination, pseud: pseud)
+      it "destroys nominations for that tag set and reassigns nominations in other tag sets" do
+        tag_set = create(:owned_tag_set)
+        create(:tag_set_nomination, pseud: default_pseud, owned_tag_set: tag_set)
+        conflicting = create(:tag_set_nomination, pseud: pseud, owned_tag_set: tag_set)
+        other_nomination = create(:tag_set_nomination, pseud: pseud)
 
-      pseud.change_tag_set_nominations
+        pseud.change_tag_set_nominations
 
-      expect(TagSetNomination.find_by(id: conflicting.id)).to be_nil
-      expect(other_nomination.reload.pseud_id).to eq(default_pseud.id)
+        expect(TagSetNomination.find_by(id: conflicting.id)).to be_nil
+        expect(other_nomination.reload.pseud_id).to eq(default_pseud.id)
+      end
     end
   end
 

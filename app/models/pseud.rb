@@ -411,7 +411,7 @@ class Pseud < ApplicationRecord
   end
 
   def change_tag_set_nominations
-    default_pseud_id = user.default_pseud.id
+    default_pseud_id = user.default_pseud_id
     # Destroy nominations for tag sets where the default pseud already has one,
     # to avoid violating the (owned_tag_set_id, pseud_id) uniqueness constraint.
     existing_tag_set_ids = TagSetNomination.where(pseud_id: default_pseud_id).pluck(:owned_tag_set_id)
