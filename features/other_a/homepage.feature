@@ -29,6 +29,7 @@ Feature: Various things on the homepage
   Scenario: About
 
     Given I am on the about page
-    Then I should see the page title "About the OTW"
-      And I should see a link "GitHub repository" to "https://github.com/otwcode/otwarchive"
+    Then I should see the page title "About AO3 and the OTW"
+      And I should see a link "open-source archiving software" to "https://github.com/otwcode/otwarchive#otw-archive"
+      And I should see a link "contribute" to "https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md"
       And I should see a link "Jira project" to "https://otwarchive.atlassian.net/browse/AO3"

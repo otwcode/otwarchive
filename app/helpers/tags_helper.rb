@@ -54,7 +54,8 @@ module TagsHelper
   end
 
   def link_to_tag(tag, options = {})
-    link_to_tag_with_text(tag, tag.display_name, options)
+    display_name = tag.errors.key?(:name) ? tag.name_was : tag.display_name
+    link_to_tag_with_text(tag, display_name, options)
   end
 
   def link_to_tag_works(tag, options = {})
@@ -162,7 +163,7 @@ module TagsHelper
   def meta_tag_tree(tag)
     meta_ul = "".html_safe
     unless tag.direct_meta_tags.empty?
-      tag.direct_meta_tags.each do |meta|
+      tag.direct_meta_tags.order(:name).each do |meta|
         meta_ul += content_tag(:li, link_to_tag(meta))
         unless meta.direct_meta_tags.empty?
           meta_ul += content_tag(:li, meta_tag_tree(meta))
