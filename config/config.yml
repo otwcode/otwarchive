@@ -35,6 +35,7 @@ SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
 SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
 TAG_WRANGLER_SUPERVISORS_ADDRESS: 'tagwranglers-personnel@example.org'
+TAG_WRANGLING_CHAIRS_ADDRESS: 'tagwranglers-chair@example.org'
 
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.
@@ -288,6 +289,13 @@ CHARACTER_CATEGORY_NAME: 'Character'
 FREEFORM_CATEGORY_NAME: 'Additional Tags'
 COMMON_CATEGORY_NAME: 'Common'
 BANNED_CATEGORY_NAME: 'Banned'
+
+# Wrangler is considered inactive if they haven't wrangled for this many days
+WRANGLING_INACTIVITY_THRESHOLD: 21
+# Supervisors are notified if wrangler hasn't wrangled for this many total days
+WRANGLING_INACTIVITY_SUPERVISOR_NOTIFICATION_THRESHOLD: 28
+WRANGLING_HIATUS_FORM_URL: "https://example.com/hiatus_form_placeholder"
+USERS_EXCLUDED_FROM_WRANGLING_INACTIVITY: []
 
 # DATE TIME FORMAT see http://ruby-doc.org/core/classes/Time.html#M000392
 DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p'
