@@ -169,6 +169,14 @@ describe AbuseReport do
       end
     end
 
+    shared_examples "enough external work reports" do |url|
+      let(:report) { build(:abuse_report, url: url) }
+      it "can't be submitted" do
+        expect(report.save).to be_falsey
+        expect(report.errors[:base].first).to include("This external work has already been reported.")
+      end
+    end
+
     shared_examples "alright" do |url|
       let(:report) { build(:abuse_report, url: url) }
       it "can be submitted" do
@@ -518,6 +526,80 @@ describe AbuseReport do
         end
         # Should be valid because old reports don't count
         report = build(:abuse_report, url: bookmark_url)
+        expect(report.save).to be_truthy
+      end
+    end
+
+    context "for an external work reported the maximum number of times" do
+      external_work_url = "http://archiveofourown.org/external_works/123"
+
+      before do
+        ArchiveConfig.ABUSE_REPORTS_PER_EXTERNAL_WORK_MAX.times do
+          create(:abuse_report, url: external_work_url)
+        end
+        expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_EXTERNAL_WORK_MAX)
+      end
+
+      # obviously
+      it_behaves_like "enough external work reports", external_work_url
+      
+      # the same external work, different protocol
+      it_behaves_like "enough external work reports", "https://archiveofourown.org/external_works/123"
+
+      # the same external work, with parameters/anchors
+      it_behaves_like "enough external work reports", "http://archiveofourown.org/external_works/123?smut=yes"
+      it_behaves_like "enough external work reports", "http://archiveofourown.org/external_works/123#timeline"
+      it_behaves_like "enough external work reports", "http://archiveofourown.org/external_works/123?smut=yes#timeline"
+      it_behaves_like "enough external work reports", "http://archiveofourown.org/external_works/123/?smut=yes"
+      it_behaves_like "enough external work reports", "http://archiveofourown.org/external_works/123/#timeline"
+      it_behaves_like "enough external work reports", "http://archiveofourown.org/external_works/123/?smut=yes#timeline"
+
+      # the same external work, subpages
+      it_behaves_like "enough external work reports", "http://archiveofourown.org/external_works/123/bookmarks"
+      
+      # a bookmark on the external work
+      it_behaves_like "alright", "http://archiveofourown.org/external_works/123/bookmarks/456"
+
+      # not the same external work
+      it_behaves_like "alright", "http://archiveofourown.org/external_works/12"
+      it_behaves_like "alright", "http://archiveofourown.org/external_works/1234"
+
+      # unrelated
+      it_behaves_like "alright", "http://archiveofourown.org/users/someone"
+
+      context "a month later" do
+        before { travel(32.days) }
+
+        it_behaves_like "alright", external_work_url
+      end
+    end
+
+    context "when reporting external work URLs that cross the reporting period timeframe" do
+      external_work_url = "http://archiveofourown.org/external_works/124"
+
+      it "allows reporting an external work when old reports are outside the configuredperiod" do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_EXTERNAL_WORK_PERIOD.days.ago - 1.day) do
+          ArchiveConfig.ABUSE_REPORTS_PER_EXTERNAL_WORK_MAX.times do
+            create(:abuse_report, url: external_work_url)
+          end
+        end
+
+        expect(create(:abuse_report, url: external_work_url)).to be_truthy
+      end
+
+      it "counts only reports within the configured period" do
+        # Create reports outside the period
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_EXTERNAL_WORK_PERIOD.days.ago - 1.day) do
+          create_list(:abuse_report, 2) do |abuse_report|
+            abuse_report.url = external_work_url
+          end
+        end
+        # Create reports within the configured period (one less than max)
+        (ArchiveConfig.ABUSE_REPORTS_PER_EXTERNAL_WORK_MAX - 1).times do
+          create(:abuse_report, url: external_work_url)
+        end
+        # Should be valid because old reports don't count
+        report = build(:abuse_report, url: external_work_url)
         expect(report.save).to be_truthy
       end
     end
