@@ -3587,12 +3587,6 @@ en:
       works_series_help_title: Choosing series
       works_skins_help_title: Work skins
       works_translation_link_help_title: Translation link
-    work_approved_children:
-      inspired_by:
-        restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
-        revealed_html: "%{work_link} by %{creator_link}"
-        title: Works inspired by this one
-        unrevealed: A work in an unrevealed collection
     work_form_associations_language:
       works_languages_help_title: Languages help
     work_form_tags:
@@ -3637,6 +3631,12 @@ en:
         unrevealed: A translation of a work in an unrevealed collection
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    work_related_works:
+      inspired_by:
+        restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
+        revealed_html: "%{work_link} by %{creator_link}"
+        title: Works inspired by this one
+        unrevealed: A work in an unrevealed collection
   wrangling_guidelines:
     show:
       edit: Edit
