@@ -1,5 +1,5 @@
 <div class="news admin home">
-  <% if policy(@admin_posts).can_post? %>
+  <% if policy(AdminPost).can_draft? %>
     <%= render "admin_index" %>
   <% else %>
     <div class="primary header module">
@@ -17,7 +17,6 @@
     </div>
     <!--main content-->
     <% @admin_posts.each do |admin_post| %>
-
       <div class="news module group" role="article">
         <%= render "admin_post", admin_post: admin_post %>
         <!-- BEGIN comment section -->
@@ -37,7 +36,7 @@
     <hr class="clear" />
 
     <!--subnav-->
-    <%= will_paginate @admin_posts %>
+    <%== pagy_nav @pagy %>
     <!--/subnav-->
   <% end %>
 </div>

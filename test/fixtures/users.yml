@@ -90,6 +90,16 @@ user_00033:
   banned: false
   login: testsuspended
   email: suspended@example.com
+user_00034:
+  encrypted_password: <%= Devise::Encryptor.digest(User, "testuser") %>
+  created_at: 2010-10-13 11:37:58 Z
+  confirmed_at: 2010-10-13 22:03:16 Z
+  updated_at: 2010-10-13 22:03:17 Z
+  id: 34
+  suspended: false
+  banned: false
+  login: OTW_Translation
+  email: otwtranslation@example.com
 user_00025: 
   password_salt: 2aa64c10d3ea67188845a59d3d9d411d52301838
   created_at: 2009-12-12 21:07:52 Z

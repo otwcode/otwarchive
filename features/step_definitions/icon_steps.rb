@@ -20,6 +20,10 @@ When "I attach an icon with the extension {string}" do |extension|
   step %{I attach the file "features/fixtures/icon.#{extension}" to "icon"}
 end
 
+When "I attach a {string} icon with the extension {string}" do |type, extension|
+  step %{I attach the file "features/fixtures/icon.#{extension}" to "#{type}_icon"}
+end
+
 When /^I add an icon to the collection "([^"]*)"$/ do |title|
   step %{I am logged in as "moderator"}
   step %{I am on "#{title}" collection's page}

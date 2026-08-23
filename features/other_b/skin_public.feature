@@ -14,7 +14,7 @@ Feature: Public skins
     And the skin "public skin" is in the chooser
   When I am logged in as "skinner"
     And I press "public skin"
-  Then I should see "The skin public skin has been set. This will last for your current session."
+  Then I should see "You're now using the public skin skin. This will last for 2 weeks"
     And the page should have the cached skin "public skin"
   When I press "Default"
   Then I should see "You are now using the default site skin again!"
@@ -103,20 +103,19 @@ Feature: Public skins
     And I should not see "Uncached skin"
 
   Scenario: A user can preview a cached public site skin, and it will take the
-  user to the works page for a canonical tag with between 10 and 20 works
+  user to the configured page for skin previews
   Given the approved public skin "Usable Skin"
+    And the user "OTW_Translation" exists and is activated
     And the skin "Usable Skin" is cached
-    And the canonical fandom "Dallas" with 2 works
-    And the canonical fandom "Major Crimes" with 11 works
-    And the canonical fandom "Rizzoli and Isles" with 21 works
     And I am logged in as "skinner"
   When I go to the public skins page
     And I follow "Preview"
-  Then I should be on the works tagged "Major Crimes"
-    And I should see "You are previewing the skin Usable Skin. This is a randomly chosen page."
-    And I should see "Go back or click any link to remove the skin"
-    And I should see "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above."
-  When I follow "Return To Skin To Use"
+  Then I should be on OTW_Translation's works page
+    And I should see "You are previewing the skin Usable Skin."
+    And I should see "Go back or follow any link to remove the skin"
+    And I should see 'Tip: You can preview any archive page you want by adding "?site_skin='
+    And I should see '" to the end of the URL'
+  When I follow "Return to Skin to Use"
   Then I should be on "Usable Skin" skin page
 
   Scenario: Setting a skin from the footer maintains the same page

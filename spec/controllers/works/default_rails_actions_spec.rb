@@ -588,6 +588,36 @@ describe WorksController, work_search: true do
     end
   end
 
+  describe "GET #edit", work_search: false do
+    let(:work) { create(:work) }
+
+    context "when logged in as the work creator" do
+      before { fake_login_known_user(work.users.first) }
+
+      it "renders the edit template" do
+        get :edit, params: { id: work }
+        expect(response).to render_template(:edit)
+        expect(assigns(:work)).to eq(work)
+      end
+    end
+
+    context "when logged in as a random user" do
+      before { fake_login }
+
+      it "redirects with an error" do
+        get :edit, params: { id: work }
+        it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+
+    context "when logged in as admin" do
+      subject { get :edit, params: { id: work } }
+      let(:success) { expect(response).to render_template(:edit) }
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin policy_and_abuse support]
+    end
+  end
+
   describe "update" do
     let(:update_user) { create(:user) }
     let(:update_work) {
@@ -595,6 +625,25 @@ describe WorksController, work_search: true do
       create(:chapter, work: work)
       work
     }
+
+    context "when logged in as admin", work_search: false do
+      let(:work) { create(:work) }
+      let!(:language) { create(:language) }
+      subject do
+        put :update, params: {
+          id: work, work: { relationship_string: "kronfaumei", language_id: language.id }
+        }
+      end
+      let(:success) do
+        it_redirects_to_with_notice(work_path(work), "Work was successfully updated.")
+        expect(work.reload.relationship_string).to eq("kronfaumei")
+        expect(work.language).to eq(language)
+      end
+
+      before { fake_logout }
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin policy_and_abuse support]
+    end
 
     before do
       fake_login_known_user(update_user)

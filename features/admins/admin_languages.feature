@@ -11,6 +11,7 @@ Scenario: An admin can add a language
     And I follow "Add a Language"
     And I fill in "Name" with "Klingon"
     And I fill in "Abbreviation" with "tlh"
+    And I fill in "Name for alphabetical sorting" with "Klingon"
     And I press "Create Language"
   Then I should see "Language was successfully added."
     And I should see "Work Languages"
@@ -19,10 +20,10 @@ Scenario: An admin can add a language
 
 Scenario: Adding Abuse support for a language
 
-  Given the following language exists
-    | name        | short |
-    | Arabic      | ar    |
-    | Espanol     | es    |
+  Given the following languages exist
+    | name        | short | sortable_name |
+    | Arabic      | ar    | Arabic        |
+    | Espanol     | es    | Espanol       |
   When I am logged in as a "policy_and_abuse" admin
     And I go to the languages page
     # Languages are sorted by short name, so the first "Edit" is for Arabic
@@ -37,16 +38,16 @@ Scenario: Adding Abuse support for a language
 Scenario: Adding a language to the Support form
 
   Given the following language exists
-      | name     | short |
-      | Sindarin | sj    |
-      | Klingon  | tlh   |
+      | name     | short | sortable_name |
+      | Sindarin | sj    | Sindarin      |
+      | Klingon  | tlh   | Klingon       |
   When I am logged in as a "support" admin
     And I go to the languages page
-    # Languages are sorted by short name, so the first "Edit" is for Sindarin
+    # Languages are sorted by sortable_name, so the first "Edit" is for Klingon
     And I follow "Edit"
     And I check "Support available"
     And I press "Update Language"
   Then I should see "Language was successfully updated."
   When I follow "Technical Support & Feedback"
-  Then I should see "Sindarin" within "select#feedback_language"
-    And I should not see "Klingon" within "select#feedback_language"
+  Then I should see "Klingon" within "select#feedback_language"
+    And I should not see "Sindarin" within "select#feedback_language"

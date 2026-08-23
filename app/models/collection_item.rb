@@ -5,13 +5,10 @@ class CollectionItem < ApplicationRecord
     [ts("Rejected"), :rejected]
   ]
 
-  belongs_to :collection, inverse_of: :collection_items
+  belongs_to :collection, inverse_of: :collection_items, autosave: false
   belongs_to :item, polymorphic: :true, inverse_of: :collection_items, touch: true
-  belongs_to :work,  class_name: "Work", foreign_key: "item_id", inverse_of: :collection_items
-  belongs_to :bookmark, class_name: "Bookmark", foreign_key: "item_id"
 
-  validates_uniqueness_of :collection_id, scope: [:item_id, :item_type],
-    message: ts("already contains this item.")
+  validates :collection_id, uniqueness: { scope: [:item_id, :item_type] }
 
   enum :user_approval_status, {
     rejected: -1,
@@ -25,11 +22,21 @@ class CollectionItem < ApplicationRecord
     approved: 1
   }, suffix: :by_collection
 
+  validate :collection_must_exist, on: :create
+  def collection_must_exist
+    if collection.nil?
+      errors.add(:collection, :blank)
+    elsif collection.new_record?
+      errors.add(:collection, :not_found, name: collection.name)
+    end
+  end
+
   validate :collection_is_open, on: :create
   def collection_is_open
-    if self.new_record? && self.collection && self.collection.closed? && !self.collection.user_is_maintainer?(User.current_user)
-      errors.add(:base, ts("The collection %{title} is not currently open.", title: self.collection.title))
-    end
+    return unless collection.present? && collection.closed? &&
+                  !collection.user_is_maintainer?(User.current_user)
+
+    errors.add(:collection, :closed, title: collection.title)
   end
 
   scope :include_for_works, -> { includes(item: :pseuds) }
@@ -47,45 +54,109 @@ class CollectionItem < ApplicationRecord
   scope :invited_by_collection, -> { approved_by_collection.unreviewed_by_user }
   scope :approved_by_both, -> { approved_by_collection.approved_by_user }
 
-  before_save :set_anonymous_and_unrevealed
+  before_validation :set_anonymous_and_unrevealed, on: :create
   def set_anonymous_and_unrevealed
-    if self.new_record? && collection
-      self.unrevealed = true if collection.reload.unrevealed?
-      self.anonymous = true if collection.reload.anonymous?
+    return unless collection
+
+    self.unrevealed = collection.unrevealed?
+    self.anonymous = collection.anonymous?
+  end
+
+  before_validation :approve_automatically, on: :create
+  def approve_automatically
+    return unless item && collection
+
+    # approve with the current user, who is the person who has just
+    # added this item -- might be either moderator or owner
+    approve(User.current_user)
+
+    # if the collection is open or the user who owns this work is a member, go ahead and approve
+    # for the collection
+    return if approved_by_collection?
+
+    approve_by_collection if !collection.moderated? ||
+                             collection.user_is_posting_participant?(User.current_user)
+  end
+
+  before_save :send_work_invitation
+  def send_work_invitation
+    return if approved_by_user? || !approved_by_collection? || !self.new_record? || User.current_user.is_author_of?(item)
+
+    # a maintainer is attempting to add this work to their collection
+    # so we send an email to all the works owners
+    item.users.each do |email_author|
+      next if email_author.preference.collection_emails_off
+
+      I18n.with_locale(email_author.preference.locale_for_mails) do
+        UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
+      end
     end
+  end
+
+  def destroyed_by_item?
+    item && destroyed_by_association &&
+      item.association(:collection_items).reflection == destroyed_by_association
+  end
+
+  after_update :notify_of_unrevealed_or_anonymous
+  def notify_of_unrevealed_or_anonymous
+    # This CollectionItem's anonymous/unrevealed status can only affect the
+    # item's status if (a) the CollectionItem is approved by the user and (b)
+    # the item is a work. (Bookmarks can't be anonymous/unrevealed at the
+    # moment.)
+    return unless approved_by_user? && item.is_a?(Work)
+
+    # Check whether anonymous/unrevealed is becoming true, when the work
+    # currently has it set to false:
+    newly_anonymous = (saved_change_to_anonymous?(to: true) && !item.anonymous?)
+    newly_unrevealed = (saved_change_to_unrevealed?(to: true) && !item.unrevealed?)
+
+    return unless newly_unrevealed || newly_anonymous
+
+    # Don't notify if it's one of the work creators who is changing the work's
+    # status.
+    return if item.users.include?(User.current_user)
+
+    item.users.each do |user|
+      I18n.with_locale(user.preference.locale_for_mails) do
+        UserMailer.anonymous_or_unrevealed_notification(
+          user.id, item.id, collection.id,
+          anonymous: newly_anonymous, unrevealed: newly_unrevealed
+        ).deliver_after_commit
+      end
+    end
+  end
+
+  after_destroy :update_work, unless: :destroyed_by_item?
+  after_destroy :reindex_item, unless: :destroyed_by_item?
+  after_destroy :expire_caches
+  def expire_caches
+    return unless self.item.respond_to?(:expire_caches)
+
+    self.item.expire_caches
+    CacheMaster.record(item_id, "collection", collection_id)
   end
 
   after_save :update_work
-  after_destroy :update_work
 
   # Set associated works to anonymous or unrevealed as appropriate.
-  #
-  # Inverses are set up properly on self.item, so we use that field to check
-  # whether we're currently in the process of saving a brand new work, or
-  # whether the work is in the process of being destroyed. (In which case we
-  # rely on the Work's callbacks to set anon/unrevealed status properly.) But
-  # because we want to discard changes made in preview mode, we perform the
-  # actual anon/unrevealed updates on self.work, which doesn't have proper
-  # inverses and therefore is freshly loaded from the database.
   def update_work
-    return unless item.is_a?(Work) && item.persisted? && !item.saved_change_to_id?
+    return unless item.is_a?(Work) && item.persisted?
 
-    if work.present?
-      work.update_anon_unrevealed
+    item.set_anon_unrevealed
 
-      # For a more helpful error message, raise an error saying that the work
-      # is invalid if we fail to save it.
-      raise ActiveRecord::RecordInvalid, work unless work.save(validate: false)
-    end
+    item.save!(validate: false) if item.will_save_change_to_anonymous? ||
+                                   item.will_save_change_to_unrevealed?
   end
 
-  # Poke the item if it's just been approved or unapproved so it gets picked up by the search index
-  after_update :update_item_for_status_change
-  def update_item_for_status_change
-    if saved_change_to_user_approval_status? || saved_change_to_collection_approval_status?
-      item.save!(validate: false)
-    end
+  after_save :reindex_item
+  def reindex_item
+    item&.enqueue_to_index
   end
+
+  # reindex collection after creation, deletion, and approval_status update
+  # (we only index approved items, which is why changes there trigger the reindex-index)
+  after_commit :update_collection_index, if: :should_update_collection_index?
 
   after_create_commit :notify_of_association
   def notify_of_association
@@ -116,44 +187,18 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  before_save :approve_automatically
-  def approve_automatically
-    return unless self.new_record?
-
-    # approve with the current user, who is the person who has just
-    # added this item -- might be either moderator or owner
-    # rubocop:disable Lint/BooleanSymbol
-    approve(User.current_user == :false ? nil : User.current_user)
-    # rubocop:enable Lint/BooleanSymbol
-
-    # if the collection is open or the user who owns this work is a member, go ahead and approve
-    # for the collection
-    return unless !approved_by_collection? && collection
-
-    approve_by_collection if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
+  def update_collection_index
+    ids = [collection_id]
+    ids.push(collection.parent_id) if collection.parent.present?
+    IndexQueue.enqueue_ids(Collection, ids, :background)
   end
 
-  before_save :send_work_invitation
-  def send_work_invitation
-    return if approved_by_user? || !approved_by_collection? || !self.new_record? || User.current_user.is_author_of?(item)
+  # reindex collection after creation, deletion, and certain attribute updates
+  def should_update_collection_index?
+    return true if destroyed?
 
-    # a maintainer is attempting to add this work to their collection
-    # so we send an email to all the works owners
-    item.users.each do |email_author|
-      next if email_author.preference.collection_emails_off
-
-      I18n.with_locale(email_author.preference.locale_for_mails) do
-        UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
-      end
-    end
-  end
-
-  after_destroy :expire_caches
-  def expire_caches
-    if self.item.respond_to?(:expire_caches)
-      self.item.expire_caches
-      CacheMaster.record(item_id, 'collection', collection_id)
-    end
+    pertinent_attributes = %w[collection_approval_status user_approval_status]
+    (self.saved_changes.keys & pertinent_attributes).present?
   end
 
   attr_writer :remove
@@ -206,8 +251,7 @@ class CollectionItem < ApplicationRecord
       approve_by_user
       approve_by_collection
     else
-      author_of_item = user.is_author_of?(item) ||
-                       (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?)
+      author_of_item = user.is_author_of?(item) || (user == User.current_user && item.new_record?)
       archivist_maintainer = user.archivist && self.collection.user_is_maintainer?(user)
       approve_by_user if author_of_item || archivist_maintainer
       approve_by_collection if self.collection.user_is_maintainer?(user)
@@ -248,52 +292,5 @@ class CollectionItem < ApplicationRecord
         end
       end
     end
-  end
-
-  after_update :notify_of_unrevealed_or_anonymous
-  def notify_of_unrevealed_or_anonymous
-    # This CollectionItem's anonymous/unrevealed status can only affect the
-    # item's status if (a) the CollectionItem is approved by the user and (b)
-    # the item is a work. (Bookmarks can't be anonymous/unrevealed at the
-    # moment.)
-    return unless approved_by_user? && item.is_a?(Work)
-
-    # Check whether anonymous/unrevealed is becoming true, when the work
-    # currently has it set to false:
-    newly_anonymous = (saved_change_to_anonymous?(to: true) && !item.anonymous?)
-    newly_unrevealed = (saved_change_to_unrevealed?(to: true) && !item.unrevealed?)
-
-    return unless newly_unrevealed || newly_anonymous
-
-    # Don't notify if it's one of the work creators who is changing the work's
-    # status.
-    return if item.users.include?(User.current_user)
-
-    item.users.each do |user|
-      I18n.with_locale(user.preference.locale_for_mails) do
-        UserMailer.anonymous_or_unrevealed_notification(
-          user.id, item.id, collection.id,
-          anonymous: newly_anonymous, unrevealed: newly_unrevealed
-        ).deliver_after_commit
-      end
-    end
-  end
-
-  # reindex collection after creation, deletion, and approval_status update
-  # (we only index approved items, which is why changes there trigger the reindex-index)
-  after_commit :update_collection_index, if: :should_update_collection_index?
-
-  def update_collection_index
-    ids = [collection_id]
-    ids.push(collection.parent_id) if collection.parent.present?
-    IndexQueue.enqueue_ids(Collection, ids, :background)
-  end
-
-  # reindex collection after creation, deletion, and certain attribute updates
-  def should_update_collection_index?
-    return true if destroyed?
-
-    pertinent_attributes = %w[collection_approval_status user_approval_status]
-    (self.saved_changes.keys & pertinent_attributes).present?
   end
 end

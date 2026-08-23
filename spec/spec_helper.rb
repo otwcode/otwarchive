@@ -66,7 +66,7 @@ RSpec.configure do |config|
     I18n.locale = I18n.default_locale
 
     # Assume all spam checks pass by default.
-    allow(Akismetor).to receive(:spam?).and_return(false)
+    allow(AkismetClient).to receive(:enabled?).and_return(false)
 
     # Don't display TOS prompts.
     allow_any_instance_of(ApplicationHelper).to receive(:tos_exempt_page?).and_return(true)
@@ -157,9 +157,6 @@ RSpec.configure do |config|
   BAD_EMAILS = ["Abc.example.com", "A@b@c@example.com", 'a\"b(c)d,e:f;g<h>i[j\k]l@example.com', 'this is"not\allowed@example.com', 'this\ still\"not/\/\allowed@example.com', "nodomain", "foo@oops", "ast*risk@example.com", "asterisk@ex*ample.com"].freeze
   INVALID_URLS = %w[no_scheme.com ftp://ftp.address.com http://www.b@d!35.com https://www.b@d!35.com http://b@d!35.com https://www.b@d!35.com].freeze
   VALID_URLS = %w[http://rocksalt-recs.livejournal.com/196316.html https://rocksalt-recs.livejournal.com/196316.html].freeze
-  INACTIVE_URLS = %w[https://www.iaminactive.com http://www.iaminactive.com https://iaminactive.com http://iaminactive.com].freeze
-  BYPASSED_URLS = %w[fanfiction.net ficbook.net bsky.app].freeze
-
   # rspec-rails 3 will no longer automatically infer an example group's spec type
   # from the file location. You can explicitly opt-in to the feature using this
   # config option.

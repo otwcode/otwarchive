@@ -37,7 +37,6 @@ gem "lograge" # https://github.com/roidrage/lograge
 gem 'will_paginate', '>=3.0.2'
 gem "pagy", "~> 9.3"
 gem 'acts_as_list', '~> 0.9.7'
-gem 'akismetor'
 
 gem 'httparty'
 gem "csv", "~> 3.3.5"
@@ -125,7 +124,7 @@ group :test do
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
-  
+
   # Record and replay data from external URLs
   gem "vcr", "~> 6.2"
   gem "webmock"
@@ -139,7 +138,6 @@ group :test do
 end
 
 group :test, :development do
-  gem 'awesome_print'
   gem 'brakeman'
   gem 'pry-byebug'
   gem 'whiny_validation'

@@ -45,6 +45,7 @@ class HomeController < ApplicationController
 
   # diversity statement
   def diversity
+    @page_subtitle = t(".page_title")
     render action: "diversity_statement", layout: "application"
   end
 

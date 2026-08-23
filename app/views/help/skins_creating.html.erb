@@ -20,7 +20,7 @@
       <code>
         -replace, -use-link-source, accelerator, accent-color, align-content,
         align-items, align-self, alignment-adjust, alignment-baseline,
-        appearance, azimuth, baseline-shift, behavior, binding, bookmark-label,
+        appearance, aspect-ratio, azimuth, baseline-shift, behavior, binding, bookmark-label,
         bookmark-level, bookmark-target, bottom, box-align, box-direction,
         box-flex, box-flex-group, box-lines, box-orient, box-pack, box-shadow,
         box-sizing, caption-side, clear, clip, color, color-profile,
@@ -28,8 +28,8 @@
         cue-after, cue-before, cursor, direction, display, dominant-baseline,
         drop-initial-after-adjust, drop-initial-after-align,
         drop-initial-before-adjust, drop-initial-before-align,
-        drop-initial-size, drop-initial-value, elevation, empty-cells, filter,
-        fit, fit-position, float, float-offset, font, font-effect,
+        drop-initial-size, drop-initial-value, elevation, empty-cells, fill,
+        filter, fit, fit-position, float, float-offset, font, font-effect,
         font-emphasize, font-emphasize-position, font-emphasize-style,
         font-family, font-size, font-size-adjust, font-smooth, font-stretch,
         font-style, font-variant, font-weight, grid-columns, grid-rows,
@@ -47,10 +47,10 @@
         punctuation-trim, quotes, rendering-intent, resize, rest, rest-after,
         rest-before, richness, right, rotation, rotation-point, ruby-align,
         ruby-overhang, ruby-position, ruby-span, size, speak, speak-header,
-        speak-numeral, speak-punctuation, speech-rate, stress, string-set,
-        tab-side, table-layout, target, target-name, target-new,
-        target-position, top, unicode-bibi, unicode-bidi, user-select,
-        vertical-align, visibility, voice-balance, voice-duration,
+        speak-numeral, speak-punctuation, speech-rate, stress, stroke,
+        stroke-width, string-set, tab-side, table-layout, target, target-name,
+        target-new, target-position, top, unicode-bibi, unicode-bidi,
+        user-select, vertical-align, visibility, voice-balance, voice-duration,
         voice-family, voice-pitch, voice-pitch-range, voice-rate, voice-stress,
         voice-volume, volume, white-space, white-space-collapse, widows, width,
         word-break, word-spacing, word-wrap, writing-mode, z-index
@@ -147,6 +147,7 @@
                 "https://w3schools.com/css/css_units.asp"),
             units_list_code: tag.br + tag.code(t(".numeric_values.description.units_list"))) %>
     </p>
+    <p><%= t(".numeric_values.description.aspect_ratio_html", aspect_ratio_code: tag.code("aspect-ratio")) %></p>
     <p><%= t(".numeric_values.description.em_unit_html", em_code: tag.code("em")) %></p>
   </dd>
 

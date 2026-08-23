@@ -30,6 +30,16 @@ describe SeriesController do
       patch :remove_user_creatorship, params: { id: series }
       it_redirects_to(new_orphan_path(series_id: series))
     end
+
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        patch :remove_user_creatorship, params: { id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
   end
 
   describe 'create' do
@@ -44,6 +54,18 @@ describe SeriesController do
       post :create, params: { series: { title: "test title", author_attributes: { ids: user.pseud_ids } } }
       expect(flash[:notice]).to eq "Series was successfully created."
       expect(response).to have_http_status :redirect
+    end
+  end
+
+  describe "GET #edit" do
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        get :edit, params: { id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
     end
   end
 
@@ -83,6 +105,28 @@ describe SeriesController do
       expect(response).to render_template('edit')
       expect(series.reload.title).not_to eq("foobar")
     end
+
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        put :update, params: { series: { title: "foobar" }, id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+  end
+
+  describe "GET #manage" do
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        get :manage, params: { id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
   end
 
   describe 'update_positions' do
@@ -98,6 +142,30 @@ describe SeriesController do
       expect(first_work.position).to eq(2)
       expect(second_work.position).to eq(1)
     end
+
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        first_work = series.serial_works.first
+        second_work = create(:serial_work, series: series)
+        post :update_positions, params: { id: series.id, serial: [second_work, first_work], format: :json }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+  end
+
+  describe "GET #confirm_delete" do
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        get :confirm_delete, params: { id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
   end
 
   describe 'destroy' do
@@ -107,6 +175,16 @@ describe SeriesController do
       delete :destroy, params: { id: series }
       it_redirects_to_with_error(series_path(series), \
                                  "Sorry, we couldn't delete the series. Please try again.")
+    end
+
+    context "when the user doesn't own the series" do
+      let(:other_user) { create(:user) }
+
+      it "redirects and shows an error message" do
+        fake_login_known_user(other_user)
+        delete :destroy, params: { id: series }
+        it_redirects_to_with_error(series_path(series), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
     end
   end
 

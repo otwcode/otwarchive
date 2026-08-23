@@ -10,12 +10,13 @@ module BylineHelper
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.
   def text_byline(creation, options = {})
+    only_path = false
+
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = t("byline_helper.anonymous_byline")
-      anon_byline = t("byline_helper.anonymous_with_name_byline_html", pseud_byline: non_anonymous_byline(creation)) if anonymous_with_name?(options, creation)
+      anon_byline = t("byline_helper.anonymous_with_name_byline_html", pseud_byline: byline_text(creation, only_path, text_only: true)) if anonymous_with_name?(options, creation)
       anon_byline
     else
-      only_path = false
       byline_text(creation, only_path, text_only: true)
     end
   end

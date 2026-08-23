@@ -32,47 +32,49 @@
 
     <%= render "works/meta" %>
 
-    <%= render "works/work_skin" %>
+    <div id="work-skin" class="wrapper">
+      <%= render "works/work_skin" %>
 
-    <!-- BEGIN section where work skin applies -->
-    <div id="workskin">
-      <%= render "works/preface" %>
-    <!--/descriptions-->
+      <!-- BEGIN section where work skin applies -->
+      <div id="workskin">
+        <%= render "works/preface" %>
+      <!--/descriptions-->
 
-      <!--chapter content-->
-      <div id="chapters" role="article">
-        <% if @chapters %>
-          <% for chapter in @chapters %>
-            <%= render "chapters/chapter", chapter: chapter %>
-          <% end %>
-        <% else %>
-          <h3 class="landmark heading" id="work"><%= ts("Work Text:") %></h3>
-          <% cache("#{@chapter.cache_key}-show-content", skip_digest: true) do %>
-            <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
-          <% end %>
-        <% end %>
-      </div>
-      <!--/chapter-->
-
-      <% inspired_by = get_inspired_by(@work) %>
-      <% if !@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty? %>
-        <!--afterword-->
-        <div class="afterword preface group">
-          <% unless @work.endnotes.blank? %>
-            <%= render "works/work_endnotes" %>
-          <% end %>
-          <% unless @work.series.blank? %>
-            <%= render "works/work_series_links" %>
-          <% end %>
-          <% unless inspired_by.empty? %>
-            <%= render "works/work_approved_children", inspired_by: inspired_by %>
+        <!--chapter content-->
+        <div id="chapters" role="article">
+          <% if @chapters %>
+            <% for chapter in @chapters %>
+              <%= render "chapters/chapter", chapter: chapter %>
+            <% end %>
+          <% else %>
+            <h3 class="landmark heading" id="work"><%= ts("Work Text:") %></h3>
+            <% cache("#{@chapter.cache_key}-show-content", skip_digest: true) do %>
+              <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
+            <% end %>
           <% end %>
         </div>
-        <!--/afterword-->
-      <% end %>
+        <!--/chapter-->
 
+        <% inspired_by = get_inspired_by(@work) %>
+        <% if !@work.endnotes.blank? || !@work.series.blank? || !inspired_by.empty? %>
+          <!--afterword-->
+          <div class="afterword preface group">
+            <% unless @work.endnotes.blank? %>
+              <%= render "works/work_endnotes" %>
+            <% end %>
+            <% unless @work.series.blank? %>
+              <%= render "works/work_series_links" %>
+            <% end %>
+            <% unless inspired_by.empty? %>
+              <%= render "works/work_approved_children", inspired_by: inspired_by %>
+            <% end %>
+          </div>
+          <!--/afterword-->
+        <% end %>
+
+      </div>
+      <!-- END work skin -->
     </div>
-    <!-- END work skin -->
   </div>
   <!-- END work -->
 

@@ -1,7 +1,8 @@
 class CollectionsController < ApplicationController
-  before_action :users_only, only: [:new, :edit, :create, :update]
+  before_action :users_only, only: [:new, :create]
   before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
-  before_action :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
+  before_action :collection_owners_or_privileged_admins_only, only: [:edit]
+  before_action :collection_owners_only, only: [:update, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   before_action :validate_challenge_type
   before_action :check_parent_visible, only: [:index]
@@ -30,6 +31,7 @@ class CollectionsController < ApplicationController
   end
 
   def index
+    options = params[:collection_search].present? ? collection_filter_params : {}
     if params[:work_id]
       @work = Work.find(params[:work_id])
       @collections = @work.approved_collections
@@ -43,14 +45,15 @@ class CollectionsController < ApplicationController
       flash_search_warnings(@collections)
       @page_subtitle = t(".subcollections_page_title", collection_title: @collection.title)
     elsif params[:user_id]
+      @sort_and_filter = true
       @user = User.find_by!(login: params[:user_id])
-      @search = CollectionSearchForm.new({ maintainer_id: @user.id, sort_column: "title.keyword" }.merge(page: params[:page]))
+      @search = CollectionSearchForm.new(options.merge({ maintainer_id: @user.id }.merge(page: params[:page])))
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       @sort_and_filter = true
-      @search = CollectionSearchForm.new(collection_filter_params.merge(page: params[:page]))
+      @search = CollectionSearchForm.new(options.merge(page: params[:page]))
       @collections = @search.search_results.scope(:for_search)
       flash_search_warnings(@collections)
     end
@@ -194,10 +197,10 @@ class CollectionsController < ApplicationController
   private
 
   def collection_filter_params
-    params.permit(:commit, collection_search: [
+    params.require(:collection_search).permit(
       :title, :challenge_type, :moderated, :multifandom, :closed, :tag,
       :sort_column, :sort_direction
-    ])[:collection_search] || {}
+    )
   end
 
   def collection_params

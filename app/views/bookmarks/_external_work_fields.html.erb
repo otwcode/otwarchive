@@ -91,7 +91,7 @@
                                %>
     </dd>
     <dt>
-      <%= Category::NAME.pluralize %> <%= link_to_help "categories-help" %>
+      <%= Category::NAME.pluralize %> <%= link_to_help_modal(help_tags_categories_path, t(".categories_help_title")) %>
     </dt>
     <dd>
       <ul>
@@ -104,13 +104,13 @@
       </ul>
     </dd>
     <dt>
-      <%= ew.label :relationship_string, Relationship::NAME.pluralize %> <%= link_to_help "relationships-help" %>
+      <%= ew.label :relationship_string, Relationship::NAME.pluralize %> <%= link_to_help_modal(help_tags_relationships_path, t(".relationships_help_title")) %>
     </dt>
     <dd title="relationships">
       <%= ew.text_field :relationship_string, autocomplete_options("relationship_in_fandom", data: { autocomplete_live_params: "fandom=external_work_fandom_string" }) %>
     </dd>
     <dt>
-      <%= ew.label :character_string, Character::NAME.pluralize %> <%= link_to_help "characters-help" %>
+      <%= ew.label :character_string, Character::NAME.pluralize %> <%= link_to_help_modal(help_tags_characters_path, t(".characters_help_title")) %>
     </dt>
     <dd title="characters">
       <%= ew.text_field :character_string, autocomplete_options("character_in_fandom", data: { autocomplete_live_params: "fandom=external_work_fandom_string" }) %>

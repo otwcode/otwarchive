@@ -24,7 +24,7 @@ Feature: Archivist bulk imports
 
   Scenario: Importing for others without an email address should give an error
     Given I am logged in as "archivist"
-    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+    When I start importing "http://import-site-with-tags.net" with a mock website as an archivist
       And I check "Import for others ONLY with permission"
       And I fill in "Author Name*" with "Name"
       And I press "Import"
@@ -32,7 +32,7 @@ Feature: Archivist bulk imports
 
   Scenario: Importing for others without a name should give an error
     Given I am logged in as "archivist"
-    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+    When I start importing "http://import-site-with-tags.net" with a mock website as an archivist
       And I check "Import for others ONLY with permission"
       And I fill in "Author Email Address*" with "foo@example.com"
       And I press "Import"
@@ -40,7 +40,7 @@ Feature: Archivist bulk imports
 
   Scenario: Importing for others without a name or email address should give an error
     Given I am logged in as "archivist"
-    When I start importing "http://import-site-with-tags" with a mock website as an archivist
+    When I start importing "http://import-site-with-tags.net" with a mock website as an archivist
       And I check "Import for others ONLY with permission"
       And I press "Import"
     Then I should see "We couldn't successfully import that work, sorry: No external author name or email specified"

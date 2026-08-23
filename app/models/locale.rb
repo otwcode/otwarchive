@@ -3,8 +3,13 @@ class Locale < ApplicationRecord
   validates_presence_of :iso
   validates :iso, uniqueness: true
   validates_presence_of :name
+  validate :interface_enabled_only_if_email_enabled
 
   scope :default_order, -> { order(:iso) }
+
+  def interface_enabled_only_if_email_enabled
+    errors.add(:interface_enabled, :only_if_email_enabled) if interface_enabled && !email_enabled
+  end
 
   def to_param
     iso

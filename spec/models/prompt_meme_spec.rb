@@ -1,6 +1,23 @@
 require "spec_helper"
 
 describe PromptMeme do
+  describe "#save" do
+    let(:challenge) { build(:prompt_meme) }
+
+    context "when request restriction doesn't allow any fields" do
+      before do
+        r = challenge.request_restriction
+        r.description_allowed = false
+        TagSet::TAG_TYPES.each { |type| r.send("#{type}_num_allowed=", 0) }
+      end
+
+      it "raises a validation error" do
+        challenge.save
+        expect(challenge.errors[:base]).to include("Request Settings must allow at least one field.")
+      end
+    end
+  end
+
   describe "#destroy" do
     let!(:challenge) { create(:prompt_meme) }
     let!(:collection) { create(:collection, challenge: challenge) }
@@ -19,7 +36,7 @@ describe PromptMeme do
     context "when prompt meme is created" do
       it "enqueues the collection for reindex" do
         expect do
-          PromptMeme.create!(collection: collection)
+          create(:prompt_meme, collection: collection)
         end.to add_to_reindex_queue(collection, :main)
       end
     end

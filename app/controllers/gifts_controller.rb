@@ -13,18 +13,16 @@ class GiftsController < ApplicationController
     end
 
     if @user
-      @works = if @can_access_refused_gifts && params[:refused]
-                 @user.rejected_gift_works.visible_to_registered_user
-               elsif current_user.nil?
-                 @user.gift_works.visible_to_all
-               else
-                 @user.gift_works.visible_to_registered_user
-               end
+      @works = @can_access_refused_gifts && params[:refused] ? @user.rejected_gift_works : @user.gift_works
     else
       pseud = Pseud.parse_byline(@recipient_name)
       @works = pseud ? pseud.gift_works : Work.giftworks_for_recipient_name(@recipient_name)
-      @works = current_user.nil? ? @works.visible_to_all : @works.visible_to_registered_user
     end
+    @works = if guest?
+               @works.visible_to_all
+             else
+               @works.visible_to_registered_user
+             end
     @works = @works.in_collection(@collection) if @collection
     @works = @works.order("revised_at DESC").paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
   end

@@ -19,9 +19,9 @@
       </li>
     <% end %>
     <% if @work.present? %>
-      <% if policy(@work).edit_tags? %>
+      <% if policy(@work).edit? %>
         <li>
-          <%= link_to t(".edit_tags"), edit_tags_work_path(@work) %>
+          <%= link_to t(".edit_work"), edit_work_path(@work) %>
         </li>
       <% end %>
       <% if policy(@work).set_spam? %>

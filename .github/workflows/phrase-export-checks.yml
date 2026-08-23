@@ -10,11 +10,12 @@ jobs:
   en-keys-to-remove:
     if: github.head_ref == 'phrase-translations'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     name: Check for outdated English keys in Phrase
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
@@ -37,12 +38,13 @@ jobs:
   unused-keys:
     if: github.head_ref == 'phrase-translations'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     needs: en-keys-to-remove
     name: Check unused keys for all locales
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
@@ -62,11 +64,12 @@ jobs:
   inconsistent-interpolations:
     if: github.head_ref == 'phrase-translations'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     name: Check consistent interpolations for all locales
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1

@@ -12,7 +12,6 @@ module OtwSanitize
       archiveorg: %r{^archive\.org/embed/},
       bilibili: %r{^(player\.)?bilibili\.com/},
       criticalcommons: %r{^criticalcommons\.org/},
-      google: %r{^google\.com/},
       podfic: %r{^podfic\.com/},
       soundcloud: %r{^(w\.)?soundcloud\.com/},
       spotify: %r{^(open\.)?spotify\.com/},
@@ -23,8 +22,8 @@ module OtwSanitize
     }.freeze
 
     ALLOWS_FLASHVARS = %i[
-      criticalcommons eighttracks google
-      podfic soundcloud spotify viddersnet
+      criticalcommons eighttracks podfic
+      soundcloud spotify viddersnet
     ].freeze
 
     SUPPORTS_HTTPS = %i[

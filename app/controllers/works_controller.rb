@@ -6,15 +6,16 @@ class WorksController < ApplicationController
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts, :share]
+  before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit, :update, :drafts, :share]
   before_action :check_user_status, except: [:index, :edit, :edit_multiple, :confirm_delete_multiple, :delete_multiple, :confirm_delete, :destroy, :show, :show_multiple, :navigate, :search, :collected, :share]
   before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy, :show_multiple, :edit_multiple, :confirm_delete_multiple, :delete_multiple]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
-  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
-  # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
-  before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
-  before_action :log_admin_activity, only: [:update_tags]
+  before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit, :update, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
+  # admins should have the ability to edit works (tags, language, and more) as per our ToS
+  before_action :check_ownership_or_admin, only: [:edit, :update]
+  before_action :save_old_tags, only: [:update]
+  after_action :log_admin_activity, only: [:update]
   before_action :check_parent_visible, only: [:navigate]
   before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
 
@@ -307,11 +308,11 @@ class WorksController < ApplicationController
       if @work.posted
         # We check here to see if we are attempting to post to moderated collection
         flash[:notice] = t(".posted_notice")
-        in_moderated_collection
+        show_moderated_collection_warning
         redirect_to work_path(@work)
       else
         flash[:notice] = t(".draft_notice_html", scheduled_for_deletion_bold: helpers.tag.strong(t(".scheduled_for_deletion")), deletion_date: view_context.date_in_zone(@work.created_at + 29.days))
-        in_moderated_collection
+        show_moderated_collection_warning
         redirect_to preview_work_path(@work)
       end
     end
@@ -319,6 +320,11 @@ class WorksController < ApplicationController
 
   # GET /works/1/edit
   def edit
+    if logged_in_as_admin?
+      authorize @work
+      return
+    end
+
     @hide_dashboard = true
     if @work.number_of_chapters > 1
       @chapters = @work.chapters_in_order(include_content: false,
@@ -341,12 +347,16 @@ class WorksController < ApplicationController
 
   # GET /works/1/edit_tags
   def edit_tags
-    authorize @work if logged_in_as_admin?
     @page_subtitle = t(".page_title")
   end
 
   # PUT /works/1
   def update
+    if logged_in_as_admin?
+      authorize @work
+      return admin_update_work
+    end
+
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_params
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
@@ -360,9 +370,9 @@ class WorksController < ApplicationController
     if params[:edit_button] || work_cannot_be_saved?
       render :edit
     elsif params[:preview_button]
-      flash[:notice] = t(".unposted_notice") unless @work.posted?
+      flash.now[:notice] = t(".unposted_notice") unless @work.posted?
 
-      in_moderated_collection
+      show_moderated_collection_warning(flash.now)
       @preview_mode = true
       render :preview
     else
@@ -375,7 +385,7 @@ class WorksController < ApplicationController
         if posted_changed
           flash[:notice] << ts(" It should appear in work listings within the next few minutes.")
         end
-        in_moderated_collection
+        show_moderated_collection_warning
         redirect_to work_path(@work)
       else
         @chapter.errors.full_messages.each { |err| @work.errors.add(:base, err) }
@@ -386,8 +396,6 @@ class WorksController < ApplicationController
 
   # PATCH /works/1/edit_tags
   def update_tags
-    authorize @work if logged_in_as_admin?
-
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_tag_params
 
@@ -401,9 +409,11 @@ class WorksController < ApplicationController
       @work.save
       flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
-    else # Save Draft
+    else
       @work.posted = true
       @work.minor_version = @work.minor_version + 1
+      @work.save
+      @work.word_count = @work.first_chapter.word_count
       @work.save
       flash[:notice] = ts('Work was successfully updated.')
       redirect_to(@work)
@@ -566,22 +576,23 @@ class WorksController < ApplicationController
   end
 
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
-  def in_moderated_collection
-    moderated_collections = []
-    @work.collections.each do |collection|
-      next unless !collection.nil? && collection.moderated? && !collection.user_is_posting_participant?(current_user)
-      next unless @work.collection_items.present?
-      @work.collection_items.each do |collection_item|
-        next unless collection_item.collection == collection
-        if collection_item.approved_by_user? && collection_item.unreviewed_by_collection?
-          moderated_collections << collection
-        end
-      end
+  def show_moderated_collection_warning(flash = self.flash)
+    moderated_collections = @work.collection_items_after_saving
+      .select(&:approved_by_user?)
+      .select(&:unreviewed_by_collection?)
+      .map(&:collection)
+
+    return if moderated_collections.blank?
+
+    links = moderated_collections.map do |collection|
+      view_context.link_to(collection.title, collection_path(collection))
     end
-    if moderated_collections.present?
-      flash[:notice] ||= ''
-      flash[:notice] += ts(" You have submitted your work to #{moderated_collections.size > 1 ? 'moderated collections (%{all_collections}). It will not become a part of those collections' : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: moderated_collections.map(&:title).join(', '))
-    end
+
+    message = t("works.moderated_collections_message_html",
+                count: moderated_collections.length,
+                collections: view_context.safe_join(links, ", "))
+
+    flash[:notice] = view_context.safe_join([flash[:notice], message].compact, " ")
   end
 
   public
@@ -786,7 +797,7 @@ class WorksController < ApplicationController
     @serial_works = @work.serial_works
 
     if @collection.nil?
-      @collection = @work.approved_collections.first
+      @collection = @work.approved_collections_after_saving.first
     end
 
     if params[:claim_id]
@@ -825,19 +836,56 @@ class WorksController < ApplicationController
     end
   end
 
+  def save_old_tags
+    @old_language = @work.language.name
+    @old_tags = @work.tags.pluck(:name)
+  end
+
   def log_admin_activity
-    if logged_in_as_admin?
-      options = { action: params[:action] }
+    return unless logged_in_as_admin?
 
-      if params[:action] == 'update_tags'
-        summary = "Old tags: #{@work.tags.pluck(:name).join(', ')}"
-      end
+    log_admin_language_edit if @work.saved_change_to_language_id?
 
-      AdminActivity.log_action(current_admin, @work, action: params[:action], summary: summary)
-    end
+    new_tags = @work.tags.pluck(:name)
+    tags_changed = new_tags.sort != @old_tags.sort
+
+    log_admin_tag_edit if tags_changed
+  end
+
+  def log_admin_language_edit
+    new_language = @work.language.name
+    edit_summary = "<p>Old language: #{@old_language}</p><p>New language: #{new_language}</p>"
+    AdminActivity.log_action(current_admin, @work, action: "edit language", summary: edit_summary)
+  end
+
+  def log_admin_tag_edit
+    edit_summary = "Old tags: #{@old_tags.join(', ')}" if @old_tags.present?
+    AdminActivity.log_action(current_admin, @work, action: "update_tags", summary: edit_summary)
   end
 
   private
+
+  def admin_update_work
+    @work.preview_mode = (params[:preview_button] || params[:edit_button]).present?
+    @work.attributes = work_tag_params
+
+    if params[:edit_button] || work_cannot_be_saved?
+      render :edit
+    elsif params[:preview_button]
+      @preview_mode = true
+      render :preview_tags
+    elsif params[:save_button]
+      @work.save
+      flash[:notice] = t("works.update.tags_updated")
+      redirect_to(@work)
+    else
+      @work.posted = true
+      @work.minor_version += 1
+      @work.save!
+      flash[:notice] = t("works.update.work_updated")
+      redirect_to(@work)
+    end
+  end
 
   def build_options(params)
     pseuds_to_apply =
