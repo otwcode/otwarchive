@@ -68,6 +68,11 @@ describe CommentsController do
         end
       end
     end
+
+    it "redirects with a flash error when no commentable is given" do
+      get :show_comments
+      it_redirects_to_with_error("/where_i_came_from", "What did you want to show comments on?")
+    end
   end
 
   describe "GET #hide_comments" do
