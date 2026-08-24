@@ -5,4 +5,7 @@
 print "Enter email: "
 email = gets.chomp
 
-puts EmailDataReport.new(email)
+print "Search audits for deleted accounts? This scans the whole audits table and should only be run at low-traffic times. (y/N): "
+deep_search = gets.chomp.strip.casecmp?("y")
+
+puts EmailDataReport.new(email, deep_search: deep_search)

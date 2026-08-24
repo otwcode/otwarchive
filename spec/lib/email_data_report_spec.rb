@@ -134,4 +134,65 @@ describe EmailDataReport do
       expect(subject).to include("192.0.2.9")
     end
   end
+
+  describe "deep search for deleted accounts" do
+    subject { described_class.new(email, deep_search: true).to_s }
+
+    # A deleted account only exists in the audits table anymore: the user row
+    # and its user_past_emails are gone, so these audits are orphaned.
+    before do
+      Audited::Audit.create!(
+        auditable_type: "User",
+        auditable_id: 424_242,
+        action: "update",
+        audited_changes: { "login" => %w[old_ghost final_ghost] },
+        remote_address: "203.0.113.30"
+      )
+      Audited::Audit.create!(
+        auditable_type: "User",
+        auditable_id: 424_242,
+        action: "destroy",
+        audited_changes: { "login" => "final_ghost", "email" => email },
+        remote_address: "203.0.113.31"
+      )
+    end
+
+    it "finds deleted accounts through their audits" do
+      expect(subject).to include("final_ghost")
+      expect(subject).to include("old_ghost")
+      expect(subject).to include("203.0.113.30")
+      expect(subject).to include("203.0.113.31")
+    end
+
+    it "excludes the admin's IP when an admin deleted the account" do
+      Audited::Audit.create!(
+        auditable_type: "User",
+        auditable_id: 777_777,
+        user: create(:admin),
+        action: "destroy",
+        audited_changes: { "login" => "admin_deleted", "email" => email },
+        remote_address: "203.0.113.50"
+      )
+
+      expect(subject).to include("admin_deleted")
+      expect(subject).not_to include("203.0.113.50")
+    end
+
+    it "ignores audits where the email only matches as a substring" do
+      Audited::Audit.create!(
+        auditable_type: "User",
+        auditable_id: 555_555,
+        action: "destroy",
+        audited_changes: { "login" => "impostor", "email" => "a#{email}" },
+        remote_address: "203.0.113.40"
+      )
+
+      expect(subject).not_to include("impostor")
+      expect(subject).not_to include("203.0.113.40")
+    end
+
+    it "does not scan audits when the deep search is off" do
+      expect(described_class.new(email).to_s).not_to include("final_ghost")
+    end
+  end
 end
