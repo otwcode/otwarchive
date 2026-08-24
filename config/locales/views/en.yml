@@ -1688,9 +1688,9 @@ en:
             acronym: non-con
             title: non-consensual sex
     tag_sets_about:
-      delete_tag_set_warning_strong: can delete the tag set or change it without warning
+      delete_tag_set_warning: can delete the tag set or change it without warning
       page_heading: About Tag Sets
-      sharing_tag_sets_html: Some users may choose to make their tag set publicly available for others to use in their challenges. Please note that the owners of a tag set %{delete_tag_set_warning_strong}, so before you use someone else's tag set for your challenge, please be sure that you trust them not to change it.
+      sharing_tag_sets_html: Some users may choose to make their tag set publicly available for others to use in their challenges. Please note that the owners of a tag set %{delete_tag_set_warning_bold}, so before you use someone else's tag set for your challenge, please be sure that you trust them not to change it.
       what_are_tag_sets: If you've ever wanted to run a challenge on the Archive, that's what tag sets are for. You create a tag set to hold a list of all the tags that should be available for sign-up, even if those tags haven't been used on the Archive before now, and then add the tag set to your challenge. Tags in the tag set will then automatically show up in the sign-up form.
       where_to_find_tag_sets: All tag sets are listed on the main tag sets page. You can browse them to get a better idea of how they work.
       who_manages_tag_sets: You can add as many moderators as you want to help you manage your tag set, and they don't need to have access to the challenge settings. You can also allow the participants in your challenge to nominate tags to be added to your set. You and any co-owners and moderators can review those nominations, and approve or reject them. You can add fandom associations to new tags in your Tag Set, or you can leave them for tag wranglers to make the associations (this may take some time).
@@ -2761,7 +2761,7 @@ en:
     index:
       in_archive_name: in the %{archive_name}
       listing_tag_sets_heading: Listing Tag Sets
-      new_tag_set_link: New Tag Set
+      new_tag_set_button: New Tag Set
       no_tag_sets_found: No tag sets found.
       page_heading_challenge: Tag Sets Used In This Challenge
       page_heading_default: Tag Sets
@@ -2770,9 +2770,10 @@ en:
       search_submit: Search
       search_title: search
       tag_sets_about_help_title: Tagset about
-      tags_link: Tags
+      tags_button: Tags
     tag_set_form:
-      check_to_remove: "(check to remove)"
+      check_to_remove_tag: "(check to remove)"
+      check_to_remove_tag_association: "(check to remove)"
       tag_sets_associations_help_title: Tagset tag associations
   pagy:
     aria_label:
