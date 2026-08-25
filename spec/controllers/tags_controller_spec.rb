@@ -415,9 +415,7 @@ describe TagsController do
       let(:unsorted_tag) { create(:unsorted_tag, canonical: true) }
 
       it "does not raise and redirects to success message" do
-        expect do
-          put :update, params: { id: unsorted_tag, commit: "Save changes" }
-        end.not_to raise_error
+        put :update, params: { id: unsorted_tag, commit: "Save changes" }
 
         it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
       end
