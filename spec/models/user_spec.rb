@@ -36,12 +36,17 @@ describe User do
         allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_username])
       end
 
-      # TODO TODO TODO not working
-      it { is_expected.not_to allow_values("admin", "admın", "ad.min", "adrnin", "ADMIN").for(:login) }
+      it { is_expected.not_to allow_values("admin", "admın", "ad.min", "ad min ", "adrnin", "ADMIN").for(:login) }
     end
 
     context "with a username not confusable to a forbidden one" do
-      # TODO
+      let(:forbidden_username) { "admin" }
+
+      before do
+        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_username])
+      end
+
+      it { is_expected.to allow_values("user", "admn", "SadminER").for(:login) }
     end
 
     context "it's internal skeleton" do
@@ -50,7 +55,7 @@ describe User do
       end
 
       it "has it's latin counterpart for cyrcillic letters" do
-        # notice the P being uppercase since letter case standardizing isn't in internal_skeleton
+        # notice the P being uppercase since letter case standardizing isn't in internal_skeleton()
         expect(NotForbiddenNameValidator.internal_skeleton("SupРort")).to eq("SupPort")
       end
 

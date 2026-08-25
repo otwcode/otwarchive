@@ -2,7 +2,6 @@ class NotForbiddenNameValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return if value.nil?
     ArchiveConfig.FORBIDDEN_USERNAMES.each do |forbidden|
-      # TODO still something wrong with this
       if NotForbiddenNameValidator.confusable?(forbidden, value)
         # i18n-tasks-use t("activerecord.errors.messages.forbidden")
         return record.errors.add(attribute, :forbidden, **options.merge(value: value))
@@ -10,7 +9,7 @@ class NotForbiddenNameValidator < ActiveModel::EachValidator
     end
   end
 
-  # the confusable that unicode defines in 39
+  # Internal skeleton that Unicode defines in Technical Standard #39
   def self.internal_skeleton(string)
     # TODO add comments since it's complicated
     # TODO also add docstrings to functions
@@ -30,22 +29,17 @@ class NotForbiddenNameValidator < ActiveModel::EachValidator
       end
     end
 
-    # TODO maaybe find a way to not using this array or simplifying it
-    final_arr = Array.new
-    string.unicode_normalize(:nfd).gsub(/\p{DI}/, "").each_codepoint.map do |codepoint|
-      # because this gives an array for each codepoint of the initial string, we iterate over that array
-      # and add that to a final array after converting to a string character.
-      (confusable_pairs[codepoint] || [codepoint]).each do |skeleton_codepoint|
-        final_arr.push([skeleton_codepoint].pack("U"))
-      end
-    end
-
-    # convert to string characters and add that to a new array
-    # finally, normalize as described by the standard
-    final_arr.unicode_normalize(:nfd)
+    # because this gives an array for each codepoint of the initial string, we
+    # join each of those arrays (or original codepoint if it's not confusable)
+    # after converting them to a string. We also normalize before and after as
+    # described by the standard
+    string.unicode_normalize(:nfd).gsub(/\p{DI}/, '').each_codepoint.map { |codepoint|
+      (confusable_pairs[codepoint] || [codepoint]).pack('U*')
+    }.join.unicode_normalize(:nfd)
   end
 
-  # This is not the confusable Unicode defines, also makes it uppercase and includes dialectics, blank and punctuations
+  # This is not the confusable Unicode defines, also makes it uppercase and
+  # includes dialectics, blank and punctuations.
   # A problem with making it uppercase after all that is "I" becomes "l" but "i" doesn't
   # Problem with making it uppercase before is "m" doesn't become "rn"
   # Workaround I found is using it both after and before
