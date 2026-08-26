@@ -274,6 +274,12 @@ class User < ApplicationRecord
     relation.first
   end
 
+  # Override of Devise method to preload roles for permission checks.
+  def self.serialize_from_session(key, salt)
+    record = includes(:roles).where(primary_key => key).first
+    record if record && record.authenticatable_salt == salt
+  end
+
   def self.for_claims(claims_ids)
     joins(:request_claims)
       .where("challenge_claims.id IN (?)", claims_ids)
