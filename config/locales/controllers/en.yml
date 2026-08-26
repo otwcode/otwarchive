@@ -218,8 +218,9 @@ en:
     rate_limited:
       error: You have made too many requests in a short time period. Please wait a while before trying again. If you are receiving this error repeatedly, try browsing more slowly or loading fewer pages at a time.
     show:
-      cannot_show_nothing: What did you want to show comments on?
       page_title: Comment %{comment_id} on %{name}
+    show_comments:
+      error: What did you want to show comments on?
     unfreeze:
       error: Sorry, that comment thread could not be unfrozen.
       permission_denied: Sorry, you don't have permission to unfreeze that comment thread.

@@ -612,7 +612,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html do
         if @commentable.nil?
-          flash[:error] = t("comments.show.cannot_show_nothing")
+          flash[:error] = t(".error")
           redirect_back_or_to root_path
         else
           # if non-ajax it could mean sudden javascript failure OR being redirected from login
