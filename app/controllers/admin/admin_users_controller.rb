@@ -11,7 +11,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def load_user
-    @user = User.find_by!(login: params[:id])
+    @user = User.includes(:roles).find_by!(login: params[:id])
   end
 
   def user_is_banned
