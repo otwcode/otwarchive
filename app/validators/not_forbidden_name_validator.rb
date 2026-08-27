@@ -1,6 +1,7 @@
 class NotForbiddenNameValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return if value.nil?
+
     ArchiveConfig.FORBIDDEN_USERNAMES.each do |forbidden|
       if NotForbiddenNameValidator.confusable?(forbidden, value)
         # i18n-tasks-use t("activerecord.errors.messages.forbidden")
@@ -23,14 +24,14 @@ class NotForbiddenNameValidator < ActiveModel::EachValidator
   # before and after as described by the standard.
   def self.internal_skeleton(string)
     confusable_pairs = Rails.cache.fetch("v1/confusables_hash") do
-      File.foreach('./script/confusables.txt')
-        .filter_map { it.match(/^(\h+)\s+;\s+([\h\s]+);\s*MA/)&.captures }
-        .to_h { [_1.to_i(16), _2.scan(/\h+/).map { it.to_i(16) }] }
+      File.foreach("./script/confusables.txt")
+        .filter_map { it.match(/^(\h+)\s+;\s+([\h\s]+);\s*MA/) }
+        .to_h { [it[1].to_i(16), it[2].scan(/\h+/).map { |x| x.to_i(16) }] }
     end
 
-    string.unicode_normalize(:nfd).gsub(/\p{DI}/, '').each_codepoint.map { |codepoint|
-      (confusable_pairs[codepoint] || [codepoint]).pack('U*')
-    }.join.unicode_normalize(:nfd)
+    string.unicode_normalize(:nfd).gsub(/\p{DI}/, "").each_codepoint.map do |codepoint|
+      (confusable_pairs[codepoint] || [codepoint]).pack("U*")
+    end.join.unicode_normalize(:nfd)
   end
 
   # This is stricter than the confusable Unicode defines, it's case-insensitive

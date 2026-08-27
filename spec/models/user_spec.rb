@@ -89,7 +89,7 @@ describe User do
       context "uppercase/lowercase issues" do
         it "both I and i resolves to l" do
           expect(NotForbiddenNameValidator.confusable?("I", "i")).to be_truthy
-          end
+        end
 
         it "m resolves to rn" do
           expect(NotForbiddenNameValidator.confusable?("m", "rn")).to be_truthy
