@@ -210,7 +210,7 @@ Feature:
       And I should see "after" within "#main"
       And I should not see "before" within "#main"
 
-  Scenario: Changing only username updates series blurbs
+  Scenario: Changing username to match an existing non-default pseud updates series blurbs
     Given I am logged in as "oldusername" with password "password"
       And "oldusername" has the pseud "newusername"
       And I add the work "Great Work" to series "Best Series"
