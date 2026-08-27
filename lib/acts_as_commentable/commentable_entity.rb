@@ -16,6 +16,15 @@ module ActsAsCommentable::CommentableEntity
     self.total_comments.order('thread, threaded_left')
   end
 
+  # Returns the unreviewed comments to show based on admin status
+  def unreviewed_comments_to_show(is_admin)
+    if is_admin
+      self.find_all_comments.unreviewed_only
+    else
+      self.find_all_comments.unreviewed_only.not_spam
+    end
+  end
+
   # Returns the total number of comments
   def count_all_comments
     self.total_comments.count
