@@ -34,6 +34,13 @@ class AdminPost < ApplicationRecord
   validates_length_of :content, maximum: ArchiveConfig.CONTENT_MAX,
     too_long: ts("cannot be more than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
 
+  # rubocop:disable Rails/UniqueValidationWithoutIndex
+  validates :translated_post_id,
+            uniqueness: { scope: :language_id,
+                          message: :translation_already_exists },
+            allow_nil: true
+  # rubocop:enable Rails/UniqueValidationWithoutIndex
+
   validate :translated_post_must_exist
 
   validate :translated_post_language_must_differ
