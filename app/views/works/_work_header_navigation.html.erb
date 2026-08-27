@@ -74,14 +74,10 @@
   </li>
 
   <%# for author or admin, review comments if moderating them %>
-  <% if (logged_in_as_admin? || (current_user && current_user.is_author_of?(@work))) && @work.find_all_comments.unreviewed_only.exists? %>
+  <% unreviewed_comments = @work.unreviewed_comments_to_show(logged_in_as_admin?) %>
+  <% if (logged_in_as_admin? || current_user&.is_author_of?(@work)) && unreviewed_comments.exists? %>
     <li class="comments" id="review_comments">
-      <% unreviewed_count = if logged_in_as_admin?
-                              @work.find_all_comments.unreviewed_only.count
-                            else
-                              @work.find_all_comments.unreviewed_only.not_spam.count
-                            end %>
-      <%= link_to t(".unreviewed_comments", count: unreviewed_count), unreviewed_work_comments_path(@work) %>
+      <%= link_to t(".unreviewed_comments", count: unreviewed_comments.count), unreviewed_work_comments_path(@work) %>
     </li>
   <% end %>
 
