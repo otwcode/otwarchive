@@ -10,29 +10,25 @@ class NotForbiddenNameValidator < ActiveModel::EachValidator
   end
 
   # Internal skeleton that Unicode defines in Technical Standard #39
+  #
+  # Check the cache for confusables hashmap, if it doesn't exist (for the first
+  # time it works and when it's updated) create it by processing each line,
+  # capturing the parts before and after the first ";", pushing an array into
+  # array (since right part of the confusable can be more than one codepoint)
+  # and finally converting to decimal integer from hexadecimal string since
+  # that's easier to use in ruby
+  #
+  # Because the hashmap gives an array for each codepoint of the initial
+  # string, join each of those arrays (or original codepoint if it's not
+  # confusable) after converting them to a string. Also normalize before and
+  # after as described by the standard.
   def self.internal_skeleton(string)
-    # TODO add comments since it's complicated
-    # TODO also add docstrings to functions
-    confusable_pairs = Rails.cache.fetch("confusables_hash") do
-      File.open("./script/confusables.txt", "rb") do |f|
-        confusable_pairs = {}
-        f.each_line do |line|
-          # Process each line, capture the part before and after the first ";" # NOTSURE if it is a line that contains confusable data.
-          line =~ /^(\w*)\s;\s((?:\w*\s)*);\sMA\s/
-
-          # pushing an array into array since right part of the confusable can be more than one codepoint
-          # TODO maybe add an example and show what it becomes at each step
-          # we're also converting to decimal integer from hexadecimal string since that's easier to use in ruby
-          confusable_pairs[$1.to_i(16)] = $2.split(" ").map{ |x| x.to_i(16)} if $2.is_a?(String)
-        end
-        confusable_pairs
-      end
+    confusable_pairs = Rails.cache.fetch("v1/confusables_hash") do
+      File.foreach('./script/confusables.txt')
+        .filter_map { it.match(/^(\h+)\s+;\s+([\h\s]+);\s*MA/)&.captures }
+        .to_h { [_1.to_i(16), _2.scan(/\h+/).map { it.to_i(16) }] }
     end
 
-    # because this gives an array for each codepoint of the initial string, we
-    # join each of those arrays (or original codepoint if it's not confusable)
-    # after converting them to a string. We also normalize before and after as
-    # described by the standard
     string.unicode_normalize(:nfd).gsub(/\p{DI}/, '').each_codepoint.map { |codepoint|
       (confusable_pairs[codepoint] || [codepoint]).pack('U*')
     }.join.unicode_normalize(:nfd)
@@ -40,8 +36,9 @@ class NotForbiddenNameValidator < ActiveModel::EachValidator
 
   # This is not the confusable Unicode defines, also makes it uppercase and
   # includes dialectics, blank and punctuations.
-  # A problem with making it uppercase after all that is "I" becomes "l" but "i" doesn't
+  # A problem with making it uppercase or lowercase after all that is "I" becomes "l" but "i" doesn't
   # Problem with making it uppercase before is "m" doesn't become "rn"
+  # Problem with making it downcase before is "I" doesn't become "l"
   # Workaround I found is using it both after and before
   # TODO find another workaround
   def self.confusable?(string1, string2)
@@ -51,4 +48,3 @@ class NotForbiddenNameValidator < ActiveModel::EachValidator
         internal_skeleton(string2.upcase).gsub(/\p{Dia}|\p{Blank}|\p{Punct}/, "")
   end
 end
-
