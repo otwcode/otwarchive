@@ -1,12 +1,23 @@
-<p class="notice">
-  <%= ts("This work is part of an ongoing challenge and will be revealed soon!") %>
-  <% if @work.user_is_owner_or_invited?(current_user) %>
-    <%= ts("You can find details here: ") %>
-    <%= show_collections_data(@work.collections.unrevealed) %>
+<div class="notice">
+  <% challenge = @work.collections.unrevealed.first.challenge %>
+  <% if @work.collections.unrevealed.count == 1 && challenge&.works_reveal_at? %>
+    <p>
+      <%= ts("This work is part of an ongoing challenge and is scheduled to be revealed on") %>
+      <span class="datetime">
+        <%= time_in_zone(challenge.works_reveal_at, challenge.time_zone || Time.zone.name) + ts(".") %>
+      </span>
   <% else %>
-    <% if @work.approved_collections.unrevealed.present? %>
-      <%= ts("You can find details here: ") %>
-      <%= show_collections_data(@work.approved_collections.unrevealed) %>
-    <% end %>
+    <p>
+      <%= ts("This work is part of a collection that has not been revealed.") %>
   <% end %>
-</p>
+      <%= ts("Please visit") %>
+      <%= show_collections_data(@work.collections.unrevealed) %>
+      <%= ts("for details.")%>
+    </p>
+    <p>
+      <%= ts("To learn more about unrevealed collections, check out") %>
+      <%= link_to(ts("What does it mean that a collection is Open or Closed, Moderated or Unmoderated, Unrevealed, or Anonymous?"), archive_faqs_path + "/collections#collectionoptions") %>
+      <%= ts("in our") %>
+      <%= link_to(ts("Collections FAQ"), archive_faqs_path + "/collections") %>
+    </p>
+</div>

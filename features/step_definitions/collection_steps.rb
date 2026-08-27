@@ -282,7 +282,7 @@ Then /^the work "([^\"]*)" should be hidden from me$/ do |title|
   expect(page.title).to include("Mystery Work")
   expect(page.title).not_to include(title)
   expect(page).not_to have_content(title)
-  expect(page).to have_content("This work is part of an ongoing challenge and will be revealed soon!")
+  expect(page).to have_content("This work is part of an ongoing challenge and is scheduled to be revealed") || have_content("This work is part of a collection that has not been revealed.")
   expect(page).not_to have_content(Sanitize.clean(work.chapters.first.content))
   if work.collections.first
     step "all indexing jobs have been run"
