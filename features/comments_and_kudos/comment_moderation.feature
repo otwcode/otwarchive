@@ -137,6 +137,22 @@ Feature: Comment Moderation
       And I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
 
+  Scenario: Authors with moderated comments should not see duplicate inbox notifications for approved replies to their comments
+    Given the moderated work "Moderation" by "author"
+      And I am logged in as "author"
+      And I post the comment "Author comment" on the work "Moderation"
+    When I am logged in as "commenter"
+      And I view the work "Moderation"
+      And I follow "Comments (1)"
+      And I follow "Reply" within ".odd"
+      And I fill in "Comment" with "A moderated reply" within ".odd"
+      And I press "Comment" within ".odd"
+    When I am logged in as "author"
+      And I view the unreviewed comments page for "Moderation"
+      And I press "Approve"
+      And I go to author's inbox page
+    Then I should see "(1 comments, 0 unread)"
+
   Scenario: Comments can be approved from the home page inbox
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
@@ -330,3 +346,22 @@ Feature: Comment Moderation
       And I view the work "Moderation"
       And I follow "Unreviewed Comments (1)"
     Then I should not see "Parent Thread"
+
+  Scenario: Creator marks an unreviewed comment as spam and the count updates
+    Given the moderated work "Spam Trap" by "spam_catcher"
+      And I post the comment "Fake spam" on the work "Spam Trap" as a guest
+    When I am logged in as "spam_catcher"
+      And I view the work "Spam Trap"
+    Then I should see "Unreviewed Comments (1)"
+    When I follow "Unreviewed Comments"
+      And it is currently 1 second from now
+      And I follow "Spam"
+    Then I should see "Unreviewed Comments (0)"
+      And I should not see "Fake spam"
+    When I am logged out
+      And I am logged in as an admin
+      And I view the work "Spam Trap"
+    Then I should see "Unreviewed Comments (1)"
+    When I follow "Unreviewed Comments"
+    Then I should see "Fake spam"
+      And I should see "This comment has been marked as spam"
