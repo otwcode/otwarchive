@@ -13,10 +13,10 @@ Feature: Collection
       And I should see "Draft was successfully created."
     When I press "Post"
     Then the work "Old Snippet" should be visible to me
-      And I should see "part of an ongoing challenge"
+      And I should see "part of a collection that has not been revealed"
     When I am logged in as "moderator"
     Then the work "Old Snippet" should be visible to me
-      And I should see "part of an ongoing challenge"
+      And I should see "part of a collection that has not been revealed"
     When I am logged in as "second_user"
     Then the work "Old Snippet" should be hidden from me
     When I am logged out
@@ -576,7 +576,7 @@ Feature: Collection
     When I am logged out
      And I go to "Welcome" collection's page
     Then I should see "Mystery Work"
-     And I should see "Part of Hidden Moderated Approved, Just Hidden, Hidden and Anonymous"
+     And I should see "Part of Hidden Moderated Approved, Just Hidden, and Hidden and Anonymous"
      And I should not see "Hidden Moderated Not Approved"
      And I should not see "Just Anonymous"
      And I should not see "Welcome" within ".mystery"
@@ -589,9 +589,9 @@ Feature: Collection
       And I edit the work "Work" to be in the collections "Hidden_Moderated_1,Hidden_Moderated_2"
 
      When I view the work "Work"
-     Then I should see "You can find details here: Hidden Moderated 1, Hidden Moderated 2"
+     Then I should see "Please visit Hidden Moderated 1 and Hidden Moderated 2 for details."
      When I view the work "Work" in full mode
-     Then I should see "You can find details here: Hidden Moderated 1, Hidden Moderated 2"
+     Then I should see "Please visit Hidden Moderated 1 and Hidden Moderated 2 for details."
 
      When I am logged out
       And I view the work "Work"
@@ -604,16 +604,16 @@ Feature: Collection
       And I submit
 
      When I view the work "Work"
-     Then I should see "You can find details here: Hidden Moderated 1"
+     Then I should see "Please visit Hidden Moderated 1 for details."
       And I should not see "Hidden Moderated 2"
      When I go to the work "Work" in full mode
-     Then I should see "You can find details here: Hidden Moderated 1"
+     Then I should see "Please visit Hidden Moderated 1 for details."
       And I should not see "Hidden Moderated 2"
 
      When I am logged out
       And I view the work "Work"
-     Then I should see "You can find details here: Hidden Moderated 1"
+     Then I should see "Please visit Hidden Moderated 1 for details."
       And I should not see "Hidden Moderated 2"
      When I go to the work "Work" in full mode
-     Then I should see "You can find details here: Hidden Moderated 1"
+     Then I should see "Please visit Hidden Moderated 1 for details."
       And I should not see "Hidden Moderated 2"
