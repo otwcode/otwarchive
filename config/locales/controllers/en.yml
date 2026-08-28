@@ -303,6 +303,9 @@ en:
         unmuted: You have unmuted the user %{name}.
       index:
         page_title: "%{username} - Muted Users"
+  orphans:
+    create:
+      pseud_option_required: You must choose whether to remove or keep your pseud.
   people:
     index:
       collection_page_title: "%{collection_title} - People"
