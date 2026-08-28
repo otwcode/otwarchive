@@ -2,16 +2,16 @@
   <% challenge = @work.collections.unrevealed.first.challenge %>
   <% if @work.collections.unrevealed.count == 1 && challenge&.works_reveal_at? %>
     <p>
-      <%= t('.scheduled_reveal_html', date: date_in_zone(challenge.works_reveal_at)) %>
+      <%= t(".scheduled_reveal_html", date: date_in_zone(challenge.works_reveal_at)) %>
   <% else %>
     <p>
-      <%= t('.not_revealed') %>
+      <%= t(".not_revealed") %>
   <% end %>
-      <%= t('.details_html', collection: show_collections_data(@work.collections.unrevealed)) %>
+      <%= t(".details_html", collection: show_collections_data(@work.collections.unrevealed)) %>
     </p>
     <p>
-      <%= t('.learn_more_html', 
-        collection_options_faq: link_to(t('.collections_faq_options'), archive_faqs_path + "/collections#collectionoptions"),
-        collections_faq: link_to(t('.collections_faq'), archive_faqs_path + "/collections") ) %>
+      <%= t(".learn_more_html", 
+        collection_options_faq: link_to(t(".collections_faq_options"), archive_faqs_path + "/collections#collectionoptions"),
+        collections_faq: link_to(t(".collections_faq"), archive_faqs_path + "/collections") ) %>
     </p>
 </div>

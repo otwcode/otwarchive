@@ -3516,8 +3516,8 @@ en:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
     mystery_blurb:
-      not_revealed: This work is part of a collection that has not been revealed.
       mystery_work: Mystery Work
+      not_revealed: This work is part of a collection that has not been revealed.
       part_of_html: Part of %{collection}
       summary: Summary
     navigate:
