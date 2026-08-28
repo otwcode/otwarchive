@@ -30,35 +30,20 @@ describe CollectionParticipantsController do
       end
 
       context "where there is a collection" do
-        let(:current_role) { CollectionParticipant::NONE }
-
         context "where the user is already a participant" do
           let!(:participant) do
             create(
               :collection_participant,
               collection: collection,
               pseud: user.default_pseud,
-              participant_role: current_role
+              participant_role: CollectionParticipant::NONE
             )
           end
 
-          context "where the user has been invited" do
-            let(:current_role) { CollectionParticipant::INVITED }
-
-            it "approves the participant and redirects to the index" do
-              get :join, params: { collection_id: collection.name }
-              expect(CollectionParticipant.find(participant.id).participant_role).to eq CollectionParticipant::MEMBER
-              it_redirects_to_with_notice(root_path,
-                                          "You are now a member of #{collection.title}.")
-            end
-          end
-
-          context "where the user is not currently invited" do
-            it "redirects to the index and displays a notice that the user has already joined or applied" do
-              get :join, params: { collection_id: collection.name }
-              it_redirects_to_with_notice(root_path,
-                                          "You have already joined (or applied to) this collection.")
-            end
+          it "redirects to the index and displays a notice that the user has already joined or applied" do
+            get :join, params: { collection_id: collection.name }
+            it_redirects_to_with_notice(root_path,
+                                        "You have already joined (or applied to) this collection.")
           end
         end
 

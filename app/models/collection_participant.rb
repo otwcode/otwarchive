@@ -5,15 +5,13 @@ class CollectionParticipant < ApplicationRecord
 
   after_commit :update_collection_index
 
-  PARTICIPANT_ROLES = ["None", "Owner", "Moderator", "Member", "Invited"]
+  PARTICIPANT_ROLES = %w[None Owner Moderator Member].freeze
   NONE = PARTICIPANT_ROLES[0]
   OWNER = PARTICIPANT_ROLES[1]
   MODERATOR = PARTICIPANT_ROLES[2]
   MEMBER = PARTICIPANT_ROLES[3]
-  INVITED = PARTICIPANT_ROLES[4]
   MAINTAINER_ROLES = [PARTICIPANT_ROLES[1], PARTICIPANT_ROLES[2]]
   PARTICIPANT_ROLE_OPTIONS = [ [ts("None"), NONE],
-                         [ts("Invited"), INVITED],
                          [ts("Member"), MEMBER],
                          [ts("Moderator"), MODERATOR],
                          [ts("Owner"), OWNER] ]
@@ -41,7 +39,6 @@ class CollectionParticipant < ApplicationRecord
   def is_moderator? ; self.participant_role == MODERATOR ; end
   def is_maintainer? ; is_owner? || is_moderator? ; end
   def is_member? ; self.participant_role == MEMBER ; end
-  def is_invited? ; self.participant_role == INVITED ; end
   def is_none? ; self.participant_role == NONE ; end
 
   def approve_membership!
