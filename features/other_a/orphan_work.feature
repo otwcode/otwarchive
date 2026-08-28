@@ -28,7 +28,7 @@ Feature: Orphan work
       And it is currently 1 second from now
     When I follow "Orphan Work"
     Then I should see "Read More About The Orphaning Process"
-    When I choose "Take my pseud off as well"
+    When I choose "Remove my pseud"
       And I press "Yes, I'm sure"
       And all indexing jobs have been run
     Then I should see "Orphaning was successful."
@@ -52,7 +52,7 @@ Feature: Orphan work
       And it is currently 1 second from now
     When I follow "Orphan Work"
     Then I should see "Read More About The Orphaning Process"
-    When I choose "Leave a copy of my pseud on"
+    When I choose "Keep my pseud"
     And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
     When I go to orphaneer's works page
@@ -67,7 +67,7 @@ Feature: Orphan work
     Given I post the work "Doomed Story"
       And I follow "Edit"
       And I follow "Orphan Work"
-      And I choose "Take my pseud off as well"
+      And I choose "Remove my pseud"
       And I press "Yes, I'm sure"
     When subscription notifications are sent
     Then 0 emails should be delivered
@@ -78,7 +78,7 @@ Feature: Orphan work
     Given I post the work "Awful Concoction"
       And I follow "Edit"
       And I follow "Orphan Work"
-      And I choose "Leave a copy of my pseud on"
+      And I choose "Keep my pseud"
       And I press "Yes, I'm sure"
     When subscription notifications are sent
     Then 0 emails should be delivered
@@ -96,7 +96,7 @@ Feature: Orphan work
       And a chapter is added to "Torrid Idfic"
       And I follow "Edit"
       And I follow "Orphan Work"
-      And I choose "Leave a copy of my pseud on"
+      And I choose "Keep my pseud"
       And I press "Yes, I'm sure"
     When subscription notifications are sent
     Then 0 emails should be delivered
@@ -115,7 +115,7 @@ Feature: Orphan work
       And I view the work "Lazy Purple Sausage"
       And I follow "Edit"
       And I follow "Orphan Work"
-      And I choose "Leave a copy of my pseud on"
+      And I choose "Keep my pseud"
       And I press "Yes, I'm sure"
     When subscription notifications are sent
     Then 0 emails should be delivered
@@ -139,13 +139,26 @@ Feature: Orphan work
     And it is currently 1 second from now
   When I follow "Orphan Works Instead"
   Then I should see "Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account."
-  When I press "Yes, I'm sure"
+  When I choose "Remove my pseud"
+    And I press "Yes, I'm sure"
     And all indexing jobs have been run
   Then I should see "Orphaning was successful."
   When I go to author's works page
   Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"
+
+  Scenario: Orphaning without choosing a pseud option shows an error
+    Given I post the work "Undecided"
+      And I view the work "Undecided"
+      And I follow "Edit"
+      And I follow "Orphan Work"
+    When I press "Yes, I'm sure"
+    Then I should see "You must choose whether to remove or keep your pseud."
+      And I should see "Read More About The Orphaning Process"
+    When I view the work "Undecided"
+    Then I should see "orphaneer"
+      And I should not see "orphan_account"
 
   Scenario: Orphaning a shared work should not affect chapters created solely by the other creator
 
