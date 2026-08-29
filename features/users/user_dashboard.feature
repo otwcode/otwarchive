@@ -306,8 +306,7 @@ Feature: User dashboard
     And I should see "Close" within "#modal"
 
   Scenario: The user dashboard should list the user's most recently created bookmarks
-  Given dashboard counts expire after 10 seconds
-    And I am logged in as "meatloaf"
+  Given I am logged in as "meatloaf"
     And I post the works "Work One, Work Two, Work Three, Work Four, Work Five, Work Six"
     And I bookmark the works "Work One, Work Two, Work Three, Work Four, Work Five, Work Six"
     And I go to meatloaf's user page
