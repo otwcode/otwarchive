@@ -316,7 +316,7 @@ Feature: User dashboard
   When I edit the bookmark for "Work One"
     And I check "Rec"
     And I press "Update"
-  When I go to meatloaf's user page
+    And I go to meatloaf's user page
   Then I should see "Recent bookmarks"
     And I should not see "Work One" within "#user-bookmarks"
     And I should see "Work Six" within "#user-bookmarks"
