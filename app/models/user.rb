@@ -544,6 +544,19 @@ class User < ApplicationRecord
     end
   end
 
+  def related_works_for_user_page
+    related_works.children_for_user_page.user_works_for_user_page(self)
+  end
+
+  def parent_work_relationships_for_user_page
+    parent_work_relationships.parents_for_user_page.user_works_for_user_page(self)
+  end
+
+  def visible_related_works_count
+    related_works_for_user_page.count +
+      parent_work_relationships_for_user_page.count
+  end
+
   private
 
   # Override the default Justifiable enabled check, because we only need to justify
