@@ -3,14 +3,15 @@
   <div class="header module">
     <h4 class="heading">
       <% if !prompt.title.blank? %>
-        <%= prompt.title %>
+        <%= link_to prompt.title, collection_prompt_path(prompt.collection, prompt) %>
       <% else %>
-        <%= ts("#{prompt.class.to_s}%{index}", :index => (index ||= false) ? " #{index+1}" : '') %>
+        <%= link_to ts("#{prompt.class.to_s}%{index}", :index => (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
       <% end %>
       <% if prompt.anonymous? %>
         <%= ts("by Anonymous") %>
       <% else %>
-        <%= ts("by %{person}", :person => (prompt.pseud ? prompt.pseud.byline : prompt.challenge_signup.pseud.byline)) %>
+        <%= ts("by") %>
+        <%= pseud_link(prompt.pseud ? prompt.pseud : prompt.challenge_signup.pseud) %>
       <% end %>
       <% unless @collection %>
         <%= ts("in") %> <%= link_to prompt.collection.title, collection_path(prompt.collection) %>
