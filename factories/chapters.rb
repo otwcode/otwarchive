@@ -8,12 +8,17 @@ FactoryBot.define do
 
     transient do
       authors { work.pseuds }
+      year { nil }
     end
 
     after(:build) do |chapter, evaluator|
       evaluator.authors.each do |pseud|
         chapter.creatorships.build(pseud: pseud)
       end
+    end
+
+    after(:build) do |chapter, evaluator|
+      chapter.published_at = Date.new(evaluator.year, 1, 1) if evaluator.year
     end
 
     trait :draft do
