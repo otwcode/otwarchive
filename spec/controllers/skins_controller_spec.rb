@@ -750,16 +750,8 @@ describe SkinsController do
     end
 
     context "with accessible site skin" do
-      let(:success) { it_redirects_to_simple(tag_works_path(tag, site_skin: skin.id)) }
-      let(:tag) { create(:canonical_fandom) }
-
-      before do
-        FilterCount.create!(
-          filter: tag,
-          public_works_count: 10,
-          unhidden_works_count: 10
-        )
-      end
+      let(:success) { it_redirects_to_simple(user_works_path(otw_translation_user, site_skin: skin.id)) }
+      let(:otw_translation_user) { create(:user, login: "OTW_Translation") }
 
       context "when site skin is public" do
         let(:skin) { create(:skin, :public, title: "Accessible Site Skin", author: skin_creator) }

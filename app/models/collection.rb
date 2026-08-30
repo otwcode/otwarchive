@@ -10,7 +10,7 @@ class Collection < ApplicationRecord
   # i18n-tasks-use t("errors.attributes.icon.invalid_format")
   # i18n-tasks-use t("errors.attributes.icon.too_large")
   validates :icon, attachment: {
-    allowed_formats: %r{image/\S+},
+    allowed_formats: %w[image/gif image/jpeg image/png],
     maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
   }
 
@@ -18,10 +18,10 @@ class Collection < ApplicationRecord
   has_many :children, class_name: "Collection", foreign_key: "parent_id", inverse_of: :parent
 
   has_one :collection_profile, dependent: :destroy
-  accepts_nested_attributes_for :collection_profile
+  accepts_nested_attributes_for :collection_profile, update_only: true
 
   has_one :collection_preference, dependent: :destroy
-  accepts_nested_attributes_for :collection_preference
+  accepts_nested_attributes_for :collection_preference, update_only: true
 
   before_validation :clear_icon
   before_validation :cleanup_url
@@ -166,13 +166,8 @@ class Collection < ApplicationRecord
     end
   end
 
-  scope :with_name_like, lambda { |name|
-    where("collections.name LIKE ?", "%#{name}%")
-      .limit(10)
-  }
-
-  scope :with_title_like, lambda { |title|
-    where("collections.title LIKE ?", "%#{title}%")
+  scope :with_name_or_title_like, lambda { |term|
+    where("collections.name LIKE ? OR collections.title LIKE ?", "%#{term}%", "%#{term}%")
   }
 
   scope :with_item_count, lambda {
@@ -297,13 +292,11 @@ class Collection < ApplicationRecord
     self.collection_profile.gift_notification || (parent ? parent.collection_profile.gift_notification : "")
   end
 
-  def moderated?() = self.collection_preference.moderated
-
-  def closed?() = self.collection_preference.closed
-
-  def unrevealed?() = self.collection_preference.unrevealed
-
-  def anonymous?() = self.collection_preference.anonymous
+  delegate :moderated?,
+           :closed?,
+           :unrevealed?,
+           :anonymous?,
+           to: :collection_preference, allow_nil: true
 
   def challenge?() = !self.challenge.nil?
 

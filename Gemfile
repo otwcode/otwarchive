@@ -124,7 +124,7 @@ group :test do
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
-  
+
   # Record and replay data from external URLs
   gem "vcr", "~> 6.2"
   gem "webmock"
@@ -138,7 +138,6 @@ group :test do
 end
 
 group :test, :development do
-  gem 'awesome_print'
   gem 'brakeman'
   gem 'pry-byebug'
   gem 'whiny_validation'

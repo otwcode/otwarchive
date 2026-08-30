@@ -1,21 +1,129 @@
-<h2 class="heading"><%= t(".heading.html", otw: tag.abbr(t(".heading.otw"), title: t(".heading.otw_long"))) %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 
 <div class="userstuff">
-  <p><%= t(".general") %></p>
-  <p><%= t(".details") %></p>
-  <p><%= t(".ao3.html",
-           github_repository_link: link_to(t(".ao3.github_repository"), "https://github.com/otwcode/otwarchive"),
-           jira_project_link: link_to(t(".ao3.jira_project"), "https://otwarchive.atlassian.net/browse/AO3")) %></p>
-  <p><%= t(".major_projects.title") %>
-    <ul>
-      <li><%= t(".major_projects.fanlore_details_html", fanlore_link: link_to(t(".major_projects.fanlore"), "https://fanlore.org")) %></li>
-      <li><%= t(".major_projects.legal_details_html", legal_advocacy_link: link_to(t(".major_projects.legal_advocacy"), "https://transformativeworks.org/projects/legal")) %></li>
-      <li><%= t(".major_projects.open_doors_details_html", open_doors_link: link_to(t(".major_projects.open_doors"), "https://opendoors.transformativeworks.org")) %></li>
-      <li><%= t(".major_projects.twc_details_html", twc_link: link_to(t(".major_projects.twc"), "https://journal.transformativeworks.org/index.php/twc")) %></li>
-    </ul>
+  <h3 class="heading" id="ao3"><%= t(".heading.about_ao3") %></h3>
+
+  <p>
+    <%= t(".ao3.description_html",
+          archive_of_our_own_link: link_to(t(".ao3.archive_of_our_own"), "https://www.transformativeworks.org/our-projects/archive-of-our-own/")) %>
   </p>
-  <p><%= t(".more_info.html",
-           transformative_works_link: link_to(t(".more_info.transformative_works"), "https://www.transformativeworks.org"),
-           faq_page_link: link_to(t(".more_info.faq_page"), "https://www.transformativeworks.org/faq"),
-           communications_team_link: link_to(t(".more_info.communications_team"), "https://www.transformativeworks.org/contact_us/")) %></p>
+
+  <p>
+    <%= t(".ao3.inclusiveness_html",
+          inclusiveness_on_ao3_bold: tag.strong(t(".ao3.inclusiveness_on_ao3_html",
+            maximum_inclusiveness_link: link_to(t(".ao3.maximum_inclusiveness"), tos_faq_path(anchor: "max_inclusiveness")))),
+          content_policy_link: link_to(t(".ao3.content_policy"), content_path),
+          tos_link: link_to(t(".ao3.tos"), tos_path)) %>
+  </p>
+
+  <p>
+    <%= t(".ao3.open_source_html",
+          archiving_software_link: link_to(t(".ao3.archiving_software"), "https://github.com/otwcode/otwarchive#otw-archive"),
+          contribute_link: link_to(t(".ao3.contribute"), "https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md"),
+          jira_project_link: link_to(t(".ao3.jira_project"), "https://otwarchive.atlassian.net/browse/AO3")) %>
+  </p>
+
+  <p>
+    <%= t(".ao3.beta_html",
+          ao3_history_fanlore_link: link_to(t(".ao3.ao3_history_fanlore"), "https://fanlore.org/wiki/Archive_of_Our_Own")) %>
+  </p>
+
+  <h4 class="heading" id="our_team"><%= t(".heading.our_team") %></h4>
+
+  <p>
+    <%= t(".our_team.intro_html",
+          committees_link: link_to(t(".our_team.committees"), "https://www.transformativeworks.org/committees/")) %>
+  </p>
+
+  <ul>
+    <li>
+      <%= t(".our_team.adt_details_html",
+            adt_link: link_to(t(".our_team.adt"), "https://www.transformativeworks.org/committees/accessibility-design-technology-committee/")) %>
+    </li>
+    <li>
+      <%= t(".our_team.documentation_details_html",
+            documentation_link: link_to(t(".our_team.documentation"), "https://www.transformativeworks.org/committees/ao3-documentation-committee/")) %>
+    </li>
+    <li>
+      <%= t(".our_team.communications_details_html",
+            communications_link: link_to(t(".our_team.communications"), "https://www.transformativeworks.org/committees/communications-committee/")) %>
+    </li>
+    <li>
+      <%= t(".our_team.open_doors_details_html",
+            open_doors_link: link_to(t(".our_team.open_doors"), "https://www.transformativeworks.org/committees/open-doors-committee/")) %>
+    </li>
+    <li>
+      <%= t(".our_team.policy_abuse_details_html",
+            policy_abuse_link: link_to(t(".our_team.policy_abuse"), "https://www.transformativeworks.org/committees/policy-abuse-committee/")) %>
+    </li>
+    <li>
+      <%= t(".our_team.support_details_html",
+            support_link: link_to(t(".our_team.support"), "https://www.transformativeworks.org/committees/support-committee/")) %>
+    </li>
+    <li>
+      <%= t(".our_team.systems_details_html",
+            systems_link: link_to(t(".our_team.systems"), "https://www.transformativeworks.org/committees/systems-committee/")) %>
+    </li>
+    <li>
+      <%= t(".our_team.tag_wrangling_details_html",
+            tag_wrangling_link: link_to(t(".our_team.tag_wrangling"), "https://www.transformativeworks.org/committees/tag-wrangling-committee/")) %>
+    </li>
+    <li>
+      <%= t(".our_team.translation_details_html",
+            translation_link: link_to(t(".our_team.translation"), "https://www.transformativeworks.org/committees/translation/")) %>
+    </li>
+    <li>
+      <%= t(".our_team.user_response_details_html",
+            user_response_link: link_to(t(".our_team.user_response"), "https://www.transformativeworks.org/committees/user-response-translation-committee/")) %>
+    </li>
+  </ul>
+
+  <h3 class="heading" id="otw"><%= t(".heading.about_otw") %></h3>
+
+  <p>
+    <%= t(".otw.html",
+          donations_link: link_to(t(".otw.donations"), "https://donate.transformativeworks.org/otwgive"),
+          mission_link: link_to(t(".otw.mission"), "https://www.transformativeworks.org/what_we_believe/"),
+          transformative_fanworks_link: link_to(t(".otw.transformative_fanworks"), "https://www.transformativeworks.org/faq/what-do-you-mean-by-a-transformative-work/")) %>
+  </p>
+
+  <p><%= t(".major_projects.title") %></p>
+
+  <ul>
+    <li>
+      <%= t(".major_projects.fanlore_details_html",
+            fanlore_link: link_to(t(".major_projects.fanlore"), "https://www.transformativeworks.org/our-projects/fanlore/"),
+            visit_fanlore_link: link_to(t(".major_projects.visit_fanlore"), "https://fanlore.org")) %>
+    </li>
+    <li>
+      <%= t(".major_projects.legal_details_html",
+            legal_advocacy_link: link_to(t(".major_projects.legal_advocacy"), "https://transformativeworks.org/projects/legal")) %>
+    </li>
+    <li>
+      <%= t(".major_projects.open_doors_details_html",
+            open_doors_link: link_to(t(".major_projects.open_doors"), "https://www.transformativeworks.org/our-projects/open-doors/"),
+            visit_open_doors_link: link_to(t(".major_projects.visit_open_doors"), "https://opendoors.transformativeworks.org")) %>
+    </li>
+    <li>
+      <%= t(".major_projects.twc_details_html",
+            twc_link: tag.cite(link_to(t(".major_projects.twc"), "https://www.transformativeworks.org/our-projects/twc/")),
+            visit_twc_link: link_to(t(".major_projects.visit_twc"), "https://journal.transformativeworks.org/index.php/twc")) %>
+    </li>
+  </ul>
+
+  <h3 class="heading" id="learn_more"><%= t(".heading.learn_more") %></h3>
+
+  <p>
+    <%= t(".learn_more.html",
+          ao3_faq_link: link_to(t(".learn_more.ao3_faq"), archive_faqs_path),
+          transformative_works_faq_link: link_to(t(".learn_more.transformative_works_faq"), "https://www.transformativeworks.org/faq/"),
+          donate_or_volunteer_link: link_to(t(".learn_more.donate_or_volunteer"), donate_path)) %>
+  </p>
+
+  <p>
+    <%= t(".learn_more.technical_help_html",
+          contact_communications_link: link_to(t(".learn_more.contact_communications"), "https://www.transformativeworks.org/contact_us/?who=Communications"),
+          contact_policy_abuse_link: link_to(t(".learn_more.contact_policy_abuse"), new_abuse_report_path),
+          contact_support_link: link_to(t(".learn_more.contact_support"), new_feedback_report_path)) %>
+  </p>
 </div>
