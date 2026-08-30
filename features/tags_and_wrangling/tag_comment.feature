@@ -154,7 +154,7 @@ I'd like to comment on a tag'
         | Enigel      | wrangulator   | enigel@example.org|
       And a canonical fandom "Doctor Who"
       And the tag wrangler "Enigel" with password "wrangulator" is wrangler of "Doctor Who"
-      And a character exists with name: "John Smith", canonical: true
+      And a canonical character "John Smith"
       And I add the fandom "Doctor Who" to the character "John Smith"
     When I am logged in as "dizmo" with password "wrangulator"
       And I post the comment "Heads up" on the tag "John Smith"
