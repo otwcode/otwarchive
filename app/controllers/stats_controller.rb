@@ -97,15 +97,15 @@ class StatsController < ApplicationController
 
     chart_col = @sort == "date" ? "hits" : @sort
     chart_col_title = chart_col.split(".")[0].titleize == "Comments" ? ts("Comment Threads") : chart_col.split(".")[0].titleize
-    chart_title = if @sort == "date" && @dir == "ASC"
-                    ts("Oldest")
-                  elsif @sort == "date" && @dir == "DESC"
-                    ts("Most Recent")
-                  elsif @dir == "ASC"
-                    ts("Bottom Five By #{chart_col_title}")
-                  else
-                    ts("Top Five By #{chart_col_title}")
-                  end
+    if @sort == "date" && @dir == "ASC"
+      chart_title = ts("Oldest")
+    elsif @sort == "date" && @dir == "DESC"
+      chart_title = ts("Most Recent")
+    elsif @dir == "ASC"
+      chart_title = ts("Bottom Five By #{chart_col_title}")
+    else
+      chart_title = ts("Top Five By #{chart_col_title}")
+    end
     @chart_data.new_column("number", chart_col_title)
 
     # Add Rows and Values
@@ -113,14 +113,13 @@ class StatsController < ApplicationController
 
     # image version of bar chart
     # opts from here: http://code.google.com/apis/chart/image/docs/gallery/bar_charts.html
-    @image_chart = GoogleVisualr::Image::BarChart.new(@chart_data, { isVertical: true }).uri({
-                                                                                               chtt: chart_title,
-                                                                                               chs: "800x350",
-                                                                                               chbh: "a",
-                                                                                               chxt: "x",
-                                                                                               chm: "N,000000,0,-1,11"
-                                                                                             })
-
+    @image_chart = GoogleVisualr::Image::BarChart.new(@chart_data, {isVertical: true}).uri({
+      chtt: chart_title,
+      chs: "800x350",
+      chbh: "a",
+      chxt: "x",
+      chm: "N,000000,0,-1,11"
+    })
     options = {
       colors: ["#993333"],
       title: chart_title,
@@ -129,11 +128,12 @@ class StatsController < ApplicationController
       }
     }
     @chart = GoogleVisualr::Interactive::ColumnChart.new(@chart_data, options)
+
   end
 
   private
 
-  def work_stat_element(work, element)
+  def stat_element(work, element)
     case element.downcase
     when "date"
       work.date
