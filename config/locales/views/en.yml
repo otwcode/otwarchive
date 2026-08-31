@@ -3003,10 +3003,8 @@ en:
       title: Title
   stats:
     index:
-      bookmarks: Bookmarks
       bookmarks_label: 'Bookmarks:'
       comment_threads_label: 'Comment Threads:'
-      date: Date
       fandom_parenthetical: "(%{fandom})"
       fandoms_view: Fandoms View
       flat_view: Flat View
