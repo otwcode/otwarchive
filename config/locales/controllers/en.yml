@@ -366,6 +366,7 @@ en:
   stats:
     index:
       page_title: "%{username} - Stats"
+      all_fandoms: All Fandoms
   subscriptions:
     delete_all:
       error: There were problems deleting your subscriptions.

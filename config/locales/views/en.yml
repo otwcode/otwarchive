@@ -3017,6 +3017,7 @@ en:
       work_bookmarks_label: 'Work Bookmarks:'
       work_subscriptions_label: 'Work Subscriptions:'
       work_count_label: 'Works:'
+      word_count_number: "%{wordcount} words"
       bookmarks: Bookmarks
       bookmarks_label: 'Bookmarks:'
       date: Date

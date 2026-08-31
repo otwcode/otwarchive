@@ -26,10 +26,10 @@
     <% { user_subscriptions: ts("User Subscriptions:"), 
          kudos: ts("Kudos:"), 
          comment_thread_count: ts("Comment Threads:"),
-         work_bookmarks: t(".work_bookmarks_label"), 
-         work_subscriptions: t(".work_subscriptions_label"), 
+         work_bookmarks: t(".work_bookmarks_label"),
+         work_subscriptions: t(".work_subscriptions_label"),
          series_bookmarks: t(".series_bookmarks_label"),
-         series_subscriptions: t(".series_subscriptions_label"), 
+         series_subscriptions: t(".series_subscriptions_label"),
          word_count: ts("Word Count:") }.each do |stat, stat_text| %>
       <% stat == :word_count ? html_class = "words" : html_class = stat.to_s.humanize.downcase %>
       <dt class="<%= html_class %>"><%= stat_text %></dt>
@@ -77,14 +77,14 @@
           <li>
             <dl>
               <dt>
-                <%= link_to work_or_series.title, work_or_series.type_label == "Work" ? work_path(:id => work_or_series.id) : series_path(:id => work_or_series.id) %> 
+                <%= link_to work_or_series.title, work_or_series.type_label == "Work" ? work_path(id: work_or_series.id) : series_path(id: work_or_series.id) %> 
                 <% if work_or_series.type_label == "Series" %><%= t(".series_parenthetical") %><% end %>
                 <% if (params[:view_type] != nil && params[:view_type] != "fandom") %>
                   <span class="fandom">
-                    <%= t(".fandom_parenthetical", fandom: work_or_series.fandoms.map { |f| f.name }.join(", ")) %>
+                    <%= t(".fandom_parenthetical", fandom: work_or_series.fandoms.map(&:name).join(", ")) %>
                   </span>
                 <% end %>
-                <span class="words">(<%= ts("%{wordcount} words", wordcount: number_with_delimiter(work_or_series.word_count)) %>)</span>
+                <span class="words">(<%= t(.work_count_number, wordcount: number_with_delimiter(work_or_series.word_count)) %>)</span>
               </dt>
               <dd>
                 <dl class="stats">

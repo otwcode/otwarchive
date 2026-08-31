@@ -71,7 +71,7 @@ class StatsController < ApplicationController
                         when "type"
                           works_and_series.uniq.group_by(&:type_label)
                         when "flat"
-                          { ts("All Fandoms") => works_and_series.uniq }
+                          { t(".all_fandoms") => works_and_series.uniq }
                         else
                           works_and_series.group_by(&:fandom)
                         end
@@ -93,7 +93,7 @@ class StatsController < ApplicationController
 
     # graph top 5 works
     @chart_data = GoogleVisualr::DataTable.new
-    @chart_data.new_column("string", "Title")
+    @chart_data.new_column('string', 'Title')
 
     chart_col = @sort == "date" ? "hits" : @sort
     chart_col_title = chart_col.split(".")[0].titleize == "Comments" ? ts("Comment Threads") : chart_col.split(".")[0].titleize
@@ -106,7 +106,7 @@ class StatsController < ApplicationController
     else
       chart_title = ts("Top Five By #{chart_col_title}")
     end
-    @chart_data.new_column("number", chart_col_title)
+    @chart_data.new_column('number', chart_col_title)
 
     # Add Rows and Values
     @chart_data.add_rows(works_and_series.uniq[0..4].map { |w| [w.title, stat_element(w, chart_col)] })
@@ -114,11 +114,11 @@ class StatsController < ApplicationController
     # image version of bar chart
     # opts from here: http://code.google.com/apis/chart/image/docs/gallery/bar_charts.html
     @image_chart = GoogleVisualr::Image::BarChart.new(@chart_data, {isVertical: true}).uri({
-      chtt: chart_title,
-      chs: "800x350",
-      chbh: "a",
-      chxt: "x",
-      chm: "N,000000,0,-1,11"
+     chtt: chart_title,
+     chs: "800x350",
+     chbh: "a",
+     chxt: "x",
+     chm: "N,000000,0,-1,11"
     })
     options = {
       colors: ["#993333"],
