@@ -59,7 +59,7 @@ class StatsController < ApplicationController
     works = work_query.all.to_a
     series = series_query.all.to_a
 
-    works_and_series = works.concat(series).sort_by { |w| @dir == "ASC" ? (stat_element(w, @sort) || 0) : (0 - (stat_element(w, @sort) || 0).to_i) }
+    works_and_series = (works + series).sort_by { |w| @dir == "ASC" ? (stat_element(w, @sort) || 0) : (0 - (stat_element(w, @sort) || 0).to_i) }
 
     # on the off-chance a new user decides to look at their stats and have no works
     render "no_stats" and return if works_and_series.blank?
