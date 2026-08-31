@@ -77,14 +77,14 @@
           <li>
             <dl>
               <dt>
-                <%= link_to work_or_series.title, work_or_series.type_label == "Work" ? work_path(id: work_or_series.id) : series_path(id: work_or_series.id) %> 
+                <%= link_to work_or_series.title, work_or_series.type_label == "Work" ? work_path(id: work_or_series.id) : series_path(id: work_or_series.id) %>
                 <% if work_or_series.type_label == "Series" %><%= t(".series_parenthetical") %><% end %>
                 <% if (params[:view_type] != nil && params[:view_type] != "fandom") %>
                   <span class="fandom">
                     <%= t(".fandom_parenthetical", fandom: work_or_series.fandoms.map(&:name).join(", ")) %>
                   </span>
                 <% end %>
-                <span class="words">(<%= t(.work_count_number, wordcount: number_with_delimiter(work_or_series.word_count)) %>)</span>
+                <span class="words">(<%= t(".word_count_number", wordcount: number_with_delimiter(work_or_series.word_count)) %>)</span>
               </dt>
               <dd>
                 <dl class="stats">
@@ -105,8 +105,8 @@
                     <dt class="comments"><%= t(".comment_threads_label") %></dt>
                     <dd class="comments"><%= number_with_delimiter(work_or_series.comment_thread_count) %></dd>
                   <% end %>
-                  <dt class="bookmarks"><%= ts("Bookmarks:") %></dt>
-                  <dd class="bookmarks"><%= number_with_delimiter(work_or_series.bookmarks.count) %></dd>
+                  <dt class="bookmark"><%= ts("Bookmarks:") %></dt>
+                  <dd class="bookmark"><%= number_with_delimiter(work_or_series.bookmarks.count) %></dd>
                 </dl>
               </dd>
             </dl>
