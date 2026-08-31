@@ -2532,6 +2532,8 @@ en:
       sent_at: Sent at
       sent_to: Sent to
       user_id_deleted: User %{user_id} (Deleted)
+    manage:
+      page_title: Manage Invitations
     user_invitations:
       table:
         actions:

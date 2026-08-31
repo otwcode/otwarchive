@@ -48,6 +48,14 @@ describe InvitationsController do
 
         expect(response).to render_template("manage")
       end
+
+      it "assigns the page subtitle" do
+        admin.update!(roles: ["policy_and_abuse"])
+        fake_login_admin(admin)
+        get :manage, params: { user_id: user.login }
+
+        expect(assigns(:page_subtitle)).to eq("Manage Invitations")
+      end
     end
   end
 
@@ -224,7 +232,6 @@ describe InvitationsController do
       invitation = create(:invitation)
       admin.update!(roles: ["policy_and_abuse"])
       fake_login_admin(admin)
- 
       delete :destroy, params: { id: invitation.id }
       it_redirects_to_with_notice(admin_invitations_path, "Invitation successfully destroyed")
     end
