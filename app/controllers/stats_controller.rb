@@ -59,7 +59,7 @@ class StatsController < ApplicationController
     works = work_query.all.to_a
     series = series_query.all.to_a
 
-    works_and_series = works.concat(series).sort_by { |w| @dir == "ASC" ? (work_stat_element(w, @sort) || 0) : (0 - (work_stat_element(w, @sort) || 0).to_i) }
+    works_and_series = works.concat(series).sort_by { |w| @dir == "ASC" ? (stat_element(w, @sort) || 0) : (0 - (stat_element(w, @sort) || 0).to_i) }
 
     # on the off-chance a new user decides to look at their stats and have no works
     render "no_stats" and return if works_and_series.blank?
@@ -109,7 +109,7 @@ class StatsController < ApplicationController
     @chart_data.new_column("number", chart_col_title)
 
     # Add Rows and Values
-    @chart_data.add_rows(works_and_series.uniq[0..4].map { |w| [w.title, work_stat_element(w, chart_col)] })
+    @chart_data.add_rows(works_and_series.uniq[0..4].map { |w| [w.title, stat_element(w, chart_col)] })
 
     # image version of bar chart
     # opts from here: http://code.google.com/apis/chart/image/docs/gallery/bar_charts.html
@@ -156,6 +156,6 @@ class StatsController < ApplicationController
   end
 
   def sum_field(items, field)
-    items.sum { |i| work_stat_element(i, field) || 0 }
+    items.sum { |i| stat_element(i, field) || 0 }
   end
 end

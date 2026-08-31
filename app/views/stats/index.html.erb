@@ -26,10 +26,10 @@
     <% { user_subscriptions: ts("User Subscriptions:"), 
          kudos: ts("Kudos:"), 
          comment_thread_count: ts("Comment Threads:"),
-         work_bookmarks: ts("Work Bookmarks:"), 
-         work_subscriptions: ts("Work Subscriptions:"), 
-         series_bookmarks: ts("Series Bookmarks:"),
-         series_subscriptions: ts("Series Subscriptions:"), 
+         work_bookmarks: t(".work_bookmarks_label"), 
+         work_subscriptions: t(".work_subscriptions_label"), 
+         series_bookmarks: t(".series_bookmarks_label"),
+         series_subscriptions: t(".series_subscriptions_label"), 
          word_count: ts("Word Count:") }.each do |stat, stat_text| %>
       <% stat == :word_count ? html_class = "words" : html_class = stat.to_s.humanize.downcase %>
       <dt class="<%= html_class %>"><%= stat_text %></dt>
@@ -59,9 +59,9 @@
   </ul>
 
   <ul class="view actions" role="menu">
-    <li><%= span_if_current ts("Fandoms View"), current_path_with(view_type: nil), params[:view_type].nil? %></li>
-    <li><%= span_if_current ts("Flat View"), current_path_with(view_type: "flat"), params[:view_type] == "flat" %></li>
-    <li><%= span_if_current ts("Type View"), current_path_with(view_type: "type"), params[:view_type] == "type" %></li>
+    <li><%= span_if_current t(".fandoms_view"), current_path_with(view_type: nil), params[:view_type].nil? %></li>
+    <li><%= span_if_current t(".flat_view"), current_path_with(view_type: "flat"), params[:view_type] == "flat" %></li>
+    <li><%= span_if_current t(".types_view"), current_path_with(view_type: "type"), params[:view_type] == "type" %></li>
   </ul>
 </div>
 
@@ -78,10 +78,10 @@
             <dl>
               <dt>
                 <%= link_to work_or_series.title, work_or_series.type_label == "Work" ? work_path(:id => work_or_series.id) : series_path(:id => work_or_series.id) %> 
-                <% if work_or_series.type_label == "Series" %><%= ts("(Series)") %><% end %>
+                <% if work_or_series.type_label == "Series" %><%= t(".series_parenthetical") %><% end %>
                 <% if (params[:view_type] != nil && params[:view_type] != "fandom") %>
                   <span class="fandom">
-                    <%= ts("(%{fandom})", fandom: work_or_series.fandoms.map { |f| f.name }.join(", ")) %>
+                    <%= t(".fandom_parenthetical", fandom: work_or_series.fandoms.map { |f| f.name }.join(", ")) %>
                   </span>
                 <% end %>
                 <span class="words">(<%= ts("%{wordcount} words", wordcount: number_with_delimiter(work_or_series.word_count)) %>)</span>
@@ -89,20 +89,20 @@
               <dd>
                 <dl class="stats">
                   <% if work_or_series.type_label == "Series" %>
-                    <dt class="works"><%= ts("Works:") %></dt>
-                    <dd class="works"><%= number_with_delimiter(work_or_series.works.posted.count) %></dd>
+                    <dt class="work"><%= t(".work_count_label") %></dt>
+                    <dd class="work"><%= number_with_delimiter(work_or_series.works.posted.count) %></dd>
                   <% end %>
                   <% if (work_or_series_subscriber_count = Subscription.where(:subscribable_id => work_or_series.id, :subscribable_type => work_or_series.type_label).count) > 0 %>
-                    <dt class="subscriptions"><%= ts("Subscriptions:") %></dt>
+                    <dt class="subscriptions"><%= t(".subscriptions_label") %></dt>
                     <dd class="subscriptions"><%= number_with_delimiter(work_or_series_subscriber_count) %></dd>
                   <% end %>
                   <% if work_or_series.type_label == "Work" %>
-                    <dt class="hits"><%= ts("Hits:") %></dt>
+                    <dt class="hits"><%= t(".hits_label") %></dt>
                     <dd class="hits"><%= number_with_delimiter(work_or_series.hits) %></dd>
-                    <% # dt ts("Downloads:") /dt dd work.downloads /dd %>
-                    <dt class="kudos"><%= ts("Kudos:") %></dt>
+                    <%# dt ts("Downloads:") /dt dd work.downloads /dd %>
+                    <dt class="kudos"><%= t(".kudos_label") %></dt>
                     <dd class="kudos"><%= number_with_delimiter(work_or_series.kudos.count) %></dd>
-                    <dt class="comments"><%= ts("Comment Threads:") %></dt>
+                    <dt class="comments"><%= t(".comment_threads_label") %></dt>
                     <dd class="comments"><%= number_with_delimiter(work_or_series.comment_thread_count) %></dd>
                   <% end %>
                   <dt class="bookmarks"><%= ts("Bookmarks:") %></dt>

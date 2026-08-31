@@ -3003,7 +3003,23 @@ en:
       title: Title
   stats:
     index:
+      comment_threads_label: 'Comment Threads:'
+      fandom_parenthetical: "(%{fandom})"
+      fandoms_view: Fandoms View
       flat_view: Flat View
+      hits_label: 'Hits:'
+      kudos_label: 'Kudos:'
+      series_bookmarks_label: 'Series Bookmarks:'
+      series_subscriptions_label: 'Series Subscriptions:'
+      series_parenthetical: '(Series)'
+      subscriptions_label: 'Subscriptions:'
+      types_view: Types View
+      work_bookmarks_label: 'Work Bookmarks:'
+      work_subscriptions_label: 'Work Subscriptions:'
+      work_count_label: 'Works:'
+      bookmarks: Bookmarks
+      bookmarks_label: 'Bookmarks:'
+      date: Date
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
