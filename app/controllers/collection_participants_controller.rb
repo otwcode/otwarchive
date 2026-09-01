@@ -54,14 +54,6 @@ class CollectionParticipantsController < ApplicationController
       @participant.save
       flash[:notice] = t('applied_to_join_collection', default: "You have applied to join %{collection}.", collection: @collection.title)
     else
-      participants.each do |participant|
-        if participant.is_invited?
-          participant.approve_membership!
-          flash[:notice] = t('collection_participants.accepted_invite', default: "You are now a member of %{collection}.", collection: @collection.title)
-          redirect_back_or_to root_path and return
-        end
-      end
-
       flash[:notice] = t('collection_participants.no_invitation', default: "You have already joined (or applied to) this collection.")
     end
 
