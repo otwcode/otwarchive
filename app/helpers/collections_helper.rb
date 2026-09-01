@@ -41,7 +41,8 @@ module CollectionsHelper
   end
   
   def show_collections_data(collections)
-    collections.collect { |coll| link_to coll.title, collection_path(coll) }.join(ArchiveConfig.DELIMITER_FOR_OUTPUT).html_safe
+    collections.collect { |coll| link_to coll.title, collection_path(coll) }
+      .to_sentence.html_safe
   end
 
   def challenge_assignment_byline(assignment)

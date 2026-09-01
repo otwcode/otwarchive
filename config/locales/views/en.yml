@@ -3513,6 +3513,11 @@ en:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    mystery_blurb:
+      mystery_work: Mystery Work
+      not_revealed: This work is part of a collection that has not been revealed.
+      part_of_html: Part of %{collection}
+      summary: Summary
     navigate:
       page_heading_html: Chapter Index for %{work_link} by %{creators}
     new_import:
@@ -3635,6 +3640,13 @@ en:
         unrevealed: A translation of a work in an unrevealed collection
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    work_unrevealed_notice:
+      collections_faq: Collections FAQ
+      collections_faq_options: What does it mean that a collection is Open or Closed, Moderated or Unmoderated, Unrevealed, or Anonymous?
+      details_html: Please visit %{collection} for details.
+      learn_more_html: To learn more about unrevealed collections, check out %{collection_options_faq} in our %{collections_faq}.
+      not_revealed: This work is part of a collection that has not been revealed.
+      scheduled_reveal_html: This work is part of an ongoing challenge and is scheduled to be revealed on %{date}.
   wrangling_guidelines:
     show:
       edit: Edit
