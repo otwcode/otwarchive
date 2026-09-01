@@ -104,6 +104,15 @@ describe CollectionQuery do
       expect(query.search_results).not_to include signup_past_open_collection
     end
 
+    it "includes collections with no closing date when signup_open is true" do
+      no_close_pm = create(:prompt_meme, signup_open: true, signups_open_at: Time.current - 1.day)
+      no_close_collection = create(:collection, challenge: no_close_pm, challenge_type: "PromptMeme")
+      run_all_indexing_jobs
+
+      query = CollectionQuery.new(signup_open: true)
+      expect(query.search_results).to include no_close_collection
+    end
+
     it "filters collections by multifandom filter" do
       query = CollectionQuery.new(multifandom: true)
       expect(query.search_results).not_to include prompt_meme_collection
@@ -174,11 +183,35 @@ describe CollectionQuery do
         %w[created_at title.keyword signups_close_at].each do |column|
           context "when the sort column is set to #{column}" do
             it "returns #{sort_direction}" do
+              expected_column_sort_options = { order: sort_direction }
+              expected_column_sort_options[:missing] = "_first" if column == "signups_close_at" && sort_direction == "desc"
+
               expect(CollectionQuery.new(sort_column: column, sort_direction: sort_direction).sort)
-                .to eq([{ column => { order: sort_direction } }, { "id" => { order: sort_direction } }])
+                .to eq([{ column => expected_column_sort_options }, { "id" => { order: sort_direction } }])
             end
           end
         end
+      end
+    end
+
+    context "when sorting by signups_close_at", collection_search: true do
+      let!(:dated_pm) { create(:prompt_meme, signup_open: true, signups_open_at: Time.current - 1.day, signups_close_at: Time.current + 1.week) }
+      let!(:dated_collection) { create(:collection, title: "dated", challenge: dated_pm, challenge_type: "PromptMeme") }
+      let!(:no_close_pm) { create(:prompt_meme, signup_open: true, signups_open_at: Time.current - 1.day) }
+      let!(:no_close_collection) { create(:collection, title: "no close", challenge: no_close_pm, challenge_type: "PromptMeme") }
+
+      before do
+        run_all_indexing_jobs
+      end
+
+      it "sorts collections with no closing date last when ascending" do
+        query = CollectionQuery.new(signup_open: true, sort_column: "signups_close_at", sort_direction: "asc")
+        expect(query.search_results.map(&:title)).to eq ["dated", "no close"]
+      end
+
+      it "sorts collections with no closing date first when descending" do
+        query = CollectionQuery.new(signup_open: true, sort_column: "signups_close_at", sort_direction: "desc")
+        expect(query.search_results.map(&:title)).to eq ["no close", "dated"]
       end
     end
   end
