@@ -222,11 +222,11 @@ class Prompt < ApplicationRecord
   end
 
   def fulfilled_claims
-    self.request_claims.fulfilled
+    self.request_claims.fulfilled.includes(creation: :approved_unrevealed_collections)
   end
 
   def fulfilled_claims_visible_to_all
-    self.request_claims.fulfilled.work_visible_to_all
+    fulfilled_claims.work_visible_to_all
   end
   # Computes the "full" tag set (tag_set + optional_tag_set), and stores the
   # result as an instance variable for speed. This is used by the matching

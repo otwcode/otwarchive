@@ -9,6 +9,7 @@ class TroubleshootingController < ApplicationController
 
   # Display options for troubleshooting.
   def show
+    @item = Work.with_includes_for_blurb.find(@item.id) if @item.is_a?(Work)
     @item_type = @item.class.base_class.to_s.underscore
     @page_subtitle = t(".page_title.#{@item_type}")
   end

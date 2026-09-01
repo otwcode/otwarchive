@@ -28,7 +28,7 @@ class BookmarksController < ApplicationController
   # get the parent
   def load_bookmarkable
     if params[:work_id]
-      @bookmarkable = Work.find(params[:work_id])
+      @bookmarkable = Work.for_blurb.find(params[:work_id])
     elsif params[:external_work_id]
       @bookmarkable = ExternalWork.find(params[:external_work_id])
     elsif params[:series_id]
@@ -37,7 +37,7 @@ class BookmarksController < ApplicationController
   end
 
   def load_bookmark
-    @bookmark = Bookmark.find(params[:id])
+    @bookmark = Bookmark.for_blurb.find(params[:id])
     @check_ownership_of = @bookmark
     @check_visibility_of = @bookmark
   end
@@ -63,7 +63,7 @@ class BookmarksController < ApplicationController
 
   def index
     if @bookmarkable
-      @bookmarks = @bookmarkable.bookmarks.not_private.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarkable.bookmarks.not_private.for_blurb.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       @bookmarks = @bookmarks.where(hidden_by_admin: false) unless logged_in_as_admin?
     else
       base_options = {
