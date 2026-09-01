@@ -99,27 +99,27 @@ class Collection < ApplicationRecord
   validates :name, uniqueness: { message: :taken }
   validates :name,
             length: { minimum: ArchiveConfig.TITLE_MIN,
-                      too_short: :too_short, min: ArchiveConfig.TITLE_MIN }
+                      too_short: :too_short, count: ArchiveConfig.TITLE_MIN }
   validates :name,
             length: { maximum: ArchiveConfig.TITLE_MAX,
-                      too_long: :too_long, max: ArchiveConfig.TITLE_MAX }
+                      too_long: :too_long, count: ArchiveConfig.TITLE_MAX }
   validates :name,
             format: { message: :characters_used,
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/ }
   validates :icon_alt_text, length: { allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
-                                      too_long: :too_long, max: ArchiveConfig.ICON_ALT_MAX }
+                                      too_long: :too_long, count: ArchiveConfig.ICON_ALT_MAX }
   validates :icon_comment_text, length: { allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
-                                          too_long: :too_long, max: ArchiveConfig.ICON_COMMENT_MAX }
+                                          too_long: :too_long, count: ArchiveConfig.ICON_COMMENT_MAX }
 
   validates :email, email_format: { allow_blank: true }
 
   validates :title, presence: { message: :no_title_entered }
   validates :title,
             length: { minimum: ArchiveConfig.TITLE_MIN,
-                      too_short: :too_short, min: ArchiveConfig.TITLE_MIN }
+                      too_short: :too_short, count: ArchiveConfig.TITLE_MIN }
   validates :title,
             length: { maximum: ArchiveConfig.TITLE_MAX,
-                      too_long: :too_long, max: ArchiveConfig.TITLE_MAX }
+                      too_long: :too_long, count: ArchiveConfig.TITLE_MAX }
   validate :no_reserved_strings
   def no_reserved_strings
     errors.add(:title, :comma_used) if
@@ -134,14 +134,14 @@ class Collection < ApplicationRecord
   validates :description,
             length: { allow_blank: true,
                       maximum: ArchiveConfig.SUMMARY_MAX,
-                      too_long: :too_long, max: ArchiveConfig.SUMMARY_MAX }
+                      too_long: :too_long, count: ArchiveConfig.SUMMARY_MAX }
 
   validates :header_image_url, url_format: { allow_blank: true, message: :valid_url }
   validates :header_image_url, format: { allow_blank: true, with: /\A\S+\.(png|gif|jpe?g)\z/, message: :file_format }
   
   validates :tags_after_saving,
             length: { maximum: ArchiveConfig.COLLECTION_TAGS_MAX,
-                      message: :too_many_tags, max: ArchiveConfig.COLLECTION_TAGS_MAX }
+                      message: :too_many_tags, count: ArchiveConfig.COLLECTION_TAGS_MAX }
 
   scope :top_level, -> { where(parent_id: nil) }
   scope :closed, -> { joins(:collection_preference).where(collection_preferences: { closed: true }) }
