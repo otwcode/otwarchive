@@ -1483,7 +1483,7 @@ en:
       tag_options: Tag Options
       tag_set: tag set
       tags: tags
-      tutorial_prompt_meme: 'Tutorial: Running a Prompt Meme on AO3'
+      tutorial_prompt_meme: 'Tutorial: Running a Prompt Meme on %{app_name}'
       use_only: Tag sets should only be used where you want users to have a choice. If you're running a Prompt Meme for a specific relationship or character, set that kind of tag to 0 tags required/allowed instead.
     rte:
       description_html: 'The exact behavior of the Rich Text Editor (%{rte_abbreviation}) depends on your device, browser, and operating system as well as the source you''re pasting from. However, starting with a well-formatted document will help you get the most out of the %{rte_abbreviation_no_title}. Here are some general tips to ensure that as much of your formatting as possible will be retained:'
