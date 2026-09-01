@@ -229,6 +229,8 @@ Feature: Delete pseud.
       And I am logged in as "giftee1"
     When I go to giftee1's gifts page
     Then I should see "GiftStory1 by gifter for me2 (giftee1)"
-    When "giftee1" deletes the pseud "me2"
+    # Delay before deleting to make sure the cache is expired
+    When it is currently 1 second from now
+      And "giftee1" deletes the pseud "me2"
       And I go to giftee1's gifts page
     Then I should see "GiftStory1 by gifter for giftee1"

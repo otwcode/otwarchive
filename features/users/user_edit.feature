@@ -251,7 +251,7 @@ Feature:
       And I view the 3rd chapter
     Then I should see "Chapter by after"
 
-  Scenario: Changing only username updates gift blurbs
+  Scenario: Changing username to match an existing non-default pseud updates gift blurbs
     Given "giftee1" has the pseud "newusername"
       And the user "giftee1" allows gifts
       And I am logged in as "gifter"
@@ -262,7 +262,9 @@ Feature:
       And I am logged in as "giftee1" with password "password"
     When I go to giftee1's gifts page
     Then I should see "GiftStory1 by gifter for giftee1"
-    When I change my username to "newusername"
+    # Delay before renaming to make sure the cache is expired
+    When it is currently 1 second from now
+      And I change my username to "newusername"
     Then I should see "Hi, newusername"
     When I go to newusername's gifts page
     Then I should see "GiftStory1 by gifter for giftee1 (newusername)"
@@ -281,7 +283,9 @@ Feature:
       And I am logged in as "giftee1" with password "password"
     When I go to giftee1's gifts page
     Then I should see "GiftStory1 by gifter for giftee1"
-    When I change my username to "newusername"
+    # Delay before renaming to make sure the cache is expired
+    When it is currently 1 second from now
+      And I change my username to "newusername"
     Then I should see "Hi, newusername"
     When I go to newusername's gifts page
     Then I should see "GiftStory1 by gifter for newusername"

@@ -268,6 +268,8 @@ Scenario: Edit pseud updates gift blurbs
     And I follow "Manage My Pseuds"
     And I follow "Edit Me2"
     And I fill in "Name" with "Me3"
+    # Delay before renaming to make sure the cache is expired
+    And it is currently 1 second from now
     And I press "Update"
   Then I should see "Pseud was successfully updated."
   When I go to giftee1's gifts page
