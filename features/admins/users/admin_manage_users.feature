@@ -137,3 +137,16 @@ Feature: Admin Actions to manage users
       And I should see "1 Comment" within "#comments-summary"
       And I should see "Comment on the work Creepy Gift" within "#comments-summary"
       And I should see "<p>Neener</p>" within "#comments-summary"
+
+  Scenario: An admin only sees the Rename button if they can rename users
+    Given the user "new_user" exists and is activated
+
+    # Admins who can rename users see the Rename button
+    When I am logged in as a "policy_and_abuse" admin
+      And I go to the user administration page for "new_user"
+    Then I should see a link "Rename"
+
+    # Admins who can't rename users don't see the Rename button
+    When I am logged in as a "support" admin
+      And I go to the user administration page for "new_user"
+    Then I should not see a link "Rename"
