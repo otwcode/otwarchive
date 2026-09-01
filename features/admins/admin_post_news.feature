@@ -334,3 +334,18 @@ Scenario: Preview of an edit to an admin post does not immediately create tags
     Then "never seen before" should not be an option within "Tag"
       And "original1" should be an option within "Tag"
       And "original2" should be an option within "Tag"
+
+  Scenario: Comment emails are sent on an admin post posted from preview
+    Given I am logged in as a "communications" admin
+      And I start to make an admin post
+      And I press "Preview"
+      And I press "Post"
+      And all emails have been delivered
+    When I am logged in as "happyuser"
+      And I go to the admin-posts page
+      And I follow "Default Admin Post"
+      And I fill in "Comment" with "I love this!"
+      And I press "Comment"
+    Then 0 emails should be delivered to "testadmin-communications@example.org"
+      But 1 email should be delivered to "admin@example.org"
+      And the email should contain "I love this!"
