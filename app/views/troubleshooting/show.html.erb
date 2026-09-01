@@ -5,7 +5,7 @@
   <p><%= link_to @item.name, tag_path(@item) %> (<%= @item.type %>)</p>
 <% elsif @item.is_a?(Work) %>
   <ol class="work index group">
-    <%= render "works/work_blurb", work: @item %>
+    <%= render WorkBlurbPresenter.new(@item) %>
   </ol>
 <% end %>
 

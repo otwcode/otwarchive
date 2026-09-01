@@ -25,9 +25,7 @@
 <!--main content-->
 <h3 class="landmark heading"><%= ts("Listing Works") %></h3>
 <ol class="work index group">
-  <% for work in @works %>
-    <% if work %><%= render 'work_blurb', :work => work %><% end %>
-  <% end %>
+  <%= render WorkBlurbPresenter.new(@works, force_reveal: User.current_user.is_a?(Admin)) %>
 </ol>
   
 <!--/content-->
