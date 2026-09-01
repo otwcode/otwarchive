@@ -250,6 +250,60 @@ Feature: Search Tags
       And the 3rd tag result should contain "created third"
       And the 4th tag result should contain "created fourth"
 
+  Scenario: Search and sort by Date Canonized in descending and ascending order
+    Given a freeform exists with name: "canonized first", canonical: true
+      And the tag "canonized first" was canonized on "2008-01-01 20:00:00 UTC"
+      And a freeform exists with name: "canonized second", canonical: true
+      And the tag "canonized second" was canonized on "2009-01-01 20:00:00 UTC"
+      And a freeform exists with name: "canonized third", canonical: true
+      And the tag "canonized third" was canonized on "2010-01-01 20:00:00 UTC"
+      And a freeform exists with name: "never canonized", canonical: false
+      And all indexing jobs have been run
+    When I am on the search tags page
+      And I fill in "Tag name" with "canonized"
+      And I select "Date Canonized" from "Sort by"
+      And I select "Descending" from "Sort direction"
+      And I press "Search Tags"
+    Then I should see "4 Found"
+      And the 1st tag result should contain "canonized third"
+      And the 2nd tag result should contain "canonized second"
+      And the 3rd tag result should contain "canonized first"
+      And the 4th tag result should contain "never canonized"
+    When I select "Ascending" from "Sort direction"
+      And I press "Search Tags"
+    Then I should see "4 Found"
+      And the 1st tag result should contain "canonized first"
+      And the 2nd tag result should contain "canonized second"
+      And the 3rd tag result should contain "canonized third"
+      And the 4th tag result should contain "never canonized"
+
+  Scenario: Search and sort by Date Decanonized in descending and ascending order
+    Given a freeform exists with name: "decanonized first", canonical: false
+      And the tag "decanonized first" was decanonized on "2008-01-01 20:00:00 UTC"
+      And a freeform exists with name: "decanonized second", canonical: false
+      And the tag "decanonized second" was decanonized on "2009-01-01 20:00:00 UTC"
+      And a freeform exists with name: "decanonized third", canonical: false
+      And the tag "decanonized third" was decanonized on "2010-01-01 20:00:00 UTC"
+      And a freeform exists with name: "never decanonized", canonical: true
+      And all indexing jobs have been run
+    When I am on the search tags page
+      And I fill in "Tag name" with "decanonized"
+      And I select "Date Decanonized" from "Sort by"
+      And I select "Descending" from "Sort direction"
+      And I press "Search Tags"
+    Then I should see "4 Found"
+      And the 1st tag result should contain "decanonized third"
+      And the 2nd tag result should contain "decanonized second"
+      And the 3rd tag result should contain "decanonized first"
+      And the 4th tag result should contain "never decanonized"
+    When I select "Ascending" from "Sort direction"
+      And I press "Search Tags"
+    Then I should see "4 Found"
+      And the 1st tag result should contain "decanonized first"
+      And the 2nd tag result should contain "decanonized second"
+      And the 3rd tag result should contain "decanonized third"
+      And the 4th tag result should contain "never decanonized"
+
   Scenario: Search and sort by Uses in descending and ascending order
     Given a set of tags for tag sort by use exists
     When I am on the search tags page
