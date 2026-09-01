@@ -425,10 +425,6 @@ class WorksController < ApplicationController
     @preview_mode = true
   end
 
-  def preview_tags
-    @preview_mode = true
-  end
-
   def confirm_delete
   end
 

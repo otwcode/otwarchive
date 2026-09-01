@@ -25,15 +25,4 @@ describe WorksController do
       it_behaves_like "can update work tags and language"
     end
   end
-
-  describe "GET #preview_tags" do
-    let(:work) { create(:work) }
-
-    it "renders preview tags" do
-      fake_login_known_user(work.users.first)
-
-      get :preview_tags, params: { id: work }
-      expect(response).to render_template "preview_tags"
-    end
-  end
 end

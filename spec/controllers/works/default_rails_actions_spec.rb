@@ -1076,9 +1076,9 @@ describe WorksController, work_search: true do
         fake_login_known_user(work.users.first)
       end
 
-      it "sets flash message" do
+      it "sets flash message and redirects" do
         delete :destroy, params: { id: work }
-        expect(flash[:error]).to eq("We couldn't delete that right now, sorry! Please try again later.")
+        it_redirects_to_with_error(user_works_path(controller.current_user), "We couldn't delete that right now, sorry! Please try again later.")
       end
     end
   end
