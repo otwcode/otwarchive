@@ -1,6 +1,6 @@
 class AdminPostTag < ApplicationRecord
   belongs_to :language
-  has_many :admin_post_taggings
+  has_many :admin_post_taggings, dependent: :destroy
   has_many :admin_posts, through: :admin_post_taggings
 
   validates_presence_of :name
