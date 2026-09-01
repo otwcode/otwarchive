@@ -22,28 +22,75 @@ describe Comment do
   end
 
   describe "validations" do
-    context "with a forbidden guest name" do
+    describe "guest name" do
+      shared_examples "prevents commenting with a forbidden name" do
+        it { is_expected.not_to allow_values(forbidden_name).for(:name) }
+
+        it "does not prevent saving when the name is unchanged" do
+          subject.name = forbidden_name
+          subject.save!(validate: false)
+          expect(subject.save).to be_truthy
+        end
+
+        it "does not prevent deletion" do
+          subject.name = forbidden_name
+          subject.save!(validate: false)
+          subject.destroy
+          expect { subject.reload }
+            .to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it "allows changing to an allowed name" do
+          subject.name = forbidden_name
+          subject.save!(validate: false)
+          subject.name = acceptable_name
+          expect(subject.save).to be_truthy
+        end
+      end
+
       subject { build(:comment, email: Faker::Internet.email) }
-      let(:forbidden_name) { Faker::Lorem.characters(number: 8) }
+      let(:acceptable_name) { Faker::Lorem.characters(number: 8) }
 
-      before do
-        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_name])
+      context "is forbidden by config" do
+        let(:forbidden_name) { Faker::Lorem.characters(number: 8) }
+
+        before do
+          allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_name])
+        end
+
+        it_behaves_like "prevents commenting with a forbidden name"
+
+        it { is_expected.not_to allow_values(forbidden_name.swapcase).for(:name) }
       end
 
-      it { is_expected.not_to allow_values(forbidden_name, forbidden_name.swapcase).for(:name) }
-
-      it "does not prevent saving when the name is unchanged" do
-        subject.name = forbidden_name
-        subject.save!(validate: false)
-        expect(subject.save).to be_truthy
+      context "impersonating an official account" do
+        let(:forbidden_name) { create(:official_user).login }
+        it_behaves_like "prevents commenting with a forbidden name"
       end
 
-      it "does not prevent deletion" do
-        subject.name = forbidden_name
-        subject.save!(validate: false)
-        subject.destroy
-        expect { subject.reload }
-          .to raise_error(ActiveRecord::RecordNotFound)
+      context "impersonating a protected account" do
+        let(:forbidden_name) { create(:protected_user).login }
+        it_behaves_like "prevents commenting with a forbidden name"
+      end
+
+      context "impersonating the orphan_account" do
+        let(:forbidden_name) { create(:orphan_user).login }
+
+        context "when orphaning is enabled" do
+          before do
+            allow(ArchiveConfig).to receive(:ORPHANING_ALLOWED).and_return(true)
+          end
+
+          it_behaves_like "prevents commenting with a forbidden name"
+        end
+
+        context "when orphaning is disabled" do
+          before do
+            allow(ArchiveConfig).to receive(:ORPHANING_ALLOWED).and_return(false)
+          end
+
+          it { is_expected.to allow_values(forbidden_name).for(:name) }
+        end
       end
     end
 
