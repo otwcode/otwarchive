@@ -3,25 +3,16 @@ class DownloadsController < ApplicationController
   before_action :load_work, only: :show
   before_action :check_download_posted_status, only: :show
   before_action :check_download_visibility, only: :show
-  around_action :remove_downloads, only: :show
-
   def show
     respond_to :html, :pdf, :mobi, :epub, :azw3
-    @download = Download.new(@work, mime_type: request.format)
-    @download.generate
-
-    # Make sure we were able to generate the download.
-    unless @download.exists?
-      flash[:error] = ts("We were not able to render this work. Please try again in a little while or try another format.")
-      redirect_to work_path(@work)
-      return
-    end
-
-    # Send file synchronously so we don't delete it before we have finished
-    # sending it
-    File.open(@download.file_path, 'r') do |f|
-      send_data f.read, filename: "#{@download.file_name}.#{@download.file_type}", type: @download.mime_type
-    end
+    download = Download.new(@work, mime_type: request.format)
+    generated_download = GeneratedDownload.create!(
+      kind: "work",
+      arguments: { work_id: @work.id, format: download.file_type },
+      filename: "#{download.file_name}.#{download.file_type}"
+    )
+    GeneratedDownloadJob.perform_later(generated_download)
+    redirect_to generated_download_path(token: generated_download.token), status: :see_other
   end
 
 protected
@@ -40,14 +31,6 @@ protected
     end
 
     @work = Work.find(params[:id])
-  end
-
-  # We're currently just writing everything to tmp and feeding them through
-  # nginx so we don't want to keep the files around.
-  def remove_downloads
-    yield
-  ensure
-    @download.remove
   end
 
   # We can't use check_visibility because this controller doesn't have access to
