@@ -65,3 +65,25 @@ Feature: Kudos Pagination
     When I follow "Next"
     Then I should see "7 - 9 of 9 Users Who Left Kudos on Popular (9)"
       And I should see "fan3, fan2, and fan1 left kudos on this work!"
+
+  @javascript
+  Scenario: Multiple pages of kudos on an admin post
+    Given an admin post "Popular Update (4)" with 4 kudos
+    When I go to the "Popular Update (4)" admin post page
+    Then I should see "fan4, fan3, fan2, and 1 more user left kudos on this post!"
+    When I follow "1 more user"
+    Then I should see "fan4, fan3, fan2, and fan1 left kudos on this post!"
+
+  Scenario: Three pages of kudos without javascript on an admin post
+    Given an admin post "Popular Update (9)" with 9 kudos
+    When I go to the "Popular Update (9)" admin post page
+    Then I should see "fan9, fan8, fan7, and 6 more users left kudos on this post!"
+    When I follow "6 more users"
+    Then I should see "1 - 3 of 9 Users Who Left Kudos on Popular Update (9)"
+      And I should see "fan9, fan8, and fan7 left kudos on this post!"
+    When I follow "Next"
+    Then I should see "4 - 6 of 9 Users Who Left Kudos on Popular Update (9)"
+      And I should see "fan6, fan5, and fan4 left kudos on this post!"
+    When I follow "Next"
+    Then I should see "7 - 9 of 9 Users Who Left Kudos on Popular Update (9)"
+      And I should see "fan3, fan2, and fan1 left kudos on this post!"
