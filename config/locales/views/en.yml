@@ -701,7 +701,10 @@ en:
         works: Works
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
     search_form:
+      bookmark_search_bookmarker_tag_help_title: Bookmark search bookmarker's tags help
       word_count: Word count
+    search_results:
+      bookmark_search_results_help_title: Bookmark search results help
   challenge:
     gift_exchange:
       challenge_signups:
@@ -1215,6 +1218,13 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    bookmark_search_bookmarker_tag:
+      description: 'The "Bookmarker''s tags" field searches all tags added to a bookmark. This does not include tags on the bookmarked series or work itself. Tags can be any of the following: Rating, Warning, Category, Fandom, Character, Relationship, Additional Tags. The field will suggest canonical tags as you enter search terms.'
+      page_heading: 'Bookmark Search: Bookmarker''s Tags'
+    bookmark_search_results:
+      description_html: Results are sorted by relevance. Please note that the list will include all bookmarks for a work, as each bookmark is factored into the results individually. To search for works instead of bookmarks, use the %{work_search_link}.
+      page_heading: 'Bookmarks Search: Results'
+      work_search: Work Search
     collectibles_add_to_collection:
       collection_names: Note that you need to use the collection's name, which gets used in the collection's URL, and not the collection's spiffy title (because different collections can have the same title). A collection's name is the equivalent of your user login. Names will be auto-completed for you if you have JavaScript turned on.
       guidance: Enter collection names as a comma-separated list, and the item you are editing will be added to all the collections you specify.
