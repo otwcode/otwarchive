@@ -24,7 +24,7 @@ class NotForbiddenNameValidator < ActiveModel::EachValidator
   # before and after as described by the standard.
   def self.internal_skeleton(string)
     confusable_pairs = Rails.cache.fetch("v1/confusables_hash") do
-      File.foreach("./script/confusables.txt")
+      File.foreach(Rails.root.join("config/confusables.txt"))
         .filter_map { it.match(/^(\h+)\s+;\s+([\h\s]+);\s*MA/) }
         .to_h { [it[1].to_i(16), it[2].scan(/\h+/).map { |x| x.to_i(16) }] }
     end

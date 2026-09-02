@@ -10,7 +10,7 @@
 require "net/http"
 
 # The directory which the confusables are stored in the otwarchive repository.
-CONFUSABLES_DIRECTORY = "./script/confusables.txt"
+CONFUSABLES_DIRECTORY = Rails.root.join("config/confusables.txt")
 
 # Uses regex to find the line that starts with "# Version:" and returns what
 # comes after as string. Takes a string object as an argument.
