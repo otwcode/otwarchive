@@ -41,17 +41,20 @@ class SearchRange
   # string must be an integer unless operand is ""
   # in which case it can be two numbers connected by "-"
   def numerical_range(operand, string)
+    capped_num = string.to_i.clamp(0, ArchiveConfig.MAX_SEARCH_INT_RANGE)
     case operand
     when "<"
-      { lt: string.to_i }
+      { lt: capped_num }
     when ">"
-      { gt: string.to_i }
+      { gt: capped_num }
     when ""
       match = string.match(/-/)
       if match
-        { gte: match.pre_match.to_i, lte: match.post_match.to_i }
+        capped_pre = match.pre_match.to_i.clamp(0, ArchiveConfig.MAX_SEARCH_INT_RANGE)
+        capped_post = match.post_match.to_i.clamp(0, ArchiveConfig.MAX_SEARCH_INT_RANGE)
+        { gte: capped_pre, lte: capped_post }
       else
-        { gte: string.to_i, lte: string.to_i }
+        { gte: capped_num, lte: capped_num }
       end
     end
   end
