@@ -1,23 +1,17 @@
 class LanguagePolicy < ApplicationPolicy
-  LANGUAGE_EDIT_ACCESS = %w[superadmin support].freeze
-  LANGUAGE_CREATE_ACCESS = %w[superadmin support].freeze
+  ACCESS_ROLES = %w[superadmin support].freeze
 
   def create?
-    user_has_roles?(LANGUAGE_CREATE_ACCESS)
+    user_has_roles?(ACCESS_ROLES)
   end
 
   def update?
-    user_has_roles?(LANGUAGE_EDIT_ACCESS)
+    user_has_roles?(ACCESS_ROLES)
   end
 
-  ALLOWED_ATTRIBUTES_BY_ROLES = {
-    "superadmin" => %i[name short sortable_name],
-    "support" => %i[name short sortable_name]
-  }.freeze
-
   def permitted_attributes
-    return [] unless user
+    return [] unless create?
 
-    ALLOWED_ATTRIBUTES_BY_ROLES.values_at(*user.roles).compact.flatten
+    %i[name short sortable_name]
   end
 end

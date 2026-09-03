@@ -57,6 +57,7 @@ end
 Given "basic languages" do
   Language.default
   Language.find_or_create_by(short: "DE", name: "Deutsch", sortable_name: "Deutsch")
+
   LocaleLanguage.default
   german = LocaleLanguage.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
   Locale.find_or_create_by(iso: "de", name: "Deutsch", language_id: german.id)
@@ -71,6 +72,7 @@ end
 Given "Persian language" do
   Language.default
   Language.find_or_create_by(short: "fa", name: "Persian", sortable_name: "Farsi")
+
   LocaleLanguage.default
   persian = LocaleLanguage.find_or_create_by(short: "fa", name: "Persian", support_available: true, abuse_support_available: true)
   Locale.find_or_create_by(iso: "fa", name: "Persian", language_id: persian.id)

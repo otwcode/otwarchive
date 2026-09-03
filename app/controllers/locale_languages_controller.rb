@@ -13,7 +13,7 @@ class LocaleLanguagesController < ApplicationController
     authorize LocaleLanguage
     @locale_language = LocaleLanguage.new(permitted_attributes(LocaleLanguage))
     if @locale_language.save
-      flash[:notice] = t("locale_languages.successfully_added")
+      flash[:notice] = t(".success")
       redirect_to locale_languages_path
     else
       render action: "new"
@@ -25,7 +25,7 @@ class LocaleLanguagesController < ApplicationController
     authorize @locale_language
     return unless @locale_language == LocaleLanguage.default
 
-    flash[:error] = t("locale_languages.cannot_edit_default")
+    flash[:error] = t(".cannot_edit_default")
     redirect_to locale_languages_path
   end
 
@@ -34,7 +34,7 @@ class LocaleLanguagesController < ApplicationController
     authorize @locale_language
 
     if @locale_language.update(permitted_attributes(@locale_language))
-      flash[:notice] = t("locale_languages.successfully_updated")
+      flash[:notice] = t(".success")
       redirect_to locale_languages_path
     else
       render action: "edit"

@@ -2657,7 +2657,7 @@ en:
       tos: Terms of Service
   locale_languages:
     edit:
-      heading: Edit Locale Language
+      page_heading: Edit Locale Language
     form:
       abuse_support_available: Abuse support available
       name: Name
@@ -2675,7 +2675,7 @@ en:
         suggest: Suggest a Locale Language
       page_heading: Locale Languages
     new:
-      heading: New Locale Language
+      page_heading: New Locale Language
   media:
     index:
       all: All %{media_type}...

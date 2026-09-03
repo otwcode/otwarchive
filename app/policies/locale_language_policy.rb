@@ -1,17 +1,17 @@
 class LocaleLanguagePolicy < ApplicationPolicy
-  LANGUAGE_EDIT_ACCESS = %w[superadmin translation support policy_and_abuse].freeze
-  LANGUAGE_CREATE_ACCESS = %w[superadmin translation].freeze
+  EDIT_ROLES = %w[superadmin translation support policy_and_abuse].freeze
+  CREATE_ROLES = %w[superadmin translation].freeze
 
   def index?
-    user_has_roles?(LANGUAGE_EDIT_ACCESS)
+    user_has_roles?(EDIT_ROLES)
   end
 
   def create?
-    user_has_roles?(LANGUAGE_CREATE_ACCESS)
+    user_has_roles?(CREATE_ROLES)
   end
 
   def update?
-    user_has_roles?(LANGUAGE_EDIT_ACCESS)
+    user_has_roles?(EDIT_ROLES)
   end
 
   ALLOWED_ATTRIBUTES_BY_ROLES = {
