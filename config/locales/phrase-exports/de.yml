@@ -469,9 +469,6 @@ de:
                 von %{work_title} in der Serie %{series_title} %{more} veröffentlicht"
               one_entry: "[%{app_name}] Anonym hat Kapitel %{chapter_position} von
                 %{work_title} in der Serie %{series_title} veröffentlicht"
-          work:
-            multiple_entries: "[%{app_name}] Anonym hat %{work_title} in der Serie
-              %{series_title} %{more} veröffentlicht"
         more:
           one: und %{count} Weiteres
           other: und %{count} Weitere
@@ -701,8 +698,6 @@ de:
       reset_password_instructions:
         change_your_password: dein Passwort ändern
         choose_new_password_imperative: benutze bitte diesen Link, um ein neues Passwort
-          festzulegen
-        choose_new_password_imperative_modal: diesen Link benutzen, um ein neues Passwort
           festzulegen
         contact_policy_abuse: kontaktiere bitte Richtlinien und Missbrauch
         contact_policy_abuse_instructions:

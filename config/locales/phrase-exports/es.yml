@@ -555,9 +555,6 @@ es:
                 de %{work_title} en la serie %{series_title} %{more}"
               one_entry: "[%{app_name}] Anónimo publicó el capítulo %{chapter_position}
                 de %{work_title} en la serie %{series_title}"
-          work:
-            multiple_entries: "[%{app_name}] Anónimo publicó %{work_title} en la serie
-              %{series_title} %{more}"
         more:
           one: y %{count} más
           other: y %{count} más
@@ -1001,8 +998,6 @@ es:
       reset_password_instructions:
         change_your_password: cambiar tu contraseña
         choose_new_password_imperative: utiliza este enlace para elegir una nueva
-          contraseña
-        choose_new_password_imperative_modal: utilizar este enlace para cambiar tu
           contraseña
         contact_policy_abuse: ponte en contacto con Políticas y Prevención de Abuso
         contact_policy_abuse_instructions:

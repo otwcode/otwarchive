@@ -291,9 +291,6 @@ vi:
         open_doors: Đội ngũ Open Doors (Cửa Mở)
         parent_org: Organization for Transformative Works – OTW (Tổ Chức cho các Tác
           Phẩm Được Biến Đổi)
-  preferences:
-    index:
-      locale_help_title: Hỗ trợ Thiết lập Ngôn ngữ ưu tiên
   roles:
     anonymous_creator: Tác giả ẩn danh
     commenter_name:
@@ -524,9 +521,6 @@ vi:
                 thuộc tác phẩm %{work_title} trong bộ tác phẩm %{series_title} %{more}"
               one_entry: "[%{app_name}] Người dùng ẩn danh đã đăng Chương %{chapter_position}
                 thuộc tác phẩm %{work_title} trong bộ tác phẩm %{series_title}"
-          work:
-            multiple_entries: "[%{app_name}] Người dùng ẩn danh đã đăng tác phẩm %{work_title}
-              trong bộ tác phẩm %{series_title} %{more}"
         more:
           other: và %{count} tác phẩm khác
         named:
@@ -959,8 +953,6 @@ vi:
       reset_password_instructions:
         change_your_password: thay đổi mật khẩu
         choose_new_password_imperative: dùng đường link này để thay đổi mật khẩu
-        choose_new_password_imperative_modal: dùng đường link này để thay đổi mật
-          khẩu
         contact_policy_abuse: liên hệ Ban Chính Sách và Xử lý Lạm Quyền
         contact_policy_abuse_instructions:
           html: Nếu bạn có bất kỳ lý do nào khác để tin rằng ai đó hiện đang truy

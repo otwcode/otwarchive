@@ -349,6 +349,15 @@ zh-Hans:
       work_added:
         html: "%{collection_link}的作品集维护员已将您的作品%{work_link} 添加到他们的作品集。"
         text: '"%{collection_title}" (%{collection_url})的作品集维护员已将您的作品"%{work_title}"(%{work_url})添加到他们的作品集!'
+    assignment_default_notification:
+      assign_pinch_hitter:
+        collection_assignments_page: 同人作品集任务页
+        html: 您可以通过%{collection_assignments_page_link}指定一名替补参与者。
+        text: 您可以通过同人作品集任务页指定一名替补参与者：%{collection_assignments_page_url} 。
+      defaulted_on_assignment:
+        html: "%{offer_byline}未能完成您在赠文交换%{collection_link}中匹配给%{request_byline} 的任务。"
+        text: '%{offer_byline}未能完成您在赠文交换"%{collection_title}"（%{collection_url}）中匹配给%{request_byline}的任务。'
+      subject: "[%{app_name}][%{collection_title}] %{offer_byline}未能完成任务"
     batch_subscription_notification:
       chapter_summary: 章节简介
       footer_note:
@@ -386,8 +395,6 @@ zh-Hans:
             chapter:
               multiple_entries: "[%{app_name}] 匿名作者在%{series_title}系列中发布了%{work_title}的第%{chapter_position}章%{more}"
               one_entry: "[%{app_name}] 匿名作者在%{series_title}系列中发布了%{work_title}的第%{chapter_position}章"
-          work:
-            multiple_entries: "[%{app_name}] 匿名作者在%{series_title}系列中发布了%{work_title}​%{more}"
         more:
           other: 以及另外%{count}篇作品
         named:
@@ -485,6 +492,33 @@ zh-Hans:
         remove_chapter: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过编辑章节将自己从创作者名单中移除：%{url}
         remove_series: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过编辑系列将自己从创作者名单中移除：%{url}
         remove_work: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过编辑作品将自己从创作者名单中移除：%{url}
+    creatorship_notification:
+      explanation: 作为某一作品的共同创作者, 无论您在个人设置中是否允许他人邀请您成为共同创作者，您都可能被列为该作品新章节的创作者， 也会被列为该作品所属系列的创作者之一。
+      html:
+        creation: 由%{pseud_links}所作的%{creation_link}
+        edit_chapter: 编辑章节
+        edit_series: 编辑系列
+        remove_chapter: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过%{edit_chapter_link}将自己从创作者名单中移除。
+        remove_series: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过%{edit_series_link}将自己从创作者名单中移除。
+      intro_chapter: 用户%{adding_user}将您以别名%{pseud}列为了下述章节的共同创作者：
+      intro_series: 用户%{adding_user}将您以别名%{pseud}列为了下述系列的共同创作者：
+      subject: "[%{app_name}] 您已被添加为共同创作者"
+      text:
+        creation: 由%{pseuds}所作的%{title}（%{url}）
+        remove_chapter: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过编辑章节将自己从创作者名单中移除：%{url}
+        remove_series: 如果您被误列为共同创作者，或者不想被列为创作者之一，您可以通过编辑系列将自己从创作者名单中移除：%{url}
+    creatorship_request:
+      html:
+        creation: 由%{pseud_links}所作的%{creation_link}
+        instructions: 您可以在您的%{page_name}页面接受或拒绝此邀请。
+        page_name: Co-Creator Requests（共同创作者邀请）
+      intro_chapter: 用户%{inviting_user}向您发送了一则邀请，希望将您以别名%{pseud}列为下述章节的共同创作者：
+      intro_series: 用户%{inviting_user}向您发送了一则邀请，希望将您以别名%{pseud}列为下述系列的共同创作者：
+      intro_work: 用户%{inviting_user}向您发送了一则邀请，希望将您以别名%{pseud}列为下述作品的共同创作者：
+      subject: "[%{app_name}] 您已收到成为共同创作者的邀请"
+      text:
+        creation: 由%{pseuds}所作的%{title}（%{url}）
+        instructions: 您可以在您的Co-Creator Requests（共同创作者邀请）页面接受或拒绝此邀请：%{url}
     delete_work_notification:
       attachment: 附件中为该作品副本，以供参考。
       deleted_other:
@@ -547,7 +581,7 @@ zh-Hans:
       reset_password_instructions:
         change_your_password: 更换您的密码
         choose_new_password_imperative: 使用此链接设置新密码
-        choose_new_password_imperative_modal: 使用此链接设置新密码
+        choose_new_password_modal: 使用此链接设置新密码
         contact_policy_abuse: 联系条款执行与违规行为处理委员会
         contact_policy_abuse_instructions:
           html: 如果您因其他原因相信目前他人能访问您的%{app_name}账号，请%{contact_policy_abuse_link}并提供所有相关信息。
@@ -562,7 +596,7 @@ zh-Hans:
           intro:
             other: 如果是您提出了此申请，请在%{count}天内%{choose_new_password_link_imperative} 。
           text:
-            other: 如果是您提出了此申请，请在%{count}天内使用此链接设置新密码：%{choose_new_password_url}。 如果此邮件内的链接已过期，您将需要重新申请重置密码：%{new_password_reset_url}。如果您遇到了技术问题，请等待几个小时再重新尝试。如果问题持续超过一天，请联系支持团队以获得进一步协助：%{contact_support_link}。
+            other: 如果是您提出了此申请，请在%{count}天内使用此链接设置新密码：%{choose_new_password_url}。 如果此邮件内的链接已过期，您将需要重新申请重置密码：%{new_password_reset_url}。如果您遇到了技术问题，请等待几个小时再重新尝试。如果问题持续超过一天，请联系支持团队以获得进一步协助：%{contact_support_url}。
         intro: 有人申请重置您的%{app_name}账号密码。
         new_password_reset: 重新申请重置密码
         reset_emails_clarification:

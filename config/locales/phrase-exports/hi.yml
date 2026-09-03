@@ -575,9 +575,6 @@ hi:
                 %{work_title} का %{chapter_position} अध्याय पोस्ट किया है %{more}"
               one_entry: "[%{app_name}] नामरहित ने %{series_title} शृंखला के %{work_title}
                 का %{chapter_position} अध्याय पोस्ट किया है"
-          work:
-            multiple_entries: "[%{app_name}] नामरहित ने %{series_title} शृंखला में
-              %{work_title} पोस्ट किया है %{more}"
         more:
           one: और %{count} अन्य
           other: और %{count} अन्य
@@ -1031,7 +1028,6 @@ hi:
       reset_password_instructions:
         change_your_password: अपना पासवर्ड बदलें
         choose_new_password_imperative: इस लिंक का उपयोग करके नया पासवर्ड चुनें।
-        choose_new_password_imperative_modal: इस लिंक का उपयोग करके नया पासवर्ड चुनें।
         contact_policy_abuse: नीति और दुरुपयोग टीम से संपर्क करें
         contact_policy_abuse_instructions:
           html: यदि आपको किसी अन्य कारण से लगता है कि किसी और के पास आपके %{app_name}
