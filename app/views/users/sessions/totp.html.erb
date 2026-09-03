@@ -1,0 +1,17 @@
+<%= form_with(url: session_path(resource), method: :post, class: "totp simple confirm") do |form| %>
+  <fieldset>
+
+    <!--Descriptive page name, messages and instructions-->
+    <legend><h2 class="heading"><%= t(".page_heading") %></h2></legend>
+    <p class="note"><%= t(".enter_totp") %></p>
+    <!--/descriptions-->
+
+    <!--main content-->
+    <p>
+      <%= form.label :totp_attempt, t(".totp_label") %>
+      <%= form.text_field :totp_attempt %>
+      <%= submit_tag t(".submit") %>
+    </p>
+    <!--/content-->
+  </fieldset>
+<% end %>
