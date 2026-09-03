@@ -2756,25 +2756,31 @@ en:
   owned_tag_sets:
     batch_load:
       page_heading: Batch Loading
-      submit: Submit
-      tag_sets_batch_load_help_title: Tagset batch load
+      submit:
+        landmark: Submit
+        button: Submit
+      tag_sets_batch_load_help_title: Tag set batch load
     index:
-      in_archive_name: in the %{archive_name}
-      listing_tag_sets_heading: Listing Tag Sets
-      new_tag_set_button: New Tag Set
+      landmark: Listing Tag Sets
+      navigation:
+        new_tag_set: New Tag Set
+        search:
+          submit: Search
+          title: Search
+        tags: Tags
       no_tag_sets_found: No tag sets found.
-      page_heading_challenge: Tag Sets Used In This Challenge
-      page_heading_default: Tag Sets
-      page_heading_query: Tag Set
-      page_heading_user: "%{user_name}'s Tag Sets"
+      page_heading:
+        challenge: Tag Sets Used In This Challenge
+        default_html: "Tag Sets %{help_modal_link} in the %{archive_name}"
+        query: Tag Set
+        user: "%{user_name}'s Tag Sets"
       search_submit: Search
-      search_title: search
-      tag_sets_about_help_title: Tagset about
-      tags_button: Tags
+      search_title: Search
+      tag_sets_about_help_title: Tag set about
     tag_set_form:
       check_to_remove_tag: "(check to remove)"
       check_to_remove_tag_association: "(check to remove)"
-      tag_sets_associations_help_title: Tagset tag associations
+      tag_sets_associations_help_title: Tag set tag associations
   pagy:
     aria_label:
       nav: Pagination
