@@ -304,3 +304,23 @@ Feature: User dashboard
   Then I should see "Here are some tips to help you get started" within "#modal"
     And I should see "First login help" within "#modal"
     And I should see "Close" within "#modal"
+
+  Scenario: The user dashboard should list the user's most recently created bookmarks
+  Given I am logged in as "meatloaf"
+    And I post the works "Work One, Work Two, Work Three, Work Four, Work Five, Work Six"
+    And I bookmark the works "Work One, Work Two, Work Three, Work Four, Work Five, Work Six"
+    And I go to meatloaf's user page
+  Then I should see "Recent bookmarks"
+    And I should not see "Work One" within "#user-bookmarks"
+    And I should see "Work Six" within "#user-bookmarks"
+  When I edit the bookmark for "Work One"
+    And I check "Rec"
+    And I press "Update"
+    And I go to meatloaf's user page
+  Then I should see "Recent bookmarks"
+    And I should not see "Work One" within "#user-bookmarks"
+    And I should see "Work Six" within "#user-bookmarks"
+  When I go to the dashboard page for user "meatloaf" with pseud "meatloaf"
+    And I should see "Recent bookmarks"
+    And I should not see "Work One" within "#user-bookmarks"
+    And I should see "Work Six" within "#user-bookmarks"
