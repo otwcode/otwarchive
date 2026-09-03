@@ -101,7 +101,7 @@ class Pseud < ApplicationRecord
   end
 
   def to_param
-    name
+    name_in_database
   end
 
   scope :public_work_count_for, -> (pseud_ids) {
@@ -399,7 +399,13 @@ class Pseud < ApplicationRecord
   end
 
   def change_bookmarks_ownership
-    Bookmark.where("pseud_id = #{self.id}").update_all("pseud_id = #{self.user.default_pseud.id}")
+    default_pseud_id = user.default_pseud.id
+    bookmarks = Bookmark.where(pseud_id: id)
+    bookmark_ids = bookmarks.ids
+    return if bookmark_ids.empty?
+
+    bookmarks.update_all(pseud_id: default_pseud_id)
+    IndexQueue.enqueue_ids(Bookmark, bookmark_ids, :main)
   end
 
   def change_collections_membership

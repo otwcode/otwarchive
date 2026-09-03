@@ -1,7 +1,7 @@
 class SeriesController < ApplicationController
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_series, only: [:show, :edit, :remove_user_creatorship, :update, :manage, :destroy, :confirm_delete]
-  before_action :check_ownership, only: [:edit, :update, :manage, :destroy, :confirm_delete]
+  before_action :load_series, only: [:show, :edit, :remove_user_creatorship, :update, :manage, :update_positions, :confirm_delete, :destroy]
+  before_action :check_ownership, except: [:index, :show, :new, :create]
   before_action :check_visibility, only: [:show]
 
   def load_series
@@ -42,14 +42,14 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @works = @series.works_in_order.posted.select(&:visible?).paginate(page: params[:page])
+    @works = @series.works_in_order.posted.includes(:pseuds).select(&:visible?).paginate(page: params[:page])
 
     # sets the page title with the data for the series
     if @series.unrevealed?
       @page_subtitle = t(".unrevealed_series")
     else
       @page_title = get_page_title(@series.fandoms.pluck(:name).join(t("support.array.words_connector")),
-                                   @series.anonymous? ? t(".anonymous") : @series.allpseuds.collect(&:byline).join(t("support.array.words_connector")),
+                                   helpers.text_byline(@series),
                                    @series.title)
     end
 
@@ -116,7 +116,6 @@ class SeriesController < ApplicationController
 
   def update_positions
     if params[:serial_works]
-      @series = Series.find(params[:id])
       @series.reorder_list(params[:serial_works])
       flash[:notice] = ts("Series order has been successfully updated.")
     elsif params[:serial]

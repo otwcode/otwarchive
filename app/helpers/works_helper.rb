@@ -30,14 +30,22 @@ module WorksHelper
     content_tag(:dl, list.to_s, class: 'stats').html_safe
   end
 
+  def collections_meta_tag(work)
+    collections_data = show_collections_data(work.approved_collections_after_saving)
+    return if collections_data.blank?
+
+    content_tag(:dt, "#{t('works_helper.collections_meta_tag.collections')} ", class: "collections") +
+      content_tag(:dd, collections_data, class: "collections")
+  end
+
   def work_page_title(work, title, options = {})
     fandoms = work.fandoms
     title_fandom = if fandoms.empty?
                      t("works_helper.work_page_title.unspecified_fandom")
-                   elsif fandoms.size > 3
+                   elsif fandoms.size > 2
                      t("works_helper.work_page_title.multifandom")
                    else
-                     fandoms.first.name
+                     fandoms.pluck(:name).join(t("support.array.words_connector"))
                    end
     author = work.anonymous? ? t("works_helper.work_page_title.anonymous") : work.pseuds.sort.collect(&:byline).join(t("support.array.words_connector"))
 
@@ -125,9 +133,12 @@ module WorksHelper
   end
 
   def related_work_note(related_work, relation, download: false)
+    default_locale = download ? :en : nil
+
+    return t(".#{relation}.deleted", locale: default_locale) if related_work.nil?
+
     work_link = link_to related_work.title, polymorphic_url(related_work)
     language = tag.span(related_work.language.name, lang: related_work.language.short) if related_work.language
-    default_locale = download ? :en : nil
 
     creator_link = if download
                      byline(related_work, visibility: "public", only_path: false)
@@ -143,7 +154,7 @@ module WorksHelper
         t(".#{relation}.unrevealed",
           locale: default_locale)
       end
-    elsif related_work.restricted? && (download || !logged_in?)
+    elsif related_work.restricted? && (download || guest?)
       t(".#{relation}.restricted_html",
         language: language,
         locale: default_locale,
@@ -174,7 +185,7 @@ module WorksHelper
     text = +"<p>by #{byline(work, { visibility: 'public', only_path: false })}</p>"
     text << work.summary if work.summary
     text << "<p>Words: #{work.word_count}, Chapters: #{chapter_total_display(work)}, Language: #{work.language ? work.language.name : 'English'}</p>"
-    text << "<p>Series: #{series_list_with_work_position(work)}</p>" unless work.series.count.zero?
+    text << "<p>Series: #{series_list_with_work_position(work)}</p>" unless work.series.size.zero?
     # Create list of tags
     text << "<ul>"
     %w(Fandom Rating ArchiveWarning Category Character Relationship Freeform).each do |type|

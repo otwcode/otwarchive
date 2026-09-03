@@ -37,7 +37,7 @@ class Work < ApplicationRecord
   has_many :subscriptions, as: :subscribable, dependent: :destroy
 
   has_many :challenge_assignments, as: :creation
-  has_many :challenge_claims, as: :creation
+  has_many :challenge_claims, as: :creation, dependent: :nullify
   accepts_nested_attributes_for :challenge_claims
 
   acts_as_commentable
@@ -48,11 +48,14 @@ class Work < ApplicationRecord
 
   belongs_to :language
   belongs_to :work_skin
-  validate :work_skin_allowed, on: :save
+  validate :work_skin_allowed
   def work_skin_allowed
-    unless self.users.include?(self.work_skin.author) || (self.work_skin.public? && self.work_skin.official?)
-      errors.add(:base, ts("You do not have permission to use that custom work stylesheet."))
-    end
+    return if work_skin.blank? || (work_skin.public? && work_skin.official?)
+
+    approved_work_creators = pseuds_after_saving.filter_map(&:user).uniq
+    return if approved_work_creators.include?(work_skin.author)
+
+    errors.add(:base, :work_skin_not_allowed)
   end
   # statistics
   has_one :stat_counter, dependent: :destroy
@@ -63,6 +66,8 @@ class Work < ApplicationRecord
   end
   # moderation
   has_one :moderated_work, dependent: :destroy
+  # imported url
+  has_one :imported_url, dependent: :destroy
 
   ########################################################################
   # VIRTUAL ATTRIBUTES
@@ -236,7 +241,6 @@ class Work < ApplicationRecord
 
   after_save :save_chapters, :save_new_gifts
 
-  before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
   after_update :adjust_series_restriction, :notify_after_update
@@ -379,7 +383,10 @@ class Work < ApplicationRecord
 
   after_destroy :clean_up_assignments
   def clean_up_assignments
-    self.challenge_assignments.each {|a| a.creation = nil; a.save!}
+    self.challenge_assignments.each do |a|
+      a.creation = nil
+      a.save!
+    end
   end
 
   ########################################################################
@@ -577,17 +584,8 @@ class Work < ApplicationRecord
     end
   end
 
-  def unrevealed?(user=User.current_user)
-    # eventually here is where we check if it's in a challenge that hasn't been made public yet
-    #!self.collection_items.unrevealed.empty?
-    in_unrevealed_collection?
-  end
-
-  def anonymous?(user = User.current_user)
-    # here we check if the story is in a currently-anonymous challenge
-    #!self.collection_items.anonymous.empty?
-    in_anon_collection?
-  end
+  alias_attribute :unrevealed, :in_unrevealed_collection
+  alias_attribute :anonymous, :in_anon_collection
 
   before_update :bust_anon_caching
   def bust_anon_caching
@@ -773,9 +771,15 @@ class Work < ApplicationRecord
   # Issue 1316: total number needs to reflect the actual number of chapters posted
   # rather than the total number of chapters indicated by user
   def number_of_posted_chapters
-    Rails.cache.fetch(key_for_chapter_posted_counting(self)) do
-      self.chapters.posted.count
-    end
+    Rails.cache.fetch(
+      key_for_chapter_posted_counting(self),
+      skip_nil: true
+    ) do
+      count = chapters.posted.count
+      # Return nil for zero so skip_nil prevents caching stale data.
+      # The .to_i below converts nil back to 0 for callers.
+      count.zero? ? nil : count
+    end.to_i
   end
 
   def chapters_in_order(include_drafts: false, include_content: true)
@@ -1121,8 +1125,6 @@ class Work < ApplicationRecord
     user = users.first
     {
       comment_type: "fanwork-post",
-      key: ArchiveConfig.AKISMET_KEY,
-      blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_role: "user",
       comment_date_gmt: created_at.to_time.iso8601,
@@ -1138,8 +1140,7 @@ class Work < ApplicationRecord
   end
 
   def check_for_spam
-    return unless %w(staging production).include?(Rails.env)
-    self.spam = Akismetor.spam?(akismet_attributes)
+    self.spam = AkismetClient.spam?(akismet_attributes)
     self.spam_checked_at = Time.now
     save
   end
@@ -1162,15 +1163,13 @@ class Work < ApplicationRecord
   def mark_as_spam!
     update_attribute(:spam, true)
     ModeratedWork.mark_reviewed(self)
-    # don't submit spam reports unless in production mode
-    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+    AkismetClient.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
     update(spam: false, hidden_by_admin: false)
     ModeratedWork.mark_approved(self)
-    # don't submit ham reports unless in production mode
-    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+    AkismetClient.submit_ham(akismet_attributes)
   end
 
   def notify_of_hiding

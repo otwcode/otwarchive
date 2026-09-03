@@ -5,15 +5,44 @@ Feature: Collection
   I want to locate and browse an existing collection
 
   Scenario: Collections index should have different links for logged in and logged out users
+    Given I am logged in as "onlooker"
+    When I go to the collections page
+    Then I should see "Open Challenges"
+      And I should see "New Collection"
+    When I log out
+      And I go to the collections page
+    Then I should see "Open Challenges"
+      And I should not see "New Collection"
 
-  Given I am logged in as "onlooker"
-  When I go to the collections page
-  Then I should see "Open Challenges"
-    And I should see "New Collection"
-  When I log out
-    And I go to the collections page
-  Then I should see "Open Challenges"
-    And I should not see "New Collection"
+  Scenario: Open Challenges and overall Collections link should not appear on subcollections page
+    Given I have a collection "Some Test Collection" with name "sometest"
+    When I am logged in as the owner of "Some Test Collection"
+      And I add the subcollection "Subcollection" to the parent collection named "sometest"
+      And I go to the "Some Test Collection" subcollections page
+    Then I should not see "Open Challenges" within "#main .navigation.actions"
+      And I should not see "Collections" within "#main .navigation.actions"
+      But I should see "New Subcollection" within "#main .navigation.actions"
+      And I should see "Subcollections" within "#main .navigation.actions"
+
+  Scenario: Open Challenges and overall Collections link should not appear on user's collections page
+    Given I have a collection "Some Test Collection" with name "sometest"
+    When I go to moderator's collections page
+    Then I should not see "Open Challenges" within "#main .navigation.actions"
+      And I should not see a page link to the collections page within "#main .navigation.actions"
+      But I should see "Collections" within "#main .navigation.actions"
+    When I am logged in as "onlooker"
+      And I go to moderator's collections page
+    Then I should not see "Open Challenges" within "#main .navigation.actions"
+      And I should not see a page link to the collections page within "#main .navigation.actions"
+      But I should see "Collections" within "#main .navigation.actions"
+      And I should see "New Collection" within "#main .navigation.actions"
+    When I am logged in as "moderator"
+      And I go to moderator's collections page
+    Then I should not see "Open Challenges" within "#main .navigation.actions"
+      And I should not see a page link to the collections page within "#main .navigation.actions"
+      But I should see "Collections" within "#main .navigation.actions"
+      And I should see "Manage Collection Items" within "#main .navigation.actions"
+      And I should see "New Collection" within "#main .navigation.actions"
 
   Scenario: Filter collections index to only show prompt memes
 
@@ -228,6 +257,105 @@ Feature: Collection
     And I should see "On Demand"
     And I should see "Surprise Presents"
     But I should not see "Another Gift Swap"
+
+  Scenario Outline: Sort collections by Works and Bookmarks
+
+  Given I have a collection "Privates"
+    And I have a collection "Publics"
+  When I am logged in as the owner of "Privates"
+    And I post the work "Private 1" in the collection "Privates"
+    And I lock the work "Private 1"
+    And I post the work "Private 2" in the collection "Privates"
+    And I lock the work "Private 2"
+    And I bookmark the work "Private 1" to the collection "Publics"
+    And I bookmark the work "Private 2" to the collection "Publics"
+    And I post the work "Public 1" in the collection "Publics"
+    And I bookmark the work "Public 1" to the collection "Privates"
+    And all indexing jobs have been run
+    And I go to <collection_page>
+    And I select "Works" from "Sort by"
+    And I select "Descending" from "Sort direction"
+    And I press "Sort and Filter"
+  Then the 1st collection result should contain "Privates"
+    And the 1st collection result should contain "Works: 2"
+    And the 2nd collection result should contain "Publics"
+    And the 2nd collection result should contain "Works: 1"
+    And "Works" should be selected within "Sort by"
+  When I log out
+    Then the 1st collection result should contain "Publics"
+    And the 1st collection result should contain "Works: 1"
+    And the 2nd collection result should contain "Privates"
+    And the 2st collection result should contain "Works: 0"
+  When I am logged in as a super admin
+    And I go to <collection_page>
+    And I select "Works" from "Sort by"
+    And I select "Descending" from "Sort direction"
+    And I press "Sort and Filter"
+  Then the 1st collection result should contain "Privates"
+    And the 1st collection result should contain "Works: 2"
+    And the 2nd collection result should contain "Publics"
+    And the 2nd collection result should contain "Works: 1"
+  When I go to <collection_page>
+    And I select "Bookmarked Items" from "Sort by"
+    And I select "Descending" from "Sort direction"
+    And I press "Sort and Filter"
+  Then the 1st collection result should contain "Publics"
+    And the 1st collection result should contain "Bookmarked Items: 2"
+    And the 2nd collection result should contain "Privates"
+    And the 2nd collection result should contain "Bookmarked Items: 1"
+  When I log out
+    And I go to <collection_page>
+    And I select "Bookmarked Items" from "Sort by"
+    And I select "Descending" from "Sort direction"
+    And I press "Sort and Filter"
+  Then the 1nd collection result should contain "Privates"
+    And the 1st collection result should contain "Bookmarked Items: 1"
+    And the 2nd collection result should contain "Publics"
+    And the 2nd collection result should not contain "Bookmarked Items"
+  When I am logged in as a super admin
+    And I go to <collection_page>
+    And I select "Bookmarked Items" from "collection_search_sort_column"
+    And I select "Descending" from "collection_search_sort_direction"
+    And I press "Sort and Filter"
+  Then the 1st collection result should contain "Publics"
+    And the 1st collection result should contain "Bookmarked Items: 2"
+    And the 2nd collection result should contain "Privates"
+    And the 2nd collection result should contain "Bookmarked Items: 1"
+
+  Examples:
+    | collection_page |
+    | the collections page |
+    | moderator's collections page |
+
+  Scenario: Filtering on a user collection page should only return collections by that user.
+
+  Given a collection "Duplicate Name" with name "collection1" owned by "meatloaf"
+    And a collection "Duplicate Name" with name "collection2" owned by "recengine"
+    And a collection "The Hobbits" with name "collectionhobbit" owned by "recengine"
+    And a collection "Not Mine!" with name "yours" owned by "iminvisible"
+    And all indexing jobs have been run
+  When I go to recengine's collections page
+    And I fill in "Filter by title" with "Duplicate Name"
+    And I press "Sort and Filter"
+  Then I should see "1 Collection"
+    And the 1st collection result should contain "Duplicate Name"
+  When I follow "Clear Filters"
+  Then I should see "2 Collections"
+    And the 1st collection result should contain "Duplicate Name"
+    And the 2nd collection result should contain "The Hobbit"
+  When I fill in "Filter by title" with "Not Mine!"
+    And I press "Sort and Filter"
+  Then I should see "Sorry, there were no collections found."
+
+  Scenario: Default sorting is different from collections page and user collections page
+
+  Given I am logged in as "testuser"
+  When I go to the collections page
+  Then "Date Created" should be selected within "Sort by"
+    And "Descending" should be selected within "Sort direction"
+  When I go to testuser's collections page
+  Then "Title" should be selected within "Sort by"
+    And "Ascending" should be selected within "Sort direction"
 
   Scenario: Look at a collection, see the rules and intro and FAQ
 

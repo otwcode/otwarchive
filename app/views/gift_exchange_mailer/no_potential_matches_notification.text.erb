@@ -1,0 +1,11 @@
+<% content_for :message do %>
+<%= t(".generation_finished.text", collection_title: @collection.title, collection_url: collection_url(@collection)) %>
+
+<%= t(".please_try_again.text", match_settings_url: edit_collection_gift_exchange_url(@collection, anchor: "match_settings")) %>
+<% end %>
+
+<% content_for :footer_note do %>
+<%= collection_footer_note_text(@is_collection_email, @collection) -%>
+<% end %>
+
+<% content_for :sent_at do %><%= l(Time.current) %><% end %>

@@ -54,15 +54,15 @@ Given "admin {string} has TOTP 2FA enabled" do |login|
   admin.enable_totp!
 end
 
-Given /^basic languages$/ do
+Given "basic languages" do
   Language.default
-  german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
+  german = Language.find_or_create_by(short: "DE", name: "Deutsch", sortable_name: "Deutsch", support_available: true, abuse_support_available: true)
   Locale.create(iso: "de", name: "Deutsch", language: german)
 end
 
-Given /^Persian language$/ do
+Given "Persian language" do
   Language.default
-  persian = Language.find_or_create_by(short: "fa", name: "Persian", support_available: true, abuse_support_available: true)
+  persian = Language.find_or_create_by(short: "fa", name: "Persian", sortable_name: "Farsi", support_available: true, abuse_support_available: true)
   Locale.create(iso: "fa", name: "Persian", language: persian)
 end
 
@@ -125,6 +125,13 @@ Given "account age threshold for comment spam check is set to {int} days" do |da
   click_button("Update")
 end
 
+Given "comment count threshold for comment rate limit is set to {int}" do |count|
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  fill_in("admin_setting_comment_count_threshold_for_comment_rate_limit", with: count)
+  click_button("Update")
+end
+
 Given "I have posted known issues" do
   step %{I am logged in as a super admin}
   step %{I follow "Admin Posts"}
@@ -143,6 +150,20 @@ end
 
 Given "the admin post {string}" do |title|
   FactoryBot.create(:admin_post, title: title, comment_permissions: :enable_all)
+end
+
+Given "the draft admin post {string}" do |title|
+  FactoryBot.create(:admin_post, :draft, title: title, comment_permissions: :enable_all)
+end
+
+Given "the draft admin post {string} with tag(s) {string}" do |title, tags|
+  FactoryBot.create(:admin_post, :draft, title: title, comment_permissions: :enable_all, tag_list: tags)
+end
+
+Given "the draft admin post {string} translating {string} to {string}" do |title, translated_title, lang|
+  admin_post = AdminPost.find_by!(title: translated_title)
+  language = Language.find_by!(name: lang)
+  FactoryBot.create(:admin_post, :draft, title: title, comment_permissions: :enable_all, translated_post_id: admin_post.id, language: language)
 end
 
 Given "the fannish next of kin {string} for the user {string}" do |kin, user|
@@ -204,12 +225,25 @@ Given /^I have posted an admin post with guest comments disabled$/ do
   step %{I log out}
 end
 
+Given "I have posted an admin post with guest comments enabled" do
+  step %{I am logged in as a "communications" admin}
+  step %{I start to make an admin post}
+  choose("Registered users and guests can comment")
+  click_button("Post")
+  step %{I log out}
+end
+
 Given /^I have posted an admin post with comments disabled$/ do
   step %{I am logged in as a "communications" admin}
   step %{I start to make an admin post}
   choose("No one can comment")
   click_button("Post")
   step %{I log out}
+end
+
+Given "comment moderation on the admin post {string} is enabled" do |title|
+  admin_post = AdminPost.find_by!(title: title)
+  admin_post.update_attribute(:moderated_commenting_enabled, true)
 end
 
 Given "an abuse ticket ID exists" do
@@ -349,7 +383,8 @@ When "I uncheck the {string} role checkbox" do |role|
   uncheck("user_roles_#{role_id}")
 end
 
-When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
+# rubocop:disable Cucumber/RegexStepName
+When /^I set up a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
   admin_post_id = !admin_post.nil? ? admin_post.id : 0
@@ -359,8 +394,13 @@ When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   step %{I select "Deutsch" from "Choose a language"}
   fill_in("admin_post_translated_post_id", with: admin_post_id)
   fill_in("admin_post_tag_list", with: tags) if tags
+end
+
+When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
+  step %{I set up a translation of an admin post with tags "#{tags}"}
   click_button("Post")
 end
+# rubocop:enable Cucumber/RegexStepName
 
 When /^I hide the work "(.*?)"$/ do |title|
   work = Work.find_by(title: title)

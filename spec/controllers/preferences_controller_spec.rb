@@ -25,6 +25,16 @@ describe PreferencesController do
 
         it_redirects_to_with_error(user_path(other_user), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
+
+      it "does not include parent-only skins in available site skins" do
+        usable_skin = create(:skin, author: user, unusable: false)
+        parent_only_skin = create(:skin, author: user, unusable: true)
+
+        get :index, params: { user_id: user.login }
+
+        expect(assigns(:available_skins)).to include(usable_skin)
+        expect(assigns(:available_skins)).not_to include(parent_only_skin)
+      end
     end
 
     context "as a guest" do
@@ -48,6 +58,14 @@ describe PreferencesController do
       read_roles = %w[superadmin policy_and_abuse support]
 
       it_behaves_like "an action only authorized admins can access", authorized_roles: read_roles
+    end
+
+    context "for a nonexistent user" do
+      it "raises a 404 error" do
+        expect do
+          get :index, params: { user_id: "deleted_user" }
+        end.to raise_exception(ActiveRecord::RecordNotFound)
+      end
     end
   end
 
@@ -129,9 +147,34 @@ describe PreferencesController do
     end
 
     context "as admin" do
-      subject { put :update, params: { user_id: user.login, id: user.preference.id, preference: preference_params } }
-      
-      it_behaves_like "an action only authorized admins can access", authorized_roles: []
+      subject { put :update, params: { user_id: user.login, id: user.preference.id, preference: { skin_id: new_skin.id } } }
+      let(:new_skin) { create(:skin, author_id: user.id) }
+      let(:success) do
+        expect(user.preference.reload.skin_id).to eq(new_skin.id)
+        it_redirects_to_with_notice(user_path(user), "Your preferences were successfully updated.")
+      end
+
+      before do
+        expect(user.preference.skin_id).not_to eq(new_skin.id)
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin support]
+
+      context "attempting to edit a non-permitted field" do
+        let(:admin) { create(:admin, roles: ["support"]) }
+
+        before do
+          fake_login_admin(admin)
+        end
+
+        it "throws error and doesn't save changes to non-permitted field" do
+          expect(user.preference.history_enabled).to be_truthy
+          expect do
+            put :update, params: { user_id: user.login, id: user.preference.id, preference: { history_enabled: "0" } }
+          end.to raise_exception(ActionController::UnpermittedParameters)
+          expect(user.preference.reload.history_enabled).to be_truthy
+        end
+      end
     end
   end
 end

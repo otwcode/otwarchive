@@ -315,6 +315,21 @@ describe Comment do
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
         end
+
+        it "has blog_lang from the work's language" do
+          expect(subject.akismet_attributes[:blog_lang]).to eq(subject.ultimate_parent.language.short)
+        end
+
+        it "has permalink with the chapter path" do
+          chapter = subject.commentable
+          expect(subject.akismet_attributes[:permalink]).to eq("https://#{ArchiveConfig.APP_HOST}/works/#{chapter.work_id}/chapters/#{chapter.id}")
+        end
+
+        it "uses request_host in permalink when available" do
+          subject.request_host = "archiveofourown.gay"
+          chapter = subject.commentable
+          expect(subject.akismet_attributes[:permalink]).to eq("https://archiveofourown.gay/works/#{chapter.work_id}/chapters/#{chapter.id}")
+        end
       end
 
       context "when the commentable is an admin post" do
@@ -330,6 +345,15 @@ describe Comment do
 
         it "has comment_post_modified_gmt as the admin post's creation time" do
           expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
+        end
+
+        it "has blog_lang from the admin post's language" do
+          expect(subject.akismet_attributes[:blog_lang]).to eq(subject.ultimate_parent.language.short)
+        end
+
+        it "has permalink with the admin post path" do
+          admin_post = subject.commentable
+          expect(subject.akismet_attributes[:permalink]).to eq("https://#{ArchiveConfig.APP_HOST}/admin_posts/#{admin_post.id}")
         end
       end
 
@@ -350,6 +374,15 @@ describe Comment do
             expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.revised_at.iso8601)
             expect(subject.akismet_attributes[:comment_post_modified_gmt]).not_to eq(subject.ultimate_parent.created_at.iso8601)
           end
+
+          it "has permalink with the original chapter path" do
+            chapter = subject.commentable.commentable
+            expect(subject.akismet_attributes[:permalink]).to eq("https://#{ArchiveConfig.APP_HOST}/works/#{chapter.work_id}/chapters/#{chapter.id}")
+          end
+
+          it "has blog_lang from the work's language" do
+            expect(subject.akismet_attributes[:blog_lang]).to eq(subject.ultimate_parent.language.short)
+          end
         end
 
         context "when the comment is on an admin post" do
@@ -366,6 +399,30 @@ describe Comment do
           it "has comment_post_modified_gmt as the admin post's creation time" do
             expect(subject.akismet_attributes[:comment_post_modified_gmt]).to eq(subject.ultimate_parent.created_at.iso8601)
           end
+
+          it "has permalink with the original admin post path" do
+            admin_post = subject.commentable.commentable
+            expect(subject.akismet_attributes[:permalink]).to eq("https://#{ArchiveConfig.APP_HOST}/admin_posts/#{admin_post.id}")
+          end
+
+          it "has blog_lang from the admin post's language" do
+            expect(subject.akismet_attributes[:blog_lang]).to eq(subject.ultimate_parent.language.short)
+          end
+        end
+      end
+
+      context "when the parent has no language" do
+        it "omits blog_lang" do
+          allow(subject.ultimate_parent).to receive(:language).and_return(nil)
+          expect(subject.akismet_attributes).not_to have_key(:blog_lang)
+        end
+      end
+
+      context "when the language code is not a valid ISO 639-1 code" do
+        it "omits blog_lang" do
+          non_iso_language = build(:language, short: "tlh")
+          allow(subject.ultimate_parent).to receive(:language).and_return(non_iso_language)
+          expect(subject.akismet_attributes).not_to have_key(:blog_lang)
         end
       end
 
@@ -919,20 +976,80 @@ describe Comment do
   end
 
   describe "#mark_as_spam!" do
-    let(:comment) { create(:comment, approved: true, spam: false) }
+    context "when the comment is not marked as spam" do
+      let(:comment) { create(:comment, approved: true, spam: false) }
 
-    it "flags the comment as spam." do
-      comment.mark_as_spam!
-      comment.reload
-      expect(comment.approved).to be_falsey
-      expect(comment.spam).to be_truthy
+      it "flags the comment as spam" do
+        comment.mark_as_spam!
+        comment.reload
+        expect(comment.approved).to be_falsey
+        expect(comment.spam).to be_truthy
+      end
+
+      it "submits the comment to Akismet" do
+        expect(AkismetClient).to receive(:submit_spam)
+
+        comment.mark_as_spam!
+      end
+    end
+
+    context "when the comment is already marked as spam" do
+      let(:comment) { create_invalid(:comment, approved: false, spam: true) }
+
+      it "flags the comment as spam" do
+        comment.mark_as_spam!
+        comment.reload
+        expect(comment.approved).to be_falsey
+        expect(comment.spam).to be_truthy
+      end
+
+      it "does not resubmit the comment to Akismet" do
+        expect(AkismetClient).not_to receive(:submit_spam)
+
+        comment.mark_as_spam!
+      end
+    end
+
+    context "when the comment is deleted" do
+      let(:comment) { create(:comment, approved: true, spam: false, is_deleted: true) }
+
+      it "does not submit the comment to akismet" do
+        expect(AkismetClient).not_to receive(:submit_spam)
+
+        comment.mark_as_spam!
+      end
+    end
+
+    context "when the commenter is deleted" do
+      let(:user) { create(:user) }
+      let(:comment) { create(:comment, pseud: user.default_pseud, approved: true, spam: false) }
+
+      before { user.delete }
+
+      it "flags the comment as spam" do
+        comment.mark_as_spam!
+        comment.reload
+        expect(comment.approved).to be_falsey
+        expect(comment.spam).to be_truthy
+      end
+
+      it "submits the comment to Akismet" do
+        expect(AkismetClient).to receive(:submit_spam)
+
+        comment.mark_as_spam!
+      end
+
+      it "has nil as name and email in akismet_attributes" do
+        expect(comment.akismet_attributes[:comment_author]).to eq(nil)
+        expect(comment.akismet_attributes[:comment_author_email]).to eq(nil)
+      end
     end
   end
 
   describe "#mark_as_ham!" do
-    let(:comment) { create(:comment, approved: false, spam: true) }
+    let(:comment) { create_invalid(:comment, approved: false, spam: true) }
 
-    it "flags the comment as legitimate." do
+    it "flags the comment as legitimate" do
       comment.mark_as_ham!
       comment.reload
       expect(comment.approved).to be_truthy

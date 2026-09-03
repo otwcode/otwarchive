@@ -600,7 +600,7 @@ describe AbuseReport do
     let!(:safe_report) { build(:abuse_report, username: "viagra-test-123", email: legit_user.email) }
 
     before do
-      allow(Akismetor).to receive(:spam?).and_return(true)
+      allow(AkismetClient).to receive(:spam?).and_return(true)
     end
 
     it "is not valid if Akismet flags it as spam" do
@@ -666,6 +666,43 @@ describe AbuseReport do
 
       expect { subject.attach_work_download(ticket_id) }
         .to have_enqueued_job
+    end
+  end
+
+  describe "#reported_work_id" do
+    context "for a plain work URL" do
+      it "returns the work id" do
+        subject.url = "http://archiveofourown.org/works/123/"
+        expect(subject.reported_work_id).to eq("123")
+      end
+    end
+
+    context "for a work URL with bookmark-form anchor" do
+      it "returns the work id" do
+        subject.url = "http://archiveofourown.org/works/123#bookmark-form"
+        expect(subject.reported_work_id).to eq("123")
+      end
+    end
+
+    context "for a work URL with comments" do
+      it "returns nil" do
+        subject.url = "http://archiveofourown.org/works/123/comments/"
+        expect(subject.reported_work_id).to be_nil
+      end
+    end
+
+    context "for a work URL with bookmarks" do
+      it "returns nil" do
+        subject.url = "http://archiveofourown.org/works/123/bookmarks/"
+        expect(subject.reported_work_id).to be_nil
+      end
+    end
+
+    context "for a work URL with a specific bookmark" do
+      it "returns nil" do
+        subject.url = "http://archiveofourown.org/works/123/bookmarks/456/"
+        expect(subject.reported_work_id).to be_nil
+      end
     end
   end
 

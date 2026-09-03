@@ -7,7 +7,7 @@ class Homepage
 
   def rounded_counts
     @user_count = Rails.cache.fetch("/v1/home/counts/user", expires_in: 40.minutes) do
-      estimate_number(User.count)
+      estimate_number(User.where(banned: false).count)
     end
     @work_count = Rails.cache.fetch("/v1/home/counts/works", expires_in: 40.minutes) do
       estimate_number(Work.posted.count)

@@ -102,12 +102,13 @@ module UsersHelper
   end
 
   def gifts_link(user)
-    if current_user.nil?
-      gift_number = user.gift_works.visible_to_all.distinct.count
-    else
-      gift_number = user.gift_works.visible_to_registered_user.distinct.count
-    end
-    span_if_current ts('Gifts (%{gift_number})', gift_number: gift_number.to_s), user_gifts_path(user)
+    works = if User.current_user.nil?
+              user.gift_works.visible_to_all
+            else
+              user.gift_works.visible_to_registered_user
+            end
+    gift_number = works.distinct.count
+    span_if_current t("users_helper.gifts_link", gift_number: gift_number), user_gifts_path(user)
   end
 
   def authored_items(pseud, work_counts = {}, rec_counts = {})
