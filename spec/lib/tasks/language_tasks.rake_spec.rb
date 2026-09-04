@@ -36,7 +36,9 @@ describe "rake db:populate_locale_languages_table" do
 
   context "when a locale language cannot be saved" do
     before do
-      LocaleLanguage.create!(name: "Suomi", short: "zz")
+      # Use an id that can't match language.id, so the task builds a new row
+      # that collides with this one's unique name.
+      LocaleLanguage.create!(id: language.id + 1_000, name: "Suomi", short: "zz")
     end
 
     it "reports the failure and continues" do
