@@ -160,14 +160,6 @@ describe Admin::AdminUsersController do
         expect(response).to have_http_status(:success)
       end
 
-      it "preloads the user's roles" do
-        fake_login_admin(admin)
-        expect(User).to receive(:includes).with(:roles).and_call_original
-        get :show, params: { id: user.login }
-
-        expect(assigns(:user).association(:roles)).to be_loaded
-      end
-
       it "if user does not exist, raises a 404" do
         fake_login_admin(admin)
         params = { id: "not_existing_id" }

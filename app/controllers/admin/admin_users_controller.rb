@@ -248,6 +248,6 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def log_items
-    @log_items ||= @user.log_items.sort_by(&:created_at).reverse
+    @log_items ||= @user.log_items.includes(:role).sort_by(&:created_at).reverse
   end
 end

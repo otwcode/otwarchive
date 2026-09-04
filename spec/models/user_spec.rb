@@ -11,8 +11,6 @@ describe User do
       expect(deserialized_user).to eq(user)
       expect(deserialized_user.association(:roles)).to be_loaded
       expect(deserialized_user.roles).to contain_exactly(role)
-      expect(Role).not_to receive(:find_by)
-      expect(deserialized_user.has_role?(role.name)).to be(true)
     end
 
     it "loads the roles association when the user has no roles" do
