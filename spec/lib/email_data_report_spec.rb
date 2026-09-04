@@ -5,8 +5,10 @@ describe EmailDataReport do
 
   let(:email) { "guest@example.com" }
 
-  it "prints only a header when no data is found" do
-    expect(subject).to eq("Data for #{email}\n")
+  it "prints only the header and the audits query when no data is found" do
+    expect(subject).to start_with("Data for #{email}\n\nDeleted accounts")
+    expect(subject).not_to include("IP Addresses:")
+    expect(subject).not_to include("Comments Left:")
   end
 
   it "downcases the email before lookup" do
@@ -121,6 +123,18 @@ describe EmailDataReport do
       expect(subject).to include("198.51.100.7")
     end
 
+    it "excludes the IP when an admin made the change" do
+      user.audits.create!(
+        action: "update",
+        auditable: user,
+        user: create(:admin),
+        audited_changes: { "login" => ["admin_changed", user.login] },
+        remote_address: "203.0.113.50"
+      )
+
+      expect(subject).not_to include("203.0.113.50")
+    end
+
     it "finds accounts that currently use the email" do
       current = create(:user, email: email)
       current.audits.create!(
@@ -135,64 +149,17 @@ describe EmailDataReport do
     end
   end
 
-  describe "deep search for deleted accounts" do
-    subject { described_class.new(email, deep_search: true).to_s }
-
-    # A deleted account only exists in the audits table anymore: the user row
-    # and its user_past_emails are gone, so these audits are orphaned.
-    before do
-      Audited::Audit.create!(
-        auditable_type: "User",
-        auditable_id: 424_242,
-        action: "update",
-        audited_changes: { "login" => %w[old_ghost final_ghost] },
-        remote_address: "203.0.113.30"
-      )
-      Audited::Audit.create!(
-        auditable_type: "User",
-        auditable_id: 424_242,
-        action: "destroy",
-        audited_changes: { "login" => "final_ghost", "email" => email },
-        remote_address: "203.0.113.31"
-      )
+  describe "deleted accounts query" do
+    it "ends the report with the audits query for a secondary database" do
+      expect(subject).to include("ask Systems to run this")
+      expect(subject).to include("SELECT DISTINCT auditable_id FROM audits")
+      expect(subject).to include("audited_changes LIKE '%guest@example.com%'")
     end
 
-    it "finds deleted accounts through their audits" do
-      expect(subject).to include("final_ghost")
-      expect(subject).to include("old_ghost")
-      expect(subject).to include("203.0.113.30")
-      expect(subject).to include("203.0.113.31")
-    end
+    it "escapes LIKE wildcards in the email" do
+      report = described_class.new("gu%es_t@example.com").to_s
 
-    it "excludes the admin's IP when an admin deleted the account" do
-      Audited::Audit.create!(
-        auditable_type: "User",
-        auditable_id: 777_777,
-        user: create(:admin),
-        action: "destroy",
-        audited_changes: { "login" => "admin_deleted", "email" => email },
-        remote_address: "203.0.113.50"
-      )
-
-      expect(subject).to include("admin_deleted")
-      expect(subject).not_to include("203.0.113.50")
-    end
-
-    it "ignores audits where the email only matches as a substring" do
-      Audited::Audit.create!(
-        auditable_type: "User",
-        auditable_id: 555_555,
-        action: "destroy",
-        audited_changes: { "login" => "impostor", "email" => "a#{email}" },
-        remote_address: "203.0.113.40"
-      )
-
-      expect(subject).not_to include("impostor")
-      expect(subject).not_to include("203.0.113.40")
-    end
-
-    it "does not scan audits when the deep search is off" do
-      expect(described_class.new(email).to_s).not_to include("final_ghost")
+      expect(report).to include("LIKE '%gu\\%es\\_t@example.com%'")
     end
   end
 end

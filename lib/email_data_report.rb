@@ -2,17 +2,13 @@
 # activity, plus account history through indexed lookups (a LIKE scan on
 # audits is too expensive, see AO3-6015 / PR #4997).
 #
-# Deleted accounts only survive in audits; deep_search: true opts into a
-# chunked scan of that table.
+# Deleted accounts only survive in audits; the report ends with the query
+# for Systems to run on a secondary database.
 class EmailDataReport
   include Rails.application.routes.url_helpers
 
-  # Bounds each deep-search query to a primary-key range.
-  AUDIT_SCAN_BATCH_SIZE = 1_000_000
-
-  def initialize(email, deep_search: false)
+  def initialize(email)
     @email = email.to_s.strip.downcase
-    @deep_search = deep_search
   end
 
   def to_s
@@ -25,6 +21,7 @@ class EmailDataReport
     parts << comments_section
     parts << abuse_reports_section
     parts << support_tickets_section
+    parts << deleted_accounts_section
     "#{parts.compact.join("\n\n")}\n"
   end
 
@@ -54,34 +51,22 @@ class EmailDataReport
     @user_ids ||= begin
       ids = User.where(email: @email).or(User.where(unconfirmed_email: @email)).pluck(:id)
       ids |= UserPastEmail.where(email_address: @email).pluck(:user_id)
-      ids |= deleted_user_ids if @deep_search
       ids
     end
   end
 
-  # LIKE matches substrings, so candidates are verified against the exact
-  # email before being included.
-  def deleted_user_ids
-    max_id = Audited::Audit.maximum(:id)
-    return [] if max_id.nil?
-
-    ids = []
-    (Audited::Audit.minimum(:id)..max_id).step(AUDIT_SCAN_BATCH_SIZE) do |start|
-      candidates = Audited::Audit.where(auditable_type: "User")
-        .where(id: start...(start + AUDIT_SCAN_BATCH_SIZE))
-        .where("audited_changes LIKE ?", "%#{Audited::Audit.sanitize_sql_like(@email)}%")
-        .pluck(:auditable_id, :audited_changes)
-      ids.concat(candidates.filter_map { |id, changes| id if email_in_changes?(changes) })
-    end
-    ids.uniq
-  end
-
-  def email_in_changes?(changes)
-    return false unless changes.is_a?(Hash)
-
-    changes.values_at("email", "unconfirmed_email").any? do |value|
-      value == @email || (value.is_a?(Array) && value.include?(@email))
-    end
+  # LIKE matches substrings, so the results still need to be verified
+  # against the exact email.
+  def deleted_accounts_section
+    escaped_email = Audited::Audit.sanitize_sql_like(@email)
+    <<~SECTION.strip
+      Deleted accounts only survive in the audits table, which is too expensive
+      to search on the live database. To look for them, ask Systems to run this
+      on a secondary database:
+        SELECT DISTINCT auditable_id FROM audits
+        WHERE auditable_type = 'User'
+        AND audited_changes LIKE '%#{escaped_email}%';
+    SECTION
   end
 
   def audit_history
