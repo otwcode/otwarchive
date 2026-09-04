@@ -217,6 +217,7 @@ zh-Hans:
           anon: 匿名作者
           named:
             html:
+              her: 作者 %{creator_links}
               other: 作者 %{creator_links}
             text:
               other: 作者 %{creators}
@@ -366,7 +367,7 @@ zh-Hans:
       preface:
         anon:
           chapter:
-            html: 匿名作者发布了%{work_title_with_word_count}的新章节：
+            html: 匿名作者发布了%{work_link_with_word_count}的新章节：
             text: 匿名作者发布了%{work_title_with_word_count}的新章节：
           work:
             backdated: 匿名作者发布了一篇发布日期倒填的作品
@@ -374,7 +375,7 @@ zh-Hans:
         named:
           chapter:
             html:
-              other: "%{creator_links}发布了%{work_title_with_word_count}的新章节："
+              other: "%{creator_links}发布了%{work_link_with_word_count}的新章节："
             text:
               other: "%{creators}发布了%{work_title_with_word_count}的新章节："
           work:
@@ -601,10 +602,7 @@ zh-Hans:
           intro:
             other: 如果是您提出了此申请，请在%{count}天内%{choose_new_password_link_imperative} 。
           text:
-            other: '如果是您提出了此申请，请在%{count}天内使用此链接设置新密码：%{choose_new_password_url}。
-              如果此邮件内的链接已过期，您将需要重新申请重置密码：%{new_password_reset_url}。如果您遇到了技术问题，请等待几个小时再重新尝试。如果问题持续超过一天，请联系支持团队以获得进一步协助：%{contact_support_url}。
-
-              '
+            other: 如果是您提出了此申请，请在%{count}天内使用此链接设置新密码：%{choose_new_password_url}。 如果此邮件内的链接已过期，您将需要重新申请重置密码：%{new_password_reset_url}。如果您遇到了技术问题，请等待几个小时再重新尝试。如果问题持续超过一天，请联系支持团队以获得进一步协助：%{contact_support_url}。
         intro: 有人申请重置您的%{app_name}账号密码。
         new_password_reset: 重新申请重置密码
         reset_emails_clarification:
