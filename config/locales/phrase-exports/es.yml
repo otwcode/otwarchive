@@ -298,8 +298,6 @@ es:
         open_doors: El equipo de Open Doors (Puertas Abiertas)
         parent_org: Organization for Transformative Works – OTW (Organización para
           las Obras Transformativas)
-  preferences:
-    locale_help_title: Ayuda para preferencias ubicación
   roles:
     anonymous_creator: Creadorx anónimx
     commenter_name:

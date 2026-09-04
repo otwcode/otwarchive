@@ -315,8 +315,6 @@ de:
         app_short_name: AO3
         open_doors: Das "Open Doors"-Team
         parent_org: OTW (Organisation für Transformative Werke)
-  preferences:
-    locale_help_title: Hilfe zur Spracheinstellung
   roles:
     anonymous_creator: Anonyme*r Schöpfer*in
     commenter_name:
