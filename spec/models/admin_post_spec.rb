@@ -49,7 +49,7 @@ describe AdminPost do
 
   describe "#translated_post_must_be_posted_first" do
     let(:admin_post) { create(:admin_post, :draft) }
-    let(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:language).id) }
+    let(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:locale_language).id) }
 
     it "returns error when posting a translation first" do
       translation.posted = true
@@ -77,7 +77,7 @@ describe AdminPost do
 
   describe "#post_translations" do
     let(:admin_post) { create(:admin_post, :draft) }
-    let!(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:language).id) }
+    let!(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:locale_language).id) }
 
     it "posts draft translations" do
       admin_post.reload.update!(posted: true)
@@ -87,13 +87,13 @@ describe AdminPost do
   end
 
   describe "#translations" do
-    let(:language1) { create(:language, name: "Arabic", short: "ar", sortable_name: "arabic") }
-    let(:language2) { create(:language, name: "Finnish", short: "fi", sortable_name: "Suomi") }
+    let(:language1) { create(:locale_language, name: "Arabic", short: "ar", sortable_name: "arabic") }
+    let(:language2) { create(:locale_language, name: "Finnish", short: "fi", sortable_name: "Suomi") }
     let(:parent_post) { create(:admin_post) }
-    let!(:language1_post) { create(:admin_post, language: language1, translated_post: parent_post) }
-    let!(:language2_post) { create(:admin_post, language: language2, translated_post: parent_post) }
+    let!(:language1_post) { create(:admin_post, locale_language: language1, translated_post: parent_post) }
+    let!(:language2_post) { create(:admin_post, locale_language: language2, translated_post: parent_post) }
 
-    it "sorts by the post's language sortable name, case-insensitive" do
+    it "sorts by the post's locale language sortable name, case-insensitive" do
       expect(parent_post.reload.translations).to eq([language1_post, language2_post])
     end
   end
