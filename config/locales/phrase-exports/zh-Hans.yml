@@ -180,6 +180,16 @@ zh-Hans:
         other: "[%{app_name}] 您对%{title}的评论所获回复已被编辑"
         tag: "[%{app_name}] 您对标签%{name}的评论所获回复已被编辑"
       you_wrote: 您的评论：
+  gift_exchange_mailer:
+    assignment_default_notification:
+      assign_pinch_hitter:
+        collection_assignments_page: 同人作品集任务页
+        html: 您可以通过%{collection_assignments_page_link}指定一名替补参与者。
+        text: 您可以通过同人作品集任务页指定一名替补参与者：%{collection_assignments_page_url} 。
+      defaulted_on_assignment:
+        html: "%{offer_byline}未能完成您在赠文交换%{collection_link}中匹配给%{request_byline} 的任务。"
+        text: '%{offer_byline}未能完成您在赠文交换"%{collection_title}"（%{collection_url}）中匹配给%{request_byline}的任务。'
+      subject: "[%{app_name}][%{collection_title}] %{offer_byline}未能完成任务"
   help:
     preferences_locale:
       locale:
