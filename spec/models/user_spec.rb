@@ -1,6 +1,32 @@
 require "spec_helper"
 
 describe User do
+  describe ".serialize_from_session" do
+    let(:role) { create(:role) }
+    let(:user) { create(:user, roles: [role]) }
+
+    it "returns the user with roles loaded when the salt matches" do
+      deserialized_user = described_class.serialize_from_session(user.to_key, user.authenticatable_salt)
+
+      expect(deserialized_user).to eq(user)
+      expect(deserialized_user.association(:roles)).to be_loaded
+      expect(deserialized_user.roles).to contain_exactly(role)
+    end
+
+    it "loads the roles association when the user has no roles" do
+      user = create(:user)
+
+      deserialized_user = described_class.serialize_from_session(user.to_key, user.authenticatable_salt)
+
+      expect(deserialized_user.association(:roles)).to be_loaded
+      expect(deserialized_user.roles).to be_empty
+    end
+
+    it "returns nil when the salt does not match" do
+      expect(described_class.serialize_from_session(user.to_key, "invalid salt")).to be_nil
+    end
+  end
+
   describe "audits" do
     let(:user) { create(:user) }
 
