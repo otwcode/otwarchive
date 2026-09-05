@@ -46,7 +46,7 @@ describe PreferencesController do
       end
 
       it "does not add a nil entry when the user's skin has been deleted" do
-        user.preference.update(skin_id: 9999)
+        user.preference.update_column(:skin_id, 9999)
 
         get :index, params: { user_id: user.login }
 
