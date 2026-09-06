@@ -6,27 +6,30 @@ describe "n+1 queries in the admin users controller" do
   include LoginMacros
 
   describe "#show", n_plus_one: true do
-    let!(:user) { create(:user) }
-    let!(:admin) { create(:policy_and_abuse_admin) }
+    context "when an admin views a user with multiple roles" do
+      let!(:user) { create(:user) }
 
-    before { fake_login_admin(admin) }
+      before { fake_login_admin(create(:policy_and_abuse_admin)) }
 
-    populate do |n|
-      role_names = %w[archivist no_resets official opendoors protected_user]
-      # Assigning roles also creates the role-change history rendered on this page.
-      user.reload.roles = role_names.first(n).map { |name| create(:role, name: name) }
-    end
+      populate do |n|
+        user.roles = create_list(:role, n)
+      end
 
-    warmup { get admin_user_path(user) }
+      subject do
+        proc do
+          get admin_user_path(user)
+        end
+      end
 
-    it "performs a constant number of role queries" do
-      expect do
-        get admin_user_path(user)
+      warmup { subject.call }
+
+      it "produces a constant number of queries" do
+        expect { subject.call }
+          .to perform_constant_number_of_queries
+
         expect(response).to have_http_status(:success)
         expect(response.body).to include("user_history")
-      end.to perform_constant_number_of_queries
-        .matching(/\b(?:roles|roles_users)\b/)
-        .with_scale_factors(2, 5)
+      end
     end
   end
 end
