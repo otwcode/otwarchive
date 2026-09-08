@@ -15,7 +15,7 @@ class Query
         track_total_hits: true
       )
     rescue Elastic::Transport::Transport::Errors::BadRequest => e
-      Sentry.capture_exception(e) if defined?(Sentry)
+      Sentry.capture_exception(e) if defined?(Sentry) && $rollout.active?(:log_elasticsearch_errors)
       { error: "Your search failed because of a syntax error. Please try again." }
     end
   end

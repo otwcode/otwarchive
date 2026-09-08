@@ -21,11 +21,30 @@ describe AutocompleteController do
         expect(JSON.parse(response.body)).to eq([{ "id" => "test", "name" => "test" }])
       end
 
-      it "reports the exception to Sentry" do
-        sentry = class_double("Sentry", capture_exception: nil).as_stubbed_const
-        get :noncanonical_tag, params: { term: "test", type: "freeform", format: :json }
-        expect(sentry).to have_received(:capture_exception)
-          .with(instance_of(Elastic::Transport::Transport::Errors::BadRequest))
+      context "when the log_elasticsearch_errors rollout flag is on" do
+        before { $rollout.activate(:log_elasticsearch_errors) }
+
+        after { $rollout.deactivate(:log_elasticsearch_errors) }
+
+        it "reports the exception to Sentry" do
+          sentry = class_double("Sentry", capture_exception: nil)
+            .as_stubbed_const
+          get :noncanonical_tag,
+              params: { term: "test", type: "freeform", format: :json }
+          error = Elastic::Transport::Transport::Errors::BadRequest
+          expect(sentry).to have_received(:capture_exception)
+            .with(instance_of(error))
+        end
+      end
+
+      context "when the log_elasticsearch_errors rollout flag is off" do
+        it "does not report the exception to Sentry" do
+          sentry = class_double("Sentry", capture_exception: nil)
+            .as_stubbed_const
+          get :noncanonical_tag,
+              params: { term: "test", type: "freeform", format: :json }
+          expect(sentry).not_to have_received(:capture_exception)
+        end
       end
     end
   end

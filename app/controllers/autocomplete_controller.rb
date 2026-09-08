@@ -111,7 +111,7 @@ class AutocompleteController < ApplicationController
       )
       render_output((match + search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] }).uniq)
     rescue Elastic::Transport::Transport::Errors::BadRequest => e
-      Sentry.capture_exception(e) if defined?(Sentry)
+      Sentry.capture_exception(e) if defined?(Sentry) && $rollout.active?(:log_elasticsearch_errors)
       render_output(match)
     end
   end
