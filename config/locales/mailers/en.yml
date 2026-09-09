@@ -69,8 +69,8 @@ en:
         text: 'Go to the thread starting from this comment: %{url}'
       last_edited: 'Last edited: %{datetime}'
       parent_thread:
-        html: Go to the thread to which this comment belongs
-        text: 'Go to the thread to which this comment belongs: %{url}'
+        html: Go to this comment's parent thread
+        text: "Go to this comment's parent thread: %{url}"
       posted: 'Posted: %{datetime}'
       read_all_comments:
         chapter:
