@@ -59,6 +59,61 @@ describe AdminPost do
     end
   end
 
+  describe "translation language uniqueness" do
+    let(:admin_post) { create(:admin_post) }
+    let(:language) { create(:language) }
+    let(:translation) do
+      build(:admin_post, translated_post: admin_post, language: language)
+    end
+    let(:message) { "already has a translation in this language" }
+
+    context "when the original post has a posted translation in the language" do
+      before do
+        create(:admin_post, translated_post: admin_post, language: language)
+      end
+
+      it "adds an error to the translated post" do
+        expect(translation).to be_invalid
+        expect(translation.errors[:translated_post_id]).to include(message)
+      end
+    end
+
+    context "when the original post has a draft translation in the language" do
+      before do
+        create(:admin_post, :draft,
+               translated_post: admin_post, language: language)
+      end
+
+      it "adds an error to the translated post" do
+        expect(translation).to be_invalid
+        expect(translation.errors[:translated_post_id]).to include(message)
+      end
+    end
+
+    context "when another post has a translation in that language" do
+      before do
+        other_post = create(:admin_post)
+        create(:admin_post, translated_post: other_post, language: language)
+      end
+
+      it "does not add an error" do
+        expect(translation).to be_valid
+      end
+    end
+
+    context "when updating the existing translation" do
+      let!(:existing) do
+        create(:admin_post, translated_post: admin_post, language: language)
+      end
+
+      it "does not add an error" do
+        existing.title = "Updated translation title"
+
+        expect(existing).to be_valid
+      end
+    end
+  end
+
   describe "#set_published_at" do
     before { freeze_time }
 

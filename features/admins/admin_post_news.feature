@@ -66,6 +66,15 @@ Feature: Admin Actions to Post News
       And I am logged in as "ordinaryuser"
     Then I should see a translated admin post
 
+  Scenario: Make a second translation of an admin post in the same language
+    Given I have posted an admin post
+      And basic languages
+      And the admin post "Erste Ankuendigung" translating "Default Admin Post" to "Deutsch"
+      And I am logged in as a "translation" admin
+    When I make a translation of an admin post
+    Then I should see "Sorry! We couldn't save this admin post because:"
+      And I should see "Translated post already has a translation in this language"
+
   Scenario: Make a translation of an admin post that doesn't exist
     Given basic languages
       And I am logged in as a "translation" admin

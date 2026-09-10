@@ -160,6 +160,16 @@ Given "the draft admin post {string} with tag(s) {string}" do |title, tags|
   FactoryBot.create(:admin_post, :draft, title: title, comment_permissions: :enable_all, tag_list: tags)
 end
 
+Given "the admin post {string} translating {string} to {string}" do |title, translated_title, lang|
+  admin_post = AdminPost.find_by!(title: translated_title)
+  language = Language.find_by!(name: lang)
+  FactoryBot.create(:admin_post,
+                    title: title,
+                    comment_permissions: :enable_all,
+                    translated_post_id: admin_post.id,
+                    language: language)
+end
+
 Given "the draft admin post {string} translating {string} to {string}" do |title, translated_title, lang|
   admin_post = AdminPost.find_by!(title: translated_title)
   language = Language.find_by!(name: lang)
