@@ -4,7 +4,7 @@
 <ul class="navigation actions" role="menu">
   <li class="action">
     <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv) %>
-    <%= link_to_help "csv-download" %>
+    <%= link_to_help_modal(help_csv_download_path, t(".csv_download_help_title")) %>
   </li>
   <li><%= link_to ts("Manage Prompts"), collection_requests_path(@collection) %></li>
   <li><%= link_to ts("Manage Claims"), collection_claims_path(@collection) %></li>
