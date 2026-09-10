@@ -62,5 +62,26 @@ describe TagNomination do
         end
       end
     end
+
+    context "when the nominated tag is a canonical fandom with a media parent" do
+      let(:media) { create(:media) }
+      let(:fandom) { create(:canonical_fandom) }
+
+      before do
+        create(:common_tagging, filterable: media, common_tag: fandom)
+      end
+
+      let(:nomination) { create(:tag_nomination, tagname: fandom.name, type: "FandomNomination") }
+
+      it "sets parented to true" do
+        expect(nomination.parented).to be(true)
+      end
+
+      it "keeps parented true after the tag is re-saved" do
+        nomination
+        fandom.save!
+        expect(nomination.reload.parented).to be(true)
+      end
+    end
   end
 end
