@@ -97,4 +97,38 @@ describe AdminPost do
       expect(parent_post.reload.translations).to eq([language1_post, language2_post])
     end
   end
+
+  describe "#set_admin_id" do
+    let(:admin) { create(:superadmin) }
+
+    context "on a new admin post" do
+      let!(:admin_post) { build(:admin_post, admin_id: nil) }
+
+      it "sets the admin_id to the admin currently logged in" do
+        User.current_user = admin
+
+        expect(admin_post.save).to be_truthy
+        expect(admin_post.reload.admin_id).to eq(admin.id)
+      end
+
+      it "does nothing if no admin is logged in" do
+        User.current_user = nil
+
+        expect(admin_post.save).to be_truthy
+        expect(admin_post.reload.admin_id).to be_nil
+      end
+    end
+
+    context "on an existing admin post" do
+      let!(:admin_post) { create(:admin_post) }
+
+      it "replaces the admin_id if already set" do
+        User.current_user = admin
+
+        expect { admin_post.save }
+          .to change { admin_post.reload.admin_id }
+          .to(admin.id)
+      end
+    end
+  end
 end

@@ -46,6 +46,7 @@ class AdminPost < ApplicationRecord
   scope :unposted, -> { where(posted: false) }
   scope :posted, -> { where(posted: true) }
 
+  before_validation :set_admin_id
   before_validation :inherit_translated_post_attributes
   before_save :apply_tag_list
   before_save :set_published_at, if: :posted_changed?
@@ -133,6 +134,12 @@ class AdminPost < ApplicationRecord
     unless Rails.env.development?
       Rails.cache.delete("v1/home/index/home_admin_posts")
     end
+  end
+
+  def set_admin_id
+    return unless User.current_user.is_a?(Admin)
+
+    self.admin_id = User.current_user.id
   end
 
   def inherit_translated_post_attributes
