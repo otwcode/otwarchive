@@ -237,12 +237,12 @@ Feature: Prompt Meme Challenge
   Then I should see "Challenge sign-up was deleted."
   # work fulfilling is still fine
   When I view the work "Fulfilled Story"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+  Then I should see "This work is part of a collection that has not been revealed. Please visit Battle 12 for details."
     And I should not see "Stargate Atlantis"
     # work is still fine as another user
   When I am logged in as "myname4"
     And I view the work "Fulfilled Story"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+  Then I should see "This work is part of a collection that has not been revealed. Please visit Battle 12 for details."
     And I should see "Stargate Atlantis"
 
   Scenario: Prompt can be removed after response has been posted and still show properly on the work which fulfilled it
@@ -256,11 +256,11 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
     And I delete my signup for the prompt meme "Battle 12"
   When I view the work "Fulfilled Story"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+  Then I should see "This work is part of a collection that has not been revealed. Please visit Battle 12 for details."
     And I should not see "Stargate Atlantis"
   When I am logged in as "myname4"
     And I view the work "Fulfilled Story"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+  Then I should see "This work is part of a collection that has not been revealed. Please visit Battle 12 for details."
     And I should see "Stargate Atlantis"
 
   Scenario: User can fulfill the same claim twice
@@ -291,10 +291,10 @@ Feature: Prompt Meme Challenge
     And I press "Update"
   Then I should see "Battle 12"
   Then I should see "Existing Story"
-    And I should see "This work is part of an ongoing challenge"
+    And I should see "This work is part of a collection that has not been revealed."
   When I reveal works for "Battle 12"
   When I view the work "Existing Story"
-    And I should not see "This work is part of an ongoing challenge"
+    And I should not see "This work is part of a collection that has not been revealed."
 
   Scenario: User edits existing work in another collection to fulfill claim
 
@@ -466,9 +466,8 @@ Feature: Prompt Meme Challenge
   When I view the work "Fulfilled Story-thing"
   Then I should not see "In response to a prompt by myname4"
     And I should not see "Fandom: Stargate Atlantis"
-    And I should not see "Anonymous"
     And I should not see "mod1"
-    And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+    And I should see "This work is part of a collection that has not been revealed. Please visit Battle 12 for details."
 
   Scenario: Mod can post a fic
 

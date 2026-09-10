@@ -1,12 +1,17 @@
-<p class="notice">
-  <%= ts("This work is part of an ongoing challenge and will be revealed soon!") %>
-  <% if @work.user_is_owner_or_invited?(current_user) %>
-    <%= ts("You can find details here: ") %>
-    <%= show_collections_data(@work.collections.unrevealed) %>
+<div class="notice">
+  <% challenge = @work.collections.unrevealed.first.challenge %>
+  <% if @work.collections.unrevealed.count == 1 && challenge&.works_reveal_at? %>
+    <p>
+      <%= t(".scheduled_reveal_html", date: date_in_zone(challenge.works_reveal_at)) %>
   <% else %>
-    <% if @work.approved_collections.unrevealed.present? %>
-      <%= ts("You can find details here: ") %>
-      <%= show_collections_data(@work.approved_collections.unrevealed) %>
-    <% end %>
+    <p>
+      <%= t(".not_revealed") %>
   <% end %>
-</p>
+      <%= t(".details_html", collection: show_collections_data(@work.collections.unrevealed)) %>
+    </p>
+    <p>
+      <%= t(".learn_more_html", 
+        collection_options_faq: link_to(t(".collections_faq_options"), archive_faqs_path + "/collections#collectionoptions"),
+        collections_faq: link_to(t(".collections_faq"), archive_faqs_path + "/collections") ) %>
+    </p>
+</div>

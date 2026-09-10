@@ -46,7 +46,7 @@ Feature: Prompt Meme Challenge
   Then I should see "New claim made"
   When I fulfill my claim
   Then I should see "Work was successfully posted"
-    And I should see "This work is part of an ongoing challenge and will be revealed soon!"
+    And I should see "This work is part of a collection that has not been revealed."
     
   # writer 2 replies to prompt
   When I am logged in as "writer2" with password "something"
