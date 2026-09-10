@@ -28,6 +28,24 @@ describe User do
         expect(existing_user.save).to be_truthy
       end
     end
+
+    context "with a username confusable with a forbidden one" do
+      before do
+        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return(["admin"])
+      end
+
+      it { is_expected.not_to allow_values("admin", "admın", "ad.min", "ad min ", "adrnin", "ADMIN", "ᗅdmin").for(:login) }
+    end
+
+    context "with a username not confusable with a forbidden one" do
+      let(:forbidden_username) { "admin" }
+
+      before do
+        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return(["admin"])
+      end
+
+      it { is_expected.to allow_values("user", "admn", "SadminER").for(:login) }
+    end
   end
 
   describe "#destroy" do
