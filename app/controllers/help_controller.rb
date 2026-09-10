@@ -13,6 +13,8 @@ class HelpController < ApplicationController
     privacy_moderated_commenting
     privacy_restricted_commenting
     privacy_restricted_work
+    prompt_restriction_tag_set_gift_exchange
+    prompt_restriction_tag_set_prompt_meme
     rte
     skins_basics
     skins_creating

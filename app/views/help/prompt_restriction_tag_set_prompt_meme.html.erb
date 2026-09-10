@@ -1,0 +1,16 @@
+<h4><%= t(".page_heading") %></h4>
+
+<p><%= t(".limit_tags_html",
+         tags_link: link_to(t(".tags"), archive_faq_path("glossary", anchor: "tagdef")),
+         tag_set_link: link_to(t(".tag_set"), archive_faq_path("glossary", anchor: "tagsetdef")),
+         prompt_meme_link: link_to(t(".prompt_meme"), archive_faq_path("glossary", anchor: "promptmemedef"))) %></p>
+
+<p><%= t(".use_only") %></p>
+
+<p><%= t(".request_offers_same_set") %></p>
+
+<p><%= t(".other_tag_types") %></p>
+
+<p><%= t(".more_information_html",
+         tag_options_link: link_to(t(".tag_options"), archive_faq_path("tutorial-running-a-prompt-meme-on-ao3", anchor: "prompttagopt")),
+         tutorial_prompt_meme_link: link_to(t(".tutorial_prompt_meme", app_name: ArchiveConfig.APP_SHORT_NAME), archive_faq_path("tutorial-running-a-prompt-meme-on-ao3"))) %></p>
