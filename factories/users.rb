@@ -52,5 +52,9 @@ FactoryBot.define do
     factory :protected_user do
       roles { [Role.find_or_create_by(name: "protected_user")] }
     end
+
+    factory :orphan_user do
+      login { "orphan_account" }
+    end
   end
 end
