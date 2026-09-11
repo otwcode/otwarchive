@@ -65,6 +65,6 @@ class Homepage
   def inbox_comments
     return unless logged_in?
 
-    @inbox_comments ||= @user.inbox_comments.with_bad_comments_removed.for_homepage
+    @inbox_comments ||= @user.inbox_comments.with_bad_comments_removed.for_homepage.for_display
   end
 end
