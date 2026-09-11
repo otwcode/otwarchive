@@ -101,6 +101,10 @@ class TagsController < ApplicationController
                 Work
               when "chapter"
                 Chapter
+              when "request"
+                Request
+              when "externalwork"
+                ExternalWork
               end
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
 
@@ -114,9 +118,9 @@ class TagsController < ApplicationController
       else
         @display_tags = case params[:tag_type]
                         when 'warnings'
-                          @display_creation.archive_warnings
+                          @display_creation.tag_groups["ArchiveWarning"]
                         when 'freeforms'
-                          @display_creation.freeforms
+                          @display_creation.tag_groups["Freeform"]
                         end
       end
 
