@@ -37,3 +37,18 @@ Feature: Favorite Tags
   When the tag "Rebecca Sutter" is decanonized
     And I go to the homepage
   Then I should not see "Rebecca Sutter"
+
+  @javascript
+  Scenario: Favoriting a tag only shows one AJAX notice when another flash is already present
+  Given a canonical fandom "Dallas (TV 2012)"
+    And the user "bourbon" exists and is activated
+    And I am a visitor
+  When I view the "Dallas (TV 2012)" works index
+    And I follow "Log In" within "#header"
+    And I fill in "Username or email:" with "bourbon" within "#login"
+    And I fill in "Password:" with "password" within "#login"
+    And I press "Log In" within "#login"
+  Then I should see "Successfully logged in"
+    And I should see a "Favorite Tag" button
+  When I press "Favorite Tag"
+  Then I should see "You have successfully added Dallas (TV 2012) to your favorite tags." exactly 1 time
