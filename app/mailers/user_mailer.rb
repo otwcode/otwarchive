@@ -349,30 +349,28 @@ class UserMailer < ApplicationMailer
   ### OTHER NOTIFICATIONS ###
 
   # archive feedback
-  def feedback(feedback_id)
-    feedback = Feedback.find(feedback_id)
-    return unless feedback.email
+  def feedback(feedback)
+    return unless feedback[:email]
 
-    @summary = feedback.summary
-    @comment = feedback.comment
-    @username = feedback.username if feedback.username.present?
-    @language = feedback.language
+    @summary = feedback[:summary]
+    @comment = feedback[:comment]
+    @username = feedback[:username] if feedback[:username].present?
+    @language = feedback[:language]
     mail(
-      to: feedback.email,
-      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(feedback.summary))
+      to: feedback[:email],
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
     )
   end
 
-  def abuse_report(abuse_report_id)
-    abuse_report = AbuseReport.find(abuse_report_id)
-    @username = abuse_report.username
-    @email = abuse_report.email
-    @url = abuse_report.url
-    @summary = abuse_report.summary
-    @comment = abuse_report.comment
+  def abuse_report(abuse_report)
+    @username = abuse_report[:username]
+    @email = abuse_report[:email]
+    @url = abuse_report[:url]
+    @summary = abuse_report[:summary]
+    @comment = abuse_report[:comment]
     mail(
-      to: abuse_report.email,
-      subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
+      to: abuse_report[:email],
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
     )
   end
 end

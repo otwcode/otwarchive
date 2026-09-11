@@ -829,7 +829,7 @@ describe UserMailer do
 
   describe "abuse_report" do
     let(:report) { create(:abuse_report) }
-    let(:email) { UserMailer.abuse_report(report.id) }
+    let(:email) { UserMailer.abuse_report(report.mailer_attributes) }
 
     it "has the correct subject" do
       expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Abuse - #{report.summary}"
@@ -880,9 +880,9 @@ describe UserMailer do
 
   describe "feedback" do
     context "when username is present" do
-      subject(:email) { UserMailer.feedback(feedback.id) }
+      subject(:email) { UserMailer.feedback(feedback.mailer_attributes) }
 
-      let(:feedback) { create(:feedback) }
+      let(:feedback) { build(:feedback) }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
@@ -912,9 +912,9 @@ describe UserMailer do
     end
 
     context "when username is not present" do
-      subject(:email) { UserMailer.feedback(feedback.id) }
+      subject(:email) { UserMailer.feedback(feedback.mailer_attributes) }
 
-      let(:feedback) { create(:feedback, username: "A. Name") }
+      let(:feedback) { build(:feedback, username: "A. Name") }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"

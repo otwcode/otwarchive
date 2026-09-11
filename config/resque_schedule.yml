@@ -122,3 +122,12 @@ disable_admin_post_comments:
   description: >-
     Disables all comments on admin (news) posts older than the
     configured window.
+
+delete_old_abuse_report_records:
+  every: 1d
+  class: "AbuseReport"
+  queue: utilities
+  args: delete_old_report_records
+  description: >-
+    Deletes abuse report records that are no longer needed for
+    rate limiting.
