@@ -1,4 +1,4 @@
-class RelatedWork < ActiveRecord::Base
+class RelatedWork < ApplicationRecord
   belongs_to :work
   belongs_to :parent, polymorphic: true, autosave: true
 
@@ -7,10 +7,45 @@ class RelatedWork < ActiveRecord::Base
   attribute :author, :string
   attribute :language_id, :integer
 
-  scope :posted, -> {
-    joins("INNER JOIN `works` `child_works` ON `child_works`.`id` = `related_works`.`work_id`").
-    where("child_works.posted = 1")
+  scope :translations, -> { where(translation: true) }
+  scope :remixes, -> { where(translation: false) }
+  scope :reciprocal, -> { where(reciprocal: true) }
+
+  scope :posted_children, -> { joins(:work).where(work: { posted: true }) }
+  scope :unhidden_children, -> { joins(:work).where(work: { hidden_by_admin: false }) }
+  scope :unrestricted_children, -> { joins(:work).where(work: { restricted: false }) }
+
+  # visible child works in User.related_works
+  scope :children_for_user_page, lambda {
+    if User.current_user.present?
+      posted_children.unhidden_children
+    else
+      posted_children.unhidden_children.unrestricted_children
+    end
   }
+
+  # visible parent works in User.parent_work_relationships
+  scope :parents_for_user_page, lambda {
+    visible_work_ids = if User.current_user.present?
+                         Work.visible_to_registered_user.select(:id)
+                       else
+                         Work.visible_to_all.select(:id)
+                       end
+
+    where(parent_type: "Work").where(parent_id: visible_work_ids)
+      .or(where(parent_type: "ExternalWork").where(parent_id: ExternalWork.visible.select(:id)))
+  }
+
+  # visible user's own works in User.related_works and User.parent_work_relationships
+  def self.user_works_for_user_page(user)
+    if User.current_user == user
+      merge(Work.unhidden)
+    elsif User.current_user.present?
+      reciprocal.merge(Work.posted.unhidden.revealed.non_anon)
+    else
+      reciprocal.merge(Work.posted.unhidden.revealed.non_anon.unrestricted)
+    end
+  end
 
   before_validation :set_parent, if: :new_record?
   def set_parent
