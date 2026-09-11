@@ -6,8 +6,13 @@ en:
       not_admin_denied: Please log in as admin
       page_access_denied: Sorry, only an authorized admin can access the page you were trying to reach.
     admin_invitations:
+      create:
+        no_email: Please enter an email address.
+        sent: An invitation was sent to %{email_address}
       find:
         user_not_found: No results were found. Try another search.
+      grant_invites_to_users:
+        invites_created: Invitations successfully created.
       invite_from_queue:
         success:
           one: "%{count} person from the invite queue is being invited."
@@ -219,6 +224,8 @@ en:
       error: You have made too many requests in a short time period. Please wait a while before trying again. If you are receiving this error repeatedly, try browsing more slowly or loading fewer pages at a time.
     show:
       page_title: Comment %{comment_id} on %{name}
+    show_comments:
+      error: What did you want to show comments on?
     unfreeze:
       error: Sorry, that comment thread could not be unfrozen.
       permission_denied: Sorry, you don't have permission to unfreeze that comment thread.
@@ -353,6 +360,8 @@ en:
     index:
       public_site_page_title: Public Site Skins
       public_work_page_title: Public Work Skins
+      site_page_title: "%{username} - Site Skins"
+      work_page_title: "%{username} - Work Skins"
     preview:
       cannot_preview: Sorry, you can't preview that skin.
       remove_skin: Go back or follow any link to remove the skin.
@@ -384,6 +393,9 @@ en:
   tags:
     index:
       collection_page_title: "%{collection_title} - Tags"
+  user_invite_requests:
+    new:
+      page_title: Request Invitations
   users:
     change_email:
       page_title: Change Email

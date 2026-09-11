@@ -95,7 +95,7 @@ Feature: Edit tags on a work
   Then I should see the page title "Work 1 -"
     And I should see "Fandom: testing"
 
-  Scenario: Preview edit tags
+  Scenario: Preview edit tags and return to edit them
   Given I am logged in as "regularuser"
     And I post the work "Some Work"
     And I follow "Edit Tags"
@@ -103,3 +103,7 @@ Feature: Edit tags on a work
     And I press "Preview"
   Then I should see the page title "Preview Work Tags"
     And I should see "Fandom: exclusive fandom"
+    And I should see "Preview Tags"
+  When I press "Edit"
+  Then I should see "Edit Work Tags"
+    And the "Fandoms" field should contain "exclusive fandom"

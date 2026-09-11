@@ -313,6 +313,14 @@ MAX_RECENT: 20
 # their search or change their sorting options.
 MAX_SEARCH_RESULTS: 100000
 
+# This determines the maximum value for search parameters that allow
+# integer ranges (e.g. word count). If the query is for works with
+# a parameter greater than this limit, the user will get the "no results
+# found" page.
+# Note: The max value of these parameters in the database is 2^(31)-1,
+# but the search function only breaks beyond 2^(63)-1.
+MAX_SEARCH_INT_RANGE: 2000000000
+
 # This is used to determine how many works or how many authors have to be
 # present in order for anonymous or mystery works to begin being displayed
 ANONYMOUS_THRESHOLD_COUNT: 10

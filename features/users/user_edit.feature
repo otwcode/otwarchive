@@ -210,21 +210,29 @@ Feature:
       And I should see "after" within "#main"
       And I should not see "before" within "#main"
 
-  Scenario: Changing username updates series blurbs
-    Given I have no users
-      And I am logged in as "oldusername" with password "password"
+  Scenario: Changing username to match an existing non-default pseud updates series blurbs
+    Given I am logged in as "oldusername" with password "password"
+      And "oldusername" has the pseud "newusername"
       And I add the work "Great Work" to series "Best Series"
     When I go to the dashboard page for user "oldusername" with pseud "oldusername"
       And I follow "Series"
     Then I should see "Best Series by oldusername"
-    When I visit the change username page for oldusername
-      And I fill in "New username" with "newusername"
-      And I fill in "Password" with "password"
-      And I press "Change Username"
-    Then I should get confirmation that I changed my username
-      And I should see "Hi, newusername"
+    When I change my username to "newusername"
+    Then I should see "Hi, newusername"
+    When I follow "Series"
+    Then I should see "Best Series by oldusername (newusername)"
+
+  Scenario: Changing username and pseud updates series blurbs
+    Given I am logged in as "oldusername" with password "password"
+      And I add the work "Great Work" to series "Best Series"
+    When I go to the dashboard page for user "oldusername" with pseud "oldusername"
+      And I follow "Series"
+    Then I should see "Best Series by oldusername"
+    When I change my username to "newusername"
+    Then I should see "Hi, newusername"
     When I follow "Series"
     Then I should see "Best Series by newusername"
+      And I should not see "Best Series by oldusername"
 
   Scenario: Changing username updates chapter bylines
     Given the work "Title" by "pikachu" with chapter two co-authored with "before"
@@ -243,19 +251,58 @@ Feature:
       And I view the 3rd chapter
     Then I should see "Chapter by after"
 
-    Scenario: Changing the username from a forbidden name to non-forbidden
-      Given I have no users
-        And the following activated user exists
-          | login     | password |
-          | forbidden | secret12 |
-        And the username "forbidden" is on the forbidden list
-      When I am logged in as "forbidden" with password "secret12"
-        And I visit the change username page for forbidden
-        And I fill in "New username" with "notforbidden"
-        And I fill in "Password" with "secret12"
-        And I press "Change Username"
-      Then I should get confirmation that I changed my username
-        And I should see "Hi, notforbidden"
+  Scenario: Changing username to match an existing non-default pseud updates gift blurbs
+    Given "giftee1" has the pseud "newusername"
+      And the user "giftee1" allows gifts
+      And I am logged in as "gifter"
+      And I set up the draft "GiftStory1"
+      And I give the work to "giftee1"
+      And I press "Post"
+      And all emails have been delivered
+      And I am logged in as "giftee1" with password "password"
+    When I go to giftee1's gifts page
+    Then I should see "GiftStory1 by gifter for giftee1"
+    # Delay before renaming to make sure the cache is expired
+    When it is currently 1 second from now
+      And I change my username to "newusername"
+    Then I should see "Hi, newusername"
+    When I go to newusername's gifts page
+    Then I should see "GiftStory1 by gifter for giftee1 (newusername)"
+
+  Scenario: Changing username and pseud updates gift blurbs
+    Given the following activated users exist
+        | login      |
+        | gifter     |
+        | giftee1    |
+      And the user "giftee1" allows gifts
+      And I am logged in as "gifter"
+      And I set up the draft "GiftStory1"
+      And I give the work to "giftee1"
+      And I press "Post"
+      And all emails have been delivered
+      And I am logged in as "giftee1" with password "password"
+    When I go to giftee1's gifts page
+    Then I should see "GiftStory1 by gifter for giftee1"
+    # Delay before renaming to make sure the cache is expired
+    When it is currently 1 second from now
+      And I change my username to "newusername"
+    Then I should see "Hi, newusername"
+    When I go to newusername's gifts page
+    Then I should see "GiftStory1 by gifter for newusername"
+      And I should not see "GiftStory1 by gifter for giftee1"
+
+  Scenario: Changing the username from a forbidden name to non-forbidden
+    Given the following activated user exists
+        | login     | password |
+        | forbidden | secret12 |
+      And the username "forbidden" is on the forbidden list
+    When I am logged in as "forbidden" with password "secret12"
+      And I visit the change username page for forbidden
+      And I fill in "New username" with "notforbidden"
+      And I fill in "Password" with "secret12"
+      And I press "Change Username"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, notforbidden"
 
   Scenario: Tag wrangling supervisors are emailed about tag wrangler username changes
     Given the user "before" exists and is activated

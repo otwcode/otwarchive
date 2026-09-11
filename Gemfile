@@ -148,7 +148,6 @@ end
 
 group :development do
   gem 'bundler-audit'
-  gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
 end
 
 group :linters do

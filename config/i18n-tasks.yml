@@ -127,10 +127,6 @@ ignore_missing:
   - comments.set_page_subtitle.page_title
   ## All of the following keys are using default values defined in the respective .rb files
   ## TODO: Move the default values to the .yml files
-  # File: app/controllers/admin/admin_invitations_controller.rb
-  - invites_created # should be admin.admin_invitations.grant_invites_to_users.invites_created
-  - no_email # should be admin.admin_invitations.create.no_email
-  - sent # should be admin.admin_invitations.create.sent
   # File: app/controllers/challenge_assignments_controller.rb
   - challenge_assignments.assignments_not_sent
   - challenge_assignments.assignments_sent
@@ -163,8 +159,6 @@ ignore_missing:
   - skins.approval_queue
   - skins.approved_skins
   - skins.rejected_skins
-  # File: app/views/comments/show.html.erb
-  - comments.show.comment_on
   # File: app/views/external_authors/_external_author_name.html.erb
   - external_authors.external_author_name.label_external_author_name
   # File: app/views/external_authors/edit.html.erb
