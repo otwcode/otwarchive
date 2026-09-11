@@ -707,5 +707,14 @@ namespace :After do
     $stdout.flush
   end
 
+  desc "Convert collection participants with the removed Invited role to None"
+  task(remove_invited_collection_participant_role: :environment) do
+    # "Invited" is no longer a valid CollectionParticipant role (AO3-4930),
+    # so it is intentionally a string literal here rather than a constant.
+    updated = CollectionParticipant.where(participant_role: "Invited")
+      .update_all(participant_role: CollectionParticipant::NONE)
+    puts "Converted #{updated} invited #{'participant'.pluralize(updated)} to None"
+  end
+
   # This is the end that you have to put new tasks above.
 end
