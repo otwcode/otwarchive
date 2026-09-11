@@ -21,7 +21,7 @@ Scenario: Orphan all works belonging to a user
   When I go to the orphan all works page
   Then I should see "Orphan All Works"
     And I should see "Are you really sure you want to"
-  When I choose "Take my pseud off as well"
+  When I choose "Remove my pseud"
     # Delay before orphaning to make sure the cache is expired
     And it is currently 1 second from now
     And I press "Yes, I'm sure"
@@ -53,7 +53,7 @@ Given I have an orphan account
   When I go to the orphan all works page
   Then I should see "Orphan All Works"
     And I should see "Are you really sure you want to"
-  When I choose "Leave a copy of my pseud on"
+  When I choose "Keep my pseud"
     # Delay before orphaning to make sure the cache is expired
     And it is currently 1 second from now
     And I press "Yes, I'm sure"
