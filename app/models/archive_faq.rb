@@ -8,8 +8,6 @@ class ArchiveFaq < ApplicationRecord
 
   validates :slug, presence: true, uniqueness: true
 
-  belongs_to :language
-
   before_validation :set_slug
   def set_slug
     if I18n.locale == :en

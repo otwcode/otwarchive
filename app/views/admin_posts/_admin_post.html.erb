@@ -1,5 +1,5 @@
 <% # expects "admin_post" %>
-<div <% if rtl_language?(admin_post.language) %>dir="rtl"<% end %> class="header">
+<div <% if rtl_language?(admin_post.locale_language) %> dir="rtl" <% end %> class="header">
   <h3 class="heading">
     <%= link_to admin_post.title.html_safe, admin_post %>
   </h3>
@@ -21,7 +21,7 @@
       <dd class="translations">
         <ul class="languages commas">
           <% translations.each do |translation| %>
-            <li><%= link_to translation.language.name, translation, lang: translation.language.short %></li>
+            <li><%= link_to translation.locale_language.name, translation, lang: translation.locale_language.short %></li>
           <% end %>
         </ul>
       </dd>
@@ -43,6 +43,6 @@
     <% end %>
   </dl>
 </div>
-<div <% if rtl_language?(admin_post.language) %>dir="rtl"<% end %> class="userstuff">
+<div <% if rtl_language?(admin_post.locale_language) %> dir="rtl" <% end %> class="userstuff">
   <%= raw sanitize_field(admin_post, :content) %>
 </div>

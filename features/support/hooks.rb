@@ -11,6 +11,7 @@ Before do
   AdminSetting.default.update_attribute(:enable_test_caching, true)
 
   # Create default language and locale.
+  Language.default
   Locale.default
 
   # Clears used values for all generators.

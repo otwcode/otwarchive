@@ -10,9 +10,9 @@ describe AdminPostsController do
   describe "GET #index" do
     context "when filtering by language" do
       let(:translated_post1) { create(:admin_post, tag_list: "xylophone,aardvark") }
-      let!(:translation_post1) { create(:admin_post, translated_post_id: translated_post1.id, language: create(:language, short: "fr")) }
+      let!(:translation_post1) { create(:admin_post, translated_post_id: translated_post1.id, locale_language: create(:locale_language, short: "fr")) }
       let(:translated_post2) { create(:admin_post, tag_list: "xylophone,aardvark") }
-      let!(:translation_post2) { create(:admin_post, translated_post_id: translated_post2.id, language: translation_post1.language) }
+      let!(:translation_post2) { create(:admin_post, translated_post_id: translated_post2.id, locale_language: translation_post1.locale_language) }
       let!(:untranslated_post) { create(:admin_post, tag_list: "uncommon tag") }
 
       it "assigns the admin post tags for the language ordered by name" do
@@ -138,7 +138,7 @@ describe AdminPostsController do
 
       context "with unposted translated post" do
         let(:admin_post) { create(:admin_post, :draft) }
-        let(:params) { super().deep_merge(post_button: "Post", admin_post: { translated_post_id: admin_post.id, language_id: create(:language).id }) }
+        let(:params) { super().deep_merge(post_button: "Post", admin_post: { translated_post_id: admin_post.id, language_id: create(:locale_language).id }) }
         before { fake_login_admin(create(:superadmin)) }
 
         it "will always be a draft" do
@@ -155,7 +155,7 @@ describe AdminPostsController do
       before { fake_login_admin(admin) }
 
       context "with invalid translated post id" do
-        let(:params) { super().deep_merge(admin_post: { translated_post_id: 0, language_id: create(:language).id }) }
+        let(:params) { super().deep_merge(admin_post: { translated_post_id: 0, language_id: create(:locale_language).id }) }
 
         it "renders the new template with error message" do
           subject
@@ -290,7 +290,7 @@ describe AdminPostsController do
           end
 
           context "with valid translated_post_id" do
-            let!(:translation) { create(:admin_post, translated_post_id: admin_post.id, language_id: create(:language).id) }
+            let!(:translation) { create(:admin_post, translated_post_id: admin_post.id, language_id: create(:locale_language).id) }
 
             context "with valid comment_permissions" do
               it "does not change comment_permissions and redirects with notice" do
@@ -320,7 +320,7 @@ describe AdminPostsController do
             context "when posting" do
               context "an unposted translated post" do
                 let(:admin_post) { create(:admin_post, :draft) }
-                let(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:language).id) }
+                let(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:locale_language).id) }
   
                 it "will remain a draft" do
                   put :update, params: { post_button: "Post", id: translation.id, admin_post: { admin_id: admin.id } }
@@ -349,7 +349,7 @@ describe AdminPostsController do
 
     context "when translated post is not posted" do
       let(:original_post) { create(:admin_post, :draft) }
-      let(:admin_post) { create(:admin_post, :draft, translated_post: original_post, language_id: create(:language)) }
+      let(:admin_post) { create(:admin_post, :draft, translated_post: original_post, language_id: create(:locale_language).id) }
 
       before { fake_login_admin(create(:superadmin)) }
       it "does not post the translation" do
@@ -377,7 +377,7 @@ describe AdminPostsController do
       it_behaves_like "an action that non-admins cannot access"
 
       context "with translated post" do
-        let!(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:language).id) }
+        let!(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:locale_language).id) }
         let(:success) do
           expect do
             admin_post.reload
@@ -403,7 +403,7 @@ describe AdminPostsController do
       end
 
       context "with translated post" do
-        let!(:translation) { create(:admin_post, translated_post_id: admin_post.id, language_id: create(:language).id) }
+        let!(:translation) { create(:admin_post, translated_post_id: admin_post.id, language_id: create(:locale_language).id) }
         let(:success) do
           expect do
             admin_post.reload

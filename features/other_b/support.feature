@@ -6,7 +6,7 @@ Feature: Filing a support request
   Scenario: Filing a support request
   
   Given I am logged in as "puzzled"
-  And basic languages
+  And basic locale languages
   When time is frozen at 14/3/2022
   When I follow "Support & Feedback"
   When I select "Deutsch" from "feedback_language"
@@ -33,7 +33,7 @@ Feature: Filing a support request
   Scenario: Not logged in, with and without email
   
   When I am on the home page
-    And basic languages
+    And basic locale languages
     And I follow "Support & Feedback"
   When I select "Deutsch" from "feedback_language"
     And I fill in "Brief summary" with "Just a brief note"
@@ -51,7 +51,7 @@ Feature: Filing a support request
   Scenario: Submit a request containing an image
 
   Given I am logged in as "puzzled"
-    And basic languages
+    And basic locale languages
   When I follow "Support & Feedback"
     And I fill in "Brief summary" with "Just a brief note"
     And I fill in "Your question or problem" with '<img src="foo.jpg" />Hi'
@@ -64,7 +64,7 @@ Feature: Filing a support request
   Scenario: Submit a request with an on-Archive referer
 
   Given I am logged in as "puzzled"
-    And basic languages
+    And basic locale languages
     And Zoho ticket creation is enabled
     And "www.example.com" is a permitted Archive host
   When I go to the works page
@@ -77,7 +77,7 @@ Feature: Filing a support request
   Scenario: Submit a request with a referer that is not on-Archive
 
   Given I am logged in as "puzzled"
-    And basic languages
+    And basic locale languages
     And Zoho ticket creation is enabled
   When I go to the works page
     And I follow "Support & Feedback"

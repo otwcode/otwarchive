@@ -12,8 +12,8 @@ class LanguagesController < ApplicationController
   end
 
   def create
-    @language = Language.new(language_params)
-    authorize @language
+    authorize Language
+    @language = Language.new(permitted_attributes(Language))
     if @language.save
       flash[:notice] = t("languages.successfully_added")
       redirect_to languages_path
@@ -23,7 +23,7 @@ class LanguagesController < ApplicationController
   end
 
   def edit
-    @language = Language.find_by(short: params[:id])
+    @language = Language.find_by!(short: params[:id])
     authorize @language
     return unless @language == Language.default
 
@@ -32,22 +32,15 @@ class LanguagesController < ApplicationController
   end
 
   def update
-    @language = Language.find_by(short: params[:id])
+    @language = Language.find_by!(short: params[:id])
     authorize @language
 
     if @language.update(permitted_attributes(@language))
       flash[:notice] = t("languages.successfully_updated")
       redirect_to languages_path
     else
-      render action: "new"
+      render action: "edit"
     end
   end
 
-  private
-
-  def language_params
-    params.require(:language).permit(
-      :name, :short, :support_available, :abuse_support_available, :sortable_name
-    )
-  end
 end
