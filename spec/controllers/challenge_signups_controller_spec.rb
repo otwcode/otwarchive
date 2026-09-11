@@ -46,6 +46,25 @@ describe ChallengeSignupsController do
                                    "What challenge did you want to sign up for?")
       end
     end
+
+    context "when collection does not exist" do
+      it "raises a RecordNotFound error" do
+        fake_login
+        expect do
+          get :new, params: { collection_id: "nonexistent_collection" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+  end
+
+  describe "summary" do
+    context "when collection does not exist" do
+      it "raises a RecordNotFound error" do
+        expect do
+          get :summary, params: { collection_id: "nonexistent_collection" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe "show" do

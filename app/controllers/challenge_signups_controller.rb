@@ -17,6 +17,8 @@ class ChallengeSignupsController < ApplicationController
   before_action :check_signup_in_collection, only: [:show, :edit, :update, :destroy, :confirm_delete]
 
   def load_challenge
+    raise ActiveRecord::RecordNotFound, "Couldn't find collection named '#{params[:collection_id]}'" unless @collection
+
     @challenge = @collection.challenge
     no_challenge and return unless @challenge
   end
