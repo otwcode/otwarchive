@@ -1214,6 +1214,12 @@ en:
         current_html: For current updates on AO3 performance or downtime, please check our %{status_page_link} and follow %{bluesky_link} on Bluesky or %{tumblr_link} on Tumblr.
         status_page: status page
         tumblr: ao3org
+  generated_downloads:
+    show:
+      check_status: Check download status
+      failed: We were not able to prepare this download. Please try again.
+      heading: Preparing download
+      processing: Your file is being prepared. This page will download it automatically when it is ready.
   help:
     collectibles_add_to_collection:
       collection_names: Note that you need to use the collection's name, which gets used in the collection's URL, and not the collection's spiffy title (because different collections can have the same title). A collection's name is the equivalent of your user login. Names will be auto-completed for you if you have JavaScript turned on.
