@@ -10,7 +10,11 @@
     <% if @creation.is_a?(Work) %>
       <i><b><%= style_link(@creation.title.html_safe, work_url(@creation)) %></b></i>
     <% else %>
+      <% if @creation.bookmarkable == nil %>
+      Bookmark of deleted item
+      <% else %>
       <i><b><%= style_link("A bookmark of: " + @creation.bookmarkable.title.html_safe, bookmark_url(@creation)) %></b></i>
+      <% end %>
     <% end %>
 
 
