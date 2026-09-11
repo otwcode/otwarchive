@@ -224,16 +224,14 @@ class TagsController < ApplicationController
 
     # update everything except for the synonym,
     # so that the associations are there to move when the synonym is created
-    syn_string = params[:tag].delete(:syn_string)
-    new_tag_type = params[:tag].delete(:type)
+    syn_string = params[:tag]&.delete(:syn_string)
+    new_tag_type = params[:tag]&.delete(:type)
 
     # Limiting the conditions under which you can update the tag type
     types = logged_in_as_admin? ? (Tag::USER_DEFINED + %w[Media]) : Tag::USER_DEFINED
     @tag = @tag.recategorize(new_tag_type) if @tag.can_change_type? && (types + %w[UnsortedTag]).include?(new_tag_type)
 
-    unless params[:tag].empty?
-      @tag.attributes = tag_params
-    end
+    @tag.attributes = tag_params if params[:tag].present?
 
     @tag.syn_string = syn_string if @tag.errors.empty? && @tag.save
 
