@@ -400,6 +400,20 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "Deutsch"
       And I should not see "English"
 
+  Scenario: Admin can edit language on drafts
+    Given basic languages
+      And I am logged in
+      And the draft "Wrong Language"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Wrong Language"
+      And I follow "Edit Work"
+    When I select "Deutsch" from "Choose a language"
+      And I press "Save Draft"
+    Then I should see "Tags were successfully updated."
+      And I should see "This work is a draft"
+      And I should see "Deutsch"
+      But I should not see "English"
+
   Scenario: When admin edits tags and language on works at the same time, both Activities entries are added
     Given basic languages
       And the work "Wrong Tags and Language"

@@ -129,3 +129,24 @@ Scenario: Delete a user who has coauthored a work
       And I fill in "Password:" with "password" within "#small_login"
       And I press "Log In" within "#small_login"
     Then I should not see "You have successfully deleted your account"
+
+  Scenario: Deleting a user updates gift blurbs
+    Given the following activated users exist
+        | login   |
+        | gifter  |
+        | giftee1 |
+      And the user "giftee1" allows gifts
+      And I am logged in as "gifter"
+      And I set up the draft "GiftStory1"
+      And I give the work to "giftee1"
+      And I press "Post"
+      And I am logged in as "giftee1"
+    When I am on gifter's works page
+    Then I should see "GiftStory1 by gifter for giftee1"
+    When I try to delete my account as giftee1
+    Then I should see "You have successfully deleted your account."
+      And a user account should not exist for "giftee1"
+      And I should be logged out
+    When I am on gifter's works page
+    Then I should see "GiftStory1 by gifter"
+      And I should not see "GiftStory1 by gifter for giftee1"

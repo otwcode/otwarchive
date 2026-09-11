@@ -92,6 +92,10 @@ module NavigationHelpers
       user_gifts_path(user_id: $1)
     when /the import page/
       new_work_path(import: 'true')
+    when /the skins page for "(.*?)"/
+      skins_path(user_id: Regexp.last_match(1))
+    when /the work-skins page for "(.*?)"/
+      skins_path(user_id: Regexp.last_match(1), skin_type: "WorkSkin")
     when /the public skins page/
       skins_path
     when /the work-skins page/

@@ -610,13 +610,18 @@ class CommentsController < ApplicationController
   def show_comments
     respond_to do |format|
       format.html do
-        # if non-ajax it could mean sudden javascript failure OR being redirected from login
-        # so we're being extra-nice and preserving any intention to comment along with the show comments option
-        options = {show_comments: true}
-        options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
-        options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
-        options[:page] = params[:page]
-        redirect_to_all_comments(@commentable, options)
+        if @commentable.nil?
+          flash[:error] = t(".error")
+          redirect_back_or_to root_path
+        else
+          # if non-ajax it could mean sudden javascript failure OR being redirected from login
+          # so we're being extra-nice and preserving any intention to comment along with the show comments option
+          options = { show_comments: true }
+          options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
+          options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
+          options[:page] = params[:page]
+          redirect_to_all_comments(@commentable, options)
+        end
       end
 
       format.js do

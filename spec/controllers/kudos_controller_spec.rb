@@ -19,6 +19,12 @@ describe KudosController do
             it_redirects_to_with_kudos_notice(referer, "Thank you for leaving kudos!")
           end
 
+          it "redirects without a duplicate anchor when the referer already has an anchor" do
+            request.headers["HTTP_REFERER"] = work_path(work, anchor: "bookmark-form")
+            post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+            it_redirects_to_with_kudos_notice(work_path(work, anchor: "kudos_message"), "Thank you for leaving kudos!")
+          end
+
           it "does not save user on kudos" do
             post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
             expect(assigns(:kudo)).to be_persisted

@@ -207,3 +207,30 @@ Feature: Delete pseud.
     Then I should see "My Collection Thing"
       And I should not see "other_pseud (myself)" within "#main"
       And I should see "myself" within "#main"
+
+  Scenario: Deleting a pseud updates series blurbs
+    Given I am logged in as "Myself"
+      And "Myself" has the pseud "me2"
+      And I add the work "Great Work" to series "Best Series" as "me2"
+    When I go to the dashboard page for user "Myself" with pseud "me2"
+      And I follow "Series"
+    Then I should see "Best Series by me2 (Myself)"
+    When "Myself" deletes the pseud "me2"
+      And I follow "Series"
+    Then I should see "Best Series by Myself"
+
+  Scenario: Deleting a pseud updates gift blurbs
+    Given "giftee1" has the pseud "me2"
+      And the user "giftee1" allows gifts
+      And I am logged in as "gifter"
+      And I set up the draft "GiftStory1"
+      And I give the work to "me2 (giftee1)"
+      And I press "Post"
+      And I am logged in as "giftee1"
+    When I go to giftee1's gifts page
+    Then I should see "GiftStory1 by gifter for me2 (giftee1)"
+    # Delay before deleting to make sure the cache is expired
+    When it is currently 1 second from now
+      And "giftee1" deletes the pseud "me2"
+      And I go to giftee1's gifts page
+    Then I should see "GiftStory1 by gifter for giftee1"

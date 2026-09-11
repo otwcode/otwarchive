@@ -425,10 +425,6 @@ class WorksController < ApplicationController
     @preview_mode = true
   end
 
-  def preview_tags
-    @preview_mode = true
-  end
-
   def confirm_delete
   end
 
@@ -600,11 +596,6 @@ class WorksController < ApplicationController
   def post_draft
     @user = current_user
     @work = Work.find(params[:id])
-
-    unless @user.is_author_of?(@work)
-      flash[:error] = ts('You can only post your own works.')
-      redirect_to(current_user) && return
-    end
 
     if @work.posted
       flash[:error] = ts('That work is already posted. Do you want to edit it instead?')
