@@ -750,6 +750,9 @@ en:
     user_index:
       assignments: My Assignments
       assignments_note_html: Looking for assignments you were given for a gift exchange? Try %{assignments_link}.
+      navigation:
+        fulfilled: Fulfilled Claims
+        unfulfilled: Unfulfilled Claims
   challenge_signups:
     signup_form:
       notice:
