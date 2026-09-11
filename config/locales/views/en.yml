@@ -2525,6 +2525,13 @@ en:
         updates_to_the_tos: Updates to the Terms of Service
         what_we_do_with_content: What we do with Content
         what_you_cant_do: What you can't do
+  inbox:
+    single_inbox_comment:
+      comment_actions: Comment Actions
+      hidden: "(This comment is under review by an admin and is currently unavailable.)"
+      replied_to: replied to
+      select: Select
+      unread: Unread
   invitations:
     invitation:
       copy_and_use: Copy and use
