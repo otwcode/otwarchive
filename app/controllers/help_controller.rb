@@ -1,5 +1,7 @@
 class HelpController < ApplicationController
   HELP_ACTIONS = %i[
+    bookmark_search_bookmarker_tag
+    bookmark_search_results
     collectibles_add_to_collection
     first_login
     html
