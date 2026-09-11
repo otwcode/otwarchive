@@ -31,4 +31,47 @@ describe Creatorship do
       end
     end
   end
+
+  describe "busting anonymous creator comment caches (AO3-7536)" do
+    let(:work) do
+      create(:work, authors: [create(:pseud), create(:pseud)],
+                    collections: [create(:anonymous_collection)])
+    end
+    let(:creatorship) { work.creatorships.last }
+    let!(:comment) do
+      create(:comment, commentable: work.first_chapter, pseud: creatorship.pseud)
+    end
+
+    it "touches the removed creator's comments when their creatorship is destroyed" do
+      travel(1.second) do
+        expect { creatorship.destroy! }
+          .to change { comment.reload.updated_at }
+      end
+    end
+
+    it "touches the accepting creator's comments when an invite is approved" do
+      invited = create(:user)
+      invite = work.creatorships.create!(pseud: invited.default_pseud)
+      invite.update_column(:approved, false)
+      invited_comment = create(:comment, commentable: work.first_chapter,
+                                         pseud: invited.default_pseud)
+
+      travel(1.second) do
+        expect { invite.reload.accept! }
+          .to change { invited_comment.reload.updated_at }
+      end
+    end
+
+    it "does not touch comments when the work is not anonymous" do
+      plain_work = create(:work, authors: [create(:pseud), create(:pseud)])
+      plain_creatorship = plain_work.creatorships.last
+      plain_comment = create(:comment, commentable: plain_work.first_chapter,
+                                       pseud: plain_creatorship.pseud)
+
+      travel(1.second) do
+        expect { plain_creatorship.destroy! }
+          .not_to change { plain_comment.reload.updated_at }
+      end
+    end
+  end
 end

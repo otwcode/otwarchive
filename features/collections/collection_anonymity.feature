@@ -252,6 +252,44 @@ Feature: Collection
     When I am logged out
     Then the author of "Cone of Silence" should be hidden from me
 
+  Scenario: Removing a co-creator from an anonymous work de-anonymizes their comments, and re-adding them re-anonymizes them (AO3-7536)
+    Given the following activated users exist
+        | login   | password | email           |
+        | author1 | password | author1@foo.com |
+        | author2 | password | author2@foo.com |
+      And I have the anonymous collection "Anonymous Together"
+      And I am logged in as "author1"
+      And I post the work "Shared Secret" to the collection "Anonymous Together"
+      And I add the co-author "author2" to the work "Shared Secret"
+
+    When I am logged in as "author2"
+      And I view the work "Shared Secret" with comments
+      And I post a comment "A very nice story"
+      And I am logged out
+      And I view the work "Shared Secret" with comments
+    Then I should see "A very nice story"
+      And I should see "Anonymous Creator"
+      And I should not see "author2"
+
+    When I am logged in as "author2"
+      And I wait 1 second
+      And I edit the work "Shared Secret"
+      And I press "Remove Me As Co-Creator"
+      And I am logged out
+      And I view the work "Shared Secret" with comments
+    Then I should see "A very nice story"
+      And I should see "author2"
+      And I should not see "Anonymous Creator"
+
+    When I am logged in as "author1"
+      And I wait 1 second
+      And I add the co-author "author2" to the work "Shared Secret"
+      And I am logged out
+      And I view the work "Shared Secret" with comments
+    Then I should see "A very nice story"
+      And I should see "Anonymous Creator"
+      And I should not see "author2"
+
   Scenario: A work is in two anonymous collections, and one is revealed
     Given I have the anonymous collection "Permanent Mice"
       And I have the anonymous collection "Temporary Mice"
