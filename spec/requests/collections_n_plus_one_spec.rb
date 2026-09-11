@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe "n+1 queries in the collections controller" do
-  describe "#index", n_plus_one: true do
+  describe "#index", n_plus_one: true, work_search: true, bookmark_search: true, collection_search: true do
     populate do |n|
       CollectionIndexer.prepare_for_testing
       create_list(:collection, n, challenge: create(:gift_exchange))

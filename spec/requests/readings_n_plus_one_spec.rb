@@ -3,7 +3,7 @@ require "spec_helper"
 describe "n+1 queries in the readings controller" do
   include LoginMacros
 
-  describe "#index", n_plus_one: true do
+  describe "#index", n_plus_one: true, work_search: true, bookmark_search: true, collection_search: true do
     context "when displaying a user's reading history" do
       let!(:user) { create(:user) }
 
