@@ -701,6 +701,12 @@ en:
         works: Works
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
     search_form:
+      date_bookmarked: Date bookmarked
+      date_bookmarked_help_title: Date bookmarked Help
+      notes_help_title: With notes Help
+      rec: Rec
+      rec_help_title: Rec Help
+      with_notes: With notes
       word_count: Word count
   challenge:
     gift_exchange:
@@ -1215,6 +1221,27 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    bookmark_search_date_bookmarked:
+      description: Specify a range of times to find bookmarks which were created during that time frame. This may differ from the time when the bookmarked item was posted or updated.
+      examples_heading: 'Examples:'
+      gt_three_years_ago:
+        description: will find bookmarks that were created more than three years ago
+        submission_example: "> 3 years ago"
+      lt_three_days_ago:
+        description: will find bookmarks that were created within the past three days
+        submission_example: "< 3 days ago"
+      note_on_ago_and_ranges: The "ago" is optional. Note that "1 day ago" is not a range, and would only find bookmarks created at this exact instant yesterday. Create a range instead.
+      page_heading: 'Bookmark Search: Date bookmarked'
+      search_unit_options: You can search by year, month, week, day, or hour.
+      three_to_nine_months_ago:
+        description: will find bookmarks that were created between 3 and 9 months ago
+        submission_example: 3-9 months ago
+    bookmark_search_notes:
+      description: Select this option if you want to limit the search to bookmarks with a note added by the bookmarker.
+      page_heading: 'Bookmark Search: With notes'
+    bookmark_search_rec:
+      description: Select this option if you want to limit the search to bookmarks which were marked as recs by the bookmarker.
+      page_heading: 'Bookmark Search: Rec'
     collectibles_add_to_collection:
       collection_names: Note that you need to use the collection's name, which gets used in the collection's URL, and not the collection's spiffy title (because different collections can have the same title). A collection's name is the equivalent of your user login. Names will be auto-completed for you if you have JavaScript turned on.
       guidance: Enter collection names as a comma-separated list, and the item you are editing will be added to all the collections you specify.
