@@ -824,6 +824,10 @@ Feature: Gift Exchange Challenge
     Then I should see "collection_1"
     When I follow "2" within ".pagination"
     Then I should see "collection_2"
+    When there are 20 assignments per page
+      And I reload the page
+    Then I should see "My Assignments"
+      But I should not see "collection_2"
 
   Scenario: Mod can approve a posted assignment in a moderated gift exchange
     Given everyone has their assignments for "Awesome Gift Exchange"
