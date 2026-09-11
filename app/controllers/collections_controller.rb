@@ -85,24 +85,24 @@ class CollectionsController < ApplicationController
       # show a random selection of works/bookmarks
       @works = WorkQuery.new(
         collection_ids: [@collection.id], show_restricted: is_registered_user?
-      ).sample(count: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      ).sample(count: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).scope(:for_blurb)
 
       @bookmarks = BookmarkQuery.new(
         collection_ids: [@collection.id], show_restricted: is_registered_user?
-      ).sample(count: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      ).sample(count: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).scope(:for_blurb)
     else
       # show recent
       @works = WorkQuery.new(
         collection_ids: [@collection.id], show_restricted: is_registered_user?,
         sort_column: "revised_at",
         per_page: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD
-      ).search_results
+      ).search_results.scope(:for_blurb)
 
       @bookmarks = BookmarkQuery.new(
         collection_ids: [@collection.id], show_restricted: is_registered_user?,
         sort_column: "created_at",
         per_page: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD
-      ).search_results
+      ).search_results.scope(:for_blurb)
     end
   end
 

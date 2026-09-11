@@ -7,6 +7,8 @@ module Collectible
 
     has_many :approved_collection_items, -> { approved_by_both },
              class_name: "CollectionItem", as: :item, inverse_of: :item, dependent: :destroy
+    has_many :approved_unrevealed_collection_items, -> { approved_by_both.unrevealed },
+             class_name: "CollectionItem", as: :item, inverse_of: :item, dependent: :destroy
     has_many :user_approved_collection_items, -> { approved_by_user },
              class_name: "CollectionItem", as: :item, inverse_of: :item, dependent: :destroy
 
@@ -19,6 +21,10 @@ module Collectible
              through: :approved_collection_items,
              source: :collection,
              dependent: :destroy
+    has_many :approved_unrevealed_collections,
+             through: :approved_unrevealed_collection_items,
+             source: :collection,
+             strict_loading: true
     has_many :user_approved_collections,
              through: :user_approved_collection_items,
              source: :collection,

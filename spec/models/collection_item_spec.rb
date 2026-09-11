@@ -77,7 +77,7 @@ describe CollectionItem, :ready do
     end
   end
 
-  describe "include_for_works scope" do
+  describe "with_item_blurb_preloads scope" do
     let(:collection) { create(:collection) }
     let(:work) { create(:work, id: 63) }
     let(:bookmark) { create(:bookmark, id: 63) }
@@ -88,7 +88,7 @@ describe CollectionItem, :ready do
       expect(work.id).to eq(bookmark.id)
       expect(collection.collection_items).not_to be_empty
       expect(collection.collection_items.first.item_type).to eq("Bookmark")
-      expect(collection.collection_items.include_for_works.first.item_type).to eq("Bookmark")
+      expect(collection.collection_items.with_item_blurb_preloads.first.item_type).to eq("Bookmark")
     end
   end
 

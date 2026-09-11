@@ -57,6 +57,7 @@ class ChaptersController < ApplicationController
     if params[:view_adult]
       cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
+      @work = Work.with_includes_for_blurb.find(@work.id)
       render "works/_adult", layout: "application" and return
     end
 
