@@ -67,7 +67,11 @@ describe Opendoors::ToolsController do
 
       context "with a valid work ID" do
         let(:work) { create(:work) }
-        let(:work_with_imported_from_url) { create(:work, imported_from_url: "http://example.org/my-immortal") }
+        let!(:work_with_imported_from_url) do
+          work = create(:work)
+          work.imported_url = ImportedUrl.create(original: "http://example.org/my-immortal")
+          work
+        end
 
         it "redirects to tools if imported-from URL is missing" do
           post :url_update, params: { work_url: "/works/#{work.id}/" }
@@ -80,7 +84,7 @@ describe Opendoors::ToolsController do
         end
 
         it "redirects to tools if imported-from URL is already used in another work" do
-          url = work_with_imported_from_url.imported_from_url
+          url = work_with_imported_from_url.imported_url.original
           post :url_update, params: { work_url: "/works/#{work.id}/", imported_from_url: url }
           it_redirects_to_with_error(opendoors_tools_path(imported_from_url: url), "There is already a work imported from the url #{url}.")
         end
@@ -90,7 +94,7 @@ describe Opendoors::ToolsController do
           post :url_update, params: { work_url: "http://example.org/works/#{work.id}/", imported_from_url: url }
           it_redirects_to_with_notice(opendoors_tools_path(imported_from_url: url), "Updated imported-from url for #{work.title} to #{url}")
           work.reload
-          expect(work.imported_from_url).to eq(url)
+          expect(work.imported_url.original).to eq(url)
         end
 
         it "updates work if imported-from URL has non-ASCII characters" do
@@ -99,7 +103,7 @@ describe Opendoors::ToolsController do
           encoded_url = URI::Parser.new.escape(url)
           it_redirects_to_with_notice(opendoors_tools_path(imported_from_url: encoded_url), "Updated imported-from url for #{work.title} to #{encoded_url}")
           work.reload
-          expect(work.imported_from_url).to eq(encoded_url)
+          expect(work.imported_url.original).to eq(encoded_url)
         end
       end
     end
