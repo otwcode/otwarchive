@@ -64,7 +64,7 @@ module WorksHelper
 
   # Determines whether or not to expand the related work association fields when the work form loads
   def check_parent_box(work)
-    work.parents_after_saving.present?
+    work.visible_parents_after_saving.present?
   end
 
   # Determines whether or not "manage series" dropdown should appear
@@ -129,7 +129,7 @@ module WorksHelper
   end
 
   def get_inspired_by(work)
-    work.approved_related_works.where(translation: false)
+    work.related_works.visible.remixes
   end
 
   def related_work_note(related_work, relation, download: false)
@@ -203,15 +203,15 @@ module WorksHelper
       work.endnotes.present? ||
       work.gifts.not_rejected.present? ||
       work.challenge_claims.present? ||
-      work.parents_after_saving.present? ||
-      work.approved_related_works.present?
+      work.visible_parents_after_saving.present? ||
+      work.related_works.visible.present?
   end
 
   # Returns true or false to determine whether the work associations should be included
   def show_associations?(work)
     work.gifts.not_rejected.present? ||
-      work.approved_related_works.where(translation: true).exists? ||
-      work.parents_after_saving.present? ||
+      work.related_works.visible.translations.exists? ||
+      work.visible_parents_after_saving.present? ||
       work.challenge_claims.present?
   end
 
