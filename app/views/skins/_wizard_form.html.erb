@@ -19,7 +19,7 @@
   <dl>
     <dt>
       <%= f.label :font, ts('Font') %>
-      <%= link_to_help('skins-wizard-font') %>
+      <%= link_to_help_modal(help_skins_wizard_font_path, t(".font_help_title")) %>
     </dt>
     <dd>
       <%= f.text_field :font, "aria-describedby" => "font-field-notes" %>
@@ -30,7 +30,7 @@
 
     <dt>
       <%= f.label :base_em, ts('Percent of browser font size') %> 
-      <%= link_to_help('skins-wizard-font-size') %>
+      <%= link_to_help_modal(help_skins_wizard_font_size_path, t(".font_size_help_title")) %>
     </dt>
     <dd>
       <%= f.text_field :base_em, "aria-describedby" => "base-em-field-notes" %>
@@ -51,7 +51,7 @@
 
     <dt>
       <%= f.label :paragraph_margin, ts('Vertical gap between paragraphs') %> 
-      <%= link_to_help('skins-wizard-vertical-gap') %>
+      <%= link_to_help_modal(help_skins_wizard_vertical_gap_path, t(".vertical_gap_help_title")) %>
     </dt>
     <dd>
       <%= f.text_field :paragraph_margin %>
