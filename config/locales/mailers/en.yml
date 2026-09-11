@@ -70,7 +70,7 @@ en:
       last_edited: 'Last edited: %{datetime}'
       parent_thread:
         html: Go to this comment's parent thread
-        text: "Go to this comment's parent thread: %{url}"
+        text: 'Go to this comment''s parent thread: %{url}'
       posted: 'Posted: %{datetime}'
       read_all_comments:
         chapter:
