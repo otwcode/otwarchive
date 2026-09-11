@@ -1,6 +1,6 @@
 <% feedback_comment = inbox_comment.feedback_comment %>
 
-<li class="<%= inbox_comment.read? ? 'read' : 'unread' %> <%= css_classes_for_comment(feedback_comment) %>" role="article" id="feedback_comment_<%= feedback_comment.id %>">
+<li class="<%= css_classes_for_inbox_comment(inbox_comment) %>" role="article" id="feedback_comment_<%= feedback_comment.id %>">
   <% if !can_see_hidden_comment?(feedback_comment) %>
     <p class="message"><%= t(".hidden") %></p>
   <% else %>
