@@ -6,7 +6,7 @@ module DateHelper
     if datetime > 30.days.ago && !AdminSetting.enable_test_caching?
       time_ago_in_words(datetime)
     else
-      date_in_user_time_zone(datetime).to_date.to_formatted_s(:rfc822)
+      date_in_zone(date_in_user_time_zone(datetime), format: :date_blurb_html)
     end
   end
 
@@ -25,12 +25,13 @@ module DateHelper
 
   # show date in the time zone specified
   # note: this does *not* append timezone and does *not* reflect user preferences
-  def date_in_zone(time, zone = nil)
+  def date_in_zone(time, zone = nil, format: :date_short_html)
     zone ||= Time.zone.name
     return nil if time.blank?
 
     time_in_zone = time.in_time_zone(zone)
-    I18n.l(time_in_zone, format: :date_short_html).html_safe
+    I18n.l(time_in_zone, format: format).html_safe
     # i18n-tasks-use t('time.formats.date_short_html')
+    # i18n-tasks-use t('time.formats.date_blurb_html')
   end
 end
