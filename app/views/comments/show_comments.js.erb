@@ -7,5 +7,9 @@ $j("#comments_placeholder").html("<%= escape_javascript(will_paginate(@comments,
 $j("#comments_placeholder").append("<%= escape_javascript(render "comments/comment_thread", {:comments => @comments, :depth => 0}) %>");
 $j("#comments_placeholder").append("</ol>");
 $j("#comments_placeholder").append("<%= escape_javascript(will_paginate(@comments, {:remote => true})) %>");
-/* roll down the comments */
+/* roll down the comments (skip animation on admin posts to avoid post-slideDown BFC reflow) */
+<% if @commentable.is_a?(AdminPost) %>
+$j("#comments_placeholder").show();
+<% else %>
 $j("#comments_placeholder").slideDown();
+<% end %>
