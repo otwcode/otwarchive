@@ -7,7 +7,7 @@ class Gift < ApplicationRecord
 
   validates :recipient_name,
             length: { maximum: NAME_LENGTH_MAX, allow_blank: true },
-            format: { with: /[a-zA-Z0-9]/, allow_blank: true }
+            format: { without: /\A[^a-zA-Z0-9]+\z/, allow_blank: true }
 
   validate :has_name_or_pseud
   def has_name_or_pseud
