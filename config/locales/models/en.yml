@@ -32,6 +32,7 @@ en:
         pseud_id: Pseud
       external_work:
         author: Creator
+        url: URL
         user_defined_tags_count: Fandom, relationship, and character tags
       gift_exchange:
         offers_num_allowed: Number of offers allowed per sign-up
@@ -149,6 +150,21 @@ en:
               taken: is already listed as a creator.
         external_work:
           attributes:
+            author:
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+            summary:
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+            title:
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+              too_short:
+                one: must be at least %{count} character long.
+                other: must be at least %{count} characters long.
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them.
         gift_exchange:
