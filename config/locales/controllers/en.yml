@@ -149,7 +149,11 @@ en:
   challenge_claims:
     index:
       page_title: "%{username} - Challenge Claims"
+  challenge_requests:
+    access_denied_requests: You are not allowed to view the requests summary!
+    collection_not_found: Collection could not be found
   challenge_signups:
+    access_denied_signup: You are not allowed to access that sign-up.
     index:
       page_title: "%{username} - Challenge Sign-ups"
     new:

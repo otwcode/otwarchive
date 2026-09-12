@@ -5,9 +5,8 @@
 <% user = challenge_signup.pseud.user %>
 
 <ul class="actions" role="menu">
-  <%# The view-all-requests link should show up if the prompt is not anonymous or if the current user owns it %>
-  <%# TODO: should perhaps also be visible when signups are closed, and to people who aren't logged in? %>
-  <% if (!prompt.anonymous || user == current_user) %>
+  <%# The view-all-requests link should show up if the prompt is not anonymous, or if the current user owns it or is a mod %>
+  <% if (!prompt.anonymous || user == current_user || collection.user_is_maintainer?(current_user)) %>
     <li>
       <%= link_to(t(".navigation.all_requests"), collection_signup_path(collection, challenge_signup)) %>
     </li>

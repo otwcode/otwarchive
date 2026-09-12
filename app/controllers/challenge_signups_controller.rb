@@ -11,6 +11,7 @@ class ChallengeSignupsController < ApplicationController
   before_action :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :allowed_to_destroy, only: [:destroy, :confirm_delete]
   before_action :signup_owner_only, only: [:edit, :update]
+  before_action :check_signup_visible, only: [:show]
   before_action :check_signup_open, only: [:new, :create, :edit, :update]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :check_signup_in_collection, only: [:show, :edit, :update, :destroy, :confirm_delete]
@@ -76,6 +77,32 @@ class ChallengeSignupsController < ApplicationController
     unless @challenge_signup.collection_id == @collection.id
       flash[:error] = ts("Sorry, that sign-up isn't associated with that collection.")
       redirect_to @collection
+    end
+  end
+
+  def check_signup_visible
+    if @collection.challenge_type == "GiftExchange"
+      # gift exchange: can view if requests summary visible, or if you're the owner or a mod
+      unless @challenge.requests_summary_visible? || @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user)
+        flash[:error] = t(".access_denied_signup")
+        redirect_to @collection
+      end
+    else
+      # prompt meme: can view if not all prompts are anonymous, or if you're the owner or a mod
+      # TODO: seems somewhat inefficient, let me know if there are better methods (like storing it as an attribute of the signup?)
+      if @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user)
+        return
+      end
+      is_all_anon = true
+      @challenge_signup.requests.each do |request|
+        unless request.anonymous?
+          is_all_anon = false
+        end
+      end
+      if is_all_anon
+        flash[:error] = t(".access_denied_signup")
+        redirect_to @collection
+      end
     end
   end
 
