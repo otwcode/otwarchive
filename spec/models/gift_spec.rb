@@ -31,7 +31,7 @@ describe Gift do
       it "is invalid if already gifted to that pseud" do
         gift = build(:gift, pseud_id: recipient.id, work: existing_gift.work)
         expect(gift).to be_invalid
-        expect(gift.errors[:pseud_id]).to include("You can't give a gift to the same person twice.")
+        expect(gift.errors[:pseud_id]).to include("^You can't give a gift to the same person twice.")
       end
 
       it "is invalid if already gifted to that user" do
