@@ -5,26 +5,18 @@ class Gift < ApplicationRecord
   belongs_to :pseud
   has_one :user, through: :pseud
 
-  validates_length_of :recipient_name,
-    maximum: NAME_LENGTH_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: NAME_LENGTH_MAX),
-    allow_blank: true
-
-  validates_format_of :recipient_name,
-    message: ts("must contain at least one letter or number."),
-    with: /[a-zA-Z0-9]/,
-    allow_blank: true
+  validates :recipient_name,
+            length: { maximum: NAME_LENGTH_MAX, allow_blank: true },
+            format: { without: /\A[^a-zA-Z0-9]+\z/, allow_blank: true }
 
   validate :has_name_or_pseud
   def has_name_or_pseud
     unless self.pseud || !self.recipient_name.blank?
-      errors.add(:base, ts("A gift must have a recipient specified."))
+      errors.add(:base, :no_recipient)
     end
   end
 
-  validates_uniqueness_of :pseud_id,
-    scope: :work_id,
-    message: ts("You can't give a gift to the same person twice.")
+  validates :pseud_id, uniqueness: { scope: :work_id }
 
   # Don't allow giving the same gift to the same user more than once
   validate :has_not_given_to_user
@@ -32,7 +24,7 @@ class Gift < ApplicationRecord
     if self.pseud && self.work
       other_pseuds = Gift.where(work_id: self.work_id).pluck(:pseud_id) - [self.pseud_id]
       if Pseud.where(id: other_pseuds, user_id: self.pseud.user_id).exists?
-        errors.add(:base, ts("You seem to already have given this work to that user."))
+        errors.add(:base, :already_gifted)
       end
     end
   end
