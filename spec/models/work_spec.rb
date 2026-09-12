@@ -108,8 +108,16 @@ describe Work do
   end
 
   context "invalid rating" do
+    it "must have at least one rating" do
+      work = build(:work, rating_string: "")
+      expect(work).to be_invalid
+      expect(work.errors[:rating_string]).to include("^Please choose a rating.")
+    end
+
     it "cannot have more than one rating" do
-      expect(build(:work, rating_string: "Not Rated, General Audiences")).to be_invalid
+      work = build(:work, rating_string: "Not Rated, General Audiences")
+      expect(work).to be_invalid
+      expect(work.errors[:base]).to include("Only one rating is allowed.")
     end
   end
 
