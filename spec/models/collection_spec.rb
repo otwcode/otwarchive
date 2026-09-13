@@ -115,16 +115,17 @@ describe Collection do
         child.collection_items.create(item: work)
       end
 
-      it "enqueues reindexing of works when subcolelction is added" do
-        child.update!(parent_id: parent_collection.id)
+      it "enqueues reindexing of works when subcollection is added" do
         expect(IndexQueue).to receive(:enqueue_ids).with(Work, [work.id], :background)
         allow(IndexQueue).to receive(:enqueue_ids).with(Bookmark, anything, :background)
+        child.update!(parent_id: parent_collection.id)
       end
 
       it "enqueues reindexing of works when subcollection is removed" do
-        child.update!(parent_id: nil)
+        child.update_column(:parent_id, parent_collection.id)
         expect(IndexQueue).to receive(:enqueue_ids).with(Work, [work.id], :background)
         allow(IndexQueue).to receive(:enqueue_ids).with(Bookmark, anything, :background)
+        child.update!(parent_id: nil)
       end
     end
   end
