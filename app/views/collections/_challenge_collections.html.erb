@@ -1,12 +1,29 @@
-<% if @challenge_collections.blank? %>
-  <p class="notes"><%= ts("There are no challenges currently open for sign-ups in the archive.") %></p>
-<% else %>
-  <p class="notes"><%= ts("The following challenges are currently open for sign-ups! Those closing soonest are at the top.") %></p>
+<h3 class="heading">
+  <% if @challenge_collections.blank? %>
+    <%= t("collections.challenge_collections.no_challenges") %>
+  <% else %>
+    <%= search_header @challenge_collections, @query, t("collections.challenge_collections.search_header_label") %>
+  <% end %>
+</h3>
 
-  <h3 class="landmark heading"><%= ts("List of Collections") %></h3>
+<% unless @challenge_collections.blank? %>
+  <p class="notes"><%= t("collections.challenge_collections.open_description") %></p>
+
+  <%= will_paginate @challenge_collections %>
+
+  <h3 class="landmark heading"><%= t("collections.challenge_collections.list_heading") %></h3>
   <ul class="collection picture index group">
   <% @challenge_collections.each do |collection| %>
     <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>
   <% end %>
   </ul>
+
+<% end %>
+
+<% if @sort_and_filter %>
+  <%= render "challenge_filters" %>
+<% end %>
+
+<% unless @challenge_collections.blank? %>
+  <%= will_paginate @challenge_collections %>
 <% end %>

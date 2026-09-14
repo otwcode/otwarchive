@@ -57,7 +57,12 @@ class CollectionQuery < Query
   end
 
   def signup_closes_in_future_filter
-    { range: { signups_close_at: { gt: "now" } } } if options[:signup_open].present?
+    return if options[:signup_open].blank?
+
+    { bool: { should: [
+      { range: { signups_close_at: { gt: "now" } } },
+      { bool: { must_not: { exists: { field: "signups_close_at" } } } }
+    ] } }
   end
 
   def closed_filter
@@ -141,6 +146,10 @@ class CollectionQuery < Query
                   else
                     "desc"
                   end
-    [{ column => { order: direction } }, { "id" => { order: direction } }]
+
+    column_sort_options = { order: direction }
+    column_sort_options[:missing] = "_first" if column == "signups_close_at" && direction == "desc"
+
+    [{ column => column_sort_options }, { "id" => { order: direction } }]
   end
 end
