@@ -140,6 +140,7 @@ class OwnedTagSetsController < ApplicationController
 
   def new
     @tag_set = OwnedTagSet.new
+    load_associations_for_remove
   end
 
   def create
@@ -149,12 +150,14 @@ class OwnedTagSetsController < ApplicationController
       flash[:notice] = ts('Tag Set was successfully created.')
       redirect_to tag_set_path(@tag_set)
     else
+      load_associations_for_remove
       render action: "new"
     end
   end
 
   def edit
     get_parent_child_tags
+    load_associations_for_remove
   end
 
   def update
@@ -163,6 +166,7 @@ class OwnedTagSetsController < ApplicationController
       redirect_to tag_set_path(@tag_set)
     else
       get_parent_child_tags
+      load_associations_for_remove
       render action: :edit
     end
   end
@@ -215,6 +219,12 @@ class OwnedTagSetsController < ApplicationController
   end
 
   private
+
+  def load_associations_for_remove
+    @associations_for_remove = @tag_set.tag_set_associations.in_name_order
+    @associations_for_add =
+      @tag_set.tag_set_associations.target.select(&:new_record?)
+  end
 
   def owned_tag_set_params
     params.require(:owned_tag_set).permit(
