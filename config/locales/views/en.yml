@@ -2757,8 +2757,8 @@ en:
     batch_load:
       page_heading: Batch Loading
       submit:
-        landmark: Submit
         button: Submit
+        landmark: Submit
       tag_sets_batch_load_help_title: Tag set batch load
     index:
       landmark: Listing Tag Sets
@@ -2771,11 +2771,9 @@ en:
       no_tag_sets_found: No tag sets found.
       page_heading:
         challenge: Tag Sets Used In This Challenge
-        default_html: "Tag Sets %{help_modal_link} in the %{archive_name}"
+        default_html: Tag Sets %{help_modal_link} in the %{archive_name}
         query: Tag Set
         user: "%{user_name}'s Tag Sets"
-      search_submit: Search
-      search_title: Search
       tag_sets_about_help_title: Tag set about
     tag_set_form:
       check_to_remove_tag: "(check to remove)"
