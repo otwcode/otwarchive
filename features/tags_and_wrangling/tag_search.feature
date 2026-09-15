@@ -258,7 +258,6 @@ Feature: Search Tags
       And a freeform exists with name: "canonized third", canonical: true
       And the tag "canonized third" was canonized on "2010-01-01 20:00:00 UTC"
       And a freeform exists with name: "never canonized", canonical: false
-      And all indexing jobs have been run
     When I am on the search tags page
       And I fill in "Tag name" with "canonized"
       And I select "Date Canonized" from "Sort by"
@@ -285,7 +284,6 @@ Feature: Search Tags
       And a freeform exists with name: "decanonized third", canonical: false
       And the tag "decanonized third" was decanonized on "2010-01-01 20:00:00 UTC"
       And a freeform exists with name: "never decanonized", canonical: true
-      And all indexing jobs have been run
     When I am on the search tags page
       And I fill in "Tag name" with "decanonized"
       And I select "Date Decanonized" from "Sort by"
