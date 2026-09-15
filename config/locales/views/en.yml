@@ -1381,6 +1381,9 @@ en:
         title: "|: OR (not exclusive)"
         user_a_or_keyboard_input: A. | User
         user_sample: User
+      page_description: Enter text in "Search all fields" to find people with usernames, pseuds, or pseud descriptions containing your search terms.
+      page_heading: 'People Search: Search All Fields'
+      page_note: The characters ":" and "@" have special meanings. Leave them out of your search or you will get unexpected results.
       space:
         a_test_user_sample: A. Test User
         a_user_keyboard_input: A. User
@@ -1388,9 +1391,6 @@ en:
         description_html: "%{a_user_keyboard_input} will find %{a_user_sample} and %{a_test_user_sample} but not %{user_sample}."
         title: 'space: a space acts like AND'
         user_sample: User
-      page_description: Enter text in "Search all fields" to find people with usernames, pseuds, or pseud descriptions containing your search terms.
-      page_heading: 'People Search: Search All Fields'
-      page_note: The characters ":" and "@" have special meanings. Leave them out of your search or you will get unexpected results.
     preferences_collection:
       allow_collection_invitation:
         changing: Changing this setting won't affect any existing works in collections.
