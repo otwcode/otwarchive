@@ -112,7 +112,8 @@ describe Pseud do
         tag_set = create(:owned_tag_set)
         create(:tag_set_nomination, pseud: default_pseud, owned_tag_set: tag_set)
         conflicting = create(:tag_set_nomination, owned_tag_set: tag_set)
-        conflicting.update_column(:pseud_id, pseud.id)
+        conflicting.pseud_id = pseud.id
+        conflicting.save!(validate: false)
 
         pseud.change_tag_set_nominations
 
@@ -123,7 +124,8 @@ describe Pseud do
         tag_set = create(:owned_tag_set)
         create(:tag_set_nomination, pseud: default_pseud, owned_tag_set: tag_set)
         conflicting = create(:tag_set_nomination, owned_tag_set: tag_set)
-        conflicting.update_column(:pseud_id, pseud.id)
+        conflicting.pseud_id = pseud.id
+        conflicting.save!(validate: false)
         other_nomination = create(:tag_set_nomination, pseud: pseud)
 
         pseud.change_tag_set_nominations
