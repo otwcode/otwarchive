@@ -18,6 +18,9 @@ class HelpController < ApplicationController
     skins_creating
     skins_parents
     symbols_key
+    tag_sets_about
+    tag_sets_associations
+    tag_sets_batch_load
     tags_additional
     tags_categories
     tags_characters
