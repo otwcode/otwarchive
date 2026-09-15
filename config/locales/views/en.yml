@@ -1361,33 +1361,33 @@ en:
         unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
       page_heading: HTML on the Archive
     people_search_all_fields:
-      and:
-        a_test_user_samp: A. Test User
-        a_user_kbd: A. User
-        a_user_samp: A. User
-        description_html: "%{a_user_kbd} will find %{a_user_samp} and %{a_test_user_samp} but not %{user_samp}."
-        title: 'space: a space acts like AND'
-        user_samp: User
-      any:
-        description_html: "%{user_any_kbd} will find %{user_samp} and %{users_samp} and %{username_samp}."
+      asterisk:
+        description_html: "%{user_any_keyboard_input} will find %{user_sample} and %{users_sample} and %{username_sample}."
         title: "*: any characters"
-        user_any_kbd: User*
-        user_samp: User
-        username_samp: Username
-        users_samp: Users
-      exact:
-        a_test_user_samp: A. Test User
-        a_user_kbd: '"A. User"'
-        a_user_samp: '"A. User"'
-        description_html: "%{a_user_kbd} will find %{a_user_samp} but not %{a_test_user_samp}."
+        user_any_keyboard_input: User*
+        user_sample: User
+        username_sample: Username
+        users_sample: Users
+      double_quotes:
+        a_test_user_sample: A. Test User
+        a_user_keyboard_input: '"A. User"'
+        a_user_sample: A. User
+        description_html: "%{a_user_keyboard_input} will find %{a_user_sample} but not %{a_test_user_sample}."
         title: "\": words in exact sequence"
       or:
-        a_samp: A.
-        a_user_samp: A. User
-        description_html: "%{user_a_or_kbd} will find %{a_samp}, %{a_user_samp}, and %{user_samp}."
+        a_sample: A.
+        a_user_sample: A. User
+        description_html: "%{user_a_or_keyboard_input} will find %{a_sample}, %{a_user_sample}, and %{user_sample}."
         title: "|: OR (not exclusive)"
-        user_a_or_kbd: A. | User
-        user_samp: User
+        user_a_or_keyboard_input: A. | User
+        user_sample: User
+      space:
+        a_test_user_sample: A. Test User
+        a_user_keyboard_input: A. User
+        a_user_sample: A. User
+        description_html: "%{a_user_keyboard_input} will find %{a_user_sample} and %{a_test_user_sample} but not %{user_sample}."
+        title: 'space: a space acts like AND'
+        user_sample: User
       page_description: Enter text in "Search all fields" to find people with usernames, pseuds, or pseud descriptions containing your search terms.
       page_heading: 'People Search: Search All Fields'
       page_note: The characters ":" and "@" have special meanings. Leave them out of your search or you will get unexpected results.
@@ -2777,7 +2777,7 @@ en:
     prev: "← Previous"
   people:
     search_form:
-      people_search_all_fields_help_title: People search all fields help
+      all_fields_help_title: People search all fields help
   potential_matches:
     in_progress:
       cancel: Cancel Potential Match Generation
