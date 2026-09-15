@@ -764,6 +764,8 @@ en:
       no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
     chapter_form:
+      chapter_title: Chapter Title
+      chapters_title_help_title: Chapter title
       publication_date: Chapter Publication Date
       works_backdating_help_title: Publication Date Options
     posting_fieldset:
@@ -1215,6 +1217,9 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    chapters_title:
+      description: You can add a chapter title, but it's not required.
+      page_heading: Chapter Title
     collectibles_add_to_collection:
       collection_names: Note that you need to use the collection's name, which gets used in the collection's URL, and not the collection's spiffy title (because different collections can have the same title). A collection's name is the equivalent of your user login. Names will be auto-completed for you if you have JavaScript turned on.
       guidance: Enter collection names as a comma-separated list, and the item you are editing will be added to all the collections you specify.
@@ -1358,6 +1363,37 @@ en:
         unwanted_larger_text: If one bit of your text shows up larger than the rest, probably our formatter couldn't figure out to put paragraph tags around it. You can fix this by manually putting in the paragraph tags around that one bit.
         unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
       page_heading: HTML on the Archive
+    people_search_all_fields:
+      asterisk:
+        description_html: "%{user_any_keyboard_input} will find %{user_sample} and %{users_sample} and %{username_sample}."
+        title: "*: any characters"
+        user_any_keyboard_input: User*
+        user_sample: User
+        username_sample: Username
+        users_sample: Users
+      double_quotes:
+        a_test_user_sample: A. Test User
+        a_user_keyboard_input: '"A. User"'
+        a_user_sample: A. User
+        description_html: "%{a_user_keyboard_input} will find %{a_user_sample} but not %{a_test_user_sample}."
+        title: "\": words in exact sequence"
+      or:
+        a_sample: A.
+        a_user_sample: A. User
+        description_html: "%{user_a_or_keyboard_input} will find %{a_sample}, %{a_user_sample}, and %{user_sample}."
+        title: "|: OR (not exclusive)"
+        user_a_or_keyboard_input: A. | User
+        user_sample: User
+      page_description: Enter text in "Search all fields" to find people with usernames, pseuds, or pseud descriptions containing your search terms.
+      page_heading: 'People Search: Search All Fields'
+      page_note: The characters ":" and "@" have special meanings. Leave them out of your search or you will get unexpected results.
+      space:
+        a_test_user_sample: A. Test User
+        a_user_keyboard_input: A. User
+        a_user_sample: A. User
+        description_html: "%{a_user_keyboard_input} will find %{a_user_sample} and %{a_test_user_sample} but not %{user_sample}."
+        title: 'space: a space acts like AND'
+        user_sample: User
     preferences_collection:
       allow_collection_invitation:
         changing: Changing this setting won't affect any existing works in collections.
@@ -2801,6 +2837,9 @@ en:
       nav: Pagination
     next: Next →
     prev: "← Previous"
+  people:
+    search_form:
+      all_fields_help_title: People search all fields help
   potential_matches:
     in_progress:
       cancel: Cancel Potential Match Generation
