@@ -1,6 +1,6 @@
 ### GIVEN
 
-Given /^I have related works setup$/ do
+Given "I have related works setup" do
   step "basic tags"
   step "all emails have been delivered"
 
@@ -12,28 +12,28 @@ Given /^I have related works setup$/ do
   FactoryBot.create(:work, title: "Worldbuilding Two", authors: inspiration.pseuds)
 end
 
-Given /^an inspiring parent work has been posted$/ do
+Given "an inspiring parent work has been posted" do
   step "I post an inspiring parent work as testuser"
 end
 
 # given for remixes / related works
 
-Given /^a related work has been posted$/ do
+Given "a related work has been posted" do
   step %{I post a related work as remixer}
 end
 
-Given /^a related work has been posted and approved$/ do
+Given "a related work has been posted and approved" do
   step %{I post a related work as remixer}
   step %{I approve a related work}
 end
 
 # given for translations
 
-Given /^a translation has been posted$/ do
+Given "a translation has been posted" do
   step %{I post a translation as translator}
 end
 
-Given /^a translation has been posted and approved$/ do
+Given "a translation has been posted and approved" do
   step %{I post a translation as translator}
   step %{I approve a related work}
 end
@@ -45,7 +45,7 @@ When "I post an inspiring parent work as testuser" do
   step %{I post the work "Parent Work"}
 end
 
-When /^I approve a related work$/ do
+When "I approve a related work" do
   step %{I am logged in as "inspiration"}
   step %{I follow "My Dashboard"}
   step %{I follow "Related Works ("}
@@ -53,28 +53,85 @@ When /^I approve a related work$/ do
   step %{I press "Yes, link me!"}
 end
 
-When /^I view my related works$/ do
+When "I view my related works" do
   step %{I follow "My Dashboard"}
   step %{I follow "Related Works ("}
 end
 
 # when for remixes / related works
 
-When /^I post a related work as remixer$/ do
+When "I post a related work as remixer" do
   step %{I am logged in as "remixer"}
-    step %{I go to the new work page}
-    step %{I select "Not Rated" from "Rating"}
-    step %{I check "No Archive Warnings Apply"}
-    step %{I select "English" from "Choose a language"}
-    step %{I fill in "Fandoms" with "Stargate"}
-    step %{I fill in "Work Title" with "Followup"}
-    step %{I fill in "content" with "That could be an amusing crossover."}
-    step %{I list the work "Worldbuilding" as inspiration}
-    step %{I press "Preview"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I press "Preview"}
   step %{I press "Post"}
 end
 
-When /^I post a related work as remixer for an external work$/ do
+When "I post a related work as remixer without previewing it" do
+  step %{I am logged in as "remixer"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I press "Post"}
+end
+
+When "I post a related work as remixer after saving it as a draft" do
+  step %{I am logged in as "remixer"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I press "Save Draft"}
+  step %{I press "Post"}
+end
+
+When "I post a related work as remixer after saving it as a draft and then editing it" do
+  step %{I am logged in as "remixer"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I press "Save Draft"}
+  step %{I press "Edit"}
+  step %{I press "Post"}
+end
+
+When "I post a related work as remixer after previewing it and then editing it" do
+  step %{I am logged in as "remixer"}
+  step %{I go to the new work page}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I press "Preview"}
+  step %{I press "Edit"}
+  step %{I press "Post"}
+end
+
+When "I post a related work as remixer for an external work" do
   step %{I am logged in as "remixer"}
   step %{I go to the new work page}
   step %{I select "Not Rated" from "Rating"}
@@ -90,19 +147,19 @@ end
 
 # when for translations
 
-When /^I post a translation as translator$/ do
+When "I post a translation as translator" do
   step %{I am logged in as "translator"}
   step %{I draft a translation}
   step %{I press "Post"}
 end
 
-When /^I post a translation of my own work$/ do
+When "I post a translation of my own work" do
   step %{I am logged in as "inspiration"}
   step %{I draft a translation}
   step %{I press "Post"}
 end
 
-When /^I draft a translation$/ do
+When "I draft a translation" do
   FactoryBot.create(:language, name: "Deutsch", short: "de")
 
   step %{I go to the new work page}
@@ -116,13 +173,13 @@ When /^I draft a translation$/ do
     step %{I press "Preview"}
 end
 
-When /^I list a series as inspiration$/ do
+When "I list a series as inspiration" do
   with_scope("#parent-options") do
     fill_in("URL", with: "#{ArchiveConfig.APP_HOST}/series/123")
   end
 end
 
-When /^I list a nonexistent work as inspiration$/ do
+When "I list a nonexistent work as inspiration" do
   work = Work.find_by_id(123)
   work.destroy unless work.nil?
   with_scope("#parent-options") do
@@ -132,31 +189,32 @@ end
 
 ### THEN
 
-Then /^the original author should be emailed$/ do
+Then "the original author should receive a related work email" do
   step "1 email should be delivered"
+  step %{the email should have "Related work notification" in the subject}
 end
 
-Then /^approving the related work should succeed$/ do
+Then "approving the related work should succeed" do
   step %{I should see "Link was successfully approved"}
 end
 
 # then for remixes / related works
 
-Then /^a parent related work should be seen$/ do
+Then "a parent related work should be seen" do
   step %{I should see "Work was successfully posted"}
   step %{I should find a list for associations}
   step %{I should see "Inspired by Worldbuilding by inspiration" within ".preface .notes"}
 end
 
-Then /^I should see the inspiring parent work in the beginning notes$/ do
+Then "I should see the inspiring parent work in the beginning notes" do
  step %{I should see "Inspired by Parent Work by testuser" within ".preface .notes"}
 end
 
-Then /^I should see a beginning note about related works$/ do
+Then "I should see a beginning note about related works" do
   step %{I should see "See the end of the work for other works inspired by this one" within ".preface .notes"}
 end
 
-Then /^I should see the related work in the end notes$/ do
+Then "I should see the related work in the end notes" do
   step %{I should see "Works inspired by this one:" within ".afterword .children"}
   step %{I should see "Followup by remixer" within ".afterword .children"}
 end
@@ -167,7 +225,7 @@ Then "I should see the related work listed on the original work" do
   step %{I should see "Followup by remixer"}
 end
 
-Then /^I should not see the related work listed on the original work$/ do
+Then "I should not see the related work listed on the original work" do
   step %{I should not see "See the end of the work for other works inspired by this one"}
   step %{I should not see "Works inspired by this one:"}
   step %{I should not see "Followup by remixer"}
@@ -179,7 +237,7 @@ end
 
 # then for translations
 
-Then /^a parent translated work should be seen$/ do
+Then "a parent translated work should be seen" do
   step %{I should see "Work was successfully posted"}
   step %{I should find a list for associations}
   step %{I should see "A translation of Worldbuilding by inspiration" within ".preface .notes"}
@@ -195,12 +253,12 @@ Then "I should see the translation listed on the original work" do
   step %{I should see "Worldbuilding Translated by translator"}
 end
 
-Then /^I should not see the translation listed on the original work$/ do
+Then "I should not see the translation listed on the original work" do
   step %{I should not see "Translation into Deutsch available:"}
   step %{I should not see "Worldbuilding Translated by translator"}
 end
 
-Then /^I should not see the translation in the end notes$/ do
+Then "I should not see the translation in the end notes" do
   step %{I should not see "Translation into Deutsch available:" within ".afterword"}
   step %{I should not see "Worldbuilding Translated by translator" within ".afterword"}
 end

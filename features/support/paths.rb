@@ -177,6 +177,9 @@ module NavigationHelpers
       collection_path(Collection.find_by(title: $1))
     when /^"(.*)" collection edit page$/i
       edit_collection_path(Collection.find_by(title: $1))
+    when /^the "(.*)" subcollections page$/i                   # e.g. when I go to the "Collection name" subcollections page
+      step %{all indexing jobs have been run}
+      collection_collections_path(Collection.find_by(title: Regexp.last_match(1)))
     when /^the "(.*)" signups page$/i                          # e.g. when I go to the "Collection name" signup page
       collection_signups_path(Collection.find_by(title: $1))
     when /^the "(.*)" requests page$/i                         # e.g. when I go to the "Collection name" signup page

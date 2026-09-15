@@ -103,9 +103,33 @@ Scenario: Manage pseuds - add, edit
     And I follow "Manage My Pseuds"
   Then I should see "Edit My new name"
 
-  # Edit your new pseud's name and description.
+  # Edit your new pseud with a blank name.
   When I follow "edit_my_new_name"
-    And I fill in "Description" with "I wanted to add another fancy name"
+    And I fill in "Description" with "I wanted to make my new name blank"
+    And I fill in "Name" with ""
+    And I press "Update"
+  Then I should not see "Pseud was successfully updated."
+    And I should see "can't be blank"
+    And I should see "can contain letters, numbers, spaces, underscores, and dashes"
+
+  # Check that the show button works and the pseud hasn't actually updated.
+  When I follow "Show"
+  Then I should be on the dashboard page for user "editpseuds" with pseud "My new name"
+  When I follow "Back To Pseuds"
+  Then I should see "Edit My new name"
+    And I should see "I wanted to add another name"
+    And I should not see "I wanted to make my new name blank"
+
+  # Edit your new pseud with an invalid name.
+  When I follow "edit_my_new_name"
+    And I fill in "Description" with "I wanted to make my new name smiley"
+    And I fill in "Name" with ":-)"
+    And I press "Update"
+  Then I should not see "Pseud was successfully updated."
+    And I should see "can contain letters, numbers, spaces, underscores, and dashes"
+
+  # Edit your new pseud with a valid name this time.
+  When I fill in "Description" with "I wanted to add another fancy name"
     And I fill in "Name" with "My new fancy name"
     And I press "Update"
   Then I should see "Pseud was successfully updated."

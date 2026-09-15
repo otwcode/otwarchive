@@ -8,6 +8,7 @@ module CssCleaner
   ALPHA_REGEX = Regexp.new('[a-z\-]+')
   UNITS_REGEX = Regexp.new('deg|cm|em|ex|in|mm|pc|pt|px|s|%', Regexp::IGNORECASE)
   NUMBER_REGEX = Regexp.new('-?\.?\d{1,3}\.?\d{0,3}')
+  NUMBER_OR_RATIO_REGEX = Regexp.new("#{NUMBER_REGEX}(\s*\/\s*#{NUMBER_REGEX})?")
   NUMBER_WITH_UNIT_REGEX = Regexp.new("#{NUMBER_REGEX}\s*#{UNITS_REGEX}?\s*,?\s*")
   PAREN_NUMBER_REGEX = Regexp.new('\(\s*' + NUMBER_WITH_UNIT_REGEX.to_s + '+\s*\)')
   PREFIX_REGEX = Regexp.new('moz|ms|o|webkit')
@@ -48,6 +49,10 @@ module CssCleaner
   URL_REGEX = Regexp.new(URI_REGEX.to_s + '|"' + URI_REGEX.to_s + '"|\'' + URI_REGEX.to_s + '\'')
   URL_FUNCTION_REGEX = Regexp.new('url\(\s*' + URL_REGEX.to_s + '\s*\)')
 
+  # Unless we have a reason to allow a new value syntax for all or most
+  # properties, sanitization should be handled on a per-property basis in 
+  # sanitize_css_declaration_value. While invalid values are typically harmless,
+  # including new syntax in VALUE_REGEX risks allowing unwanted valid values.
   VALUE_REGEX = Regexp.new("#{TRANSFORM_FUNCTION_REGEX}|#{URL_FUNCTION_REGEX}|#{COLOR_STOP_FUNCTION_REGEX}|#{COLOR_REGEX}|#{NUMBER_WITH_UNIT_REGEX}|#{ALPHA_REGEX}|#{SHAPE_FUNCTION_REGEX}|#{FILTER_FUNCTION_REGEX}|#{DROP_SHADOW_FUNCTION_REGEX}|#{VAR_FUNCTION_REGEX}")
 
 
@@ -136,6 +141,8 @@ module CssCleaner
     if property == "font-family"
       # preserve the original capitalization
       clean = value if sanitize_css_font(value).present?
+    elsif property == "aspect-ratio"
+      clean = value if value.match(/\A(#{ALPHA_REGEX}|(auto\s+)?#{NUMBER_OR_RATIO_REGEX}(\s+auto)?)\z/i)
     elsif property == "content"
       # don't allow var() function
       clean = value.match(/\bvar\b/i) ? "" : sanitize_css_content(value)

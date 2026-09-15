@@ -96,7 +96,7 @@ a.cloud8 {
 https://otwcode.github.io/docs/classes-taxonomy.html#grouping-and-spacing
 */
 
-.wrapper {
+.wrapper:has(> table, > .meta) {
     box-shadow: 1px 1px 5px #aaa;
 }
 
@@ -107,10 +107,6 @@ https://otwcode.github.io/docs/classes-taxonomy.html#grouping-and-spacing
 
 #work-skin.wrapper {
   overflow-y: hidden;
-}
-
-#outer.wrapper, #inner.wrapper, #work-skin.wrapper {
-    box-shadow: none;
 }
 
 .module, .index, .index .index {

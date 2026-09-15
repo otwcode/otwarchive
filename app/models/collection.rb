@@ -166,13 +166,8 @@ class Collection < ApplicationRecord
     end
   end
 
-  scope :with_name_like, lambda { |name|
-    where("collections.name LIKE ?", "%#{name}%")
-      .limit(10)
-  }
-
-  scope :with_title_like, lambda { |title|
-    where("collections.title LIKE ?", "%#{title}%")
+  scope :with_name_or_title_like, lambda { |term|
+    where("collections.name LIKE ? OR collections.title LIKE ?", "%#{term}%", "%#{term}%")
   }
 
   scope :with_item_count, lambda {
