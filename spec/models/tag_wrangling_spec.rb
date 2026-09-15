@@ -18,6 +18,42 @@ describe Tag do
         end.to(add_to_reindex_queue(work, :background) &
                not_add_to_reindex_queue(work, :main))
       end
+
+      it "sets canonized_at" do
+        freeze_time do
+          fandom.update!(canonical: true)
+          expect(fandom.canonized_at).to eq(Time.current)
+          expect(fandom.decanonized_at).to be_nil
+        end
+      end
+    end
+
+    context "when a tag is created as canonical" do
+      it "sets canonized_at" do
+        freeze_time do
+          fandom = create(:canonical_fandom)
+          expect(fandom.canonized_at).to eq(Time.current)
+          expect(fandom.decanonized_at).to be_nil
+        end
+      end
+    end
+
+    context "when a tag is created as non-canonical" do
+      it "does not set canonized_at or decanonized_at" do
+        fandom = create(:fandom)
+        expect(fandom.canonized_at).to be_nil
+        expect(fandom.decanonized_at).to be_nil
+      end
+    end
+
+    context "when canonical does not change" do
+      it "does not change canonized_at or decanonized_at" do
+        fandom = create(:canonical_fandom)
+        expect do
+          fandom.update!(unwrangleable: false)
+        end.to avoid_changing { fandom.reload.canonized_at } &
+               avoid_changing { fandom.reload.decanonized_at }
+      end
     end
 
     context "when canonical becomes false" do
@@ -35,6 +71,13 @@ describe Tag do
           fandom.update!(canonical: false)
         end.to(add_to_reindex_queue(work, :background) &
                not_add_to_reindex_queue(work, :main))
+      end
+
+      it "sets decanonized_at" do
+        freeze_time do
+          fandom.update!(canonical: false)
+          expect(fandom.decanonized_at).to eq(Time.current)
+        end
       end
 
       it "removes favorite tags" do

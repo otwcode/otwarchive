@@ -23,6 +23,8 @@ class TagIndexer < Indexer
         },
         tag_type: { type: "keyword" },
         sortable_name: { type: "keyword" },
+        canonized_at: { type: "date" },
+        decanonized_at: { type: "date" },
         uses: { type: "integer" },
         unwrangled: { type: "boolean" }
       }
@@ -72,7 +74,7 @@ class TagIndexer < Indexer
       root: false,
       only: [
         :id, :name, :sortable_name, :merger_id, :canonical, :created_at,
-        :unwrangleable
+        :canonized_at, :decanonized_at, :unwrangleable
       ]
     ).merge(
       has_posted_works: object.has_posted_works?,

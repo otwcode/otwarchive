@@ -255,6 +255,15 @@ class Tag < ApplicationRecord
     end
   end
 
+  before_save :set_canonization_date, if: :will_save_change_to_canonical?
+  def set_canonization_date
+    if canonical?
+      self.canonized_at = Time.current
+    else
+      self.decanonized_at = Time.current
+    end
+  end
+
   after_save :check_type_changes, if: :saved_change_to_type?
   def check_type_changes
     return if type_before_last_save.nil?
