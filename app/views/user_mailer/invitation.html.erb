@@ -1,14 +1,14 @@
 <% content_for :message do %>
   <p>
     <% if !@user_name.blank? %>
-      <%= t(".has_invited", user_name: style_bold(@user_name)).html_safe %>
+      <%= t(".has_invited.html", user_name: style_bold(@user_name)) %>
     <% else %>
       <%= t ".been_invited" %>
     <% end %>
   </p>
 
   <p>
-    <%= t(".html.about", otw_link: style_link(t(".html.otw_link_text"), "https://www.transformativeworks.org")).html_safe %>
+    <%= t(".about.html", otw_link: style_link(t(".about.otw_link_text"), "https://www.transformativeworks.org")) %>
   </p>
 
   <p>
@@ -16,14 +16,14 @@
   </p>
 
   <p>
-    <%= t(".html.join", invitation_link: style_link(t(".html.invitation_link_text"), signup_url(invitation_token: @invitation.token))).html_safe %>
+    <%= t(".join.html", invitation_link: style_link(t(".join.invitation_link_text"), signup_url(invitation_token: @invitation.token))) %>
   </p>
 
   <p>
-    <%= t(".html.activation_support", support_link: style_link(t(".html.support_link_text"), new_feedback_report_url)).html_safe %>
+    <%= t(".activation_support.html", support_link: style_link(t(".activation_support.support_link_text"), new_feedback_report_url)) %>
   </p>
 
   <p>
-    <%= t(".html.faq", faq_link: style_link(t(".html.faq_link_text"), archive_faqs_url)).html_safe %>
+    <%= t(".faq.html", faq_link: style_link(t(".faq.faq_link_text"), archive_faqs_url)) %>
   </p>
 <% end %>
