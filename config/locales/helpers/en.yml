@@ -81,6 +81,16 @@ en:
       troubleshot: Account Troubleshot
       validated: Account Validated
       warn: Warned
+  validation_helper:
+    live_validation_for_field:
+      blank: Must be present.
+      not_a_number: Must be a number!
+      too_long:
+        one: Must be less than %{count} letter long.
+        other: Must be less than %{count} letters long.
+      too_short:
+        one: Must be at least %{count} letter long.
+        other: Must be at least %{count} letters long.
   works_helper:
     collections_meta_tag:
       collections: 'Collections:'
