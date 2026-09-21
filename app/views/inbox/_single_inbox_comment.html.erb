@@ -1,8 +1,8 @@
 <% feedback_comment = inbox_comment.feedback_comment %>
 
-<li class="<%= css_classes_for_inbox_comment(inbox_comment) %>" role="article" id="feedback_comment_<%= feedback_comment.id %>">
+<li class="<%= css_classes_for_inbox_comment(inbox_comment) %>" id="feedback_comment_<%= feedback_comment.id %>">
   <% if !can_see_hidden_comment?(feedback_comment) %>
-    <p class="message"><%= t(".hidden") %></p>
+    <p class="message"><%= t("comments.general.hidden") %></p>
   <% else %>
     <%= render "inbox/inbox_comment_contents", feedback_comment: feedback_comment %>
   <% end %>

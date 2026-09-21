@@ -991,6 +991,8 @@ en:
       page_heading: Editing comment
       show: Show
       update: Update
+    general:
+      hidden: "(This comment is under review by an admin and is currently unavailable.)"
     new:
       actions:
         comment: Comment
@@ -2528,7 +2530,6 @@ en:
   inbox:
     single_inbox_comment:
       comment_actions: Comment Actions
-      hidden: "(This comment is under review by an admin and is currently unavailable.)"
       replied_to: replied to
       select: Select
       unread: Unread
