@@ -1,8 +1,11 @@
 class HelpController < ApplicationController
   HELP_ACTIONS = %i[
     collectibles_add_to_collection
+    collections_name
     first_login
     html
+    icon_alt_text
+    icon_comment_text
     preferences_collection
     preferences_comment
     preferences_display

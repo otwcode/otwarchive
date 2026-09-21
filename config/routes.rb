@@ -659,8 +659,11 @@ Rails.application.routes.draw do
 
   # Redirects for moved help files
   get "/help/add-collectible-to-collection.html", to: redirect("/help/collectibles_add_to_collection")
+  get "help/collection-name.html", to: redirect("help/collections_name")
   get "/first_login_help", to: redirect("/help/first_login")
   get "/help/html-help.html", to: redirect("/help/html")
+  get "help/icon-alt-text.html", to: redirect("help/icon_alt_text")
+  get "help/pseud-icon-comment.html", to: redirect("help/icon_comment_text")
   get "/help/collection-preferences.html", to: redirect("/help/preferences_collection")
   get "/help/comment-preferences.html", to: redirect("/help/preferences_comment")
   get "/help/display-preferences.html", to: redirect("/help/preferences_display")

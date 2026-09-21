@@ -42,7 +42,7 @@
 
   <dt>
     <%= f.label :icon_alt_text, t(".icon_alt") %>
-    <%= link_to_help "icon-alt-text" %>
+    <%= link_to_help_modal(help_icon_alt_text_path, t(".icon_alt_text_help_title")) %>
   </dt>
   <dd>
     <%= f.text_field :icon_alt_text, class: "observe_textlength", disabled: logged_in_as_admin? %>
@@ -51,7 +51,7 @@
 
   <dt>
     <%= f.label :icon_comment_text, t(".icon_comment") %>
-    <%= link_to_help("pseud-icon-comment") %>
+    <%= link_to_help_modal(help_icon_comment_text_path, t(".icon_comment_text_help_title")) %>
   </dt>
   <dd>
     <%= f.text_field :icon_comment_text, class: "observe_textlength", disabled: logged_in_as_admin? %>
