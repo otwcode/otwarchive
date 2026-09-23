@@ -88,8 +88,12 @@ Feature: User statistics
     And I should see "Fandom B" within ".fandom.listbox.group[2]"
     And I should see "Fandom C" within ".fandom.listbox.group[3]"
 
-  Scenario: Statistics page title includes the username
-  
+   Scenario: Statistics page title and navigation say "Statistics"
+
   Given I am logged in as "NUMB3RSfan"
+    And I post the work "Numbers Fic"
   When I go to NUMB3RSfan's stats page
-  Then I should see the page title "NUMB3RSfan - Stats"
+  Then I should see the page title "NUMB3RSfan - Statistics"
+    And I should see "Statistics" within "#main .navigation.actions"
+    
+
