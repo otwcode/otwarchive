@@ -183,6 +183,49 @@ describe ApplicationHelper do
     end
   end
 
+  describe "#creation_series_ids_for_css_classes" do
+    context "when creation is ExternalWork" do
+      let(:external_work) { create(:external_work) }
+
+      it "returns empty array for exteral work" do
+        result = helper.creation_series_ids_for_css_classes(external_work)
+        expect(result).to be_empty
+      end
+    end
+
+    context "when creation is Series" do
+      let(:series) { create(:series) }
+
+      it "returns empty array for series" do
+        result = helper.creation_series_ids_for_css_classes(series)
+        expect(result).to be_empty
+      end
+    end
+
+    context "when creation is work" do
+      let(:series_a) { create(:series) }
+      let(:series_b) { create(:series) }
+      let(:work_a) { series_a.works.first }
+      let(:work_b) { create(:work) }
+      let(:work_c) { create(:work, series: [series_a, series_b]) }
+
+      it "returns empty array for work with no series" do
+        result = helper.creation_series_ids_for_css_classes(work_b)
+        expect(result).to be_empty
+      end
+        
+      it "returns array for work with series" do
+        result = helper.creation_series_ids_for_css_classes(work_a)
+        expect(result).to eq(["series-#{series_a.id}"])
+      end
+        
+      it "returns array for work with multiple series" do
+        result = helper.creation_series_ids_for_css_classes(work_c)
+        expect(result).to eq(["series-#{series_a.id}", "series-#{series_b.id}"])
+      end
+    end
+  end
+
   describe "#css_classes_for_creation_blurb" do
     let(:default_classes) { "blurb group" }
 
@@ -314,6 +357,16 @@ describe ApplicationHelper do
       it "returns string with default classes and creation and creator info" do
         result = helper.css_classes_for_creation_blurb(work)
         expect(result).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
+      end
+
+      context "when work belongs to a series" do
+        before do
+          create(:series, works: [work])
+        end
+        it "returns string with default classes and creation and series and creator info" do
+          result = helper.css_classes_for_creation_blurb(work.reload)
+          expect(result).to eq("#{default_classes} work-#{work.id} series-#{work.reload.series.first.id} user-#{user1.id}")
+        end
       end
 
       context "when new user is added" do
