@@ -41,8 +41,9 @@ class Work < ApplicationRecord
   accepts_nested_attributes_for :challenge_claims
 
   acts_as_commentable
+  has_many :comments, as: :commentable # Handled in chapters#delete_all_comments
   has_many :total_comments, class_name: 'Comment', through: :chapters
-  has_many :kudos, as: :commentable, dependent: :destroy
+  has_many :kudos, as: :commentable, dependent: :delete_all
 
   has_many :original_creators, class_name: "WorkOriginalCreator", dependent: :destroy
 
