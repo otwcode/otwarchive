@@ -4,6 +4,10 @@ class PseudIndexer < Indexer
     "Pseud"
   end
 
+  def self.klass_with_includes
+    Pseud.includes(:user, :collections)
+  end
+
   def self.mapping
     {
       properties: {
@@ -52,48 +56,47 @@ class PseudIndexer < Indexer
   end
 
   def extras(pseud)
-    work_counts = work_counts(pseud)
+    counts = work_counts[pseud.id] || {}
     {
       sortable_name: pseud.name.downcase,
       fandoms: fandoms(pseud),
-      general_bookmarks_count: general_bookmarks_count(pseud),
-      public_bookmarks_count: public_bookmarks_count(pseud),
-      general_works_count: work_counts.values.sum,
-      public_works_count: work_counts[false] || 0
+      general_bookmarks_count: general_bookmarks_counts[pseud.id] || 0,
+      public_bookmarks_count: public_bookmarks_counts[pseud.id] || 0,
+      general_works_count: counts.values.sum,
+      public_works_count: counts[false] || 0
     }
   end
 
   private
 
-  def fandoms(pseud)
-    tag_info(pseud, "Fandom")
+  def batch_pseud_ids
+    @batch_pseud_ids ||= Array(ids).map(&:to_i)
   end
 
-  # Produces an array of hashes with the format
-  # [{id: 1, name: "Star Trek", count: 5}]
-  def tag_info(pseud, tag_type)
-    info = []
-    info +=
-      pseud.direct_filters.where(works: countable_works_conditions)
-        .by_type(tag_type).group_by(&:id)
-        .map do |id, tags|
-        {
-          id: id,
-          name: tags.first.name,
-          count: tags.length
-        }
+  def fandoms(pseud)
+    fandom_info[pseud.id] || []
+  end
+
+  def fandom_info
+    @fandom_info ||= begin
+      info = {}
+      fandom_counts(countable_works).each do |(pseud_id, id, name), count|
+        (info[pseud_id] ||= []) << { id: id, name: name, count: count }
       end
-    info +=
-      pseud.direct_filters.where(works: countable_works_conditions.merge(restricted: false))
-        .by_type(tag_type).group_by(&:id)
-        .map do |id, tags|
-        {
-          id_for_public: id,
-          name: tags.first.name,
-          count: tags.length
-        }
+      public_works = countable_works.where(restricted: false)
+      fandom_counts(public_works).each do |(pseud_id, id, name), count|
+        (info[pseud_id] ||= []) <<
+          { id_for_public: id, name: name, count: count }
       end
-    info
+      info
+    end
+  end
+
+  def fandom_counts(works)
+    works.joins(:direct_filters)
+      .merge(Tag.by_type("Fandom"))
+      .group("creatorships.pseud_id", "tags.id", "tags.name")
+      .count
   end
 
   # The relation containing all bookmarks that should be included in the count
@@ -114,16 +117,31 @@ class PseudIndexer < Indexer
         .is_public
   end
 
-  def general_bookmarks_count(pseud)
-    general_bookmarks.merge(pseud.bookmarks).count
+  def general_bookmarks_counts
+    @general_bookmarks_counts ||=
+      general_bookmarks.where(pseud_id: batch_pseud_ids)
+        .group(:pseud_id).count
   end
 
-  def public_bookmarks_count(pseud)
-    public_bookmarks.merge(pseud.bookmarks).count
+  def public_bookmarks_counts
+    @public_bookmarks_counts ||=
+      public_bookmarks.where(pseud_id: batch_pseud_ids)
+        .group(:pseud_id).count
   end
 
-  def work_counts(pseud)
-    pseud.works.where(countable_works_conditions).group(:restricted).count
+  def work_counts
+    @work_counts ||= countable_works
+      .group("creatorships.pseud_id", :restricted).count
+      .each_with_object({}) do |((pseud_id, restricted), count), counts|
+        (counts[pseud_id] ||= {})[restricted] = count
+      end
+  end
+
+  def countable_works
+    Work.where(countable_works_conditions)
+      .joins(:creatorships)
+      .merge(Creatorship.approved)
+      .where(creatorships: { pseud_id: batch_pseud_ids })
   end
 
   def countable_works_conditions
