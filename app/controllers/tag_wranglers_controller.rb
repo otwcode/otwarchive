@@ -8,6 +8,8 @@ class TagWranglersController < ApplicationController
   def index
     authorize :wrangling, :full_access? if logged_in_as_admin?
 
+    @page_subtitle = t("tag_wranglers.index.page_subtitle")
+
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
 
     @assignments = Fandom.in_use.joins("LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id)
