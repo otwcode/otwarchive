@@ -1,8 +1,9 @@
 class Users::TotpController < ApplicationController
   before_action :load_user
   before_action :check_ownership_or_admin
-  before_action :check_totp_disabled, only: [:new, :reauthenticate_create, :create]
-  before_action :check_totp_enabled, only: [:confirm_disable, :disable]
+  before_action :check_totp_already_enabled, only: [:new, :reauthenticate_create, :create]
+  before_action :check_totp_already_disabled, only: [:confirm_disable, :disable]
+  before_action :check_totp_enabled, only: [:confirm_reset_backup_codes, :reset_backup_codes]
 
   def load_user
     @user = User.find_by!(login: params[:user_id])
@@ -47,11 +48,6 @@ class Users::TotpController < ApplicationController
 
   # POST /users/<login>/totp/reset_backup_codes
   def reset_backup_codes
-    unless current_user.totp_enabled?
-      flash[:error] = t(".not_enabled")
-      redirect_to new_user_totp_path and return
-    end
-
     flash.now[:notice] = t(".success")
 
     @page_subtitle = t(".page_title")
@@ -80,17 +76,24 @@ class Users::TotpController < ApplicationController
 
   private
 
-  def check_totp_enabled
+  def check_totp_already_disabled
     return if current_user.totp_enabled?
 
     flash[:error] = t("users.totp.already_disabled")
     redirect_to user_preferences_path
   end
 
-  def check_totp_disabled
+  def check_totp_already_enabled
     return unless current_user.totp_enabled?
 
     flash[:error] = t("users.totp.already_enabled")
     redirect_to user_preferences_path
+  end
+
+  def check_totp_enabled
+    return if current_user.totp_enabled?
+
+    flash[:error] = t("users.totp.please_enable_first")
+    redirect_to new_user_totp_path
   end
 end
