@@ -335,7 +335,7 @@ describe CommentsController do
               it "marks the comment as spam" do
                 put :reject, params: { id: comment.id }
                 expect(flash[:error]).to be_nil
-                expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                expect(response).to redirect_to(chapter_path(comment.parent,
                                                           show_comments: true,
                                                           anchor: "comments"))
                 comment.reload
@@ -366,7 +366,7 @@ describe CommentsController do
           it "marks the comment as spam" do
             put :reject, params: { id: comment.id }
             expect(flash[:error]).to be_nil
-            expect(response).to redirect_to(work_path(comment.ultimate_parent,
+            expect(response).to redirect_to(chapter_path(comment.parent,
                                                       show_comments: true,
                                                       anchor: "comments"))
             comment.reload
@@ -479,7 +479,7 @@ describe CommentsController do
           it "marks the comment as not spam" do
             put :approve, params: { id: comment.id }
             expect(flash[:error]).to be_nil
-            expect(response).to redirect_to(work_path(comment.ultimate_parent,
+            expect(response).to redirect_to(chapter_path(comment.parent,
                                                       show_comments: true,
                                                       anchor: "comments"))
             comment.reload

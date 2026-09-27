@@ -41,8 +41,7 @@ class KudosController < ApplicationController
       respond_to do |format|
         format.html do
           flash[:kudos_notice] = t(".success")
-          redirect_path = url_from(request.referer) || polymorphic_path(@kudo.commentable)
-          redirect_to "#{redirect_path}#kudos_message" and return
+          redirect_to kudos_redirect_path(@kudo.commentable) and return
         end
 
         format.js do
@@ -59,8 +58,7 @@ class KudosController < ApplicationController
           return if check_user_status
 
           flash[:kudos_error] = error_message
-          redirect_path = url_from(request.referer) || polymorphic_path(@kudo.commentable || root_path)
-          redirect_to "#{redirect_path}#kudos_message" and return
+          redirect_to kudos_redirect_path(@kudo.commentable || root_path) and return
         end
 
         format.js do
@@ -78,8 +76,7 @@ class KudosController < ApplicationController
     respond_to do |format|
       format.html do
         flash[:kudos_error] = error_message
-        redirect_path = url_from(request.referer) || polymorphic_path(@kudo&.commentable || root_path)
-        redirect_to "#{redirect_path}#kudos_message" and return
+        redirect_to kudos_redirect_path(@kudo&.commentable || root_path) and return
       end
 
       format.js do
@@ -89,6 +86,11 @@ class KudosController < ApplicationController
   end
 
   private
+
+  def kudos_redirect_path(commentable)
+    redirect_path = url_from(request.referer.to_s.split("#", 2).first)
+    redirect_path ? "#{redirect_path}#kudos_message" : polymorphic_path(commentable, anchor: "kudos_message")
+  end
 
   def kudo_params
     params.require(:kudo).permit(:commentable_id, :commentable_type)

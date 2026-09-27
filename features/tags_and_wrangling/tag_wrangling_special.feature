@@ -39,6 +39,7 @@ Feature: Tag Wrangling - special cases
   When I fill in "Name" with "Amelia"
     And I press "Save changes"
   Then I should see "Name can only be changed by an admin."
+    And I should see "Edit Amelie Tag"
 
   Scenario: Change capitalisation of a tag
 

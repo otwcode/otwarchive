@@ -394,7 +394,6 @@ Rails.application.routes.draw do
       get :navigate
       patch :remove_user_creatorship
       get :edit_tags
-      get :preview_tags
       patch :update_tags
       patch :mark_for_later
       patch :mark_as_read

@@ -10,7 +10,7 @@ class Collection < ApplicationRecord
   # i18n-tasks-use t("errors.attributes.icon.invalid_format")
   # i18n-tasks-use t("errors.attributes.icon.too_large")
   validates :icon, attachment: {
-    allowed_formats: %r{image/\S+},
+    allowed_formats: %w[image/gif image/jpeg image/png],
     maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
   }
 
@@ -166,13 +166,8 @@ class Collection < ApplicationRecord
     end
   end
 
-  scope :with_name_like, lambda { |name|
-    where("collections.name LIKE ?", "%#{name}%")
-      .limit(10)
-  }
-
-  scope :with_title_like, lambda { |title|
-    where("collections.title LIKE ?", "%#{title}%")
+  scope :with_name_or_title_like, lambda { |term|
+    where("collections.name LIKE ? OR collections.title LIKE ?", "%#{term}%", "%#{term}%")
   }
 
   scope :with_item_count, lambda {

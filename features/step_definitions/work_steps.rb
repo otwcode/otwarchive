@@ -283,10 +283,6 @@ When /^I view the work "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |wo
   step %{I follow "Chapter by Chapter"} if mode == "chapter-by-chapter"
 end
 
-When /^I view a deleted work$/ do
-  visit "/works/12345/chapters/12345"
-end
-
 When /^I view a deleted chapter$/ do
   step "the draft \"DeletedChapterWork\""
   work = Work.find_by(title: "DeletedChapterWork")
@@ -390,14 +386,6 @@ When /^I post the(?: draft)? chapter$/ do
   step %{all indexing jobs have been run}
 
   step "the periodic tag count task is run"
-end
-
-Then /^I should see the default work content$/ do
-  page.should have_content(DEFAULT_CONTENT)
-end
-
-Then /^I should not see the default work content$/ do
-  page.should_not have_content(DEFAULT_CONTENT)
 end
 
 When /^I fill in basic work tags$/ do

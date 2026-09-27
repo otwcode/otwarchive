@@ -92,6 +92,10 @@ module NavigationHelpers
       user_gifts_path(user_id: $1)
     when /the import page/
       new_work_path(import: 'true')
+    when /the skins page for "(.*?)"/
+      skins_path(user_id: Regexp.last_match(1))
+    when /the work-skins page for "(.*?)"/
+      skins_path(user_id: Regexp.last_match(1), skin_type: "WorkSkin")
     when /the public skins page/
       skins_path
     when /the work-skins page/
@@ -177,6 +181,9 @@ module NavigationHelpers
       collection_path(Collection.find_by(title: $1))
     when /^"(.*)" collection edit page$/i
       edit_collection_path(Collection.find_by(title: $1))
+    when /^the "(.*)" subcollections page$/i                   # e.g. when I go to the "Collection name" subcollections page
+      step %{all indexing jobs have been run}
+      collection_collections_path(Collection.find_by(title: Regexp.last_match(1)))
     when /^the "(.*)" signups page$/i                          # e.g. when I go to the "Collection name" signup page
       collection_signups_path(Collection.find_by(title: $1))
     when /^the "(.*)" requests page$/i                         # e.g. when I go to the "Collection name" signup page
