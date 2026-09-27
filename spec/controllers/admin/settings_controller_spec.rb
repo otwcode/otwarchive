@@ -66,7 +66,8 @@ describe Admin::SettingsController do
               cache_expiration: "10",
               hide_spam: "1",
               guest_comments_off: "1",
-              account_age_threshold_for_comment_spam_check: "7"
+              account_age_threshold_for_comment_spam_check: "7",
+              comment_count_threshold_for_comment_rate_limit: "10"
             }
           }
 
@@ -92,9 +93,11 @@ describe Admin::SettingsController do
 
         {
           account_age_threshold_for_comment_spam_check: 10,
+          comment_count_threshold_for_comment_rate_limit: 3,
           hide_spam: 1,
           invite_from_queue_enabled: 0,
           invite_from_queue_number: 11,
+          invite_from_queue_frequency: 5,
           request_invite_enabled: 1
         }.each_pair do |field, value|
           it "allows admins with policy_and_abuse role to update #{field}" do
@@ -113,7 +116,8 @@ describe Admin::SettingsController do
           hide_spam: true,
           guest_comments_off: true,
           tag_wrangling_off: true,
-          account_age_threshold_for_comment_spam_check: 10
+          account_age_threshold_for_comment_spam_check: 10,
+          comment_count_threshold_for_comment_rate_limit: 3
         }.each_pair do |field, value|
           it "prevents admins with support role from updating #{field}" do
             expect do
@@ -145,7 +149,8 @@ describe Admin::SettingsController do
           downloads_enabled: false,
           hide_spam: true,
           guest_comments_off: true,
-          account_age_threshold_for_comment_spam_check: 10
+          account_age_threshold_for_comment_spam_check: 10,
+          comment_count_threshold_for_comment_rate_limit: 3
         }.each_pair do |field, value|
           it "prevents admins with tag_wrangling role from updating #{field}" do
             expect do

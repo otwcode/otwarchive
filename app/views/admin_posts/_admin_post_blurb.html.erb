@@ -1,0 +1,25 @@
+<%# expects admin_post %>
+<dt><%= link_to admin_post.title.html_safe, admin_post %></dt>
+<dd>
+  <p class="datetime">
+    <% if admin_post.posted? %>
+      <%= t(".meta.published", publication_date: l(admin_post.published_at), created_date: l(admin_post.created_at), updated_date: l(admin_post.updated_at)) %>
+    <% else %>
+      <%= t(".meta.draft", created_date: l(admin_post.created_at), updated_date: l(admin_post.updated_at)) %>
+    <% end %>
+  </p>
+  <ul class="actions">
+    <li><%= link_to t(".show"), admin_post %></li>
+    <% if policy(admin_post).edit? %>
+      <li><%= link_to t(".edit"), edit_admin_post_path(admin_post) %></li>
+      <% if admin_post.posted %>
+        <li><%= link_to t(".delete"), admin_post, data: { confirm: t(".confirm_delete") }, method: :delete %></li>
+      <% else %>
+        <% if policy(AdminPost).can_post? && (admin_post.translated_post.blank? || admin_post.translated_post.posted?) %>
+          <li><%= link_to t(".draft.post"), post_admin_post_path(admin_post), method: :put %></li>
+        <% end %>
+        <li><%= link_to t(".draft.delete"), admin_post, data: { confirm: t(".confirm_delete") }, method: :delete %></li>
+      <% end %>
+    <% end %>
+  </ul>
+</dd>

@@ -21,4 +21,18 @@ describe BylineHelper do
       end
     end
   end
+
+  describe "#text_byline" do
+    let(:user) { create(:user, login: "Joe") }
+    let(:work) { create(:work, authors: [user.default_pseud], collections: [create(:anonymous_collection)]) }
+
+    before do
+      allow(helper).to receive(:logged_in_as_admin?).and_return(true)
+    end
+
+    it "includes no links for partially anonymous byline shown to admins" do
+      expect(helper.text_byline(work)).to_not include("href")
+      expect(helper.text_byline(work)).to eq("Anonymous [Joe]")
+    end
+  end
 end

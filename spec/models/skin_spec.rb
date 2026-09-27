@@ -199,6 +199,8 @@ describe Skin do
       "errors when saving urls with invalid domain" => "body {background: url(http://foo.htc/bar.png)}",
       "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}",
       "errors when saving url followed by something else" => 'a {content: url(/images/fakeimage.png) " (" attr(href) ")"}',
+      "errors when saving url followed by a newline and something else" => "a {content: url(/images/fakeimage.png)\n ' (' attr(href) ')'}",
+      "errors when saving string followed by a newline and something else" => "a {content: 'exploit'\n ' (' attr(href) ')'}",
       "errors when saving custom property with url function" => ":root { --address: url(\"https://example.org/img.jpg\") }",
       "errors when saving fill with url function" => ".a { fill: url(\"https://ao3.org/image.png\"); }",
       "errors when saving stroke used as a shorthand property with url function" => "img { stroke: blue url(\"https://ao3.org/image.png\") 1em; }"

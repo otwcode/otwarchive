@@ -71,6 +71,8 @@ class ChallengeClaim < ApplicationRecord
              CollectionItem.user_approval_statuses[:approved], CollectionItem.collection_approval_statuses[:approved])
   }
 
+  # TODO: AO3-6024 for making sure we also exclude works hidden by admin
+  scope :work_visible_to_all, -> { where("works.restricted = 0") }
 
   scope :posted, -> { joins(WORKS_JOIN).where("challenge_claims.creation_id IS NOT NULL AND works.posted = 1") }
 

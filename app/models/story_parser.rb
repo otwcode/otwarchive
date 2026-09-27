@@ -8,6 +8,8 @@ class StoryParser
   require 'open-uri'
   include HtmlCleaner
 
+  VALID_URL_PATTERN = /^https?:\/\/[_a-z\d\-]+\.[._a-z\d\-]+(:\d+)?\/?.+/i.freeze
+
   OPTIONAL_META = {notes: 'Note',
                    freeform_string: 'Tag',
                    fandom_string: 'Fandom',
@@ -808,8 +810,18 @@ class StoryParser
         # or if they've used capital letters or an underscore in the hostname
         uri = UrlFormatter.new(location).standardized
         raise Error, I18n.t("story_parser.on_archive") if ArchiveConfig.PERMITTED_HOSTS.include?(uri.host)
+        raise Error, I18n.t("story_parser.invalid_url") if uri.to_s !~ VALID_URL_PATTERN || uri.hostname =~ /\A127\.|\A::1\z/
 
-        response = Net::HTTP.get_response(uri)
+        env_proxy = ENV["http_proxy"]
+        http = if env_proxy
+                 proxy = URI(env_proxy)
+                 Net::HTTP.new(uri.hostname, uri.port, proxy.hostname, proxy.port)
+               else
+                 Net::HTTP.new(uri.hostname, uri.port)
+               end
+        http.use_ssl = true if uri.scheme == "https"
+        response = http.start { |h| h.request_get(uri.path.presence || "/") }
+
         case response
         when Net::HTTPSuccess
           story = response.body

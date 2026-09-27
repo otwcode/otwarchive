@@ -11,7 +11,7 @@ Feature: Import Works
   Scenario: Creating a new minimally valid work
     When I set up importing with a mock website
     Then I should see "Import New Work"
-    When I fill in "urls" with "http://import-site-without-tags"
+    When I fill in "urls" with "http://import-site-without-tags.site"
       And I press "Import"
     Then I should see "Language cannot be blank."
     When I select "Deutsch" from "Choose a language"
@@ -19,7 +19,7 @@ Feature: Import Works
     Then I should see "Preview"
       And I should see "Untitled Imported Work"
       And I should see "Language: Deutsch"
-      And I should not see "A work has already been imported from http://import-site-without-tags"
+      And I should not see "A work has already been imported from http://import-site-without-tags.club"
       And I should see "No Fandom"
       And I should see "Chose Not To"
       And I should see "Not Rated"
@@ -29,7 +29,7 @@ Feature: Import Works
     Then I should see "Untitled Imported Work"
 
   Scenario: With override disabled and tag detection enabled, tags should be detected
-    When I start importing "http://import-site-with-tags" with a mock website
+    When I start importing "http://import-site-with-tags.gay" with a mock website
       And I select "Deutsch" from "Choose a language"
       And I select "Explicit" from "Rating"
       And I check "No Archive Warnings Apply"
@@ -55,7 +55,7 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
 
   Scenario: With override and tag detection enabled, provided tags should be used when tags are entered
-    When I start importing "http://import-site-with-tags" with a mock website
+    When I start importing "http://import-site-with-tags.net" with a mock website
       And I select "Deutsch" from "Choose a language"
       And I check "override_tags"
       And I choose "detect_tags_true"
@@ -83,7 +83,7 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
 
   Scenario: With override and tag detection enabled, both provided and detected tags should be used when not all tags are entered
-    When I start importing "http://import-site-with-tags" with a mock website
+    When I start importing "https://example.com/import-site-with-tags" with a mock website
       And I select "Deutsch" from "Choose a language"
       And I check "override_tags"
       And I choose "detect_tags_true"
@@ -108,7 +108,7 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
 
   Scenario: Default tags should be used when no tags are entered, and override is enabled and tag detection is disabled
-    When I start importing "http://import-site-with-tags" with a mock website
+    When I start importing "http://import-site-with-tags.org" with a mock website
       And I check "override_tags"
       And I choose "detect_tags_false"
     When I press "Import"
@@ -121,7 +121,7 @@ Feature: Import Works
       And I should not see "Relationship: Detected 1/Detected 2"
 
   Scenario Outline: Admins see IP address on imported works
-    Given I import "http://import-site-with-tags" with a mock website
+    Given I import "http://import-site-with-tags.biz" with a mock website
       And I press "Post"
     When I am logged in as a "<role>" admin
       And I go to the "Detected Title" work page
@@ -133,7 +133,7 @@ Feature: Import Works
     | policy_and_abuse |
 
   Scenario Outline: Admins see IP address on works imported without preview
-    Given I start importing "http://import-site-with-tags" with a mock website
+    Given I start importing "http://import-site-with-tags.gov" with a mock website
       And I check "Post without previewing"
       And I press "Import"
     When I am logged in as a "<role>" admin
@@ -148,8 +148,8 @@ Feature: Import Works
   Scenario Outline: Admins see IP address on multi-chapter works imported without preview
     Given I import the urls with mock websites as chapters without preview
       """
-      http://import-site-without-tags
-      http://second-import-site-without-tags
+      http://import-site-without-tags.edu
+      http://second-import-site-without-tags.net
       """
     When I am logged in as a "policy_and_abuse" admin
       And I go to the "Untitled Imported Work" work page
@@ -162,7 +162,7 @@ Feature: Import Works
     | policy_and_abuse |
 
   Scenario: Imported works can be set to restricted
-    When I start importing "http://import-site-with-tags" with a mock website
+    When I start importing "http://import-site-with-tags.net" with a mock website
       And I check "Only show imported works to registered users"
       And I press "Import"
       And I press "Post"
@@ -171,7 +171,7 @@ Feature: Import Works
     Then I should see "This work is only available to registered users of the Archive."
 
   Scenario: Imported works can have comments enabled to guests
-    When I start importing "http://import-site-with-tags" with a mock website
+    When I start importing "http://import-site-with-tags.net" with a mock website
       And I choose "comment_permissions_enable_all"
       And I press "Import"
       And I press "Post"
@@ -181,7 +181,7 @@ Feature: Import Works
     Then I should see "Guest name"
 
   Scenario: Imported works can have comments disabled to guests
-    When I start importing "http://import-site-with-tags" with a mock website
+    When I start importing "http://import-site-with-tags.net" with a mock website
       And I choose "comment_permissions_disable_anon"
       And I press "Import"
       And I press "Post"
@@ -191,7 +191,7 @@ Feature: Import Works
     Then I should see "Sorry, this work doesn't allow non-Archive users to comment."
 
   Scenario: Imported works can have comments disabled
-    When I start importing "http://import-site-with-tags" with a mock website
+    When I start importing "http://import-site-with-tags.net" with a mock website
       And I choose "comment_permissions_disable_all"
       And I press "Import"
       And I press "Post"
@@ -199,7 +199,7 @@ Feature: Import Works
     Then I should see "Sorry, this work doesn't allow comments."
 
   Scenario: Imported works can have comment moderation off
-    When I start importing "http://import-site-with-tags" with a mock website
+    When I start importing "http://import-site-with-tags.net" with a mock website
       And I uncheck "moderated_commenting_enabled"
       And I press "Import"
       And I press "Post"
@@ -209,7 +209,7 @@ Feature: Import Works
     Then I should not see "This work's creator has chosen to moderate comments on the work."
 
   Scenario: Imported works can have comment moderation on
-    When I start importing "http://import-site-with-tags" with a mock website
+    When I start importing "http://import-site-with-tags.net" with a mock website
       And I choose "comment_permissions_enable_all"
       And I check "moderated_commenting_enabled"
       And I press "Import"
@@ -255,16 +255,16 @@ Feature: Import Works
   Scenario: Imported multichapter work should have the correct word count
     Given I import the urls with mock websites as chapters without preview
       """
-      http://import-site-without-tags
-      http://second-import-site-without-tags
+      http://import-site-without-tags.net
+      http://second-import-site-without-tags.edu
       """
     Then I should see "Words:5"
 
   Scenario: Editing an imported multichapter work should have the correct word count
     Given I import the urls with mock websites as chapters without preview
       """
-      http://import-site-without-tags
-      http://second-import-site-without-tags
+      http://import-site-without-tags.net
+      http://second-import-site-without-tags.edu
       """
     Then I should see "Words:5"
     When I follow "Edit"
@@ -328,18 +328,18 @@ Feature: Import Works
   Then I should see "Chapter 2"
 
   Scenario: Searching for an imported work by URL will redirect you to the work
-    When I import "http://import-site-with-tags" with a mock website
+    When I import "http://import-site-with-tags.nl" with a mock website
       And I press "Post"
       And I go to the redirect page
-      And I fill in "Original URL of work" with "http://import-site-with-tags"
+      And I fill in "Original URL of work" with "http://import-site-with-tags.nl"
       And I press "Go"
     Then I should see "Detected Title"
 
   Scenario: Import URLs as chapters of a single work and post from drafts page
     Given I import the urls with mock websites as chapters
       """
-      http://import-site-without-tags
-      http://second-import-site-without-tags
+      http://import-site-without-tags.de
+      http://second-import-site-without-tags.com.br
       """
     When I follow "My Dashboard"
       And I follow "Drafts ("
@@ -357,7 +357,7 @@ Feature: Import Works
         | notsam   | notsam@example.com |
       And the user "sam" enables translated emails
       And all emails have been delivered
-    When I import the mock work "http://import-site-without-tags" by "sam" with email "sam@example.com" and by "notsam" with email "notsam@example.com"
+    When I import the mock work "http://import-site-without-tags.ca" by "sam" with email "sam@example.com" and by "notsam" with email "notsam@example.com"
     Then I should see import confirmation
       And 1 email should be delivered to "sam@example.com"
       And the email should contain claim information

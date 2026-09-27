@@ -5,14 +5,14 @@
     <legend><%= ts("Header") %></legend>
     <dl>
 
-      <% if @collection.new_record? && current_user.pseuds.size > 1 %>
+      <% if @collection.new_record? && current_user&.pseuds&.size.to_i > 1 %>
         <dt>
           <%= label_tag "owner_pseuds[]", ts("Owner pseud(s)") %>
         </dt>
         <dd>
           <%= select_tag "owner_pseuds[]", options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud_id), multiple: true %>
         </dd>
-      <% else %>
+      <% elsif current_user %>
         <p><%= hidden_field_tag "owner_pseuds[]", [current_user.default_pseud.id] %></p>
       <% end %>
 

@@ -687,7 +687,7 @@ describe "rake After:add_collection_tags" do
 
     it "tags the collection with the work's fandoms" do
       subject.invoke
-      expect(collection.tags).to include(*items.flat_map(&:fandoms))
+      expect(collection.reload.tags).to include(*items.flat_map(&:fandoms))
     end
 
     shared_examples "does not tag the collection" do
@@ -728,6 +728,7 @@ describe "rake After:add_collection_tags" do
 
     it "tags the collection with the bookmark's AND bookmarked item's fandoms" do
       subject.invoke
+      collection.reload
       expect(collection.tags).to include(*items.flat_map(&:fandoms))
       expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
     end
@@ -778,6 +779,7 @@ describe "rake After:add_collection_tags" do
 
     it "includes the bookmark's and series's fandoms" do
       subject.invoke
+      collection.reload
       expect(collection.tags).to include(*bookmark.fandoms)
       expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map { |s| s.work_tags.where(type: "Fandom") })
     end
@@ -863,5 +865,130 @@ describe "rake After:add_canonical_email" do
     expect(user2.canonical_email).to eq("b@gmail.com")
     expect(user3.canonical_email).to eq("c@example.com")
     expect(user4.canonical_email).to eq("dlastname@gmail.com")
+  end
+end
+  
+describe "rake After:remove_noncanonical_fandom_wrangling_assignments" do
+  let!(:fandom1) { create(:fandom, canonical: false) }
+  let!(:assignment1) { create(:wrangling_assignment, fandom: fandom1) }
+
+  it "deletes wrangling assignments of noncanonical fandoms" do
+    subject.invoke
+    expect(WranglingAssignment.all).not_to include(assignment1)
+  end
+
+  let!(:fandom2) { create(:canonical_fandom) }
+  let!(:assignment2) { create(:wrangling_assignment, fandom: fandom2) }
+
+  it "doesn't delete wrangling assignments of canonical fandoms" do
+    subject.invoke
+    expect(WranglingAssignment.all).to include(assignment2)
+  end
+end
+
+describe "rake After:backfill_missing_pseuds" do
+  context "when all users have a username-matching pseud" do
+    let!(:user) { create(:user) }
+
+    it "does not create any pseuds" do
+      expect { subject.invoke }
+        .not_to change { Pseud.count }
+    end
+  end
+
+  context "when a user is missing a username-matching pseud" do
+    let!(:user) { create(:user) }
+
+    before do
+      user.pseuds.find_by(name: user.login).delete
+    end
+
+    it "creates a pseud matching the username" do
+      expect { subject.invoke }
+        .to change { user.pseuds.reload.count }
+        .by(1)
+      expect(user.pseuds.find_by(name: user.login)).to be_present
+    end
+
+    it "marks the created pseud as default" do
+      subject.invoke
+      expect(user.reload.default_pseud).to be_present
+      expect(user.default_pseud.name).to eq(user.login)
+    end
+  end
+
+  context "when a user is missing a username-matching pseud but has another default pseud" do
+    let!(:user) { create(:user) }
+    let!(:other_pseud) { create(:pseud, user: user, is_default: true) }
+
+    before do
+      user.pseuds.find_by(name: user.login).delete
+    end
+
+    it "does not change the existing default pseud" do
+      subject.invoke
+      expect(user.reload.default_pseud).to eq(other_pseud)
+    end
+  end
+
+  context "when another user has a pseud with the same name as the affected user's login" do
+    let!(:affected_user) { create(:user) }
+    let!(:other_user) { create(:user) }
+
+    before do
+      affected_user.pseuds.find_by(name: affected_user.login).delete
+      create(:pseud, user: other_user, name: affected_user.login)
+    end
+
+    it "still creates a pseud for the affected user" do
+      expect { subject.invoke }
+        .to change { affected_user.pseuds.reload.count }
+        .by(1)
+      expect(affected_user.pseuds.find_by(name: affected_user.login)).to be_present
+    end
+  end
+
+  # Scenarios from before AO3-6359 / PR #5534: username rename left a pseud that
+  # matched only by case or diacritics, so the exact-match delete guard failed.
+  context "when the user has a pseud matching the username except for capitalization" do
+    let!(:user) { create(:user, login: "Name") }
+
+    before do
+      user.pseuds.find_by(name: "Name").update_column(:name, "name")
+    end
+
+    it "updates the pseud name to exactly match the username" do
+      expect { subject.invoke }
+        .not_to change { user.pseuds.reload.count }
+      expect(user.pseuds.reload.map(&:name)).to contain_exactly("Name")
+    end
+  end
+
+  context "when the user has a pseud matching the username except for diacritics" do
+    let!(:user) { create(:user, login: "Name") }
+
+    before do
+      user.pseuds.find_by(name: "Name").update_column(:name, "Näme")
+    end
+
+    it "updates the pseud name to exactly match the username" do
+      expect { subject.invoke }
+        .not_to change { user.pseuds.reload.count }
+      expect(user.pseuds.reload.map(&:name)).to contain_exactly("Name")
+    end
+  end
+
+  context "when the pseud fails to save" do
+    let!(:user) { create(:user) }
+
+    before do
+      user.pseuds.find_by(name: user.login).delete
+      allow(Pseud).to receive(:create!).and_raise(ActiveRecord::RecordNotSaved.new("Validation failed"))
+    end
+
+    it "reports the failure and does not crash" do
+      expect { subject.invoke }
+        .to output(/Failed to backfill pseud/).to_stdout
+    end
   end
 end

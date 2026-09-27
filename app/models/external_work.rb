@@ -40,7 +40,7 @@ class ExternalWork < ApplicationRecord
 
   before_validation :cleanup_url
   # i18n-tasks-use t("errors.attributes.url.invalid")
-  validates :url, presence: true, url_format: true, url_active: true
+  validates :url, presence: true, url_format: true
   def cleanup_url
     self.url = Addressable::URI.heuristic_parse(self.url) if self.url
   rescue Addressable::URI::InvalidURIError

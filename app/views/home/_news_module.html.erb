@@ -13,7 +13,7 @@
           </h4>
           <p class="meta">
             <span class="published">
-              <%= ts('Published:') %> <%= time_in_zone(admin_post.created_at) %>
+              <%= t(".news.published_html", publication_date: time_in_zone(admin_post.published_at)) %>
             </span>
             <span class="comments">
               <%= ts('Comments:') %> <%= link_to(admin_post.count_visible_comments, polymorphic_path(admin_post, show_comments: true, anchor: :comments)) %>

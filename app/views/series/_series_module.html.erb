@@ -1,7 +1,7 @@
 <%# expects "series" %>
 
 <!--title etc-->
-<div class="header module">
+<div class="<% if series.anonymous? %>anonymous <% end %>header module">
   <h4 class="heading">
     <%= t(".series_by_html", series_title_link: link_to(series.title, series), byline: byline(series)) %>
     <% if series.restricted %>

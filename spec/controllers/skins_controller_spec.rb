@@ -68,6 +68,45 @@ describe SkinsController do
     end
   end
 
+  describe "GET #index" do
+    let(:user) { create(:user) }
+
+    context "when user is logged in" do
+      before do
+        fake_login_known_user(user) 
+        @login = user.login
+      end
+
+      context "and viewing their site skins" do
+        it "prepends page title with username" do
+          get(:index, params: { user_id: @login })
+          expect(assigns[:page_subtitle]).to eq("#{@login} - Site Skins")
+        end
+      end
+
+      context "and viewing their work skins" do
+        it "prepends page title with username" do
+          get(:index, params: { user_id: @login, skin_type: "WorkSkin" })
+          expect(assigns[:page_subtitle]).to eq("#{@login} - Work Skins")
+        end
+      end
+
+      context "and viewing public work skins" do
+        it "displays correct page title" do
+          get(:index, params: { skin_type: "WorkSkin" })
+          expect(assigns[:page_subtitle]).to eq("Public Work Skins")
+        end
+      end
+      
+      context "and viewing public site skins" do
+        it "displays correct page title" do
+          get(:index)
+          expect(assigns[:page_subtitle]).to eq("Public Site Skins")
+        end
+      end
+    end
+  end
+
   describe "POST #create" do
     let(:skin_creator) { create(:user) }
 
@@ -750,16 +789,8 @@ describe SkinsController do
     end
 
     context "with accessible site skin" do
-      let(:success) { it_redirects_to_simple(tag_works_path(tag, site_skin: skin.id)) }
-      let(:tag) { create(:canonical_fandom) }
-
-      before do
-        FilterCount.create!(
-          filter: tag,
-          public_works_count: 10,
-          unhidden_works_count: 10
-        )
-      end
+      let(:success) { it_redirects_to_simple(user_works_path(otw_translation_user, site_skin: skin.id)) }
+      let(:otw_translation_user) { create(:user, login: "OTW_Translation") }
 
       context "when site skin is public" do
         let(:skin) { create(:skin, :public, title: "Accessible Site Skin", author: skin_creator) }

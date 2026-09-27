@@ -3,6 +3,7 @@ Feature: Granular comment rate limiting
 
   Scenario: Guest commenter is not affected by rate limits
     Given account age threshold for comment spam check is set to 5 days
+      And comment count threshold for comment rate limit is set to 5
       And the work "Spam target" by "joe" with guest comments enabled
       And I am logged out
     When I view the work "Spam target"
@@ -15,6 +16,7 @@ Feature: Granular comment rate limiting
 
   Scenario: Work creator is not affected by rate limits
     Given account age threshold for comment spam check is set to 5 days
+      And comment count threshold for comment rate limit is set to 5
       And the work "Spam target" by "joe" with guest comments enabled
     When I am logged in as a new user "joe"
       And I post the comment "Hello!" on the work "Spam target"
@@ -26,6 +28,7 @@ Feature: Granular comment rate limiting
 
   Scenario: Tag comments are not affected by rate limits
     Given account age threshold for comment spam check is set to 5 days
+      And comment count threshold for comment rate limit is set to 5
       And a canonical fandom "Stargate SG-1"
       And I am logged in as a tag wrangler
       And I view the tag "Stargate SG-1" with comments
@@ -132,6 +135,65 @@ Feature: Granular comment rate limiting
   Scenario Outline: New users' comments should not be rate limited when the admin setting is disabled
     Given <commentable>
       And account age threshold for comment spam check is set to 0 days
+    When I am logged in as a new user "naughty"
+      And I view <commentable> with comments
+      And I post the comment "One comment" on <commentable>
+    Then I should see "Comment created!"
+      And I post the comment "Two comment" on <commentable>
+    Then I should see "Comment created!"
+      And I post the comment "Three comment" on <commentable>
+    Then I should see "Comment created!"
+      And I post the comment "Four comment" on <commentable>
+    Then I should see "Comments (4)"
+      But I should not see "Error 429"
+
+    Examples:
+      | commentable |
+      | the work "Generic Work"  |
+      | the admin post "Generic Post" |
+
+  Scenario Outline: Low comment count users' comments should be rate limited when the comment count admin setting is enabled
+    Given <commentable>
+      And comment count threshold for comment rate limit is set to 5
+    When I am logged in as a new user "naughty"
+      And I view <commentable> with comments
+      And I post the comment "One comment" on <commentable>
+    Then I should see "Comment created!"
+      And I post the comment "Two comment" on <commentable>
+    Then I should see "Comment created!"
+      And I post the comment "Three comment" on <commentable>
+    Then I should see "Comment created!"
+      And I post the comment "Four comment" on <commentable>
+    Then I should see "Error 429"
+
+    Examples:
+      | commentable |
+      | the work "Generic Work"  |
+      | the admin post "Generic Post" |
+
+  Scenario Outline: High comment count users' comments should not be rate limited when the comment count admin setting is enabled
+    Given <commentable>
+      And comment count threshold for comment rate limit is set to 2
+    When I am logged in as a new user "naughty"
+      And I view <commentable> with comments
+      And I post the comment "One comment" on <commentable>
+    Then I should see "Comment created!"
+      And I post the comment "Two comment" on <commentable>
+    Then I should see "Comment created!"
+      And I post the comment "Three comment" on <commentable>
+    Then I should see "Comment created!"
+      And I post the comment "Four comment" on <commentable>
+    Then I should see "Comments (4)"
+      But I should not see "Error 429"
+
+    Examples:
+      | commentable |
+      | the work "Generic Work"  |
+      | the admin post "Generic Post" |
+
+  Scenario Outline: Low comment count users' comments should not be rate limited when the comment count admin setting is disabled
+    Given <commentable>
+      And comment count threshold for comment rate limit is set to 0
     When I am logged in as a new user "naughty"
       And I view <commentable> with comments
       And I post the comment "One comment" on <commentable>

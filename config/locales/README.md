@@ -15,3 +15,4 @@ Aside from the locale name, the files should not be edited.
 
 - "mr-IN" to "mr"
 - "tl" to "fil"
+- "zh-CN" to "zh-Hans"

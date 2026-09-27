@@ -1,7 +1,6 @@
 module SearchHelper
-
   # modified from mislav-will_paginate-2.3.2/lib/will_paginate/view_helpers.rb
-  def search_header(collection, search, item_name, parent=nil)
+  def search_header(collection, search, item_name, parent = nil)
     header = []
     if !collection.respond_to?(:total_pages)
       header << ts("Recent #{item_name.pluralize}")
@@ -50,6 +49,16 @@ module SearchHelper
       action: :index,
       only_path: true,
       **params.slice(:tag_id, :fandom_id, :collection_id, :pseud_id, :user_id).permit!
+    )
+  end
+
+  def collections_original_path
+    url_for(
+      controller: :collections,
+      action: :index,
+      only_path: true,
+      **params.slice(:title, :challenge_type, :moderated, :multifandom, :closed, :tag,
+                     :sort_column, :sort_direction).permit!
     )
   end
 

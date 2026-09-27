@@ -16,8 +16,15 @@ class TagSetNomination < ApplicationRecord
   validates_presence_of :owned_tag_set_id
   validates_presence_of :pseud_id
 
-  validates_uniqueness_of :owned_tag_set_id, scope: [:pseud_id], message: ts("You have already submitted nominations for that tag set. Try editing them instead.")
-  
+  validate :unique_per_user, on: :create
+  def unique_per_user
+    return if pseud.blank? || owned_tag_set_id.blank?
+
+    if TagSetNomination.for_tag_set(owned_tag_set).owned_by(pseud.user).exists?
+      errors.add(:base, :taken_by_user)
+    end
+  end
+
   validate :can_nominate
   def can_nominate
     unless owned_tag_set.nominated

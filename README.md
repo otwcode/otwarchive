@@ -22,6 +22,8 @@ We welcome pull requests for bugs described in our issue tracker. Please see our
 * [Developer Documentation](https://github.com/otwcode/otwarchive/wiki)
 * [Commit Policy](https://github.com/otwcode/otwarchive/wiki/Commit-policy)
 
+Code review is another great way to contribute! Whether it's a thorough review or a quick note about a typo, everyone is welcome to leave polite review comments on open pull requests. Reviewers receive credit in our [public release notes](https://archiveofourown.org/admin_posts?tag=1). (If you're not a contributor, please make sure your comment includes the name we should credit. Otherwise, we'll use your GitHub username.)
+
 We do not have a public chat, but you are welcome to contact us at otw-coders@transformativeworks.org if you have any questions.
 
 We grant your Jira account permissions for commenting on, assigning, and transitioning issues [after you create your first pull request](https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md#workflow).

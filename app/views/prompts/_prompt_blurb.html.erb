@@ -80,13 +80,15 @@
     <% end %>
 
     <% # if prompt has been fulfilled list works %>
-    <% unless prompt.unfulfilled? %>
+    <% unless prompt.unfulfilled? || (guest? && prompt.fulfilled_claims_visible_to_all.empty?) %>
       <div class="work listbox group">
         <h5 class="heading"><%= ts("Fulfilled By")%></h5>
         <ul class="index group">
           <% prompt.fulfilled_claims.map(&:creation).each do |creation| %>
             <% if creation.is_a?(Work) %>
-              <%= render "works/work_blurb", :work => creation %>
+              <% unless guest? && creation.restricted %>
+                <%= render "works/work_blurb", work: creation %>
+              <% end %>
             <% end %>
           <% end %>
         </ul>

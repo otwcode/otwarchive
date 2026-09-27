@@ -17,11 +17,11 @@ module AdminHelper
     link_to(activity.target_name, url)
   end
 
-  # Summaries for profile and pseud edits, which contain links, need to be
-  # handled differently from summaries that use item.inspect (and thus contain
-  # angle brackets).
+  # Summaries for profile and pseud edits, which contain links, and summaries for
+  # language edits, which have multiple paragraphs, need to be handled differently
+  # from summaries that use item.inspect (and thus contain angle brackets).
   def admin_activity_summary(activity)
-    if activity.action == "edit pseud" || activity.action == "edit profile"
+    if activity.action == "edit pseud" || activity.action == "edit profile" || activity.action == "edit language"
       raw sanitize_field(activity, :summary)
     else
       activity.summary

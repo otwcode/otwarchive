@@ -64,7 +64,7 @@
   <% end %>        
 
   <li>
-    <% disable_destroy = !collection_item.user_allowed_to_destroy?(@current_user) %>
+    <% disable_destroy = @current_user.nil? || !collection_item.user_allowed_to_destroy?(@current_user) %>
     <%= form.label(:remove,
       options = {},
       html_options = { class: disable_destroy ? "disabled" : nil }) do %>

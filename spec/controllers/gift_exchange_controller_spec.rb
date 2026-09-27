@@ -6,7 +6,7 @@ describe Challenge::GiftExchangeController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  let(:challenge) { GiftExchange.new }
+  let(:challenge) { create(:gift_exchange) }
   let(:collection) { create(:collection, challenge: challenge) }
   let(:owner) { collection.owners.first.user }
 
@@ -53,16 +53,16 @@ describe Challenge::GiftExchangeController do
         end.not_to change { Time.zone }
 
         # Sydney is at +10, so we expect the UTC time to be 10 hours earlier:
-        expect(collection.reload.challenge.signups_open_at).to eq(Time.utc(2021, 6, 30, 20))
+        expect(assigns[:challenge].signups_open_at).to eq(Time.utc(2021, 6, 30, 20))
       end
     end
   end
 
   describe "edit" do
     let(:challenge) do
-      GiftExchange.new(time_zone: "Sydney",
-                       signup_open: false,
-                       signups_open_at: Time.utc(2021, 6, 30, 20))
+      create(:gift_exchange, time_zone: "Sydney",
+                             signup_open: false,
+                             signups_open_at: Time.utc(2021, 6, 30, 20))
     end
 
     it "displays dates in the challenge time zone, but doesn't change Time.zone" do
@@ -90,7 +90,7 @@ describe Challenge::GiftExchangeController do
       # Use travel_to so that we don't get any daylight savings time issues:
       travel_to Time.utc(2021, 6, 24) do
         expect do
-          post :create, params: {
+          put :update, params: {
             collection_id: collection.name,
             gift_exchange: {
               signup_open: false,
@@ -101,7 +101,7 @@ describe Challenge::GiftExchangeController do
         end.not_to change { Time.zone }
 
         # Sydney is at +10, so we expect the UTC time to be 10 hours earlier:
-        expect(collection.reload.challenge.signups_open_at).to eq(Time.utc(2021, 6, 30, 20))
+        expect(assigns[:challenge].signups_open_at).to eq(Time.utc(2021, 6, 30, 20))
       end
     end
   end
@@ -119,5 +119,19 @@ describe Challenge::GiftExchangeController do
     it "redirects to the collection's main page with a notice" do
       it_redirects_to_with_notice(collection, "Challenge settings were deleted.")
     end
+  end
+
+  describe "admin access to challenge settings" do
+    authorized_roles = %w[support policy_and_abuse superadmin].freeze
+    before { fake_logout }
+
+    subject { get :edit, params: { collection_id: collection.name } }
+
+    let(:success) do
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:edit)
+    end
+
+    it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
   end
 end

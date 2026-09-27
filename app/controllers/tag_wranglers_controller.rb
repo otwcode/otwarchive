@@ -52,7 +52,8 @@ class TagWranglersController < ApplicationController
     results = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
     wrangled_tags.find_each(order: :desc) do |tag|
       merger = tag.merger&.name || ""
-      fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }.join(", ")
+      fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }
+        .join(", ")
       results << [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]
     end
     filename = "wrangled_tags_#{wrangler.login}_#{Time.now.utc.strftime('%Y-%m-%d-%H%M')}.csv"
@@ -65,13 +66,19 @@ class TagWranglersController < ApplicationController
     unless params[:tag_fandom_string].blank?
       names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
       fandoms = Fandom.where('name IN (?)', names)
-      unless fandoms.blank?
-        for fandom in fandoms
-          unless !current_user.respond_to?(:fandoms) || current_user.fandoms.include?(fandom)
-            assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
-            assignment.save!
+      noncanonical_fandoms = []
+      if fandoms.present? && current_user.respond_to?(:fandoms)
+        fandoms.each do |fandom|
+          next if current_user.fandoms.include?(fandom)
+          
+          unless fandom.canonical?
+            noncanonical_fandoms.push(fandom)
+            next
           end
+          assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
+          assignment.save!
         end
+        flash[:error] = t(".noncanonical_fandoms_tried_assignment", count: noncanonical_fandoms.length, fandom_list: helpers.to_sentence(noncanonical_fandoms.map(&:name))) unless noncanonical_fandoms.empty?
       end
     end
     unless params[:assignments].blank?
