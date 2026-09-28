@@ -29,7 +29,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should see "Wrangling Home"
       And I should not see "first fandom"
     When I follow "Wranglers"
-    Then I should see "Tag Wrangling Assignments"
+    Then I should see "Assign Wranglers to Fandoms"
       And I should see "first fandom"
     When I view the tag "first fandom"
     Then I should see "Edit"
@@ -44,7 +44,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should see "Wrangling Home"
       And I should not see "first fandom"
     When I follow "Wranglers"
-    Then I should see "Tag Wrangling Assignments"
+    Then I should see "Assign Wranglers to Fandoms"
       And I should see "first fandom"
 
     # assigning a fandom to oneself

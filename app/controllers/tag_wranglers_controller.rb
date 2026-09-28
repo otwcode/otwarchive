@@ -8,7 +8,7 @@ class TagWranglersController < ApplicationController
   def index
     authorize :wrangling, :full_access? if logged_in_as_admin?
 
-    @page_subtitle = t("tag_wranglers.index.page_subtitle")
+    @page_subtitle = t(".page_heading")
 
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
 

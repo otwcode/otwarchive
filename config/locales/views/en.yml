@@ -3062,7 +3062,7 @@ en:
         only_fandoms_starting_with: Only fandoms starting with
         only_media: Only media
         only_wrangler: Only wrangler
-      page_subtitle: Wranglers
+      page_heading: Wranglers
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
       tags_wrangled_csv: Tags Wrangled (CSV)
