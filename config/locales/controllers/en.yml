@@ -387,6 +387,8 @@ en:
       noncanonical_fandoms_tried_assignment:
         one: Could not assign fandom %{fandom_list}. Non-canonical fandoms cannot be assigned.
         other: Could not assign fandoms %{fandom_list}. Non-canonical fandoms cannot be assigned.
+    index:
+      page_title: Wranglers
   tag_wranglings:
     index:
       page_subtitle: fandoms
