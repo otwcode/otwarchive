@@ -707,5 +707,24 @@ namespace :After do
     $stdout.flush
   end
 
+  desc "Rename collections with duplicate names"
+  task(rename_duplicate_collections: :environment) do
+    duplicates = Collection.group(:name).having("COUNT(*) > 1").count
+    puts "Renaming duplicates for #{duplicates.count} collections"
+
+    duplicates.each do |name, _|
+      collections = Collection.where(name: name)
+      collections.each_with_index do |collection, index|
+        next if index.zero?
+
+        new_name = "#{collection.name}_#{collection.id}"
+        collection.name = new_name
+        collection.save!
+        puts "Renamed collection to #{new_name}"
+      end
+    end
+    puts "Finished renaming collections"
+  end
+
   # This is the end that you have to put new tasks above.
 end
