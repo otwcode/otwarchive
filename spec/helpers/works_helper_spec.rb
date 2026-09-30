@@ -9,7 +9,7 @@ describe WorksHelper do
 
     context 'no public work skins or private work skins' do
       it 'returns an empty array' do
-        expect(helper.all_coauthor_skins).to be_empty
+        expect(helper.all_coauthor_skins(@work)).to be_empty
       end
     end
 
@@ -21,7 +21,7 @@ describe WorksHelper do
 
       context 'no private work skins' do
         it 'returns public work skins, ordered by title' do
-          expect(helper.all_coauthor_skins.pluck(:title)).to eq(['B Public Skin', 'Z Public Skin'])
+          expect(helper.all_coauthor_skins(@work).pluck(:title)).to eq(["B Public Skin", "Z Public Skin"])
         end
       end
 
@@ -33,15 +33,27 @@ describe WorksHelper do
         end
 
         it 'returns public work skins and skins belonging to allpseuds, ordered by title' do
-          expect(helper.all_coauthor_skins.pluck(:title)).to eq(['A Private Skin',
-                                                                 'B Public Skin',
-                                                                 'M Private Skin',
-                                                                 'Z Public Skin'])
+          expect(helper.all_coauthor_skins(@work).pluck(:title)).to eq(["A Private Skin",
+                                                                        "B Public Skin",
+                                                                        "M Private Skin",
+                                                                        "Z Public Skin"])
         end
 
         it 'does not return unassociated private work skins' do
-          expect(helper.all_coauthor_skins.pluck(:title)).not_to include(['Unowned Private Skin'])
+          expect(helper.all_coauthor_skins(@work).pluck(:title)).not_to include(["Unowned Private Skin"])
         end
+      end
+    end
+
+    context "when the work's current skin does not belong to a creator" do
+      before do
+        skin = create(:work_skin, title: "Departed Creator Skin")
+        @work.update_column(:work_skin_id, skin.id)
+      end
+
+      it "includes the current skin" do
+        expect(helper.all_coauthor_skins(@work).pluck(:title))
+          .to include("Departed Creator Skin")
       end
     end
   end
