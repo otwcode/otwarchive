@@ -77,7 +77,9 @@ describe ExternalAuthor do
 
     it "removes the connection between the work and the external author's email" do
       expect { external_author.orphan(false) }
-        .to change { external_author.reload.works.count }.from(1).to(0)
+        .to change { external_author.reload.works.count }
+        .from(1).to(0)
+        
       expect(ExternalCreatorship.exists?(external_creatorship.id)).to be false
     end
 
