@@ -123,7 +123,7 @@ class AdminPost < ApplicationRecord
     return unless ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS&.positive?
 
     where.not(comment_permissions: :disable_all)
-      .where(created_at: ..ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago)
+      .where(posted: true, published_at: ..ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago)
       .update_all(comment_permissions: :disable_all)
   end
 
