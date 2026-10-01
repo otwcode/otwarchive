@@ -122,8 +122,8 @@ class AdminPost < ApplicationRecord
   def self.disable_old_post_comments
     return unless ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS&.positive?
 
-    where.not(comment_permissions: :disable_all)
-      .where(posted: true, published_at: ..ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago)
+    posted.where(published_at: ..ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago)
+      .where.not(comment_permissions: :disable_all)
       .update_all(comment_permissions: :disable_all)
   end
 
