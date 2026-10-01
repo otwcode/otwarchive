@@ -3122,7 +3122,7 @@ en:
         tw_wranglers_slack: "#tw-wranglers"
         wrangle_to_guidelines_html: Wrangle tags in accordance with the %{wrangling_guidelines_link}.
         wrangling_guidelines: wrangling guidelines
-      page_heading: Tag Wrangling
+      page_heading: Wrangling Tools
     wrangler_dashboard:
       characters_by_fandom: Characters by fandom (%{count})
       fandoms_by_media: Fandoms by media (%{count})
