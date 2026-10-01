@@ -4,15 +4,15 @@ module ShareHelper
   # but do not add formatting so it can be link text for Tumblr sharing.
   def get_tumblr_embed_link_title(work)
     title = work.title + " (#{work.word_count} #{ts('words')})"
-    pseud = text_byline(work)
-    "#{title} #{ts("by")} #{pseud} #{ts("[#{ArchiveConfig.APP_SHORT_NAME}]")}"
+    pseud = text_byline(work, { external_share: work.anonymous? })
+    "#{title} #{ts('by')} #{pseud} #{ts("[#{ArchiveConfig.APP_SHORT_NAME}]")}"
   end
 
   def get_tweet_text(work)
     if work.unrevealed?
       ts("Mystery Work")
     else
-      names = text_byline(work)
+      names = text_byline(work, { external_share: work.anonymous? })
       fandoms = short_fandom_string(work)
       "#{work.title} by #{names} - #{fandoms}".truncate(95)
     end
