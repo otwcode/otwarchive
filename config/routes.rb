@@ -671,6 +671,7 @@ Rails.application.routes.draw do
   get "/help/comments-moderated.html", to: redirect("/help/privacy_moderated_commenting")
   get "/help/who-can-comment-on-this-work.html", to: redirect("/help/privacy_restricted_commenting")
   get "/help/registered-users.html", to: redirect("/help/privacy_restricted_work")
+  get "/help/prompt-restriction-tag-set.html", to: redirect("/help/prompt_restriction_tag_set_gift_exchange")
   get "/help/rte-help.html", to: redirect("/help/rte")
   get "/help/skins-basics.html", to: redirect("/help/skins_basics")
   get "/help/skins-creating.html", to: redirect("/help/skins_creating")
