@@ -9,6 +9,7 @@ class TagWranglingsController < ApplicationController
   def index
     @counts = tag_counts_per_category
     authorize :wrangling, :read_access? if logged_in_as_admin?
+    @page_subtitle = t(".wrangling_tools_page_subtitle")
     return if params[:show].blank?
 
     raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)

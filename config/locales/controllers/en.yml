@@ -394,6 +394,7 @@ en:
   tag_wranglings:
     index:
       page_subtitle: fandoms
+      wrangling_tools_page_subtitle: Wrangling Tools
   tags:
     index:
       collection_page_title: "%{collection_title} - Tags"

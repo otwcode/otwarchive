@@ -417,3 +417,11 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I should see "1" within "td[title='unwrangled characters']"
       And I should see "Freeforms by fandom (0)"
       And I should see "Characters by fandom (1)"
+
+  Scenario: browser page title and page heading appears as "Wrangling Tools" in Wrangling Tools page
+    Given I am logged in as a tag wrangler
+    When I go to the wrangling tools page
+    Then I should see "Wrangling Tools" within "h2.heading"
+      And I should not see "Tag Wrangling" within "h2.heading"
+      And I should see the page title "Wrangling Tools"
+      And the page title should not include "Tag Wranglings"
