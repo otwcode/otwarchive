@@ -1,8 +1,18 @@
-<p>
-  <%= radio_button_tag 'use_default', 'true', true %> 
-  <%= label_tag 'use_default_true', ts('Take my pseud off as well') %>
-</p>
-<p>
-  <%= radio_button_tag 'use_default', 'false' %> 
-  <%= label_tag 'use_default_false', ts('Leave a copy of my pseud on') %>
-</p>
+<dl>
+  <dt><%= t(".prompt") %></dt>
+  <dd>
+    <fieldset>
+      <legend><%= t(".prompt") %></legend>
+      <ul>
+        <li>
+          <%= radio_button_tag "use_default", "true" %>
+          <%= label_tag "use_default_true", t(".remove_pseud") %>
+        </li>
+        <li>
+          <%= radio_button_tag "use_default", "false" %>
+          <%= label_tag "use_default_false", t(".keep_pseud") %>
+        </li>
+      </ul>
+    </fieldset>
+  </dd>
+</dl>

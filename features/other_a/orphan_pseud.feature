@@ -22,7 +22,7 @@ Feature: Orphan pseud
       And it is currently 1 second from now
     When I follow "Orphan Works"
     Then I should see "Orphan All Works by orphanpseud"
-    When I choose "Take my pseud off as well"
+    When I choose "Remove my pseud"
       And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
     When I view the work "Shenanigans"
@@ -50,7 +50,7 @@ Feature: Orphan pseud
       And it is currently 1 second from now
     When I follow "Orphan Works"
     Then I should see "Orphan All Works by orphanpseud"
-    When I choose "Leave a copy of my pseud on"
+    When I choose "Keep my pseud"
       And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
     When I view the work "Shenanigans"
@@ -87,7 +87,7 @@ Feature: Orphan pseud
     When I go to halfandhalf's pseuds page
       And I follow "Orphan Works by To Be Orphaned"
     Then I should see "Orphan All Works by To Be Orphaned"
-    When I choose "Take my pseud off as well"
+    When I choose "Remove my pseud"
       And I wait 2 seconds
       And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."

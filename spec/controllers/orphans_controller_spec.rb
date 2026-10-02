@@ -189,6 +189,37 @@ describe OrphansController do
     context "when logged in as the owner" do
       before { fake_login_known_user(user.reload) }
 
+      context "when no pseud option is chosen" do
+        let(:error) { "You must choose whether to remove or keep your pseud." }
+
+        it "redirects back to the works orphan page with an error" do
+          post :create, params: { work_ids: [work] }
+
+          it_redirects_to_with_error(
+            new_orphan_path(work_ids: [work.id]), error
+          )
+          expect(work.reload.users).to include(user)
+        end
+
+        it "redirects back to the series orphan page with an error" do
+          post :create, params: { series_id: series }
+
+          it_redirects_to_with_error(
+            new_orphan_path(series_id: series.id), error
+          )
+          expect(series.reload.users).to include(user)
+        end
+
+        it "rejects values other than true or false" do
+          post :create, params: { work_ids: [work], use_default: "maybe" }
+
+          it_redirects_to_with_error(
+            new_orphan_path(work_ids: [work.id]), error
+          )
+          expect(work.reload.users).to include(user)
+        end
+      end
+
       it "successfully orphans a single work and redirects" do
         post :create, params: { work_ids: [work], use_default: "true" }
         expect(work.reload.users).not_to include(user)
