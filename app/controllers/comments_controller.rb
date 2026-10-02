@@ -4,6 +4,7 @@ class CommentsController < ApplicationController
                        :hide_comments, :add_comment_reply,
                        :cancel_comment_reply, :delete_comment,
                        :cancel_comment_delete, :unreviewed, :review_all]
+  before_action :check_commentable_found, only: [:new, :create, :show_comments, :add_comment_reply]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   before_action :load_comment, only: [:show, :edit, :update, :delete_comment, :destroy, :cancel_comment_edit, :cancel_comment_delete, :review, :approve, :reject, :freeze, :unfreeze, :hide, :unhide]
   before_action :check_visibility, only: [:show]
@@ -317,6 +318,17 @@ class CommentsController < ApplicationController
     end
   end
 
+  def check_commentable_found
+    return unless @commentable.nil?
+
+    # i18n-tasks-use t("comments.add_comment_reply.not_found")
+    # i18n-tasks-use t("comments.create.not_found")
+    # i18n-tasks-use t("comments.new.not_found")
+    # i18n-tasks-use t("comments.show_comments.not_found")
+    flash[:error] = t("comments.#{action_name}.not_found")
+    redirect_back_or_to root_path
+  end
+
   def set_page_subtitle
     parent = find_parent
     return unless parent
@@ -359,28 +371,21 @@ class CommentsController < ApplicationController
 
   # GET /comments/new
   def new
-    if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
-      redirect_back_or_to root_path
-    else
-      @comment = Comment.new
-      @controller_name = params[:controller_name] if params[:controller_name]
-      @name =
-        case @commentable.class.name
-        when /Work/
-          @commentable.title
-        when /Chapter/
-          @commentable.work.title
-        when /Tag/
-          @commentable.name
-        when /AdminPost/
-          @commentable.title
-        when /Comment/
-          ts("Previous Comment")
-        else
-          @commentable.class.name
-        end
-    end
+    @comment = Comment.new
+    @controller_name = params[:controller_name] if params[:controller_name]
+    @name =
+      case @commentable.class.name
+      when /Work/, /AdminPost/
+        @commentable.title
+      when /Chapter/
+        @commentable.work.title
+      when /Tag/
+        @commentable.name
+      when /Comment/
+        t(".previous_comment_name")
+      else
+        @commentable.class.name
+      end
   end
 
   # GET /comments/1/edit
@@ -394,55 +399,50 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.xml
   def create
-    if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
-      redirect_back_or_to root_path
-    else
-      @comment = Comment.new(comment_params)
-      @comment.ip_address = request.remote_ip
-      @comment.user_agent = request.env["HTTP_USER_AGENT"]&.to(499)
-      @comment.cloudflare_bot_score = request.env["HTTP_CF_BOT_SCORE"]
-      @comment.cloudflare_ja3_hash = request.env["HTTP_CF_JA3_HASH"]
-      @comment.cloudflare_ja4 = request.env["HTTP_CF_JA4"]
-      @comment.request_host = request.host
-      @comment.commentable = Comment.commentable_object(@commentable)
-      @controller_name = params[:controller_name]
+    @comment = Comment.new(comment_params)
+    @comment.ip_address = request.remote_ip
+    @comment.user_agent = request.env["HTTP_USER_AGENT"]&.to(499)
+    @comment.cloudflare_bot_score = request.env["HTTP_CF_BOT_SCORE"]
+    @comment.cloudflare_ja3_hash = request.env["HTTP_CF_JA3_HASH"]
+    @comment.cloudflare_ja4 = request.env["HTTP_CF_JA4"]
+    @comment.request_host = request.host
+    @comment.commentable = Comment.commentable_object(@commentable)
+    @controller_name = params[:controller_name]
 
-      # First, try saving the comment
-      if @comment.save
-        flash[:comment_notice] = if @comment.unreviewed?
-                                   # i18n-tasks-use t("comments.create.success.moderated.admin_post")
-                                   # i18n-tasks-use t("comments.create.success.moderated.work")
-                                   t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
-                                 else
-                                   t("comments.create.success.not_moderated")
-                                 end
-        respond_to do |format|
-          format.html do
-            if request.referer&.match(/inbox/)
-              redirect_to user_inbox_path(current_user, filters: filter_params, page: params[:page])
-            elsif request.referer&.match(/new/) || (@comment.unreviewed? && current_user)
-              # If the referer is the new comment page, go to the comment's page
-              # instead of reloading the full work.
-              # If the comment is unreviewed and commenter is logged in, take
-              # them to the comment's page so they can access the edit and
-              # delete options for the comment, since unreviewed comments don't
-              # appear on the commentable.
-              redirect_to comment_path(@comment)
-            elsif request.referer == root_url
-              # replying on the homepage
-              redirect_to root_path
-            elsif @comment.unreviewed?
-              redirect_to_all_comments(@commentable)
-            else
-              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
-            end
+    # First, try saving the comment
+    if @comment.save
+      flash[:comment_notice] = if @comment.unreviewed?
+                                 # i18n-tasks-use t("comments.create.success.moderated.admin_post")
+                                 # i18n-tasks-use t("comments.create.success.moderated.work")
+                                 t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
+                               else
+                                 t("comments.create.success.not_moderated")
+                               end
+      respond_to do |format|
+        format.html do
+          if request.referer&.match(/inbox/)
+            redirect_to user_inbox_path(current_user, filters: filter_params, page: params[:page])
+          elsif request.referer&.match(/new/) || (@comment.unreviewed? && current_user)
+            # If the referer is the new comment page, go to the comment's page
+            # instead of reloading the full work.
+            # If the comment is unreviewed and commenter is logged in, take
+            # them to the comment's page so they can access the edit and
+            # delete options for the comment, since unreviewed comments don't
+            # appear on the commentable.
+            redirect_to comment_path(@comment)
+          elsif request.referer == root_url
+            # replying on the homepage
+            redirect_to root_path
+          elsif @comment.unreviewed?
+            redirect_to_all_comments(@commentable)
+          else
+            redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
           end
         end
-      else
-        flash[:error] = ts("Couldn't save comment!")
-        render action: "new"
       end
+    else
+      flash[:error] = t(".error")
+      render action: "new"
     end
   end
 
@@ -610,18 +610,13 @@ class CommentsController < ApplicationController
   def show_comments
     respond_to do |format|
       format.html do
-        if @commentable.nil?
-          flash[:error] = t(".error")
-          redirect_back_or_to root_path
-        else
-          # if non-ajax it could mean sudden javascript failure OR being redirected from login
-          # so we're being extra-nice and preserving any intention to comment along with the show comments option
-          options = { show_comments: true }
-          options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
-          options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
-          options[:page] = params[:page]
-          redirect_to_all_comments(@commentable, options)
-        end
+        # if non-ajax it could mean sudden javascript failure OR being redirected from login
+        # so we're being extra-nice and preserving any intention to comment along with the show comments option
+        options = { show_comments: true }
+        options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
+        options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
+        options[:page] = params[:page]
+        redirect_to_all_comments(@commentable, options)
       end
 
       format.js do
