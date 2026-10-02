@@ -388,6 +388,37 @@ describe Work do
         expect(work.errors[:base]).to include("You do not have permission to use that work skin.")
       end
     end
+
+    context "when the skin author is no longer a creator" do
+      let(:skin) { create(:work_skin, author: skin_author) }
+      let(:work) do
+        create(:work,
+               authors: [skin_author.default_pseud, create(:user).default_pseud],
+               work_skin_id: skin.id)
+      end
+
+      before do
+        work.creatorships.find_by(pseud: skin_author.default_pseud).destroy!
+        work.reload
+      end
+
+      it "is valid without changing the skin" do
+        work.title = "New title"
+        expect(work).to be_valid
+      end
+
+      it "is valid when removing the skin" do
+        work.work_skin_id = nil
+        expect(work).to be_valid
+      end
+
+      it "is invalid when changing to another skin the creators do not own" do
+        other_skin = create(:work_skin, author: create(:user))
+        work.work_skin_id = other_skin.id
+        expect(work).to be_invalid
+        expect(work.errors[:base]).to include("You do not have permission to use that work skin.")
+      end
+    end
   end
 
   describe "new gifts virtual attribute" do
