@@ -42,7 +42,7 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @works = @series.works_in_order.posted.includes(:pseuds).select(&:visible?).paginate(page: params[:page])
+    @works = @series.works_in_order.posted.for_blurb.select(&:visible?).paginate(page: params[:page])
 
     # sets the page title with the data for the series
     if @series.unrevealed?

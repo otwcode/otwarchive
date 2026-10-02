@@ -1,4 +1,4 @@
-<% works_count = @external_author.works.size %>
+<% works_count = @works.size %>
 <h2 class="heading"><%= t(".page_heading", count: works_count) %></h2>
 
 <p class="message">
@@ -42,7 +42,7 @@
 <div class="work listbox group">
   <h3 class="heading"><%= t(".my_imported", count: works_count) %></h3>
   <ul id="imported_works" class="index group">
-    <% @external_author.works.each do |work| %>
+    <% @works.each do |work| %>
       <%= render "works/work_blurb", work: work %>
     <% end %>
   </ul>
