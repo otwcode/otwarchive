@@ -99,8 +99,8 @@ describe Admin::SettingsController do
           invite_from_queue_enabled: 0,
           invite_from_queue_number: 11,
           request_invite_enabled: 1,
-          preserve_audit_records_user_ids: "1"
-          invite_from_queue_frequency: 5,
+          preserve_audit_records_user_ids: "1",
+          invite_from_queue_frequency: 5
         }.each_pair do |field, value|
           it "allows admins with policy_and_abuse role to update #{field}" do
             put :update, params: { id: setting.id, admin_setting: { field => value } }
