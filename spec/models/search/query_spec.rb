@@ -1,6 +1,44 @@
 require 'spec_helper'
 
 describe Query do
+  describe "#search" do
+    context "when Elasticsearch raises a BadRequest error" do
+      before do
+        allow($elasticsearch).to receive(:search)
+          .and_raise(Elastic::Transport::Transport::Errors::BadRequest)
+      end
+
+      it "returns an error hash" do
+        result = Query.new.search
+        expect(result).to eq(error: "Your search failed because of a syntax error. Please try again.")
+      end
+
+      context "when the log_elasticsearch_errors rollout flag is on" do
+        before { $rollout.activate(:log_elasticsearch_errors) }
+
+        after { $rollout.deactivate(:log_elasticsearch_errors) }
+
+        it "reports the exception to Sentry" do
+          sentry = class_double("Sentry", capture_exception: nil)
+            .as_stubbed_const
+          Query.new.search
+          error = Elastic::Transport::Transport::Errors::BadRequest
+          expect(sentry).to have_received(:capture_exception)
+            .with(instance_of(error))
+        end
+      end
+
+      context "when the log_elasticsearch_errors rollout flag is off" do
+        it "does not report the exception to Sentry" do
+          sentry = class_double("Sentry", capture_exception: nil)
+            .as_stubbed_const
+          Query.new.search
+          expect(sentry).not_to have_received(:capture_exception)
+        end
+      end
+    end
+  end
+
   describe '#split_query_text_phrases' do
     it "should add quoted phrases to a query string" do
       q = Query.new
