@@ -35,7 +35,7 @@
               <%= render "works/work_series_links" %>
             <% end %>
             <% unless inspired_by.empty? %>
-              <%= render "works/work_approved_children", inspired_by: inspired_by %>
+              <%= render "works/work_related_works", inspired_by: inspired_by %>
             <% end %>
           </div>
           <!--/afterword-->

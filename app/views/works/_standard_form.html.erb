@@ -100,8 +100,8 @@
         <!-- Toggles on with parent checkbox -->
         <fieldset id="parent-options">
           <dl>
-            <% new_parent, existing_parents = @work.parent_work_relationships.partition(&:new_record?) %>
-            <% new_parent << @work.parent_work_relationships.build if new_parent.empty? %>
+            <% existing_parents = @work.parent_work_relationships.visible %>
+            <% new_parent = @work.parent_work_relationships.detect(&:new_record?) || @work.parent_work_relationships.build %>
 
             <%= f.fields_for :parent_work_relationships, new_parent do |p| %>
               <dt><%= p.label :url, ts("URL") %></dt>
