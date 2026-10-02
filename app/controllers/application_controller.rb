@@ -26,7 +26,9 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from Rack::Timeout::RequestTimeoutException, with: :raise_timeout
-  
+
+  rescue_from ActionView::MissingTemplate, with: :raise_not_found
+
   def raise_timeout
     redirect_to timeout_error_path
   end
