@@ -5,7 +5,7 @@ describe Locale do
     locale = Locale.default
     expect(locale.iso).to eq(ArchiveConfig.DEFAULT_LOCALE_ISO)
     expect(locale.name).to eq(ArchiveConfig.DEFAULT_LOCALE_NAME)
-    expect(locale.language).to eq(Language.default)
+    expect(locale.locale_language).to eq(LocaleLanguage.default)
     expect(I18n.default_locale.to_s).to eq(ArchiveConfig.DEFAULT_LOCALE_ISO)
   end
 

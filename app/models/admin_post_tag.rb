@@ -1,5 +1,5 @@
 class AdminPostTag < ApplicationRecord
-  belongs_to :language
+  belongs_to :locale_language, foreign_key: :language_id, inverse_of: :admin_post_tags
   has_many :admin_post_taggings
   has_many :admin_posts, through: :admin_post_taggings
 

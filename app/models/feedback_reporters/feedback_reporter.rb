@@ -46,7 +46,7 @@ class FeedbackReporter
       "email" => email,
       "contactId" => zoho_contact_id,
       "cf" => {
-        "cf_language" => language.presence || Language.default.name,
+        "cf_language" => language.presence || LocaleLanguage.default.name,
         "cf_name" => username.presence || "Anonymous user"
       }
     }
