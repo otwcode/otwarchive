@@ -215,10 +215,11 @@ module WorksHelper
       work.challenge_claims.present?
   end
 
-  def all_coauthor_skins
-    users = @work.users.to_a
+  def all_coauthor_skins(work)
+    users = work.users.to_a
     users << User.current_user if User.current_user.is_a?(User)
-    WorkSkin.approved_or_owned_by_any(users).order(:title)
+    skins = WorkSkin.approved_or_owned_by_any(users).order(:title)
+    (skins + [work.work_skin]).compact.uniq
   end
 
   def sorted_languages
