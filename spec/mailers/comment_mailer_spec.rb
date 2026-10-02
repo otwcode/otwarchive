@@ -196,12 +196,8 @@ describe CommentMailer do
   end
 
   shared_examples "a notification email for admins" do
-    it "is not delivered to the admin who is the commentable owner" do
-      expect(email).not_to deliver_to(comment.ultimate_parent.commentable_owners.first.email)
-    end
-
     it "is delivered to the admin address" do
-      expect(email).to deliver_to(ArchiveConfig.ADMIN_ADDRESS)
+      expect(email.to).to eq([ArchiveConfig.ADMIN_ADDRESS])
     end
   end
 
@@ -434,7 +430,7 @@ describe CommentMailer do
     end
 
     context "when the comment is on an admin post" do
-      let(:user) { comment.ultimate_parent.commentable_owners.first }
+      let(:user) { ArchiveConfig.ADMIN_ADDRESS }
       let(:comment) { create(:comment, :on_admin_post) }
 
       it_behaves_like "a notification email for admins"
@@ -449,6 +445,14 @@ describe CommentMailer do
         before { comment.update!(unreviewed: true) }
 
         it_behaves_like "a notification email to someone who can review comments"
+      end
+
+      context "when the admin post has no admin_id set" do
+        let!(:admin) { create(:admin) }
+        let(:admin_post) { create(:admin_post, admin_id: nil) }
+        let(:comment) { create(:comment, commentable: admin_post) }
+
+        it_behaves_like "a notification email for admins"
       end
     end
 
@@ -559,7 +563,7 @@ describe CommentMailer do
     end
 
     context "when the comment is on an admin post" do
-      let(:user) { comment.ultimate_parent.commentable_owners.first }
+      let(:user) { ArchiveConfig.ADMIN_ADDRESS }
       let(:comment) { create(:comment, :on_admin_post) }
 
       it_behaves_like "a notification email for admins"

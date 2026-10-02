@@ -282,7 +282,7 @@ describe AdminPostsController do
           
           context "with invalid translated_post_id" do
             it "renders the edit template with error message" do
-              put :update, params: { id: admin_post.id, admin_post: { admin_id: admin.id, translated_post_id: 0 } }
+              put :update, params: { id: admin_post.id, admin_post: { translated_post_id: 0 } }
 
               expect(response).to render_template(:edit)
               expect(assigns[:admin_post].errors.full_messages).to include("Translated post does not exist")
@@ -298,7 +298,6 @@ describe AdminPostsController do
                   put :update, params: {
                     id: translation.id,
                     admin_post: {
-                      admin_id: admin.id,
                       comment_permissions: :disable_all
                     }
                   }
@@ -311,7 +310,7 @@ describe AdminPostsController do
 
             context "with invalid translated_post language" do
               it "renders the edit template with error message" do
-                put :update, params: { id: translation.id, admin_post: { admin_id: admin.id, language_id: admin_post.language_id } }
+                put :update, params: { id: translation.id, admin_post: { language_id: admin_post.language_id } }
                 expect(response).to render_template(:edit)
                 expect(assigns[:admin_post].errors.full_messages).to include("Translated post cannot be same language as original post")
               end
@@ -323,10 +322,11 @@ describe AdminPostsController do
                 let(:translation) { create(:admin_post, :draft, translated_post_id: admin_post.id, language_id: create(:language).id) }
   
                 it "will remain a draft" do
-                  put :update, params: { post_button: "Post", id: translation.id, admin_post: { admin_id: admin.id } }
-  
+                  put :update, params: { post_button: "Post", id: translation.id, admin_post: { title: "New Title" } }
+
                   it_redirects_to_with_notice(admin_post_path(assigns[:admin_post]), "Admin Post was successfully updated.")
                   expect(translation.reload.posted?).to be_falsey
+                  expect(translation.title).to eq("New Title")
                 end
               end
             end
