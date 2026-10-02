@@ -363,3 +363,35 @@ Feature: Filters
     When I fill in "work_search_query" with "bad~query!!!"
       And I press "Sort and Filter"
     Then I should see "Your search failed because of a syntax error"
+  
+  Scenario: Filtering under a too-large word count
+    # using words_to
+    When I go to meatloaf's user page
+      And I follow "Works (3)"
+    When I fill in "work_search_words_to" with "10000000000000000000"
+      And I press "Sort and Filter"
+    Then I should see "Bilbo Does the Thing"
+      And I should not see "Your search failed because of a syntax error"
+    # using the range operator
+    When I go to meatloaf's user page
+      And I follow "Works (3)"
+    When I fill in "work_search_query" with "words:1-10000000000000000000"
+      And I press "Sort and Filter"
+    Then I should see "Bilbo Does the Thing"
+      And I should not see "Your search failed because of a syntax error"
+
+  Scenario: Filtering over a too-large word count
+    # using words_from
+    When I go to meatloaf's user page
+      And I follow "Works (3)"
+    When I fill in "work_search_words_from" with "10000000000000000000"
+      And I press "Sort and Filter"
+    Then I should see "0 Works"
+      And I should not see "Your search failed because of a syntax error"
+    # using the range operator
+    When I go to meatloaf's user page
+      And I follow "Works (3)"
+    When I fill in "work_search_query" with "words:>10000000000000000000"
+      And I press "Sort and Filter"
+    Then I should see "0 Works"
+      And I should not see "Your search failed because of a syntax error"    

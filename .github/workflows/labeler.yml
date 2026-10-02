@@ -5,6 +5,7 @@ on:
 jobs:
   labeler:
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     steps:
 
       - name: Content-Based

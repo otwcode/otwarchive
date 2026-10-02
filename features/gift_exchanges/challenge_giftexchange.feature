@@ -172,6 +172,62 @@ Feature: Gift Exchange Challenge
       And I submit
     Then I should see "Offer URL does not appear to be a valid URL."
 
+  Scenario: Custom URL and description labels are used in emails when available
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I edit settings for "Awesome Gift Exchange" challenge
+      And I check "gift_exchange[request_restriction_attributes][url_allowed]"
+      And I fill in "gift_exchange[request_url_label]" with "Custom Request URL Label"
+      And I fill in "gift_exchange[request_description_label]" with "Custom Request Description Label"
+      And I submit
+    When I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with combination A
+      And I follow "Edit Sign-up"
+      And I fill in "Custom Request URL Label" with "https://example.com/myname1_prompt"
+      And I fill in "Custom Request Description Label" with "myname1 wrote a description!"
+      And I submit
+    When I am logged in as "myname2"
+      And I sign up for "Awesome Gift Exchange" with combination B
+      And I follow "Edit Sign-up"
+      And I fill in "Custom Request URL Label" with "https://example.com/myname2_prompt"
+      And I fill in "Custom Request Description Label" with "myname2 wrote a description!"
+      And I submit
+    When I am logged in as "mod1"
+      And I have generated matches for "Awesome Gift Exchange"
+    When I press "Send Assignments"
+    Then I should see "Assignments are now being sent out"
+    When I reload the page
+    Then I should not see "Assignments are now being sent out"
+      And 1 email should be delivered to "myname1"
+      And the email should contain "Custom Request URL Label"
+      And the email should contain "Custom Request Description Label"
+
+  Scenario: When custom URL and description labels aren't set, the default values for them show up in emails
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I edit settings for "Awesome Gift Exchange" challenge
+      And I check "gift_exchange[request_restriction_attributes][url_allowed]"
+      And I submit
+    When I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with combination A
+      And I follow "Edit Sign-up"
+      And I fill in "Prompt URL:" with "https://example.com/myname1_prompt"
+      And I fill in "Description:" with "myname1 wrote a description!"
+      And I submit
+    When I am logged in as "myname2"
+      And I sign up for "Awesome Gift Exchange" with combination B
+      And I follow "Edit Sign-up"
+      And I fill in "Prompt URL:" with "https://example.com/myname2_prompt"
+      And I fill in "Description:" with "myname2 wrote a description!"
+      And I submit
+    When I am logged in as "mod1"
+      And I have generated matches for "Awesome Gift Exchange"
+    When I press "Send Assignments"
+    Then I should see "Assignments are now being sent out"
+    When I reload the page
+    Then I should not see "Assignments are now being sent out"
+      And 1 email should be delivered to "myname1"
+      And the email should contain "Prompt URL"
+      And the email should contain "Description"
+
   Scenario: Sign-ups can be seen in the dashboard
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
     When I am logged in as "myname1"

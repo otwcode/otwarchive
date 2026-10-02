@@ -8,6 +8,7 @@ class AdminSettingPolicy < ApplicationPolicy
       preserve_audit_records_user_ids
       hide_spam
       invite_from_queue_enabled
+      invite_from_queue_frequency
       invite_from_queue_number
       request_invite_enabled
       account_age_threshold_for_comment_spam_check
