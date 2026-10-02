@@ -76,13 +76,13 @@
         <dl>
           <dt class="landmark"><%= t(".landmark.note") %>:</dt>
           <dd class="instructions comment_form"><%= t(".guest_instructions") %></dd>
-          <dt><%= f.label "name_for_#{commentable.id}", t(".guest_name") %></dt>
-          <dd>
+          <dt class="required"><%= f.label "name_for_#{commentable.id}", t(".guest_name") %></dt>
+          <dd class="required">
             <%= f.text_field :name, id: "comment_name_for_#{commentable.id}" %>
             <%= live_validation_for_field("comment_name_for_#{commentable.id}", failureMessage: t(".guest_name_failure")) %>
           </dd>
-          <dt><%= f.label "email_for_#{commentable.id}", t(".guest_email") %></dt>
-          <dd>
+          <dt class="required"><%= f.label "email_for_#{commentable.id}", t(".guest_email") %></dt>
+          <dd class="required">
             <%= f.text_field :email, id: "comment_email_for_#{commentable.id}" %>
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", failureMessage: t(".guest_email_failure")) %>
           </dd>
@@ -101,6 +101,9 @@
             failureMessage: t(".comment_too_short"),
             maximum_length: ArchiveConfig.COMMENT_MAX,
             tooLongMessage: t(".comment_too_long", count: ArchiveConfig.COMMENT_MAX) %>
+      <% unless logged_in? %>
+        <p class="footnote"><%= t(".guest_edit_warning") %></p>
+      <% end %>
       <p class="submit actions">
           <%= f.submit button_name, id: "comment_submit_for_#{commentable.id}", data: { disable_with: t(".processing_message") } %>
           <% if controller.controller_name == 'inbox' %>

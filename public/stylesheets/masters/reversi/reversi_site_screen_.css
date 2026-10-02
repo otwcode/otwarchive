@@ -337,7 +337,8 @@ fieldset.listbox .heading,
 fieldset fieldset,
 .mce-container button,
 .filters .expander,
-.actions .disabled select {
+.actions .disabled select,
+.news .wrapper {
   box-shadow: none;
 }
 

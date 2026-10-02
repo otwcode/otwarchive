@@ -707,6 +707,7 @@ en:
       challenge_signups:
         close_offers_html: Close Offers &#8593;
         close_requests_html: Close Requests &#8593;
+        csv_download_help_title: CSV Downloads
         heading:
           for_collection: Sign-ups for %{collection}
           for_search: Sign-up
@@ -717,8 +718,12 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+    prompt_meme:
+      challenge_signups:
+        csv_download_help_title: CSV Downloads
     shared:
       challenge_requests:
+        csv_download_help_title: CSV Downloads
         fandom: Fandom %{allowed_fandom_count}
   challenge_assignments:
     assignment_blurb:
@@ -929,10 +934,11 @@ en:
       comment_field_title: Enter Comment
       comment_too_long: must be less than %{count} characters long.
       comment_too_short: Brevity is the soul of wit, but we need your comment to have text in it.
-      guest_email: Guest email
+      guest_edit_warning: You will not be able to edit or delete your comment after it is posted.
+      guest_email: Guest email (required)
       guest_email_failure: Please enter your email address.
-      guest_instructions: All fields are required. Your email address will not be published.
-      guest_name: Guest name
+      guest_instructions: All fields are required. Your name and comment text will both be publicly displayed. Your email address will not be made public, but it will be used to send you notifications of any replies to your comment.
+      guest_name: Guest name (required)
       guest_name_failure: Please enter your name.
       inbox_reference_html: to %{commentable_creator} on %{commentable_link}
       landmark:
@@ -1221,6 +1227,8 @@ en:
       moderated_and_anonymous_collections: 'Also note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically - it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
       page_heading: Adding To Collections
       removing_from_collection: If you change your mind about having an item in a collection, you can either edit the list of collections when editing it, or you can manage all your collected items under the "My Collections" page in your account.
+    csv_download:
+      how_to_open: To open the file properly, you might need to tell your program that the file is TAB-separated. In Open Office and Neo Office, for example, choose the TAB separator in the File Open Wizard. In Google Docs, use "Import" instead of "Open" to be able to set the separator to TAB.
     first_login:
       additional_info:
         header: Additional Browsing Information
