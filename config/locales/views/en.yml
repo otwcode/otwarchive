@@ -1798,6 +1798,26 @@ en:
       chapters: Any subsequent chapters you add will have that date pre-set on the form, though you will still have the option of overriding that date. This means that if you don't know or care exactly when each chapter was originally published, you can still backdate your work conveniently.
       guidance: When posting a work, you have the option to set a different publication date — in other words, to backdate the work. You can also set publication dates for individual chapters. Please note that in both cases, this affects whether and where your work appears on your dashboard and the works page, etc. These pages which show the date when your work was last updated — the publication date of your work or of one of your chapters, whichever is the most recent date.
       page_heading: Publication Date Options
+    works_import:
+      from_another_site:
+        how_to_import_from_another_site: '"How do I import works from another website?"'
+        html: If you are importing a chaptered work from an e-fiction site, you need to enter the URL for each chapter, each one on a different line. You can import a maximum of two hundred chapters at a time. For more information on importing works from other sites, please refer to %{how_to_import_from_another_site_link}
+      known_import_issues:
+        html: If none of the above information is helpful to you, you might find your problem listed on the the %{known_issues_link} page.
+        known_issues: Known Issues
+      override_tags_and_notes: Unless you check the "Override tags and notes" box, any information you enter under Tags will only be used if the importer cannot determine tags from the work itself.
+      page_heading: Troubleshooting Importing
+      posting_and_editing:
+        html: You will be able to edit and complete the standard header information after the import has been completed. For more information on posting and editing, please refer to the %{posting_and_editing_faq_link}.
+        posting_and_editing_faq: Posting and Editing FAQ
+      set_custom_encoding:
+        encoding_help_page: Encoding Help Page
+        html: If your text gets cut off at the point of an em dash or accented character, you might have to manually set the encoding using the "Set custom encoding" menu below for your work to import successfully. The type of encoding that works can vary; you may need to try different options to find the right one. Refer to the %{encoding_help_page_link} for more information.
+      transfer_work_account: If you are trying to transfer a work already on the Archive of Our Own from one user account to another, you must edit the existing work to add the new account as a co-creator, then remove the old account. You can't use the Import tool on AO3-hosted works.
+    works_import_encoding:
+      automatic_detection_problem: If you find that the importer strips special characters (such as umlauts or curly quotes) from your work, or fails to import whole chunks of text, there might be a problem with the automatic detection of your work's encoding. UTF-8 is a common encoding, but there are others that you might have to manually put in to help the importer handle your work.
+      custom_encoding_examples: If you're unsure what encoding your text is using, try ISO-8859-1 (often called Latin-1) or Windows-1252 (sometimes wrongly called ANSI), both of which are very common in the output from Windows programs.
+      page_heading: Encoding Help
     works_languages:
       contact_support: let us know via the Support form
       page_heading: Languages
@@ -3535,11 +3555,14 @@ en:
       page_heading_html: Chapter Index for %{work_link} by %{creators}
     new_import:
       content_policy: Content Policy
+      page_heading: Import New Work
       post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       privacy_moderated_commenting_help_title: Comments moderated
       privacy_restricted_commenting_help_title: Who can comment on these works
       privacy_restricted_work_help_title: Registered users
       tos_faq: Terms of Service FAQ
+      works_import_encoding_help_title: Encoding help
+      works_import_help_title: Work import
       works_languages_help_title: Languages help
     permissions:
       privacy: Privacy

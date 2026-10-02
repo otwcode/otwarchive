@@ -685,6 +685,8 @@ Rails.application.routes.draw do
   get "/help/warning-help.html", to: redirect("/help/tags_warnings")
   get "/help/add-work-to-assignment.html", to: redirect("/help/works_assignment")
   get "/help/backdating-help.html", to: redirect("/help/works_backdating")
+  get "/help/work-import.html", to: redirect("/help/works_import")
+  get "/help/encoding-help.html", to: redirect("/help/works_import_encoding")
   get "/help/languages-help.html", to: redirect("/help/works_languages")
   get "/help/parent-works-help.html", to: redirect("/help/works_parents")
   get "/help/recipients.html", to: redirect("/help/works_recipients")
