@@ -225,7 +225,7 @@ Feature: Create bookmarks of external works
       And I follow "Edit External Work"
       And I check "No Archive Warnings Apply"
       And I press "Update External work"
-    When I am logged in as "regular_user"
+      And I am logged in as "regular_user"
       And I set my preferences to hide warnings
       And I view the external work "External Changes"
     Then I should see "Show warnings"
@@ -243,7 +243,7 @@ Feature: Create bookmarks of external works
       And I follow "Edit External Work"
       And I fill in "Additional Tags" with "Admin-Added Freeform"
       And I press "Update External work"
-    When I am logged in as "regular_user"
+      And I am logged in as "regular_user"
       And I set my preferences to hide freeform
       And I view the external work "External Changes"
     Then I should see "Show additional tags"

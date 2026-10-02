@@ -909,7 +909,7 @@ Feature: Gift Exchange Challenge
     When I start signing up for "Awesome Gift Exchange"
       And I check "No Archive Warnings Apply"
       And I submit
-    When I am logged in as "myname2"
+      And I am logged in as "myname2"
       And I set my preferences to hide warnings
       And I go to "Awesome Gift Exchange" collection's page
       And I follow "Requests Summary"
@@ -927,7 +927,7 @@ Feature: Gift Exchange Challenge
       And I check "Requests visible?"
       And I submit
       And I sign up for "Awesome Gift Exchange" with combination A
-    When I am logged in as "myname2"
+      And I am logged in as "myname2"
       And I set my preferences to hide freeform
       And I go to "Awesome Gift Exchange" collection's page
       And I follow "Requests Summary"

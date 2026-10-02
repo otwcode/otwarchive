@@ -535,7 +535,7 @@ Feature: Prompt Meme Challenge
     When I follow "Challenge Settings"
       And I enable archive warning challenge options
       And I sign up for Battle 12 with combination F
-    When I am logged in as "myname2"
+      And I am logged in as "myname2"
       And I set my preferences to hide warnings
       And I go to "Battle 12" collection's page
       And I follow "Prompts"
