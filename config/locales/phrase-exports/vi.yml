@@ -351,6 +351,8 @@ vi:
         html: Ban Chính Sách & Xử lý Lạm Quyền đã ẩn tác phẩm %{title} của bạn.
         text: Ban Chính Sách & Xử lý Lạm Quyền đã ẩn tác phẩm "%{title}" (%{work_url})
           của bạn
+      required_action:
+        other: bạn sẽ được yêu cầu thực hiện khắc phục vi phạm này
       subject:
         other: "[%{app_name}] Ban Chính Sách & Xử lý Lạm Quyền đã ẩn tác phẩm của
           bạn"
@@ -358,11 +360,7 @@ vi:
       tos_faq: Các câu hỏi thường gặp về Điều Khoản Dịch Vụ
       tos_violation:
         html:
-          other: Nếu tác phẩm của bạn bị ẩn do vi phạm %{tos_link} (bao gồm %{content_policy_link}),
-            bạn sẽ được yêu cầu thực hiện khắc phục vi phạm này. Tác phẩm của bạn
-            có thể bị xóa khỏi AO3 nếu bạn không thực hiện các chỉnh sửa cần thiết
-            để tuân theo Điều Khoản Dịch Vụ. Để biết thêm thông tin chi tiết, vui
-            lòng tham khảo %{tos_faq_link}.
+          other: Nếu tác phẩm của bạn bị ẩn do vi phạm %{tos_link} (bao gồm %{content_policy_link}), %{required_action_bold}. Tác phẩm của bạn có thể bị xóa khỏi AO3 nếu bạn không thực hiện các chỉnh sửa cần thiết để tuân theo Điều Khoản Dịch Vụ. Để biết thêm thông tin chi tiết, vui lòng tham khảo %{tos_faq_link}.
         text:
           other: 'Nếu tác phẩm của bạn bị ẩn do vi phạm Điều Khoản Dịch Vụ của AO3
             (%{tos_url}), bao gồm Chính Sách Nội Dung (%{content_policy_url}), bạn

@@ -307,13 +307,15 @@ zh-Hans:
       hidden_one:
         html: 您的作品《%{title}》已被条款执行与违规行为处理委员会隐藏。
         text: 您的作品《%{title}》（%{work_url}）已被条款执行与违规行为处理委员会隐藏
+      required_action:
+        other: 您须采取行动纠正违规行为
       subject:
         other: "[%{app_name}] 您的作品已被条款执行与违规行为处理委员会隐藏"
       tos: AO3服务条款
       tos_faq: 服务条款常见问题
       tos_violation:
         html:
-          other: 如果您的作品因违反%{tos_link}（包括%{content_policy_link}）而被隐藏，您须采取行动纠正违规行为。如未能使作品符合服务条款规定，您的作品可能会被移除出AO3作品库。若想了解更多信息，请参阅%{tos_faq_link}。
+          other: 如果您的作品因违反%{tos_link}（包括%{content_policy_link}）而被隐藏，%{required_action_bold}。如未能使作品符合服务条款规定，您的作品可能会被移除出AO3作品库。若想了解更多信息，请参阅%{tos_faq_link}。
         text:
           other: 如果您的作品因违反AO3服务条款（%{tos_url}），包括内容政策（%{content_policy_url}），而被隐藏，您须采取行动纠正违规行为。如未能使作品符合服务条款规定，您的作品可能会被移除出AO3作品库。若想了解更多信息，请参阅服务条款常见问题：%{tos_faq_url}。
       work_info: "-《%{title}》（%{work_url}）"
