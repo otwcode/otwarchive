@@ -45,6 +45,11 @@ class Chapter < ApplicationRecord
   before_save :strip_title
   before_save :set_word_count
   before_save :validate_published_at
+  before_save :set_posted_at
+
+  def set_posted_at
+    self.posted_at = Time.current if posted? && (new_record? || will_save_change_to_posted?)
+  end
 
   after_create :notify_after_creation
   after_update :notify_after_update

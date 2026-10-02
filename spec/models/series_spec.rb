@@ -53,6 +53,33 @@ describe Series do
     expect(series.pseuds).to include(*restricted_work.pseuds.to_a)
   end
 
+  describe "#works_in_order" do
+    it "orders works by revised_at, newest first" do
+      older_work = create(:work)
+      newer_work = create(:work)
+      older_work.update_column(:revised_at, 2.days.ago)
+      newer_work.update_column(:revised_at, 1.day.ago)
+      series.works = [older_work, newer_work]
+
+      expect(series.works_in_order).to eq([newer_work, older_work])
+    end
+  end
+
+  describe "#expire_caches" do
+    it "expires work blurb caches without touching work timestamps" do
+      series.works = [unrestricted_work, restricted_work]
+      works = series.works.to_a
+      timestamps = works.map { |work| [work.id, work.reload.updated_at] }.to_h
+
+      expect(Work).to receive(:expire_work_blurb_version).with(unrestricted_work.id)
+      expect(Work).to receive(:expire_work_blurb_version).with(restricted_work.id)
+
+      travel(1.second) { series.expire_caches }
+
+      expect(works.map { |work| [work.id, work.reload.updated_at] }.to_h).to eq(timestamps)
+    end
+  end
+
   describe "#visible_word_count" do
     let(:hidden_work) { create(:work, hidden_by_admin: true) }
 
