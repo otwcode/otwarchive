@@ -398,7 +398,7 @@ describe Work do
       end
 
       before do
-        work.creatorships.find_by(pseud: skin_author.default_pseud).destroy
+        work.creatorships.find_by(pseud: skin_author.default_pseud).destroy!
         work.reload
       end
 

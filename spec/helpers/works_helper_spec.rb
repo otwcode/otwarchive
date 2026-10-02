@@ -48,7 +48,8 @@ describe WorksHelper do
     context "when the work's current skin does not belong to a creator" do
       before do
         skin = create(:work_skin, title: "Departed Creator Skin")
-        @work.update_column(:work_skin_id, skin.id)
+        @work.work_skin_id = skin.id
+        @work.save!(validate: false)
       end
 
       it "includes the current skin" do
