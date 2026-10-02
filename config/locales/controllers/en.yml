@@ -378,7 +378,7 @@ en:
       success_html: You're now using the %{skin_title} skin. This will last for 2 weeks even if you close your browser. If you'd like to keep it longer, go to the %{skin_page_link} and select the "Use" button at the bottom of the page.
   stats:
     index:
-      page_title: "%{username} - Stats"
+      page_title: "%{username} - Statistics"
   subscriptions:
     delete_all:
       error: There were problems deleting your subscriptions.
