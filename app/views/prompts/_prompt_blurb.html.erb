@@ -87,7 +87,7 @@
           <% prompt.fulfilled_claims.map(&:creation).each do |creation| %>
             <% if creation.is_a?(Work) %>
               <% unless guest? && creation.restricted %>
-                <%= render "works/work_blurb", work: creation %>
+                <%= render WorkBlurbPresenter.new(creation) %>
               <% end %>
             <% end %>
           <% end %>

@@ -24,11 +24,7 @@
 
   <h3 class="landmark heading">Works List</h3>
   <ol class="work index group">
-    <% @works.each do |work| %>
-      <% unless work.nil? %>
-        <%= render :partial => 'work_blurb', :locals => {:work => work} %>
-      <% end %>
-    <% end %>
+    <%= render WorkBlurbPresenter.new(@works) %>
   </ol>
  
  <%= will_paginate @works %>
