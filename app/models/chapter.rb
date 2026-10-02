@@ -11,23 +11,15 @@ class Chapter < ApplicationRecord
 
   acts_as_commentable
 
-  validates_length_of :title, allow_blank: true, maximum: ArchiveConfig.TITLE_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
+  validates :title, length: { maximum: ArchiveConfig.TITLE_MAX, allow_blank: true }
 
-  validates_length_of :summary, allow_blank: true, maximum: ArchiveConfig.SUMMARY_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
-  validates_length_of :notes, allow_blank: true, maximum: ArchiveConfig.NOTES_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.NOTES_MAX)
-  validates_length_of :endnotes, allow_blank: true, maximum: ArchiveConfig.NOTES_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.NOTES_MAX)
+  validates :summary, length: { maximum: ArchiveConfig.SUMMARY_MAX, allow_blank: true }
+  validates :notes, length: { maximum: ArchiveConfig.NOTES_MAX, allow_blank: true }
+  validates :endnotes, length: { maximum: ArchiveConfig.NOTES_MAX, allow_blank: true }
 
-
-  validates_presence_of :content
-  validates_length_of :content, minimum: ArchiveConfig.CONTENT_MIN,
-    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.CONTENT_MIN)
-
-  validates_length_of :content, maximum: ArchiveConfig.CONTENT_MAX,
-    too_long: ts("cannot be more than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
+  validates :content,
+            presence: true,
+            length: { minimum: ArchiveConfig.CONTENT_MIN, maximum: ArchiveConfig.CONTENT_MAX }
 
   attr_accessor :wip_length_placeholder
 
@@ -184,7 +176,7 @@ class Chapter < ApplicationRecord
     if !self.published_at
       self.published_at = Date.current
     elsif self.published_at > Date.current
-      errors.add(:base, ts("Publication date can't be in the future."))
+      errors.add(:base, :future_published_at)
       throw :abort
     end
   end

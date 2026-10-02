@@ -118,6 +118,32 @@ en:
               required: can't be blank
         bookmark/collection_items:
           format: "%{message}"
+        chapter:
+          attributes:
+            content:
+              too_long:
+                one: cannot be more than %{count} character long.
+                other: cannot be more than %{count} characters long.
+              too_short:
+                one: must be at least %{count} character long.
+                other: must be at least %{count} characters long.
+            endnotes:
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+            notes:
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+            summary:
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+            title:
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+          future_published_at: Publication date can't be in the future.
         collection:
           attributes:
             header_image_url:
