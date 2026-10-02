@@ -315,6 +315,13 @@ Rails.application.routes.draw do
     end
     resources :nominations, controller: "tag_set_nominations", only: [:index]
     resources :preferences, only: [:index, :update]
+    resource :totp, controller: "users/totp", only: [:create, :new] do
+      get :confirm_reset_backup_codes
+      post :reset_backup_codes
+      get :confirm_disable
+      post :disable
+      post :reauthenticate_create
+    end
     resource :profile, only: [:show, :edit, :update], controller: "profile" do
       collection do
         get :pseuds

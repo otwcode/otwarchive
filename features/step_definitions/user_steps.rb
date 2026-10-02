@@ -412,3 +412,22 @@ Then "I should see the invitation id for the user {string}" do |login|
   invitation_id = User.find_by(login: login).invitation.id
   step %{I should see "Invitation: #{invitation_id}"}
 end
+
+Given "user {string} has TOTP 2FA enabled" do |login|
+  user = User.find_by(login: login) || FactoryBot.create(:user, login: login)
+  user.generate_totp_secret_if_missing!
+  user.enable_totp!
+end
+
+When "I fill in a valid TOTP two-step verification code for user {string}" do |login|
+  user = User.find_by(login: login)
+  fill_in "totp_attempt", with: user.current_otp
+end
+
+When "I fill in a valid TOTP recovery code for user {string}" do |login|
+  user = User.find_by(login: login)
+  codes = user.generate_otp_backup_codes!
+  user.save!
+  fill_in "totp_attempt", with: codes.first
+  @used_totp_recovery_code = codes.first
+end
