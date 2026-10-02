@@ -42,6 +42,7 @@ describe BylineHelper do
     
     before do
       allow(helper).to receive(:is_author_of?).and_return(true)
+      allow(helper).to receive(:logged_in_as_admin?).and_return(false)
     end
 
     it "includes no links and hides byline for external shares" do
