@@ -151,7 +151,7 @@ en:
             name:
               characters_used: must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.
               no_name_entered: "^Please enter a name for your collection."
-              taken: Sorry, that name is already taken. Try again, please!
+              taken: "^Sorry, that name is already taken. Try again, please!"
               too_long:
                 one: must be less than %{count} character long.
                 other: must be less than %{count} characters long.
