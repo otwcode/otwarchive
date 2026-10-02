@@ -26,14 +26,12 @@ en:
         base: 'Invalid creator:'
         pseud_id: Pseud
       collection:
-        description: Description
-        gift_exchange: Gift Exchange
+        description: Brief description
         header_image_url: Header image URL
         icon_alt_text: Icon alt text
         icon_comment_text: Icon comment text
-        name: Name
-        prompt_meme: Prompt Meme
-        title: Title
+        name: Collection name
+        title: Display title
       creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
@@ -126,13 +124,12 @@ en:
         bookmark/collection_items:
           format: "%{message}"
         collection:
+          cant_be_its_own_parent: You can't make a collection its own parent.
+          no_owners: Collection has no valid owners.
+          not_a_maintainer_of_parent: You have to be a maintainer of %{name} to make a subcollection.
+          parent_doesnt_exist: We couldn't find a collection with name %{name}.
+          subcollection_cant_be_parent_collection: Sorry, but %{name} is a subcollection, so it can't also be a parent collection.
           attributes:
-            base:
-              cant_be_its_own_parent: You can't make a collection its own parent.
-              it_has_no_owners: Collection has no valid owners.
-              not_a_maintainer_of_parent: You have to be a maintainer of %{name} to make a subcollection.
-              parent_doesnt_exist: We couldn't find a collection with name %{name}.
-              subcollection_cant_be_parent_collection: Sorry, but %{name} is a subcollection, so it can't also be a parent collection.
             description:
               too_long:
                 one: must be less than %{count} character long.
@@ -359,10 +356,13 @@ en:
       character:
         one: Character
         other: Characters
-      collection:
-        one: Collection
-        other: Collections
       comment: Comment
+      gift_exchange: 
+        one: Gift Exchange
+        other: Gift Exchanges
+      prompt_meme: 
+        one: Prompt Meme
+        other: Prompt Memes
       fandom:
         one: Fandom
         other: Fandoms

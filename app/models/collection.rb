@@ -62,15 +62,15 @@ class Collection < ApplicationRecord
 
   CHALLENGE_TYPE_OPTIONS = [
     ["", ""],
-    [human_attribute_name("gift_exchange"), "GiftExchange"],
-    [human_attribute_name("prompt_meme"), "PromptMeme"]
+    [GiftExchange.model_name.human, "GiftExchange"],
+    [PromptMeme.model_name.human, "PromptMeme"]
   ].freeze
 
   validate :must_have_owners
   def must_have_owners
     # we have to use collection participants because the association may not exist until after
     # the collection is saved
-    errors.add(:base, :it_has_no_owners) if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select(&:is_owner?)
+    errors.add(:base, :no_owners) if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select(&:is_owner?)
       .empty?
   end
 
