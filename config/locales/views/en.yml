@@ -3072,6 +3072,7 @@ en:
         only_wrangler: Only wrangler
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
+      page_title: "%{username} - Wrangling Page"
       tags_wrangled_csv: Tags Wrangled (CSV)
   tag_wranglings:
     index:
