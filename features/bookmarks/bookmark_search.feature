@@ -300,3 +300,20 @@ Feature: Search Bookmarks
     When I fill in "Any field on work" with "bad~query~~!!!"
       And I press "Search Bookmarks"
     Then I should see "Your search failed because of a syntax error. Please try again."
+
+    Scenario: Bookmark search help modals are translated
+    Given I have bookmarks to search
+    When I open help modal "Bookmark search bookmarker's tags help"
+    Then I should see "Bookmark Search: Bookmarker's Tags"
+      And I should see "field searches all tags added to a bookmark"
+      And I should not see "translation missing"
+      And I should not see "<a href"
+    When I go to the search bookmarks page
+      And I fill in "Bookmarker's tags" with "rare"
+      And I press "Search Bookmarks"
+      And I open help modal "Bookmark search results help"
+    Then I should see "Bookmarks Search: Results"
+      And I should see "Results are sorted by relevance."
+      And I should see a link "Work Search" to "/works/search"
+      And I should not see "translation missing"
+      And I should not see "<a href"
