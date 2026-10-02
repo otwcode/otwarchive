@@ -42,12 +42,10 @@
 
   <!--BACK END if pos can we not display this if blank-->
   <fieldset>
-    <% associations_for_remove = @tag_set.tag_set_associations.reject {|assoc| assoc.new_record?} %>
-    <% associations_for_add = @tag_set.tag_set_associations.select {|assoc| assoc.new_record?} %>
-    <legend>Tag Associations <%= associations_for_remove.empty? ? '' : ts('(check to remove)') %> <%= link_to_help('tagset-tag-associations')%></legend>
+    <legend>Tag Associations <%= @associations_for_remove.empty? ? "" : t(".check_to_remove") %> <%= link_to_help("tagset-tag-associations") %></legend>
 
     <h3 class="landmark heading"><%= ts('Tag Associations') %> </h3>
-    <% unless associations_for_remove.empty? %>
+    <% unless @associations_for_remove.empty? %>
       <%= render "tag_set_associations_remove", :form => tag_set_form %>
     <% end %>
     <% unless @tag_set.new_record? || @child_tags_in_set.empty? || @parent_tags_in_set.empty? %>
@@ -56,7 +54,7 @@
         # because we don't generate an initial tag set association form, we have to put one of these into the upper level form
         # with the right id to start from
       %>
-      <% associations_for_add.each do |assoc| %>
+      <% @associations_for_add.each do |assoc| %>
         <%= tag_set_form.fields_for :tag_set_associations, assoc do |assoc_form| %>
           <%= render "tag_set_association_fields", :form => assoc_form %>
         <% end %>

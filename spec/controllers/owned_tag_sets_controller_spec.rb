@@ -219,6 +219,36 @@ describe OwnedTagSetsController do
     end
   end
 
+  describe "edit" do
+    let(:user) { create(:user) }
+    let(:tag_set) { create(:owned_tag_set, owner: user.default_pseud) }
+
+    before do
+      fake_login_known_user(user)
+    end
+
+    context "when the tag set has associations" do
+      let(:early_fandom) { create(:fandom, name: "Aardvark Fandom") }
+      let(:late_fandom) { create(:fandom, name: "Zebra Fandom") }
+      let!(:late_fandom_association) do
+        create(:tag_set_association, owned_tag_set: tag_set,
+                                     tag: create(:character, name: "Amy"),
+                                     parent_tag: late_fandom)
+      end
+      let!(:early_fandom_association) do
+        create(:tag_set_association, owned_tag_set: tag_set,
+                                     tag: create(:character, name: "Zoe"),
+                                     parent_tag: early_fandom)
+      end
+
+      it "loads the associations ordered by parent and child tag names" do
+        get :edit, params: { id: tag_set.id }
+        expect(assigns(:associations_for_remove))
+          .to eq [early_fandom_association, late_fandom_association]
+      end
+    end
+  end
+
   describe "update" do
     let(:tag_set) { create(:owned_tag_set) }
     let(:user) { create(:user) }
@@ -263,6 +293,14 @@ describe OwnedTagSetsController do
           expect(assigns(:parent_tags_in_set)).to include [fandom_tag.name, fandom_tag.id]
           expect(assigns(:child_tags_in_set)).to include [character_tag.name, character_tag.id]
           assert_template :edit
+        end
+
+        it "loads the associations for the remove checkboxes" do
+          association = create(:tag_set_association, owned_tag_set: tag_set,
+                                                     tag: character_tag,
+                                                     parent_tag: fandom_tag)
+          put :update, params: params
+          expect(assigns(:associations_for_remove)).to eq [association]
         end
       end
     end
