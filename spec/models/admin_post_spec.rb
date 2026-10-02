@@ -45,6 +45,25 @@ describe AdminPost do
       AdminPost.disable_old_post_comments
       expect(new_post.reload.disable_all_comments?).to be(false)
     end
+
+    it "does not disable comments on drafts" do
+      old_draft = travel_to(ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago) do
+        create(:admin_post, :draft)
+      end
+
+      AdminPost.disable_old_post_comments
+      expect(old_draft.reload.disable_all_comments?).to be(false)
+    end
+
+    it "only disables comments on posts that are published outside the window" do
+      drafted_post = travel_to(ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago) do
+        create(:admin_post, :draft)
+      end
+      drafted_post.update(posted: true)
+
+      AdminPost.disable_old_post_comments
+      expect(drafted_post.reload.disable_all_comments?).to be(false)
+    end
   end
 
   describe "#translated_post_must_be_posted_first" do

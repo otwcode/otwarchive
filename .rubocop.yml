@@ -179,6 +179,13 @@ Rails/RakeEnvironment:
 Rails/ReversibleMigrationMethodDefinition:
   Enabled: true
 
+Rails/SaveBang:
+  Enabled: true
+  AllowImplicitReturn: false
+  Include:
+    - "features/**/*.rb"
+    - "spec/**/*.rb"
+
 # Allow update_attribute, update_all, touch, etc.
 Rails/SkipsModelValidations:
   Enabled: false
