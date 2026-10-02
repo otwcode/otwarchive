@@ -682,6 +682,8 @@ Rails.application.routes.draw do
   get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
   get "/help/rating-help.html", to: redirect("/help/tags_ratings")
   get "/help/relationships-help.html", to: redirect("/help/tags_relationships")
+  get "/help/tag-search-results-help.html", to: redirect("/help/tags_search_results")
+  get "/help/tag-search-text-help.html", to: redirect("/help/tags_search_text")
   get "/help/warning-help.html", to: redirect("/help/tags_warnings")
   get "/help/add-work-to-assignment.html", to: redirect("/help/works_assignment")
   get "/help/backdating-help.html", to: redirect("/help/works_backdating")
