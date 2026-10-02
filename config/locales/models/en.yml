@@ -135,8 +135,8 @@ en:
                 one: must be less than %{count} character long.
                 other: must be less than %{count} characters long.
             header_image_url:
-              file_format: can only point to a gif, jpg, jpeg, or png file.
-              valid_url: is not a valid URL.
+              invalid: can only point to a gif, jpg, jpeg, or png file.
+              invalid_url: is not a valid URL.
             icon_alt_text:
               too_long:
                 one: must be less than %{count} character long.
@@ -146,8 +146,8 @@ en:
                 one: must be less than %{count} character long.
                 other: must be less than %{count} characters long.
             name:
-              characters_used: must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.
-              no_name_entered: "^Please enter a name for your collection."
+              invalid: must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.
+              blank: "^Please enter a name for your collection."
               taken: "^Sorry, that name is already taken. Try again, please!"
               too_long:
                 one: must be less than %{count} character long.
@@ -156,12 +156,12 @@ en:
                 one: must be at least %{count} character long.
                 other: must be at least %{count} characters long.
             tags_after_saving:
-              too_many_tags:
+              too_long:
                 one: "^Sorry, a collection can only have %{count} tag."
                 other: "^Sorry, a collection can only have %{count} tags."
             title:
               comma_used: "^Sorry, the ',' character cannot be in a collection Display Title."
-              no_title_entered: "^Please enter a title to be displayed for your collection."
+              blank: "^Please enter a title to be displayed for your collection."
               too_long:
                 one: must be less than %{count} character long.
                 other: must be less than %{count} characters long.
