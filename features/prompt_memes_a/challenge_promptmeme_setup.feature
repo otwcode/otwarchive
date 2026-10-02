@@ -3,7 +3,7 @@ Feature: Prompt Meme Challenge
   In order to have an archive full of works
   As a humble user
   I want to create a prompt meme and post to it
-  
+
   Scenario: Can create a collection to house a prompt meme
   
   Given I have standard challenge tags setup
@@ -138,7 +138,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Request: Your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
   When I fill in the missing prompt
   Then I should see "Sign-up was successfully created"
-  
+
   Scenario: Correct number of signups is shown in user sidebar
   
   Given I have Battle 12 prompt meme fully set up
@@ -337,12 +337,36 @@ Feature: Prompt Meme Challenge
     And I should see "Sign-up for myname1"
   When I edit my signup for "Battle 12"
   Then I should see "othername"
-  When I select "othername" from "challenge_signup_pseud_id"
+  When I select my pseud "othername" on my signup
     # two forms in this page, must specify which button to press
     And I press "Update" 
   Then I should see "Sign-up was successfully updated"
   Then I should see "Sign-up for othername (myname1)"
+
+  Scenario: Pseud on a prompt meme sign-up doesn't revert to default upon error
+
+  Given "myname1" has the pseud "othername"
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I start signing up for "Battle 12"
+    And I select my pseud "othername" on my signup
+    And I submit
+  Then I should see "Request: Your Request must include exactly 1 fandom tags, but you have included 0 fandom tags in your current Request"
+    And "othername" should be selected within challenge signup pseuds
+
+  Scenario: Pseud on a prompt meme sign-up doesn't revert to default upon editing sign-up
   
+  Given "myname1" has the pseud "othername"
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+    And I sign up for Battle 12 with combination A
+    And I edit my signup for "Battle 12"
+    And I select my pseud "othername" on my signup
+    And I submit
+  Then I should see "Sign-up for othername (myname1)"
+  When I edit my signup for "Battle 12"
+  Then "othername" should be selected within challenge signup pseuds
+
   Scenario: Add more requests button disappears correctly from signup show page
   
   Given I am logged in as "mod1"
