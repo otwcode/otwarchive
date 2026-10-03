@@ -88,7 +88,7 @@ describe AuditsCleanupJob do
     before do
       admin_setting = AdminSetting.default
       admin_setting.preserve_audit_records_user_ids = [no_cleanup_user.id.to_s, "999999"].join(", ")
-      admin_setting.save(validate: false)
+      admin_setting.save!(validate: false)
 
       create_audits(existing_user)
       create_audits(no_cleanup_user)
