@@ -141,7 +141,7 @@ describe LanguagesController do
 
     %w[translation superadmin support policy_and_abuse].each do |role|
       context "when logged in as an admin with #{role} role" do
-        let!(:deutsch) { Language.create(name: "Deutsch", short: "de") }
+        let!(:deutsch) { create(:language, name: "Deutsch", short: "de") }
         let(:admin) { create(:admin, roles: [role]) }
 
         it "renders the edit template for a non-default language" do
@@ -160,7 +160,7 @@ describe LanguagesController do
   end
 
   describe "PUT update" do
-    let(:finnish) { Language.create(name: "Suomi", short: "fi", support_available: "0", abuse_support_available: "1") }
+    let(:finnish) { create(:language, name: "Suomi", short: "fi", sortable_name: "Suomi", support_available: false, abuse_support_available: true) }
     let(:language_params) do
       {
         id: finnish.short,
@@ -181,7 +181,7 @@ describe LanguagesController do
           name: "Suomi",
           short: "fi",
           support_available: "1",
-          sortable_name: ""
+          sortable_name: "Suomi2"
         }
       }
     end
@@ -267,7 +267,7 @@ describe LanguagesController do
         expect(finnish.short).to eq("fi")
         expect(finnish.support_available).to eq(false)
         expect(finnish.abuse_support_available).to eq(false)
-        expect(finnish.sortable_name).to eq("")
+        expect(finnish.sortable_name).to eq("Suomi")
       end
 
       it "redirects and returns success message" do
@@ -289,7 +289,7 @@ describe LanguagesController do
       end
     end
 
-    context "when logged in as an admin with support role and attempt to edit non-abuse fields" do
+    context "when logged in as an admin with support role and attempt to edit non-support fields" do
       let(:admin) { create(:admin, roles: ["support"]) }
       before do
         fake_login_admin(admin)
@@ -301,7 +301,7 @@ describe LanguagesController do
         expect(finnish.short).to eq("fi")
         expect(finnish.support_available).to eq(true)
         expect(finnish.abuse_support_available).to eq(true)
-        expect(finnish.sortable_name).to eq("")
+        expect(finnish.sortable_name).to eq("Suomi2")
       end
 
       it "redirects and returns success message" do

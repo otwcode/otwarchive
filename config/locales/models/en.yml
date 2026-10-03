@@ -213,8 +213,8 @@ en:
           attributes:
             parent:
               blank: The work you listed as an inspiration does not seem to exist.
+              invalid: This work cannot be listed as an inspiration.
               not_work: Only a link to a work can be listed as an inspiration.
-              protected: You can't use the related works function to cite works by the protected user %{login}.
           format: "%{message}"
         skin:
           archive_in_title: Sorry, titles including the word 'Archive' are reserved for official skins.

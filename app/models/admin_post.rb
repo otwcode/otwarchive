@@ -10,7 +10,11 @@ class AdminPost < ApplicationRecord
 
   belongs_to :language
   belongs_to :translated_post, class_name: "AdminPost"
-  has_many :translations, class_name: "AdminPost", foreign_key: "translated_post_id", dependent: :destroy
+  has_many :translations, -> { includes(:language).order("language.sortable_name") },
+           class_name: "AdminPost",
+           foreign_key: "translated_post_id",
+           inverse_of: :translated_post,
+           dependent: :destroy
   has_many :admin_post_taggings
   has_many :tags, through: :admin_post_taggings, source: :admin_post_tag
 
@@ -118,8 +122,8 @@ class AdminPost < ApplicationRecord
   def self.disable_old_post_comments
     return unless ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS&.positive?
 
-    where.not(comment_permissions: :disable_all)
-      .where(created_at: ..ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago)
+    posted.where(published_at: ..ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago)
+      .where.not(comment_permissions: :disable_all)
       .update_all(comment_permissions: :disable_all)
   end
 
