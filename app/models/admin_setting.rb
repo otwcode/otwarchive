@@ -5,11 +5,18 @@ class AdminSetting < ApplicationRecord
   validates_presence_of :last_updated_by
   validates :invite_from_queue_number, numericality: { greater_than_or_equal_to: 1,
     allow_nil: false, message: "must be greater than 0. To <strong>disable</strong> invites, uncheck the appropriate setting." }
+  validates :preserve_audit_records_user_ids, format: {
+    allow_blank: true,
+    with: /\A\s*(\d+\s*,\s*)*(\d+)\s*\z/,
+    message: "must be numeric user IDs separated by commas and optional whitespace"
+  }
 
   before_save :update_invite_date
   before_update :check_filter_status
 
   belongs_to :default_skin, class_name: 'Skin'
+
+  CACHE_KEY = "admin_settings-v5".freeze
 
   DEFAULT_SETTINGS = {
     invite_from_queue_enabled?: ArchiveConfig.INVITE_FROM_QUEUE_ENABLED,
@@ -45,7 +52,7 @@ class AdminSetting < ApplicationRecord
   end
 
   def self.current
-    Rails.cache.fetch("admin_settings-v4", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
+    Rails.cache.fetch(CACHE_KEY, race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
   end
 
   class << self
@@ -79,7 +86,7 @@ class AdminSetting < ApplicationRecord
     self.reload
 
     # However, we only cache it if the transaction is successful.
-    after_commit { Rails.cache.write("admin_settings-v4", self) }
+    after_commit { Rails.cache.write(CACHE_KEY, self) }
   end
 
   private
