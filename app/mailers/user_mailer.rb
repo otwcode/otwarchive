@@ -33,7 +33,7 @@ class UserMailer < ApplicationMailer
     mail(
       to: @user.email,
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
-       )
+    )
   end
 
   # We use an options hash here, instead of keyword arguments, to avoid
@@ -318,9 +318,9 @@ class UserMailer < ApplicationMailer
     attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
 
     mail(
-        to: user.email,
-        subject: t("user_mailer.admin_deleted_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
+      to: user.email,
+      subject: t("user_mailer.admin_deleted_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email to creators when a creation is hidden by an admin
@@ -343,6 +343,28 @@ class UserMailer < ApplicationMailer
     mail(
       to: @user.email,
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
+  end
+
+  ### TOTP 2FA NOTIFICATIONS ###
+  def totp_2fa_enabled(user_id, backup_codes)
+    @user = User.find_by(id: user_id)
+    @time = Time.current
+    @codes = backup_codes
+
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.totp_2fa_enabled.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
+  end
+
+  def totp_2fa_disabled(user_id)
+    @user = User.find_by(id: user_id)
+    @time = Time.current
+
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.totp_2fa_disabled.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
