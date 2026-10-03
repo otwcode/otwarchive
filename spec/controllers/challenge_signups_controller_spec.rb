@@ -82,6 +82,18 @@ describe ChallengeSignupsController do
                                  "You aren't allowed to see the CSV summary.")
     end
 
+    context "when trying to access sign-ups for a prompt meme" do
+      let(:prompt_meme) { create(:prompt_meme) }
+      let(:collection) { create(:collection, challenge: prompt_meme) }
+
+      it "redirects to the collection and errors" do
+        fake_login_known_user(collection.owners.first.user)
+        get :index, params: { collection_id: collection.name }
+        it_redirects_to_with_error(collection_path(collection),
+                                   "Sorry, you're not allowed to do that.")
+      end
+    end
+
     context "when user visits their own sign-ups" do
       it "sets the page subtitle correctly" do
         fake_login_known_user(user)
