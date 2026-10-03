@@ -96,6 +96,8 @@ class ChallengeSignupsController < ApplicationController
       load_collection
       load_challenge if @collection
       return false unless @challenge
+
+      not_allowed(collection_path(@collection)) if @collection.challenge_type == "PromptMeme"
     end
 
     # using respond_to in order to provide Excel output

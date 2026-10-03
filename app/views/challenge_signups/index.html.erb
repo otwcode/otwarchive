@@ -1,11 +1,8 @@
-<% if @collection && @collection.challenge %>
-  <% # signups for a given challenge %>
-
-  <% # render differently based on the challenge %>
-  <%= render "challenge/#{challenge_class_name(@collection)}/challenge_signups" %>
-  
+<% if @collection && @collection.challenge && @collection.challenge_type == "GiftExchange" %>
+  <%# signups for a gift exchange %>
+  <%= render "challenge/gift_exchange/challenge_signups" %>
 <% elsif @user %>
-  <% # view in user dashboard %>
+  <%# view in user dashboard %>
 
   <!--Descriptive page name, messages and instructions-->
   <h2 class="heading"><%= ts("Challenge Sign-ups for %{user}", :user => @user.login) %></h2>
