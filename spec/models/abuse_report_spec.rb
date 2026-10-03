@@ -231,6 +231,7 @@ describe AbuseReport do
       it_behaves_like "alright", "http://archiveofourown.org/works/789/comments/876"
 
       # the same work: variations we don't cover
+      it_behaves_like "alright", "http://archiveofourown.org/chapters/123"
       it_behaves_like "alright", "http://archiveofourown.org/comments/show_comments?work_id=789"
 
       # not the same work
@@ -705,26 +706,22 @@ describe AbuseReport do
     let(:ticket_id) { "123" }
     let(:work) { create(:work) }
     
-    before do
-      create(:user, login: "someone")
-    end
-
     it "does not attach a download for non-work URLs asynchronously" do
-      subject = create(:abuse_report, url: "http://archiveofourown.org/users/someone/")
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/someone/")
 
       expect { subject.attach_work_download(ticket_id) }
         .not_to have_enqueued_job
     end
 
     it "does not attach a download for comment sub-URLs asynchronously" do
-      subject = create(:abuse_report, url: "http://archiveofourown.org/works/#{work.id}/comments/")
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/comments/")
 
       expect { subject.attach_work_download(ticket_id) }
         .not_to have_enqueued_job
     end
 
     it "attaches a download for work URLs asynchronously" do
-      subject = create(:abuse_report, url: "http://archiveofourown.org/works/#{work.id}/")
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
 
       expect { subject.attach_work_download(ticket_id) }
         .to have_enqueued_job

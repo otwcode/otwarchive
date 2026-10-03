@@ -196,7 +196,7 @@ class AbuseReport < ApplicationRecord
   def reported_series_id
     url[%r{/series/(\d+)}, 1]
   end
-
+  
   # Username (aka. login) of the reported user
   def reported_user_login
     url[%r{/users/(\w+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
