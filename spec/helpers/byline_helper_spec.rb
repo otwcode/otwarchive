@@ -47,7 +47,7 @@ describe BylineHelper do
 
     it "includes no links and hides byline for external shares" do
       expect(helper.text_byline(work)).to_not include("href")
-      expect(helper.text_byline(work, external_share: true)).to eq("Anonymous")
+      expect(helper.text_byline(work, visibility: "public")).to eq("Anonymous")
     end
   end
 end

@@ -44,7 +44,7 @@ module BylineHelper
 
   # Creation is anonymous but current user/admin should see the creator
   def anonymous_with_name?(options, creation)
-    options[:visibility] != "public" && !options[:external_share] && (logged_in_as_admin? || is_author_of?(creation))
+    options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
   end
 
   def non_anonymous_byline(creation, url_path = nil)
