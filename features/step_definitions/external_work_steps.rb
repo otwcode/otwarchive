@@ -61,7 +61,7 @@ end
 
 When /^I view the external work "([^\"]*)"$/ do |external_work|
   external_work = ExternalWork.find_by_title(external_work)
-  visit external_work_url(external_work)
+  visit external_work_path(external_work)
 end
 
 When /^the (character|fandom|relationship) "(.*?)" is removed from the external work "(.*?)"$/ do |tag_type, tag, title|

@@ -179,6 +179,12 @@ When /^I fill in multi-prompt challenge options$/ do
     step %{I submit}
 end
 
+When "I enable archive warning challenge options" do
+  step "I fill in prompt meme challenge options"
+  step %{I fill in "prompt_meme_request_restriction_attributes_archive_warning_num_allowed" with "1"}
+  step %{I submit}
+end
+
 When /^I fill in prompt meme challenge options$/ do
   step %{I fill in "General Sign-up Instructions" with "Here are some general tips"}
     fill_in("Tag Sets To Use:", with: "Standard Challenge Tags")
@@ -257,6 +263,15 @@ When /^I sign up for Battle 12 with combination E$/ do
     step "I follow \"Sign Up\""
     step %{I fill in "Description:" with "Weird description"}
     step "I press \"Submit\""
+end
+
+# Only works after step "I enable archive warning challenge options"
+When "I sign up for Battle 12 with combination F" do
+  step %{I start signing up for "Battle 12"}
+  step %{I check the 1st checkbox with the value "Stargate Atlantis"}
+  step %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+  step %{I check the 1st checkbox with the value "No Archive Warnings Apply"}
+  click_button "Submit"
 end
 
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
