@@ -331,8 +331,8 @@ Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
   step %{the user "#{user}" exists and is activated}
   user_pseud = User.find_by(login: user).default_pseud
 
-  lang_en = Language.find_or_create_by!(name: "English", short: "en")
-  lang_de = Language.find_or_create_by!(name: "Deutsch", short: "de")
+  lang_en = Language.find_or_create_by!(name: "English", short: "en", sortable_name: "English")
+  lang_de = Language.find_or_create_by!(name: "Deutsch", short: "de", sortable_name: "Deutsch")
 
   work1 = FactoryBot.create(:work, title: "english work", language_id: lang_en.id)
   work2 = FactoryBot.create(:work, title: "german work", language_id: lang_de.id)

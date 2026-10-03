@@ -33,17 +33,19 @@
   <% end %>
 <% end %>
 
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :create), class: "invitation simple post", autocomplete: "off" do %>
-  <fieldset class="simple">
-    <h3 class="heading"><%= t(".send_to_email.heading") %></h3>
-    <p>
-      <%= t(".send_to_email.description") %>
-      <%= text_field_tag "invitation[invitee_email]",
-            (@invitation.try(:invitee_email) || ""),
-            title: t(".send_to_email.invite_by_email_title") %>
-      <span class="submit actions"><%= submit_tag t(".send_to_email.invite_user") %></span>
-    </p>
-  </fieldset>
+<% if policy(Invitation).create? %>
+  <%= form_tag url_for(controller: "admin/admin_invitations", action: :create), class: "invitation simple post", autocomplete: "off" do %>
+    <fieldset class="simple">
+      <h3 class="heading"><%= t(".send_to_email.heading") %></h3>
+      <p>
+        <%= t(".send_to_email.description") %>
+        <%= text_field_tag "invitation[invitee_email]",
+              (@invitation.try(:invitee_email) || ""),
+              title: t(".send_to_email.invite_by_email_title") %>
+        <span class="submit actions"><%= submit_tag t(".send_to_email.invite_user") %></span>
+      </p>
+    </fieldset>
+  <% end %>
 <% end %>
 
 <% if policy(Invitation).invite_from_queue? %>

@@ -394,7 +394,6 @@ Rails.application.routes.draw do
       get :navigate
       patch :remove_user_creatorship
       get :edit_tags
-      get :preview_tags
       patch :update_tags
       patch :mark_for_later
       patch :mark_as_read
@@ -660,6 +659,7 @@ Rails.application.routes.draw do
 
   # Redirects for moved help files
   get "/help/add-collectible-to-collection.html", to: redirect("/help/collectibles_add_to_collection")
+  get "/help/csv-download.html", to: redirect("/help/csv_download")
   get "/first_login_help", to: redirect("/help/first_login")
   get "/help/html-help.html", to: redirect("/help/html")
   get "/help/collection-preferences.html", to: redirect("/help/preferences_collection")
