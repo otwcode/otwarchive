@@ -40,9 +40,20 @@ class RelatedWork < ActiveRecord::Base
     return unless parent.respond_to?(:users)
     return if parent.anonymous? || parent.unrevealed?
 
-    parent.users.each do |user|
-      errors.add(:parent, :protected, login: user.login) if user.protected_user
-    end
+    return unless parent.users.any?(&:protected_user)
+
+    errors.add(:parent, :invalid)
+    throw :abort # don't generate any further errors
+  end
+
+  validate :check_parent_visible, on: :create
+  def check_parent_visible
+    return unless parent.respond_to?(:visible?)
+
+    return if parent.visible? && !parent.hidden_by_admin
+
+    errors.add(:parent, :invalid)
+    throw :abort # don't generate any further errors
   end
 
   def notify_parent_owners

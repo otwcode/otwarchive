@@ -54,15 +54,15 @@ Given "admin {string} has TOTP 2FA enabled" do |login|
   admin.enable_totp!
 end
 
-Given /^basic languages$/ do
+Given "basic languages" do
   Language.default
-  german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
+  german = Language.find_or_create_by(short: "DE", name: "Deutsch", sortable_name: "Deutsch", support_available: true, abuse_support_available: true)
   Locale.create(iso: "de", name: "Deutsch", language: german)
 end
 
-Given /^Persian language$/ do
+Given "Persian language" do
   Language.default
-  persian = Language.find_or_create_by(short: "fa", name: "Persian", support_available: true, abuse_support_available: true)
+  persian = Language.find_or_create_by(short: "fa", name: "Persian", sortable_name: "Farsi", support_available: true, abuse_support_available: true)
   Locale.create(iso: "fa", name: "Persian", language: persian)
 end
 
@@ -225,12 +225,25 @@ Given /^I have posted an admin post with guest comments disabled$/ do
   step %{I log out}
 end
 
+Given "I have posted an admin post with guest comments enabled" do
+  step %{I am logged in as a "communications" admin}
+  step %{I start to make an admin post}
+  choose("Registered users and guests can comment")
+  click_button("Post")
+  step %{I log out}
+end
+
 Given /^I have posted an admin post with comments disabled$/ do
   step %{I am logged in as a "communications" admin}
   step %{I start to make an admin post}
   choose("No one can comment")
   click_button("Post")
   step %{I log out}
+end
+
+Given "comment moderation on the admin post {string} is enabled" do |title|
+  admin_post = AdminPost.find_by!(title: title)
+  admin_post.update_attribute(:moderated_commenting_enabled, true)
 end
 
 Given "an abuse ticket ID exists" do

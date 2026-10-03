@@ -68,6 +68,13 @@ describe CommentsController do
         end
       end
     end
+
+    context "when no commentable is given" do
+      it "redirects back with a flash error" do
+        get :show_comments
+        it_redirects_to_with_error("/where_i_came_from", "What did you want to show comments on?")
+      end
+    end
   end
 
   describe "GET #hide_comments" do
@@ -345,7 +352,7 @@ describe CommentsController do
       it "PUT #freeze successfully freezes the comment" do
         put :freeze, params: { id: comment.id }
         it_redirects_to_with_comment_notice(
-          work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+          chapter_path(comment.parent, show_comments: true, anchor: :comments),
           "Comment thread successfully frozen!"
         )
         expect(comment.reload.iced).to be_truthy
@@ -355,7 +362,7 @@ describe CommentsController do
         comment.update!(iced: true)
         put :unfreeze, params: { id: comment.id }
         it_redirects_to_with_comment_notice(
-          work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+          chapter_path(comment.parent, show_comments: true, anchor: :comments),
           "Comment thread successfully unfrozen!"
         )
         expect(comment.reload.iced).to be_falsey
@@ -442,7 +449,7 @@ describe CommentsController do
             fake_login_admin(admin)
             put :freeze, params: { id: comment.id }
             it_redirects_to_with_comment_notice(
-              work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+              chapter_path(comment.parent, show_comments: true, anchor: :comments),
               "Comment thread successfully frozen!"
             )
             expect(comment.reload.iced).to be_truthy
@@ -466,7 +473,7 @@ describe CommentsController do
             fake_login_admin(admin)
             put :unfreeze, params: { id: comment.id }
             it_redirects_to_with_comment_notice(
-              work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+              chapter_path(comment.parent, show_comments: true, anchor: :comments),
               "Comment thread successfully unfrozen!"
             )
             expect(comment.reload.iced).to be_falsey
