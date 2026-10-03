@@ -310,7 +310,7 @@ en:
           addressed_html: Hi, %{name}!
           unaddressed: Hi!
         introductory: Hello from the Archive of Our Own!
-        tag_wrangler_supervisors: Tag Wrangler Supervisors
+        tag_wrangling_supervisors: Tag Wrangling Supervisors
       metadata_label_indicator: ": "
       signature:
         abuse_team: The AO3 Policy & Abuse team
@@ -326,7 +326,15 @@ en:
     guest_with_parens: "(Guest)"
     official_with_parens: "(Official)"
     registered_with_parens: "(Registered User)"
-  tag_wrangling_supervisor_mailer:
+  tag_wrangling_leadership_mailer:
+    inactive_wrangler_notification:
+      inactive_wranglers:
+        one: 'The following wranglers have not been recorded as wrangling any tags in the past %{weeks} week:'
+        other: 'The following wranglers have not been recorded as wrangling any tags in the past %{weeks} weeks:'
+      start_procedures: Please start the procedures for inactive wranglers, as appropriate.
+      subject:
+        one: "[%{app_name}] Wranglers who have not wrangled in %{weeks} week"
+        other: "[%{app_name}] Wranglers who have not wrangled in %{weeks} weeks"
     wrangler_username_change_notification:
       name_changed:
         html: The wrangler %{old_username} has changed their name to %{new_username}.
@@ -689,6 +697,39 @@ en:
       additional_ticket: If you have additional questions or information, do not hesitate to send in another ticket.
       introduction: 'We''re working hard to reply to everyone, and we''ll respond to you as soon as we can. Your communication is greatly valued, and it will be reviewed and answered by our volunteer Support team. In the meantime, here is a copy of the information you submitted through the Technical Support and Feedback form:'
       subject: "[%{app_name}] Support - %{summary}"
+    inactive_wrangler_notification:
+      already_on_break: If you've already told wrangling Supervisors you're on a break, you can ignore this message. Supervisors have your date of return on the vacation board and will check-in to see how things are going once you’re back, so no further action is needed on your part.
+      hiatus_form: Wrangler Hiatus & Retirement Form
+      inactive:
+        one: This is an automated message from %{app_name} on behalf of Tag Wrangling Supervisors. We'd like to gently check in since no wrangling activity has been logged on your account in the past %{weeks} week %{inactive_days}.
+        other: This is an automated message from %{app_name} on behalf of Tag Wrangling Supervisors. We'd like to gently check in since no wrangling activity has been logged on your account in the past %{weeks} weeks %{inactive_days}.
+      inactive_days:
+        one: "(%{count} day)"
+        other: "(%{count} days)"
+      last_wrangled_date: If you would like to see the last wrangled date that's been logged for your account, you can find this located at the top of your wrangling page between the Assigned fandoms text and the fandoms you have assigned to yourself. This information is only visible to yourself and wrangling admin accounts.
+      message_only_for_you: This message is only sent to you - Supervisors won't see it. We hope it gives you a chance to reflect on your own needs such as how you are feeling about wrangling and your availability on your own time.
+      not_in_trouble: No worries! You're not in trouble; we just want to make sure everything's okay and see if there's anything you need. We know life can get busy, and this message is simply here to help if something's come up.
+      please_reply:
+        another_issue: Anything else is going on and you'd like to talk about it.
+        mentor: You'd like a mentor, a cheerleading buddy, or you have any questions Supervisors can help with.
+        more_tags: You need more tags in order to wrangle regularly.
+        sent_in_error:
+          one: You believe this email was sent in error and you have been wrangling in the last week.
+          other: You believe this email was sent in error and you have been wrangling in the last %{weeks} weeks.
+        technical_issues: You're having technical issues accessing the Archive.
+        title: 'Feel free to reply to this email if:'
+        training: You're still in training and need some help with getting started.
+      request_hiatus:
+        html: If you're in need of an extended break or you need to take a formal hiatus, you can reply to this email or use the %{hiatus_form_link}.
+        text: 'If you''re in need of an extended break or you need to take a formal hiatus, you can reply to this email or use the Wrangler Hiatus & Retirement Form: %{hiatus_form_url}.'
+      subject: "[%{app_name}] Wrangling activity reminder"
+      supervisors_notification:
+        one: As a reminder, wrangling policies ask everyone to wrangle at least once every two weeks. If there's still no sign of wrangling activity on your account a week from today %{supervisors_notification_days}, a note will go out to the wrangling Supervisors to follow up and check-in with you.
+        other: As a reminder, wrangling policies ask everyone to wrangle at least once every two weeks. If there's still no sign of wrangling activity on your account %{weeks} weeks from today %{supervisors_notification_days}, a note will go out to the wrangling Supervisors to follow up and check-in with you.
+      supervisors_notification_days:
+        one: "(%{count} day)"
+        other: "(%{count} days)"
+      thank_you: Thanks so much for all the work you do. We really appreciate it! Please let us know if there's anything we can do to support you.
     invitation:
       been_invited: You've been invited to join the Archive of Our Own!
       features: With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!

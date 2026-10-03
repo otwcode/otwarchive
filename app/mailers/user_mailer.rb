@@ -10,6 +10,7 @@ class UserMailer < ApplicationMailer
   helper :users
   helper :date
   helper :series
+  include ActiveSupport::NumberHelper
   include HtmlCleaner
   include MailerHelper
 
@@ -373,6 +374,21 @@ class UserMailer < ApplicationMailer
     mail(
       to: abuse_report.email,
       subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
+    )
+  end
+
+  def inactive_wrangler_notification(user)
+    @username = user.login
+    @inactivity_days = ArchiveConfig.WRANGLING_INACTIVITY_THRESHOLD
+    @inactivity_weeks = @inactivity_days.days.in_weeks
+    @inactivity_weeks_formatted = number_to_human(@inactivity_weeks)
+    @supervisor_distance_days = ArchiveConfig.WRANGLING_INACTIVITY_SUPERVISOR_NOTIFICATION_THRESHOLD - ArchiveConfig.WRANGLING_INACTIVITY_THRESHOLD
+    @supervisor_distance_weeks = @supervisor_distance_days.days.in_weeks
+    @supervisor_distance_formatted = number_to_human(@supervisor_distance_weeks)
+    mail(
+      to: user.email,
+      reply_to: ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 end
