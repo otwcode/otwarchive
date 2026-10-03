@@ -4,7 +4,7 @@ Feature: Collection
   As a humble user
   I want to locate and browse through tag collection listings
 
-  Scenario: Tags and synonyms of the tag show up in the tag's collection listing
+  Scenario: Collections tagged with a tag and synonyms of the tag show up in the tag's collection listing
   Given a set of collections for tag page searching
   When I go to the collections page
     And I follow "My Beautiful Canonical Tag"
@@ -29,11 +29,11 @@ Feature: Collection
     And I should see "Gorgeous Tag Test Collection"
     But I should not see "Noncanonical Tag Test Collection"
 
-  Scenario: We can further filter a tag's collection listing with collection_search_tag
+  Scenario: We can further filter a tag's collection listing with another tag
   Given a set of collections for tag page searching
   When I go to the collections page
     And I follow "My Beautiful Canonical Tag"
-    And I fill in "collection_search_tag" with "a noncanonical tag"
+    And I fill in "Filter by tag" with "a noncanonical tag"
     And I press "Sort and Filter"
   Then I should see "My Beautiful Canonical Tag" within "h2.heading"
     And I should see "1 Collection" within "h2.heading"
@@ -46,7 +46,7 @@ Feature: Collection
   Given a set of collections for tag page searching
   When I go to the collections page
     And I follow "My Beautiful Canonical Tag"
-    And I choose "collection_search_challenge_type_giftexchange"
+    And I choose "Gift Exchange Challenge"
     And I press "Sort and Filter"
   Then I should see "My Beautiful Canonical Tag" within "h2.heading"
     And I should see "1 Collection" within "h2.heading"
@@ -59,7 +59,7 @@ Feature: Collection
   Given a set of collections for tag page searching
   When I go to the collections page
     And I follow "My Beautiful Canonical Tag"
-    And I choose "collection_search_challenge_type_giftexchange"
+    And I choose "Gift Exchange Challenge"
     And I press "Sort and Filter"
   Then I should see "My Beautiful Canonical Tag" within "h2.heading"
     And I should see "1 Collection" within "h2.heading"
@@ -103,8 +103,7 @@ Feature: Collection
     And I fill in "Collection Tags" with ""
     And I press "Update"
     And all indexing jobs have been run
-    And I view the tag "My Beautiful Canonical Tag"
-    And I follow "Collections" within ".primary.header.module"
+    And I go to the collections tagged "My Beautiful Canonical Tag"
   Then I should see "My Beautiful Canonical Tag" within "h2.heading"
     And I should see "2 Collections" within "h2.heading"
     And I should see "Multiple Tag Test Collection"

@@ -55,7 +55,6 @@ class CollectionsController < ApplicationController
         @collections = @work.approved_collections
           .by_title
           .for_blurb
-          .paginate(base_options)
       elsif @collection.present?
         @sort_and_filter = false
         @search = CollectionSearchForm.new({ parent_id: @collection.id, sort_column: "title.keyword" }.merge(base_options))
@@ -72,7 +71,7 @@ class CollectionsController < ApplicationController
       @collections = @search.search_results.scope(:for_search)
     end
 
-    flash_search_warnings(@collections) if @sort_and_filter
+    flash_search_warnings(@collections) if !@work.present?
     @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
   end
 
