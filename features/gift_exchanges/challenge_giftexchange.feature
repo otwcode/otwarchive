@@ -906,10 +906,10 @@ Feature: Gift Exchange Challenge
       And I check "Requests visible?"
       And I allow warnings in my gift exchange
       And I submit
-    When I start signing up for "Awesome Gift Exchange"
+      And I start signing up for "Awesome Gift Exchange"
       And I check "No Archive Warnings Apply"
       And I submit
-      And I am logged in as "myname2"
+    When I am logged in as "myname2"
       And I set my preferences to hide warnings
       And I go to "Awesome Gift Exchange" collection's page
       And I follow "Requests Summary"
@@ -922,12 +922,12 @@ Feature: Gift Exchange Challenge
   @javascript
   Scenario: Can hide and show additional tags on a request
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
-    When I am logged in as "mod1"
+      And I am logged in as "mod1"
       And I go to "Awesome Gift Exchange" gift exchange edit page
       And I check "Requests visible?"
       And I submit
       And I sign up for "Awesome Gift Exchange" with combination A
-      And I am logged in as "myname2"
+    When I am logged in as "myname2"
       And I set my preferences to hide freeform
       And I go to "Awesome Gift Exchange" collection's page
       And I follow "Requests Summary"

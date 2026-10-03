@@ -220,12 +220,12 @@ Feature: Create bookmarks of external works
   Scenario: Can hide and show warnings on an external bookmark
     Given I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
-    When I am logged in as a "policy_and_abuse" admin
+      And I am logged in as a "policy_and_abuse" admin
       And I view the external work "External Changes"
       And I follow "Edit External Work"
       And I check "No Archive Warnings Apply"
       And I press "Update External work"
-      And I am logged in as "regular_user"
+    When I am logged in as "regular_user"
       And I set my preferences to hide warnings
       And I view the external work "External Changes"
     Then I should see "Show warnings"
@@ -238,12 +238,12 @@ Feature: Create bookmarks of external works
   Scenario: Can hide and show additional tags on an external bookmark
     Given I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
-    When I am logged in as a "policy_and_abuse" admin
+      And I am logged in as a "policy_and_abuse" admin
       And I view the external work "External Changes"
       And I follow "Edit External Work"
       And I fill in "Additional Tags" with "Admin-Added Freeform"
       And I press "Update External work"
-      And I am logged in as "regular_user"
+    When I am logged in as "regular_user"
       And I set my preferences to hide freeform
       And I view the external work "External Changes"
     Then I should see "Show additional tags"

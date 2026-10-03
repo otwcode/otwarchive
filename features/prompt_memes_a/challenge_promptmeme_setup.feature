@@ -532,10 +532,10 @@ Feature: Prompt Meme Challenge
   @javascript
   Scenario: Can hide and show warnings on a prompt
     Given I have Battle 12 prompt meme fully set up
-    When I follow "Challenge Settings"
+      And I follow "Challenge Settings"
       And I enable archive warning challenge options
       And I sign up for Battle 12 with combination F
-      And I am logged in as "myname2"
+    When I am logged in as "myname2"
       And I set my preferences to hide warnings
       And I go to "Battle 12" collection's page
       And I follow "Prompts"
