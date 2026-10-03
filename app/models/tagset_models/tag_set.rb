@@ -165,7 +165,12 @@ class TagSet < ApplicationRecord
     # this is required because otherwise tag sets created on the fly (eg with + during potential match generation)
     # that are not saved in the database will return empty list.
     # We use Tag.where so that we can still chain this with other AR queries
-    return self.new_record? ? Tag.where(id: self.tags.select {|t| t.type == type.classify}.collect(&:id)) : self.tags.with_type(type.classify)
+    if self.new_record?
+      Tag.where(id: self.tags.select { |t| t.type == type.classify }
+                             .collect(&:id))
+    else
+      self.tags.with_type(type.classify)
+    end
   end
 
   def has_type?(type)

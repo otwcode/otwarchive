@@ -108,9 +108,8 @@ class TagsController < ApplicationController
               end
       @display_creation = model.find(params[:creation_id]) if model.is_a? Class
 
-      # Tags aren't directly on Series or Requests, so we need to handle them differently
-      @display_tags = case params[:creation_type]
-                      when "Series"
+      # Tags aren't directly on Series, so we need to handle them differently
+      @display_tags = if params[:creation_type] == "Series"
                         case params[:tag_type]
                         when "warnings"
                           @display_creation.works.visible.collect(&:archive_warnings).flatten.compact.uniq.sort
