@@ -7,7 +7,7 @@ describe RolesUser do
 
       it "assigning the role sets last wrangler activity to now" do
         freeze_time do
-          role = Role.find_or_create_by(name: "tag_wrangler")
+          role = Role.find_or_create_by!(name: "tag_wrangler")
           user.roles.push(role)
           expect(user.last_wrangling_activity).not_to be_nil
           expect(user.last_wrangling_activity.updated_at).to eq(Time.current)
