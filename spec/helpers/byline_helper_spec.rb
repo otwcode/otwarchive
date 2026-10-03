@@ -35,4 +35,19 @@ describe BylineHelper do
       expect(helper.text_byline(work)).to eq("Anonymous [Joe]")
     end
   end
+
+  describe "#text_byline" do
+    let(:user) { create(:user, login: "Joe") }
+    let(:work) { create(:work, authors: [user.default_pseud], collections: [create(:anonymous_collection)]) }
+    
+    before do
+      allow(helper).to receive(:is_author_of?).and_return(true)
+      allow(helper).to receive(:logged_in_as_admin?).and_return(false)
+    end
+
+    it "includes no links and hides byline for external shares" do
+      expect(helper.text_byline(work)).to_not include("href")
+      expect(helper.text_byline(work, visibility: "public")).to eq("Anonymous")
+    end
+  end
 end
