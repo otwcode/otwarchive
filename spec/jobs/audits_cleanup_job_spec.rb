@@ -27,10 +27,16 @@ describe AuditsCleanupJob do
   let(:no_cleanup_user) { create(:user) }
 
   before do
+    @previous_queue_adapter = ActiveJob::Base.queue_adapter
     ActiveJob::Base.queue_adapter = :test
 
     ArchiveConfig.USER_KEEP_AUDIT_UPDATES_DAYS = 30
     ArchiveConfig.USER_KEEP_AUDIT_CREATES_DESTROYS_DAYS = 30
+  end
+
+  after do
+    # Prevents breaking other jobs' tests
+    ActiveJob::Base.queue_adapter = @previous_queue_adapter
   end
 
   context "when old audits exist" do
