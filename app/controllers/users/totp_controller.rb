@@ -34,6 +34,8 @@ class Users::TotpController < ApplicationController
       @backup_codes = current_user.generate_otp_backup_codes!
       current_user.save!
 
+      UserMailer.totp_2fa_enabled(@user.id, @backup_codes).deliver_later
+
       render action: :reset_backup_codes and return
     else
       flash.now[:error] = t(".incorrect_code")
@@ -70,6 +72,8 @@ class Users::TotpController < ApplicationController
     else
       flash[:error] = t(".failure")
     end
+
+    UserMailer.totp_2fa_disabled(@user.id).deliver_later
 
     redirect_to user_preferences_path
   end

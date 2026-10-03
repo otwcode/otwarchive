@@ -16,6 +16,8 @@ Feature: Authenticate Users With TOTP 2FA
       And I press "Enable Two-Step Verification"
     Then I should see "Two-step verification was successfully enabled"
       And I should see "Finish"
+      And 1 email should be delivered to "user"
+      And the email should contain "Two-step verification for your AO3 account was enabled"
     When I follow "Finish"
     Then I should see "Set My Preferences"
   
@@ -33,6 +35,7 @@ Feature: Authenticate Users With TOTP 2FA
     Then I should see "Your password was incorrect."
       And I should not see "Successfully enabled two-step verification, please make note of your backup codes."
       And I should not see "Finish"
+      And 0 emails should be delivered
   
   Scenario: Users cannot enable TOTP 2FA if they provide a wrong code
     Given the following activated users exist
@@ -51,6 +54,7 @@ Feature: Authenticate Users With TOTP 2FA
     Then I should see "Incorrect verification code. Your code may have expired, or you may need to set up your authenticator app again."
       And I should not see "Successfully enabled two-step verification, please make note of your backup codes."
       And I should not see "Finish"
+      And 0 emails should be delivered
   
   Scenario: Users can disable TOTP 2FA
     Given the following activated users exist
@@ -64,6 +68,8 @@ Feature: Authenticate Users With TOTP 2FA
     When I fill in "Password" with "testpassword"
       And I press "Disable"
     Then I should see "Successfully disabled two-step verification."
+      And 1 email should be delivered to "user"
+      And the email should contain "Two-step verification for your AO3 account was disabled"
 
   Scenario: Users cannot disable TOTP 2FA if they provide a wrong password
     Given the following activated users exist
@@ -78,6 +84,7 @@ Feature: Authenticate Users With TOTP 2FA
       And I press "Disable"
     Then I should see "Your password was incorrect."
       And I should not see "Successfully disabled two-step verification."
+      And 0 emails should be delivered
 
   Scenario: Users can regenerate TOTP backup codes
     Given the following activated users exist
@@ -90,6 +97,7 @@ Feature: Authenticate Users With TOTP 2FA
     Then I should see "Are you sure you want to reset your two-step verification backup codes?"
     When I press "Yes, Reset Codes"
     Then I should see "Two-Step Verification Backup Codes"
+      And 0 emails should be delivered
     When I follow "Finish"
     Then I should see "Set My Preferences"
 

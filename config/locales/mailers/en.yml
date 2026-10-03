@@ -820,6 +820,42 @@ en:
       welcome:
         html: Welcome to the Archive of Our Own, %{login}!
         text: Welcome to the Archive of Our Own, %{login}!
+    totp_2fa_disabled:
+      after_login:
+        html: After you %{login_link}, you will no longer need to use a verification code from your authenticator app to finish logging in to your account.
+        login: log in with your password
+        text: After you log in with your password (%{login_url}), you will no longer need to use a verification code from your authenticator app to finish logging in to your account.
+      changed: Two-step verification for your %{app_name} account was disabled on %{date}.
+      did_not_make_change:
+        contact_policy_abuse: contact Policy & Abuse
+        html: If you did not make this change, someone else may have access to your %{app_name} account. Please %{reset_password_link} or %{contact_policy_abuse_link}.
+        reset_password: reset your password now
+        text: 'If you did not make this change, someone else may have access to your %{app_name} account. Please reset your password now (%{reset_password_url}) or contact Policy & Abuse: %{contact_policy_abuse_url}.'
+      preferences:
+        contact_support: contact Support
+        html: You can enable two-step verification for your account by updating %{preferences_link}. If you experience technical issues, please %{contact_support_link}.
+        text: 'You can enable two-step verification for your account by updating your preferences: %{preferences_url}. If you experience technical issues, please contact Support: %{contact_support_url}.'
+        your_preferences: your preferences
+      subject: "[%{app_name}] Two-step verification has been disabled for your account"
+    totp_2fa_enabled:
+      after_login:
+        html: After you %{login_link}, you will need to use a verification code from your authenticator app to finish logging in to your account.
+        login: log in with your password
+        text: After you log in with your password (%{login_url}), you will need to use a verification code from your authenticator app to finish logging in to your account.
+      backup_codes: 'If you do not have access to your authenticator app, you can enter one of these backup codes instead:'
+      changed: Two-step verification for your %{app_name} account was enabled on %{date}.
+      did_not_make_change:
+        contact_policy_abuse: contact Policy & Abuse
+        html: If you did not make this change, someone else may have access to your %{app_name} account. Please %{reset_password_link} or %{contact_policy_abuse_link}.
+        reset_password: reset your password now
+        text: 'If you did not make this change, someone else may have access to your %{app_name} account. Please reset your password now (%{reset_password_url}) or contact Policy & Abuse: %{contact_policy_abuse_url}.'
+      preferences:
+        contact_support: contact Support
+        html: You can disable two-step verification for your account by updating %{preferences_link}. If you experience technical issues, please %{contact_support_link}.
+        text: 'You can disable two-step verification for your account by updating your preferences: %{preferences_url}. If you experience technical issues, please contact Support: %{contact_support_url}.'
+        your_preferences: your preferences
+      store_codes: Please store these backup codes in a safe and secure location. We recommend that you delete this email after doing so. Otherwise, if someone else gains access to your email account, they may be able to log in to your AO3 account.
+      subject: "[%{app_name}] Two-step verification has been enabled for your account"
   users:
     mailer:
       confirmation_instructions:
