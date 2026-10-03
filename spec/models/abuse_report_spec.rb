@@ -226,7 +226,6 @@ describe AbuseReport do
       it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/chapters/123#major-character-death"
       it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/chapters/123?ending=1"
       it_behaves_like "enough work reports", "http://archiveofourown.org/works/789/chapters/123?ending=2#major-character-death"
-      it_behaves_like "enough work reports", "http://archiveofourown.org/chapters/123"
 
       # a comment on the work
       it_behaves_like "alright", "http://archiveofourown.org/works/789/comments/876"

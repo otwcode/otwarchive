@@ -184,7 +184,10 @@ class AbuseReport < ApplicationRecord
 
   # ID of the reported work
   def reported_work_id
-    url[%r{/works/(\d+)}, 1]
+    comments = url[%r{/comments/}, 0]
+    bookmarks = url[%r{/bookmarks/}, 0]
+
+    url[%r{/works/(\d+)}, 1] if comments.nil? && bookmarks.nil?
   end
 
   # ID of the reported comment
@@ -248,10 +251,12 @@ class AbuseReport < ApplicationRecord
       work_params_only = url.match(%r{/works/\d+/}).to_s
       work_report_period = ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago
       existing_reports_total = AbuseReport.where('created_at > ? AND
-                                                 url LIKE ?',
+                                                 url LIKE ? AND
+                                                 NOT url LIKE "%/comments/%" AND
+                                                 NOT url LIKE "%/bookmarks/%"',
                                                  work_report_period,
                                                  "%#{work_params_only}%").count
-      errors.add(:base, :over_reported) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
+      errors.add(:base, :over_reported_work) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
     when %r{/users/\w+}
       user_params_only = url.match(%r{/users/\w+/}).to_s
       user_report_period = ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago
@@ -268,6 +273,7 @@ class AbuseReport < ApplicationRecord
                                                  series_report_period,
                                                  "%#{series_params_only}%").count
       errors.add(:base, :over_reported_series) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_SERIES_MAX
+    end
   end
 
   def email_is_not_over_reporting
