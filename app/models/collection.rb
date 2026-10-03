@@ -95,8 +95,8 @@ class Collection < ApplicationRecord
     end
   end
 
-  validates :name, presence: {}
-  validates :name, uniqueness: {}
+  validates :name, presence: true
+  validates :name, uniqueness: true
   validates :name,
             length: { minimum: ArchiveConfig.TITLE_MIN }
   validates :name,
@@ -108,7 +108,7 @@ class Collection < ApplicationRecord
 
   validates :email, email_format: { allow_blank: true }
 
-  validates :title, presence: {}
+  validates :title, presence: true
   validates :title,
             length: { minimum: ArchiveConfig.TITLE_MIN }
   validates :title,
