@@ -95,5 +95,3 @@ Feature: User statistics
   When I go to NUMB3RSfan's stats page
   Then I should see the page title "NUMB3RSfan - Statistics"
     And I should see "Statistics" within "#main .navigation.actions"
-    
-
