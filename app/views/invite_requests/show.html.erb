@@ -3,7 +3,7 @@
 <% elsif @invitation %>
   <%= render "invitation", invitation: @invitation %>
 <% else %>
-  <%= render "no_invitation" %>
+  <%= render "no_invitation", email_blank: @email_blank %>
 <% end %>
 
 <p>
