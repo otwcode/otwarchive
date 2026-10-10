@@ -12,7 +12,7 @@ module ShareHelper
     if work.unrevealed?
       ts("Mystery Work")
     else
-      names = text_byline(work, { visibility: "public" })
+      names = text_byline(work, visibility: "public")
       fandoms = short_fandom_string(work)
       "#{work.title} by #{names} - #{fandoms}".truncate(95)
     end
