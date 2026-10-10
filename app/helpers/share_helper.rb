@@ -3,14 +3,16 @@ module ShareHelper
   # Get work title, word count, and creators and add app short name,
   # but do not add formatting so it can be link text for Tumblr sharing.
   def get_tumblr_embed_link_title(work)
-    title = work.title + " (#{work.word_count} #{ts('words')})"
-    pseud = text_byline(work, { visibility: "public" })
-    "#{title} #{ts('by')} #{pseud} #{ts("[#{ArchiveConfig.APP_SHORT_NAME}]")}"
+    t("share_helper.tumblr_embed_link_title",
+      title: work.title,
+      count: work.word_count,
+      creators: text_byline(work, visibility: "public"),
+      app_short_name: ArchiveConfig.APP_SHORT_NAME)
   end
 
   def get_tweet_text(work)
     if work.unrevealed?
-      ts("Mystery Work")
+      t("share_helper.unrevealed_tweet_text")
     else
       names = text_byline(work, visibility: "public")
       fandoms = short_fandom_string(work)
@@ -51,7 +53,7 @@ module ShareHelper
   private
 
   def short_fandom_string(work)
-    work.fandoms.size > 2 ? ts("Multifandom") : work.fandom_string
+    work.fandoms.size > 2 ? t("share_helper.multi_fandom_short_string") : work.fandom_string
   end
 
   # Being able to add line breaks in the sharing templates makes the code
