@@ -51,4 +51,5 @@ describe BylineHelper do
         expect(helper.text_byline(work, visibility: "public")).to eq("Anonymous")
       end
     end
+  end
 end
