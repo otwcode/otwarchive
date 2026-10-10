@@ -5,11 +5,12 @@ Then /^the share modal should contain social share buttons$/ do
   end
 end
 
-Then /^the (twitter|tumblr) share link should( not)? include "([^"]*)"$/ do |site, notinclude, text|
+Then "the {word} share link should include {string}" do |site, text|
   href = CGI.unescape(find("#share li.#{site} a")[:href])
-  if notinclude
-    expect(href).not_to include(text)
-  else
-    expect(href).to include(text)
-  end
+  expect(href).to include(text)
+end
+
+Then "the {word} share link should not include {string}" do |site, text|
+  href = CGI.unescape(find("#share li.#{site} a")[:href])
+  expect(href).not_to include(text)
 end

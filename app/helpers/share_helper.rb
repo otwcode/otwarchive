@@ -7,7 +7,7 @@ module ShareHelper
       title: work.title,
       count: work.word_count,
       creators: text_byline(work, visibility: "public"),
-      app_short_name: ArchiveConfig.APP_SHORT_NAME)
+      app_name: ArchiveConfig.APP_SHORT_NAME)
   end
 
   def get_tweet_text(work)
