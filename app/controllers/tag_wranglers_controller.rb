@@ -45,19 +45,12 @@ class TagWranglersController < ApplicationController
     authorize :wrangling
 
     wrangler = User.find_by!(login: params[:id])
-    wrangled_tags = Tag
-      .where(last_wrangler: wrangler)
-      .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
-      .includes(:merger, :parents)
-    results = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
-    wrangled_tags.find_each(order: :desc) do |tag|
-      merger = tag.merger&.name || ""
-      fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }
-        .join(", ")
-      results << [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]
-    end
     filename = "wrangled_tags_#{wrangler.login}_#{Time.now.utc.strftime('%Y-%m-%d-%H%M')}.csv"
-    send_csv_data(results, filename)
+    queue_csv_download(
+      kind: "tag_wrangler",
+      arguments: { user_id: wrangler.id },
+      filename: filename
+    )
   end
 
   def create

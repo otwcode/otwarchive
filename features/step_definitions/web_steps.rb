@@ -282,7 +282,10 @@ end
 Then /^I should download a ([^"]*) file with(?: (\d+) rows and)? the header row "(.*?)"$/ do |type, rows, header|
   page.response_headers['Content-Disposition'].should =~ /attachment; filename=.*?\.#{type}/i
   page.response_headers['Content-Type'].should =~ /\/#{type}/i
-  body_without_bom = page.body.encode("UTF-8").delete!("\xEF\xBB\xBF")
+  body_without_bom = page.body.dup
+    .force_encoding("UTF-16LE")
+    .encode("UTF-8")
+    .delete_prefix("\uFEFF")
   csv = CSV.parse(body_without_bom, col_sep: "\t") # array of arrays
   expect(csv.first.join(" ")).to eq(header)
   expect(csv.size).to eq(rows) unless rows.blank? || rows.zero?
