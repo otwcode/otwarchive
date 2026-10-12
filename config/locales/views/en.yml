@@ -897,7 +897,7 @@ en:
       page_heading:
         collection: Collection
         collections_in_the: "%{collections} in the %{archive}"
-        collections_including: Collections including %{work}
+        collections_including: "%{collections} including %{work}"
         subcollection: Subcollection
     sidebar:
       bookmarks: Bookmarked Items (%{count})

@@ -5,9 +5,9 @@
   <% elsif @collection %>
     <%= search_header(@collections, @query, t(".page_heading.subcollection"), @owner) %>
   <% elsif @work %>
-    <%= t(".page_heading.collections_including", work: @work.title) %>
+    <%= t(".page_heading.collections_including", work: @work.title, collections: search_header(@collections, @query, t(".page_heading.collection"), @owner)) %>
   <% else %>
-    <%= t(".page_heading.collections_in_the", collections: search_header(@collections, @query, t(".page_heading.collection"), @owner), archive: ArchiveConfig.APP_NAME) %>
+    <%= t(".page_heading.collections_in_the", archive: ArchiveConfig.APP_NAME, collections: search_header(@collections, @query, t(".page_heading.collection"), @owner)) %>
   <% end %>
 </h2>
 <!--/descriptions-->
