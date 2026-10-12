@@ -26,6 +26,19 @@ class Comment < ApplicationRecord
 
   attr_accessor :cloudflare_bot_score, :cloudflare_ja3_hash, :cloudflare_ja4, :request_host
 
+  validate :guest_name_not_misleading, if: :will_save_change_to_name?
+  def guest_name_not_misleading
+    errors.add(:name, :forbidden) if misleading_guest_name?
+  end
+
+  # Whether the comment's guest name is potentially misleading, e.g. trying to impersonate a protected user
+  def misleading_guest_name?
+    return false if name.blank?
+
+    u = User.find_by(login: name)
+    !u.nil? && (u.official || u.protected_user || u == User.orphan_account)
+  end
+
   # Whether the writer of the comment this is replying to allows guest replies
   validate :guest_can_reply, if: :reply_comment?, unless: :pseud_id, on: :create
   def guest_can_reply
