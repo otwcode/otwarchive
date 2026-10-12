@@ -152,11 +152,7 @@ class WorksController < ApplicationController
   end
 
   def drafts
-    unless params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-      flash[:error] = ts('Whose drafts did you want to look at?')
-      redirect_to users_path
-      return
-    end
+    @user = User.find_by!(login: params[:user_id])
 
     unless current_user == @user || logged_in_as_admin?
       flash[:error] = ts('You can only see your own drafts, sorry!')
