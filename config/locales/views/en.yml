@@ -718,9 +718,6 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
-    prompt_meme:
-      challenge_signups:
-        csv_download_help_title: CSV Downloads
     shared:
       challenge_requests:
         csv_download_help_title: CSV Downloads
