@@ -12,6 +12,16 @@ Given "a work {string} with {int} kudo(s)" do |title, count|
   end
 end
 
+Given "an admin post {string} with {int} kudo(s)" do |title, count|
+  admin_post = FactoryBot.create(:admin_post, title: title)
+
+  count.times do |i|
+    user = User.find_by(login: "fan#{i + 1}") ||
+           FactoryBot.create(:user, login: "fan#{i + 1}")
+    admin_post.kudos.create(user: user)
+  end
+end
+
 Given "the maximum number of kudos to show is {int}" do |count|
   allow(ArchiveConfig).to receive(:MAX_KUDOS_TO_SHOW).and_return(count)
 end

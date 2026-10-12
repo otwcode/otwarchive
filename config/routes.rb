@@ -182,6 +182,7 @@ Rails.application.routes.draw do
       put :post
       get :preview
     end
+    resources :kudos, only: [:index]
   end
 
   namespace :admin do
