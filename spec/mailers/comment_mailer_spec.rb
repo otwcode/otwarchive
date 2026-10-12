@@ -280,6 +280,34 @@ describe CommentMailer do
     end
   end
 
+  shared_examples "a notification email concerning a tag" do
+    describe "HTML email" do
+      it "has a reference to the tag category" do
+        expect(subject).to have_html_part_content("the Fandom tag")
+      end
+
+      it "has a link to the tag" do
+        url = tag_url(comment.ultimate_parent)
+
+        expect(subject.html_part).to have_xpath(
+          "//a[@href=\"#{url}\"]",
+          text: comment.ultimate_parent.commentable_name
+        )
+      end
+    end
+
+    describe "text email" do
+      it "has a reference to the tag category" do
+        expect(subject).to have_text_part_content("the Fandom tag")
+      end
+
+      it "has a link to the tag" do
+        url = tag_url(comment.ultimate_parent)
+        expect(subject).to have_text_part_content(" tag #{comment.ultimate_parent.commentable_name} (#{url})")
+      end
+    end
+  end
+
   shared_examples "a notification with a titled chapter reference" do
     describe "HTML email" do
       it "has a link to the chapter including its title" do
@@ -474,6 +502,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with the commenter's pseud and username"
+      it_behaves_like "a notification email concerning a tag"
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
@@ -599,6 +628,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with the commenter's pseud and username"
+      it_behaves_like "a notification email concerning a tag"
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
@@ -723,6 +753,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username"
+      it_behaves_like "a notification email concerning a tag"
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
@@ -866,6 +897,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username"
+      it_behaves_like "a notification email concerning a tag"
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
@@ -966,6 +998,7 @@ describe CommentMailer do
       let(:comment) { create(:comment, :on_tag) }
 
       it_behaves_like "a notification email with a link to the comment"
+      it_behaves_like "a notification email concerning a tag"
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
@@ -1072,6 +1105,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username" # for parent comment
+      it_behaves_like "a notification email concerning a tag"
       it_behaves_like "a comment subject to image safety mode settings"
 
       it "has the correct subject line" do
