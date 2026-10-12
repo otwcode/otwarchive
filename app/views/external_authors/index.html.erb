@@ -5,12 +5,6 @@
     <%= ts("If an archive that includes your works is backed up to the AO3, here's where you'll get control over those works.") %>
   </p>
 
-  <!--
-  Adding/removing new external identities is coming soon 
-    <ul class="navigation actions" role="navigation">
-      <li><%= link_to ts('New author identity'), new_user_external_author_path(@user) %></li>
-    </ul>
-  -->
 <% elsif current_user.archivist %>
   <h2 class="heading"><%= ts("External Authors Imported") %></h2>
 <% end %>
@@ -34,18 +28,6 @@
           <li><%= link_to(ext_creatorship.creation.title, work_path(ext_creatorship.creation)) %></li>
         <% end %>
       </ul>
-        
-      <% if @user && current_user == @user %>
-        <ul class="actions" role="menu">
-          <li><%= link_to ts('Edit'), [:edit, @user, external_author] %></li>
-          <!-- coming soon 
-          <li>
-            <%= link_to ts('Delete'), [@user, external_author], 
-                          :confirm => ts('Are you sure you want to delete this additional email identity?'), :method => :delete %>
-          </li>
-          -->
-        </ul>
-      <% end %>
     </li>
   <% end %>
 </ul>
