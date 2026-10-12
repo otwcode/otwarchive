@@ -928,7 +928,7 @@ class StoryParser
       date = nil
       if date_string =~ /^(\d+)$/
         # probably seconds since the epoch
-        date = Time.at(Regex.last_match[1].to_i)
+        date = Time.zone.at(Regexp.last_match[1].to_i)
       end
       date ||= Date.parse(date_string)
       return '' if date > Date.current
