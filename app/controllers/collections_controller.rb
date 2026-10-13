@@ -72,7 +72,7 @@ class CollectionsController < ApplicationController
       @collections = @search.search_results.scope(:for_search)
     end
 
-    flash_search_warnings(@collections) unless @work.present?
+    flash_search_warnings(@collections) if @work.blank?
     @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
   end
 

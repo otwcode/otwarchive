@@ -369,16 +369,16 @@ public
       @tag = Tag.find_by_name!(params[:tag_id])
 
       unless @tag.canonical?
-        redirect_to tag_path(@tag) and return unless @tag.merger.present?
+        redirect_to tag_path(@tag) and return if @tag.merger.blank?
 
+        work_redirect_path = @collection.present? ? collection_tag_works_path(@collection, @tag.merger) : tag_works_path(@tag.merger)
         case obj_name
         when "collection"
           redirect_to tag_collections_path(@tag.merger) and return
         when "bookmark"
           redirect_to tag_bookmarks_path(@tag.merger) and return
         when "work"
-          redirect_path = @collection.present? ? collection_tag_works_path(@collection, @tag.merger) : tag_works_path(@tag.merger)
-          redirect_to redirect_path and return
+          redirect_to work_redirect_path and return
         end
       end
     end
