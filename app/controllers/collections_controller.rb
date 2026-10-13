@@ -55,6 +55,7 @@ class CollectionsController < ApplicationController
         @collections = @work.approved_collections
           .by_title
           .for_blurb
+          .page(params[:page])
       elsif @collection.present?
         @sort_and_filter = false
         @search = CollectionSearchForm.new({ parent_id: @collection.id, sort_column: "title.keyword" }.merge(base_options))
@@ -213,18 +214,7 @@ class CollectionsController < ApplicationController
   protected
 
   def load_owner
-    @user = User.find_by!(login: params[:user_id]) if params[:user_id].present?
-    @work = Work.find(params[:work_id]) if params[:work_id].present?
-    @collection = Collection.find_by!(name: params[:collection_id]) if params[:collection_id].present?
-    if params[:tag_id].present?
-      @tag = Tag.find_by_name!(params[:tag_id])
-
-      unless @tag.canonical?
-        redirect_path = @tag.merger.present? ? tag_collections_path(@tag.merger) : tag_path(@tag)
-        redirect_to redirect_path and return
-      end
-    end
-    @owner = @user || @work || @collection || @tag
+    general_load_owner("collection")
   end
 
   def add_owner(options)

@@ -354,6 +354,51 @@ public
     @collection = Collection.find_by(name: params[:collection_id]) if params[:collection_id]
   end
 
+  # obj_name: "work", "bookmark", or "collection" (used in the respective controllers)
+  def general_load_owner(obj_name)
+    @work = Work.find(params[:work_id]) if params[:work_id].present?
+    @collection = Collection.find_by!(name: params[:collection_id]) if params[:collection_id].present?
+    @language = Language.find_by(short: params[:language_id]) if params[:language_id].present?
+
+    if params[:user_id].present?
+      @user = User.find_by!(login: params[:user_id])
+
+      if params[:pseud_id].present?
+        @pseud = @user.pseuds.find_by!(name: params[:pseud_id])
+      end
+    end
+
+    if params[:tag_id].present?
+      @tag = Tag.find_by_name!(params[:tag_id])
+
+      unless @tag.canonical?
+        if @tag.merger.present?
+          case obj_name
+          when "collection"
+            redirect_to tag_collections_path(@tag.merger) and return
+          when "bookmark"
+            redirect_to tag_bookmarks_path(@tag.merger) and return
+          when "work"
+            redirect_path = @collection.present? ? collection_tag_works_path(@collection, @tag.merger) : tag_works_path(@tag.merger)
+            redirect_to redirect_path and return
+          end
+        else
+          redirect_to tag_path(@tag) and return
+        end
+      end
+    end
+
+    @owner = @user || @collection || @tag
+    @owner ||= case obj_name
+               when "work"
+                 @pseud || @language
+               when "bookmark"
+                 @pseud || @bookmarkable
+               when "collection"
+                 @work
+               end
+  end
+
   def privileged_collection_admin?
     policy(Collection).access?
   end
