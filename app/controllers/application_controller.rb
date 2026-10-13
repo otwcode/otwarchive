@@ -361,13 +361,23 @@ public
     @language = Language.find_by(short: params[:language_id]) if params[:language_id].present?
 
     if params[:user_id].present?
-      @user = User.find_by!(login: params[:user_id])
-      @pseud = @user.pseuds.find_by!(name: params[:pseud_id]) if params[:pseud_id].present?
+      @user = User.find_by(login: params[:user_id])
+      unless @user
+        raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:user_id]}'"
+      end
+      if params[:pseud_id].present?
+        @pseud = @user.pseuds.find_by(name: params[:pseud_id])
+        if @pseud.blank? and obj_name == "bookmark"
+          raise ActiveRecord::RecordNotFound, "Couldn't find pseud named '#{params[:pseud_id]}'"
+        end
+      end
     end
 
     if params[:tag_id].present?
-      @tag = Tag.find_by_name!(params[:tag_id])
-
+      @tag = Tag.find_by_name(params[:tag_id])
+      unless @tag && @tag.is_a?(Tag)
+        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
+      end
       unless @tag.canonical?
         redirect_to tag_path(@tag) and return if @tag.merger.blank?
 
