@@ -372,7 +372,7 @@ public
 
     if params[:tag_id].present?
       @tag = Tag.find_by_name(params[:tag_id])
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'" unless @tag&.is_a?(Tag)
+      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'" unless @tag.is_a?(Tag)
 
       unless @tag.canonical?
         redirect_to tag_path(@tag) and return if @tag.merger.blank?
