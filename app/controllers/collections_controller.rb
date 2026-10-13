@@ -1,5 +1,5 @@
 class CollectionsController < ApplicationController
-  before_action :load_owner, only: [:index]
+  before_action :load_collection_owner, only: [:index]
   before_action :users_only, only: [:new, :create]
   before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :collection_owners_or_privileged_admins_only, only: [:edit]
@@ -72,7 +72,7 @@ class CollectionsController < ApplicationController
       @collections = @search.search_results.scope(:for_search)
     end
 
-    flash_search_warnings(@collections) if !@work.present?
+    flash_search_warnings(@collections) unless @work.present?
     @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
   end
 
@@ -213,8 +213,8 @@ class CollectionsController < ApplicationController
 
   protected
 
-  def load_owner
-    general_load_owner("collection")
+  def load_collection_owner
+    load_owner("collection")
   end
 
   def add_owner(options)

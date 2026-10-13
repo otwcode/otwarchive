@@ -1,6 +1,6 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
-  before_action :load_owner, only: [:index]
+  before_action :load_bookmark_owner, only: [:index]
   before_action :load_bookmarkable, only: [:index, :new, :create]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
@@ -251,8 +251,8 @@ class BookmarksController < ApplicationController
 
   protected
 
-  def load_owner
-    general_load_owner("bookmark")
+  def load_bookmark_owner
+    load_owner("bookmark")
   end
 
   def index_page_title

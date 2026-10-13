@@ -180,10 +180,10 @@ Given "a set of collections for searching" do
 end
 
 Given "a set of collections for tag page searching" do
-  beautiful = Fandom.where(name: "My Beautiful Canonical Tag", canonical: true).first_or_create
-  gorgeous = Fandom.find_or_create_by(name: "My Gorgeous Synonymous Tag")
+  beautiful = Fandom.where(name: "My Beautiful Canonical Tag", canonical: true).first_or_create!
+  gorgeous = Fandom.find_or_create_by!(name: "My Gorgeous Synonymous Tag")
   gorgeous.reload.merger = beautiful
-  gorgeous.save
+  gorgeous.save!
   profile = CollectionProfile.create!(faq: "FAQ goes here",
                                       intro: "Intro goes here",
                                       rules: "Rules go here")
