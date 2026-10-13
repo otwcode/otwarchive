@@ -50,7 +50,7 @@ describe "n+1 queries in the WorksController" do
     end
   end
 
-  describe "#index" do
+  describe "#index", work_search: true, bookmark_search: true do
     context "when viewing the works for a tag" do
       subject do
         proc do
@@ -116,7 +116,7 @@ describe "n+1 queries in the WorksController" do
     end
   end
 
-  describe "#collected" do
+  describe "#collected", work_search: true, bookmark_search: true do
     subject do
       proc do
         get collected_user_works_path(user)
@@ -138,7 +138,7 @@ describe "n+1 queries in the WorksController" do
     end
   end
 
-  describe "#drafts" do
+  describe "#drafts", work_search: true, bookmark_search: true do
     subject do
       proc do
         fake_login_known_user(user.reload)
@@ -154,7 +154,7 @@ describe "n+1 queries in the WorksController" do
     it_behaves_like "displaying multiple works efficiently", queries_per_work: 1
   end
 
-  describe "#search" do
+  describe "#search", work_search: true, bookmark_search: true do
     subject do
       proc do
         get search_works_path(work_search: { query: fandom.name })
