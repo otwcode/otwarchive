@@ -1,4 +1,7 @@
 class AdminPostTag < ApplicationRecord
+  include AsyncWithResque
+  @queue = :utilities
+
   belongs_to :language
   has_many :admin_post_taggings
   has_many :admin_posts, through: :admin_post_taggings
@@ -18,4 +21,7 @@ class AdminPostTag < ApplicationRecord
     tag.valid? ? tag : nil
   end
 
+  def self.delete_unused
+    left_outer_joins(:admin_post_taggings).where(admin_post_taggings: { id: nil }).delete_all
+  end
 end
