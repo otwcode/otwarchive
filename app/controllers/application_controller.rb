@@ -362,22 +362,18 @@ public
 
     if params[:user_id].present?
       @user = User.find_by(login: params[:user_id])
-      unless @user
-        raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:user_id]}'"
-      end
+      raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:user_id]}'" if @user.blank?
+
       if params[:pseud_id].present?
         @pseud = @user.pseuds.find_by(name: params[:pseud_id])
-        if @pseud.blank? and obj_name == "bookmark"
-          raise ActiveRecord::RecordNotFound, "Couldn't find pseud named '#{params[:pseud_id]}'"
-        end
+        raise ActiveRecord::RecordNotFound, "Couldn't find pseud named '#{params[:pseud_id]}'" if @pseud.blank? && obj_name == "bookmark"
       end
     end
 
     if params[:tag_id].present?
       @tag = Tag.find_by_name(params[:tag_id])
-      unless @tag && @tag.is_a?(Tag)
-        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
-      end
+      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'" unless @tag&.is_a?(Tag)
+
       unless @tag.canonical?
         redirect_to tag_path(@tag) and return if @tag.merger.blank?
 
