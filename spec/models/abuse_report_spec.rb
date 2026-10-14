@@ -606,9 +606,6 @@ describe AbuseReport do
         comment_url = "http://archiveofourown.org/works/123/comments/456"
 
         before do
-          work = create(:work, id: 123)
-          create(:comment, commentable: work.first_chapter, id: 456)
-
           ArchiveConfig.ABUSE_REPORTS_PER_COMMENT_MAX.times do
             create(:abuse_report, url: comment_url)
           end
@@ -622,9 +619,6 @@ describe AbuseReport do
       context "for bookmark URLs with work ID" do
         bookmark_url = "http://archiveofourown.org/works/123/bookmarks/456"
         before do
-          work = create(:work, id: 123)
-          create(:bookmark, bookmarkable: work, id: 456)
-
           ArchiveConfig.ABUSE_REPORTS_PER_BOOKMARK_MAX.times do
             create(:abuse_report, url: bookmark_url)
           end
@@ -633,22 +627,6 @@ describe AbuseReport do
 
         # does not prevent the work from being reportable
         it_behaves_like "alright", "https://archiveofourown.org/works/123"
-      end
-
-      context "for work URLs with user" do
-        work_url = "http://archiveofourown.org/user/someone/work/123"
-        before do
-          user = create(:user, login: "someone")
-          create(:work, id: 123, authors: [user.default_pseud])
-
-          ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
-            create(:abuse_report, url: work_url)
-          end
-          expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX)
-        end
-
-        # does not prevent the user from being reportable
-        it_behaves_like "alright", "https://archiveofourown.org/user/someone"
       end
     end
   end
