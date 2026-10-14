@@ -43,7 +43,7 @@
           <li><%= link_to @admin_post.posted? ? t(".navigation.next") : t(".navigation.next_draft"), @next_admin_post %></li>
         <% end %>
         <li>
-          <%= link_to_rss admin_posts_path(:rss, language_id: @admin_post.language.short) %>
+          <%= link_to_rss admin_posts_path(:rss, language_id: @admin_post.locale_language.short) %>
         </li>
       </ul>
     </div>

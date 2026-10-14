@@ -9,14 +9,14 @@ class LocalesController < ApplicationController
   def new
     @locale = Locale.new
     authorize @locale
-    @languages = Language.default_order
+    @locale_languages = LocaleLanguage.default_order
   end
 
   # GET /locales/en/edit
   def edit
     @locale = Locale.find_by(iso: params[:id])
     authorize @locale
-    @languages = Language.default_order
+    @locale_languages = LocaleLanguage.default_order
   end
 
   def update
@@ -27,7 +27,7 @@ class LocalesController < ApplicationController
       flash[:notice] = ts('Your locale was successfully updated.')
       redirect_to action: 'index', status: 303
     else
-      @languages = Language.default_order
+      @locale_languages = LocaleLanguage.default_order
       render action: "edit"
     end
   end
@@ -40,7 +40,7 @@ class LocalesController < ApplicationController
       flash[:notice] = t('successfully_added', default: 'Locale was successfully added.')
       redirect_to locales_path
     else
-      @languages = Language.default_order
+      @locale_languages = LocaleLanguage.default_order
       render action: "new"
     end
   end

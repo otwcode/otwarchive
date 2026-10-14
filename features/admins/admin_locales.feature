@@ -2,7 +2,7 @@
 Feature: Admin tasks
 
   Scenario: Add and edit a locale
-  Given the following language exists
+  Given the following locale language exists
       | name       | short |
       | Dutch      | nl    |
     And I am logged in as a "translation" admin

@@ -10,7 +10,7 @@ FactoryBot.define do
   end
 
   factory :locale do
-    language { Language.default }
+    locale_language { LocaleLanguage.default }
     iso { generate(:locale_iso) }
     name { generate(:locale_name) }
   end
