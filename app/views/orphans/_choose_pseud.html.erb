@@ -1,18 +1,13 @@
-<dl>
-  <dt><%= t(".prompt") %></dt>
-  <dd>
-    <fieldset>
-      <legend><%= t(".prompt") %></legend>
-      <ul>
-        <li>
-          <%= radio_button_tag "use_default", "true" %>
-          <%= label_tag "use_default_true", t(".remove_pseud") %>
-        </li>
-        <li>
-          <%= radio_button_tag "use_default", "false" %>
-          <%= label_tag "use_default_false", t(".keep_pseud") %>
-        </li>
-      </ul>
-    </fieldset>
-  </dd>
-</dl>
+<fieldset>
+  <legend><%= t(".legend") %></legend>
+  <ul>
+    <li>
+      <%= radio_button_tag "use_default", "true" %>
+      <%= label_tag "use_default_true", t(".remove_pseud") %>
+    </li>
+    <li>
+      <%= radio_button_tag "use_default", "false" %>
+      <%= label_tag "use_default_false", t(".keep_pseud") %>
+    </li>
+  </ul>
+</fieldset>

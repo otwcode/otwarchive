@@ -150,10 +150,8 @@ Feature: Orphan work
 
   Scenario: Orphaning without choosing a pseud option shows an error
     Given I post the work "Undecided"
-      And I view the work "Undecided"
-      And I follow "Edit"
-      And I follow "Orphan Work"
-    When I press "Yes, I'm sure"
+    When I begin orphaning the work "Undecided"
+      And I press "Yes, I'm sure"
     Then I should see "You must choose whether to remove or keep your pseud."
       And I should see "Read More About The Orphaning Process"
     When I view the work "Undecided"

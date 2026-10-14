@@ -209,8 +209,12 @@ describe OrphansController do
           )
           expect(series.reload.users).to include(user)
         end
+      end
 
-        it "rejects values other than true or false" do
+      context "when invalid pseud option is provided" do
+        let(:error) { "You must choose whether to remove or keep your pseud." }
+
+        it "redirects back to the works orphan page with an error" do
           post :create, params: { work_ids: [work], use_default: "maybe" }
 
           it_redirects_to_with_error(
