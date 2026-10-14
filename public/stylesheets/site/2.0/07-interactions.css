@@ -594,7 +594,7 @@ form.simple span.actions {
   margin: 0;
 }
 
-/* mods: SINGLE for prominent simple forms consisting of one text input, e.g., on the blocked user page */
+/* mods: SINGLE for prominent simple forms consisting of one text input (e.g., on the blocked user page) or group of checkboxes or radios (e.g., on the orphan work page) */
 
 form.single fieldset {
   background: transparent;

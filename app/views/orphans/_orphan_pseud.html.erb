@@ -29,7 +29,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_tag orphans_path do %>
+<%= form_tag orphans_path, class: "single simple post" do %>
   <p>
     <% works.each do |work| %>
       <%= hidden_field_tag "work_ids[]", work.id, id: "work_ids_#{work.id}" %>
