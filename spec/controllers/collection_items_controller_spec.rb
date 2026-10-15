@@ -371,6 +371,77 @@ describe CollectionItemsController do
         end
       end
     end
+
+    context "as an opendoors user" do
+      let(:opendoors_user) { create(:opendoors_user) }
+      let(:work) { create(:work) }
+
+      let(:collection) do
+        create(:collection, owner: opendoors_user.default_pseud)
+      end
+
+      let(:params) do
+        {
+          collection_names: collection.name,
+          work_id: work.id
+        }
+      end
+
+      before do
+        fake_login_known_user(opendoors_user)
+      end
+
+      context "when the item's creator does not allow collection invitations" do
+        it "adds the item approved by both sides" do
+          post :create, params: params
+          it_redirects_to_with_notice(work, "Added to collection(s): #{collection.title}.")
+          expect(work.reload.approved_collections).to include(collection)
+        end
+
+        it "sends the Open Doors email and not an invitation email" do
+          message_double =
+            instance_double(ActionMailer::MessageDelivery, deliver_later: true)
+          expect(UserMailer).to receive(:archivist_added_to_collection_notification)
+            .and_return(message_double)
+          expect(UserMailer).not_to receive(:invited_to_collection_notification)
+          post :create, params: params
+        end
+      end
+
+      context "when the item's creator allows collection invitations" do
+        before do
+          work.users.first.preference.update!(allow_collection_invitation: true)
+        end
+
+        it "adds the item approved by both sides" do
+          post :create, params: params
+          it_redirects_to_with_notice(work, "Added to collection(s): #{collection.title}.")
+          expect(work.reload.approved_collections).to include(collection)
+        end
+      end
+
+      context "when the opendoors user does not maintain the collection" do
+        let(:collection) { create(:collection) }
+
+        it "does not add the item" do
+          post :create, params: params
+          expect(flash[:error]).to include("either you don't own this item or are not a moderator of the collection.")
+          expect(work.reload.collections).not_to include(collection)
+        end
+      end
+
+      context "when the collection is unrevealed" do
+        before do
+          collection.collection_preference.update!(unrevealed: true)
+        end
+
+        it "does not add the item" do
+          post :create, params: params
+          expect(flash[:error]).to include("because you don't own this item and the collection is anonymous or unrevealed.")
+          expect(work.reload.collections).not_to include(collection)
+        end
+      end
+    end
   end
 
   describe "PATCH #update_multiple" do

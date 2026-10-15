@@ -69,6 +69,57 @@ describe CollectionItem, :ready do
       end
     end
 
+    context "as an opendoors user" do
+      let(:opendoors_user) { create(:opendoors_user) }
+
+      before do
+        work
+        User.current_user = opendoors_user
+      end
+
+      context "when the opendoors user maintains the collection" do
+        let(:collection) do
+          create(:collection, owner: opendoors_user.default_pseud)
+        end
+
+        it "automatically approves the item" do
+          item = create(:collection_item, item: work, collection: collection)
+          expect(item.approved?).to be true
+        end
+
+        it "sends an archivist added email" do
+          message_double =
+            instance_double(ActionMailer::MessageDelivery, deliver_later: true)
+          expect(UserMailer).to receive(:archivist_added_to_collection_notification)
+            .and_return(message_double)
+          create(:collection_item, item: work, collection: collection)
+        end
+
+        context "when the item's creator has collection emails turned off" do
+          before do
+            work.users.first.preference.update!(collection_emails_off: true)
+          end
+
+          it "does not send an archivist added email" do
+            expect(UserMailer).not_to receive(:archivist_added_to_collection_notification)
+            create(:collection_item, item: work, collection: collection)
+          end
+        end
+      end
+
+      context "when the opendoors user does not maintain the collection" do
+        it "does not automatically approve the item" do
+          item = create(:collection_item, item: work, collection: collection)
+          expect(item.approved?).to be false
+        end
+
+        it "does not send an archivist added email" do
+          expect(UserMailer).not_to receive(:archivist_added_to_collection_notification)
+          create(:collection_item, item: work, collection: collection)
+        end
+      end
+    end
+
     context "with no current user" do
       it "does not send an archivist added email" do
         expect(UserMailer).not_to receive(:archivist_added_to_collection_notification)
