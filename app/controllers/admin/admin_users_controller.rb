@@ -11,7 +11,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def load_user
-    @user = User.find_by!(login: params[:id])
+    @user = User.includes(:roles).find_by!(login: params[:id])
   end
 
   def user_is_banned
@@ -248,6 +248,6 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def log_items
-    @log_items ||= @user.log_items.sort_by(&:created_at).reverse
+    @log_items ||= @user.log_items.includes(:role).sort_by(&:created_at).reverse
   end
 end
