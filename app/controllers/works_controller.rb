@@ -5,7 +5,7 @@ class WorksController < ApplicationController
 
   # only registered users and NOT admin should be able to create new works
   before_action :load_collection
-  before_action :load_owner, only: [:index]
+  before_action :load_work_owner, only: [:index]
   before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit, :update, :drafts, :share]
   before_action :check_user_status, except: [:index, :edit, :edit_multiple, :confirm_delete_multiple, :delete_multiple, :confirm_delete, :destroy, :show, :show_multiple, :navigate, :search, :collected, :share]
   before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy, :show_multiple, :edit_multiple, :confirm_delete_multiple, :delete_multiple]
@@ -723,32 +723,8 @@ class WorksController < ApplicationController
 
   protected
 
-  def load_owner
-    if params[:user_id].present?
-      @user = User.find_by!(login: params[:user_id])
-      if params[:pseud_id].present?
-        @pseud = @user.pseuds.find_by(name: params[:pseud_id])
-      end
-    end
-    if params[:tag_id]
-      @tag = Tag.find_by_name(params[:tag_id])
-      unless @tag && @tag.is_a?(Tag)
-        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
-      end
-      unless @tag.canonical?
-        if @tag.merger.present?
-          if @collection.present?
-            redirect_to(collection_tag_works_path(@collection, @tag.merger)) && return
-          else
-            redirect_to(tag_works_path(@tag.merger)) && return
-          end
-        else
-          redirect_to(tag_path(@tag)) && return
-        end
-      end
-    end
-    @language = Language.find_by(short: params[:language_id]) if params[:language_id].present?
-    @owner = @pseud || @user || @collection || @tag || @language
+  def load_work_owner
+    load_owner("work")
   end
 
   def load_work

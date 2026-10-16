@@ -1,29 +1,25 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
-  <% if @user %>
-    <%= t(".page_heading.users_collections", user: @user.login) %>
+  <% if @user || @tag %>
+    <%= search_header(@collections, @query, t(".page_heading.collection"), @owner) %>
   <% elsif @collection %>
-    <%= t(".page_heading.challenges_subcollections_in", collection: @collection.title) %>
+    <%= search_header(@collections, @query, t(".page_heading.subcollection"), @owner) %>
   <% elsif @work %>
-    <%= t(".page_heading.collections_including", work: @work.title) %>
+    <%= t(".page_heading.collections_including", work: @work.title, collections: search_header(@collections, @query, t(".page_heading.collection"), @owner)) %>
   <% else %>
-    <%= t(".page_heading.collections_in_the", archive: ArchiveConfig.APP_NAME) %>
+    <%= t(".page_heading.collections_in_the", archive: ArchiveConfig.APP_NAME, collections: search_header(@collections, @query, t(".page_heading.collection"), @owner)) %>
   <% end %>
 </h2>
-
-<h3 class="heading">
-  <% if @collections.empty? %>
-    <%= t(".page_heading.no_results") %>
-  <% else %>
-    <%= search_header @collections, @query, t(".page_heading.search_header") %>
-  <% end %>
-</h3>
 <!--/descriptions-->
 
 <!--Subnavigation, sorting and actions-->
 <h3 class="landmark heading"><%= t(".navigation.landmark_heading") %></h3>
-<ul class="navigation actions">
-  <% if @collection %>
+<ul class="navigation actions" role="navigation">
+  <% if @tag %>
+    <li><%= span_if_current t(".navigation.actions.tag.works"), tag_works_path(@tag) %></li>
+    <li><%= span_if_current t(".navigation.actions.tag.bookmarks"), tag_bookmarks_path(@tag) %></li>
+    <li><%= span_if_current t(".navigation.actions.tag.collections"), tag_collections_path(@tag) %></li>
+  <% elsif @collection %>
     <%# Collection subcollections index gets link for Subcollections %>
     <li><%= span_if_current t(".navigation.actions.subcollections"), collection_collections_path(@collection) %></li>
   <% elsif @user %>
@@ -34,7 +30,7 @@
       <li><%= link_to t(".navigation.actions.manage_items"), user_collection_items_path(@user) %></li>
     <% end %>
   <% else %>
-    <%# Collections and Open Challenges link unless on a user's collections page or collection's subcollections page %>
+    <%# Collections and Open Challenges link unless on a tag's/user's collections page or collection's subcollections page %>
     <li><%= span_if_current t(".navigation.actions.collections"), collections_path %></li>
     <li><%= link_to t(".navigation.actions.open_challenges"), list_challenges_collections_path %></li>
   <% end %>
@@ -42,7 +38,7 @@
     <%# Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
     <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
       <li><%= link_to t(".navigation.actions.new_subcollection"), new_collection_collection_path(@collection) %></li>
-    <% else %>
+    <% elsif !@tag %>
       <li><%= link_to t(".navigation.actions.new_collection"), new_collection_path %></li>
     <% end %>
   <% end %>
@@ -54,7 +50,7 @@
 
 <% unless @collections.blank? %>
   <!--pagination here-->
-  <%= will_paginate @collections %>
+  <%= pagy_nav @pagy %>
 
   <!--main content-->
   <h3 class="landmark heading"><%= t(".main_content.landmark_heading") %></h3>
@@ -70,5 +66,5 @@
 <% end %>
 
 <% unless @collections.blank? %>
-  <%= will_paginate @collections %>
+  <%= pagy_nav @pagy %>
 <% end %>
