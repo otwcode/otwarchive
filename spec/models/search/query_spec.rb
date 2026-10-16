@@ -27,5 +27,11 @@ describe Query do
       result = q.split_query_text_words(:hero, "superman -batman")
       expect(result).to eq(" hero:superman NOT hero:batman")
     end
+
+    it "should not touch stand-alone minuses" do
+      q = Query.new
+      result = q.split_query_text_words(:title, "foo - bar")
+      expect(result).to eq(" title:foo title:\\- title:bar")
+    end
   end
 end

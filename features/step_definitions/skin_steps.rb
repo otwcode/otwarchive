@@ -9,6 +9,16 @@ Given /^basic skins$/ do
   assert WorkSkin.basic_formatting
 end
 
+Given "the skin {string} by {string}" do |skin_name, login|
+  user = ensure_user(login)
+  FactoryBot.create(:skin, title: skin_name, author_id: user.id)
+end
+
+Given "the work skin {string} by {string}" do |skin_name, login|
+  user = ensure_user(login)
+  FactoryBot.create(:work_skin, title: skin_name, author_id: user.id)
+end
+
 Given /^I set up the skin "([^"]*)"$/ do |skin_name|
   visit new_skin_path
   fill_in("Title", with: skin_name)
@@ -49,6 +59,7 @@ Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name,
   # creation dates, so that they will be listed in the right order:
   step "it is currently 1 second from now"
 
+  step %{the user "skinner" exists and has the role "official"}
   step %{I am logged in as "skinner"}
   step %{I set up the skin "#{skin_name}" with css "#{css}"}
   attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
@@ -80,15 +91,22 @@ Given /^I have loaded site skins$/ do
   Skin.load_site_css
 end
 
-Given /^the approved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
-  step "the unapproved public skin \"#{skin_name}\" with css \"#{css}\""
-  step "I am logged in as an admin"
-  step "I approve the skin \"#{skin_name}\""
+Given "the approved public skin {string} with css {string}" do |skin_name, css|
+  step %{the unapproved public skin "#{skin_name}" with css "#{css}"}
+  step %{I approve the skin "#{skin_name}"}
   step "I am logged out"
 end
 
 Given /^the approved public skin "([^"]*)"$/ do |skin_name|
   step "the approved public skin \"#{skin_name}\" with css #{DEFAULT_CSS}"
+end
+
+Given "the approved public skin {string} has reserved words in the title" do |skin_name|
+  # Admins can't create skins, so we have to create it this way.
+  FactoryBot.build(:skin, title: skin_name, public: true).save!(validate: false)
+
+  step %{I approve the skin "#{skin_name}"}
+  step "I am logged out"
 end
 
 Given /^"([^"]*)" is using the approved public skin "([^"]*)" with css "([^"]*)"$/ do |login, skin_name, css|
@@ -117,7 +135,7 @@ end
 ### WHEN
 
 When /^I change my skin to "([^\"]*)"$/ do |skin_name|
-  step "I am on my user page"
+  step %{I follow "My Dashboard"}
     step %{I follow "Preferences"}
     step %{I select "#{skin_name}" from "preference_skin_id"}
     step %{I submit}
@@ -175,9 +193,8 @@ When /^I preview the skin "([^\"]*)"$/ do |skin_name|
   visit preview_skin_path(skin)
 end
 
-When /^I set the skin "([^\"]*)" for this session$/ do |skin_name|
-  skin = Skin.find_by(title: skin_name)
-  visit set_skin_path(skin)
+When "I attach a preview for the skin" do
+  attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
 end
 
 ### THEN

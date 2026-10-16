@@ -1,5 +1,5 @@
 phrase:
-  project_id: a3667b8095533c2b3f8d3ac946bb642f
+  project_id: b61346547c00b4ae4eb12d72162dec12
   file_format: yml
   push:
     sources:
@@ -158,7 +158,7 @@ phrase:
       - file: ./config/locales/phrase-exports/vi.yml
         params:
           locale_id: vi
-      - file: ./config/locales/phrase-exports/zh-CN.yml
+      - file: ./config/locales/phrase-exports/zh-Hans.yml
         params:
-          locale_id: zh-CN
+          locale_id: zh-Hans
 

@@ -22,11 +22,6 @@
   </p>
 <% else %>
   <h3 class="heading"><%= t(".login.log_in") %></h3>
-  <p>
-    <strong><%= t(".beta_reminder.reminder") %></strong>
-    <%= t(".beta_reminder.warning") %>
-    <%= t(".beta_reminder.report_bugs", give_feedback_link: link_to(t(".beta_reminder.give_feedback"), feedbacks_path)).html_safe %>
-  </p>
 <% end %>
 
 <div id="loginform">

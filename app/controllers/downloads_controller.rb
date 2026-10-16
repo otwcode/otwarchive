@@ -1,6 +1,5 @@
 class DownloadsController < ApplicationController
 
-  skip_before_action :store_location, only: :show
   before_action :load_work, only: :show
   before_action :check_download_posted_status, only: :show
   before_action :check_download_visibility, only: :show
@@ -36,7 +35,7 @@ protected
   def load_work
     unless AdminSetting.current.downloads_enabled?
       flash[:error] = ts("Sorry, downloads are currently disabled.")
-      redirect_back_or_default works_path
+      redirect_to work_path(params[:id])
       return
     end
 

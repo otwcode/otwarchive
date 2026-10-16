@@ -31,7 +31,7 @@
       </dd>
       <dt>
         <%= f.label :language_id, ts("Language") %>
-        <%= link_to_help "languages-help" %>
+        <%= link_to_help_modal(help_works_languages_path, t(".works_languages_help_title")) %>
       </dt>
       <dd>
         <%= f.select(:language_id, language_options_for_select(sorted_languages, "id"), prompt: " ") %>

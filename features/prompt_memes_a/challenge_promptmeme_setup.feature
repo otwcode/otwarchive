@@ -22,6 +22,17 @@ Feature: Prompt Meme Challenge
   When I create Battle 12 promptmeme
   Then Battle 12 prompt meme should be correctly created
 
+  Scenario: Prompt meme timezone updates without caching
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "scott"
+  When the user "scott" sets the time zone to "Nairobi"
+    And I go to the Collections page
+  Then I should see "EAT" within ".collection.picture.index.group .userstuff.summary"
+  When the user "scott" sets the time zone to "Mumbai"
+    And I go to the Collections page
+  Then I should see "IST" within ".collection.picture.index.group .userstuff.summary"
+
   Scenario: User can see a prompt meme
   
   Given I have Battle 12 prompt meme fully set up
@@ -133,7 +144,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I am on my user page
+  When I am on myname1's user page
   Then I should see "Sign-ups (1)"
   
   Scenario: View signups in the dashboard
@@ -141,7 +152,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I am on my signups page
+  When I am on myname1's signups page
   Then I should see "Battle 12"
 
   Scenario: Prompt count shows on profile
@@ -168,7 +179,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I am on my signups page
+  When I am on myname1's signups page
   Then I should see "Edit"
     And I should see "Delete"
   
@@ -350,7 +361,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I am on my user page
+  When I am on myname1's user page
   When I follow "Sign-ups"
   Then I should not see "Remove prompt"
   
@@ -458,7 +469,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
-  When I am on my user page
+  When I follow "My Dashboard"
     And I follow "Claims"
   Then I should see "Drop Claim"
   When I follow "Drop Claim"
@@ -488,3 +499,32 @@ Feature: Prompt Meme Challenge
     And I view prompts for "Battle 12"
     # TODO: Refactor this test once we have a new Capybara version so that we look for .exact(Claim)
   Then I should see "Drop Claim"
+
+  Scenario: HTML escape chars in prompt title display properly
+
+  Given I have single-prompt prompt meme fully set up
+  When I am logged in as "escapecharsfan"
+    And I sign up for "Battle 12" with combination ESCAPE_CHARS
+  When I view my signup for "Battle 12"
+  Then I should see "These & < > ' ? are some HTML escape chars"
+  When I view my signup for "Battle 12"
+    And I follow "Edit Sign-up"
+  Then I should see "These & < > ' ? are some HTML escape chars" in the "challenge_signup_requests_attributes_0_title" input
+    And I should see "Request 1"
+  When I view my signup for "Battle 12"
+    And I follow "Edit Prompt"
+  Then I should see "These & < > ' ? are some HTML escape chars" in the "prompt_title" input
+    And I should see "Request 1"
+
+  When I am logged in as "claimer"
+    And I view prompts for "Battle 12"
+  Then I should see "These & < > ' ? are some HTML escape chars"
+  When I claim a prompt from "Battle 12"
+    And I go to the "Battle 12" claims page for the current user
+  Then I should see "These & < > ' ? are some HTML escape chars"
+  When I go to claimer's claims page
+  Then I should see "These & < > ' ? are some HTML escape chars"
+
+  When I am logged in as "mod1"
+    And I view unposted claims for "Battle 12"
+  Then I should see "These & < > ' ? are some HTML escape chars"

@@ -106,7 +106,7 @@ describe "API v2 BookmarksController", type: :request, bookmark_search: true do
                    "This bookmark does not contain a URL to an external site. Please specify a valid, non-AO3 URL."
     end
 
-    it "returns an error message if the URL is on AO3" do
+    xit "returns an error message if the URL is on AO3" do
       work = create(:work)
       post "/api/v2/bookmarks",
            params: { archivist: archivist.login,

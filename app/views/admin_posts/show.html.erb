@@ -1,21 +1,31 @@
-<div class="news admin home">
+<div class="news admin<%= " draft" if @preview_mode || @admin_post.draft? %> home">
   <div class="primary header module">
     <!--Descriptive page name, messages and instructions-->
-    <h2 class="heading"><%= link_to t(".page_heading"), admin_posts_path %></h2>
+    <h2 class="heading">
+      <% if @admin_post.posted? %>
+        <%= link_to t(".page_heading"), admin_posts_path %>
+      <% else %>
+        <%= link_to t(".draft_page_heading"), drafts_admin_posts_path %>
+      <% end %>
+    </h2>
     <div class="icon"></div>
     <!--/descriptions-->
     <!--subnav-->
     <div class="navigation actions module" role="navigation">
-      <% if policy(@admin_post).can_post? %>
+      <% if policy(@admin_post).edit? || policy(@admin_post).destroy? || (logged_in_as_admin? && @admin_post.find_all_comments.unreviewed_only.exists?) %>
         <h4 class="landmark heading"><%= t(".navigation.admin.landmark") %></h4>
         <ul class="management actions">
-          <li><%= link_to t(".navigation.admin.edit"), edit_admin_post_path(@admin_post) %></li>
-          <li>
-            <%= link_to t(".navigation.admin.delete"),
-                  @admin_post,
-                  data: { confirm: t(".navigation.admin.confirm_delete") },
-                  method: :delete %>
-          </li>
+          <% if policy(@admin_post).edit? %>
+            <li><%= link_to @admin_post.posted? ? t(".navigation.admin.edit") : t(".navigation.admin.edit_draft"), edit_admin_post_path(@admin_post) %></li>
+          <% end %>
+          <% if policy(@admin_post).destroy? %>
+            <li>
+              <%= link_to @admin_post.posted? ? t(".navigation.admin.delete") : t(".navigation.admin.delete_draft"),
+                    @admin_post,
+                    data: { confirm: t(".navigation.admin.confirm_delete") },
+                    method: :delete %>
+            </li>
+          <% end %>
           <% if @admin_post.find_all_comments.unreviewed_only.exists? %>
             <li>
               <%= link_to t(".navigation.admin.unreviewed_comments", count: @admin_post.find_all_comments.unreviewed_only.count),
@@ -27,10 +37,10 @@
       <h4 class="landmark heading"><%= t(".navigation.landmark") %></h4>
       <ul class="actions">
         <% if @previous_admin_post %>
-          <li><%= link_to t(".navigation.previous"), @previous_admin_post %></li>
+          <li><%= link_to @admin_post.posted? ? t(".navigation.previous") : t(".navigation.previous_draft"), @previous_admin_post %></li>
         <% end %>
         <% if @next_admin_post %>
-          <li><%= link_to t(".navigation.next"), @next_admin_post %></li>
+          <li><%= link_to @admin_post.posted? ? t(".navigation.next") : t(".navigation.next_draft"), @next_admin_post %></li>
         <% end %>
         <li>
           <%= link_to_rss admin_posts_path(:rss, language_id: @admin_post.language.short) %>

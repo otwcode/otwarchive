@@ -6,6 +6,7 @@ Feature: Share Bookmarks
   @javascript @load-default-skin
   Scenario: Share a bookmark
     Given I am logged in as "tess"
+      And the work "Damp Gravel" by "tess" with fandom "Stargate SG-1"
       And I have a bookmark for "Damp Gravel"
     When I go to the first bookmark for the work "Damp Gravel"
     Then I should see "Damp Gravel"
@@ -13,7 +14,7 @@ Feature: Share Bookmarks
     When I follow "Share"
     Then I should see "Copy and paste the following code to link back to this work" within "#share"
       And I should see "or use the Tweet or Tumblr links to share the work" within "#share"
-      And I should see '<strong>Damp Gravel</strong></a> (6 words)' within "#share textarea"
+      And I should see '<strong>Damp Gravel</strong></a> (8 words)' within "#share textarea"
       And I should see 'by <a href="http://www.example.com/users/tess"><strong>tess</strong></a>' within "#share textarea"
       And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share textarea"
       And I should see "Rating: Not Rated" within "#share textarea"

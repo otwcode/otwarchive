@@ -56,17 +56,34 @@ describe FeedbackReporter do
     end
 
     it "calls the ZohoResourceClient with the expected arguments" do
-      expect(ZohoResourceClient).to receive(:new).
-        with(access_token: "x7y8z9", email: "walrus@example.org")
+      expect(ZohoResourceClient).to receive(:new)
+        .with(access_token: "x7y8z9", email: "walrus@example.org")
 
       subject.send_report!
     end
 
     it "calls the Zoho ticket creator with the expected arguments" do
-      expect(ZohoResourceClient).to receive_message_chain(:new, :create_ticket).
-        with(ticket_attributes: expected_ticket_attributes)
+      expect(ZohoResourceClient).to receive_message_chain(:new, :create_ticket)
+        .with(ticket_attributes: expected_ticket_attributes)
 
       subject.send_report!
+    end
+  end
+
+  describe "#send_attachment!" do
+    let(:download) { "the_file" }
+
+    it "calls the Zoho ticket attachment creator with the expected arguments" do
+      expect(ZohoResourceClient).to receive_message_chain(
+        :new,
+        :create_ticket_attachment
+      ) do |ticket_id:, attachment_attributes:|
+        expect(ticket_id).to eq("123")
+        expect(attachment_attributes[:file].gets).to eq(download)
+        expect(attachment_attributes[:file].path).to eq("#{download}.html")
+      end
+
+      subject.send_attachment!("123", "#{download}.html", download)
     end
   end
 

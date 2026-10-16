@@ -25,7 +25,7 @@ Feature: Comment freezing
       And I should see "Frozen" within "div.messages .comment ul.actions"
       And I should not see "Reply" within "div.messages .comment ul.actions"
 
-    When I go to my inbox page
+    When I go to author's inbox page
     Then I should see "My test comment!" within "#inbox-form .comment"
       And I should see "Frozen" within "#inbox-form .comment ul.actions"
       And I should not see "Reply" within "#inbox-form .comment ul.actions"
@@ -41,7 +41,7 @@ Feature: Comment freezing
       And I should see "Reply" within "div.messages .comment ul.actions"
       And I should not see "Frozen" within "div.messages .comment ul.actions"
 
-    When I go to my inbox page
+    When I go to author's inbox page
     Then I should see "My test comment!" within "#inbox-form .comment"
       And I should see "Reply" within "#inbox-form .comment ul.actions"
       And I should not see "Frozen" within "#inbox-form .comment ul.actions"

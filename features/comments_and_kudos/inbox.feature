@@ -5,42 +5,54 @@ Feature: Get messages in the inbox
 
   Scenario: I should not receive comments in my inbox if I have set my preferences to "Turn off messages to your inbox about comments."
     Given I am logged in as "boxer" with password "10987tko"
-      And I post the work "Another Round"
+      And the work "Another Round" by "boxer"
       And I set my preferences to turn off messages to my inbox about comments
     When I am logged in as "cutman"
       And I post the comment "You should not receive this in your inbox." on the work "Another Round"
     When I am logged in as "boxer" with password "10987tko"
-      And I go to my inbox page
+      And I go to boxer's inbox page
     Then I should not see "cutman on Another Round"
       And I should not see "You should not receive this in your inbox."
 
   Scenario: I should receive comments in my inbox if I haven't set my preferences to "Turn off messages to your inbox about comments."
     Given I am logged in as "boxer" with password "10987tko"
-      And I post the work "The Fight"
+      And the work "The Fight" by "boxer"
       And I set my preferences to turn on messages to my inbox about comments
     When I am logged in as "cutman"
       And I post the comment "You should receive this in your inbox." on the work "The Fight"
     When I am logged in as "boxer" with password "10987tko"
-      And I go to my inbox page
+      And I go to boxer's inbox page
     Then I should see "cutman on The Fight"
       And I should see "You should receive this in your inbox."
 
   Scenario: Logged in comments in my inbox should have timestamps
-    Given I am logged in as "boxer" with password "10987tko"
-      And I post the work "Down for the Count"
+    Given the work "Down for the Count" by "boxer"
     When I am logged in as "cutman"
       And I post the comment "It was a right hook... with a bit of a jab. (And he did it with his left hand.)" on the work "Down for the Count"
     When I am logged in as "boxer" with password "10987tko"
-      And I go to my inbox page
+      And I go to boxer's inbox page
     Then I should see "cutman on Down for the Count"
       And I should see "less than 1 minute ago"
 
+  Scenario: Inbox comments should display which chapter it's on, if and only if the work is multi-chapter
+    Given I am logged in as "author"
+      And I post the work "Single-chapter Work"
+      And I post the chaptered work "Multi-chapter Work"
+      And I set my preferences to turn on messages to my inbox about comments
+    When I am logged in as "commenter"
+      And I post the comment "You should receive this in your inbox." on the work "Single-chapter Work"
+      And I post the comment "And this one too." on the work "Multi-chapter Work"
+    When I am logged in as "author"
+      And I go to author's inbox page
+    Then I should see "on Single-chapter Work"
+      And I should not see "on Chapter 1 of Single-chapter Work"
+      And I should see "on Chapter 1 of Multi-chapter Work"
+
   Scenario: Comments in my inbox should be filterable
-    Given I am logged in as "boxer" with password "10987tko"
-      And I post the work "Down for the Count"
+    Given the work "Down for the Count" by "boxer"
     When I post the comment "The fight game's complex." on the work "Down for the Count" as a guest
     When I am logged in as "boxer" with password "10987tko"
-      And I go to my inbox page
+      And I go to boxer's inbox page
       And I choose "Show unread"
       And I press "Filter"
     Then I should see "guest (Guest) on Down for the Count"
@@ -50,13 +62,12 @@ Feature: Get messages in the inbox
     Then I should not see "guest (Guest) on Down for the Count"
 
   Scenario: I can bulk edit comments in my inbox by clicking 'Select'
-    Given I am logged in as "boxer"
-      And I post the work "The Fight"
+    Given the work "The Fight" by "boxer"
     When I am logged in as "cutman"
       And I post the comment "You should receive this in your inbox." on the work "The Fight"
       And I post the comment "A second message for your inbox!" on the work "The Fight"
     When I am logged in as "boxer"
-      And I go to my inbox page
+      And I go to boxer's inbox page
     Then I should see "cutman on The Fight"
       And I should see "You should receive this in your inbox."
       And I should see "A second message for your inbox!"
@@ -68,8 +79,7 @@ Feature: Get messages in the inbox
     Then I should not see "Unread"
 
   Scenario: A user can see some of their unread comments on the homepage
-    Given I am logged in as "boxer" with password "10987tko"
-      And I post the work "Pre-Fight Coverage"
+    Given the work "Pre-Fight Coverage" by "boxer"
     When I am logged in as "cutman"
       And I post the comment "That's a haymaker? I actually never knew that." on the work "Pre-Fight Coverage"
     When I am logged in as "boxer" with password "10987tko"
@@ -81,8 +91,7 @@ Feature: Get messages in the inbox
       And I should see "That's a haymaker? I actually never knew that."
 
   Scenario: A user can delete an unread comment on the homepage
-    Given I am logged in as "boxer" with password "10987tko"
-      And I post the work "The Gladiators of Old"
+    Given the work "The Gladiators of Old" by "boxer"
     When I am logged in as "cutman"
       And I post the comment "I can still make you cry, you know." on the work "The Gladiators of Old"
     When I am logged in as "boxer" with password "10987tko"
@@ -100,8 +109,7 @@ Feature: Get messages in the inbox
       And I should not see "I can still make you cry, you know."
 
   Scenario: A user can mark an unread comment read on the homepage
-    Given I am logged in as "boxer" with password "10987tko"
-      And I post the work "Special Coverage"
+    Given the work "Special Coverage" by "boxer"
     When I am logged in as "cutman"
       And I post the comment "Is there anything we can do to make the fight go longer?" on the work "Special Coverage"
     When I am logged in as "boxer" with password "10987tko"
@@ -119,8 +127,7 @@ Feature: Get messages in the inbox
       And I should not see "Is there anything we can do to make the fight go longer?"
 
   Scenario: A user can reply to a comment from the home page without JavaScript
-    Given I am logged in as "sewwiththeflo"
-      And I post the work "Cat Thor's Bizarre Adventure"
+    Given the work "Cat Thor's Bizarre Adventure" by "sewwiththeflo"
       And I am logged in as "unbeatablesg"
       And I post the comment "dude this is super great!!" on the work "Cat Thor's Bizarre Adventure"
     When I am logged in as "sewwiththeflo"
@@ -139,8 +146,7 @@ Feature: Get messages in the inbox
 
   @javascript
   Scenario: A user can reply to a comment from the home page
-    Given I am logged in as "sewwiththeflo"
-      And I post the work "Cat Thor's Bizarre Adventure"
+    Given the work "Cat Thor's Bizarre Adventure" by "sewwiththeflo"
       And I am logged in as "unbeatablesg"
       And I post the comment "dude this is super great!!" on the work "Cat Thor's Bizarre Adventure"
     When I am logged in as "sewwiththeflo"
@@ -159,3 +165,17 @@ Feature: Get messages in the inbox
       And I go to the homepage
     Then I should see "sewwiththeflo on Cat Thor's Bizarre Adventure"
       And I should see "Thank you! Please go to bed."
+
+  Scenario: A user can update their inbox while filtering without a valid referer
+    Given the work "Cat Thor's Bizarre Adventure" by "sewwiththeflo"
+      And I am logged in as "unbeatablesg"
+      And I post the comment "dude this is super great!!" on the work "Cat Thor's Bizarre Adventure"
+    When I am logged in as "sewwiththeflo"
+      And I go to sewwiththeflo's inbox page
+      And I choose "Show unread"
+      And I press "Filter"
+      And I check "Select" within "li.comment:first-child"
+      And I press "Mark Read"
+    Then I should be on sewwiththeflo's inbox page
+      And the "Show unread" checkbox should be checked
+      And I should not see "dude this is super great!!"

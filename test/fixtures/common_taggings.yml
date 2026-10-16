@@ -62,13 +62,6 @@ common_tagging_00161:
   updated_at: 2008-12-07 21:06:54 Z
   id: 161
   filterable_id: 1063753758
-common_tagging_00190: 
-  filterable_type: Tag
-  common_tag_id: 1063753811
-  created_at: 2009-02-16 06:09:20 Z
-  updated_at: 2009-02-16 06:09:20 Z
-  id: 190
-  filterable_id: 1063753738
 common_tagging_00162: 
   filterable_type: Tag
   common_tag_id: 1063753762
@@ -216,13 +209,6 @@ common_tagging_02993:
   updated_at: 2009-03-20 20:06:52 Z
   id: 2993
   filterable_id: 1063753818
-common_tagging_00197: 
-  filterable_type: Tag
-  common_tag_id: 1063753747
-  created_at: 2009-02-16 06:11:18 Z
-  updated_at: 2009-02-16 06:11:18 Z
-  id: 197
-  filterable_id: 1063753738
 common_tagging_02938: 
   filterable_type: Tag
   common_tag_id: 1063753893
@@ -293,13 +279,6 @@ common_tagging_01652:
   updated_at: 2009-02-21 00:12:26 Z
   id: 1652
   filterable_id: 1063753818
-common_tagging_00085: 
-  filterable_type: Tag
-  common_tag_id: 0
-  created_at: 2008-11-21 07:59:52 Z
-  updated_at: 2008-11-21 07:59:52 Z
-  id: 85
-  filterable_id: 221905380
 common_tagging_00199: 
   filterable_type: Tag
   common_tag_id: 1063753750
@@ -349,13 +328,6 @@ common_tagging_01655:
   updated_at: 2009-02-21 00:12:45 Z
   id: 1655
   filterable_id: 1063753818
-common_tagging_00088: 
-  filterable_type: Tag
-  common_tag_id: 0
-  created_at: 2008-11-21 07:59:52 Z
-  updated_at: 2008-11-21 07:59:52 Z
-  id: 88
-  filterable_id: 26796919
 common_tagging_00001: 
   filterable_type: Tag
   common_tag_id: 26796919
@@ -391,13 +363,6 @@ common_tagging_00173:
   updated_at: 2009-02-16 05:57:47 Z
   id: 173
   filterable_id: 221905380
-common_tagging_00031: 
-  filterable_type: Tag
-  common_tag_id: 552317390
-  created_at: 2008-11-21 07:16:27 Z
-  updated_at: 2008-11-21 07:16:27 Z
-  id: 31
-  filterable_id: 713695255
 common_tagging_00003: 
   filterable_type: Tag
   common_tag_id: 545584597
@@ -405,13 +370,6 @@ common_tagging_00003:
   updated_at: 2008-11-21 06:11:27 Z
   id: 3
   filterable_id: 26796919
-common_tagging_00200: 
-  filterable_type: Tag
-  common_tag_id: 1063753750
-  created_at: 2009-02-16 06:11:18 Z
-  updated_at: 2009-02-16 06:11:18 Z
-  id: 200
-  filterable_id: 1063753738
 common_tagging_00174: 
   filterable_type: Tag
   common_tag_id: 1063753753
@@ -440,13 +398,6 @@ common_tagging_00175:
   updated_at: 2009-02-16 06:01:04 Z
   id: 175
   filterable_id: 1063753780
-common_tagging_00033: 
-  filterable_type: Tag
-  common_tag_id: 221905380
-  created_at: 2008-11-21 07:23:11 Z
-  updated_at: 2008-11-21 07:23:11 Z
-  id: 33
-  filterable_id: 713695255
 common_tagging_00230: 
   filterable_type: Tag
   common_tag_id: 1063753748
@@ -461,13 +412,6 @@ common_tagging_00202:
   updated_at: 2009-02-16 06:14:02 Z
   id: 202
   filterable_id: 1063753752
-common_tagging_00176: 
-  filterable_type: Tag
-  common_tag_id: 1063753808
-  created_at: 2009-02-16 06:01:04 Z
-  updated_at: 2009-02-16 06:01:04 Z
-  id: 176
-  filterable_id: 1063753738
 common_tagging_00034: 
   filterable_type: Tag
   common_tag_id: 545584597
@@ -552,13 +496,6 @@ common_tagging_00036:
   updated_at: 2008-11-21 07:33:32 Z
   id: 36
   filterable_id: 791950904
-common_tagging_00206: 
-  filterable_type: Tag
-  common_tag_id: 1063753813
-  created_at: 2009-02-16 06:17:18 Z
-  updated_at: 2009-02-16 06:17:18 Z
-  id: 206
-  filterable_id: 1063753738
 common_tagging_02948: 
   filterable_type: Tag
   common_tag_id: 1063753840
@@ -601,13 +538,6 @@ common_tagging_00095:
   updated_at: 2008-11-21 07:59:52 Z
   id: 95
   filterable_id: 26796919
-common_tagging_00208: 
-  filterable_type: Tag
-  common_tag_id: 1063753812
-  created_at: 2009-02-16 06:17:18 Z
-  updated_at: 2009-02-16 06:17:18 Z
-  id: 208
-  filterable_id: 1063753738
 common_tagging_00150: 
   filterable_type: Tag
   common_tag_id: 1063753781
@@ -643,13 +573,6 @@ common_tagging_00152:
   updated_at: 2008-12-07 21:05:37 Z
   id: 152
   filterable_id: 741440589
-common_tagging_00098: 
-  filterable_type: Tag
-  common_tag_id: 26796919
-  created_at: 2008-11-21 08:02:42 Z
-  updated_at: 2008-11-21 08:02:42 Z
-  id: 98
-  filterable_id: 1063753746
 common_tagging_00153: 
   filterable_type: Tag
   common_tag_id: 1063753803
@@ -720,13 +643,6 @@ common_tagging_02952:
   updated_at: 2009-03-19 01:55:30 Z
   id: 2952
   filterable_id: 569823665
-common_tagging_00183: 
-  filterable_type: Tag
-  common_tag_id: 1063753779
-  created_at: 2009-02-16 06:03:48 Z
-  updated_at: 2009-02-16 06:03:48 Z
-  id: 183
-  filterable_id: 1063753738
 common_tagging_02924: 
   filterable_type: Tag
   common_tag_id: 1063753887

@@ -1,5 +1,14 @@
 <% if @invite_request %>
   $j("#invite-status").html("<%= escape_javascript(render "invite_requests/invite_request", invite_request: @invite_request) %>");
+<% elsif @invitation %>
+  $j("#invite-status").html("<%= escape_javascript(render "invitation", invitation: @invitation) %>");
+
+  <%# Correct heading size for JavaScript display %>
+  $j(document).ready(function(){
+    $j('#invite-heading').replaceWith(function () {
+      return '<h3 class="heading">' + $j(this).html() + "</h3>";
+    });
+  })
 <% else %>
-  $j("#invite-status").html("<p>Sorry, we can't find the email address you entered. If you had used it to join our invitation queue, it's possible that your invitation may have already been emailed to you; please check your spam folder, as your spam filters may have placed it there.</p>");
+  $j("#invite-status").html("<%= escape_javascript(render "no_invitation") %>");
 <% end %>

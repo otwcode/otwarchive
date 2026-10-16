@@ -1,10 +1,7 @@
-# encoding: UTF-8
-require 'spec_helper'
+require "spec_helper"
 
 describe Tag do
-  after(:each) do
-    User.current_user = nil
-  end
+  it { is_expected.not_to allow_values("", "a" * 151).for(:name) }
 
   context "checking count caching" do
     before(:each) do
@@ -66,7 +63,7 @@ describe Tag do
       end
 
       it "Writes to the database do not happen immediately" do
-        (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
+        (1..(40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR) - 1).each do |try|
           @fandom_tag.taggings_count = try
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq 0
@@ -128,7 +125,7 @@ describe Tag do
         # Blank values will cause errors if assigned earlier due to division
         # in taggings_count_expiry.
         REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
-        REDIS_GENERAL.sadd("tag_update", tag.id)
+        REDIS_GENERAL.sadd?("tag_update", tag.id)
 
         RedisJobSpawner.perform_now("TagCountUpdateJob")
 
@@ -161,11 +158,37 @@ describe Tag do
     expect(tag.save).to be_truthy
   end
 
-  it "should not be valid if too long" do
-    tag = Tag.new
-    tag.name = "a" * 101
-    expect(tag.save).not_to be_truthy
-    expect(tag.errors[:name].join).to match(/too long/)
+  context "tags with blank names are invalid" do
+    [
+      ["200B".hex].pack("U"), # zero width space
+      ["200D".hex].pack("U"), # zero width joiner
+      ["2060".hex].pack("U"), # word joiner
+      (["200B".hex].pack("U") * 3),
+      ["200D".hex, "200D".hex, "2060".hex, "200B".hex].pack("U")
+    ].each do |tag_name|
+      tag = Tag.new
+      tag.name = tag_name
+      it "is not saved with an error message about a blank tag" do
+        expect(tag.save).to be_falsey
+        expect(tag.errors[:name].join).to match(/cannot be blank/)
+      end
+    end
+  end
+
+  context "tags with names that contain some zero-width characters are valid" do
+    %w[
+      👨‍👨‍👧‍👦
+      ප්‍රදානය
+      👩‍🔬
+    ].each do |tag_name|
+      tag = Tag.new
+      tag.name = tag_name
+      it "is saved" do
+        expect(tag.save).to be_truthy
+        expect(tag.errors).to be_empty
+        expect(tag.name).to eq(tag_name)
+      end
+    end
   end
 
   context "tags using restricted characters should not be saved" do
@@ -185,7 +208,7 @@ describe Tag do
       "no%maths"
     ].each do |tag|
       forbidden_tag = Tag.new
-      forbidden_tag.name = tag 
+      forbidden_tag.name = tag
       it "is not saved and receives an error message about restricted characters" do
         expect(forbidden_tag.save).to be_falsey
         expect(forbidden_tag.errors[:name].join).to match(/restricted characters/)
@@ -269,17 +292,30 @@ describe Tag do
       end
 
       it "autocomplete should work" do
-        tag_character = FactoryBot.create(:character, canonical: true, name: "kirk")
-        tag_fandom = FactoryBot.create(:fandom, name: "Star Trek", canonical: true)
-        tag_fandom.add_to_autocomplete
-        results = Tag.autocomplete_fandom_lookup(term: "ki", fandom: "Star Trek")
-        expect(results.include?("#{tag_character.id}: #{tag_character.name}")).to be_truthy
-        expect(results.include?("brave_sire_robin")).to be_falsey
+        create(:canonical_fandom, name: "Star Trek")
+        tag_character = create(:canonical_character, name: "kirk")
+        results = Tag.autocomplete_fandom_lookup(term: +"ki", fandom: "Star Trek")
+        expected_tag = "#{tag_character.id}: #{tag_character.name}"
+        expect(results).to eq([expected_tag])
+      end
+
+      it "autocomplete should deduplicate tags between fandoms" do
+        # Create two fandoms
+        tag_fandom_og = create(:canonical_fandom, name: "Star Trek")
+        tag_fandom_reboot = create(:canonical_fandom, name: "Star Trek (2009 Reboot)")
+        # And add a character tag that is in both of them
+        tag_character = create(:canonical_character, name: "kirk")
+        CommonTagging.new(common_tag: tag_character, filterable: tag_fandom_og).save
+        CommonTagging.new(common_tag: tag_character, filterable: tag_fandom_reboot).save
+        # Search results should still only show a single tag
+        results = Tag.autocomplete_fandom_lookup(term: +"ki", fandom: ["Star Trek", "Star Trek (2009 Reboot)"])
+        expected_tag = "#{tag_character.id}: #{tag_character.name}"
+        expect(results).to eq([expected_tag])
       end
 
       it "old tag maker still works" do
-        tag_adult = Rating.create_canonical("adult", true)
-        tag_normal = ArchiveWarning.create_canonical("other")
+        tag_adult = Rating.create_canonical(+"adult", true)
+        tag_normal = ArchiveWarning.create_canonical(+"other")
         expect(tag_adult.name).to eq("adult")
         expect(tag_normal.name).to eq("other")
         expect(tag_adult.adult).to be_truthy
@@ -343,15 +379,19 @@ describe Tag do
   end
 
   describe "has_posted_works?" do
-    before do
-      create(:work, fandom_string: "love live,jjba")
-      create(:draft, fandom_string: "zombie land saga,jjba")
-    end
-
-    it "is true if used in posted works" do
-      expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
-      expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
-      expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
+    {
+      "draft" => { posted: false },
+      "unrevealed" => { in_unrevealed_collection: true },
+      "hidden" => { hidden_by_admin: true }
+    }.each do |description, attributes|
+      it "is false if only used on #{description} works" do
+        create(:work, fandom_string: "love live,jjba")
+        non_visible_work = create(:work, fandom_string: "zombie land saga,jjba")
+        non_visible_work.update!(**attributes)
+        expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
+        expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
+        expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
+      end
     end
   end
 

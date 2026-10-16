@@ -29,10 +29,11 @@ class Admin::BannersController < Admin::BaseController
     if @admin_banner.save
       if @admin_banner.active?
         AdminBanner.banner_on
-        flash[:notice] = ts('Setting banner back on for all users. This may take some time.')
+        flash[:notice] = t(".banner_on")
       else
-        flash[:notice] = ts('Banner successfully created.')
+        flash[:notice] = t(".success")
       end
+      AdminActivity.log_action(current_admin, @admin_banner, action: "create admin banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
       redirect_to @admin_banner
     else
       render action: 'new'
@@ -43,34 +44,43 @@ class Admin::BannersController < Admin::BaseController
   def update
     @admin_banner = authorize AdminBanner.find(params[:id])
 
-    if !@admin_banner.update(admin_banner_params)
-      render action: 'edit'
-    elsif params[:admin_banner_minor_edit]
-      flash[:notice] = ts('Updating banner for users who have not already dismissed it. This may take some time.')
+    if @admin_banner.update(admin_banner_params)
+      if params[:admin_banner_minor_edit]
+        flash[:notice] = t(".minor_edit")
+      elsif @admin_banner.active?
+        AdminBanner.banner_on
+        flash[:notice] = t(".banner_on")
+      else
+        flash[:notice] = t(".success")
+      end
+      AdminActivity.log_action(current_admin, @admin_banner, action: "update admin banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}, Active: #{@admin_banner.active?}")
       redirect_to @admin_banner
     else
-      if @admin_banner.active?
-        AdminBanner.banner_on
-        flash[:notice] = ts('Setting banner back on for all users. This may take some time.')
-      else
-        flash[:notice] = ts('Banner successfully updated.')
-      end
-      redirect_to @admin_banner
+      render action: "edit"
     end
   end
 
   # GET /admin/banners/1/confirm_delete
   def confirm_delete
     @admin_banner = authorize AdminBanner.find(params[:id])
+    return unless @admin_banner.active?
+    
+    flash[:error] = t("admin.banners.cannot_delete_active")
+    redirect_to @admin_banner
   end
 
   # DELETE /admin/banners/1
   def destroy
     @admin_banner = authorize AdminBanner.find(params[:id])
-    @admin_banner.destroy
-
-    flash[:notice] = ts('Banner successfully deleted.')
-    redirect_to admin_banners_path
+    if @admin_banner.active?
+      flash[:error] = t("admin.banners.cannot_delete_active")
+      redirect_to @admin_banner
+    else
+      @admin_banner.destroy
+      flash[:notice] = t(".success")
+      AdminActivity.log_action(current_admin, @admin_banner, action: "destroy admin banner", summary: "Content: #{@admin_banner.content}, Type: #{@admin_banner.banner_type.presence || 'Default'}")
+      redirect_to admin_banners_path
+    end
   end
 
   private

@@ -7,18 +7,15 @@
       names = givers_hash["names"]
       guest_count = givers_hash["guest_count"].to_i
       kudo_count = names.size + guest_count
-      # dup so we don't add "a guest" or "5 guests" to the original array. If
-      # that happens, kudo_count ends up too high whenever both named and guest
-      # kudos are present.
-      givers = names.dup
+      givers = names.map { |name| style_link(name, user_url(name)) }
       givers << t(".guest", count: guest_count) unless guest_count.zero?
-      givers_list = givers.map { |k| style_bold(k) }.to_sentence.html_safe
+      givers_list = to_sentence(givers.map { |k| style_bold(k) })
     %>
 
     <% if kudo_count == 1 && guest_count == 1 %>
-      <%= t(".html.single_guest.left_kudos", giver_list: style_bold(t(".html.single_guest.giver_list")).html_safe, commentable_link: commentable_link.html_safe).html_safe %>
+      <%= t(".single_guest.html", giver: style_bold(t(".single_guest.giver")), commentable_link: commentable_link) %>
     <% else %>
-      <%= t(".html.left_kudos", givers_list: givers_list, commentable_link: commentable_link.html_safe, count: kudo_count).html_safe %>
+      <%= t(".left_kudos.html", givers_list: givers_list, commentable_link: commentable_link, count: kudo_count) %>
     <% end %>
 
     <% if (index < @commentables.length - 1) %>

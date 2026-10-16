@@ -1,23 +1,25 @@
 class Admin::AdminInvitationsController < Admin::BaseController
-
   def index
+    authorize Invitation
   end
 
   def create
-    @invitation = current_admin.invitations.new(invitation_params)
+    @invitation = authorize current_admin.invitations.new(invitation_params)
 
     if @invitation.invitee_email.blank?
-      flash[:error] = t('no_email', default: "Please enter an email address.")
-      render action: 'index'
+      flash[:error] = t(".no_email")
+      render :index
     elsif @invitation.save
-      flash[:notice] = t('sent', default: "An invitation was sent to %{email_address}", email_address: @invitation.invitee_email)
+      flash[:notice] = t(".sent", email_address: @invitation.invitee_email)
       redirect_to admin_invitations_path
     else
-      render action: 'index'
+      render :index
     end
   end
 
   def invite_from_queue
+    authorize Invitation
+
     count = invitation_params[:invite_from_queue].to_i
     InviteFromQueueJob.perform_later(count: count, creator: current_admin)
 
@@ -26,29 +28,32 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def grant_invites_to_users
+    authorize Invitation
+
     if invitation_params[:user_group] == "All"
       Invitation.grant_all(invitation_params[:number_of_invites].to_i)
     else
       Invitation.grant_empty(invitation_params[:number_of_invites].to_i)
     end
-    flash[:notice] = t('invites_created', default: 'Invitations successfully created.')
+    flash[:notice] = t(".invites_created")
     redirect_to admin_invitations_path
   end
 
   def find
+    authorize Invitation
+
     unless invitation_params[:user_name].blank?
       @user = User.find_by(login: invitation_params[:user_name])
       @hide_dashboard = true
       @invitations = @user.invitations if @user
     end
     if !invitation_params[:token].blank?
-      @invitation = Invitation.find_by(token: invitation_params[:token])
+      @invitations = Invitation.where(token: invitation_params[:token])
     elsif invitation_params[:invitee_email].present?
       @invitations = Invitation.where("invitee_email LIKE ?", "%#{invitation_params[:invitee_email]}%")
-      @invitation = @invitations.first if @invitations.length == 1
     end
 
-    return if @user || @invitation || @invitations.present?
+    return if @user || @invitations.present?
 
     flash.now[:error] = t(".user_not_found")
   end

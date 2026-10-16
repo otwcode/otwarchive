@@ -30,7 +30,7 @@ describe Admin, :ready do
   end
 
   context "invalid" do
-    it "without a user name" do
+    it "without a username" do
       expect { create(:admin, login: nil) }
         .to raise_error(ActiveRecord::RecordInvalid,
                         "Validation failed: Login can't be blank, Login is too short (minimum is #{ArchiveConfig.LOGIN_LENGTH_MIN} characters)")
@@ -126,6 +126,17 @@ describe Admin, :ready do
           .to raise_error(ActiveRecord::RecordInvalid,
                           "Validation failed: Roles is invalid")
       end
+    end
+  end
+
+  describe "#generate_otp_backup_codes!" do
+    let(:admin) { create(:admin) }
+
+    it "invalidates existing backup codes" do
+      admin.generate_otp_backup_codes!
+      original_codes = admin.otp_backup_codes
+      admin.generate_otp_backup_codes!
+      expect(admin.otp_backup_codes).not_to include(*original_codes)
     end
   end
 end

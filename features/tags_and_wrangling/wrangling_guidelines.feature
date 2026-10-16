@@ -6,7 +6,7 @@ Feature: Wrangling Guidelines
 
   Scenario: Post a Wrangling Guideline
 
-  Given I am logged in as an admin
+  Given I am logged in as a "tag_wrangling" admin
     And I am on the wrangling guidelines page
   And I follow "New Wrangling Guideline"
     And I fill in "Guideline text" with "This series of documents (Wrangling Guidelines) are intended to help tag wranglers remain consistent as they go about the business of wrangling tags by providing a set of formatting guidelines."
@@ -29,7 +29,7 @@ Feature: Wrangling Guidelines
 
   Scenario: Reorder Wrangling Guidelines
 
-  Given I am logged in as an admin
+  Given I am logged in as a "tag_wrangling" admin
     And 3 Wrangling Guidelines exist
   When I go to the Wrangling Guidelines reorder page
     And I fill in "wrangling_guidelines_1" with "3"
@@ -44,7 +44,7 @@ Feature: Wrangling Guidelines
 
   Scenario: Delete Wrangling Guideline
 
-  Given I am logged in as an admin
+  Given I am logged in as a "tag_wrangling" admin
     And I have posted a Wrangling Guideline titled "Relationship Tags"
   When I go to the Wrangling Guidelines page
     And I follow "Delete"

@@ -1,10 +1,9 @@
 class ProfilePolicy < ApplicationPolicy
-  # Roles that allow updating a user's profile.
-  EDIT_ROLES = %w[superadmin policy_and_abuse].freeze
+  FULL_ACCESS_ROLES = %w[superadmin policy_and_abuse].freeze
 
-  def can_edit_profile?
-    user_has_roles?(EDIT_ROLES)
+  def full_access?
+    user_has_roles?(FULL_ACCESS_ROLES)
   end
 
-  alias update? can_edit_profile?
+  alias update? full_access?
 end

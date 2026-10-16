@@ -162,7 +162,7 @@ class WorkQuery < Query
   def user_filter
     return if user_ids.blank?
 
-    if viewing_own_collected_works_page?
+    if collected_works_page_owner_or_admin?
       {
         has_child: {
           type: "creator",
@@ -232,8 +232,14 @@ class WorkQuery < Query
   def word_count_filter
     return unless options[:words_from].present? || options[:words_to].present?
     range = {}
-    range[:gte] = options[:words_from].delete(",._").to_i if options[:words_from].present?
-    range[:lte] = options[:words_to].delete(",._").to_i if options[:words_to].present?
+    if options[:words_from].present?
+      words_from = options[:words_from].delete(",._").to_i
+      range[:gte] = words_from.clamp(0, ArchiveConfig.MAX_SEARCH_INT_RANGE)
+    end
+    if options[:words_to].present?
+      words_to = options[:words_to].delete(",._").to_i
+      range[:lte] = words_to.clamp(0, ArchiveConfig.MAX_SEARCH_INT_RANGE)
+    end
     { range: { word_count: range } }
   end
 
@@ -331,9 +337,10 @@ class WorkQuery < Query
     options[:collected]
   end
 
-  def viewing_own_collected_works_page?
+  def collected_works_page_owner_or_admin?
     collected? && options[:works_parent].present? &&
-      options[:works_parent] == User.current_user
+      (options[:works_parent] == User.current_user ||
+        User.current_user.is_a?(Admin))
   end
 
   def include_restricted?
@@ -348,9 +355,10 @@ class WorkQuery < Query
 
   # Include anonymous works if we're not on a user/pseud page
   # OR if the user is viewing their own collected works
+  # OR an admin is viewing someone's collected works
   def include_anon?
     (user_ids.blank? && pseud_ids.blank?) ||
-      viewing_own_collected_works_page?
+      collected_works_page_owner_or_admin?
   end
 
   def user_ids

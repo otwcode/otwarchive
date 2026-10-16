@@ -83,6 +83,35 @@ form.single .autocomplete li.input {
   margin-right: 0;
 }
 
+/* 08 actions */
+
+.javascript .work.navigation .secondary {
+  width: 100%;
+    box-sizing: border-box;
+}
+
+/* If we use display without the .expanded qualifier, it will override .hidden's
+display: none and secondary will always be open. */
+.javascript .work.navigation .expanded + .secondary, .javascript .work.navigation .secondary li, .javascript .work.navigation .secondary p, .javascript .work.navigation .secondary a {
+  display: block;
+}
+
+.javascript .work.navigation .secondary p {
+  padding-block-start: 0.375em;
+}
+
+.javascript .work.navigation .secondary select {
+  max-width: 100%;
+  min-width: auto;
+}
+
+.javascript .work.navigation .secondary a {
+  height: 100%;
+  min-height: 1.286em;
+  padding-inline: 0.5em;
+  white-space: normal;
+}
+
 /* 16 zone system */
 
 .logged-in .splash > .module {

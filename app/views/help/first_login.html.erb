@@ -1,0 +1,155 @@
+<%# Expects current_user %>
+<div class="userstuff">
+  <h2 class="heading">
+    <%= t(".welcome_header", app_name: ArchiveConfig.APP_NAME) %>
+  </h2>
+  <p><%= t(".tips_to_start") %></p>
+
+  <h3 class="landmark heading"><%= t(".table_of_contents") %></h3>
+  <ul id="toc" class="toc" role="directory">
+    <li><%= link_to t(".logging_in_out.header"), "#logging_in" %></li>
+    <li><%= link_to t(".editing_profile.header"), "#edit_profile" %></li>
+    <li><%= link_to t(".pseuds.header"), "#pseuds" %></li>
+    <li><%= link_to t(".posting_works.header"), "#posting" %></li>
+    <li><%= link_to t(".browsing.header"), "#browsing" %></li>
+    <li><%= link_to t(".tags.header"), "#tags" %></li>
+    <li><%= link_to t(".warnings.header"), "#warnings" %></li>
+    <li><%= link_to t(".bookmarking_works.header"), "#bookmarking" %></li>
+    <li><%= link_to t(".preferences.header"), "#preferences" %></li>
+    <li>
+      <%= link_to t(".additional_info.header"), "#additional" %>
+      <ul>
+        <li><%= link_to t(".additional_info.history_mark_later.header"), "#history" %></li>
+        <li><%= link_to t(".additional_info.subscriptions.header"), "#subscriptions" %></li>
+      </ul>
+    </li>
+    <li><%= link_to t(".tos.header"), "#legal_stuff" %></li>
+    <li><%= link_to t(".support_and_feedback.header"), "#support" %></li>
+  </ul>
+
+  <h3 class="heading" id="logging_in"><%= t(".logging_in_out.header") %></h3>
+  <p>
+    <%= t(".logging_in_out.html",
+          forgot_password_link: link_to(t(".logging_in_out.forgot_password"), new_user_password_path)) %>
+  </p>
+
+  <h3 class="heading" id="edit_profile"><%= t(".editing_profile.header") %></h3>
+  <p>
+    <%= t(".editing_profile.html",
+          your_dashboard_link: link_to(t(".editing_profile.your_dashboard"), user_path(current_user)),
+          profile_link: link_to(t(".editing_profile.profile"), user_profile_path(current_user)),
+          edit_my_profile_link: link_to(t(".editing_profile.edit_my_profile"), edit_user_profile_path(current_user)),
+          profile_faq_link: link_to(t(".editing_profile.profile_faq"), archive_faq_path("profile"))) %>
+  </p>
+
+  <h3 class="heading" id="pseuds"><%= t(".pseuds.header") %></h3>
+  <p>
+    <%= t(".pseuds.html",
+          manage_your_pseuds_link: link_to(t(".pseuds.manage_your_pseuds"), user_pseuds_path(current_user)),
+          pseuds_faq_link: link_to(t(".pseuds.pseuds_faq"), archive_faq_path("pseuds"))) %>
+  </p>
+
+  <h3 class="heading" id="posting"><%= t(".posting_works.header") %></h3>
+  <p>
+    <%= t(".posting_works.html",
+          post_new_link: link_to(t(".posting_works.post_new"), new_work_path),
+          posting_editing_faq_link: link_to(t(".posting_works.posting_editing_faq"),
+            archive_faq_path("posting-and-editing")),
+          tutorial_link: link_to(t(".posting_works.tutorial"),
+            archive_faq_path("tutorial-posting-a-work-on-ao3"))) %>
+  </p>
+
+  <h3 class="heading" id="browsing"><%= t(".browsing.header") %></h3>
+  <p>
+    <% media_movie = Media.find_by_name("Movies") %>
+    <%= t(".browsing.html",
+          fandoms_link: link_to(t(".browsing.fandoms"), menu_fandoms_path),
+          all_fandoms_link: link_to(t(".browsing.all_fandoms"), media_index_path),
+          movies_link: if media_movie
+                         link_to(t(".browsing.movies"), media_fandoms_path(media_movie))
+                       else
+                         t(".browsing.movies")
+                       end,
+          search_feature_link: link_to(t(".browsing.search_feature"), search_works_path),
+          search_browse_faq_link: link_to(t(".browsing.search_browse_faq"), archive_faq_path("search-and-browse")),
+          search_browse_tutorial_link: link_to(t(".browsing.search_browse_tutorial"), admin_post_path(259))) %>
+  </p>
+
+  <h3 class="heading" id="tags"><%= t(".tags.header") %></h3>
+  <p>
+    <%= t(".tags.html",
+          tags_faq_link: link_to(t(".tags.tags_faq"), archive_faq_path("tags"))) %>
+  </p>
+
+  <h3 class="heading" id="warnings"><%= t(".warnings.header") %></h3>
+  <p>
+    <%= t(".warnings.description_html",
+          archive_specific_warnings_link: link_to(t(".warnings.archive_specific_warnings"),
+            tos_faq_path(anchor: "warnings_list"))) %>
+  </p>
+  <p>
+    <%= t(".warnings.symbols_html",
+          symbols_key_chart_link: link_to(t(".warnings.symbols_key_chart"), "/help/symbols-key.html")) %>
+  </p>
+
+  <h3 class="heading" id="bookmarking"><%= t(".bookmarking_works.header") %></h3>
+  <p>
+    <%= t(".bookmarking_works.html",
+          bookmarks_faq_link: link_to(t(".bookmarking_works.bookmarks_faq"), archive_faq_path("bookmarks"))) %>
+  </p>
+
+  <h3 class="heading" id="preferences"><%= t(".preferences.header") %></h3>
+  <p>
+    <%= t(".preferences.html",
+          set_my_preferences_link: link_to(t(".preferences.set_my_preferences"), user_preferences_path(current_user)),
+          edit_my_profile_link: link_to(t(".preferences.edit_my_profile"), edit_user_profile_path(current_user)),
+          preferences_faq_link: link_to(t(".preferences.preferences_faq"), archive_faq_path("preferences"))) %>
+  </p>
+  <p>
+    <%= t(".preferences.skins_detail_html",
+          skins_faq_link: link_to(t(".preferences.skins_faq"),
+            archive_faq_path("skins-and-archive-interface")),
+          tutorials_list_link: link_to(t(".preferences.tutorials_list"),
+            archive_faq_path("tutorials"))) %>
+  </p>
+
+  <h3 class="heading" id="additional"><%= t(".additional_info.header") %></h3>
+  <h4 class="heading" id="history"><%= t(".additional_info.history_mark_later.header") %></h4>
+  <p>
+    <%= t(".additional_info.history_mark_later.html",
+          your_dashboard_link: link_to(t(".additional_info.history_mark_later.your_dashboard"), user_path(current_user)),
+          history_link: link_to(t(".additional_info.history_mark_later.history"), user_readings_path(current_user)),
+          history_faq_link: link_to(t(".additional_info.history_mark_later.history_faq"),
+            archive_faq_path("History-and-mark-for-later"))) %></p>
+
+  <h4 class="heading" id="subscriptions"><%= t(".additional_info.subscriptions.header") %></h4>
+  <p>
+    <%= t(".additional_info.subscriptions.html",
+          your_dashboard_link: link_to(t(".additional_info.subscriptions.your_dashboard"), user_path(current_user)),
+          subscriptions_feed_faq_link: link_to(t(".additional_info.subscriptions.subscriptions_feed_faq"),
+            archive_faq_path("subscriptions-and-feeds"))) %>
+  </p>
+
+  <h3 class="heading" id="legal_stuff"><%= t(".tos.header") %></h3>
+  <p>
+    <%= t(".tos.info_html",
+          tos_link: link_to(t(".tos.tos"), tos_path),
+          content_policy_link: link_to(t(".tos.content_policy"), content_path),
+          privacy_policy_link: link_to(t(".tos.privacy_policy"), privacy_path),
+          tos_faq_link: link_to(t(".tos.tos_faq"), tos_faq_path)) %>
+  </p>
+  <p>
+    <%= t(".tos.additional_questions_html",
+          contact_abuse_link: link_to(t(".tos.contact_abuse"), new_abuse_report_path)) %>
+  </p>
+
+  <h3 class="heading" id="support"><%= t(".support_and_feedback.header") %></h3>
+  <p>
+    <%= t(".support_and_feedback.html",
+          archive_faq_link: link_to(t(".support_and_feedback.archive_faq"), archive_faqs_path),
+          known_issues_link: link_to(t(".support_and_feedback.known_issues"), known_issues_path),
+          contact_support_link: link_to(t(".support_and_feedback.contact_support"), new_feedback_report_path),
+          unofficial_tools_faq_link: link_to(t(".support_and_feedback.unofficial_tools_faq"),
+            archive_faq_path("unofficial-browser-tools"))) %>
+  </p>
+</div>

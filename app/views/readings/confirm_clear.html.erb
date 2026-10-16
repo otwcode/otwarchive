@@ -1,0 +1,13 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".page_heading") %></h2>
+
+<!--main content-->
+<%= form_with(method: :post, url: { action: "clear" }, class: "simple destroy") do |f| %>
+  <p class="caution notice">
+    <%= t(".notice_html") %>
+  </p>
+  <p class="actions">
+    <%= f.submit t(".submit") %>
+  </p>
+<% end %>
+<!--/content-->

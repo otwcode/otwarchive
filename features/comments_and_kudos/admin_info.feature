@@ -29,6 +29,7 @@ Feature: Some admins can see IP addresses and emails for comments
   Examples:
     | role             | should_ip  | should_email |
     | superadmin       | should     | should       |
+    | legal            | should     | should       |
     | policy_and_abuse | should     | should       |
     | support          | should not | should       |
     | board            | should not | should not   |

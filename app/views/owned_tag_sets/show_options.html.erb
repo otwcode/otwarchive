@@ -10,12 +10,8 @@
 <% cache("tagsets_#{ids}_#{newest_updated_at}_#{tags_cache_key}", skip_digest: true) do %>
   <h2 class="heading">
     <%= ts("%{tag_type} Options From", tag_type: tag_type_label_name(@tag_type)) %>:
+    <%= to_sentence(@tag_sets.map { |ts| link_to(ts.title, tag_set_path(ts)) }) %>
   </h2>
-  <ul class="commas">
-    <% @tag_sets.each do |ts| %>
-      <li><%= link_to ts.title, tag_set_path(ts) %></li>
-    <% end %>
-  </ul>
 
   <% if @tags.empty? %>
     <p class="note"><%= ts("None to list!") %></p>

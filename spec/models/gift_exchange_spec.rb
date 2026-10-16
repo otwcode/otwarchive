@@ -41,5 +41,83 @@ describe GiftExchange do
         expect(challenge.requests_num_allowed).to eq(challenge.requests_num_required)
       end
     end
+
+    context "when request restriction doesn't allow any fields" do
+      before do
+        r = challenge.request_restriction
+        r.description_allowed = false
+        TagSet::TAG_TYPES.each { |type| r.send("#{type}_num_allowed=", 0) }
+      end
+
+      it "raises a validation error" do
+        challenge.save
+        expect(challenge.errors[:base]).to include("Request Settings must allow at least one field.")
+      end
+    end
+
+    context "when offer restriction doesn't allow any fields" do
+      before do
+        r = challenge.offer_restriction
+        r.description_allowed = false
+        TagSet::TAG_TYPES.each { |type| r.send("#{type}_num_allowed=", 0) }
+      end
+
+      it "raises a validation error" do
+        challenge.save
+        expect(challenge.errors[:base]).to include("Offer Settings must allow at least one field.")
+      end
+    end
+  end
+
+  describe "#destroy" do
+    let!(:challenge) { create(:gift_exchange) }
+    let!(:collection) { create(:collection, challenge: challenge) }
+
+    it "nullifies the collection's challenge references" do
+      challenge.destroy!
+      collection.reload
+      expect(collection.challenge_id).to be_nil
+      expect(collection.challenge_type).to be_nil
+    end
+  end
+
+  describe "reindexing" do
+    let!(:collection) { create(:collection) }
+
+    context "when gift exchange is created" do
+      it "enqueues the collection for reindex" do
+        expect do
+          create(:gift_exchange, collection: collection)
+        end.to add_to_reindex_queue(collection, :main)
+      end
+    end
+
+    context "when gift exchange already exists" do
+      let!(:exchange) { create(:gift_exchange, collection: collection, signup_open: false) }
+
+      context "when gift exchange signups are opened" do
+        it "enqueues the collection for reindex" do
+          expect do
+            exchange.update!(signup_open: true)
+          end.to add_to_reindex_queue(collection, :main)
+        end
+      end
+
+      context "when gift exchange is not significantly changed" do
+        it "doesn't enqueue the collection for reindex" do
+          expect do
+            exchange.update!(signup_instructions_general: "Changed text")
+          end.to not_add_to_reindex_queue(collection, :main)
+        end
+      end
+
+      context "when gift exchange is destroyed" do
+        it "enqueues the collection for reindex" do
+          expect do
+            exchange.destroy!
+          end.to add_to_reindex_queue(collection, :main)
+        end
+      end
+    end
   end
 end

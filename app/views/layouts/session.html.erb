@@ -37,6 +37,7 @@
       <%= render "layouts/header" %>
       <div id="inner" class="wrapper">
         <!-- BEGIN main -->
+        <%# If you edit these classes, you may need to edit the totp classes in application_helper's classes_for_main method %>
         <div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session region" role="main">
           <%= flash_div :error, :caution, :notice, :alert %>
           <div class="flash"></div>

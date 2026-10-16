@@ -1,7 +1,7 @@
 <% content_for :message do %>
 
 <% if @username.present? %>
-<%= t("mailer.general.greeting.informal.addressed", name: @username) %>
+<%= t("mailer.general.greeting.informal.addressed_html", name: @username) %>
 <% else %>
 <%= t("mailer.general.greeting.informal.unaddressed") %>
 <% end %>
@@ -21,4 +21,4 @@
 <%= t("mailer.general.signature.support") %>
 <% end %>
 
-<% content_for :sent_at do %><%= l(Time.now) %><% end %>
+<% content_for :sent_at do %><%= l(Time.current) %><% end %>

@@ -2,7 +2,7 @@
 
 class ZohoAuthClient
   ACCESS_TOKEN_REQUEST_ENDPOINT = "https://accounts.zoho.com/oauth/v2/token"
-  ACCESS_TOKEN_CACHE_KEY = "/v2/zoho_access_token"
+  ACCESS_TOKEN_CACHE_KEY = "/v3/zoho_access_token"
 
   SCOPE = [
     # - Find and create contacts before submitting tickets
@@ -12,7 +12,8 @@ class ZohoAuthClient
     "Desk.contacts.READ",
     "Desk.search.READ",
     "Desk.tickets.CREATE",
-    "Desk.tickets.READ"
+    "Desk.tickets.READ",
+    "Desk.tickets.UPDATE"
   ].join(",").freeze
 
   def access_token

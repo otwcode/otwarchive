@@ -11,7 +11,7 @@
   <%= will_paginate(@people) %>
   <!--main content-->
   <h3 class="landmark heading">Listing People</h3>
-  <ul class="pseud index group">
+  <ul class="participant pseud index group">
     <% for person in @people %>
       <% unless person.nil? %>
         <%= render 'people/author_blurb', :author => person %>

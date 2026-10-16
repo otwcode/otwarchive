@@ -29,9 +29,21 @@ When /^I orphan(?:| and take my pseud off) the (work|series) "([^"]*)"$/ do |typ
   step %{I choose to take my pseud off}
 end
 
-When /^I orphan and (?:keep|leave) my pseud on the (work|series) "([^"]*)"$/ do |type, name|
-  step %{I begin orphaning the #{type} "#{name}"}
+When "I orphan and leave my pseud on the series {string}" do |name|
+  step %{I begin orphaning the series "#{name}"}
   step %{I choose to keep my pseud on}
+end
+
+When "{string} orphans and takes their pseud off the work {string}" do |author, work|
+  u = User.find_by(login: author)
+  w = Work.find_by(title: work)
+  Creatorship.orphan(u.pseuds, [w], true)
+end
+
+When "{string} orphans and keeps their pseud on the work {string}" do |author, work|
+  u = User.find_by(login: author)
+  w = Work.find_by(title: work)
+  Creatorship.orphan(u.pseuds, [w], false)
 end
 
 Then /^"([^"]*)" (should|should not) be (?:a|the) (?:|co-)creator (?:of|on) the work "([^"]*)"$/ do |user, should_or_should_not, work|

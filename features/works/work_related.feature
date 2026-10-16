@@ -9,13 +9,36 @@ Scenario: Posting a remix / related work emails the creator of the original work
   Given I have related works setup
   When I post a related work as remixer
   Then a parent related work should be seen
-    And the original author should be emailed
+    And the original author should receive a related work email
+
+Scenario: Posting a remix in a variatey of ways should always send related work emails the creator of the original work and list the parent work in the proper location on the remix / related work
+
+  Given I have related works setup
+    And all emails have been delivered
+  When I post a related work as remixer without previewing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+
+  Given all emails have been delivered
+  When I post a related work as remixer after saving it as a draft
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+
+  Given all emails have been delivered
+  When I post a related work as remixer after saving it as a draft and then editing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+    
+  Given all emails have been delivered
+  When I post a related work as remixer after previewing it and then editing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
 
 Scenario: Remixer can see their remix / related work on their related works page
 
   Given I have related works setup
   When I post a related work as remixer
-  When I go to my user page
+  When I go to remixer's user page
   Then I should see "Related Works (1)"
   When I follow "Related Works"
   Then I should see "Works that inspired remixer"
@@ -30,18 +53,27 @@ Scenario: Creator of original work can see a remix on their related works page
   Then I should see "Works inspired by inspiration"
     And I should see "Followup by remixer"
 
+Scenario: Random user should not see unapproved related work on original work Creator's related works page
+
+  Given I have related works setup
+    And a related work has been posted
+  When I am logged in as "remixer"
+    And I go to inspiration's related works page
+  Then I should not see "Works inspired by inspiration"
+    And I should not see "Followup by remixer"
+
 Scenario: Posting a translation emails the creator of the original work and lists the parent work in the proper location on the translation
 
   Given I have related works setup
   When I post a translation as translator
   Then a parent translated work should be seen
-    And the original author should be emailed
+    And the original author should receive a related work email
 
 Scenario: Translator can see their translation on their related works page
 
   Given I have related works setup
   When I post a translation as translator
-  When I go to my user page
+  When I go to translator's user page
   Then I should see "Related Works (1)"
   When I follow "Related Works"
   Then I should see "Works translated by translator"
@@ -107,7 +139,7 @@ Scenario: Translation, related work, and parent work links appear in the right p
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding"
     And I list the work "Parent Work" as inspiration
-    And I press "Post"
+    And I press "Update"
     And a chapter is added to "Worldbuilding"
     And a draft chapter is added to "Worldbuilding"
   When I view the work "Worldbuilding"
@@ -236,7 +268,7 @@ Scenario: Draft works should not show up on related works
     And I am logged in as "translator"
     And I draft a translation
   When I am logged in as "inspiration"
-    And I go to my user page
+    And I go to inspiration's user page
   Then I should not see "Related Works (1)"
   When I view my related works
   Then I should not see "Worldbuilding Translated"
@@ -278,16 +310,6 @@ Scenario: Listing external works as inspirations
     And I should see "Inspired by Worldbuilding Two by BNF"
   When I view my related works
   Then I should see "From N/A to English"
-  # inactive URL should give a helpful message (AO3-1783)
-  # unreachable URL should give a more helpful message (A03-3536)
-  When I edit the work "Followup"
-    And I check "parent-options-show"
-    And I fill in "URL" with "http://example.org/404"
-    And I fill in "Title" with "Worldbuilding Two"
-    And I fill in "Author" with "BNF"
-    And I press "Preview"
-  Then I should see "Parent work URL could not be reached. If the URL is correct and the site is currently down, please try again later."
-
 Scenario: External work language
 
   Given basic tags
@@ -321,7 +343,7 @@ Scenario: External work language
 # especially during posting / editing / previewing a work
 # especially from the related_works page, which works but redirects to a non-existant page right now
 
-Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
+Scenario: Restricted works listed as Inspiration show up [Restricted] for guests, but normally for admins
   Given I have related works setup
     And a related work has been posted and approved
   When I am logged in as "remixer"
@@ -329,6 +351,9 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   When I am logged out
     And I view the work "Worldbuilding"
   Then I should see "[Restricted Work] by remixer"
+  When I am logged in as an admin
+    And I view the work "Worldbuilding"
+  Then I should see "Followup by remixer"
   When I am logged in as "remixer"
     And I unlock the work "Followup"
   When I am logged out
@@ -339,6 +364,9 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   When I am logged out
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
+  When I am logged in as an admin
+    And I view the work "Followup"
+  Then I should see "Inspired by Worldbuilding by inspiration"
 
 Scenario: Anonymous works listed as inspiration should have links to the authors,
   but only for the authors themselves and admins
@@ -351,13 +379,13 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
     And I view the work "Worldbuilding"
   Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
   When I follow "remixer" within ".afterword .children"
-  Then I should be on my "remixer" pseud page
+  Then I should be on the dashboard page for user "remixer" with pseud "remixer"
 
   When I am logged in as an admin
     And I view the work "Worldbuilding"
   Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
   When I follow "remixer" within ".afterword .children"
-  Then I should be on remixer's "remixer" pseud page
+  Then I should be on the dashboard page for user "remixer" with pseud "remixer"
 
   When I am logged out
     And I view the work "Worldbuilding"
@@ -389,6 +417,17 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And the email should link to misterdeejay's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/misterdeejay/pseuds/misterdeejay&quot;"
 
+  Scenario: When using an invalid URL
+    Given I am logged in
+      And I set up a draft "Naughty"
+    When I check "parent-options-show"
+      And I fill in "URL" with "not valid."
+      And I fill in "Title" with "Breaking rules"
+      And I fill in "Author" with "human"
+      And I press "Post"
+    Then I should see a save error message
+      And I should see "Parent work URL does not appear to be a valid URL."
+
   Scenario: When using a URL on the site to cite a parent work, the URL can't be
   for something that isn't a work
   Given I am logged in
@@ -409,7 +448,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Given I have related works setup
     And the user "inspiration" is a protected user
   When I post a related work as remixer
-  Then I should see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should see "This work cannot be listed as an inspiration."
 
   Scenario: When editing a work with an existing citation of a protected user's work, the citation remains
   Given I have related works setup
@@ -418,7 +457,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And I am logged in as "remixer"
     And I edit the work "Followup"
     And I fill in "Fandoms" with "I forgot about the witches"
-    And I press "Post"
+    And I press "Update"
   Then I should see "Work was successfully updated."
     And I should see "Inspired by Worldbuilding by inspiration"
 
@@ -459,7 +498,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding" to be in the collection "Anonymous"
   When I post a related work as remixer
-  Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should not see "This work cannot be listed as an inspiration."
   When I am logged in as "remixer"
     And I go to remixer's related works page
   Then I should see "Works that inspired remixer"
@@ -473,7 +512,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding" to be in the collection "Hidden"
   When I post a related work as remixer
-  Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should not see "This work cannot be listed as an inspiration."
   When I am logged in as "remixer"
     And I go to remixer's related works page
   Then I should see "Works that inspired remixer"
@@ -489,7 +528,9 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I go to remixer's related works page
     Then I should see "Works that inspired remixer"
       And I should see "Worldbuilding by inspiration"
-    When I go to inspiration's related works page
+    When I approve a related work
+      And I am logged in as "remixer"
+      And I go to inspiration's related works page
     Then I should see "Works inspired by inspiration"
       And I should see "Followup by Anonymous [remixer]"
     When I am logged in as "inspiration"
@@ -505,6 +546,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given a hidden collection "Hidden"
       And I have related works setup
       And I post a related work as remixer
+      And I approve a related work
     When I am logged in as "remixer"
       And I edit the work "Followup" to be in the collection "Hidden"
       And I go to remixer's related works page
@@ -523,10 +565,22 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I should see "A work in an unrevealed collection"
       And I should not see "remixer"
 
+  Scenario: When an unrevealed work is cited, its title is not visible on the remixer's work edit page
+    Given a hidden collection "Hidden"
+      And I have related works setup
+      And I post a related work as remixer
+      And I am logged in as "inspiration"
+      And I edit the work "Worldbuilding" to be in the collection "Hidden"
+    When I am logged in as "remixer"
+      And I edit the work "Followup"
+    Then I should see "Mystery Work"
+      And I should not see "Worldbuilding"
+
   Scenario: A remix of an anonymous work is shown on the remixer's related works page, but not on the original creator's related works page
     Given an anonymous collection "Anonymous"
       And I have related works setup
       And I post a related work as remixer
+      And I approve a related work
     When I am logged in as "inspiration"
       And I edit the work "Worldbuilding" to be in the collection "Anonymous"
       And I go to remixer's related works page
@@ -548,6 +602,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given a hidden collection "Hidden"
       And I have related works setup
       And I post a related work as remixer
+      And I approve a related work
     When I am logged in as "inspiration"
       And I edit the work "Worldbuilding" to be in the collection "Hidden"
       And I go to remixer's related works page
@@ -570,6 +625,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given an anonymous collection "Anonymous"
       And I have related works setup
       And I post a translation as translator
+      And I approve a related work
     When I am logged in as "translator"
       And I edit the work "Worldbuilding Translated" to be in the collection "Anonymous"
       And I go to translator's related works page
@@ -595,6 +651,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given a hidden collection "Hidden"
       And I have related works setup
       And I post a translation as translator
+      And I approve a related work
     When I am logged in as "translator"
       And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
       And I go to translator's related works page
@@ -618,6 +675,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given an anonymous collection "Anonymous"
       And I have related works setup
       And I post a translation as translator
+      And I approve a related work
     When I am logged in as "inspiration"
       And I edit the work "Worldbuilding" to be in the collection "Anonymous"
       And I go to translator's related works page
@@ -643,6 +701,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given a hidden collection "Hidden"
       And I have related works setup
       And I post a translation as translator
+      And I approve a related work
     When I am logged in as "inspiration"
       And I edit the work "Worldbuilding" to be in the collection "Hidden"
       And I go to translator's related works page
@@ -708,7 +767,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding"
     And I list the work "Parent Work" as inspiration
-    And I press "Post"
+    And I press "Update"
     And I am logged in as "translator"
     And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
     And I am logged in as "remixer"
@@ -729,3 +788,85 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Then I should see the inspiring parent work in the beginning notes
     And I should see the translation listed on the original work
     And I should see the related work listed on the original work
+
+Scenario: Notification emails for related works are translated
+
+  Given a locale with translated emails
+    And I have related works setup
+    And the user "inspiration" enables translated emails
+    And the user "encouragement" allows co-creators
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I invite the co-author "encouragement"
+    And I press "Update"
+  Then 1 email should be delivered to "encouragement"
+    And the email should contain "The user inspiration has invited your pseud encouragement to be listed as a co-creator on the following work"
+  When the user "encouragement" accepts all co-creator requests
+    And a related work has been posted
+  Then 3 emails should be delivered
+    And "inspiration" should receive 1 email
+    And the email to "inspiration" should be translated
+    And the email should have "Related work notification" in the subject
+    And "encouragement" should receive 2 emails
+    And the last email to "encouragement" should be non-translated
+    And the last email should have "Related work notification" in the subject
+
+Scenario: Notification emails for translations are translated
+
+  Given a locale with translated emails
+    And I have related works setup
+    And the user "inspiration" enables translated emails
+    And the user "encouragement" allows co-creators
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I invite the co-author "encouragement"
+    And I press "Update"
+  Then 1 email should be delivered to "encouragement"
+    And the email should contain "The user inspiration has invited your pseud encouragement to be listed as a co-creator on the following work"
+  When the user "encouragement" accepts all co-creator requests
+    And a translation has been posted
+  Then 3 emails should be delivered
+    And "inspiration" should receive 1 email
+    And the email to "inspiration" should be translated
+    And the email should have "Related work notification" in the subject
+    And "encouragement" should receive 2 emails
+    And the last email to "encouragement" should be non-translated
+    And the last email should have "Related work notification" in the subject
+
+Scenario: A note appears on deleted inspirations and translations
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  When I view the work "Followup"
+  Then I should see "Inspired by a deleted work"
+  When I view the work "Worldbuilding Translated"
+  Then I should see "A translation of a deleted work"
+
+Scenario: Downloaded works with a deleted inspiration display the correct note when downloaded
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  Then I should be able to download all versions of "Followup"
+  When I view the work "Followup" 
+    And I follow "HTML"
+  Then I should see "Inspired by a deleted work"
+
+Scenario: Deleted inspiration relationships can be deleted from the Edit Work page
+
+  Given I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  When I am logged in as "remixer"
+    And I view the work "Followup"
+    And I follow "Edit"
+  Then I should see "Deleted work"
+  When I follow "Remove" within "#parent-options"
+  Then I should not see "Deleted work"

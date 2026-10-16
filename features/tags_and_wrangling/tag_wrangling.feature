@@ -3,21 +3,21 @@ Feature: Tag wrangling
 
   Scenario: Admin can create a tag wrangler using the interface
 
-    Given I have loaded the "roles" fixture
+    Given the role "tag_wrangler"
     When I am logged in as "dizmo"
-    Then I should not see "Tag Wrangling" within "#header"
+    Then I should not see "Tag Wrangling" within "#greeting"
     When I am logged in as a "tag_wrangling" admin
       And I go to the manage users page
       And I fill in "Name" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
     # admin making user tag wrangler
-    When I check "user_roles_1"
+    When I check the "tag_wrangler" role checkbox
       And I press "Update"
     Then I should see "User was successfully updated"
     # accessing wrangling pages
     When I am logged in as "dizmo"
-      And I follow "Tag Wrangling" within "#header"
+      And I follow "Tag Wrangling" within "#greeting"
     Then I should see "Wrangling Home"
     # no access otherwise
     When I log out
@@ -26,9 +26,9 @@ Feature: Tag wrangling
   Scenario Outline: Tag wrangler navigation/sidebar
     Given the tag wrangling setup
       And I am logged in as a tag wrangler
-    When I go to my wrangling page
+    When I go to the wrangling page for "wrangler"
     Then I should see "Wrangling Home"
-      And I should see "Fandoms by media (3)"
+      And I should see "Fandoms by media (2)"
       And I should see "Characters by fandom (2)"
       And I should see "Relationships by fandom (1)"
     When I follow <link_text>
@@ -40,7 +40,7 @@ Feature: Tag wrangling
       | "Wrangling Tools"             | "Tag Wrangling"                    |
       | "Characters by fandom (2)"    | "Mass Wrangle New/Unwrangled Tags" |
       | "Relationships by fandom (1)" | "Mass Wrangle New/Unwrangled Tags" |
-      | "Fandoms by media (3)"        | "Mass Wrangle New/Unwrangled Tags" |
+      | "Fandoms by media (2)"        | "Mass Wrangle New/Unwrangled Tags" |
 
   Scenario: Edit tag page
     Given the tag wrangling setup
@@ -70,7 +70,7 @@ Feature: Tag wrangling
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
       And I am logged in as a tag wrangler
-    When I go to my wrangling page
+    When I go to the wrangling page for "wrangler"
       And I follow "Wranglers"
       And I fill in "tag_fandom_string" with "Stargate SG-1"
       And I press "Assign"
@@ -81,7 +81,7 @@ Feature: Tag wrangling
     Then I should see "Stargate SG-1"
       And I should see "wrangler" within "ul.wranglers"
 
-  Scenario: Making a character canonical and assiging it to a fandom
+  Scenario: Making a character canonical and assigning it to a fandom
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
       And I am logged in as a tag wrangler
@@ -112,6 +112,7 @@ Feature: Tag wrangling
     When I go to the "Jack O'Neil" tag edit page
       And I fill in "Synonym of" with "Jack O'Neill"
       And I press "Save changes"
+      And all indexing jobs have been run
       And I follow "Jack O'Neill"
     Then I should see "Stargate SG-1"
     When I view the tag "Stargate SG-1"
@@ -120,7 +121,7 @@ Feature: Tag wrangling
 
   Scenario Outline: Creating new non-canonical tags
     Given I am logged in as a tag wrangler
-      And I go to my wrangling page
+      And I go to the wrangling page for "wrangler"
     When I follow "New Tag"
       And I fill in "Name" with "MyNewTag"
       And I choose <type>
@@ -136,7 +137,7 @@ Feature: Tag wrangling
 
   Scenario Outline: Creating new canonical tags
     Given I am logged in as a tag wrangler
-      And I go to my wrangling page
+      And I go to the wrangling page for "wrangler"
     When I follow "New Tag"
       And I fill in "Name" with "MyNewTag"
       And I choose <type>
@@ -205,7 +206,7 @@ Feature: Tag wrangling
       And I press "Save changes"
     Then I should see "Tag was updated"
       And the "Apophis" tag should be unwrangleable
-    When I am on my wrangling page
+    When I go to the wrangling page for "wrangler"
       And I follow "Stargate SG-1"
     Then I should see "Wrangle Tags for Stargate SG-1"
     When I follow "Characters (4)"
@@ -311,7 +312,7 @@ Feature: Tag wrangling
   Scenario: An admin can see the troubleshoot button on a tag page
 
     Given a canonical fandom "Cowboy Bebop"
-      And I am logged in as an admin
+      And I am logged in as a "tag_wrangling" admin
     When I view the tag "Cowboy Bebop"
     Then I should see "Troubleshoot"
 
@@ -360,8 +361,79 @@ Feature: Tag wrangling
     Given the tag wrangling setup
       And I am logged in as a tag wrangler
     Then no tag is scheduled for count update from now on
-    When I go to my wrangling page
+    When I go to the wrangling page for "wrangler"
     Then I should see "Wrangling Home"
       And I should see "Characters by fandom (2)"
     When I follow "Characters by fandom (2)"
     Then I should see "Mass Wrangle New/Unwrangled Tags"
+
+  Scenario: Subtags are listed in alphabetical order
+    Given a canonical freeform "Angst"
+      And a canonical freeform "Angstc"
+      And it is currently 1 second from now
+      # The waits are here so we can be sure the tags are created/attached in
+      # a non-sorted order, so the test can check that reordering is happening
+      And a canonical freeform "Angstb"
+      And it is currently 1 second from now
+      And a canonical freeform "Angsta"
+      And "Angst" is a metatag of the freeform "Angstc"
+      And it is currently 1 second from now
+      And "Angst" is a metatag of the freeform "Angstb"
+      And it is currently 1 second from now
+      And "Angst" is a metatag of the freeform "Angsta"
+    When I view the tag "Angst"
+    Then "Angsta" should appear before "Angstb"
+      And "Angstb" should appear before "Angstc"
+
+  Scenario: Metatags are listed in alphabetical order by sortable name
+    Given a canonical freeform "Sex and Feels and Pain"
+      And a canonical freeform "Smut"
+      And it is currently 1 second from now
+      # The waits are here so we can be sure the tags are created/attached in
+      # a non-sorted order, so the test can check that reordering is happening
+      And a canonical freeform "The Angst"
+      And it is currently 1 second from now
+      And a canonical freeform "Fluff"
+      And "Smut" is a metatag of the freeform "Sex and Feels and Pain"
+      And it is currently 1 second from now
+      And "The Angst" is a metatag of the freeform "Sex and Feels and Pain"
+      And it is currently 1 second from now
+      And "Fluff" is a metatag of the freeform "Sex and Feels and Pain"
+    When I view the tag "Sex and Feels and Pain"
+    Then "The Angst" should appear before "Fluff"
+      And "Fluff" should appear before "Smut"
+
+  Scenario: Tags in mass wrangling bins should have a link to the comment page with the comment count.
+
+    Given I am logged in as a tag wrangler
+      And I post the work "My Plan" with fandom "World Domination"
+      And all indexing jobs have been run
+      And I go to the fandom mass bin
+    Then I should see "World Domination"
+      And I should see "Comments (0)"
+    When I post the comment "Anyone have a plan?" on the tag "World Domination"
+      And I go to the fandom mass bin
+    Then I should see "World Domination"
+      And I should see "Comments (1)"
+
+  Scenario: Tags in fandom bins should have a link to the comment page with the comment count.
+
+    Given I am logged in as a tag wrangler
+      And I post the work "My Plan" with fandom "World Domination" with character "New Person"
+      And all indexing jobs have been run
+      And I view the unwrangled character bin for "World Domination"
+    Then I should see "New Person"
+      And I should see "Comments (0)"
+    When I post the comment "Who's this?" on the tag "New Person"
+      And I view the unwrangled character bin for "World Domination"
+    Then I should see "World Domination"
+      And I should see "Comments (1)"
+
+  Scenario: Unwrangleable tags should not appear in mass wrangling bins
+    Given I am logged in as a tag wrangler
+      And a freeform exists with name: "Unwrangleable Nonsense", unwrangleable: true
+      And I post the work "My Plan" with freeform "Unwrangleable Nonsense" with second freeform "Wrangleable Sense"
+      And all indexing jobs have been run
+    When I go to the freeform mass bin
+      Then I should see "Wrangleable Sense"
+      Then I should not see "Unwrangleable Nonsense"

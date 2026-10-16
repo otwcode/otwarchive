@@ -4,13 +4,12 @@ class BookmarksController < ApplicationController
   before_action :load_bookmarkable, only: [:index, :new, :create]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :check_parent_visible, only: [:index, :new]
   before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :confirm_delete, :share]
   before_action :check_visibility, only: [:show, :share]
   before_action :check_ownership, only: [:edit, :update, :destroy, :confirm_delete, :share]
 
   before_action :check_pseud_ownership, only: [:create, :update]
-
-  skip_before_action :store_location, only: [:share]
 
   def check_pseud_ownership
     if params[:bookmark][:pseud_id]
@@ -20,6 +19,10 @@ class BookmarksController < ApplicationController
         redirect_to root_path and return
       end
     end
+  end
+
+  def check_parent_visible
+    check_visibility_for(@bookmarkable)
   end
 
   # get the parent
@@ -60,8 +63,8 @@ class BookmarksController < ApplicationController
 
   def index
     if @bookmarkable
-      access_denied unless is_admin? || @bookmarkable.visible?
-      @bookmarks = @bookmarkable.bookmarks.is_public.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarkable.bookmarks.not_private.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarks.where(hidden_by_admin: false) unless logged_in_as_admin?
     else
       base_options = {
         show_private: (@user.present? && @user == current_user),
@@ -95,7 +98,6 @@ class BookmarksController < ApplicationController
 
       if @owner.present?
         @search = BookmarkSearchForm.new(options.merge(faceted: true, parent: @owner))
-
         if @user.blank?
           # When it's not a particular user's bookmarks, we want
           # to list *bookmarkable* items to avoid duplication
@@ -109,7 +111,6 @@ class BookmarksController < ApplicationController
           flash_search_warnings(@bookmarks)
           @facets = @bookmarks.facets
         end
-
         if @search.options[:excluded_tag_ids].present? || @search.options[:excluded_bookmark_tag_ids].present?
           # Excluded tags do not appear in search results, so we need to generate empty facets
           # to keep them as checkboxes on the filters.
@@ -134,7 +135,7 @@ class BookmarksController < ApplicationController
           end
         end
       elsif use_caching?
-        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: ArchiveConfig.SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE.seconds) do
+        @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v3", expires_in: ArchiveConfig.SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE.seconds) do
           search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
           results = search.search_results.scope(:for_blurb)
           flash_search_warnings(results)
@@ -145,6 +146,13 @@ class BookmarksController < ApplicationController
       end
     end
     set_own_bookmarks
+
+    @pagy =
+      if @bookmarks.respond_to?(:total_pages)
+        pagy_query_result(@bookmarks)
+      elsif @bookmarkable_items.respond_to?(:total_pages)
+        pagy_query_result(@bookmarkable_items)
+      end
   end
 
   # GET    /:locale/bookmark/:id
@@ -187,7 +195,8 @@ class BookmarksController < ApplicationController
     @bookmarkable ||= ExternalWork.new(external_work_params)
     @bookmark = Bookmark.new(bookmark_params.merge(bookmarkable: @bookmarkable))
     if @bookmark.errors.empty? && @bookmark.save
-      flash[:notice] = ts("Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.")
+      flash[:notice] = t("bookmarks.create.success")
+      flash[:notice] += t("bookmarks.create.warnings.private_bookmark_added_to_collection") if bookmark_params[:collection_names].present?
       redirect_to(bookmark_path(@bookmark))
     else
       render :new
@@ -197,55 +206,9 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1
   # PUT /bookmarks/1.xml
   def update
-    new_collections = []
-    unapproved_collections = []
-    errors = []
-    bookmark_params[:collection_names]&.split(",")&.map(&:strip)&.uniq&.each do |collection_name|
-      collection = Collection.find_by(name: collection_name)
-      if collection.nil?
-        errors << ts("%{name} does not exist.", name: collection_name)
-      else
-        if @bookmark.collections.include?(collection)
-          next
-        elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
-          errors << ts("%{title} is closed to new submissions.", title: collection.title)
-        elsif @bookmark.add_to_collection(collection) && @bookmark.save
-          if @bookmark.approved_collections.include?(collection)
-            new_collections << collection
-          else
-            unapproved_collections << collection
-          end
-        else
-          errors << ts("Something went wrong trying to add collection %{title}, sorry!", title: collection.title)
-        end
-      end
-    end
-
-    # messages to the user
-    unless errors.empty?
-      flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
-    end
-
-    unless new_collections.empty?
-      flash[:notice] = ts("Added to collection(s): %{collections}.",
-                          collections: new_collections.collect(&:title).join(", "))
-    end
-    unless unapproved_collections.empty?
-      flash[:notice] = flash[:notice] ? flash[:notice] + " " : ""
-      flash[:notice] += if unapproved_collections.size > 1
-                          ts("You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map(&:title).join(", "))
-                        else
-                          ts("You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
-                        end
-    end
-
-    flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
-    flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
-
-    if @bookmark.update(bookmark_params) && errors.empty?
-      flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
-      flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
-      flash[:notice] = flash[:notice].html_safe
+    if @bookmark.update(bookmark_params)
+      flash[:notice] = t("bookmarks.update.bookmark_updated")
+      new_moderated_collections_message
       redirect_to(@bookmark)
     else
       @bookmarkable = @bookmark.bookmarkable
@@ -264,7 +227,7 @@ class BookmarksController < ApplicationController
     else
       # Avoid getting an unstyled page if JavaScript is disabled
       flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
-      redirect_back(fallback_location: root_path)
+      redirect_back_or_to @bookmark
     end
   end
 
@@ -276,6 +239,13 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
+    # We check that the URL from where the bookmark was deleted is a list of bookmarks. If it is not, we cannot redirect the user back since it would cause a 404 error
+    if %r{(/bookmarks\z)|(bookmarks/search\z)}.match?(URI.parse(request.referer).path)
+      redirect_back_or_to user_bookmarks_path(current_user)
+    else
+      redirect_to user_bookmarks_path(current_user)
+    end
+  rescue URI::InvalidURIError
     redirect_to user_bookmarks_path(current_user)
   end
 
@@ -339,6 +309,27 @@ class BookmarksController < ApplicationController
     end
   end
 
+  # Flash a message about the new moderated collections that the user has
+  # submitted their bookmark to.
+  def new_moderated_collections_message
+    new_moderated_collections = @bookmark.collection_items
+      .select(&:previously_new_record?)
+      .select(&:unreviewed_by_collection?)
+      .map(&:collection)
+
+    return if new_moderated_collections.blank?
+
+    links = new_moderated_collections.map do |collection|
+      view_context.link_to(collection.title, collection_path(collection))
+    end
+
+    message = t("bookmarks.new_moderated_collections_message_html",
+                count: new_moderated_collections.length,
+                collections: view_context.safe_join(links, ", "))
+
+    flash[:notice] = view_context.safe_join([flash[:notice], message].compact, " ")
+  end
+
   private
 
   def bookmark_params
@@ -366,6 +357,9 @@ class BookmarksController < ApplicationController
       :language_id,
       :date,
       :bookmarkable_date,
+      :word_count,
+      :words_from,
+      :words_to,
       :sort_column,
       :other_tag_names,
       :excluded_tag_names,

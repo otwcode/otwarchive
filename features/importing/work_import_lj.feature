@@ -136,7 +136,7 @@ Feature: Import Works from LJ
   Scenario: Creating a new multichapter work from an LJ story
     Given basic tags
       And I am logged in as "cosomeone"
-      And I set my time zone to "UTC"
+      And the user "cosomeone" sets the time zone to "UTC"
     When I go to the import page
       And I fill in "urls" with
         """

@@ -10,32 +10,47 @@
       </li>
     <% end %>
 
-    <li class="dropdown">
-      <%= link_to t(".nav.invitations.invitations"), admin_invitations_path %>
-      <ul class="menu">
-        <li><%= link_to t(".nav.invitations.new"), admin_invitations_path %></li>
-        <li><%= link_to t(".nav.invitations.requests"), user_invite_requests_path %></li>
-        <% if policy(InviteRequest).can_manage? %>
-          <li><%= link_to t(".nav.invitations.queue"), manage_invite_requests_path %></li>
-        <% end %>
-      </ul>
-    </li>
+    <% if policy(Invitation).index? || policy(UserInviteRequest).index? || policy(InviteRequest).can_manage? %>
+      <li class="dropdown">
+        <%= link_to t(".nav.invitations.invitations"), admin_invitations_path %>
+        <ul class="menu">
+          <li><%= link_to t(".nav.invitations.new"), admin_invitations_path %></li>
+          <% if policy(UserInviteRequest).index? %>
+            <li><%= link_to t(".nav.invitations.requests"), user_invite_requests_path %></li>
+          <% end %>
+          <% if policy(InviteRequest).can_manage? %>
+            <li><%= link_to t(".nav.invitations.queue"), manage_invite_requests_path %></li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
     <li class="dropdown">
       <%= link_to t(".nav.posts.admin_posts"), admin_posts_path %>
       <ul class="menu">
         <li><%= link_to t(".nav.posts.news"), admin_posts_path %></li>
+        <% if policy(AdminPost).can_draft? %>
+          <li><%= link_to t(".nav.posts.news_drafts"), drafts_admin_posts_path %></li>
+        <% end %>
         <% if policy(AdminPost).can_post? %>
           <li><%= link_to t(".nav.posts.post_news"), new_admin_post_path %></li>
+        <% elsif policy(AdminPost).can_draft? %>
+          <li><%= link_to t(".nav.posts.draft_news"), new_admin_post_path %></li>
         <% end %>
-        <li><%= link_to t(".nav.posts.faqs"), archive_faqs_path %></li>
-        <li><%= link_to t(".nav.posts.known_issues"), known_issues_path %></li>
-        <li><%= link_to t(".nav.posts.wrangling_guidelines"), wrangling_guidelines_path %></li>
+        <% if policy(ArchiveFaq).translation_access? %>
+          <li><%= link_to t(".nav.posts.faqs"), archive_faqs_path %></li>
+        <% end %>
+        <% if policy(KnownIssue).admin_index? %>
+          <li><%= link_to t(".nav.posts.known_issues"), known_issues_path %></li>
+        <% end %>
+        <% if policy(:wrangling).new? %>
+          <li><%= link_to t(".nav.posts.wrangling_guidelines"), wrangling_guidelines_path %></li>
+        <% end %>
       </ul>
     </li>
     <% if policy(AdminBlacklistedEmail).index? %>
       <li><%= link_to t(".nav.banned_emails"), admin_blacklisted_emails_path %></li>
     <% end %>
-  
+
     <% if policy(ModeratedWork).index? %>
       <li><%= link_to t(".nav.spam"), admin_spam_index_path %></li>
     <% end %>
@@ -48,6 +63,10 @@
       <li><%= link_to t(".nav.banners"), admin_banners_path %></li>
     <% end %>
 
+    <% if policy(SupportNotice).index? %>
+      <li><%= link_to t(".nav.support_notices"), admin_support_notices_path %></li>
+    <% end %>
+
     <% if policy(Skin).index? %>
       <li class="dropdown">
         <%= link_to t(".nav.skins.skins"), admin_skins_path %>
@@ -58,8 +77,9 @@
         </ul>
       </li>
     <% end %>
-    <li><%= link_to t(".nav.wrangling"), tag_wranglings_path %></li>
-  
+    <% if policy(:wrangling).full_access? %>
+      <li><%= link_to t(".nav.wrangling"), tag_wranglings_path %></li>
+    <% end %>
     <% if policy(Locale).index? %>
       <li><%= link_to t(".nav.locales"), locales_path %></li>
     <% end %>
@@ -68,6 +88,8 @@
       <li><%= link_to t(".nav.activities"), admin_activities_path %></li>
     <% end %>
 
-    <li><%= link_to t(".nav.api_tokens"), admin_api_index_path %></li>
+    <% if policy(ApiKey).index? %>
+      <li><%= link_to t(".nav.api_tokens"), admin_api_index_path %></li>
+    <% end %>
   </ul>
 </nav>

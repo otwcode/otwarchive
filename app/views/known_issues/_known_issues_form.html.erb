@@ -2,7 +2,7 @@
   <%= form_for(@known_issue) do |f| %>
     <%= error_messages_for @known_issue %>
     <dl class="text">
-      <dt class="required"><%= f.label :title, ts("Beta Revision") + "*" %></dt>
+      <dt class="required"><%= f.label :title, ts("Software Version") + "*" %></dt>
       <dd class="required"><%= f.text_field :title %></dd>
       <dt><%= f.label :content, ts("Recent Known Issues") %></dt>
       <dd>
@@ -12,7 +12,7 @@
         </ul>
         <p class="rtf-html-instructions note">
           <span class="html-notes"><%= allowed_html_instructions %></span>
-          <span class="hidden rtf-notes"><%= ts("Type or paste formatted text.") %><%= link_to_help "rte-help" %></span>
+          <span class="hidden rtf-notes"><%= rich_text_instructions %></span>
         </p>
         <% use_tinymce %>
 

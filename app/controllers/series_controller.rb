@@ -1,7 +1,7 @@
 class SeriesController < ApplicationController
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_series, only: [ :show, :edit, :update, :manage, :destroy, :confirm_delete ]
-  before_action :check_ownership, only: [ :edit, :update, :manage, :destroy, :confirm_delete ]
+  before_action :load_series, only: [:show, :edit, :remove_user_creatorship, :update, :manage, :update_positions, :confirm_delete, :destroy]
+  before_action :check_ownership, except: [:index, :show, :new, :create]
   before_action :check_visibility, only: [:show]
 
   def load_series
@@ -21,9 +21,9 @@ class SeriesController < ApplicationController
       redirect_to(root_path) and return
     end
     @user = User.find_by!(login: params[:user_id])
-    @page_subtitle = ts("%{username} - Series", username: @user.login)
+    @page_subtitle = t(".page_title", username: @user.login)
 
-    @series = if current_user.nil?
+    @series = if User.current_user.nil?
                 Series.visible_to_all
               else
                 Series.visible_to_registered_user
@@ -31,7 +31,7 @@ class SeriesController < ApplicationController
 
     if params[:pseud_id]
       @pseud = @user.pseuds.find_by!(name: params[:pseud_id])
-      @page_subtitle = ts("by ") + @pseud.byline
+      @page_subtitle = t(".page_title", username: @pseud.name)
       @series = @series.exclude_anonymous.for_pseud(@pseud)
     else
       @series = @series.exclude_anonymous.for_user(@user)
@@ -42,15 +42,21 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @works = @series.works_in_order.posted.select(&:visible?).paginate(page: params[:page])
+    @works = @series.works_in_order.posted.includes(:pseuds).select(&:visible?).paginate(page: params[:page])
 
     # sets the page title with the data for the series
-    @page_title = @series.unrevealed? ? ts("Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
-    if current_user.respond_to?(:subscriptions)
-      @subscription = current_user.subscriptions.where(subscribable_id: @series.id,
-                                                       subscribable_type: 'Series').first ||
-                      current_user.subscriptions.build(subscribable: @series)
+    if @series.unrevealed?
+      @page_subtitle = t(".unrevealed_series")
+    else
+      @page_title = get_page_title(@series.fandoms.pluck(:name).join(t("support.array.words_connector")),
+                                   helpers.text_byline(@series),
+                                   @series.title)
     end
+
+    return unless current_user.respond_to?(:subscriptions)
+
+    @subscription = current_user.subscriptions.where(subscribable: @series).first ||
+                    current_user.subscriptions.build(subscribable: @series)
   end
 
   # GET /series/new
@@ -61,19 +67,20 @@ class SeriesController < ApplicationController
 
   # GET /series/1/edit
   def edit
-    if params["remove"] == "me"
-      pseuds_with_author_removed = @series.pseuds - current_user.pseuds
-      if pseuds_with_author_removed.empty?
-        redirect_to controller: 'orphans', action: 'new', series_id: @series.id
-      else
-        begin
-          @series.remove_author(current_user)
-          flash[:notice] = ts("You have been removed as a creator from the series and its works.")
-          redirect_to @series
-        rescue Exception => error
-          flash[:error] = error.message
-          redirect_to @series
-        end
+  end
+
+  def remove_user_creatorship
+    pseuds_with_author_removed = @series.pseuds - current_user.pseuds
+    if pseuds_with_author_removed.empty?
+      redirect_to controller: "orphans", action: "new", series_id: @series.id
+    else
+      begin
+        @series.remove_author(current_user)
+        flash[:notice] = ts("You have been removed as a creator from the series and its works.")
+        redirect_to @series
+      rescue StandardError => e
+        flash[:error] = e.message
+        redirect_to @series
       end
     end
   end
@@ -109,7 +116,6 @@ class SeriesController < ApplicationController
 
   def update_positions
     if params[:serial_works]
-      @series = Series.find(params[:id])
       @series.reorder_list(params[:serial_works])
       flash[:notice] = ts("Series order has been successfully updated.")
     elsif params[:serial]

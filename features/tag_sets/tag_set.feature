@@ -149,7 +149,7 @@ Feature: Creating and editing tag sets
   Then I should see an update confirmation message
     And I should see "Uncategorized Fandoms (2)"
     And I should see "Unassociated Characters & Relationships (1)"
-  When I follow "Expand All"
+  When I press "Expand All"
   Then I should see "The Closer (1)"
     And I should see "Major Crimes (0)"
     And "Sharon Raydor" should be associated with the "Uncategorized" fandom "The Closer"
@@ -158,7 +158,7 @@ Feature: Creating and editing tag sets
     And I press "Update"
   Then I should see an update confirmation message
     And I should see "Unassociated Characters & Relationships (2)"
-  When I follow "Expand All"
+  When I press "Expand All"
   Then I should see "The Closer (0)"
     And I should see "Major Crimes (0)"
   When I expand the unassociated characters and relationships

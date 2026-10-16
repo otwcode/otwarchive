@@ -3,8 +3,9 @@ require 'spec_helper'
 describe Skin do
 
   describe "save" do
-    let(:child_skin) { build(:skin, title: "Child", css: "body {background: #fff;}") }
-    let(:parent_skin) { build(:skin, title: "Parent", css: "body {color: #000;}") }
+    let(:owner) { create(:user) }
+    let(:child_skin) { build(:skin, author: owner, title: "Child", css: "body {background: #fff;}") }
+    let(:parent_skin) { build(:skin, author: owner, title: "Parent", css: "body {color: #000;}") }
     let(:skin_parent) { SkinParent.new(child_skin: child_skin, parent_skin: parent_skin, position: 1) }
 
     it "should save a basic parent relationship" do
@@ -53,7 +54,7 @@ describe Skin do
       expect(own_grandparent.save).not_to be_truthy
       expect(own_grandparent.errors[:base]).not_to be_empty
 
-      grandchild_skin = Skin.new(title: "Grandchild", css: "body {color: red;}")
+      grandchild_skin = Skin.new(title: "Grandchild", css: "body {color: red;}", author: owner)
       expect(grandchild_skin.save).to be_truthy
       skin_parent2 = SkinParent.new(child_skin: grandchild_skin, parent_skin: child_skin, position: 1)
       expect(skin_parent2.save).to be_truthy
@@ -64,8 +65,35 @@ describe Skin do
       expect(duplicate_ancestor.errors[:base]).not_to be_empty
     end
 
+    context "when the parent skin belongs to a different user" do
+      let(:user_a) { create(:user) }
+      let(:user_b) { create(:user) }
+
+      it "should not allow using a private skin from another user as parent" do
+        private_skin = create(:skin, author: user_a, title: "Private Skin", css: "body {color: #000;}")
+        child = create(:skin, author: user_b, title: "Child Skin", css: "body {background: #fff;}")
+        skin_parent = SkinParent.new(child_skin: child, parent_skin: private_skin, position: 1)
+        expect(skin_parent.save).to be_falsey
+        expect(skin_parent.errors[:base]).not_to be_empty
+      end
+
+      it "should allow using a public skin from another user as parent" do
+        public_skin = create(:skin, :public, author: user_a, title: "Public Skin", css: "body {color: #000;}")
+        child = create(:skin, author: user_b, title: "Child Skin", css: "body {background: #fff;}")
+        skin_parent = SkinParent.new(child_skin: child, parent_skin: public_skin, position: 1)
+        expect(skin_parent.save).to be_truthy
+      end
+
+      it "should allow using your own private skin as parent" do
+        own_skin = create(:skin, author: user_a, title: "Own Skin", css: "body {color: #000;}")
+        child = create(:skin, author: user_a, title: "Own Child", css: "body {background: #fff;}")
+        skin_parent = SkinParent.new(child_skin: child, parent_skin: own_skin, position: 1)
+        expect(skin_parent.save).to be_truthy
+      end
+    end
+
     it "must not allow the title of a parent skin to be blank" do
-      blank_parent = Skin.new(title: " ", css: "body {color: #000;}")
+      blank_parent = Skin.new(author: owner, title: " ", css: "body {color: #000;}")
       blank_parent.save!(validate: false)
 
       child_skin.skin_parents_attributes = [{ parent_skin_title: blank_parent.title, position: 1 }]

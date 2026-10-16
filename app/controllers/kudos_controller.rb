@@ -1,9 +1,17 @@
 class KudosController < ApplicationController
-  skip_before_action :store_location
+  before_action :load_parent, only: [:index]
+  before_action :check_parent_visible, only: [:index]
   before_action :admin_logout_required, only: [:create]
 
-  def index
+  def load_parent
     @work = Work.find(params[:work_id])
+  end
+
+  def check_parent_visible
+    check_visibility_for(@work)
+  end
+
+  def index
     @kudos = @work.kudos.includes(:user).with_user
     @guest_kudos_count = @work.kudos.by_guest.count
 
@@ -33,7 +41,7 @@ class KudosController < ApplicationController
       respond_to do |format|
         format.html do
           flash[:kudos_notice] = t(".success")
-          redirect_to request.referer and return
+          redirect_to kudos_redirect_path(@kudo.commentable) and return
         end
 
         format.js do
@@ -50,7 +58,7 @@ class KudosController < ApplicationController
           return if check_user_status
 
           flash[:kudos_error] = error_message
-          redirect_to request.referer and return
+          redirect_to kudos_redirect_path(@kudo.commentable || root_path) and return
         end
 
         format.js do
@@ -68,7 +76,7 @@ class KudosController < ApplicationController
     respond_to do |format|
       format.html do
         flash[:kudos_error] = error_message
-        redirect_to request.referer
+        redirect_to kudos_redirect_path(@kudo&.commentable || root_path) and return
       end
 
       format.js do
@@ -78,6 +86,11 @@ class KudosController < ApplicationController
   end
 
   private
+
+  def kudos_redirect_path(commentable)
+    redirect_path = url_from(request.referer.to_s.split("#", 2).first)
+    redirect_path ? "#{redirect_path}#kudos_message" : polymorphic_path(commentable, anchor: "kudos_message")
+  end
 
   def kudo_params
     params.require(:kudo).permit(:commentable_id, :commentable_type)

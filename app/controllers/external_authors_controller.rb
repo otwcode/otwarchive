@@ -1,7 +1,5 @@
 class ExternalAuthorsController < ApplicationController
   before_action :load_user
-  before_action :check_ownership, only: [:create, :edit, :destroy, :new]
-  before_action :check_user_status, only: [:new, :create, :edit]
   before_action :get_external_author_from_invitation, only: [:claim, :complete_claim]
   before_action :users_only, only: [:complete_claim]
 
@@ -21,10 +19,6 @@ class ExternalAuthorsController < ApplicationController
       flash[:notice] = "You can't see that information."
       redirect_to root_path
     end
-  end
-
-  def edit
-    @external_author = ExternalAuthor.find(params[:id])
   end
 
   def get_external_author_from_invitation
@@ -56,7 +50,7 @@ class ExternalAuthorsController < ApplicationController
   def update
     @invitation = Invitation.find_by(token: params[:invitation_token])
     @external_author = ExternalAuthor.find(params[:id])
-    unless (@invitation && @invitation.external_author == @external_author) || @external_author.user == current_user
+    unless (@invitation && @invitation.external_author == @external_author) || (logged_in? && @external_author.user == current_user)
       flash[:error] = "You don't have permission to do that."
       redirect_to root_path
       return
@@ -86,7 +80,7 @@ class ExternalAuthorsController < ApplicationController
       redirect_to @user ? user_external_authors_path(@user) : root_path
     else
       flash[:error] = "There were problems saving your preferences."
-      render action: "edit"
+      redirect_to root_path
     end
   end
 

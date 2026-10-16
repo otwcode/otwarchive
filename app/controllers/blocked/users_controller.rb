@@ -12,14 +12,18 @@ module Blocked
     # GET /users/:user_id/blocked/users
     def index
       @blocks = @user.blocks_as_blocker
-        .joins(:blocked).includes(blocked: :default_pseud)
+        .joins(:blocked)
+        .includes(blocked: [:pseuds, { default_pseud: { icon_attachment: { blob: {
+                    variant_records: { image_attachment: :blob },
+                    preview_image_attachment: { blob: { variant_records: { image_attachment: :blob } } }
+                  } } } }])
         .order(created_at: :desc).order(id: :desc).page(params[:page])
 
       @pseuds = @blocks.map { |b| b.blocked.default_pseud }
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
 
-      @page_subtitle = "Blocked Users"
+      @page_subtitle = t(".page_title", username: @user.login)
     end
 
     # GET /users/:user_id/blocked/users/confirm_block

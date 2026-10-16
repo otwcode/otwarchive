@@ -1,30 +1,45 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Change My Email") %></h2>
+<h2 class="heading"><%= t(".heading") %></h2>
 <%= error_messages_for :user %>
 <!--/descriptions-->
 
 <!--subnav-->
-<%= render 'edit_header_navigation' %>
+<%= render "edit_header_navigation" %>
 <!--/subnav-->
 
+<% reconfirmation_date = @user.confirmation_sent_at + User.confirm_within if @user.pending_reconfirmation? %>
+<% if reconfirmation_date && (Time.current < reconfirmation_date) %>
+  <div class="caution notice">
+    <p><%= t(".caution.requested_change_html", unconfirmed_email: tag.strong(@user.unconfirmed_email)) %></p>
+    <p><%= t(".caution.check_spam_html", must_confirm_bold: tag.strong(t(".caution.must_confirm")), contact_support_link: link_to(t(".caution.contact_support"), new_feedback_report_path)) %></p>
+    <p><strong><%= t(".caution.confirm_by", date: l(reconfirmation_date)) %></strong></p>
+  </div>
+<% end %>
+
+<div class="notice">
+  <p><%= t(".request_for_confirmation") %></p>
+  <p><%= t(".must_confirm", count: User.confirm_within.in_days.to_i) %></p>
+  <p><%= t(".resubmission_html", invalidate_bold: tag.strong(t(".invalidate"))) %> </p>
+</div>
+
 <!--main content-->
-<%= form_tag changed_email_user_path(@user) do %>
+<%= form_with model: @user, url: confirm_change_email_user_path(@user), method: :put do %>
   <dl>
-    <dt><%= ts("Current Email") %></dt>
+    <dt><%= t(".form.current_email") %></dt>
     <dd><%= @user.email %></dd>
 
-    <dt><%= label_tag :new_email, ts("New Email") %></dt>
-    <dd><%= email_field_tag :new_email %></dd>
+    <dt><%= label_tag :new_email, t(".form.new_email") %></dt>
+    <dd><%= email_field_tag :new_email, nil, autocomplete: "off" %></dd>
 
-    <dt><%= label_tag :email_confirmation, ts("Confirm New Email") %></dt>
-    <dd><%= email_field_tag :email_confirmation %></dd>
+    <dt><%= label_tag :email_confirmation, t(".form.email_again") %></dt>
+    <dd><%= email_field_tag :email_confirmation, nil, autocomplete: "off" %></dd>
 
-    <dt><%= label_tag :password_check, ts("Password") %></dt>
+    <dt><%= label_tag :password_check, t(".form.password") %></dt>
     <dd><%= password_field_tag :password_check %></dd>
 
-    <dt class="landmark"><%= label_tag :submit, ts("Submit") %></dt>
+    <dt class="landmark"><%= label_tag :submit, t(".form.submit_landmark") %></dt>
     <dd class="submit actions">
-      <%= submit_tag ts("Change Email") %>
+      <%= submit_tag t(".form.confirm") %>
     </dd>
   </dl>
 <% end %>

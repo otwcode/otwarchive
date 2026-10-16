@@ -3,9 +3,9 @@
     <%= t("mailer.general.greeting.introductory") %>
   </h2>
 
-  <p><%= t('.introduction.html', open_doors_name_link: style_link(t('.html.open_doors_name'), "http://opendoors.transformativeworks.org"), app_short_name: ArchiveConfig.APP_SHORT_NAME, app_link: style_link(ArchiveConfig.APP_NAME, root_url)) %></p>
+  <p><%= t(".introduction.html", open_doors_name_link: style_link(t(".html.open_doors_name"), "https://opendoors.transformativeworks.org"), app_short_name: ArchiveConfig.APP_SHORT_NAME, app_link: style_link(ArchiveConfig.APP_NAME, root_url)) %></p>
 
-  <p><%= t('.more_info.html', ao3_news_link: style_link(t('.html.ao3_news'), admin_posts_url + "?tag=18"), faq_page_link: style_link(t('.html.faq_page'), "http://opendoors.transformativeworks.org/faq"), tutorial_page_link: style_link(t('.html.tutorial_page'), "http://opendoors.transformativeworks.org/tutorials"), contact_support_link: support_link(t '.html.contact_support')) %></p>
+  <p><%= t(".more_info.html", ao3_news_link: style_link(t(".html.ao3_news"), "#{admin_posts_url}?tag=18"), faq_page_link: style_link(t(".html.faq_page"), "https://opendoors.transformativeworks.org/faq"), tutorial_page_link: style_link(t(".html.tutorial_page"), "https://opendoors.transformativeworks.org/tutorials"), contact_support_link: support_link(t(".html.contact_support"))) %></p>
 
   <p><%= t('.mistake.html', contact_open_doors_link: style_link(t('.html.contact_open_doors'), 'https://opendoors.transformativeworks.org/en/contact-open-doors/')) %></p>
 
@@ -17,16 +17,14 @@
 
   <ul>
   <% @external_author.works.each do |work| %>
-    <li><%= style_link(work.title.html_safe, work_url(work)) %>
+    <li><%= style_link(work.title, work_url(work)) %>
       <%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %></li>
   <% end %>
   </ul>
 
   <p><%= t('.unwanted.html', contact_support_link: support_link(t '.html.contact_support')) %></p>
 
-  <p><%= t '.redirects' %></p>
-
-  <p><%= t('.update_redirect.html', contact_open_doors_link: style_link(t('.html.contact_open_doors'), 'https://opendoors.transformativeworks.org/en/contact-open-doors/')) %></p>
+  <p><%= t(".redirects.html", negation: style_bold(t(".redirects.negation")), faq_link: style_link(t(".html.faq"), archive_faqs_url)) %></p>
 
   <p><%= t('.other_works.html', contact_open_doors_link: style_link(t('.html.contact_open_doors'), 'https://opendoors.transformativeworks.org/en/contact-open-doors/')) %></p>
 

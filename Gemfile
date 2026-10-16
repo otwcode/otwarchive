@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-ruby "3.1.4"
+ruby "~> 3.4.6"
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 7.0.8"
-gem "rails-i18n"
+gem "rails", "~> 8.1.0"
+gem "rails-i18n", "~> 8.0", git: "https://github.com/svenfuchs/rails-i18n", ref: "54c1c7c2fdcc311427ec6f1dadd298a60db1ddef"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
 
@@ -16,14 +16,13 @@ gem 'actionpack-page_caching'
 gem 'rails-controller-testing'
 
 # Database
-# gem 'sqlite3-ruby', require: 'sqlite3'
 gem "mysql2"
 
 gem 'rack-attack'
 
-# Version of redis-rb gem
-# We are currently running Redis 3.2.1 (7/2018)
-gem "redis", "~> 3.3.5"
+# We are currently running Redis server 7.0.15 (10/2025)
+# Version of redis-rb gem (Redis client)
+gem "redis", "< 5.0"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
@@ -31,16 +30,16 @@ gem 'redis-namespace'
 # Used to convert strings to ascii
 gem 'unicode'
 gem 'unidecoder'
-gem 'unicode_utils', '>=1.4.0'
 
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
+gem "pagy", "~> 9.3"
 gem 'acts_as_list', '~> 0.9.7'
-gem 'akismetor'
 
 gem 'httparty'
+gem "csv", "~> 3.3.5"
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', require: false
 gem 'nokogiri', '>= 1.8.5'
@@ -51,20 +50,22 @@ gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem "elasticsearch", "7.17.1"
+gem "elasticsearch", "9.3.0"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
 gem "terrapin"
-gem "kt-paperclip", ">= 5.2.0"
 
 # for looking up image dimensions quickly
 gem 'fastimage'
 
 # Gems for authentication
-gem 'devise'
-gem 'devise-async'       # To mails through queues
-gem 'bcrypt'
+gem "devise", git: "https://github.com/otwcode/devise", ref: "5dd846e"
+gem "devise-async" # To mails through queues
+gem "bcrypt"
+gem "devise-pwned_password"
+gem "devise-two-factor"
+gem "rqrcode"
 
 # Needed for modern ssh
 gem "ed25519", ">= 1.2", "< 2.0"
@@ -80,21 +81,11 @@ gem 'escape_utils', '1.2.1'
 
 gem 'timeliness'
 
-# TODO: rpm_contrib is deprecated and needs to be replaced
-# Here is a list of possible alternatives:
-# https://github.com/newrelic/extends_newrelic_rpm
-#
-# The last working version is not compatible with Rails 5
-#
-# gem 'rpm_contrib', '2.2.0'
-
 # for generating graphs
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
 # Globalize for translations
-# Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
-gem 'globalize', git: 'https://github.com/globalize/globalize'
-gem 'activemodel-serializers-xml'
+gem "globalize", "~> 7.0"
 
 # Add a clean notifier that shows we are on dev or test
 gem 'rack-dev-mark', '>=0.7.8'
@@ -117,15 +108,15 @@ gem 'kgio', '2.10.0'
 gem "marcel", "1.0.2"
 
 # Library for helping run pt-online-schema-change commands:
-gem "departure", "~> 6.5"
+gem "departure", "~> 8.0"
 
-# Ruby 3.1 means we need to specify a version of mail until we get to rails 7.x
-gem "mail", ">= 2.8"
+gem "rack-timeout"
+gem "puma_worker_killer"
 
 group :test do
-  gem "rspec-rails", "~> 4.0.1"
+  gem "rspec-rails", "~> 8.0"
   gem 'pickle'
-  gem 'shoulda'
+  gem "shoulda-matchers"
   gem "capybara"
   gem "cucumber"
   gem 'database_cleaner'
@@ -133,7 +124,7 @@ group :test do
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
-  
+
   # Record and replay data from external URLs
   gem "vcr", "~> 6.2"
   gem "webmock"
@@ -147,7 +138,6 @@ group :test do
 end
 
 group :test, :development do
-  gem 'awesome_print'
   gem 'brakeman'
   gem 'pry-byebug'
   gem 'whiny_validation'
@@ -158,7 +148,6 @@ end
 
 group :development do
   gem 'bundler-audit'
-  gem 'active_record_query_trace', '~> 1.6', '>= 1.6.1'
 end
 
 group :linters do
@@ -180,11 +169,17 @@ gem 'rvm-capistrano'
 
 # Use unicorn as the web server
 gem 'unicorn', '~> 5.5', require: false
+# Install puma so we can migrate to it
+gem "puma", "~> 7.2.1"
 # Use god as the monitor
 gem 'god', '~> 0.13.7'
 
 group :staging, :production do
-  # Place the New Relic gem as low in the list as possible, allowing the
-  # frameworks above it to be instrumented when the gem initializes.
-  gem "newrelic_rpm"
+  gem "stackprof"
+  gem "sentry-ruby"
+  gem "sentry-rails"
+  gem "sentry-resque"
 end
+
+gem "image_processing", "~> 1.14"
+gem "ostruct"

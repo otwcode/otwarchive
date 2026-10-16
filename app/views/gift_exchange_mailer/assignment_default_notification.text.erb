@@ -1,0 +1,15 @@
+<% content_for :message do %>
+<%= t(".defaulted_on_assignment.text",
+      offer_byline: @assignment.offering_pseud.byline,
+      request_byline: @assignment.requesting_pseud.byline,
+      collection_title: @collection.title,
+      collection_url: collection_url(@collection)) %>
+
+<%= t(".assign_pinch_hitter.text", collection_assignments_page_url: collection_assignments_url(@collection)) %>
+<% end %>
+
+<% content_for :footer_note do %>
+<%= collection_footer_note_text(@is_collection_email, @collection) -%>
+<% end %>
+
+<% content_for :sent_at do %><%= l(Time.current) %><% end %>

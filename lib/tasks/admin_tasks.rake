@@ -16,7 +16,7 @@ namespace :admin do
 
   desc "Purge unvalidated accounts created more than 2 weeks ago"
   task(:purge_unvalidated_users => :environment) do
-    users = User.where("confirmed_at IS NULL AND created_at < ?", 2.weeks.ago)
+    users = User.where("confirmed_at IS NULL AND created_at < ?", AdminSetting.current.days_to_purge_unactivated.weeks.ago)
     puts users.map(&:login).join(", ")
     users.map(&:destroy)
     puts "Unvalidated accounts created more than two weeks ago have been purged"

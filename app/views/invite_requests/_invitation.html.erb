@@ -1,0 +1,28 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading" id="invite-heading">
+  <%= t(".title", email: invitation.invitee_email) %>
+</h2>
+<!--/descriptions-->
+
+<!--main content-->
+<p>
+  <% status = invitation.resent_at ? "resent" : "not_resent" %>
+  <%= t(".info.#{status}",
+        sent_at: l((invitation.sent_at || invitation.created_at).to_date),
+        resent_at: invitation.resent_at ? l(invitation.resent_at.to_date) : nil) %>
+</p>
+
+<p>
+  <% if invitation.can_resend? %>
+  <%# i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.not_resent")
+      i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.resent_html")-%>
+    <% status = invitation.resent_at ? "resent_html" : "not_resent" %>
+    <%= t(".after_cooldown_period.#{status}",
+          count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION,
+          contact_support_link: link_to(t(".contact_support"), new_feedback_report_path)) %>
+    <%= button_to t(".resend_button"), resend_invite_requests_path(email: invitation.invitee_email) %>
+  <% else %>
+    <%= t(".before_cooldown_period", count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION) %>
+  <% end %>
+</p>
+<!--/content-->

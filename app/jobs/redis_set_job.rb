@@ -51,14 +51,14 @@ class RedisSetJob < ApplicationJob
 
   # Add items to be processed when this job runs:
   def add_to_job(batch)
-    redis.sadd(key, batch)
+    redis.sadd?(key, batch)
   end
 
   # Use sscan to iterate through the set, and srem to remove:
   def self.scan_and_remove(redis, key, batch_size:)
     scan_set_in_batches(redis, key, batch_size: batch_size) do |batch|
       yield batch
-      redis.srem(key, batch)
+      redis.srem?(key, batch)
     end
   end
 

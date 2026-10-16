@@ -24,11 +24,6 @@ module BookmarksHelper
     end
   end
 
-  # tag_bookmarks_path was behaving badly for tags with slashes
-  def link_to_tag_bookmarks(tag)
-    {controller: 'bookmarks', action: 'index', tag_id: tag}
-  end
-
   def link_to_bookmarkable_bookmarks(bookmarkable, link_text='')
     if link_text.blank?
       link_text = number_with_delimiter(Bookmark.count_visible_bookmarks(bookmarkable, current_user))
@@ -76,9 +71,13 @@ module BookmarksHelper
 
   def get_count_for_bookmark_blurb(bookmarkable)
     count = bookmarkable.public_bookmark_count
-    link = link_to (count < 100 ? count.to_s : "*"),
-              polymorphic_path([bookmarkable, Bookmark])
-    content_tag(:span, link, class: "count")
+    # show unlinked count for viewers if unrevealed and not author
+    if bookmarkable.try(:unrevealed?) && !is_author_of?(bookmarkable)
+      content_tag(:span, count, class: "count")
+    else
+      link = link_to (count < 100 ? count.to_s : "*"), polymorphic_path([bookmarkable, Bookmark])
+      content_tag(:span, link, class: "count")
+    end
   end
 
   # Bookmark blurbs contain a single bookmark from a single user.

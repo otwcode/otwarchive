@@ -3,7 +3,7 @@ require 'faker'
 FactoryBot.define do
   factory :admin do
     login { generate(:login) }
-    password { "adminpassword" }
+    password { SecureRandom.alphanumeric(10) }
     password_confirmation { |u| u.password }
     email { Faker::Internet.unique.email }
 

@@ -121,14 +121,14 @@ Feature: Comment Moderation
       And I am logged in as "commenter"
       And I post the comment "Test comment" on the work "Moderation"
     When I am logged in as "author"
-      And I go to my inbox page
+      And I go to author's inbox page
     Then I should see "Test comment"
       And I should not see "Reply"
       And I should see "Unreviewed"
     # we can only test the non-javascript version here
     When I follow "Unreviewed Comments"
       And I press "Approve"
-      And I go to my inbox page
+      And I go to author's inbox page
     Then I should see "Reply"
       And I should not see "Unreviewed"
       And I should not see "Unread"
@@ -136,6 +136,22 @@ Feature: Comment Moderation
     Then I should see "Comments:1"
       And I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
+
+  Scenario: Authors with moderated comments should not see duplicate inbox notifications for approved replies to their comments
+    Given the moderated work "Moderation" by "author"
+      And I am logged in as "author"
+      And I post the comment "Author comment" on the work "Moderation"
+    When I am logged in as "commenter"
+      And I view the work "Moderation"
+      And I follow "Comments (1)"
+      And I follow "Reply" within ".odd"
+      And I fill in "Comment" with "A moderated reply" within ".odd"
+      And I press "Comment" within ".odd"
+    When I am logged in as "author"
+      And I view the unreviewed comments page for "Moderation"
+      And I press "Approve"
+      And I go to author's inbox page
+    Then I should see "(1 comments, 0 unread)"
 
   Scenario: Comments can be approved from the home page inbox
     Given the moderated work "Moderation" by "author"
@@ -182,6 +198,7 @@ Feature: Comment Moderation
     When I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
     Then I should see "A moderated reply"
+      And "Parent Thread" should appear before "Thread"
     When I press "Approve"
     Then I should see "Comment approved"
     When I view the work "Moderation"
@@ -225,7 +242,7 @@ Feature: Comment Moderation
     When all emails have been delivered
       And I am logged in as "commenter"
       And I set my preferences to turn on copies of my own comments
-      And I go to my inbox page
+      And I go to commenter's inbox page
     Then I should not see "A moderated reply"
     When I view the work "Moderation"
       And I follow "Comments (1)"
@@ -238,7 +255,7 @@ Feature: Comment Moderation
       And "author" should not be emailed
       And "new_commenter" should not be emailed
     When I am logged in as "commenter"
-      And I go to my inbox page
+      And I go to commenter's inbox page
     Then I should see "A moderated reply"
 
   Scenario: When I turn off moderation, comments stay unreviewed
@@ -248,12 +265,12 @@ Feature: Comment Moderation
     When I am logged in as "author"
       And I edit the work "Moderation"
       And I uncheck "Enable comment moderation"
-      And I post the work without preview
+      And I update the work
     Then comment moderation should not be enabled on "Moderation"
     When I view the work "Moderation"
     Then I should see "Unreviewed Comments"
       And I should not see "Comments:1"
-    When I go to my inbox page
+    When I go to author's inbox page
     Then I should not see "Reply"
     When I am logged in as "commenter"
       And I view the work "Moderation"
@@ -307,3 +324,43 @@ Feature: Comment Moderation
     Then I should see "All moderated comments approved."
     When I view the work "Moderation"
     Then I should see "Comments (4)"
+
+  Scenario: I can view the parent thread of an unreviewed comment
+    Given the moderated work "Moderation" by "author" with the approved comment "Test comment" by "commenter"
+      And I am logged in as "new_commenter"
+    When I view the work "Moderation"
+      And I follow "Comments (1)"
+      And I follow "Reply" within ".odd"
+      And I fill in "Comment" with "A moderated reply" within ".odd"
+      And I press "Comment" within ".odd"
+    When I am logged in as "author"
+      And I view the work "Moderation"
+      And I follow "Unreviewed Comments (1)"
+      And I follow "Parent Thread"
+    Then I should see "Test comment"
+    When I view the unreviewed comments page for "Moderation"
+      And I press "Approve"
+    When I am logged in as "new_commenter"
+      And I post the comment "Zero-depth comment" on the work "Moderation"
+    When I am logged in as "author"
+      And I view the work "Moderation"
+      And I follow "Unreviewed Comments (1)"
+    Then I should not see "Parent Thread"
+
+  Scenario: Creator marks an unreviewed comment as spam and the count updates
+    Given the moderated work "Test Work" by "spam_catcher"
+    When I post the comment "Fake spam" on the work "Test Work" as a guest
+      And I am logged in as "spam_catcher"
+      And I view the work "Test Work"
+    Then I should see "Unreviewed Comments (1)"
+    When I follow "Unreviewed Comments"
+      And it is currently 1 second from now
+      And I follow "Spam"
+    Then I should not see "Unreviewed Comments"
+      And I should not see "Fake spam"
+    When I am logged in as an admin
+      And I view the work "Test Work"
+    Then I should see "Unreviewed Comments (1)"
+    When I follow "Unreviewed Comments"
+    Then I should see "Fake spam"
+      And I should see "This comment has been marked as spam"

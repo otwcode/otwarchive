@@ -4,6 +4,7 @@ describe Admin::BannersController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  let(:admin) { create(:admin, roles: ["superadmin"]) }
   let(:admin_banner) { create(:admin_banner) }
   let(:admin_banner_params) { attributes_for(:admin_banner) }
 
@@ -82,6 +83,17 @@ describe Admin::BannersController do
       it_redirects_to_with_notice(assigns[:admin_banner], "Banner successfully created.")
     end
 
+    it "creates admin activity" do
+      fake_login_admin(admin)
+      expect { subject }
+        .to change { AdminActivity.count }
+        .by(1)
+      expect(AdminActivity.last.target).to eq(assigns(:admin_banner))
+      expect(AdminActivity.last.action).to eq("create admin banner")
+      expect(AdminActivity.last.admin).to eq(admin)
+      expect(AdminActivity.last.summary).to include(admin_banner_params[:content])
+    end
+
     it_behaves_like "only authorized admins are allowed",
                     authorized_roles: %w[superadmin board board_assistants_team communications support]
   end
@@ -105,6 +117,17 @@ describe Admin::BannersController do
       it_redirects_to_with_notice(admin_banner, "Banner successfully updated.")
     end
 
+    it "creates admin activity" do
+      fake_login_admin(admin)
+      expect { subject }
+        .to change { AdminActivity.count }
+        .by(1)
+      expect(AdminActivity.last.target).to eq(assigns(:admin_banner))
+      expect(AdminActivity.last.action).to eq("update admin banner")
+      expect(AdminActivity.last.admin).to eq(admin)
+      expect(AdminActivity.last.summary).to include(admin_banner_params[:content])
+    end
+
     it_behaves_like "only authorized admins are allowed",
                     authorized_roles: %w[superadmin board board_assistants_team communications development_and_membership support]
   end
@@ -118,9 +141,17 @@ describe Admin::BannersController do
 
     it_behaves_like "only authorized admins are allowed",
                     authorized_roles: %w[superadmin board board_assistants_team communications support]
+    
+    it "redirects to show page with error for active banners" do
+      fake_login_admin(create(:admin, roles: ["superadmin"]))
+      active_banner = create(:admin_banner, active: true)
+      get :confirm_delete, params: { id: active_banner }
+      it_redirects_to_with_error(admin_banner_path(active_banner), "Active banners cannot be deleted.")
+    end
   end
 
   describe "DELETE #destroy" do
+    let!(:admin_banner) { create(:admin_banner) }
     subject { delete :destroy, params: { id: admin_banner } }
 
     let(:success) do
@@ -128,7 +159,25 @@ describe Admin::BannersController do
       it_redirects_to_with_notice(admin_banners_path, "Banner successfully deleted.")
     end
 
+    it "creates admin activity" do
+      fake_login_admin(admin)
+      expect { subject }
+        .to change { AdminActivity.count }
+        .by(1)
+      expect(AdminActivity.last.target).to eq(nil)
+      expect(AdminActivity.last.action).to eq("destroy admin banner")
+      expect(AdminActivity.last.admin).to eq(admin)
+      expect(AdminActivity.last.summary).to include(admin_banner.content)
+    end
+
     it_behaves_like "only authorized admins are allowed",
                     authorized_roles: %w[superadmin board board_assistants_team communications support]
+    
+    it "redirects to show page with error for active banners" do
+      fake_login_admin(create(:admin, roles: ["superadmin"]))
+      active_banner = create(:admin_banner, active: true)
+      delete :destroy, params: { id: active_banner }
+      it_redirects_to_with_error(admin_banner_path(active_banner), "Active banners cannot be deleted.")
+    end
   end
 end

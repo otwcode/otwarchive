@@ -16,6 +16,7 @@ Scenario: Create a collection
     And I fill in "Introduction" with "Welcome to the collection"
     And I fill in "FAQ" with "<dl><dt>What is this thing?</dt><dd>It's a collection</dd></dl>"
     And I fill in "Rules" with "Be nice to people"
+    And I fill in "collection_tag_string" with "My New Fandom, My OC"
     And I check all the collection settings checkboxes
     And I submit
   Then I should see "Collection was successfully created"
@@ -24,6 +25,8 @@ Scenario: Create a collection
     And I should see "What is this thing?" within "#faq"
     And I should see "It's a collection" within "#faq"
     And I should see "Be nice to people" within "#rules"
+    And I should see "My New Fandom" within ".meta"
+    And I should see "My OC" within ".meta"
   When I follow "Collection Settings"
     And I fill in "Collection name" with " "
     And I submit

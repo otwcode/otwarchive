@@ -24,8 +24,7 @@
 #
 # Several tasks run automatically based on behind-the-scenes magic
 #
-require './config/boot'
-require 'new_relic/recipes'
+require "./config/boot"
 require "active_support/core_ext/hash/keys"
 
 # takes care of the bundle install tasks
@@ -62,7 +61,7 @@ set :scm, :git
 set :repository, "https://github.com/otwcode/otwarchive.git"
 set :deploy_via, :remote_cache
 
-set :servers, -> { YAML.load_file(File.join(__dir__, "servers.yml")).deep_symbolize_keys[fetch(:stage)] }
+set :servers, -> { YAML.safe_load_file(File.join(__dir__, "servers.yml")).deep_symbolize_keys[fetch(:stage)] }
 
 # overwrite default capistrano deploy tasks
 namespace :deploy do
@@ -139,4 +138,3 @@ after "deploy:restart", "deploy:update_cron_web"
 after "deploy:restart", "deploy:restart_workers"
 after "deploy:restart", "deploy:restart_schedulers"
 after "deploy:symlink", "deploy:update_configs"
-after "deploy:update", "newrelic:notice_deployment"

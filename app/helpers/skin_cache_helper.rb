@@ -19,10 +19,23 @@ module SkinCacheHelper
   end
 
   def skin_chooser_key
-    [:v2, :skin_chooser]
+    [:v3, :skin_chooser]
   end
 
   def skin_chooser_expire_cache
-    ActionController::Base.new.expire_fragment(skin_chooser_key)
+    Rails.cache.delete(skin_chooser_key)
+  end
+
+  def skin_chooser_data
+    Rails.cache.fetch(skin_chooser_key) do
+      Skin.in_chooser.order(:title).map do |skin|
+        {
+          title: skin.title,
+          # Cache the parameters that we need for generating the skin URL later
+          # We can't cache the record itself (for later URL generation) since it could change or be deleted
+          param: skin.to_param
+        }
+      end
+    end
   end
 end

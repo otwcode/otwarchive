@@ -1,0 +1,518 @@
+---
+scr:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          few: 'Upozorenja:'
+          one: 'Upozorenje:'
+          other: 'Upozorenja:'
+      category:
+        name_with_colon:
+          few: 'Категорије:'
+          one: 'Kategorija:'
+          other: 'Kategorije:'
+      character:
+        name_with_colon:
+          few: 'Likovi:'
+          one: 'Lik:'
+          other: 'Likovi:'
+      fandom:
+        name_with_colon:
+          few: 'Fandomi:'
+          one: 'Fandom:'
+          other: 'Fandomi:'
+      freeform:
+        name_with_colon:
+          few: 'Dodatni tagovi:'
+          one: 'Dodatan tag:'
+          other: 'Dodatni tagovi:'
+      rating:
+        name_with_colon: 'Ocena primerenosti sadržaja:'
+      relationship:
+        name_with_colon:
+          few: 'Odnosi između likova:'
+          one: 'Odnos između likova:'
+          other: 'Odnosi između likova:'
+      work:
+        chapter_total_display: Poglavlja
+        summary: Sažetak
+    models:
+      archive_warning:
+        few: Upozorenja
+        one: Upozorenje
+        other: Upozorenja
+      category:
+        few: Kategorije
+        one: Kategorija
+        other: Kategorije
+      chapter:
+        few: Glave
+        one: Glava
+        other: Glave
+      character:
+        few: Likovi
+        one: Lik
+        other: Ликови
+      fandom:
+        few: Fandomi
+        one: Fandom
+        other: Fandomi
+      freeform:
+        few: Dodatni tagovi
+        one: Dodatan tag
+        other: Dodatni tagovi
+      rating:
+        few: Ocene primerenosti zadržaja
+        one: Ocena primerenosti zadržaja
+        other: Ocene primerenosti zadržaja
+      relationship:
+        few: Odnosi između likova
+        one: Odnos između likova
+        other: Odnosi između likova
+      series:
+        few: Serijali
+        one: Serijal
+        other: Serijali
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        few: "%{count} госта"
+        one: "%{count} гост"
+        other: "%{count} гостију"
+      left_kudos:
+        html:
+          few: "%{givers_list} су похвалили %{commentable_link}."
+          one: "%{givers_list} је похвалио/ла %{commentable_link}."
+          other: "%{givers_list} су похвалили %{commentable_link}."
+        text:
+          few: "%{givers_list} су похвалили %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} је похвалио/ла %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} су похвалили %{commentable_title} (%{commentable_url})."
+      single_guest:
+        giver: Гост/гошћа
+        html: "%{giver} је оставио/ла похвалу на %{commentable_link}."
+        text: Гост/гошћа је оставио/ла похвалу на %{commentable_title} (%{commentable_url}).
+      subject: "[%{app_name}] Добили сте похвале!"
+  mailer:
+    general:
+      closing:
+        formal: Srdačan pozdrav,
+        informal: Sve najbolje,
+      creation:
+        link_with_word_count: "%{creation_link} (%{word_count})"
+        title_with_chapter_number: "%{title}: Поглавље %{position}"
+        title_with_word_count: '"%{creation_title}" (%{word_count})'
+        word_count:
+          few: "%{count} reči"
+          one: "%{count} reč"
+          other: "%{count} reči"
+      footer:
+        general:
+          about:
+            html: AO3 je arhiva koju vode i podržavaju fanovi, a oslanja se na %{donate_link}.
+            text: 'AO3 je arhiva koju vode i podržavaju fanovi, a oslanja se na Vaše
+              donacije: %{donate_url}.'
+          html:
+            donate_link_text: Vaše donacije
+            support_link_text: kontaktirajte Korisničku podršku
+          unwanted_email:
+            html: Ako ste greškom primili ovu poruku, molimo Vas %{support_link}.
+            text: Ako ste greškom primili ovu poruku, molimo Vas kontaktirajte Korisničku
+              podršku na %{support_url}.
+        sent_at: Poslato u %{sent_at}.
+      greeting:
+        formal_html: Poštovani/a %{name},
+        informal:
+          addressed_html: Zdravo, %{name}!
+          unaddressed: Zdravo!
+        introductory: Pozdrav od Archive of Our Own – AO3-a (Naše sopstvene arhive)!
+      metadata_label_indicator: ":"
+      signature:
+        abuse_team: Tim Politike i zloupotrebe AO3-a
+        app_short_name: AO3
+        open_doors: Tim Open Doors (Otvorenih vrata)
+        parent_org: Organization for Transformative Works – OTW (Organizacija za transformativne
+          radove)
+        support: Tim Korisničke podrške AO3-a
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Ако не искористите овај линк да ресетујете своју лозинку у року
+          од недељу дана, истећи ће и мораћете затражити нови.
+        intro: 'неко је затражио ресетовање лозинке за Bаш налог. Можете променити
+          лозинку Bашег налога тако што ћете пратити линк испод и унети Вашу нову
+          лозинку:'
+        link_title: Промени моју лозинку.
+        subject: "[%{app_name}] Ресетујте своју лозинку"
+        unrequested: Уколико нисте затражили ово ресетовање лозинке, можете занемарити
+          овај имејл и Ваша претходна лозинка ће наставити да ради.
+  user_mailer:
+    admin_deleted_work_notification:
+      bye: У прилогу је копија Вашег дела за Вашу референцу.
+      contact_abuse: контактирајте наш Одбор за злоупотребу
+      deleted:
+        html: Ваше дело %{title} је избрисано са АО3-a од стране администратора сајта.
+        text: Ваше дело "%{title}" је избрисано са AO3-a од стране администратора
+          сајта.
+      html:
+        tos_violation: Ако постоји могућност да је Ваше дело прекршило Услове коришћења
+          AO3-a, молимо Вас, %{contact_abuse_link}.
+      import_project:
+        html: Ако је Ваше дело било део увезеног пројекта којим се бави наш тим Open
+          Doors (Отворених врата), молимо Вас, %{opendoors_link} ако имате додатна
+          питања.
+        text: Ако је Ваше дело било део увезеног пројекта којим се бави наш тим Open
+          Doors (Отворених врата), молимо Вас, контактирајте Отворена врата (%{opendoors_link})
+          ако имате додатна питања.
+      opendoors: контактирајте Отворена врата
+      subject: "[%{app_name}] Ваше дело је избрисано од стране администратора"
+      text:
+        tos_violation: Ако постоји могућност да је Ваше дело прекршило Услове коришћења
+          АО3-а, молимо Вас, контактирајте наш Одбор за злоупотребу (%{contact_abuse_url}).
+    admin_hidden_work_notification:
+      access: Иако је Ваше дело сакривено, и даље ћете моћи да му приступите кроз
+        линк изнад, али неће бити наведено на Вашој страници дела, и неће бити доступно
+        другим корисницима АО3-а.
+      check_email: Молимо проверите Ваш имејл, укључујући фолдер за спам, јер Вас
+        је тим Политике и злоупотребе можда већ контактирао и објаснио зашто је Ваше
+        дело сакривено.
+      contact_abuse: контактирајте Политику и злоупотребу
+      html:
+        help: Ако нисте сигурни зашто је Ваше дело сакривено, и нисте примили више
+          информација о овоме, молимо директно %{contact_abuse_link}.
+        hidden: Ваше дело %{title} је сакривено од стране тима Политике и злоупотребе
+          и више није јавно доступно.
+        tos_violation: Ако је Ваше дело сакривено јер је прекршило АО3-ове %{tos_link},
+          мораћете да исправите прекршај. Ако Ваше дело не доведете у сагласност са
+          Условима коришћења, то може довести до брисања Вашег дела са АО3-а.
+      subject: "[%{app_name}] Ваше дело је сакривено од стране тима Политике и злоупотребе"
+      text:
+        help: 'Ако нисте сигурни зашто је Ваше дело сакривено, и нисте примили више
+          информација о овоме, молимо директно контактирајте Политику и злоупотребу:
+          %{contact_abuse_url}.'
+        hidden: Ваше дело "%{title}" (%{work_url}) је сакривено од стране тима Политике
+          и злоупотребе и више није јавно доступно.
+        tos_violation: Ако је Ваше дело сакривено јер је прекршило АО3-ове Услове
+          коришћења (%{tos_url}), мораћете да исправите прекршај. Ако Ваше дело не
+          доведете у сагласност са Условима коришћења, то може довести до брисања
+          Вашег дела са АО3-а.
+      tos: Услове коришћења
+    anonymous_or_unrevealed_notification:
+      anonymous_info: Анонимна дела су укључена у излистане тагове, али нису на Вашој
+        страници радова. На самом делу, Ваше корисничко име ће бити замењено са "Anonymous"
+        (Анонимно).
+      anonymous_unrevealed_info: Одржаваоци збирке могу касније открити Ваше дело,
+        али га оставити анонимним. Људи који Вас буду пратили неће бити обавештени
+        када ова промена ступи на снагу. Након што је откривено, Ваше дело ће бити
+        укључено у излистане тагове, али неће бити на страници Ваших радова. На самом
+        делу, Ваше корисничко име ће бити замењено са "Anonymous" (Анонимно).
+      changed_status:
+        anonymous:
+          html: Одржаваоци %{collection_link} збирке су променили статус Вашег дела
+            %{work_link} на анонимно.
+          text: Одржаваоци "%{collection_title}" (%{collection_url}) збирке су променили
+            статус Вашег дела "%{work_title}" (%{work_url}) на анонимно.
+        anonymous_unrevealed:
+          html: Одржаваоци %{collection_link} збирке су променили статус Вашег дела
+            %{work_link} на анонимно и неоткривено.
+          text: Одржаваоци "%{collection_title}" (%{collection_url}) збирке су променили
+            статус Вашег дела "%{work_title}" (%{work_url}) на анонимно и неоткривено.
+        unrevealed:
+          html: Одржаваоци %{collection_link} збирке су променили статус Вашег дела
+            %{work_link} на неоткривено.
+          text: Одржаваоци "%{collection_title}" (%{collection_url}) збирке су променили
+            статус Вашег дела "%{work_title}" (%{work_url}) на неоткривено.
+      collection_items_link_text: страницу Approved Collection Items (Одобрени предмети
+        из збирке)
+      do_not_want:
+        anonymous:
+          html: Ако не желите да Ваше дело буде анонимно, молимо Вас да посетите Вашу
+            %{collection_items_link} како бисте га уклонили из ове збирке.
+          text: 'Ако не желите да Ваше дело буде анонимно, молимо Вас да посетите
+            Вашу страницу Approved Collection Items (Одобрени предмети из збирке)
+            како бисте га уклонили из ове збирке: %{collection_items_url}'
+        anonymous_unrevealed:
+          html: Ако не желите да Ваше дело буде анонимно и неоткривено, молимо Вас
+            да посетите Вашу %{collection_items_link} како бисте га уклонили из ове
+            збирке.
+          text: 'Ако не желите да Ваше дело буде анонимно и неоткривено, молимо Вас
+            да посетите Вашу страницу Approved Collection Items (Одобрени предмети
+            из збирке) како бисте га уклонили из ове збирке: %{collection_items_url}'
+        unrevealed:
+          html: Ако не желите да Ваше дело буде неоткривено, молимо Вас да посетите
+            Вашу %{collection_items_link} како бисте га уклонили из ове збирке.
+          text: 'Ако не желите да Ваше дело буде неоткривено, молимо Вас да посетите
+            Вашу страницу Approved Collection Items (Одобрени предмети из збирке)
+            како бисте га уклонили из ове збирке: %{collection_items_url}'
+      faq_link_text: Често постављена питања о збиркама
+      more_info:
+        html: За више информација, посетите наша %{faq_link}.
+        text: 'За више информација, посетите наша Често постављена питања о збиркама:
+          %{faq_url}'
+      subject:
+        anonymous: "[%{app_name}] Ваше дело је начињено анонимним"
+        anonymous_unrevealed: "[%{app_name}] Ваше дело је начињено анонимним и неоткривеним"
+        unrevealed: "[%{app_name}] Ваше дело је начињено неоткривеним"
+      unrevealed_info: Неоткривена дела нису укључена у излистане тагове и нису на
+        страници Ваших радова. Свако ко буде пратио линк до Вашег дела ће добити обавештење
+        да је дело тренутно неоткривено, и да није могуће да се приступи његовом садржају.
+    challenge_assignment_notification:
+      any: Bilo koji
+      assignment:
+        html: Dodeljen Vam je sledeći zahtev u okviru izazova %{link} na AO3-u!
+      description: 'Opis:'
+      due: 'Rok za ovaj zadatak je:'
+      html:
+        footer: Primili ste ovaj mejl jer ste se prijavili za izazov %{title}. Za
+          više informacija o izazovu i kontakt informacije moderatora, molimo Vas
+          da posetite %{footer_link}.
+        footer_link: profilnu stranicu izazova
+        look_up: Ovaj zadatak možete potražiti na %{link}.
+        look_up_link: Vašoj stranici Assignments (Zadaci)
+      optional_tags: 'Proizvoljni tagovi:'
+      prompts: 'Ideje (prompts):'
+      prompt_url: 'Link ideje:'
+      recipient: 'Primalac:'
+      recipient_missing: 'Nepoznato: kontaktirajte moderatora za pomoć!'
+      subject: "[%{app_name}][%{collection_title}] Vaš zadatak!"
+      text:
+        assignment: Dodeljen Vam je sledeći zahtev u okviru izazova "%{collection_title}"
+          (%{collection_url}) na AO3-u!
+        footer: Primili ste ovaj mejl jer ste se prijavili za izazov %{title} (%{url}).
+          Za više informacija o izazovu i kontakt informacije moderatora, molimo Vas
+          da posetite %{profile_url}.
+        look_up: Ovaj zadatak možete potražiti na Vašoj stranici Assignments (Zadaci)
+          na %{link}.
+    change_email:
+      changed:
+        html: "%{login}, имејл који је повезан са Вашим налогом је промењен у %{email}"
+        text: "%{login}, имејл који је повезан са Вашим налогом је промењен у %{email}"
+      subject: "[%{app_name}] Имејл је промењен"
+    claim_notification:
+      access:
+        contact_support: kontaktirajte Korisničku podršku AO3-a
+        html: Zavisno od arhive, Vaša dela su možda unesena kao ograničena samo za
+          registrovane korisnike (kako bi bila sakrivena od Gugl pretraga). Ako je
+          ovo slučaj, dela će biti dostupna samo ulogovanim korisnicima osim ako Vi
+          ne odlučite da ih učinite potpuno vidljivim. Za pomoć oko otključavanja,
+          odricanja od ili brisanja dela, molimo %{contact_support_link}.
+        text: Zavisno od arhive, Vaša dela su možda unesena kao ograničena samo za
+          registrovane korisnike (kako bi bila sakrivena od Gugl pretraga). Ako je
+          ovo slučaj, dela će biti dostupna samo ulogovanim korisnicima osim ako Vi
+          ne odlučite da ih učinite potpuno vidljivim. Za pomoć oko otključavanja,
+          odricanja od ili brisanja dela, molimo kontaktirajte Korisničku podršku
+          AO3-a na %{support_url}.
+      email_tips: Ako nas kontaktirate, molimo dodajte imejl adrese od @transformativeworks.org
+        na Vašu listu bezbednih kontakata i proverite Vaše spam foldere za naš odgovor.
+      introduction:
+        ao3_name: Archive of Our Own – AO3 (Našu sopstvenu arhivu)
+        html: Primili ste ovaj imejl jer ste imali dela u arhivi fan-dela koju su
+          %{open_doors_name_link} unela na %{app_link}. Pošto je ova imejl adresa
+          povezana sa jednom koja je registrovana na unesenoj arhivi, povezana fan-dela
+          (navedena ispod) su automatski dodata na Vaš AO3 nalog.
+        open_doors_name: Open Doors (Otvorena vrata)
+        text: 'Primili ste ovaj imejl jer ste imali dela u arhivi fan-dela koju su
+          Open Doors (Otvorena vrata) (%{open_doors_url}) unela na Archive of Our
+          Own – AO3 (Našu sopstvenu arhivu): %{app_url}. Pošto je ova imejl adresa
+          povezana sa jednom koja je registrovana na unesenoj arhivi, povezana fan-dela
+          (navedena ispod) su automatski dodata na Vaš AO3 nalog.'
+      mistake:
+        contact_open_doors: kontaktirate Otvorena vrata
+        html: Ako je ovo greška i ovo nisu Vaša dela, molimo Vas da ih ne obrišete!
+          Molimo Vas da samo %{contact_open_doors_link} i mi ćemo rešiti problem.
+        text: Ako je ovo greška i ovo nisu Vaša dela, molimo Vas da ih ne obrišete!
+          Molimo Vas da samo kontaktirate Otvorena vrata (%{open_doors_url}) i mi
+          ćemo rešiti problem.
+      more_info:
+        ao3_news: AO3 vestima
+        contact_support: kontaktirajte Korisničku podršku AO3-a
+        faq_page: stranici Često postavljenih pitanja
+        html: Možete pročitati objave o skorašnjim prenosima arhiva na %{ao3_news_link},
+          i pronaći još informacija na %{faq_page_link} ili %{tutorial_page_link}
+          Otvorenih vrata. Za pitanja na koja nije odgovoreno u Često postavljenim
+          pitanjima, tutorijalima ili ovom imejlu, molimo %{contact_support_link}.
+        text: Možete pročitati objave o skorašnjim prenosima arhiva na AO3 vestima
+          (%{news_url}), i pronaći još informacija na stranici Često postavljenih
+          pitanja (%{open_doors_faq_url}) ili stranici tutorijala (%{open_doors_tutorial_url})
+          Otvorenih vrata. Za pitanja na koja nije odgovoreno u Često postavljenim
+          pitanjima, tutorijalima ili ovom imejlu, molimo kontaktirajte Korisničku
+          podršku AO3-a na %{support_url}.
+        tutorial_page: stranici tutorijala
+      other_works:
+        contact_open_doors: kontaktirajte Otvorena vrata
+        html: Ako ste imali druga dela na unesenoj arhivi pod imejl adresom kojoj
+          više ne možete da pristupite, molimo Vas, %{contact_open_doors_link} sa
+          bilo kojim informacijama koje mogu da pomognu u potvrđivanju Vašeg identiteta.
+        text: Ako ste imali druga dela na unesenoj arhivi pod imejl adresom kojoj
+          više ne možete da pristupite, molimo Vas, kontaktirajte Otvorena vrata sa
+          bilo kojim informacijama koje mogu da pomognu u potvrđivanju Vašeg identiteta.
+      questions:
+        contact_support: kontaktirajte Korisničku podršku AO3-a
+        html: Za druga pitanja, molimo %{contact_support_link}.
+        text: Za druga pitanja, molimo kontaktirajte Korisničku podršku AO3-a na %{support_url}.
+      redirects:
+        html: Kako bi očuvali liste preporuka i obeleživače, veb adrese unesene arhive
+          će možda voditi do unesenih kopija ovih dela na ograničeno vreme (proverite
+          objavu za Vašu arhivu kako biste bili sigurni). Ako ste Vi već objavili
+          kopiju ovih dela i %{negation} koristili opciju unosa putem URL-a, na AO3-u
+          će postojati dve kopije istog dela.
+      subject: "[%{app_name}] Dodata dela"
+      update_redirect:
+        contact_open_doors: kontaktirate Otvorena vrata
+        html: Ako želite da Otvorena vrata ažuriraju preusmerenje kako bi vodilo do
+          Vašeg već postojećeg dela, molimo da obrišete unesenu kopiju i %{contact_open_doors_link}
+          sa imenom Vašeg AO3 naloga, imenom Vašeg naloga na unesenoj arhivi, i naslovom
+          i URL-om fan-dela prema kom biste želeli da vodi veb adresa. (Ako imate
+          više dela za koja biste želeli da promenite preusmerenje, možete da ih navedete
+          u jednom imejlu.)
+        text: Ako želite da Otvorena vrata ažuriraju preusmerenje kako bi vodilo do
+          Vašeg već postojećeg dela, molimo da obrišete unesenu kopiju i kontaktirate
+          Otvorena vrata na %{open_doors_url} sa imenom Vašeg AO3 naloga, imenom Vašeg
+          naloga na unesenoj arhivi, i naslovom i URL-om fan-dela prema kom biste
+          želeli da vodi veb adresa. (Ako imate više dela za koja biste želeli da
+          promenite preusmerenje, možete da ih navedete u jednom imejlu.)
+      works_by: 'Ova dela su bila napisana sa imejla: %{email}'
+      work_info:
+        html: "%{work_link} (%{fandom})"
+        text:
+          no_fandom: "- %{work_title} %{work_url}"
+          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
+    collection_notification:
+      assignments_sent:
+        complete: Сви задаци су послати.
+        subject: Задаци послати
+      html:
+        received_message: 'Примили сте поруку о својој збирци %{collection_link}:'
+      text:
+        received_message: 'Примили сте поруку о својој збирци "%{collection_title}"
+          (%{collection_url}):'
+    creatorship_notification:
+      explanation: Када сте коаутор неког дела, можете бити додани новим главама без
+        обзира на Ваша подешавања о коауторству. Бићете додани и на сваки серијал
+        у који је тај рад додан.
+      html:
+        creation: "%{creation_link} од %{pseud_links}"
+        edit_chapter: уредити поглавље
+        edit_series: уредити серијал
+        remove_chapter: Ако сте додани грешком или не желите да будете наведени као
+          аутор, можете %{edit_chapter_link} да бисте уклонили себе са листе аутора.
+        remove_series: Ако сте додани грешком или не желите да будете наведени као
+          аутор, можете %{edit_series_link} да бисте уклонили себе са листе аутора.
+      intro_chapter: 'Корисник %{adding_user} је навео Ваш псеудоним %{pseud} као
+        коаутора следећег поглавља:'
+      intro_series: 'Корисник %{adding_user} је навео Ваш псеудоним %{pseud} као коаутора
+        следећег серијала:'
+      subject: "[%{app_name}] Обавештење о коауторству"
+      text:
+        creation: "%{title} (%{url}) од %{pseuds}"
+        remove_chapter: 'Ако сте додани грешком или не желите да будете наведени као
+          аутор, можете уредити поглавље дa бисте уклонили себе као аутора: %{url}'
+        remove_series: 'Ако сте додани грешком или не желите да будете наведени као
+          аутор, можете уредити серијал дa бисте уклонили себе као аутора: %{url}'
+    creatorship_notification_archivist:
+      explanation: Pošto postupaju po svojoj zvaničnoj nadležnosti kao arhivar Otvorenih
+        vrata, dozvoljeno im je da Vas dodaju bez zahteva, čak i ako Vam je opcija
+        koautorstva onemogućena.
+      html:
+        creation: "%{creation_link} оd %{pseud_links}"
+        edit_chapter: uredite poglavlje
+        edit_series: uredite serijal
+        edit_work: uredite delo
+        remove_chapter: Ako ste dodati greškom ili ne želite da budete navedeni kao
+          autor, možete da %{edit_chapter_link} da biste uklonili sebe kao autora.
+        remove_series: Ako ste dodati greškom ili ne želite da budete navedeni kao
+          autor, možete da %{edit_series_link} da biste uklonili sebe kao autora.
+        remove_work: Ako ste dodati greškom ili ne želite da budete navedeni kao autor,
+          možete da %{edit_work_link} da biste uklonili sebe kao autora.
+      intro_chapter: 'Korisnik %{archivist} je dodao Vaš pseudonim %{pseud} kao koautora
+        na sledeće poglavlje:'
+      intro_series: 'Korisnik %{archivist} je dodao Vaš pseudonim %{pseud} kao koautora
+        na sledeći serijal:'
+      intro_work: 'Korisnik %{archivist} je dodao Vaš pseudonim %{pseud} kao koautora
+        na sledeće delo:'
+      subject: "[%{app_name}] Arhivarsko obaveštenje o koautorstvu"
+      text:
+        creation: "%{title} (%{url}) od %{pseuds}"
+        remove_chapter: 'Ako ste dodati greškom ili ne želite da budete navedeni kao
+          autor, možete da uredite poglavlje da biste uklonili sebe kao autora: %{url}'
+        remove_series: 'Ako ste dodati greškom ili ne želite da budete navedeni kao
+          autor, možete da uredite serijal da biste uklonili sebe kao autora: %{url}'
+        remove_work: 'Ako ste dodati greškom ili ne želite da budete navedeni kao
+          autor, možete da uredite delo da biste uklonili sebe kao autora: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} од стране %{pseud_links}"
+        instructions: Можете да прихватите или одбијете овај захтев на Вашој страници
+          %{page_name}.
+        page_name: Co-Creator Requests (Захтеви за коаутора)
+      intro_chapter: 'Корисник %{inviting_user} је позвао Ваш псеудоним %{pseud} да
+        буде на листи коаутора следећег поглавља:'
+      intro_series: 'Корисник %{inviting_user} је позвао Ваш псеудоним %{pseud} да
+        буде на листи коаутора следећег серијала:'
+      intro_work: 'Корисник %{inviting_user} је позвао Ваш псеудоним %{pseud} да буде
+        на листи коаутора на следећем делу:'
+      subject: "[%{app_name}] Захтев за коаутора"
+      text:
+        creation: "%{title} (%{url}) од стране %{pseuds}"
+        instructions: 'Можете да прихватите или одбијете овај захтев на Вашој страници
+          Co-Creator Requests (Захтеви за коаутора): %{url}'
+    delete_work_notification:
+      attachment: У прилогу је копија Вашег дела ако желите да га прегледате.
+      deleted_other:
+        html: Ваше дело %{title} је избрисано на захтев %{pseud}.
+        text: Ваше дело "%{title}" је избрисано на захтев %{pseud}.
+      deleted_yourself:
+        html: Ваше дело %{title} је избрисано на Ваш захтев.
+        text: Ваше дело %{title} је избрисано на Ваш захтев.
+      questions:
+        html: Ако имате питања, молимо Вас %{support}.
+        text: Ако имате питања, молимо Вас %{support} (%{url}).
+      subject: "[%{app_name}] Ваше дело је избрисано"
+      support: контактирајте Корисничку подршку
+    invite_increase_notification:
+      html:
+        body:
+          few: Samo smo hteli da Vas obavestimo da imate %{count} nove pozivnice,
+            koje se mogu koristiti za kreiranje novih naloga na AO3-u. Možete pozvati
+            prijatelja na %{invitation_page_link}.
+          one: Samo smo hteli da Vas obavestimo da imate %{count} novu pozivnicu,
+            koja se može koristiti za kreiranje novih naloga na AO3-u. Možete pozvati
+            prijatelja na %{invitation_page_link}.
+          other: Samo smo hteli da Vas obavestimo da imate %{count} novih pozivnica,
+            koje se mogu koristiti za kreiranje novih naloga na AO3-u. Možete pozvati
+            prijatelja na %{invitation_page_link}.
+      invitation_page_link_text: Vašoj stranici Invitations (Pozivnice)
+      subject: "[%{app_name}] Nove pozivnice"
+      text:
+        body:
+          few: Samo smo hteli da Vas obavestimo da imate %{count} novе pozivnicе,
+            koje se mogu koristiti za kreiranje novih naloga na AO3-u. Možete pozvati
+            prijatelja na Vašoj stranici Invitations (Pozivnice) (%{invitation_page_url}).
+          one: Samo smo hteli da Vas obavestimo da imate %{count} novu pozivnicu,
+            koja se može koristiti za kreiranje novih naloga na AO3-u. Možete pozvati
+            prijatelja na Vašoj stranici Invitations (Pozivnice) (%{invitation_page_url}).
+          other: Samo smo hteli da Vas obavestimo da imate %{count} novih pozivnica,
+            koje se mogu koristiti za kreiranje novih naloga na AO3-u. Možete pozvati
+            prijatelja na Vašoj stranici Invitations (Pozivnice) (%{invitation_page_url}).
+    invite_request_declined:
+      main:
+        few: Са жаљењем Вас обавештавамо да се Ваш захтев за %{count} нове позивнице
+          не може тренутно испунити.
+        one: Са жаљењем Вас обавештавамо да се Ваш захтев за %{count} нову позивницу
+          не може тренутно испунити.
+        other: Са жаљењем Вас обавештавамо да се Ваш захтев за %{count} нових позивница
+          не може тренутно испунити.
+      reason: 'Ваш захтев је био:'
+      subject: "[%{app_name}] Захтев за додатни позивни код је одбијен"
+    recipient_notification:
+      html:
+        collection: Поклон дело за Вас је објављено у %{collection_link} збирци на
+          АО3-у!
+      no_collection: Поклон дело за Вас је објављено на АО3-у!
+      subject:
+        collection: "[%{app_name}][%{collection_title}] Поклон дело за Вас из %{collection_title}"
+        no_collection: "[%{app_name}] Поклон дело за Вас"
+      text:
+        collection: Поклон дело за Вас је објављено у "%{collection_title}" збирци
+          (%{collection_url}) на АО3-у!

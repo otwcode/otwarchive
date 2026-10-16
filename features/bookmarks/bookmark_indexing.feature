@@ -46,13 +46,13 @@ Feature: Bookmark Indexing
       And I bookmark the series "Series"
     When I edit the work "Work"
       And I fill in "Additional Tags" with "New Tag"
-      And I press "Post"
+      And I press "Update"
       And all indexing jobs have been run
       And I go to the bookmarks tagged "New Tag"
     Then the 1st bookmark result should contain "Series"
     When I edit the work "Work"
       And I fill in "Additional Tags" with ""
-      And I press "Post"
+      And I press "Update"
       And all indexing jobs have been run
       And I go to the bookmarks tagged "New Tag"
     Then I should not see "Series"
@@ -63,7 +63,7 @@ Feature: Bookmark Indexing
     Given a canonical fandom "Veronica Mars"
       And a canonical fandom "Veronica Mars (TV)"
       And bookmarks of external works and series tagged with the fandom tag "Veronica Mars"
-      And I am logged in as an admin
+      And I am logged in as a "tag_wrangling" admin
     When I syn the tag "Veronica Mars" to "Veronica Mars (TV)"
       And I go to the bookmarks tagged "Veronica Mars (TV)"
     Then I should see "BookmarkedExternalWork"

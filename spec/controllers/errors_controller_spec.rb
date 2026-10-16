@@ -28,4 +28,20 @@ describe ErrorsController do
       expect(response.header["Content-Type"]).to eq("text/html; charset=utf-8")
     end
   end
+
+  describe "GET #auth_error" do
+    it "returns an HTML auth error page" do
+      get :auth_error
+      expect(response.status).to eq(200)
+      expect(response.header["Content-Type"]).to eq("text/html; charset=utf-8")
+    end
+  end
+
+  describe "GET #timeout_error" do
+    it "returns an HTML timeout error page" do
+      get :timeout_error
+      expect(response.status).to eq(504)
+      expect(response.header["Content-Type"]).to eq("text/html; charset=utf-8")
+    end
+  end
 end

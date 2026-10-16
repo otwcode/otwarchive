@@ -20,8 +20,10 @@ module SkinWizard
         #header .user a:focus,
         #dashboard a:hover,
         .actions a:hover,
+        .actions button:hover,
         .actions input:hover,
         .actions a:focus,
+        .actions button:focus,
         .actions input:focus,
         label.action:hover,
         .action:hover,
@@ -113,9 +115,10 @@ module SkinWizard
         form.verbose legend,
         .verbose form legend,
         #modal,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         .own,
         .draft,
-        .draft .wrapper,
         .unread,
         .child,
         .unwrangled,
@@ -123,7 +126,8 @@ module SkinWizard
         .thread .even,
         .listbox .index,
         .nomination dt,
-        #tos_prompt {
+        #tos_prompt,
+        .annotation {
           background: #{color};
         }
 
@@ -148,7 +152,9 @@ module SkinWizard
         .toggled form,
         .dynamic form,
         .secondary,
-        .wrapper {
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
+        .wrapper:has(> table, > .meta) {
           box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5)
         }
 
@@ -159,6 +165,10 @@ module SkinWizard
         
         .listbox .index {
           box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .news .wrapper {
+          box-shadow: none;
         }
       "
     else
@@ -301,13 +311,18 @@ module SkinWizard
         form.verbose legend,
         .verbose form legend,
         .secondary,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         dl.meta,
+        dl.meta .wrapper,
         .bookmark .user,
         div.comment,
         li.comment,
         .comment div.icon,
         .splash .news li,
-        .userstuff blockquote {
+        .authentication fieldset,
+        .userstuff blockquote,
+        .annotation {
           border-color: #{color};
         }
 

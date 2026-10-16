@@ -3,7 +3,7 @@ Feature: Filing a support request
   As a confused user
   I want to file a support request
 
-  Scenario: Filling a support request
+  Scenario: Filing a support request
   
   Given I am logged in as "puzzled"
   And basic languages
@@ -59,4 +59,29 @@ Feature: Filing a support request
   Then 1 email should be delivered
     # The sanitizer adds the domain in front of relative image URLs as of AO3-6571
     And the email should not contain "<img src="http://www.example.org/foo.jpg" />"
-    But the email should contain "http://www.example.org/foo.jpgHi"
+    But the email should contain "img src="http://www.example.org/foo.jpg"Hi"
+
+  Scenario: Submit a request with an on-Archive referer
+
+  Given I am logged in as "puzzled"
+    And basic languages
+    And Zoho ticket creation is enabled
+    And "www.example.com" is a permitted Archive host
+  When I go to the works page
+    And I follow "Support & Feedback"
+    And I fill in "Brief summary" with "Just a brief note"
+    And I fill in "Your question or problem" with "Hi, I came from the Archive"
+    And I press "Send"
+  Then a Zoho ticket should be created with referer "http://www.example.com/works"
+
+  Scenario: Submit a request with a referer that is not on-Archive
+
+  Given I am logged in as "puzzled"
+    And basic languages
+    And Zoho ticket creation is enabled
+  When I go to the works page
+    And I follow "Support & Feedback"
+    And I fill in "Brief summary" with "Just a brief note"
+    And I fill in "Your question or problem" with "Hi, I didn't come from the Archive"
+    And I press "Send"
+  Then a Zoho ticket should be created with referer ""

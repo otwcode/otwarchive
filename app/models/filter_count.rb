@@ -67,8 +67,8 @@ class FilterCount < ApplicationRecord
     small_ids = ids - large_ids
 
     # Add all filters to the appropriate queues.
-    REDIS.sadd(QUEUE_KEY_LARGE, large_ids) if large_ids.present?
-    REDIS.sadd(QUEUE_KEY_SMALL, small_ids) if small_ids.present?
+    REDIS.sadd?(QUEUE_KEY_LARGE, large_ids) if large_ids.present?
+    REDIS.sadd?(QUEUE_KEY_SMALL, small_ids) if small_ids.present?
   end
 
   # Update counts for small filters.
@@ -96,7 +96,7 @@ class FilterCount < ApplicationRecord
 
       # Build a separate REDIS set for the next batch to process.
       batch_key = "#{temp_key}:#{batch.first}"
-      REDIS.sadd(batch_key, batch)
+      REDIS.sadd?(batch_key, batch)
       async(:update_counts_for_batch, batch_key)
     end
 

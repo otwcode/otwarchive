@@ -32,8 +32,7 @@ describe WorksController, work_search: true do
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params: params
-        it_redirects_to_with_error(new_user_session_path,
-                                   "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -95,7 +94,7 @@ describe WorksController, work_search: true do
           { query: "sort by: word count", expected: "word_count" },
           { query: "sort by: words", expected: "word_count" },
           { query: "sort by: word", expected: "word_count" },
-          { query: "sort by: author", expected: "authors_to_sort_on" },
+          { query: "sort by: creator", expected: "authors_to_sort_on" },
           { query: "sort by: title", expected: "title_to_sort_on" },
           { query: "sort by: date", expected: "created_at" },
           { query: "sort by: date posted", expected: "created_at" },
@@ -181,8 +180,7 @@ describe WorksController, work_search: true do
   describe "new" do
     it "doesn't return the form for anyone not logged in" do
       get :new
-      it_redirects_to_with_error(new_user_session_path,
-                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      it_redirects_to_user_login_with_error
     end
 
     it "renders the form if logged in" do
@@ -197,6 +195,60 @@ describe WorksController, work_search: true do
       it_redirects_to_simple(user_path(banned_user))
       expect(flash[:error]).to include("Your account has been banned.")
     end
+
+    context "when collection is closed" do
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: true)) }
+      let(:user) { create(:user) }
+
+      before { fake_login_known_user(user) }
+
+      it "redirects to collection page with error for non-maintainers" do
+        get :new, params: { collection_id: collection.name }
+        it_redirects_to_with_error(collection_path(collection), "Sorry, the collection Excalibur is closed. New works cannot be added to it.")
+      end
+    end
+
+    context "when collection is closed but user is owner" do
+      let(:user) { create(:user) }
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: true)) }
+      let!(:participant) { collection.collection_participants.create(pseud: user.default_pseud, participant_role: CollectionParticipant::OWNER) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "allows access to new work form" do
+        get :new, params: { collection_id: collection.name }
+        expect(response).to render_template("new")
+      end
+    end
+
+    context "when collection is closed but user is maintainer" do
+      let(:user) { create(:user) }
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: true)) }
+      let!(:participant) { collection.collection_participants.create(pseud: user.default_pseud, participant_role: CollectionParticipant::MODERATOR) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "allows access to new work form" do
+        get :new, params: { collection_id: collection.name }
+        expect(response).to render_template("new")
+      end
+    end
+
+    context "when collection is open" do
+      let(:collection) { create(:collection, title: "Excalibur", collection_preference: create(:collection_preference, closed: false)) }
+      let(:user) { create(:user) }
+
+      before { fake_login_known_user(user) }
+
+      it "allows access to new work form" do
+        get :new, params: { collection_id: collection.name }
+        expect(response).to render_template("new")
+      end
+    end
   end
 
   describe "create" do
@@ -205,15 +257,14 @@ describe WorksController, work_search: true do
     before { fake_login_known_user(user) }
 
     it "doesn't allow a user to create a work in a series that they don't own" do
-      @series = create(:series)
+      series = create(:series)
       work_attributes = attributes_for(:work).except(:posted)
-      work_attributes[:series_attributes] = { id: @series.id }
-      expect {
+      work_attributes[:series_attributes] = { id: series.id }
+      expect do
         post :create, params: { work: work_attributes }
-      }.not_to change { @series.works.all.count }
+      end.not_to change { series.works.all.count }
       expect(response).to render_template :new
-      expect(assigns[:work].errors.full_messages).to \
-        include("You can't add a work to that series.")
+      expect(assigns[:work].errors.full_messages).to include("You can't add a work to that series.")
     end
 
     it "doesn't allow a user to submit only a pseud that is not theirs" do
@@ -274,6 +325,14 @@ describe WorksController, work_search: true do
         include /Only canonical category tags are allowed./
     end
 
+    it "renders new if the work has invalid comment permissions" do
+      work_attributes = attributes_for(:work).except(:posted, :comment_permissions).merge(comment_permissions: "Comment")
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include "Comment permissions are invalid."
+    end
+
     context "as a tag wrangler" do
       let(:user) { create(:tag_wrangler) }
 
@@ -313,6 +372,35 @@ describe WorksController, work_search: true do
 
       expect(assigns(:page_title)).to include "No fandom specified"
     end
+
+    it "assigns @page_subtitle with unrevealed work and not @page_title" do
+      work.update!(in_unrevealed_collection: true)
+      get :show, params: { id: work.id }
+      expect(assigns[:page_subtitle]).to eq("Mystery Work")
+      expect(assigns[:page_title]).to be_nil
+    end
+
+    context "when work does not exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "999999999" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    context "when collection is given but the work is not in the collection" do
+      let(:unrelated_collection) { create(:collection) }
+
+      before do
+        work.update!(collections: [create(:collection)])
+      end
+
+      it "redirects to the work" do
+        get :show, params: { id: work.id, collection_id: unrelated_collection.name }
+
+        it_redirects_to work_path(work)
+      end
+    end
   end
 
   describe "share" do
@@ -334,37 +422,51 @@ describe WorksController, work_search: true do
   end
 
   describe "index" do
-    before do
-      @fandom = create(:canonical_fandom)
-      @work = create(:work, fandom_string: @fandom.name)
-    end
+    let(:fandom) { create(:canonical_fandom) }
+    let!(:work) { create(:work, fandom_string: fandom.name) }
 
     it "returns the work" do
       get :index
-      expect(assigns(:works)).to include(@work)
+      expect(assigns(:works)).to include(work)
     end
 
     it "sets the fandom when given a fandom id" do
-      params = { fandom_id: @fandom.id }
+      params = { fandom_id: fandom.id }
       get :index, params: params
-      expect(assigns(:fandom)).to eq(@fandom)
+      expect(assigns(:fandom)).to eq(fandom)
     end
 
-    describe "without caching" do
+    describe "when the fandom id is invalid" do
+      it "raises a 404 for an invalid id" do
+        params = { fandom_id: 0 }
+        expect { get :index, params: params }
+          .to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    describe "when the fandom id is empty" do
+      it "returns the work" do
+        params = { fandom_id: nil }
+        get :index, params: params
+        expect(assigns(:works)).to include(work)
+      end
+    end
+
+    context "without caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, false)
       end
 
       it "returns the result with different works the second time" do
         get :index
-        expect(assigns(:works)).to include(@work)
+        expect(assigns(:works)).to include(work)
         work2 = create(:work)
         get :index
         expect(assigns(:works)).to include(work2)
       end
     end
 
-    describe "with caching" do
+    context "with caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, true)
       end
@@ -372,7 +474,7 @@ describe WorksController, work_search: true do
       context "with NO owner tag" do
         it "returns the same result the second time when a new work is created within the expiration time" do
           get :index
-          expect(assigns(:works)).to include(@work)
+          expect(assigns(:works)).to include(work)
           work2 = create(:work)
           run_all_indexing_jobs
           get :index
@@ -381,44 +483,45 @@ describe WorksController, work_search: true do
       end
 
       context "with a valid owner tag" do
+        let!(:fandom2) { create(:canonical_fandom) }
+        let!(:work2) { create(:work, fandom_string: fandom2.name) }
+
         before do
-          @fandom2 = create(:canonical_fandom)
-          @work2 = create(:work, fandom_string: @fandom2.name)
           run_all_indexing_jobs
         end
 
         it "only gets works under that tag" do
-          get :index, params: { tag_id: @fandom.name }
-          expect(assigns(:works).items).to include(@work)
-          expect(assigns(:works).items).not_to include(@work2)
+          get :index, params: { tag_id: fandom.name }
+          expect(assigns(:works).items).to include(work)
+          expect(assigns(:works).items).not_to include(work2)
         end
 
         it "shows different results on second page" do
-          get :index, params: { tag_id: @fandom.name, page: 2 }
-          expect(assigns(:works).items).not_to include(@work)
+          get :index, params: { tag_id: fandom.name, page: 2 }
+          expect(assigns(:works).items).not_to include(work)
         end
 
         context "with restricted works" do
+          let!(:work2) { create(:work, fandom_string: fandom.name, restricted: true) }
+
           before do
-            @work2 = create(:work, fandom_string: @fandom.name, restricted: true)
             run_all_indexing_jobs
           end
 
-          it "shows restricted works to guests" do
-            get :index, params: { tag_id: @fandom.name }
-            expect(assigns(:works).items).to include(@work)
-            expect(assigns(:works).items).not_to include(@work2)
+          it "hides them from guests, showing only unrestricted works" do
+            get :index, params: { tag_id: fandom.name }
+            expect(assigns(:works).items).to include(work)
+            expect(assigns(:works).items).not_to include(work2)
           end
-
         end
 
         context "when tag is a synonym" do
-          let(:fandom_synonym) { create(:fandom, merger: @fandom) }
+          let(:fandom_synonym) { create(:fandom, merger: fandom) }
 
           it "redirects to the merger's work index" do
             params = { tag_id: fandom_synonym.name }
             get :index, params: params
-            it_redirects_to tag_works_path(@fandom)
+            it_redirects_to tag_works_path(fandom)
           end
 
           context "when collection is specified" do
@@ -427,7 +530,7 @@ describe WorksController, work_search: true do
             it "redirects to the merger's collection works index" do
               params = { tag_id: fandom_synonym.name, collection_id: collection.name }
               get :index, params: params
-              it_redirects_to collection_tag_works_path(collection, @fandom)
+              it_redirects_to collection_tag_works_path(collection, fandom)
             end
           end
         end
@@ -474,7 +577,7 @@ describe WorksController, work_search: true do
         params = { user_id: user.login }
         get :index, params: params
         expect(assigns(:works).items).to include(user_work, pseud_work)
-        expect(assigns(:works).items).not_to include(@work)
+        expect(assigns(:works).items).not_to include(work)
       end
 
       context "with a valid pseud" do
@@ -482,7 +585,7 @@ describe WorksController, work_search: true do
           params = { user_id: user.login, pseud_id: pseud.name }
           get :index, params: params
           expect(assigns(:works).items).to include(pseud_work)
-          expect(assigns(:works).items).not_to include(user_work, @work)
+          expect(assigns(:works).items).not_to include(user_work, work)
         end
       end
 
@@ -491,33 +594,81 @@ describe WorksController, work_search: true do
           params = { user_id: user.login, pseud_id: "nonexistent_pseud" }
           get :index, params: params
           expect(assigns(:works).items).to include(user_work, pseud_work)
-          expect(assigns(:works).items).not_to include(@work)
+          expect(assigns(:works).items).not_to include(work)
         end
       end
     end
   end
 
+  describe "GET #edit", work_search: false do
+    let(:work) { create(:work) }
+
+    context "when logged in as the work creator" do
+      before { fake_login_known_user(work.users.first) }
+
+      it "renders the edit template" do
+        get :edit, params: { id: work }
+        expect(response).to render_template(:edit)
+        expect(assigns(:work)).to eq(work)
+      end
+    end
+
+    context "when logged in as a random user" do
+      before { fake_login }
+
+      it "redirects with an error" do
+        get :edit, params: { id: work }
+        it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+
+    context "when logged in as admin" do
+      subject { get :edit, params: { id: work } }
+      let(:success) { expect(response).to render_template(:edit) }
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin policy_and_abuse support]
+    end
+  end
+
   describe "update" do
     let(:update_user) { create(:user) }
-    let(:update_work) {
+    let(:update_work) do
       work = create(:work, authors: [update_user.default_pseud])
       create(:chapter, work: work)
       work
-    }
+    end
+
+    context "when logged in as admin", work_search: false do
+      let(:work) { create(:work) }
+      let!(:language) { create(:language) }
+      subject do
+        put :update, params: {
+          id: work, work: { relationship_string: "kronfaumei", language_id: language.id }
+        }
+      end
+      let(:success) do
+        it_redirects_to_with_notice(work_path(work), "Work was successfully updated.")
+        expect(work.reload.relationship_string).to eq("kronfaumei")
+        expect(work.language).to eq(language)
+      end
+
+      before { fake_logout }
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin policy_and_abuse support]
+    end
 
     before do
       fake_login_known_user(update_user)
     end
 
     it "doesn't allow the user to add a series that they don't own" do
-      @series = create(:series)
-      attrs = { series_attributes: { id: @series.id } }
-      expect {
+      series = create(:series)
+      attrs = { series_attributes: { id: series.id } }
+      expect do
         put :update, params: { id: update_work.id, work: attrs }
-      }.not_to change { @series.works.all.count }
+      end.not_to change { series.works.all.count }
       expect(response).to render_template :edit
-      expect(assigns[:work].errors.full_messages).to \
-        include("You can't add a work to that series.")
+      expect(assigns(:work).errors.full_messages).to include("You can't add a work to that series.")
     end
 
     it "redirects to the edit page if the work could not be saved" do
@@ -697,6 +848,12 @@ describe WorksController, work_search: true do
         get :collected, params: { user_id: collected_user.login }
         expect(assigns(:works)).to include(work, anonymous_work)
       end
+
+      it "returns anonymous works in collections for admins" do
+        fake_login_admin(create(:admin))
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work, anonymous_work)
+      end
     end
 
     context "with restricted works" do
@@ -798,6 +955,57 @@ describe WorksController, work_search: true do
         get :collected, params: { user_id: collected_user.login }
         expect(assigns(:works)).to include(work, unrevealed_work)
       end
+
+      it "returns unrevealed works in collections for admins" do
+        fake_login_admin(create(:admin))
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work, unrevealed_work)
+      end
+    end
+
+    context "with sorting options" do
+      let!(:new_work) do
+        create(:work,
+               title: "New Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 3.days.ago,
+               revised_at: 3.days.ago)
+      end
+
+      let!(:old_work) do
+        create(:work,
+               title: "Old Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 30.days.ago,
+               revised_at: 30.days.ago)
+      end
+
+      let!(:revised_work) do
+        create(:work,
+               title: "Revised Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 20.days.ago,
+               revised_at: 2.days.ago)
+      end
+
+      before { run_all_indexing_jobs }
+
+      it "sorts by date" do
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works).map(&:title)).to eq([revised_work, new_work, old_work].map(&:title))
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_direction: "asc" } }
+        expect(assigns(:works).map(&:title)).to eq([old_work, new_work, revised_work].map(&:title))
+      end
+
+      it "sorts by title" do
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_column: "title_to_sort_on" } }
+        expect(assigns(:works).map(&:title)).to eq([new_work, old_work, revised_work].map(&:title))
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_column: "title_to_sort_on", sort_direction: "desc" } }
+        expect(assigns(:works).map(&:title)).to eq([revised_work, old_work, new_work].map(&:title))
+      end
     end
   end
 
@@ -858,6 +1066,19 @@ describe WorksController, work_search: true do
         it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{banned_users_work.title} was deleted.")
         expect { banned_users_work.reload }
           .to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the work deletion errors out" do
+      before do
+        allow_any_instance_of(Work).to receive(:destroy) { raise ActiveRecord::RecordNotDestroyed }
+
+        fake_login_known_user(work.users.first)
+      end
+
+      it "sets flash message and redirects" do
+        delete :destroy, params: { id: work }
+        it_redirects_to_with_error(user_works_path(controller.current_user), "We couldn't delete that right now, sorry! Please try again later.")
       end
     end
   end

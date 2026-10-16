@@ -40,6 +40,20 @@ module TagSetsHelper
     message
   end
 
+  def nomination_review_heading(tag_type, pagy)
+    return t("tag_sets.nomination_review_heading.already_approved_fandoms") if tag_type == "cast"
+
+    type_name = tag_type_label_name(tag_type).pluralize
+    if pagy.pages > 1
+      t("tag_sets.nomination_review_heading.paginated",
+        from: pagy.from, to: pagy.to,
+        total: pagy.count, type: type_name)
+    else
+      t("tag_sets.nomination_review_heading.left_to_review",
+        type: type_name, count: pagy.count)
+    end
+  end
+
   def nomination_status(nomination=nil)
     symbol = "?!"
     status = "unreviewed"
@@ -64,7 +78,7 @@ module TagSetsHelper
   end
 
   def nomination_tag_information(nominated_tag)
-    tag_object = nominated_tag.type.gsub(/Nomination/, '').constantize.find_by_name(nominated_tag.tagname)
+    tag_object = Tag.find_by(name: nominated_tag.tagname)
     status = "nonexistent"
     tooltip = ts("This tag has never been used before. Check the spelling!")
     title = ts("nonexistent tag")

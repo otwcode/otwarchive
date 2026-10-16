@@ -14,7 +14,7 @@ Feature: Private bookmarks
       And I post the work "Public Masterpiece"
       And I post the work "Another Masterpiece"
     When I am logged in as "avid_bookmarker"
-      And I add the pseud "infrequent_bookmarker"
+      And "avid_bookmarker" creates the pseud "infrequent_bookmarker"
       And I start a new bookmark for "Secret Masterpiece"
       And I check "Rec"
       And I check "Private bookmark"
