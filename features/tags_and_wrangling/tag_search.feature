@@ -25,34 +25,34 @@ Feature: Search Tags
     Then I should see "1 Found"
       And I should see the tag search result "first last/someone else (0)"
 
-    Scenario: Search for fandom with slash in name
-      Given I have no tags
-        And a fandom exists with name: "first/fandom", canonical: false
-        And all indexing jobs have been run
-      When I am on the search tags page
-        And I fill in "Tag name" with "first"
-        And I press "Search Tags"
-      Then I should see "1 Found"
-        And I should see the tag search result "Fandom: first/fandom (0)"
+  Scenario: Search for fandom with slash in name
+    Given I have no tags
+      And a fandom exists with name: "first/fandom", canonical: false
+      And all indexing jobs have been run
+    When I am on the search tags page
+      And I fill in "Tag name" with "first"
+      And I press "Search Tags"
+    Then I should see "1 Found"
+      And I should see the tag search result "Fandom: first/fandom (0)"
 
-    Scenario: Search for fandom with period in name
-      Given I have no tags
-        And a fandom exists with name: "first.fandom", canonical: false
-        And all indexing jobs have been run
-      When I am on the search tags page
-        And I fill in "Tag name" with "first.fandom"
-        And I press "Search Tags"
-      Then I should see "1 Found"
-        And I should see the tag search result "Fandom: first.fandom (0)"
-      When I follow "first.fandom"
-      Then I should see "This tag belongs to the Fandom Category"
+  Scenario: Search for fandom with period in name
+    Given I have no tags
+      And a fandom exists with name: "first.fandom", canonical: false
+      And all indexing jobs have been run
+    When I am on the search tags page
+      And I fill in "Tag name" with "first.fandom"
+      And I press "Search Tags"
+    Then I should see "1 Found"
+      And I should see the tag search result "Fandom: first.fandom (0)"
+    When I follow "first.fandom"
+    Then I should see "This tag belongs to the Fandom Category"
 
-      When I am on the search tags page
-      # possibly a bug rather than desired behaviour, to be discussed later
-        And I fill in "Tag name" with "first"
-        And I press "Search Tags"
-      Then I should see "0 Found"
-        And I should not see "Fandom: first.fandom (0)"
+    When I am on the search tags page
+    # possibly a bug rather than desired behaviour, to be discussed later
+      And I fill in "Tag name" with "first"
+      And I press "Search Tags"
+    Then I should see "0 Found"
+      And I should not see "Fandom: first.fandom (0)"
 
   Scenario: Search for tag in canonical fandom(s)
     Given a canonical character "Anna Anderson" in fandom "Fandom A"
@@ -273,3 +273,14 @@ Feature: Search Tags
       And the 4th tag result should contain "8 uses"
       And the 5th tag result should contain "8 uses"
       And the 6th tag result should contain "10 uses"
+
+  Scenario: Search defaults to sort by Uses in descending order
+    Given a set of tags for tag sort by use exists
+    When I am on the search tags page
+      And I fill in "Tag name" with "uses"
+      And I press "Search Tags"
+    Then I should see "6 Found"
+      And the 1st tag result should contain "10 uses"
+      And the 2nd tag result should contain "8 uses"
+      And the 3rd tag result should contain "8 uses"
+      And the 4th tag result should contain "5 uses"
