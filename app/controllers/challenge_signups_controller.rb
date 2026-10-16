@@ -97,6 +97,7 @@ class ChallengeSignupsController < ApplicationController
       @challenge_signup.requests.each do |request|
         unless request.anonymous?
           is_all_anon = false
+          break
         end
       end
       if is_all_anon
