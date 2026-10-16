@@ -287,6 +287,14 @@ When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
   check("selected_tags_#{tag.id}")
 end
 
+Given "the tag {string} was canonized on {string}" do |name, date|
+  Tag.find_by!(name: name).update_column(:canonized_at, date)
+end
+
+Given "the tag {string} was decanonized on {string}" do |name, date|
+  Tag.find_by!(name: name).update_column(:decanonized_at, date)
+end
+
 When "I edit the tag {string}" do |tag|
   tag = Tag.find_by!(name: tag)
   visit edit_tag_path(tag)

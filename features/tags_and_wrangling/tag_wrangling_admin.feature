@@ -32,6 +32,34 @@ Feature: Tag wrangling
     Then I should not see "Amelie"
       And I should see "Amélie"
 
+  Scenario: Admin can see when a tag was last canonized and decanonized
+
+  Given I am logged in as a "tag_wrangling" admin
+    And a fandom exists with name: "Amelie", canonical: false
+  When I edit the tag "Amelie"
+  Then I should not see "Last canonized on"
+    And I should not see "Last decanonized on"
+  When I check "Canonical"
+    And I press "Save changes"
+  Then I should see "Last canonized on"
+    And I should not see "Last decanonized on"
+  When I uncheck "Canonical"
+    And I press "Save changes"
+  Then I should see "Last canonized on"
+    And I should see "Last decanonized on"
+
+  Scenario: Tag wrangler cannot see when a tag was last canonized or decanonized
+
+  Given I am logged in as a "tag_wrangling" admin
+    And a fandom exists with name: "Amelie", canonical: true
+  When I edit the tag "Amelie"
+    And I uncheck "Canonical"
+    And I press "Save changes"
+    And I am logged in as a tag wrangler
+    And I edit the tag "Amelie"
+  Then I should not see "Last canonized on"
+    And I should not see "Last decanonized on"
+
   Scenario: Admin can rename a tag using Eastern characters
 
   Given I am logged in as a "tag_wrangling" admin

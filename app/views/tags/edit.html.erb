@@ -13,6 +13,16 @@
 
 <% if logged_in_as_admin? %>
   <p class="notes"><%= ts("Last updated by %{wrangler} on %{date}", wrangler: @tag.last_wrangler.try(:login) || '---', date: @tag.updated_at) %></p>
+  <% if @tag.canonized_at || @tag.decanonized_at %>
+    <p class="notes">
+      <% if @tag.canonized_at %>
+        <%= t(".last_canonized", date: @tag.canonized_at.utc.strftime("%Y-%m-%d %H:%M:%S")) %>
+      <% end %>
+      <% if @tag.decanonized_at %>
+        <%= t(".last_decanonized", date: @tag.decanonized_at.utc.strftime("%Y-%m-%d %H:%M:%S")) %>
+      <% end %>
+    </p>
+  <% end %>
 <% end %>
 
 <%= form_for @tag, as: :tag, url: { action: "update", id: @tag}, html: { method: :put } do |f| %>
