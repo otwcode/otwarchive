@@ -4,5 +4,5 @@
 <% elsif bookmarkable.is_a?(Series) %>
   <%= render 'series/series_module', series: bookmarkable %>
 <% else %>
-  <%= render 'works/work_module', work: bookmarkable %>
+  <%= render WorkBlurbPresenter.new(bookmarkable, blurb: false) %>
 <% end %>
