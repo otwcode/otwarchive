@@ -291,6 +291,10 @@ en:
           format: "%{message}"
         work/parent_work_relationships:
           format: "%{message}"
+        admin_blacklisted_email:
+          attributes:
+            email:
+              taken: has already been banned.
     models:
       admin_blacklisted_email:
         one: Banned Email
