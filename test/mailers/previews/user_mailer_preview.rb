@@ -413,6 +413,25 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.signup_notification(user.id)
   end
 
+  # URL: /rails/mailers/user_mailer/totp_2fa_enabled
+  def totp_2fa_enabled
+    user = create(:user, :for_mailer_preview)
+    codes = %w[
+      5768696c6520796f757265207472616e
+      736c6174696e67207468697320796f75
+      20636f756c6420686176652061637475
+      616c6c79206d6164652070726f677265
+      7373206f6e20796f7572207061746368
+    ]
+    UserMailer.totp_2fa_enabled(user.id, codes)
+  end
+
+  # URL: /rails/mailers/user_mailer/totp_2fa_disabled
+  def totp_2fa_disabled
+    user = create(:user, :for_mailer_preview)
+    UserMailer.totp_2fa_disabled(user.id)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)

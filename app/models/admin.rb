@@ -52,7 +52,7 @@ class Admin < ApplicationRecord
 
   attr_accessor :otp_plain_backup_codes
 
-  # Generate a TOTP secret it it does not already exist
+  # Generate a TOTP secret if it does not already exist
   def generate_totp_secret_if_missing!
     return unless otp_secret.nil?
 
