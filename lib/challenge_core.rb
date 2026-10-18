@@ -61,9 +61,9 @@ module ChallengeCore
     self.collection.user_is_maintainer?(user) || self.signup_open
   end
   
-  # def user_allowed_to_see_prompt?(user, prompt)
-  #   true
-  # end
+  def user_allowed_to_see_prompt?(user, prompt)
+    true
+  end
 
   # whether users can change the name on their signup or not -- override in challenge class as appropriate
   def allow_name_change?
