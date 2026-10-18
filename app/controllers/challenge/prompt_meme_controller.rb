@@ -42,7 +42,7 @@ class Challenge::PromptMemeController < ChallengesController
       flash[:notice] = 'Challenge was successfully updated.'
       # expire the cache on the signup form
       ActionController::Base.new.expire_fragment('challenge_signups/new')
-      redirect_to @collection
+      redirect_to collection_path(@collection)
     else
       render action: :edit
     end
@@ -51,7 +51,7 @@ class Challenge::PromptMemeController < ChallengesController
   def destroy
     @challenge.destroy
     flash[:notice] = 'Challenge settings were deleted.'
-    redirect_to @collection
+    redirect_to collection_path(@collection)
   end
 
   private

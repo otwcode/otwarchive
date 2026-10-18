@@ -898,3 +898,41 @@ Feature: Gift Exchange Challenge
     Then I should not see "Approve"
     When I follow "Complete"
     Then I should see "Fulfilled Story" 
+
+  @javascript
+  Scenario: Can hide and show warnings on a request
+    Given I have set up the gift exchange "Awesome Gift Exchange"
+      And I check "Sign-up open?"
+      And I check "Requests visible?"
+      And I allow warnings in my gift exchange
+      And I submit
+      And I start signing up for "Awesome Gift Exchange"
+      And I check "No Archive Warnings Apply"
+      And I submit
+    When I am logged in as "myname2"
+      And I set my preferences to hide warnings
+      And I go to "Awesome Gift Exchange" collection's page
+      And I follow "Requests Summary"
+    Then I should see "Show warnings"
+      And I should not see "No Archive Warnings" within "li.warnings"
+    When I follow "Show warnings"
+    Then I should not see "Show warnings"
+      And I should see "No Archive Warnings" within "li.warnings"
+
+  @javascript
+  Scenario: Can hide and show additional tags on a request
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I am logged in as "mod1"
+      And I go to "Awesome Gift Exchange" gift exchange edit page
+      And I check "Requests visible?"
+      And I submit
+      And I sign up for "Awesome Gift Exchange" with combination A
+    When I am logged in as "myname2"
+      And I set my preferences to hide freeform
+      And I go to "Awesome Gift Exchange" collection's page
+      And I follow "Requests Summary"
+    Then I should see "Show additional tags"
+      And I should not see "Alternate Universe - Historical"
+    When I follow "Show additional tags"
+    Then I should not see "Show additional tags"
+      And I should see "Alternate Universe - Historical"
