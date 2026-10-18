@@ -1,4 +1,4 @@
-@tags @tag_wrangling @search
+@tags @tag_wrangling @elasticsearch
 Feature: Search Tags
   In order to find tags
   As a user

@@ -1,4 +1,4 @@
-@bookmarks @search
+@bookmarks
 Feature: Bookmark Indexing
 
   Scenario: Adding a new, out-of-fandom work to a series

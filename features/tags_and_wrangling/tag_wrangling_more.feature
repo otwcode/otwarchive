@@ -264,6 +264,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I view the unwrangled relationship bin for "Canonical Character"
     Then I should not see "Syn Character/OC"
 
+  @elasticsearch
   Scenario: Tags from draft works don't show in unwrangled bins
     Given a canonical fandom "Testing"
       And I am logged in as a tag wrangler
@@ -286,6 +287,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I follow "Relationships by fandom (0)"
       Then I should not see "draft rel"
 
+  @elasticsearch
   Scenario: When the only draft using a tag is posted, the tag shows up in unwrangled bins
     Given a canonical fandom "Testing"
       And I am logged in as a tag wrangler
@@ -305,6 +307,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I follow "Characters by fandom (1)"
     Then I should see "draft char"
 
+  @elasticsearch
   Scenario: Tags from bookmarks don't show up in unwrangled bins after being sorted and assigned to a fandom
     Given  a canonical fandom "Testing"
       And I am logged in as a tag wrangler
@@ -406,6 +409,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I view the unwrangled character bin for "Testing"
     Then I should see "hidden char"
 
+  @elasticsearch
   Scenario: Unwrangleable tags should not appear in wrangler tag counts
     Given the tag wrangler "wrangler" with password "wrangulator" is wrangler of "Canonical Fandom"
       And a character exists with name: "Unwrangled Character"
