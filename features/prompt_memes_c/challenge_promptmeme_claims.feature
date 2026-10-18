@@ -400,40 +400,36 @@ Feature: Prompt Meme Challenge
   Then I should not see "Download (CSV)"
 
   Scenario: Validation error doesn't cause semi-anon ticky to lose state (default non-anonymous) (Issue 2617)
-  Given I set up an anon promptmeme "Scotts Prompt" with name "scotts_prompt"
-    And I am logged in as "Scott" with password "password"
-    And I go to "Scotts Prompt" collection's page
-    And I follow "Prompt Form"
-    And I check the 1st checkbox with id matching "anonymous"
-  When I press "Submit"
-  Then I should see "There were some problems with this submission. Please correct the mistakes below."
-    And I should see "Your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
-    And the "Semi-anonymous Prompt" checkbox should be checked
+    Given I set up an anon promptmeme "Scotts Prompt"
+      And I go to "Scotts Prompt" collection's page
+      And I follow "Prompt Form"
+      And I check "Semi-anonymous Prompt?"
+    When I press "Submit"
+    Then I should see "There were some problems with this submission. Please correct the mistakes below."
+      And I should see "Your Request must include between 1 and 2 fandom tags, but you have included 0 fandom tags in your current Request."
+      And the "Semi-anonymous Prompt" checkbox should be checked
 
   Scenario: Editing prompt form doesn't cause semi-anon ticky to lose state (default semi-anonymous)
-  Given I set up an anon promptmeme "Scotts Prompt" with name "scotts_prompt" that is semi-anon
-    And a canonical fandom "Stargate Atlantis"
-    And I am logged in as "Scott" with password "password"
-    And I go to "Scotts Prompt" collection's page
-    And I follow "Prompt Form"
-    And I fill in the 1st field with id matching "fandom_tagnames" with "Stargate Atlantis"
-    And I uncheck "challenge_signup_requests_attributes_0_anonymous"
-    And I press "Submit"
-  Then I should see "Sign-up was successfully created."
-    And I should see "Request 1 by Scott"
-  When I follow "Edit Sign-up"
-  Then the "challenge_signup_requests_attributes_0_anonymous" checkbox should not be checked
-  # note: if ArchiveConfig.PROMPT_MEME_PROMPTS_MAX is ever changed this must be too
-  When I follow "My Prompts"
-    And I follow "Add Prompt"
-    When I fill in the 1st field with id matching "fandom_tagnames" with "Stargate Atlantis"
-    And I press "Submit"
-  Then I should see "Prompt was successfully added."
-    And I should see "Request 1 by Scott"
-    And I should see "Request 2 by Anonymous"
-  When I follow "Edit Sign-up"
-  Then the "challenge_signup_requests_attributes_0_anonymous" checkbox should not be checked
-    And the "challenge_signup_requests_attributes_1_anonymous" checkbox should be checked
+    Given I set up Battle 12 promptmeme collection
+      And I check "Prompts anonymous by default?"
+      And I submit
+    When I start signing up for "Battle 12"
+      And I uncheck "Semi-anonymous Prompt?"
+      And I press "Submit"
+    Then I should see "Sign-up was successfully created."
+      And I should see "Request 1 by mod1"
+    When I follow "Edit Sign-up"
+    Then the "Semi-anonymous Prompt?" checkbox should not be checked
+    # Can't use "Add another request?" to add a prompt because it doesn't work on the command line
+    When I follow "My Prompts"
+      And I follow "Add Prompt"
+      And I press "Submit"
+    Then I should see "Prompt was successfully added."
+      And I should see "Request 1 by mod1"
+      And I should see "Request 2 by Anonymous"
+    When I follow "Edit Sign-up"
+    Then the 1st checkbox with id matching "anonymous" should not be checked
+      And the 2nd checkbox with id matching "anonymous" should be checked
 
   Scenario: Dates should be correctly set on PromptMemes
     Given it is currently 2015-09-21 12:40 AM

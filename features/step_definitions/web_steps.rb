@@ -249,6 +249,14 @@ Then /^the "(.*?)" checkbox(?: within "(.*?)")? should not be checked$/ do |labe
   end
 end
 
+Then "the {int}(st)(nd)(rd)(th) checkbox with id matching {string} should be checked" do |index, id_string|
+  assert has_checked_field?(page.all("input[type='checkbox']").select { |el| el['id'] && el['id'].match(/#{id_string}/) }[index - 1]['id'])
+end
+
+Then "the {int}(st)(nd)(rd)(th) checkbox with id matching {string} should not be checked" do |index, id_string|
+  assert has_unchecked_field?(page.all("input[type='checkbox']").select { |el| el['id'] && el['id'].match(/#{id_string}/) }[index - 1]['id'])
+end
+
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
