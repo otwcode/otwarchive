@@ -6,6 +6,9 @@ describe AbuseReportsController do
   include LoginMacros
 
   describe "POST #create" do
+    success_response = { headers: { content_type: "application/json" }, body: '{"data":[{"id":"1"}]}' }.freeze
+    failure_response = { status: 400, headers: { content_type: "application/json" }, body: "{}" }.freeze
+
     let(:mock_zoho) { instance_double(ZohoResourceClient) }
 
     let(:default_parameters) do
@@ -30,7 +33,7 @@ describe AbuseReportsController do
     it "specifies a channel" do
       expect(mock_zoho).to receive(:create_ticket).with(ticket_attributes: include(
         "channel" => "Abuse Form"
-      )).and_return({})
+      )).and_return(success_response)
       post :create, params: default_parameters
     end
 
@@ -45,7 +48,7 @@ describe AbuseReportsController do
           "cf" => include(
             "cf_user_agent" => user_agent.to(499)
           )
-        )).and_return({})
+        )).and_return(success_response)
         post :create, params: default_parameters
       end
     end
@@ -60,8 +63,27 @@ describe AbuseReportsController do
           "cf" => include(
             "cf_user_agent" => "Unknown user agent"
           )
-        )).and_return({})
+        )).and_return(success_response)
         post :create, params: default_parameters
+      end
+    end
+
+    context "when the abuse report is invalid" do
+      it "renders the new template with an error message" do
+        post :create, params: default_parameters.deep_merge(abuse_report: { email: "not an email" })
+        expect(response).to render_template(:new)
+        expect(assigns[:abuse_report].errors.full_messages).to include("Email should look like an email address.")
+      end
+    end
+
+    context "when Zoho does not accept the ticket" do
+      it "renders the new template with an error message" do
+        expect(mock_zoho).to receive(:create_ticket).and_return(failure_response)
+
+        post :create, params: default_parameters
+
+        expect(response).to render_template(:new)
+        expect(flash[:error]).to include("Sorry, your report could not be submitted. Please try again later.")
       end
     end
   end

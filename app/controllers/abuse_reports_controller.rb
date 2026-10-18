@@ -16,12 +16,16 @@ class AbuseReportsController < ApplicationController
     @abuse_report.ip_address = request.remote_ip
     @abuse_report.user_agent = request.env["HTTP_USER_AGENT"].presence&.to(499)
     if @abuse_report.save
-      @abuse_report.email_and_send
-      flash[:notice] = ts("Your report was submitted to the Policy & Abuse team. A confirmation message has been sent to the email address you provided.")
-      redirect_to root_path
-    else
-      render action: "new"
+      if @abuse_report.email_and_send
+        flash[:notice] = t(".success")
+        redirect_to root_path
+        return
+      else
+        flash[:error] = t(".failure_send")
+        @abuse_report.destroy # avoid contributing to reporting limits
+      end
     end
+    render action: "new"
   end
 
   private
