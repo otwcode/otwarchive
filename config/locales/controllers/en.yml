@@ -253,6 +253,8 @@ en:
     index:
       choose_media: Please choose a media category to start browsing fandoms.
       collection_page_title: "%{collection_title} - Fandoms"
+    unassigned:
+      page_title: Unassigned Fandoms
   gifts:
     index:
       page_subtitle: "%{name} - Gifts"
