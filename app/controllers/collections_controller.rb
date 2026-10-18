@@ -21,7 +21,7 @@ class CollectionsController < ApplicationController
   def load_collection_from_id
     @collection = Collection.find_by(name: params[:id])
     unless @collection
-        raise ActiveRecord::RecordNotFound, "Couldn't find collection named '#{params[:id]}'"
+         raise ActiveRecord::RecordNotFound, "Couldn't find collection named '#{params[:id]}'"
     end
   end
 
@@ -73,7 +73,6 @@ class CollectionsController < ApplicationController
     end
 
     flash_search_warnings(@collections) if @work.blank?
-    @pagy = pagy_query_result(@collections) if @collections.respond_to?(:total_pages)
   end
 
   # display challenges that are currently taking signups

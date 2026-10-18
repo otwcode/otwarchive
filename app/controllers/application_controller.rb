@@ -361,9 +361,7 @@ public
     @language = Language.find_by(short: params[:language_id]) if params[:language_id].present?
 
     if params[:user_id].present?
-      @user = User.find_by(login: params[:user_id])
-      raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:user_id]}'" if @user.blank?
-
+      @user = User.find_by!(login: params[:user_id])
       if params[:pseud_id].present?
         @pseud = @user.pseuds.find_by(name: params[:pseud_id])
         raise ActiveRecord::RecordNotFound, "Couldn't find pseud named '#{params[:pseud_id]}'" if @pseud.blank? && obj_name == "bookmark"
@@ -371,21 +369,11 @@ public
     end
 
     if params[:tag_id].present?
-      @tag = Tag.find_by_name(params[:tag_id])
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'" unless @tag.is_a?(Tag)
-
+      @tag = Tag.find_by_name!(params[:tag_id])
       unless @tag.canonical?
         redirect_to tag_path(@tag) and return if @tag.merger.blank?
 
-        work_redirect_path = @collection.present? ? collection_tag_works_path(@collection, @tag.merger) : tag_works_path(@tag.merger)
-        case obj_name
-        when "collection"
-          redirect_to tag_collections_path(@tag.merger) and return
-        when "bookmark"
-          redirect_to tag_bookmarks_path(@tag.merger) and return
-        when "work"
-          redirect_to work_redirect_path and return
-        end
+        redirect_to url_for(action: :index, tag_id: @tag.merger, only_path: true) and return
       end
     end
 

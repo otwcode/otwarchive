@@ -50,7 +50,7 @@
 
 <% unless @collections.blank? %>
   <!--pagination here-->
-  <%= pagy_nav @pagy %>
+  <%= will_paginate @collections %>
 
   <!--main content-->
   <h3 class="landmark heading"><%= t(".main_content.landmark_heading") %></h3>
@@ -66,5 +66,5 @@
 <% end %>
 
 <% unless @collections.blank? %>
-  <%= pagy_nav @pagy %>
+  <%= will_paginate @collections %>
 <% end %>
