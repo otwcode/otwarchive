@@ -61,18 +61,18 @@ describe CommentMailer do
 
   shared_examples "a notification email with a link to the comment's thread" do
     describe "HTML email" do
-      it "has a link to the comment's thread" do
+      it "has a link to the comment's parent thread" do
         expect(subject.html_part).to have_xpath(
           "//a[@href=\"#{comment_url(comment.thread)}\"]",
-          text: "Go to the thread to which this comment belongs"
+          text: "Go to this comment's parent thread"
         )
       end
     end
 
     describe "text email" do
-      it "has a link to the comment's thread" do
+      it "has a link to the comment's parent thread" do
         expect(subject).to have_text_part_content(
-          "Go to the thread to which this comment belongs: #{comment_url(comment.thread)}"
+          "Go to this comment's parent thread: #{comment_url(comment.thread)}"
         )
       end
     end
