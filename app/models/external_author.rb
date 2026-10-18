@@ -110,9 +110,12 @@ class ExternalAuthor < ApplicationRecord
         # remove archivist as owner, convert to the pseud
         archivist = external_creatorship.archivist
         work = external_creatorship.creation
-        archivist_pseud = work.pseuds.select {|pseud| archivist.pseuds.include?(pseud)}.first
         orphan_pseud = remove_pseud ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by(name: external_author_name.name)
         change_ownership(work, archivist, User.orphan_account, orphan_pseud)
+
+        # sever the link between the work and this external author's email/name
+        # so the work no longer shows as imported under this identity
+        external_creatorship.destroy
       end
     end
   end
