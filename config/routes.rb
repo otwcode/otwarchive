@@ -294,9 +294,7 @@ Rails.application.routes.draw do
       end
     end
     resource :creatorships, controller: "creatorships", only: [:show, :update]
-    resources :external_authors do
-      resources :external_author_names
-    end
+    resources :external_authors, only: [:index, :update]
     resources :favorite_tags, only: [:create, :destroy]
     resources :gifts, only: [:index]
     resource :inbox, controller: "inbox" do
@@ -394,7 +392,6 @@ Rails.application.routes.draw do
       get :navigate
       patch :remove_user_creatorship
       get :edit_tags
-      get :preview_tags
       patch :update_tags
       patch :mark_for_later
       patch :mark_as_read
@@ -649,9 +646,7 @@ Rails.application.routes.draw do
   end
 
   resources :abuse_reports, only: [:new, :create]
-  resources :external_authors do
-    resources :external_author_names
-  end
+  resources :external_authors, only: [:index, :update]
   resources :orphans, only: [:index, :new, :create]
 
   HelpController::HELP_ACTIONS.each do |action|
@@ -660,6 +655,7 @@ Rails.application.routes.draw do
 
   # Redirects for moved help files
   get "/help/add-collectible-to-collection.html", to: redirect("/help/collectibles_add_to_collection")
+  get "/help/csv-download.html", to: redirect("/help/csv_download")
   get "/first_login_help", to: redirect("/help/first_login")
   get "/help/html-help.html", to: redirect("/help/html")
   get "/help/collection-preferences.html", to: redirect("/help/preferences_collection")

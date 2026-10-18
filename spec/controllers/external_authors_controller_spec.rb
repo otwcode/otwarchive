@@ -59,6 +59,17 @@ describe ExternalAuthorsController do
   end
 
   describe "PUT #update" do
+    context "when logged out" do
+      before(:each) do
+        fake_logout
+      end
+
+      it "redirects with an error if no invitation is provided" do
+        put :update, params: { id: external_author.id }
+        it_redirects_to_with_error(root_path, "You don't have permission to do that.")
+      end
+    end
+
     it "redirects with an error if the user does not have permission" do
       wrong_external_author = create(:external_author)
       someone_elses_invitation = create(:invitation, external_author: wrong_external_author)
@@ -144,7 +155,7 @@ describe ExternalAuthorsController do
       end
 
       context "when unsuccessfully updating preferences" do
-        it "renders edit template with an error" do
+        it "redirects to homepage with an error" do
           parameters = {
             user_id: user.login,
             id: external_author.id,
@@ -156,8 +167,7 @@ describe ExternalAuthorsController do
 
           allow_any_instance_of(ExternalAuthor).to receive(:update).and_return(false)
           put :update, params: parameters
-          expect(response).to render_template :edit
-          expect(flash[:error]).to eq "There were problems saving your preferences."
+          it_redirects_to_with_error(root_path, "There were problems saving your preferences.")
         end
       end
     end
@@ -208,7 +218,7 @@ describe ExternalAuthorsController do
         end
 
         context "when unsuccessfully updating preferences" do
-          it "does not mark invitation redeemed and renders edit template with a success message for doing nothing and an error for preferences" do
+          it "does not mark invitation redeemed and redirects to homepage with a success message for doing nothing and an error for preferences" do
             parameters = {
               invitation_token: invitation.token,
               id: external_author.id,
@@ -221,7 +231,7 @@ describe ExternalAuthorsController do
 
             allow_any_instance_of(ExternalAuthor).to receive(:update).and_return(false)
             put :update, params: parameters
-            expect(response).to render_template :edit
+            it_redirects_to_simple(root_path)
             expect(flash[:notice]).to eq "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. "
             expect(flash[:error]).to eq "There were problems saving your preferences."
             invitation.reload
@@ -276,7 +286,7 @@ describe ExternalAuthorsController do
         end
 
         context "when unsuccessfully updating preferences" do
-          it "marks invitation redeemed and renders edit template with a success message for orphaning and an error for preferences" do
+          it "marks invitation redeemed and redirects to homepage with a success message for orphaning and an error for preferences" do
             parameters = {
               invitation_token: invitation.token,
               id: external_author.id,
@@ -286,7 +296,7 @@ describe ExternalAuthorsController do
 
             allow_any_instance_of(ExternalAuthor).to receive(:update).and_return(false)
             put :update, params: parameters
-            expect(response).to render_template :edit
+            it_redirects_to_simple(root_path)
             expect(flash[:notice]).to eq "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
             expect(flash[:error]).to eq "There were problems saving your preferences."
             invitation.reload
@@ -341,7 +351,7 @@ describe ExternalAuthorsController do
         end
 
         context "when unsuccessfully updating preferences" do
-          it "marks invitation redeemed and renders edit template with a success message for deleting and an error for preferences" do
+          it "marks invitation redeemed and redirects to homepage with a success message for deleting and an error for preferences" do
             parameters = {
               invitation_token: invitation.token,
               id: external_author.id,
@@ -353,7 +363,7 @@ describe ExternalAuthorsController do
 
             allow_any_instance_of(ExternalAuthor).to receive(:update).and_return(false)
             put :update, params: parameters
-            expect(response).to render_template :edit
+            it_redirects_to_simple(root_path)
             expect(flash[:notice]).to eq "Your imported stories have been deleted. "
             expect(flash[:error]).to eq "There were problems saving your preferences."
             invitation.reload
@@ -362,13 +372,6 @@ describe ExternalAuthorsController do
           end
         end
       end
-    end
-  end
-
-  describe "GET #edit" do
-    it "assigns external_author" do
-      get :edit, params: { id: external_author.id, user_id: user.login }
-      expect(assigns(:external_author)).to eq(external_author)
     end
   end
 

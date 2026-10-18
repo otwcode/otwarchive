@@ -1,19 +1,19 @@
 class Admin::AdminInvitationsController < Admin::BaseController
-
   def index
+    authorize Invitation
   end
 
   def create
-    @invitation = current_admin.invitations.new(invitation_params)
+    @invitation = authorize current_admin.invitations.new(invitation_params)
 
     if @invitation.invitee_email.blank?
-      flash[:error] = t('no_email', default: "Please enter an email address.")
-      render action: 'index'
+      flash[:error] = t(".no_email")
+      render :index
     elsif @invitation.save
-      flash[:notice] = t('sent', default: "An invitation was sent to %{email_address}", email_address: @invitation.invitee_email)
+      flash[:notice] = t(".sent", email_address: @invitation.invitee_email)
       redirect_to admin_invitations_path
     else
-      render action: 'index'
+      render :index
     end
   end
 
@@ -35,7 +35,7 @@ class Admin::AdminInvitationsController < Admin::BaseController
     else
       Invitation.grant_empty(invitation_params[:number_of_invites].to_i)
     end
-    flash[:notice] = t('invites_created', default: 'Invitations successfully created.')
+    flash[:notice] = t(".invites_created")
     redirect_to admin_invitations_path
   end
 

@@ -707,6 +707,7 @@ en:
       challenge_signups:
         close_offers_html: Close Offers &#8593;
         close_requests_html: Close Requests &#8593;
+        csv_download_help_title: CSV Downloads
         heading:
           for_collection: Sign-ups for %{collection}
           for_search: Sign-up
@@ -717,8 +718,12 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+    prompt_meme:
+      challenge_signups:
+        csv_download_help_title: CSV Downloads
     shared:
       challenge_requests:
+        csv_download_help_title: CSV Downloads
         fandom: Fandom %{allowed_fandom_count}
   challenge_assignments:
     assignment_blurb:
@@ -929,10 +934,11 @@ en:
       comment_field_title: Enter Comment
       comment_too_long: must be less than %{count} characters long.
       comment_too_short: Brevity is the soul of wit, but we need your comment to have text in it.
-      guest_email: Guest email
+      guest_edit_warning: You will not be able to edit or delete your comment after it is posted.
+      guest_email: Guest email (required)
       guest_email_failure: Please enter your email address.
-      guest_instructions: All fields are required. Your email address will not be published.
-      guest_name: Guest name
+      guest_instructions: All fields are required. Your name and comment text will both be publicly displayed. Your email address will not be made public, but it will be used to send you notifications of any replies to your comment.
+      guest_name: Guest name (required)
       guest_name_failure: Please enter your name.
       inbox_reference_html: to %{commentable_creator} on %{commentable_link}
       landmark:
@@ -1221,6 +1227,8 @@ en:
       moderated_and_anonymous_collections: 'Also note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically - it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
       page_heading: Adding To Collections
       removing_from_collection: If you change your mind about having an item in a collection, you can either edit the list of collections when editing it, or you can manage all your collected items under the "My Collections" page in your account.
+    csv_download:
+      how_to_open: To open the file properly, you might need to tell your program that the file is TAB-separated. In Open Office and Neo Office, for example, choose the TAB separator in the File Open Wizard. In Google Docs, use "Import" instead of "Open" to be able to set the separator to TAB.
     first_login:
       additional_info:
         header: Additional Browsing Information
@@ -2064,24 +2072,33 @@ en:
       welcome_statement: You are welcome at the Archive of Our Own (AO3).
       your_feedback: your feedback
     donate:
-      general:
-        text: There are two main ways to support the AO3 - donating your time or money.
-        title: Donations
+      intro: There are two main ways to support the Archive of Our Own (AO3) – donating your time or money.
       money:
-        details_html: The AO3 has ongoing running costs - electricity for the servers and bandwidth so you can reach them - and one-off costs such as buying new servers as the number of users and works increases. Any %{donation_link} is a big help. (Don't worry, we'll never connect your AO3 username and your financial information.)
-        donation: donation to the OTW
+        budget_reports: budget reports
+        details_html: AO3 is free to use and will never include ads of any type. All of our operating costs are supported by %{donation_link}, and we can't run AO3 without your help. We hold donation drives twice a year in April and October, but you can donate year-round. To learn more, check out our %{budget_reports_link} or refer to our %{faq_link}.
+        donation: donations
+        faq: Donation and Finance FAQs
         title: Donating Financially
+      page_heading: Donate or Volunteer
       page_title: Donate or Volunteer
       time:
-        contribute_html: We also welcome community contributions to %{github_repository_link} for open tasks in our %{jira_project_link}. We also encourage you to browse through our %{volunteer_listings_link}, sign up to receive all our %{news_by_email_link} which includes our calls for volunteers, and apply for any volunteer roles that match your qualifications and interests.
-        github_repository: our GitHub repository
-        info_html: The %{otw_link} is the parent organization of the Archive of Our Own (AO3). We are often looking for volunteers to contribute to %{projects_link}. If you are interested in volunteering specifically to help the Archive of Our Own, the committees to look out for include Accessibility, Design, and Technology (AD&T); AO3 Documentation; Policy & Abuse; Support; Tag Wrangling; and Translation.
-        jira_project: Jira project
-        news_by_email: news by email
-        otw: Organization for Transformative Works
-        projects: our projects
+        contributing:
+          contributing: Contributing Guidelines
+          github: open-source archiving software
+          info_html: AO3 is run on %{github_link} developed by OTW volunteers and community contributors. Anyone can contribute to one of the open tasks in our %{jira_link}. To get started, refer to our %{contributing_link}.
+          jira: Jira project
+          title: Contributing Code
         title: Donating Your Time
-        volunteer_listings: volunteer position listings
+        volunteering:
+          committees: committees
+          info_html: 'The %{otw_link} (OTW) is the parent organization of AO3. The OTW normally recruits about once a month for volunteers to support %{projects_link}. Many of the OTW''s %{committees_link} contribute to AO3 in some capacity. However, if you are interested in volunteering primarily for AO3, the committees to look for are: Accessibility, Design, &amp; Technology; AO3 Documentation; Policy &amp; Abuse; Support; Tag Wrangling; Translation; and User Response Translation.'
+          listings: open volunteer position listings
+          listings_html: We encourage you to browse through our %{listings_link} and apply for any volunteer roles that match your qualifications and interests. If there are no roles currently recruiting, you can sign up for %{news_link} or follow us on %{social_link}.
+          news: OTW News by Email
+          organization_for_transformative_works: Organization for Transformative Works
+          projects: its projects
+          social: social media
+          title: Volunteering
     fandoms:
       all_fandoms: All Fandoms
     index:
@@ -2264,7 +2281,7 @@ en:
         manage_my_pseuds: Manage My Pseuds
         my_profile: My Profile
       contact_us:
-        donations: Donations
+        donate_or_volunteer: Donate or Volunteer
         header: Contact Us
         policy_questions_and_abuse_reports: Policy Questions & Abuse Reports
         technical_support_and_feedback: Technical Support & Feedback
@@ -2660,6 +2677,7 @@ en:
         takedown_policy: DMCA & TIDA Policies
         tos: Terms of Service
       contact_us:
+        donate_or_volunteer: Donate or Volunteer
         header: Contact Us
         pac: Policy Questions & Abuse Reports
         support: Technical Support & Feedback
@@ -3501,8 +3519,6 @@ en:
       works_skins_help_title: Work skins
     edit_tags:
       page_heading_html: Edit Work Tags for %{title}
-    filters:
-      submit_landmark: Submit
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works

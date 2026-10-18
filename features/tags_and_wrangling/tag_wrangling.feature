@@ -385,22 +385,22 @@ Feature: Tag wrangling
     Then "Angsta" should appear before "Angstb"
       And "Angstb" should appear before "Angstc"
 
-  Scenario: Metatags are listed in alphabetical order
+  Scenario: Metatags are listed in alphabetical order by sortable name
     Given a canonical freeform "Sex and Feels and Pain"
       And a canonical freeform "Smut"
       And it is currently 1 second from now
       # The waits are here so we can be sure the tags are created/attached in
       # a non-sorted order, so the test can check that reordering is happening
-      And a canonical freeform "Angst"
+      And a canonical freeform "The Angst"
       And it is currently 1 second from now
       And a canonical freeform "Fluff"
       And "Smut" is a metatag of the freeform "Sex and Feels and Pain"
       And it is currently 1 second from now
-      And "Angst" is a metatag of the freeform "Sex and Feels and Pain"
+      And "The Angst" is a metatag of the freeform "Sex and Feels and Pain"
       And it is currently 1 second from now
       And "Fluff" is a metatag of the freeform "Sex and Feels and Pain"
     When I view the tag "Sex and Feels and Pain"
-    Then "Angst" should appear before "Fluff"
+    Then "The Angst" should appear before "Fluff"
       And "Fluff" should appear before "Smut"
 
   Scenario: Tags in mass wrangling bins should have a link to the comment page with the comment count.
