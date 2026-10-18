@@ -21,7 +21,7 @@ class CollectionsController < ApplicationController
   def load_collection_from_id
     @collection = Collection.find_by(name: params[:id])
     unless @collection
-         raise ActiveRecord::RecordNotFound, "Couldn't find collection named '#{params[:id]}'"
+      raise ActiveRecord::RecordNotFound, "Couldn't find collection named '#{params[:id]}'"
     end
   end
 
