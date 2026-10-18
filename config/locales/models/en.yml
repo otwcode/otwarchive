@@ -26,7 +26,12 @@ en:
         base: 'Invalid creator:'
         pseud_id: Pseud
       collection:
+        description: Brief description
         header_image_url: Header image URL
+        icon_alt_text: Icon alt text
+        icon_comment_text: Icon comment text
+        name: Collection name
+        title: Display title
       creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
@@ -120,8 +125,49 @@ en:
           format: "%{message}"
         collection:
           attributes:
+            description:
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
             header_image_url:
-              file_format: can only point to a gif, jpg, jpeg, or png file.
+              invalid: can only point to a gif, jpg, jpeg, or png file.
+              invalid_url: is not a valid URL.
+            icon_alt_text:
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+            icon_comment_text:
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+            name:
+              blank: "^Please enter a name for your collection."
+              invalid: must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.
+              taken: "^Sorry, that name is already taken. Try again, please!"
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+              too_short:
+                one: must be at least %{count} character long.
+                other: must be at least %{count} characters long.
+            tags_after_saving:
+              too_long:
+                one: "^Sorry, a collection can only have %{count} tag."
+                other: "^Sorry, a collection can only have %{count} tags."
+            title:
+              blank: "^Please enter a title to be displayed for your collection."
+              comma_used: "^Sorry, the ',' character cannot be in a collection Display Title."
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+              too_short:
+                one: must be at least %{count} character long.
+                other: must be at least %{count} characters long.
+          cant_be_its_own_parent: You can't make a collection its own parent.
+          no_owners: Collection has no valid owners.
+          not_a_maintainer_of_parent: You have to be a maintainer of %{name} to make a subcollection.
+          parent_doesnt_exist: We couldn't find a collection with name %{name}.
+          subcollection_cant_be_parent_collection: Sorry, but %{name} is a subcollection, so it can't also be a parent collection.
         collection_item:
           attributes:
             collection:
@@ -317,6 +363,12 @@ en:
       freeform:
         one: Additional Tag
         other: Additional Tags
+      gift_exchange:
+        one: Gift Exchange
+        other: Gift Exchanges
+      prompt_meme:
+        one: Prompt Meme
+        other: Prompt Memes
       pseud: Pseud
       rating:
         one: Rating
