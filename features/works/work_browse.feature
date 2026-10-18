@@ -153,7 +153,8 @@ chapter when the chapters are reordered.
   Then I should be on the work "Awesome Work"
     And I should see "Bravo!"
 
-Scenario: Can also browse work indexed by language
+  @elasticsearch
+  Scenario: Can also browse work indexed by language
     Given basic languages
       And Persian language
       And basic tags

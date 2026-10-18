@@ -1,4 +1,4 @@
-@works @search
+@works @elasticsearch
 Feature: Search works by work info
   As a user
   I want to search works by work info
