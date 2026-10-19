@@ -9,6 +9,7 @@ class TagWranglingsController < ApplicationController
   def index
     @counts = tag_counts_per_category
     authorize :wrangling, :read_access? if logged_in_as_admin?
+    @page_subtitle = t(".page_title.wrangling_tools")
     return if params[:show].blank?
 
     raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
@@ -18,7 +19,7 @@ class TagWranglingsController < ApplicationController
 
     if params[:show] == "fandoms"
       @media_names = Media.by_name.pluck(:name)
-      @page_subtitle = t(".page_subtitle")
+      @page_subtitle = t(".page_title.fandoms")
     end
 
     type = params[:show].singularize.capitalize
