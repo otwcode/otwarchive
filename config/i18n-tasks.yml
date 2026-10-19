@@ -159,11 +159,6 @@ ignore_missing:
   - skins.approval_queue
   - skins.approved_skins
   - skins.rejected_skins
-  # File: app/views/external_authors/_external_author_name.html.erb
-  - external_authors.external_author_name.label_external_author_name
-  # File: app/views/external_authors/edit.html.erb
-  - external_authors.edit.back
-  - external_authors.edit.edit_external_author
   # File: app/views/gifts/_gift_search.html.erb
   - gifts.gift_search.forms.gift_search
   - gifts.gift_search.gifts.recipient_field

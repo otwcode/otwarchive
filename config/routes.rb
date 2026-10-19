@@ -294,9 +294,7 @@ Rails.application.routes.draw do
       end
     end
     resource :creatorships, controller: "creatorships", only: [:show, :update]
-    resources :external_authors do
-      resources :external_author_names
-    end
+    resources :external_authors, only: [:index, :update]
     resources :favorite_tags, only: [:create, :destroy]
     resources :gifts, only: [:index]
     resource :inbox, controller: "inbox" do
@@ -648,9 +646,7 @@ Rails.application.routes.draw do
   end
 
   resources :abuse_reports, only: [:new, :create]
-  resources :external_authors do
-    resources :external_author_names
-  end
+  resources :external_authors, only: [:index, :update]
   resources :orphans, only: [:index, :new, :create]
 
   HelpController::HELP_ACTIONS.each do |action|
