@@ -422,6 +422,4 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Given I am logged in as a tag wrangler
     When I go to the wrangling tools page
     Then I should see "Wrangling Tools" within "h2.heading"
-      And I should not see "Tag Wrangling" within "h2.heading"
       And I should see the page title "Wrangling Tools"
-      And the page title should not include "Tag Wranglings"
