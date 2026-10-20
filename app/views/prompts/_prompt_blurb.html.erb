@@ -6,16 +6,16 @@
         <%= link_to prompt.title, collection_prompt_path(prompt.collection, prompt) %>
       <% else %>
         <% if prompt.class.to_s == "Offer" %>
-          <%= link_to t(".header.offer_title", :index => (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
+          <%= link_to t(".header.offer_title", index: (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
         <% else %>
-          <%= link_to t(".header.request_title", :index => (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
+          <%= link_to t(".header.request_title", index: (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
         <% end %>
       <% end %>
       <% if prompt.anonymous? %>
         <%= t(".header.by_anonymous") %>
       <% else %>
         <%= t(".header.by_pseud_html",
-              pseud_link: link_to(prompt.pseud.byline, user_pseud_url(prompt.pseud.user, prompt.pseud), class: "byline")) %>
+              pseud_link: link_to(prompt.pseud.byline, user_pseud_url(prompt.user, prompt.pseud), class: "byline")) %>
       <% end %>
       <% unless @collection %>
         <%= t(".header.in_collection_html",
@@ -43,7 +43,8 @@
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
     <% unless any_types.empty? %>
       <%# This still isn't fully i18n'd since the inserted tag types are always English. %>
-      <%= any_types.map { |type| content_tag(:li, t(".body.any_tag_type", tag_type: tag_type_label_name(type)), :class => "tag") }.join("\n").html_safe %>
+      <%= any_types.map { |type| content_tag(:li, t(".body.any_tag_type", tag_type: tag_type_label_name(type)), class: "tag") }
+                   .join("\n").html_safe %>
     <% end %>
   </ul>
   <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>

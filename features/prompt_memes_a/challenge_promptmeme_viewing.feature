@@ -48,7 +48,7 @@ Feature: Prompt Meme Challenge
       And I go to the "Battle 12" signup page for the user "myname1"
     Then I should see "crack by myname1"
       And I should see "Request 2 by Anonymous"
-  
+
     Examples:
     | username |
     | myname1  |

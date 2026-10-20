@@ -61,7 +61,7 @@ describe PromptsController do
         let(:prompt) { signup.requests.first }
 
         context "when logged in as the prompt owner" do
-          let(:user) { prompt.pseud.user }
+          let(:user) { prompt.user }
           include_examples "displays the prompt"
         end
 

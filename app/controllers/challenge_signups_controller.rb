@@ -83,27 +83,22 @@ class ChallengeSignupsController < ApplicationController
   def check_signup_visible
     if @collection.challenge_type == "GiftExchange"
       # gift exchange: can view if requests summary visible, or if you're the owner or a mod
-      unless @challenge.requests_summary_visible? || @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user)
-        flash[:error] = t(".access_denied_signup")
-        redirect_to @collection
-      end
+      return if @challenge.requests_summary_visible? || @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user)
+
+      flash[:error] = t(".access_denied_signup")
+      redirect_to collection_path(@collection)
     else
       # prompt meme: can view if not all prompts are anonymous, or if you're the owner or a mod
-      # TODO: seems somewhat inefficient, let me know if there are better methods (like storing it as an attribute of the signup?)
-      if @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user)
-        return
-      end
-      is_all_anon = true
+      return if @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user)
+
+      # TODO: seems somewhat inefficient to check every time, let me know if there are better methods (like storing it as an attribute of the signup?)
       @challenge_signup.requests.each do |request|
-        unless request.anonymous?
-          is_all_anon = false
-          break
-        end
+        return unless request.anonymous?
       end
-      if is_all_anon
-        flash[:error] = t(".access_denied_signup")
-        redirect_to @collection
-      end
+
+      # we haven't hit the return statement, so all prompts must be anonymous
+      flash[:error] = t(".access_denied_signup")
+      redirect_to collection_path(@collection)
     end
   end
 

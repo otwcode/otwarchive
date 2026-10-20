@@ -24,7 +24,7 @@ Feature: Gift Exchange Challenge
       And I should see "Stargate SG-1"
       And I should see "Offer 1"
       And I should see "Stargate Atlantis"
-    
+
     Examples:
     | username |
     | myname2  |

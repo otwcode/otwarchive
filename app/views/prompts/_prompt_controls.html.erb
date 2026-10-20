@@ -13,7 +13,7 @@
   <% end %>
 
   <% if logged_in? && (collection.challenge_type == "PromptMeme" || challenge.signup_open || collection.user_is_maintainer?(current_user)) %>
-    <% # The edit link should show up if signups are open and the current user owns the prompt, OR if the challenge is a gift exchange and signups are closed and the current user is the maintainer %>
+    <% # The edit links should show up if signups are open and the current user owns the prompt, OR if the challenge is a gift exchange and signups are closed and the current user is the maintainer %>
     <% if (challenge.signup_open && user == current_user) || (collection.challenge_type == "GiftExchange" && !challenge.signup_open && collection.user_is_maintainer?(current_user)) %>
       <li>
         <%= link_to(t(".navigation.edit_signup"), edit_collection_signup_path(collection, challenge_signup)) %>
@@ -47,7 +47,7 @@
       <% if (claim ||= prompt.claim_by(current_user).first) %>
         <% # The fulfill link should show up if the collection is open OR if the current user is the maintainer %>
         <% if !collection.closed? || collection.user_is_maintainer?(current_user) %>
-          <li><%= link_to t(".navigation.fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
+          <li><%= link_to t(".navigation.fulfill"), new_collection_work_path(collection, claim_id: claim.id) %></li>
         <% end %>
         <% # The drop claim link should show up if the current user has claimed the prompt %>
         <li><%= link_to t(".navigation.drop_claim"), collection_claim_path(collection, claim), data: { confirm: t(".confirm.drop_claim") }, method: :delete %></li>
