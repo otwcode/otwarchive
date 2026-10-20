@@ -103,6 +103,26 @@ class Bookmark < ApplicationRecord
 
   scope :for_blurb, -> { includes(:bookmarkable, :tags, :collections, pseud: [:user]) }
 
+  def self.load_from_elasticsearch(hits, scopes: nil)
+    bookmarks = super
+    return bookmarks unless Array(scopes).include?(:for_blurb)
+
+    preload_bookmarkables_for_blurb(bookmarks)
+    bookmarks
+  end
+
+  def self.preload_bookmarkables_for_blurb(bookmarks)
+    bookmarks.group_by { |bookmark| bookmark.bookmarkable.class }
+      .each do |klass, group|
+      next unless klass.respond_to?(:for_blurb)
+
+      ActiveRecord::Associations::Preloader.new(
+        records: group.map(&:bookmarkable),
+        associations: klass.for_blurb.includes_values
+      ).call
+    end
+  end
+
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
   # if the user is not a logged-in User, we use the "visible_to_all" scope
