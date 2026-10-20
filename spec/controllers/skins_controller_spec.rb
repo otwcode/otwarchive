@@ -662,6 +662,17 @@ describe SkinsController do
     end
   end
 
+  describe "GET #show" do
+    let(:user) { create(:user) }
+    context "when the target skin does not exist" do
+        it "raises a 404 error" do
+          expect do
+            get :show, params: {id: "nonexistent_skin"}
+          end.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
+
   describe "GET #preview" do
     let(:skin_creator) { create(:user) }
     let(:other_user) { create(:user) }
