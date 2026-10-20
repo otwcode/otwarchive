@@ -98,7 +98,7 @@ en:
         challenge: 'Sorry! We couldn''t save this challenge because:'
         challenge_signup: 'Sorry! We couldn''t save this challenge signup because:'
         chapter: 'Sorry! We couldn''t save this chapter because:'
-        character: 'Sorry! We couldn''t save character work because:'
+        character: 'Sorry! We couldn''t save this character because:'
         collection: 'Sorry! We couldn''t save this collection because:'
         collection_item: 'Sorry! We couldn''t save this collection item because:'
         comment: 'Sorry! We couldn''t save this comment because:'
@@ -121,7 +121,7 @@ en:
         prompt: 'Sorry! We couldn''t save this prompt because:'
         prompt_meme: 'Sorry! We couldn''t save this prompt meme because:'
         pseud: 'Sorry! We couldn''t save this pseud because:'
-        rating: 'Sorry! We couldn''t save this work because:'
+        rating: 'Sorry! We couldn''t save this rating because:'
         relationship: 'Sorry! We couldn''t save this relationship because:'
         request: 'Sorry! We couldn''t save this request because:'
         series: 'Sorry! We couldn''t save this series because:'
@@ -301,6 +301,10 @@ en:
             subscribable:
               blank: The item you tried to subscribe to does not exist. It may have been deleted.
               format: "%{message}"
+        support_notice:
+          attributes:
+            support_notice_type:
+              invalid_type: is invalid.
         tag_set_nomination:
           attributes:
             base:
