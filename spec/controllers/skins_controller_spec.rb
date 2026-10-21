@@ -664,6 +664,7 @@ describe SkinsController do
 
   describe "GET #show" do
     let(:user) { create(:user) }
+    
     context "when the target skin does not exist" do
       it "raises a 404 error" do
         expect do
