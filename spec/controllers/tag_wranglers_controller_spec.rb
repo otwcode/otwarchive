@@ -129,13 +129,22 @@ describe TagWranglersController do
     context "when logged in as an admin with proper authorization" do
       before { fake_login_admin(admin) }
 
+      def download_report(user)
+        get :report_csv, params: { id: user.login }
+        csv = GeneratedDownload.order(:created_at).last.file.download
+          .force_encoding("utf-16le").encode("utf-8")
+        CSV.parse(csv[1..], col_sep: "\t")
+      end
+
       wrangling_roles.each do |admin_role|
         context "with role #{admin_role}" do
           let(:admin) { create(:admin, roles: [admin_role]) }
 
           it "allows access to the report" do
             get :report_csv, params: { id: user.login }
-            expect(response).to have_http_status(:success)
+            expect(response).to redirect_to(
+              generated_download_path(token: GeneratedDownload.order(:created_at).last.token)
+            )
           end
 
           it "only includes wrangling activity for the specified user" do
@@ -143,8 +152,7 @@ describe TagWranglersController do
             tag1 = create(:tag, last_wrangler: user)
             create(:tag, last_wrangler: other_user)
 
-            get :report_csv, params: { id: user.login }
-            result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
+            result = download_report(user)
 
             expect(result)
               .to eq([["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"],
@@ -157,8 +165,7 @@ describe TagWranglersController do
             create(:tag, last_wrangler: user)
             tag2 = create(:tag, last_wrangler: user)
 
-            get :report_csv, params: { id: user.login }
-            result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
+            result = download_report(user)
 
             expect(result.length).to eq(2)
             expect(result[1][0]).to eq(tag2.name)
@@ -168,8 +175,7 @@ describe TagWranglersController do
             tag1 = create(:tag, last_wrangler: user)
             tag2 = create(:tag, last_wrangler: user, merger: tag1)
 
-            get :report_csv, params: { id: user.login }
-            result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
+            result = download_report(user)
 
             expect(result)
               .to eq([["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"],
@@ -182,8 +188,7 @@ describe TagWranglersController do
             tag = create(:freeform, last_wrangler: user)
             expect(fandom.add_association(tag)).to be_truthy
 
-            get :report_csv, params: { id: user.login }
-            result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
+            result = download_report(user)
 
             expect(result)
               .to eq([["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"],
@@ -197,8 +202,7 @@ describe TagWranglersController do
             expect(fandom1.add_association(tag)).to be_truthy
             expect(fandom2.add_association(tag)).to be_truthy
 
-            get :report_csv, params: { id: user.login }
-            result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
+            result = download_report(user)
 
             expect(result)
               .to eq([["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"],
@@ -210,8 +214,7 @@ describe TagWranglersController do
             media = create(:media, last_wrangler: user)
             expect(media.add_association(fandom)).to be_truthy
 
-            get :report_csv, params: { id: user.login }
-            result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
+            result = download_report(user)
 
             expect(result[1][4]).to be_empty
           end
@@ -219,8 +222,7 @@ describe TagWranglersController do
           it "correctly reports a tag marked unwrangleable" do
             tag = create(:tag, last_wrangler: user, unwrangleable: true)
 
-            get :report_csv, params: { id: user.login }
-            result = CSV.parse(response.body.encode("utf-8")[1..], col_sep: "\t")
+            result = download_report(user)
 
             expect(result)
               .to eq([["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"],
