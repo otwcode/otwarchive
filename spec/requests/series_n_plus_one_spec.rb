@@ -3,6 +3,49 @@ require "spec_helper"
 describe "n+1 queries in the series controller" do
   include LoginMacros
 
+  describe "#index", n_plus_one: true do
+    let!(:user) { create(:user) }
+
+    subject do
+      proc do
+        get user_series_index_path(user_id: user)
+      end
+    end
+
+    before do
+      fake_login_known_user(user)
+    end
+
+    context "when all blurbs are cached" do
+      populate do |n|
+        create_list(:series, n, authors: user.pseuds)
+        subject.call # this caches the blurbs
+      end
+
+      it "performs a constant number of queries" do
+        expect do
+          subject.call
+          expect(response.body.scan('<li id="series_').size).to eq(current_scale.to_i)
+        end.to perform_constant_number_of_queries
+      end
+    end
+
+    context "when nothing is cached" do
+      populate do |n|
+        create_list(:series, n, authors: user.pseuds)
+      end
+
+      warmup { get user_series_index_path(user_id: create(:series).users.first) }
+
+      it "performs around 1 query per series" do
+        expect do
+          subject.call
+          expect(response.body.scan('<li id="series_').size).to eq(current_scale.to_i)
+        end.to perform_linear_number_of_queries(slope: 1)
+      end
+    end
+  end
+
   describe "#show", n_plus_one: true do
     let!(:user) { create(:user) }
 
