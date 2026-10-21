@@ -62,7 +62,7 @@
       </dd>
       <dt>
         <%= f.label :other_bookmark_tag_names, ts("Bookmarker's tags") %>
-        <%= link_to_help "bookmark-search-bookmarker-tag" %>
+        <%= link_to_help_modal(help_bookmark_search_bookmarker_tag_path, t(".bookmark_search_bookmarker_tag_help_title")) %>
       </dt>
       <dd>
         <%= f.text_field :other_bookmark_tag_names, autocomplete_options("tag") %>
