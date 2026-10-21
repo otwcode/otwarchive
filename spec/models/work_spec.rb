@@ -14,6 +14,23 @@ describe Work do
     end
   end
 
+  describe "#set_revised_at" do
+    it "uses the newest remaining chapter's post time after a chapter is deleted" do
+      work = create(:work)
+      earlier_chapter = work.first_chapter
+      later_chapter = create(:chapter, work: work, position: 2)
+      earlier_posted_at = 2.days.ago.change(usec: 0)
+      later_posted_at = 1.day.ago.change(usec: 0)
+      earlier_chapter.update_column(:posted_at, earlier_posted_at)
+      later_chapter.update_column(:posted_at, later_posted_at)
+
+      later_chapter.destroy!
+      work.set_revised_at
+
+      expect(work.revised_at).to eq(earlier_posted_at)
+    end
+  end
+
   context "create_stat_counter" do
     it "creates a stat counter for that work id" do
       expect do

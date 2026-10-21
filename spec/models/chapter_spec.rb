@@ -14,6 +14,16 @@ describe Chapter do
   it "is posted by default when produced by a factory" do
     chapter = create(:chapter)
     expect(chapter.posted).to be_truthy
+    expect(chapter.posted_at).to be_within(1.second).of(Time.current)
+  end
+
+  it "sets posted_at when a draft is posted" do
+    chapter = create(:chapter, posted: false)
+    posted_at = 1.hour.ago
+
+    travel_to(posted_at) { chapter.update!(posted: true) }
+
+    expect(chapter.reload.posted_at).to be_within(1.second).of(posted_at)
   end
 
   describe "save" do
