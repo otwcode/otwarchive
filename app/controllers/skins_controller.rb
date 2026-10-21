@@ -205,11 +205,7 @@ class SkinsController < ApplicationController
   end
 
   def load_skin
-    @skin = Skin.find_by(id: params[:id])
-    unless @skin
-      flash[:error] = "Skin not found"
-      redirect_to skins_path and return
-    end
+    @skin = Skin.find_by!(id: params[:id])
     @check_ownership_of = @skin
     @check_visibility_of = @skin
   end
