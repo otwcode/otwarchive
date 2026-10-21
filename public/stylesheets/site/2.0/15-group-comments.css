@@ -12,6 +12,12 @@ test note: have put clearfixes on listbox, blurb and comments here, to allow for
   margin: 0 0 auto;
 }
 
+/* Admin post comment bylines should not clear floated #dashboard nav */
+.news.admin.home .comment:after,
+.news.admin.home .comment h4.byline:after {
+  clear: none;
+}
+
 div.comment, li.comment {
   position: relative;
   border: 1px solid #ddd;
