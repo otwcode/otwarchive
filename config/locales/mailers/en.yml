@@ -380,6 +380,9 @@ en:
       hidden_one:
         html: Your work %{title} has been hidden by the Policy & Abuse committee.
         text: Your work "%{title}" (%{work_url}) has been hidden by the Policy & Abuse committee.
+      required_action:
+        one: you will be required to take action to correct the violation
+        other: you will be required to take action to correct the violations
       subject:
         one: "[%{app_name}] Your work has been hidden by the Policy & Abuse committee"
         other: "[%{app_name}] Your works have been hidden by the Policy & Abuse committee"
@@ -387,8 +390,8 @@ en:
       tos_faq: Terms of Service FAQ
       tos_violation:
         html:
-          one: If your work was hidden due to being in violation of the %{tos_link} (including the %{content_policy_link}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may result in your work being deleted from AO3. For more information, please refer to the %{tos_faq_link}.
-          other: If your works were hidden due to being in violation of the %{tos_link} (including the %{content_policy_link}), you will be required to take action to correct the violations. Failure to bring your works into compliance with the Terms of Service may result in your works being deleted from AO3. For more information, please refer to the %{tos_faq_link}.
+          one: If your work was hidden due to being in violation of the %{tos_link} (including the %{content_policy_link}), %{required_action_bold}. Failure to bring your work into compliance with the Terms of Service may result in your work being deleted from AO3. For more information, please refer to the %{tos_faq_link}.
+          other: If your works were hidden due to being in violation of the %{tos_link} (including the %{content_policy_link}), %{required_action_bold}. Failure to bring your works into compliance with the Terms of Service may result in your works being deleted from AO3. For more information, please refer to the %{tos_faq_link}.
         text:
           one: 'If your work was hidden due to being in violation of the AO3 Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may result in your work being deleted from AO3. For more information, please refer to the Terms of Service FAQ: %{tos_faq_url}.'
           other: 'If your works were hidden due to being in violation of the AO3 Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you will be required to take action to correct the violations. Failure to bring your works into compliance with the Terms of Service may result in your works being deleted from AO3. For more information, please refer to the Terms of Service FAQ: %{tos_faq_url}.'
