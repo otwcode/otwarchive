@@ -59,9 +59,10 @@ class AbuseReport < ApplicationRecord
   # Profile URLs: "users/username"
   # Bookmark URLs: "bookmarks/123"
   # Series URLs: "series/123"
+  # External work URLs: "external_works/123"
   before_validation :standardize_url, on: :create
   def standardize_url
-    return unless url =~ %r{((chapters|works|comments|bookmarks|series)/\d+)} || url =~ %r{(users/\w+)}
+    return unless url =~ %r{((chapters|works|comments|bookmarks|series|external_works)/\d+)} || url =~ %r{(users/\w+)}
 
     self.url = add_scheme_to_url(url)
     self.url = clean_url(url)
@@ -202,6 +203,12 @@ class AbuseReport < ApplicationRecord
     url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
   end
 
+  # ID of the reported external work, unless the report is about bookmark(s) on the work
+  def reported_external_work_id
+    bookmarks = url[%r{/bookmarks/}, 0]
+    url[%r{/external_works/(\d+)}, 1] if bookmarks.nil?
+  end
+
   def attach_work_download(ticket_id)
     work_id = reported_work_id
     return unless work_id
@@ -256,6 +263,14 @@ class AbuseReport < ApplicationRecord
                                                  series_report_period,
                                                  "%#{series_params_only}%").count
       errors.add(:base, :over_reported_series) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_SERIES_MAX
+    when %r{/external_works/\d+}
+      external_work_params_only = url.match(%r{/external_works/\d+/}).to_s
+      external_work_report_period = ArchiveConfig.ABUSE_REPORTS_PER_EXTERNAL_WORK_PERIOD.days.ago
+      existing_reports_total = AbuseReport.where('created_at > ? AND
+                                                 url LIKE ?', 
+                                                 external_work_report_period, 
+                                                 "%#{external_work_params_only}%").count
+      errors.add(:base, :over_reported_external_work) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_EXTERNAL_WORK_MAX
     end
   end
 
