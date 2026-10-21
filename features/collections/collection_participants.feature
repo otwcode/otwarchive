@@ -69,25 +69,6 @@
     And I press "Join"
   Then I should see "You have applied to join Such a nice collection"
 
-  Scenario: A collection owner can preapprove a user to join a closed collection
-  Given I have a moderated closed collection "Such a nice collection"
-    And I am in sam's browser
-    And I am logged in as "sam"
-  When I go to "Such a nice collection" collection's page
-  When I am in the moderator's browser
-    And I am logged in as the owner of "Such a nice collection"
-    And I am on the "Such a nice collection" participants page
-    And I fill in "participants_to_invite" with "sam"
-    And I press "Submit"
-  Then I should see "New members invited: sam"
-  When I select "Invited" from "sam_role"
-    And I submit with the 4th button
-  Then I should see "Updated sam."
-  When I am in sam's browser
-    And I press "Join"
-  Then I should see "You are now a member of Such a nice collection"
-  When I am in the default browser
-
   Scenario: A subcollection profile and blurb do not show duplicates when a moderator is also an owner of the parent collection
     Given a user exists with login: "sam"
       And I have the collection "Collection"

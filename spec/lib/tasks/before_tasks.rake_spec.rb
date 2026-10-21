@@ -16,3 +16,35 @@ describe "Before:backfill_language_sortable_name" do
       .to(language.name)
   end
 end
+
+describe "Before:remove_invited_collection_participant_role" do
+  let(:collection) { create(:collection) }
+  let!(:member) do
+    create(:collection_participant, collection: collection,
+                                    participant_role: CollectionParticipant::MEMBER)
+  end
+  let!(:invited) do
+    participant = build(:collection_participant, collection: collection)
+    participant.participant_role = "Invited"
+    participant.save!(validate: false)
+    participant
+  end
+
+  it "converts invited participants to none" do
+    subject.invoke
+    expect(invited.reload.participant_role).to eq(CollectionParticipant::NONE)
+  end
+
+  it "does not change other participants" do
+    subject.invoke
+    expect(member.reload.participant_role).to eq(CollectionParticipant::MEMBER)
+  end
+
+  it "outputs the participants it could not update" do
+    allow_any_instance_of(CollectionParticipant).to \
+      receive(:update).and_return(false)
+
+    expect { subject.invoke }
+      .to output(/Failed to convert: #{invited.id}/).to_stdout
+  end
+end
