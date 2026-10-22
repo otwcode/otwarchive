@@ -287,8 +287,20 @@ describe CollectionItemsController do
   end
 
   describe "POST #create" do
-    context "creation" do
+    context "logged out" do
+      let(:collection) { create(:collection) }
+      let(:work) { create(:work) }
+
+      it "redirects to login" do
+        post :create, params: { collection_names: collection.name, work_id: work.id }
+        it_redirects_to_user_login_with_error
+      end
+    end
+
+    context "logged in" do
       let(:collection) { FactoryBot.create(:collection) }
+
+      before { fake_login }
 
       it "fails if collection names missing" do
         post :create, params: { collection_id: collection.id }
