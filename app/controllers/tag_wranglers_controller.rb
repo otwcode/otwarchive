@@ -8,6 +8,8 @@ class TagWranglersController < ApplicationController
   def index
     authorize :wrangling, :full_access? if logged_in_as_admin?
 
+    @page_subtitle = t(".page_title")
+
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
 
     @assignments = Fandom.in_use.joins("LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id)
@@ -49,7 +51,7 @@ class TagWranglersController < ApplicationController
       .where(last_wrangler: wrangler)
       .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
       .includes(:merger, :parents)
-    results = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
+    results = [["Name", "Last Updated", "Type", "Merger", "Fandoms", "Unwrangleable"]]
     wrangled_tags.find_each(order: :desc) do |tag|
       merger = tag.merger&.name || ""
       fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }
@@ -63,9 +65,9 @@ class TagWranglersController < ApplicationController
   def create
     authorize :wrangling if logged_in_as_admin?
 
-    unless params[:tag_fandom_string].blank?
-      names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
-      fandoms = Fandom.where('name IN (?)', names)
+    if params[:tag_fandom_string].present?
+      names = params[:tag_fandom_string].gsub(/$/, ",").split(",").map(&:strip)
+      fandoms = Fandom.where(name: names)
       noncanonical_fandoms = []
       if fandoms.present? && current_user.respond_to?(:fandoms)
         fandoms.each do |fandom|
@@ -81,16 +83,16 @@ class TagWranglersController < ApplicationController
         flash[:error] = t(".noncanonical_fandoms_tried_assignment", count: noncanonical_fandoms.length, fandom_list: helpers.to_sentence(noncanonical_fandoms.map(&:name))) unless noncanonical_fandoms.empty?
       end
     end
-    unless params[:assignments].blank?
+    if params[:assignments].present?
       params[:assignments].each_pair do |fandom_id, user_logins|
         fandom = Fandom.find(fandom_id)
         user_logins.uniq.each do |login|
-          unless login.blank?
-            user = User.find_by(login: login)
-            unless user.nil? || user.fandoms.include?(fandom)
-              assignment = user.wrangling_assignments.build(fandom_id: fandom.id)
-              assignment.save!
-            end
+          next if login.blank?
+
+          user = User.find_by(login: login)
+          unless user.nil? || user.fandoms.include?(fandom)
+            assignment = user.wrangling_assignments.build(fandom_id: fandom.id)
+            assignment.save!
           end
         end
       end
