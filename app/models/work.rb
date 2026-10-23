@@ -23,11 +23,19 @@ class Work < ApplicationRecord
   has_many :serial_works, dependent: :destroy
   has_many :series, through: :serial_works
 
-  has_many :related_works, as: :parent
-  has_many :approved_related_works, -> { where(reciprocal: 1) }, as: :parent, class_name: "RelatedWork"
-  has_many :parent_work_relationships, class_name: "RelatedWork", dependent: :destroy
+  has_many :related_works, as: :parent, dependent: :nullify do
+    def visible(user = User.current_user)
+      children_for_work_page(user)
+    end
+  end
+
+  has_many :parent_work_relationships, class_name: "RelatedWork", dependent: :destroy do
+    def visible(user = User.current_user)
+      parents_for_work_page(user)
+    end
+  end
+
   has_many :children, through: :related_works, source: :work
-  has_many :approved_children, through: :approved_related_works, source: :work
 
   accepts_nested_attributes_for :parent_work_relationships, allow_destroy: true, reject_if: proc { |attrs| attrs.values_at(:url, :author, :title).all?(&:blank?) }
 
@@ -989,6 +997,11 @@ class Work < ApplicationRecord
 
   def parents_after_saving
     parent_work_relationships.reject(&:marked_for_destruction?)
+  end
+
+  def visible_parents_after_saving(user = User.current_user)
+    parent_work_relationships.visible(user).reject(&:marked_for_destruction?) +
+      parent_work_relationships.select(&:new_record?)
   end
 
   def touch_related_works
