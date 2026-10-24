@@ -702,10 +702,10 @@ en:
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
     search_form:
       date_bookmarked: Date bookmarked
-      date_bookmarked_help_title: Date bookmarked Help
-      notes_help_title: With notes Help
+      date_bookmarked_help_title: Bookmark search date bookmarked help
+      notes_help_title: Bookmark search notes help
       rec: Rec
-      rec_help_title: Rec Help
+      rec_help_title: Bookmark search rec help
       with_notes: With notes
       word_count: Word count
   challenge:
