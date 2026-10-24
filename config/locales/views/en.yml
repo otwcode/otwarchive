@@ -2953,11 +2953,11 @@ en:
       revert_to_default: Revert to Default Skin
     wizard_form:
       description: Description
-      font_help_title: Fonts
-      font_size_help_title: Font Sizes
-      skins_parents_help_title: Skins Parents
+      font_help_title: Skins wizard font
+      font_size_help_title: Skins wizard font size
+      skins_parents_help_title: Skins parents
       title: Title
-      vertical_gap_help_title: Vertical Gaps
+      vertical_gap_help_title: Skins wizard vertical gap
   stats:
     index:
       flat_view: Flat View
