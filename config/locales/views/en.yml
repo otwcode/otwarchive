@@ -1228,14 +1228,14 @@ en:
         description: will find bookmarks that were created within the past three days
         submission_example: "< 3 days ago"
       note_on_ago_and_ranges: The "ago" is optional. Note that "1 day ago" is not a range, and would only find bookmarks created at this exact instant yesterday. Create a range instead.
-      page_heading: 'Bookmark Search: Date bookmarked'
+      page_heading: 'Bookmark Search: Date Bookmarked'
       search_unit_options: You can search by year, month, week, day, or hour.
       three_to_nine_months_ago:
         description: will find bookmarks that were created between 3 and 9 months ago
         submission_example: 3-9 months ago
     bookmark_search_notes:
       description: Select this option if you want to limit the search to bookmarks with a note added by the bookmarker.
-      page_heading: 'Bookmark Search: With notes'
+      page_heading: 'Bookmark Search: With Notes'
     bookmark_search_rec:
       description: Select this option if you want to limit the search to bookmarks which were marked as recs by the bookmarker.
       page_heading: 'Bookmark Search: Rec'
