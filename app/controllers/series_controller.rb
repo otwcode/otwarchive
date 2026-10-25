@@ -36,7 +36,7 @@ class SeriesController < ApplicationController
     else
       @series = @series.exclude_anonymous.for_user(@user)
     end
-    @series = @series.paginate(page: params[:page])
+    @series = @series.for_blurb.paginate(page: params[:page])
   end
 
   # GET /series/1

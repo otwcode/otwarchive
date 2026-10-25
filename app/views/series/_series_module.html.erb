@@ -41,7 +41,7 @@
   <dd class="words"><%= number_with_delimiter(series.visible_word_count) %></dd>
   <dt class="works"><%= Work.model_name.human(count: :many) %>:</dt>
   <dd class="works"><%= number_with_delimiter(series.visible_work_count) %></dd>
-  <% if (bookmark_count = series.bookmarks.is_public.count) > 0 %>
+  <% if (bookmark_count = series.public_bookmark_count) > 0 %>
     <dt class="bookmarks"><%= Bookmark.model_name.human(count: :many) %>:</dt>
     <dd class="bookmarks"><%= link_to_bookmarkable_bookmarks(series, number_with_delimiter(bookmark_count)) %></dd>
   <% end %>
