@@ -704,6 +704,7 @@ Rails.application.routes.draw do
   get 'token_dispenser' => 'home#token_dispenser'
   get 'delete_confirmation' => 'users#delete_confirmation'
   get 'activate/:id' => 'users#activate', as: 'activate'
+  get 'devmode' => 'devmode#index'
   get 'donate' => 'home#donate'
   get 'lost_cookie' => 'home#lost_cookie'
   get 'about' => 'home#about'
