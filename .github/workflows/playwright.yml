@@ -1,0 +1,113 @@
+name: Playwright Text Snapshots
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  playwright:
+    name: playwright aria snapshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      CI: true
+      RAILS_ENV: test
+      PLAYWRIGHT_USER: testuser
+      PLAYWRIGHT_PASSWORD: testuser
+
+    services:
+      database:
+        image: mariadb:10.5.4-focal
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: otwarchive_test
+        ports:
+          - 3306:3306
+
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.3.0
+        ports:
+          - 9200:9200
+        options: >-
+          -e="discovery.type=single-node"
+          -e="xpack.security.enabled=false"
+
+      memcached:
+        image: memcached:1.5
+        ports:
+          - 11211:11211
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Run apt-get update
+        run: sudo apt-get update
+        timeout-minutes: 2
+
+      - name: Install and start up redis servers
+        run: |
+          sudo apt-get install -y redis-server
+          ./script/gh-actions/multiple_redis.sh
+        timeout-minutes: 5
+
+      - name: Set up Ruby and run bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Copy config files
+        run: |
+          cp config/gh-actions/database.yml config/database.yml
+          cp config/gh-actions/redis.yml config/redis.yml
+          cp config/gh-actions/local.yml config/local.yml
+
+      - name: Set transaction isolation level
+        run: ./script/gh-actions/configure_database.sh
+
+      - name: Make and seed database
+        run: bundle exec rake db:otwseed
+
+      - name: Prepare elasticsearch indexes and the test user
+        run: bundle exec rails runner script/playwright_prepare.rb
+
+      - name: Start the Rails server
+        run: |
+          bundle exec rails server -p 3000 &
+          for i in $(seq 1 60); do
+            curl -s -o /dev/null http://localhost:3000/ && break
+            sleep 2
+          done
+          curl -s -o /dev/null -w "server responded with %{http_code}\n" http://localhost:3000/
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install Playwright
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+        timeout-minutes: 10
+
+      - name: Run Playwright tests
+        run: npm run test:playwright
+
+      - name: Upload Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            playwright-report
+            test-results
+            log/test.log
