@@ -166,6 +166,10 @@ module SkinWizard
         .listbox .index {
           box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
+
+        .news .wrapper {
+          box-shadow: none;
+        }
       "
     else
       ""

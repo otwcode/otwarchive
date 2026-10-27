@@ -294,6 +294,15 @@ class Prompt < ApplicationRecord
     self.tag_set ? self.tag_set.tags.group_by { |t| t.type.to_s } : {}
   end
 
+  # archive_warnings and freeforms methods are for showing hidden tags on prompts
+  def archive_warnings
+    self.tag_set ? self.tag_set.archive_warning_taglist : []
+  end
+
+  def freeforms
+    self.tag_set ? self.tag_set.freeform_taglist : []
+  end
+
   def claim_by(user)
     ChallengeClaim.where(request_prompt_id: self.id, claiming_user_id: user.id)
   end

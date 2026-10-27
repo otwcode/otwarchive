@@ -1,0 +1,38 @@
+<h4><%= t(".page_heading") %></h4>
+
+<dl>
+  <dt>
+    <%= t(".asterisk.title") %>
+  </dt>
+  <dd>
+    <%= t(".asterisk.description_html", book_query_keyboard_input: tag.kbd(t(".asterisk.book_query_keyboard_input")), book_sample: tag.samp(t(".asterisk.book_sample")), books_sample: tag.samp(t(".asterisk.books_sample")), booking_sample: tag.samp(t(".asterisk.booking_sample"))) %>
+  </dd>
+
+  <dt>
+    <%= t(".space.title") %>
+  </dt>
+  <dd>
+    <%= t(".space.description_html", harry_potter_keyboard_input: tag.kbd(t(".space.harry_potter_keyboard_input")), harry_potter_sample: tag.samp(t(".space.harry_potter_sample")), harry_james_potter_sample: tag.samp(t(".space.harry_james_potter_sample")), harry_sample: tag.samp(t(".space.harry_sample"))) %>
+  </dd>
+
+  <dt>
+    <%= t(".or.title") %>
+  </dt>
+  <dd>
+    <%= t(".or.description_html", harry_potter_keyboard_input: tag.kbd(t(".or.harry_potter_keyboard_input")), harry_sample: tag.samp(t(".or.harry_sample")), harry_potter_sample: tag.samp(t(".or.harry_potter_sample")), potter_sample: tag.samp(t(".or.potter_sample"))) %>
+  </dd>
+
+  <dt>
+    <%= t(".double_quotes.title") %>
+  </dt>
+  <dd>
+    <%= t(".double_quotes.description_html", harry_lockhart_keyboard_input: tag.kbd(t(".double_quotes.harry_lockhart_keyboard_input")), harry_lockhart_sample: tag.samp(t(".double_quotes.harry_lockhart_sample")), harry_potter_gilderoy_lockhart_sample: tag.samp(t(".double_quotes.harry_potter_gilderoy_lockhart_sample"))) %>
+  </dd>
+
+  <dt>
+    <%= t(".not.title") %>
+  </dt>
+  <dd>
+    <%= t(".not.description_html", harry_not_lockhart_keyboard_input: tag.kbd(t(".not.harry_not_lockhart_keyboard_input")), harry_potter_sample: tag.samp(t(".not.harry_potter_sample")), harry_lockhart_sample: tag.samp(t(".not.harry_lockhart_sample")), gilderoy_lockhart_harry_potter_sample: tag.samp(t(".not.gilderoy_lockhart_harry_potter_sample"))) %>
+  </dd>
+</dl>

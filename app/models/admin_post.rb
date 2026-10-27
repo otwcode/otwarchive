@@ -8,6 +8,8 @@ class AdminPost < ApplicationRecord
     disable_all: 2
   }, default: :disable_anon, suffix: :comments, validate: { message: :invalid_permissions }
 
+  has_many :kudos, as: :commentable, inverse_of: :commentable, dependent: :destroy
+
   belongs_to :language
   belongs_to :translated_post, class_name: "AdminPost"
   has_many :translations, -> { includes(:language).order("language.sortable_name") },
@@ -97,6 +99,18 @@ class AdminPost < ApplicationRecord
     end
   end
 
+  def guest_kudos_count
+    Rails.cache.fetch "admin_posts/#{id}/guest_kudos_count" do
+      kudos.by_guest.count
+    end
+  end
+
+  def all_kudos_count
+    Rails.cache.fetch "admin_posts/#{id}/kudos_count" do
+      kudos.count
+    end
+  end
+
   def translated_post_language_must_differ
     return if translated_post.blank?
     return unless translated_post.language == language
@@ -122,8 +136,8 @@ class AdminPost < ApplicationRecord
   def self.disable_old_post_comments
     return unless ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS&.positive?
 
-    where.not(comment_permissions: :disable_all)
-      .where(created_at: ..ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago)
+    posted.where(published_at: ..ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago)
+      .where.not(comment_permissions: :disable_all)
       .update_all(comment_permissions: :disable_all)
   end
 

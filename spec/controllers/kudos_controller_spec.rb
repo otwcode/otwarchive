@@ -19,6 +19,12 @@ describe KudosController do
             it_redirects_to_with_kudos_notice(referer, "Thank you for leaving kudos!")
           end
 
+          it "redirects without a duplicate anchor when the referer already has an anchor" do
+            request.headers["HTTP_REFERER"] = work_path(work, anchor: "bookmark-form")
+            post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+            it_redirects_to_with_kudos_notice(work_path(work, anchor: "kudos_message"), "Thank you for leaving kudos!")
+          end
+
           it "does not save user on kudos" do
             post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
             expect(assigns(:kudo)).to be_persisted
@@ -245,6 +251,27 @@ describe KudosController do
 
       it "redirects with an error" do
         get :index, params: { work_id: work }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "denies access for admin post that is a draft" do
+      let(:admin_post) { create(:admin_post, :draft) }
+
+      it "redirects guests" do
+        get :index, params: { admin_post_id: admin_post }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+
+      it "redirects users" do
+        fake_login
+        get :index, params: { admin_post_id: admin_post }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+
+      it "redirects admin" do
+        fake_login_admin(create(:admin))
+        get :index, params: { admin_post_id: admin_post }
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end

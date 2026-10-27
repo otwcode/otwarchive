@@ -3,9 +3,12 @@ class HelpController < ApplicationController
     bookmark_search_date_bookmarked
     bookmark_search_notes
     bookmark_search_rec
+    chapters_title
     collectibles_add_to_collection
+    csv_download
     first_login
     html
+    people_search_all_fields
     preferences_collection
     preferences_comment
     preferences_display
@@ -21,12 +24,17 @@ class HelpController < ApplicationController
     skins_creating
     skins_parents
     symbols_key
+    tag_sets_about
+    tag_sets_associations
+    tag_sets_batch_load
     tags_additional
     tags_categories
     tags_characters
     tags_fandoms
     tags_ratings
     tags_relationships
+    tags_search_results
+    tags_search_text
     tags_warnings
     works_assignment
     works_backdating

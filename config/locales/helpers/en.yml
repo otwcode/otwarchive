@@ -44,6 +44,9 @@ en:
       on_tag_html: Comment on the tag %{name}
       on_unknown: Comment on unknown item
       on_work_html: Comment on the work %{title}
+    page_heading:
+      new_comment_html: New Comment on %{commentable_link}
+      reading_comments_html: Reading Comments on %{commentable_link}
   inbox_helper:
     comment_link_with_chapter_number: Chapter %{position} of %{title}
   qr_code_helper:
@@ -78,6 +81,16 @@ en:
       troubleshot: Account Troubleshot
       validated: Account Validated
       warn: Warned
+  validation_helper:
+    live_validation_for_field:
+      blank: Must be present.
+      not_a_number: Must be a number!
+      too_long:
+        one: Must be less than %{count} letter long.
+        other: Must be less than %{count} letters long.
+      too_short:
+        one: Must be at least %{count} letter long.
+        other: Must be at least %{count} letters long.
   works_helper:
     collections_meta_tag:
       collections: 'Collections:'

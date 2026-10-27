@@ -88,18 +88,13 @@ module ValidationHelper
   # Add more default values here! There are many more live validation options, see the code in
   # the javascripts folder for details. 
   def live_validation_for_field(id, options = {})
-    defaults = {presence: true,
-                failureMessage: 'Must be present.',
-                validMessage: ''}                
-    if options[:maximum_length]
-      defaults.merge!(tooLongMessage: 'Must be less than ' + options[:maximum_length].to_s + ' letters long.') #/
-    end
-    if options[:minimum_length]
-      defaults.merge!(tooShortMessage: 'Must be at least ' + options[:minimum_length].to_s + ' letters long.') #/
-    end
-    if options[:notANumberMessage]
-      defaults.merge!(notANumberMessage: 'Please enter a number') #/
-    end
+    defaults = { presence: true,
+                 failureMessage: t("validation_helper.live_validation_for_field.blank"),
+                 validMessage: "" }
+
+    defaults.merge!(tooLongMessage: t("validation_helper.live_validation_for_field.too_long", count: options[:maximum_length])) if options[:maximum_length]
+    defaults.merge!(tooShortMessage: t("validation_helper.live_validation_for_field.too_short", count: options[:minimum_length])) if options[:minimum_length]
+    defaults.merge!(notANumberMessage: t("validation_helper.live_validation_for_field.not_a_number")) if options[:numericality]
 
     options = defaults.merge(options)
 

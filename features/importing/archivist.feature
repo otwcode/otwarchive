@@ -127,23 +127,22 @@ Feature: Archivist bulk imports
     When I go to ao3's works page
     Then I should see "Story"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Importing for an email address that's not associated with an existing Archive account, but that does belong to a user, allows the user to claim the works and add them to their account
-    Given the user "creator" exists and is activated
-    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "creator" with email "not_creators_account_email@example.com"
+    Given I set up mock websites for importing
+      And the user "creator" exists and is activated
+    When I import the work "http://example.com/second-import-site-with-tags.html" by "creator" with email "not_creators_account_email@example.com"
       And all indexing jobs have been run
     Then 1 email should be delivered to "not_creators_account_email@example.com"
     When I am logged in as "creator"
       # Use the URL because we get logged out if we follow the link in the email
       And I go to the claim page for "not_creators_account_email@example.com"
-    Then I should see "Claim your works with your logged-in account."
-    When I press "Add these works to my currently-logged-in account"
+    Then I should see "Claim your work as creator."
+    When I press "Add this work to creator's account"
       And all indexing jobs have been run
     Then I should see "Author Identities for creator"
       And I should see "We have added the stories imported under not_creators_account_email@example.com to your account."
     When I go to creator's works page
-    Then I should see "Story"
+    Then I should see "Huddling"
 
   # TODO: Enable after AO3-6353.
   @wip
@@ -174,164 +173,157 @@ Feature: Archivist bulk imports
     And I should see "ra_ndom-test n@me."
     And 1 email should be delivered to "random@example.com"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Claim a work and create a new account in response to an invite
-    Given account creation is enabled
-    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    Given I set up mock websites for importing
+      And account creation is enabled
+    When I import the work "http://example.com/second-import-site-with-tags.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
-    Then I should see "Claiming Your Imported Works"
-    And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I press "Sign me up and give me my works!"
+    Then I should see "Claiming Your Imported Work"
+    And I should see "An archive including one of your works has been moved to the "
+    When I press "Sign me up and give me my work!"
     Then I should see "Create Account"
     When I fill in the sign up form with valid data
     And I press "Create Account"
     Then I should see "Almost Done!"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Orphan a work in response to an invite, leaving name on it
-    Given I have an orphan account
-    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    Given I set up mock websites for importing
+      And I have an orphan account
+    When I import the work "http://example.com/second-import-site-with-tags.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
-    Then I should see "Claiming Your Imported Works"
-      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I choose "Orphan my works and take my email address off them, but keep my name."
+    Then I should see "Claiming Your Imported Work"
+      And I should see "An archive including one of your works has been moved to the "
+    When I choose "Orphan my work and take my email address off it, but keep my name."
       And I wait 2 seconds
       And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
-      And I view the work "Story"
+      And I view the work "Huddling"
     Then I should see "randomtestname (orphan_account)"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Orphan a work in response to an invite, taking name off it
-    Given I have an orphan account
-    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    Given I set up mock websites for importing
+      And I have an orphan account
+    When I import the work "http://example.com/second-import-site-with-tags.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
-    Then I should see "Claiming Your Imported Works"
-      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own."
-    When I choose "Orphan my works and take my email address off them, but keep my name."
-      And I check "Assign my works to the AO3 orphan_account, removing both my name and email address."
+    Then I should see "Claiming Your Imported Work"
+      And I should see "An archive including one of your works has been moved to the "
+    When I choose "Orphan my work and take my email address off it, but keep my name."
+      And I check "Assign my work to the AO3 orphan_account, removing both my name and email address."
       And I wait 2 seconds
       And I press "Update"
     Then I should see "Your imported stories have been orphaned. Thank you for leaving them in the archive! Your preferences have been saved."
     When I am logged in
-      And I view the work "Story"
+      And I view the work "Huddling"
     Then I should not see "randomtestname"
       And I should see "orphan_account"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Delete an imported work and choose not to be notified of future imports of your works
-    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    Given I set up mock websites for importing
+    When I import the work "http://example.com/import-site-without-tags.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
-    Then I should see "Claiming Your Imported Works"
-      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
-    When I choose "Please remove my works from the archive entirely."
+    Then I should see "Claiming Your Imported Work"
+      And I should see "An archive including one of your works has been moved to the "
+    When I choose "Please remove my work from AO3 entirely."
       And I check "Do not email me in the future when works are imported with this email address."
       And I press "Update"
     Then I should be on the homepage
       And I should see "Your imported stories have been deleted. Your preferences have been saved."
     When the email queue is clear
       And I am logged in as "archivist"
-      And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
+      And I import the work "http://example.com/second-import-site-with-tags.html" by "randomtestname" with email "random@example.com"
      Then 0 emails should be delivered to "random@example.com"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Leave an imported work in the archivist's care
-    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    Given I set up mock websites for importing
+    When I import the work "http://example.com/import-site-without-tags.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
-    Then I should see "Claiming Your Imported Works"
-      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
-    When I choose "Leave my works in the care of the archivist."
+    Then I should see "Claiming Your Imported Work"
+      And I should see "An archive including one of your works has been moved to the "
+    When I choose "Leave my work in the care of the archivist."
       And I press "Update"
     Then I should be on the homepage
       And I should see "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved."
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Leave an imported work in the archivist's care and choose not to be notified of future imports of your works
-    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    Given I set up mock websites for importing
+    When I import the work "http://example.com/import-site-without-tags.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
-    Then I should see "Claiming Your Imported Works"
-      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
-    When I choose "Leave my works in the care of the archivist."
+    Then I should see "Claiming Your Imported Work"
+      And I should see "An archive including one of your works has been moved to the "
+    When I choose "Leave my work in the care of the archivist."
       And I check "Do not email me in the future when works are imported with this email address."
       And I press "Update"
     Then I should be on the homepage
       And I should see "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved."
     When the email queue is clear
       And I am logged in as "archivist"
-      And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
+      And I import the work "http://example.com/second-import-site-with-tags.html" by "randomtestname" with email "random@example.com"
      Then 0 emails should be delivered to "random@example.com"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Leave an imported work in the archivist's care and do not allow future imports with your email address
-    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    Given I set up mock websites for importing
+    When I import the work "http://example.com/import-site-without-tags.html" by "randomtestname" with email "random@example.com"
     Then 1 email should be delivered to "random@example.com"
       And the email should contain "Claim or remove your works"
     When I am logged out
       And I follow "Claim or remove your works" in the email
-    Then I should see "Claiming Your Imported Works"
-      And I should see "An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd like us to do with them."
-    When I choose "Leave my works in the care of the archivist."
+    Then I should see "Claiming Your Imported Work"
+      And I should see "An archive including one of your works has been moved to the "
+    When I choose "Leave my work in the care of the archivist."
       And I check "From now on, do not import works with this email address."
       And I press "Update"
     Then I should be on the homepage
       And I should see "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. Your preferences have been saved."
     When I am logged in as "archivist"
-      And I import the work "http://ao3testing.dreamwidth.org/325.html" by "randomtestname" with email "random@example.com"
+      And I import the work "http://example.com/second-import-site-with-tags.html" by "randomtestname" with email "random@example.com"
     Then I should see "We couldn't successfully import that work, sorry: Author randomtestname at random@example.com does not allow importing their work to this archive."
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Importing straight into a collection
-    Given I have a collection "Club"
+    Given I set up mock websites for importing
+      And I have a collection "Club"
       And I am logged in as "archivist"
-    When I start to import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    When I start to import the work "http://example.com/second-import-site-with-tags.html" by "randomtestname" with email "random@example.com"
       And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
     When I press "Edit"
       And I fill in "work_collection_names" with "Club"
       And I press "Post"
-    Then I should see "Story"
+    Then I should see "Huddling"
       And I should see "randomtestname"
       And I should see "Club"
       And 1 email should be delivered to "random@example.com"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Should not be able to import for others unless the box is checked
+    Given I set up mock websites for importing
     When I go to the import page
-      And I fill in "URLs*" with "http://ao3testing.dreamwidth.org/593.html"
+      And I fill in "URLs*" with "http://example.com/import-site-without-tags.html"
       And I select "English" from "Choose a language"
       And I fill in "Author Name*" with "ao3testing"
       And I fill in "Author Email Address*" with "ao3testing@example.com"
       And I press "Import"
     Then I should see /You have entered an external author name or e-mail address but did not select "Import for others."/
     When I check the 1st checkbox with id matching "importing_for_others"
+      And I fill in "Author Name*" with "ao3testing"
+      And I fill in "Author Email Address*" with "ao3testing@example.com"
       And I press "Import"
     Then I should see "We have notified the author(s) you imported works for. If any were missed, you can also add co-authors manually."
 
