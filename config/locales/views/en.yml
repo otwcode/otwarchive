@@ -539,7 +539,12 @@ en:
       page_heading: AO3 News Drafts
       page_title: AO3 News Drafts
     index:
+      landmark: Comment
+      page_heading: AO3 News
       page_title: AO3 News
+      read_comments:
+        one: Read %{count} Comment
+        other: Read %{count} Comments
     new:
       page_heading: New AO3 News Post
       page_title: New AO3 News Post
@@ -771,6 +776,8 @@ en:
       no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
     chapter_form:
+      chapter_title: Chapter Title
+      chapters_title_help_title: Chapter title
       publication_date: Chapter Publication Date
       works_backdating_help_title: Publication Date Options
     posting_fieldset:
@@ -960,6 +967,7 @@ en:
       draft_news_index: Back to AO3 News Drafts
       guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
+      kudos: Kudos ♥
       logged_as_admin: Please log out of your admin account to comment.
       news_index: Back to AO3 News Index
       permissions:
@@ -1223,6 +1231,9 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    chapters_title:
+      description: You can add a chapter title, but it's not required.
+      page_heading: Chapter Title
     collectibles_add_to_collection:
       collection_names: Note that you need to use the collection's name, which gets used in the collection's URL, and not the collection's spiffy title (because different collections can have the same title). A collection's name is the equivalent of your user login. Names will be auto-completed for you if you have JavaScript turned on.
       guidance: Enter collection names as a comma-separated list, and the item you are editing will be added to all the collections you specify.
@@ -1368,6 +1379,37 @@ en:
         unwanted_larger_text: If one bit of your text shows up larger than the rest, probably our formatter couldn't figure out to put paragraph tags around it. You can fix this by manually putting in the paragraph tags around that one bit.
         unwilling_to_break: If you have put in some custom HTML (eg a list of items inside a <ul>) and you don't want break tags or paragraphs inserted, just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).
       page_heading: HTML on the Archive
+    people_search_all_fields:
+      asterisk:
+        description_html: "%{user_any_keyboard_input} will find %{user_sample} and %{users_sample} and %{username_sample}."
+        title: "*: any characters"
+        user_any_keyboard_input: User*
+        user_sample: User
+        username_sample: Username
+        users_sample: Users
+      double_quotes:
+        a_test_user_sample: A. Test User
+        a_user_keyboard_input: '"A. User"'
+        a_user_sample: A. User
+        description_html: "%{a_user_keyboard_input} will find %{a_user_sample} but not %{a_test_user_sample}."
+        title: "\": words in exact sequence"
+      or:
+        a_sample: A.
+        a_user_sample: A. User
+        description_html: "%{user_a_or_keyboard_input} will find %{a_sample}, %{a_user_sample}, and %{user_sample}."
+        title: "|: OR (not exclusive)"
+        user_a_or_keyboard_input: A. | User
+        user_sample: User
+      page_description: Enter text in "Search all fields" to find people with usernames, pseuds, or pseud descriptions containing your search terms.
+      page_heading: 'People Search: Search All Fields'
+      page_note: The characters ":" and "@" have special meanings. Leave them out of your search or you will get unexpected results.
+      space:
+        a_test_user_sample: A. Test User
+        a_user_keyboard_input: A. User
+        a_user_sample: A. User
+        description_html: "%{a_user_keyboard_input} will find %{a_user_sample} and %{a_test_user_sample} but not %{user_sample}."
+        title: 'space: a space acts like AND'
+        user_sample: User
     preferences_collection:
       allow_collection_invitation:
         changing: Changing this setting won't affect any existing works in collections.
@@ -1700,6 +1742,25 @@ en:
           non_con:
             acronym: non-con
             title: non-consensual sex
+    tag_sets_about:
+      delete_tag_set_warning: can delete the tag set or change it without warning
+      page_heading: About Tag Sets
+      sharing_tag_sets_html: Some users may choose to make their tag set publicly available for others to use in their challenges. Please note that the owners of a tag set %{delete_tag_set_warning_bold}, so before you use someone else's tag set for your challenge, please be sure that you trust them not to change it.
+      what_are_tag_sets: If you've ever wanted to run a challenge on the Archive, that's what tag sets are for. You create a tag set to hold a list of all the tags that should be available for sign-up, even if those tags haven't been used on the Archive before now, and then add the tag set to your challenge. Tags in the tag set will then automatically show up in the sign-up form.
+      where_to_find_tag_sets: All tag sets are listed on the main tag sets page. You can browse them to get a better idea of how they work.
+      who_manages_tag_sets: You can add as many moderators as you want to help you manage your tag set, and they don't need to have access to the challenge settings. You can also allow the participants in your challenge to nominate tags to be added to your set. You and any co-owners and moderators can review those nominations, and approve or reject them. You can add fandom associations to new tags in your Tag Set, or you can leave them for tag wranglers to make the associations (this may take some time).
+    tag_sets_associations:
+      note_about_tag_set_associations: 'Note: if the wranglers have already set up these associations, then you can just add the additional ones that you would like -- you don''t have to (and in fact aren''t allowed) to create copies of canonical associations. You can still limit your participants'' choices to tags actually in your set.'
+      page_heading: Tag Set Associations
+      tip: If you're not sure how this might work, try adding a few fandoms and characters and setting up some associations, and then set up your challenge and try out the sign-up form!
+      what_are_tag_set_associations: Tag associations let you set up associations between the fandoms, characters, and relationships in your tag set, which then lets your participants pick from only the characters and relationships in a given fandom.
+    tag_sets_batch_load:
+      add_new_tags_note: If you really want to add some new tags to the Archive, you can add them to your tag set first, and then batch load the associations here afterwards.
+      already_associated_note: If two tags are already associated in the Archive or in your tag set, it won't associate them again.
+      load_tag_associations_note: You can only batch load tag associations if the tags already exist. This is to avoid mass-adding piles of wrong tags to the Archive.
+      loading_error_note: If the batch load is taking too long and you're getting 502 errors, please split up the number of tags you're trying to load!
+      page_heading: Batch Loading
+      submit_note: Only the associations that didn't work will remain in the form after you select the "Submit" button.
     tags_additional:
       description: Any other tags you want to give your work (for example, "Angst", "Crossover", or "Tentacles"). You may also use this field to warn for things not covered by the Archive Warnings. Please do not enter fandom, relationship, or character names in this field. Multiple tags should be separated by commas.
       more_info:
@@ -1767,6 +1828,49 @@ en:
         html: "(For more information, see the %{tags_faq_section_link}.)"
         tags_faq_section: Tags on the Archive FAQ
       page_heading: Relationships Tags
+    tags_search_results:
+      canonical:
+        description_html: "%{highlighted} tags are canonical."
+        highlighted: Highlighted
+      page_heading: Tag Search Results
+      refine: If there are too many tags, try refining your search, rather than paging through the results.
+      sorting: Very new tags will be at the top of the list. Otherwise the list is sorted alphabetically by type and then name.
+    tags_search_text:
+      asterisk:
+        book_query_keyboard_input: book*
+        book_sample: book
+        booking_sample: booking
+        books_sample: books
+        description_html: "%{book_query_keyboard_input} will find %{book_sample} and %{books_sample} and %{booking_sample}."
+        title: "*: any characters"
+      double_quotes:
+        description_html: "%{harry_lockhart_keyboard_input} will find %{harry_lockhart_sample} but not %{harry_potter_gilderoy_lockhart_sample}."
+        harry_lockhart_keyboard_input: '"Harry Lockhart"'
+        harry_lockhart_sample: Harry Lockhart
+        harry_potter_gilderoy_lockhart_sample: Harry Potter/Gilderoy Lockhart
+        title: "\": words in exact sequence"
+      not:
+        description_html: "%{harry_not_lockhart_keyboard_input} will find %{harry_potter_sample} but not %{harry_lockhart_sample} or %{gilderoy_lockhart_harry_potter_sample}."
+        gilderoy_lockhart_harry_potter_sample: Gilderoy Lockhart/Harry Potter
+        harry_lockhart_sample: Harry Lockhart
+        harry_not_lockhart_keyboard_input: Harry NOT Lockhart
+        harry_potter_sample: Harry Potter
+        title: 'NOT: NOT'
+      or:
+        description_html: "%{harry_potter_keyboard_input} will find %{harry_sample}, %{harry_potter_sample}, and %{potter_sample}."
+        harry_potter_keyboard_input: Harry || Potter
+        harry_potter_sample: Harry Potter
+        harry_sample: Harry
+        potter_sample: Potter
+        title: "||: OR (not exclusive)"
+      page_heading: Tag Search Text
+      space:
+        description_html: "%{harry_potter_keyboard_input} will find %{harry_potter_sample} and %{harry_james_potter_sample} but not %{harry_sample}."
+        harry_james_potter_sample: Harry James Potter
+        harry_potter_keyboard_input: Harry Potter
+        harry_potter_sample: Harry Potter
+        harry_sample: Harry
+        title: 'space: a space acts like AND'
     tags_warnings:
       choose_not_to_use:
         description: Use this if you don't want to warn for anything. You may also choose this option if you don't know what you should warn for; if you don't like warning for certain topics or warnings in general; if you want to avoid some spoilers, but not others; etc.
@@ -2126,6 +2230,8 @@ en:
       parent_org_intro_html: The Archive of Our Own (AO3) is a project of the %{parent_org_link}.
     news_module:
       news:
+        comments_html: 'Comments: %{comments}'
+        kudos_html: 'Kudos: %{kudos}'
         published_html: 'Published: %{publication_date}'
     privacy:
       account_termination:
@@ -2639,6 +2745,19 @@ en:
     guest_header:
       one: "%{count} guest has also left kudos"
       other: "%{count} guests have also left kudos"
+    left_kudos:
+      admin_post_html:
+        one: "%{givers_list} left kudos on this post!"
+        other: "%{givers_list} left kudos on this post!"
+      guest_only:
+        one: "%{count} guest"
+        other: "%{count} guests"
+      user_and_guest_html:
+        one: "%{users} as well as %{count} guest"
+        other: "%{users} as well as %{count} guests"
+      work_html:
+        one: "%{givers_list} left kudos on this work!"
+        other: "%{givers_list} left kudos on this work!"
     user_links:
       more_link:
         one: "%{count} more user"
@@ -2806,11 +2925,40 @@ en:
     orphan_user:
       orphaning_bylines_only_message_html: Orphaning will automatically remove your personal information from <strong>bylines only</strong>. It will <strong>not</strong> automatically remove your personal information from anywhere else in the work(s). Social media accounts, contact information, email addresses, names, and any other personal information posted in the title, summary, notes, tags, work body, or comment text will <strong>not</strong> be automatically removed. Comments posted by other users will also <strong>not</strong> be affected by Orphaning. If you want information removed from these places, you should edit or delete it prior to Orphaning. <strong>Once you Orphan the work(s), you will no longer be able to delete information in these places yourself</strong>.
       orphaning_works_message_html: 'Orphaning will <strong>permanently</strong> remove your username and/or pseud from the bylines of: the following work(s), their chapters, associated series, and any comments you may have left on them while logged into this account.'
+  owned_tag_sets:
+    batch_load:
+      page_heading: Batch Loading
+      submit:
+        button: Submit
+        landmark: Submit
+      tag_sets_batch_load_help_title: Tag set batch load
+    index:
+      landmark: Listing Tag Sets
+      navigation:
+        new_tag_set: New Tag Set
+        search:
+          submit: Search
+          title: Search
+        tags: Tags
+      no_tag_sets_found: No tag sets found.
+      page_heading:
+        challenge: Tag Sets Used In This Challenge
+        default_html: Tag Sets %{help_modal_link} in the %{archive_name}
+        query: Tag Set
+        user: "%{user_name}'s Tag Sets"
+      tag_sets_about_help_title: Tag set about
+    tag_set_form:
+      check_to_remove_tag: "(check to remove)"
+      check_to_remove_tag_association: "(check to remove)"
+      tag_sets_associations_help_title: Tag set tag associations
   pagy:
     aria_label:
       nav: Pagination
     next: Next →
     prev: "← Previous"
+  people:
+    search_form:
+      all_fields_help_title: People search all fields
   potential_matches:
     in_progress:
       cancel: Cancel Potential Match Generation
@@ -3058,6 +3206,8 @@ en:
   stats:
     index:
       flat_view: Flat View
+    navigation:
+      statistics: Statistics
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
@@ -3198,6 +3348,8 @@ en:
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
         random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
+    search:
+      tags_search_results_help_title: Tag search results help
     search_form:
       fandoms: Fandoms
       fandoms_footnote: Find tags wrangled to specific canonical fandoms.
@@ -3214,6 +3366,7 @@ en:
         synonymous: Synonymous
         unwrangleable: Unwrangleable
       tag_name: Tag name
+      tags_search_text_help_title: Tag search text help
       type: Type
       wrangling_status: Wrangling status
     show:

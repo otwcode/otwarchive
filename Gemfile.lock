@@ -196,8 +196,10 @@ GEM
       bigdecimal
       rexml
     crass (1.0.7)
-    css_parser (1.22.0)
+    css_parser (3.2.0)
       addressable
+      base64
+      ssrf_filter (~> 1.5)
     csv (3.3.5)
     cucumber (9.2.1)
       builder (~> 3.2)
@@ -643,6 +645,7 @@ GEM
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
+    ssrf_filter (1.6.0)
     stackprof (0.2.27)
     stringex (2.8.6)
     stringio (3.1.7)
@@ -807,7 +810,7 @@ DEPENDENCIES
   will_paginate (>= 3.0.2)
 
 RUBY VERSION
-   ruby 3.4.6p54
+   ruby 3.4.12p148
 
 BUNDLED WITH
    2.6.9

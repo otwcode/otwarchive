@@ -3,6 +3,52 @@ require "spec_helper"
 describe AutocompleteController do
   include LoginMacros
 
+  describe "GET #noncanonical_tag" do
+    context "when Elasticsearch raises a BadRequest error" do
+      before do
+        allow($elasticsearch).to receive(:search)
+          .and_raise(Elastic::Transport::Transport::Errors::BadRequest)
+      end
+
+      it "returns an empty result when there is no exact match" do
+        get :noncanonical_tag, params: { term: "test", type: "freeform", format: :json }
+        expect(JSON.parse(response.body)).to eq([])
+      end
+
+      it "falls back to the exact database match" do
+        create(:freeform, name: "test", canonical: false)
+        get :noncanonical_tag, params: { term: "test", type: "freeform", format: :json }
+        expect(JSON.parse(response.body)).to eq([{ "id" => "test", "name" => "test" }])
+      end
+
+      context "when the log_elasticsearch_errors rollout flag is on" do
+        before { $rollout.activate(:log_elasticsearch_errors) }
+
+        after { $rollout.deactivate(:log_elasticsearch_errors) }
+
+        it "reports the exception to Sentry" do
+          sentry = class_double("Sentry", capture_exception: nil)
+            .as_stubbed_const
+          get :noncanonical_tag,
+              params: { term: "test", type: "freeform", format: :json }
+          error = Elastic::Transport::Transport::Errors::BadRequest
+          expect(sentry).to have_received(:capture_exception)
+            .with(instance_of(error))
+        end
+      end
+
+      context "when the log_elasticsearch_errors rollout flag is off" do
+        it "does not report the exception to Sentry" do
+          sentry = class_double("Sentry", capture_exception: nil)
+            .as_stubbed_const
+          get :noncanonical_tag,
+              params: { term: "test", type: "freeform", format: :json }
+          expect(sentry).not_to have_received(:capture_exception)
+        end
+      end
+    end
+  end
+
   describe "tag" do
     let!(:tag1) { create(:canonical_fandom, name: "Match") }
     let!(:tag2) { create(:canonical_fandom, name: "Blargh") }

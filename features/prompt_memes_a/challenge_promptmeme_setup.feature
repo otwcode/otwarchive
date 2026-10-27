@@ -3,7 +3,7 @@ Feature: Prompt Meme Challenge
   In order to have an archive full of works
   As a humble user
   I want to create a prompt meme and post to it
-  
+
   Scenario: Can create a collection to house a prompt meme
   
   Given I have standard challenge tags setup
@@ -528,3 +528,33 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
     And I view unposted claims for "Battle 12"
   Then I should see "These & < > ' ? are some HTML escape chars"
+
+  @javascript
+  Scenario: Can hide and show warnings on a prompt
+    Given I have Battle 12 prompt meme fully set up
+      And I follow "Challenge Settings"
+      And I enable archive warning challenge options
+      And I sign up for Battle 12 with combination F
+    When I am logged in as "myname2"
+      And I set my preferences to hide warnings
+      And I go to "Battle 12" collection's page
+      And I follow "Prompts"
+    Then I should see "Show warnings"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
+    When I follow "Show warnings"
+    Then I should not see "Show warnings"
+      And I should see "No Archive Warnings Apply" within "li.warnings"
+
+  @javascript
+  Scenario: Can hide and show additional tags on a prompt
+    Given I have Battle 12 prompt meme fully set up
+      And I sign up for Battle 12 with combination A
+    When I am logged in as "myname2"
+      And I set my preferences to hide freeform
+      And I go to "Battle 12" collection's page
+      And I follow "Prompts"
+    Then I should see "Show additional tags"
+      And I should not see "Alternate Universe - Historical"
+    When I follow "Show additional tags"
+    Then I should not see "Show additional tags"
+      And I should see "Alternate Universe - Historical"
