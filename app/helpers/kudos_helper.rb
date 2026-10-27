@@ -1,5 +1,6 @@
 module KudosHelper
-  # Returns a comma-separated list of kudos. Restricts the list to the first
+  # Returns an array containing two items: a comma-separated list of kudos
+  # and the total kudos count. Restricts the list to the first
   # ArchiveConfig.MAX_KUDOS_TO_SHOW entries, with a link to view more.
   #
   # When showing_more is true, returns a list with a connector at the front,
@@ -34,7 +35,7 @@ module KudosHelper
       # Add the link to show more at the end of the list:
       kudos_links << link_to(
         t("kudos.user_links.more_link", count: collapsed_count),
-        work_kudos_path(commentable, before: kudos_to_display.last.id),
+        polymorphic_path([commentable, :kudos], before: kudos_to_display.last.id),
         id: "kudos_more_link", remote: true
       )
 
@@ -47,6 +48,6 @@ module KudosHelper
       end
     end
 
-    kudos_links.to_sentence(connectors).html_safe
+    [kudos_links.to_sentence(connectors).html_safe, total_count]
   end
 end
