@@ -1,6 +1,22 @@
 require "spec_helper"
 
 describe "n+1 queries in the tags controller" do
+  describe "#show" do
+    it "renders bookmark results for unrevealed works and mixed bookmarkable types" do
+      tag = create(:freeform)
+      collection = create(:unrevealed_collection)
+      mystery_work = create(:work, collection_names: collection.name)
+      create(:bookmark, bookmarkable_id: mystery_work.id, tag_string: tag.name)
+      create(:external_work_bookmark, tag_string: tag.name)
+      create(:series_bookmark, tag_string: tag.name)
+
+      get tag_path(tag)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Mystery Work")
+    end
+  end
+
   describe "#feed", n_plus_one: true do
     context "when creating a tag's feed" do
       let!(:tag) { create(:canonical_fandom, name: "Hermitcraft SMP") }
