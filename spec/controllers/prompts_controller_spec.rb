@@ -42,26 +42,39 @@ describe PromptsController do
     end
 
     context "in a gift exchange" do
-      let(:signup) { create(:gift_exchange_signup) }
-      let(:collection) { signup.collection }
-      let(:prompt) { signup.requests.first }
+      context "when the collection's requests are visible" do
+        let(:challenge) { create(:gift_exchange, requests_summary_visible: true) }
+        let(:collection) { create(:collection, challenge: challenge) }
+        let(:signup) { create(:gift_exchange_signup, collection_id: collection.id) }
+        let(:prompt) { signup.requests.first }
 
-      context "when logged in as the prompt owner" do
-        let(:user) { prompt.pseud.user }
-        include_examples "displays the prompt"
+        context "when logged in as a random user" do
+          let(:user) { create(:user) }
+          include_examples "displays the prompt"
+        end
       end
 
-      context "when logged in as the collection owner" do
-        let(:user) { collection.owners.first.user }
-        include_examples "displays the prompt"
-      end
+      context "when the collection's requests are not visible" do
+        let(:challenge) { create(:gift_exchange, requests_summary_visible: false) }
+        let(:collection) { create(:collection, challenge: challenge) }
+        let(:signup) { create(:gift_exchange_signup, collection_id: collection.id) }
+        let(:prompt) { signup.requests.first }
 
-      context "when logged in as a random user" do
-        let(:user) { create(:user) }
+        context "when logged in as the prompt owner" do
+          let(:user) { prompt.user }
+          include_examples "displays the prompt"
+        end
 
-        it "redirects and shows an error" do
-          get :show, params: { collection_id: collection.name, id: prompt.id }
-          it_redirects_to_with_error(collection, "Sorry, you don't have permission to access the page you were trying to reach.")
+        context "when logged in as the collection owner" do
+          let(:user) { collection.owners.first.user }
+          include_examples "displays the prompt"
+        end
+
+        it "redirects and errors if the user does not own the sign-up or the collection" do
+          fake_login
+          get :show, params: { id: prompt.id, collection_id: collection.name }
+          it_redirects_to_with_error(collection_path(collection),
+                                     "Sorry, you don't have permission to access the page you were trying to reach.")
         end
       end
     end
