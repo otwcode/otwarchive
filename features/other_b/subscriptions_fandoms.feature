@@ -48,7 +48,7 @@ Feature: Subscriptions
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
     And I check "F/F"
     And I press "Update"
-  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+  Then I should see "This work is part of a collection that has not been revealed. Please visit Hidden Treasury for details."
   When I am logged in as "author"
     And I post a work "My Work Title" with category "F/F"
   When I view the "F/F" works index
