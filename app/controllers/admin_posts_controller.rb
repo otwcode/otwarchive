@@ -6,7 +6,7 @@ class AdminPostsController < Admin::BaseController
   # GET /admin_posts
   def index
     @page_subtitle = t(".page_title")
-    @pagy, @admin_posts = pagy(@admin_posts.posted.order(published_at: :desc))
+    @pagy, @admin_posts = pagy(@admin_posts.posted.includes(:language, :tags, :translated_post).order(published_at: :desc))
   end
 
   # GET /admin_posts/drafts
