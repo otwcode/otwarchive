@@ -292,11 +292,11 @@ class TagSet < ApplicationRecord
     # expire fast
     REDIS_AUTOCOMPLETE.expire combo_key, 1
 
-    unless search_param.blank?
-      search_regex = Tag.get_search_regex(search_param)
-      return results.select {|tag| tag.match(search_regex)}
-    else
-      return results
-    end
+    return results if search_param.blank?
+
+    search_regex = Tag.get_search_regex(search_param)
+    return [] if search_regex.nil?
+
+    results.select { |tag| tag.match(search_regex) }
   end
 end
