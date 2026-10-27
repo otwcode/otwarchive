@@ -76,7 +76,7 @@ Given /^"([^\"]*)" has claimed a prompt from Battle 12$/ do |username|
   step %{I claim a prompt from "Battle 12"}
 end
 
-When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/ do |type, title, name|
+When /^I set up an?(?: (.*?)) promptmeme "(.*?)"(?: with name "(.*?)")?$/ do |type, title, name| # rubocop:disable Cucumber/RegexStepName
   step %{I am logged in as "mod1"}
   visit new_collection_path
   if name.nil?
