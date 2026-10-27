@@ -55,9 +55,6 @@ class WorkIndexer < Indexer
         title_to_sort_on: {
           type: "keyword"
         },
-        imported_from_url: {
-          type: "keyword"
-        },
         work_types: {
           type: "keyword"
         },
