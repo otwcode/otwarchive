@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe ChallengeSignupsController do
   include LoginMacros
@@ -17,6 +17,10 @@ describe ChallengeSignupsController do
   let(:open_collection_owner) { User.find(open_collection.all_owners.first.user_id) }
   let(:open_signup_owner) { Pseud.find(open_signup.pseud_id).user }
 
+  let(:open_challenge2) { create(:prompt_meme) }
+  let(:open_collection2) { create(:collection, challenge: open_challenge2) }
+  let(:open_collection_owner2) { User.find(open_collection2.all_owners.first.user_id) }
+
   describe "new" do
     context "when sign-ups are closed" do
       it "redirects and errors" do
@@ -33,6 +37,24 @@ describe ChallengeSignupsController do
         get :new, params: { collection_id: open_collection.name, pseud: user.pseuds.first }
         it_redirects_to_with_notice(edit_collection_signup_path(open_collection, open_signup),
                                     "You are already signed up for this challenge. You can edit your sign-up below.")
+      end
+
+      it "allows sign up when only title field is filled out" do
+        fake_login_known_user(user)
+        open_challenge2.request_restriction.update!(title_allowed: true, title_required: true, description_allowed: false, 
+                                                    fandom_num_allowed: 0, character_num_allowed: 0, freeform_num_allowed: 0, category_num_allowed: 0, 
+                                                    rating_num_allowed: 0, relationship_num_allowed: 0, archive_warning_num_allowed: 0)
+        open_challenge2.update!(signup_open: true)
+        post :create, params: { collection_id: open_collection2.name, pseud: user.pseuds.first, challenge_signup: {
+          pseud_id: user.pseuds.first.id,
+          requests_attributes: {
+            "0" => {
+              title: "Tester title"
+            }
+          }
+        } }
+        signup = ChallengeSignup.last
+        it_redirects_to_with_notice(collection_signup_path(open_collection2, signup), "Sign-up was successfully created.")
       end
     end
 
