@@ -10,5 +10,5 @@
     });
   })
 <% else %>
-  $j("#invite-status").html("<%= escape_javascript(render "no_invitation") %>");
+  $j("#invite-status").html("<%= escape_javascript(render "no_invitation", email_blank: @email_blank) %>");
 <% end %>
