@@ -91,8 +91,9 @@ module BookmarksHelper
     else
       Rails.cache.fetch("#{creation.cache_key_with_version}_#{bookmark.cache_key}/blurb_css_classes") do
         creation_id = creation_id_for_css_classes(creation)
+        series_ids = creation_series_ids_for_css_classes(creation).join(" ")
         user_ids = user_ids_for_bookmark_blurb(bookmark).join(" ")
-        "bookmark blurb group #{creation_id} #{user_ids}".squish
+        "bookmark blurb group #{creation_id} #{series_ids} #{user_ids}".squish
       end
     end
   end
