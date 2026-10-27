@@ -187,7 +187,7 @@ describe AdminMailer do
     end
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your admin account backup codes"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your admin account backup codes have been reset"
       expect(email).to have_subject(subject)
     end
 

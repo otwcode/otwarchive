@@ -48,7 +48,7 @@ en:
         login: log in
       chairs: If you experience technical issues, please contact your Chairs.
       did_not_make_change: If you did not make this change, someone else may have access to your admin account. Please let AD&T know immediately so they can take steps to secure your account.
-      subject: "[%{app_name}] Your admin account backup codes"
+      subject: "[%{app_name}] Your admin account backup codes have been reset"
   comment_mailer:
     comment_notification:
       chapter:
