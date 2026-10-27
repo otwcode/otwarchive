@@ -1,12 +1,10 @@
 class StatsController < ApplicationController
-
-  before_action :users_only
   before_action :load_user
   before_action :check_ownership
 
   # only the current user
   def load_user
-    @user = current_user
+    @user = User.find_by!(login: params[:user_id])
     @check_ownership_of = @user
   end
 
