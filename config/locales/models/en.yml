@@ -102,6 +102,10 @@ en:
               over_reported_series: This series has already been reported. Our volunteers only need one report in order to investigate and resolve an issue, so please be patient and do not submit another report.
             url:
               not_on_archive: does not appear to be on this site.
+        admin_blacklisted_email:
+          attributes:
+            email:
+              taken: has already been banned.
         admin_post:
           attributes:
             comment_permissions:
