@@ -79,3 +79,9 @@ coverage
 redis-cucumber-dump.rdb
 
 .rspec
+
+# Playwright
+node_modules/
+playwright/.auth/
+playwright-report/
+test-results/

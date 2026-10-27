@@ -1,0 +1,11 @@
+{
+  "name": "otwarchive",
+  "private": true,
+  "scripts": {
+    "test:playwright": "playwright test",
+    "test:playwright:update": "playwright test --update-snapshots"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}
