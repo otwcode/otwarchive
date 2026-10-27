@@ -199,7 +199,7 @@ class AbuseReport < ApplicationRecord
   
   # Username (aka. login) of the reported user
   def reported_user_login
-    url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
+    url[%r{/users/(\w+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
   end
 
   def attach_work_download(ticket_id)
@@ -236,10 +236,12 @@ class AbuseReport < ApplicationRecord
       work_params_only = url.match(%r{/works/\d+/}).to_s
       work_report_period = ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago
       existing_reports_total = AbuseReport.where('created_at > ? AND
-                                                 url LIKE ?',
+                                                 url LIKE ? AND
+                                                 NOT url LIKE "%/comments/%" AND
+                                                 NOT url LIKE "%/bookmarks/%"',
                                                  work_report_period,
                                                  "%#{work_params_only}%").count
-      errors.add(:base, :over_reported) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
+      errors.add(:base, :over_reported_work) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
     when %r{/users/\w+}
       user_params_only = url.match(%r{/users/\w+/}).to_s
       user_report_period = ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago
