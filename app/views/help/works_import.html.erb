@@ -1,0 +1,29 @@
+<h4><%= t(".page_heading") %></h4>
+
+<p>
+  <%= t(".set_custom_encoding.html",
+        encoding_help_page_link: link_to(t(".set_custom_encoding.encoding_help_page"), help_works_import_encoding_path)) %>
+</p>
+
+<p>
+  <%= t(".from_another_site.html",
+        how_to_import_from_another_site_link: link_to(t(".from_another_site.how_to_import_from_another_site"),
+          archive_faq_path("posting-and-editing", anchor: "importwork"))) %>
+</p>
+
+<p><%= t(".transfer_work_account") %></p>
+
+<p><%= t(".override_tags_and_notes") %></p>
+
+<p>
+  <%= t(".posting_and_editing.html",
+        posting_and_editing_faq_link: link_to(t(".posting_and_editing.posting_and_editing_faq"),
+          archive_faq_path("posting-and-editing"))) %>
+
+</p>
+
+<p>
+  <%= t(".known_import_issues.html",
+        known_issues_link: link_to(t(".known_import_issues.known_issues"),
+          known_issues_path(anchor: "importing"))) %>
+</p>

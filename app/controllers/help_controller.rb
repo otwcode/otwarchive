@@ -34,6 +34,8 @@ class HelpController < ApplicationController
     tags_search_text
     tags_warnings
     works_assignment
+    works_import
+    works_import_encoding
     works_backdating
     works_languages
     works_parents
