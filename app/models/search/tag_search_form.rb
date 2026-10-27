@@ -56,8 +56,8 @@ class TagSearchForm
     @options[:wrangling_status] = bool_value(@options[:canonical]) ? "canonical" : "noncanonical"
   end
 
-  def sort_columns
-    options[:sort_column] || "name"
+  def sort_column
+    options[:sort_column] || "uses"
   end
 
   def sort_direction
