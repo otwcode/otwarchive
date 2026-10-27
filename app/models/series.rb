@@ -58,7 +58,7 @@ class Series < ApplicationRecord
     joins(approved_creatorships: :pseud).where(pseuds: { user: user })
   }
 
-  scope :for_blurb, -> { includes(:work_tags, :pseuds) }
+  scope :for_blurb, -> { preload({ pseuds: :user }, works: :tags) }
 
   def posted_works
     self.works.posted
@@ -113,9 +113,15 @@ class Series < ApplicationRecord
 
   def visible_work_count
     if User.current_user.nil?
-      self.works.posted.unrestricted.count
+      if works.loaded?
+        works.count { |work| work.posted && !work.restricted }
+      else
+        works.posted.unrestricted.count
+      end
+    elsif works.loaded?
+      works.count(&:posted)
     else
-      self.works.posted.count
+      works.posted.count
     end
   end
 
@@ -192,11 +198,27 @@ class Series < ApplicationRecord
     tag_groups["Fandom"]&.sort || []
   end
 
+  # Memoized because the blurb calls this three times per series (fandoms,
+  # symbols and tag block). The result depends on User.current_user.
   def tag_groups
-    tags = self.work_tags.where(works: { hidden_by_admin: false, posted: true })
-    tags = tags.where(works: { restricted: false }) unless User.current_user
-    tags.group_by { |t| t.type.to_s }
+    @tag_groups ||=
+      if works_and_tags_loaded?
+        visible_works = works.select do |work|
+          work.posted && !work.hidden_by_admin
+        end
+        visible_works = visible_works.reject(&:restricted) unless User.current_user
+        visible_works.flat_map(&:tags).uniq.group_by { |t| t.type.to_s }
+      else
+        tags = work_tags.where(works: { hidden_by_admin: false, posted: true })
+        tags = tags.where(works: { restricted: false }) unless User.current_user
+        tags.group_by { |t| t.type.to_s }
+      end
   end
+
+  def works_and_tags_loaded?
+    works.loaded? && works.all? { |work| work.association(:tags).loaded? }
+  end
+  private :works_and_tags_loaded?
 
   # Grabs the earliest published_at date of the visible works in the series
   def published_at
@@ -208,12 +230,36 @@ class Series < ApplicationRecord
   end
 
   def revised_at
-    if self.works.visible.posted.blank?
+    if works.loaded?
+      dates = works_visible_to_current_user.map(&:revised_at).compact
+      dates.empty? ? self.updated_at : dates.max
+    elsif self.works.visible.posted.blank?
       self.updated_at
     else
       Work.in_series(self).visible.collect(&:revised_at).compact.uniq.sort.last
     end
   end
+
+  # Mirrors Work.visible_to_user for preloaded works. Only hidden works
+  # check ownership (an extra query), and those are rare.
+  def works_visible_to_current_user
+    user = User.current_user
+    case user
+    when Admin
+      works.select(&:posted)
+    when User
+      works.select do |work|
+        work.posted &&
+          (!work.hidden_by_admin ||
+           work.pseuds.any? { |pseud| pseud.user_id == user.id })
+      end
+    else
+      works.select do |work|
+        work.posted && !work.restricted && !work.hidden_by_admin
+      end
+    end
+  end
+  private :works_visible_to_current_user
 
   ######################
   # SEARCH
@@ -261,7 +307,12 @@ class Series < ApplicationRecord
   # Word count as seen by guests
   def public_word_count
     # Exclude restricted works and those hidden by admin from the word count
-    self.works.posted.unrestricted.unhidden.pluck(:word_count).compact.sum
+    if works.loaded?
+      works.select { |work| work.posted && !work.restricted && !work.hidden_by_admin }
+        .sum { |work| work.word_count.to_i }
+    else
+      self.works.posted.unrestricted.unhidden.pluck(:word_count).compact.sum
+    end
   end
 
   # Word count as seen by registered users
@@ -269,7 +320,12 @@ class Series < ApplicationRecord
   # in the series word count
   def general_word_count
     # Exclude works hidden by admin from the word count
-    self.works.posted.unhidden.pluck(:word_count).compact.sum
+    if works.loaded?
+      works.select { |work| work.posted && !work.hidden_by_admin }
+        .sum { |work| work.word_count.to_i }
+    else
+      self.works.posted.unhidden.pluck(:word_count).compact.sum
+    end
   end
 
   # FIXME: should series have their own language?
