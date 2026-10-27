@@ -68,13 +68,6 @@ describe CommentsController do
         end
       end
     end
-
-    context "when no commentable is given" do
-      it "redirects back with a flash error" do
-        get :show_comments
-        it_redirects_to_with_error("/where_i_came_from", "What did you want to show comments on?")
-      end
-    end
   end
 
   describe "GET #hide_comments" do
@@ -504,6 +497,20 @@ describe CommentsController do
       let(:edit_error_message) { "Sorry, you can't comment on a draft." }
       let(:work) { comment.ultimate_parent }
       before { work.update_column(:posted, false) }
+    end
+  end
+
+  context "when no commentable is given" do
+    {
+      new: "What did you want to comment on?",
+      create: "What did you want to comment on?",
+      show_comments: "What did you want to show comments on?",
+      add_comment_reply: "What did you want to reply to?"
+    }.each do |action, error_message|
+      it "GET ##{action} redirects back with a flash error" do
+        get action
+        it_redirects_to_with_error("/where_i_came_from", error_message)
+      end
     end
   end
 end
