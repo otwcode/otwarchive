@@ -1228,6 +1228,12 @@ en:
         current_html: For current updates on AO3 performance or downtime, please check our %{status_page_link} and follow %{bluesky_link} on Bluesky or %{tumblr_link} on Tumblr.
         status_page: status page
         tumblr: ao3org
+  generated_downloads:
+    show:
+      check_status: Check download status
+      failed: We were not able to prepare this download. Please try again.
+      heading: Preparing download
+      processing: Your file is being prepared. This page will download it automatically when it is ready.
   help:
     chapters_title:
       description: You can add a chapter title, but it's not required.
