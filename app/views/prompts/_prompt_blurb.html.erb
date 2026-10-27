@@ -6,9 +6,9 @@
         <%= link_to prompt.title, collection_prompt_path(prompt.collection, prompt) %>
       <% else %>
         <% if prompt.class.to_s == "Offer" %>
-          <%= link_to t(".header.offer_title", index: (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
+          <%= link_to t(".header.offer_title", index: (index ||= false) ? " #{index + 1}" : ""), collection_prompt_path(prompt.collection, prompt) %>
         <% else %>
-          <%= link_to t(".header.request_title", index: (index ||= false) ? " #{index+1}" : ''), collection_prompt_path(prompt.collection, prompt) %>
+          <%= link_to t(".header.request_title", index: (index ||= false) ? " #{index + 1}" : ""), collection_prompt_path(prompt.collection, prompt) %>
         <% end %>
       <% end %>
       <% if prompt.anonymous? %>
@@ -44,7 +44,7 @@
     <% unless any_types.empty? %>
       <%# This still isn't fully i18n'd since the inserted tag types are always English. %>
       <%= any_types.map { |type| content_tag(:li, t(".body.any_tag_type", tag_type: tag_type_label_name(type)), class: "tag") }
-                   .join("\n").html_safe %>
+            .join("\n").html_safe %>
     <% end %>
   </ul>
   <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
@@ -63,21 +63,21 @@
 
   <% unless prompt.url.blank? %>
     <p>
-      <% url_label = prompt.collection.challenge.request_url_label %><%= url_label.blank? ? t(".body.url") : url_label %>
+      <% url_label = prompt.collection.challenge.request_url_label %><%= url_label.presence || t(".body.url") %>
       <%= link_to(prompt.url, prompt.url) %>
     </p>
   <% end %>
 
-  <%= render "prompts/prompt_controls", :challenge_signup => prompt.challenge_signup, :prompt => prompt %>
+  <%= render "prompts/prompt_controls", challenge_signup: prompt.challenge_signup, prompt: prompt %>
 
   <% unless (suppress_claims ||= false) %>
     <% # if prompt has been claimed list by whom %>
     <% unless prompt.unfulfilled_claims.empty? %>
       <div class="claims listbox group">
-        <h5 class="heading"><%= t(".footer.claimed_by")%></h5>
+        <h5 class="heading"><%= t(".footer.claimed_by") %></h5>
         <ul class="commas index group">
           <% if prompt.collection.anonymous? %>
-            <%= t(".footer.anonymous_claimant_count", :count => prompt.unfulfilled_claims.count) %>
+            <%= t(".footer.anonymous_claimant_count", count: prompt.unfulfilled_claims.count) %>
           <% else %>
             <%= User.for_claims(prompt.unfulfilled_claims.pluck(:id)).pluck(:login).map {|user| content_tag(:li, user)}.join("\n").html_safe %>
           <% end %>
@@ -88,7 +88,7 @@
     <% # if prompt has been fulfilled list works %>
     <% unless prompt.unfulfilled? || (guest? && prompt.fulfilled_claims_visible_to_all.empty?) %>
       <div class="work listbox group">
-        <h5 class="heading"><%= t(".footer.fulfilled_by")%></h5>
+        <h5 class="heading"><%= t(".footer.fulfilled_by") %></h5>
         <ul class="index group">
           <% prompt.fulfilled_claims.map(&:creation).each do |creation| %>
             <% if creation.is_a?(Work) %>

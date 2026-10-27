@@ -72,9 +72,9 @@ describe PromptsController do
 
         it "redirects and errors if the user does not own the sign-up or the collection" do
           fake_login
-          get :show, params: { id: signup, collection_id: collection.name }
+          get :show, params: { id: prompt.id, collection_id: collection.name }
           it_redirects_to_with_error(collection_path(collection),
-                                    "Sorry, you don't have permission to access the page you were trying to reach.")
+                                     "Sorry, you don't have permission to access the page you were trying to reach.")
         end
       end
     end

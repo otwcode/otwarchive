@@ -4,7 +4,7 @@ class ChallengeRequestsController < ApplicationController
 
   def check_visibility
     unless @collection
-      flash[:error] = t(".collection_not_found")
+      flash[:error] = t("challenge_requests.error.collection_not_found")
       redirect_to "/" and return
     end
 
@@ -13,7 +13,7 @@ class ChallengeRequestsController < ApplicationController
 
     return admin_only_access_denied if logged_in_as_admin?
 
-    flash[:error] = t(".access_denied_requests")
+    flash[:error] = t("challenge_requests.error.access_denied_requests")
     redirect_to collection_path(@collection) and return
   end
 

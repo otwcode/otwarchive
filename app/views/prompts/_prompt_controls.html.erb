@@ -13,7 +13,7 @@
   <% end %>
 
   <% if logged_in? && (collection.challenge_type == "PromptMeme" || challenge.signup_open || collection.user_is_maintainer?(current_user)) %>
-    <% # The edit links should show up if signups are open and the current user owns the prompt, OR if the challenge is a gift exchange and signups are closed and the current user is the maintainer %>
+    <%# The edit links should show up if signups are open and the current user owns the prompt, OR if the challenge is a gift exchange and signups are closed and the current user is the maintainer %>
     <% if (challenge.signup_open && user == current_user) || (collection.challenge_type == "GiftExchange" && !challenge.signup_open && collection.user_is_maintainer?(current_user)) %>
       <li>
         <%= link_to(t(".navigation.edit_signup"), edit_collection_signup_path(collection, challenge_signup)) %>
@@ -27,17 +27,17 @@
     <% if ((challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user))) && prompt.can_delete? %>
     <li>
       <%= link_to t(".navigation.delete_prompt"),
-        collection_prompt_path(collection, prompt),
-        data: { confirm: t(".confirm.delete_prompt") },
-        method: :delete %>
+            collection_prompt_path(collection, prompt),
+            data: { confirm: t(".confirm.delete_prompt") },
+            method: :delete %>
     </li>
     <% end %>
     <% # Moderators should be able to delete entire sign-ups from the /requests page in PromptMemes.  %>
     <% if collection.user_is_maintainer?(current_user) && collection.challenge_type == "PromptMeme" %>
       <li><%= link_to t(".navigation.delete_signup"),
-                  collection_signup_path(collection, challenge_signup),
-                  data: { confirm: t(".confirm.delete_signup") },
-                  method: :delete %>
+                collection_signup_path(collection, challenge_signup),
+                data: { confirm: t(".confirm.delete_signup") },
+                method: :delete %>
       </li>
     <% end %>
 

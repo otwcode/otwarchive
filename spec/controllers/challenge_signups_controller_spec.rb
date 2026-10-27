@@ -58,7 +58,7 @@ describe ChallengeSignupsController do
         fake_login
         get :show, params: { id: invisible_signup, collection_id: invisible_collection.name }
         it_redirects_to_with_error(collection_path(invisible_collection),
-                                  "You are not allowed to access that sign-up.")
+                                   "You are not allowed to access that sign-up.")
       end
     end
 

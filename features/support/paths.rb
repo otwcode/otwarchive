@@ -200,8 +200,8 @@ module NavigationHelpers
     when /^the "(.*)" claims page for the current user$/       # e.g. when I go to the "Collection name" claims page for the current user
       collection_claims_path(Collection.find_by(title: Regexp.last_match(1)), for_user: true)
     when /^the "(.*)" signup page for the user "(.*)"$/
-      collection = Collection.find_by(title: $1)
-      user = User.find_by(login: $2)
+      collection = Collection.find_by(title: Regexp.last_match(1))
+      user = User.find_by(login: Regexp.last_match(2))
       signup = ChallengeSignup.in_collection(collection).by_user(user).first
       collection_signup_path(collection, signup)
     when /^"(.*)" gift exchange edit page$/i

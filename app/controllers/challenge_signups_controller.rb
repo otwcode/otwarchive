@@ -81,25 +81,19 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def check_signup_visible
-    if @collection.challenge_type == "GiftExchange"
-      # gift exchange: can view if requests summary visible, or if you're the owner or a mod
-      return if @challenge.requests_summary_visible? || @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user)
+    # always visible if you own the signup, are a challenge mod, or are a privileged admin
+    return if @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user) || privileged_collection_admin?
 
-      flash[:error] = t(".access_denied_signup")
-      redirect_to collection_path(@collection)
-    else
-      # prompt meme: can view if not all prompts are anonymous, or if you're the owner or a mod
-      return if @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user)
+    # gift exchange: can view if requests summary visible
+    return if @collection.challenge_type == "GiftExchange" && @challenge.requests_summary_visible?
 
-      # TODO: seems somewhat inefficient to check every time, let me know if there are better methods (like storing it as an attribute of the signup?)
-      @challenge_signup.requests.each do |request|
-        return unless request.anonymous?
-      end
+    # prompt meme: can view if not all prompts on the signup are anonymous
+    # TODO: seems somewhat inefficient to check every time, let me know if there are better methods (like storing it as an attribute of the signup?)
+    return if @collection.challenge_type == "PromptMeme" && @challenge_signup.requests.any? { |request| !request.anonymous? }
 
-      # we haven't hit the return statement, so all prompts must be anonymous
-      flash[:error] = t(".access_denied_signup")
-      redirect_to collection_path(@collection)
-    end
+    # the method still hasn't returned, so the signup must not be visible
+    flash[:error] = t("challenge_signups.error.access_denied_signup")
+    redirect_to collection_path(@collection)
   end
 
   #### ACTIONS
