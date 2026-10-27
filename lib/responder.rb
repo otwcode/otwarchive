@@ -13,9 +13,10 @@ module Responder
       work = self.commentable
     elsif self.respond_to?(:bookmarkable)
       work = self.bookmarkable
+    elsif self.respond_to?(:work)
+      work = self.work
     end
 
     work.is_a?(Work) ? work : nil
   end
 end
-

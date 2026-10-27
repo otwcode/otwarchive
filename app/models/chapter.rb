@@ -5,11 +5,13 @@ class Chapter < ApplicationRecord
   include WorkChapterCountCaching
   include CreationNotifier
   include Creatable
+  include Responder
 
   belongs_to :work, inverse_of: :chapters
   # acts_as_list scope: 'work_id = #{work_id}'
 
   acts_as_commentable
+  has_many :comments, as: :commentable # Handled in #delete_all_comments
 
   validates :title, length: { maximum: ArchiveConfig.TITLE_MAX, allow_blank: true }
 
@@ -44,7 +46,13 @@ class Chapter < ApplicationRecord
   scope :in_order, -> { order(:position) }
   scope :posted, -> { where(posted: true) }
 
+  before_destroy :fix_positions_before_destroy, :invalidate_chapter_count, :delete_all_comments
+  after_destroy :update_work_stats
+
   after_save :fix_positions
+  after_save :invalidate_chapter_count, if: proc { |chapter| chapter.saved_change_to_posted? }
+  after_commit :update_series_index
+
   def fix_positions
     return unless work&.persisted?
 
@@ -76,10 +84,6 @@ class Chapter < ApplicationRecord
     work.expire_caches
   end
 
-  after_save :invalidate_chapter_count,
-    if: Proc.new { |chapter| chapter.saved_change_to_posted? }
-
-  before_destroy :fix_positions_before_destroy, :invalidate_chapter_count
   def fix_positions_before_destroy
     if work&.persisted? && position
       chapters = work.chapters.where(["position > ?", position])
@@ -87,7 +91,13 @@ class Chapter < ApplicationRecord
     end
   end
 
-  after_commit :update_series_index
+  def delete_all_comments
+    inbox_comments = InboxComment.where(feedback_comment_id: total_comments.pluck(:id))
+
+    total_comments.in_batches.delete_all
+    inbox_comments.in_batches.delete_all
+  end
+
   def update_series_index
     return unless work&.series.present? && should_reindex_series?
     work.serial_works.each(&:update_series_index)
