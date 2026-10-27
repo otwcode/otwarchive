@@ -54,7 +54,6 @@ class Collection < ApplicationRecord
 
   has_many :participants, through: :collection_participants, source: :pseud
   has_many :users, through: :participants, source: :user
-  has_many :invited, -> { where(collection_participants: { participant_role: CollectionParticipant::INVITED }) }, through: :collection_participants, source: :pseud
   has_many :owners, -> { where(collection_participants: { participant_role: CollectionParticipant::OWNER }) }, through: :collection_participants, source: :pseud
   has_many :moderators, -> { where(collection_participants: { participant_role: CollectionParticipant::MODERATOR }) }, through: :collection_participants, source: :pseud
   has_many :members, -> { where(collection_participants: { participant_role: CollectionParticipant::MEMBER }) }, through: :collection_participants, source: :pseud
