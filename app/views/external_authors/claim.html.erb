@@ -42,9 +42,7 @@
 <div class="work listbox group">
   <h3 class="heading"><%= t(".my_imported", count: works_count) %></h3>
   <ul id="imported_works" class="index group">
-    <% @external_author.works.each do |work| %>
-      <%= render "works/work_blurb", work: work %>
-    <% end %>
+    <%= render WorkBlurbPresenter.new(@external_author.works) %>
   </ul>
   <p class="actions">
     <% if logged_in? %>

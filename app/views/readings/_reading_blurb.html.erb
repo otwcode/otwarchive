@@ -10,7 +10,7 @@
 
   <% unless reading.work.nil? %>
 
-    <%= render 'works/work_module', work: reading.work %>
+    <%= render WorkBlurbPresenter.new(reading.work, blurb: false) %>
 
   <% end %>
 

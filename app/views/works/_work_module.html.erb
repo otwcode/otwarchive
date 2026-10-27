@@ -1,7 +1,4 @@
 <% # expects "work" %>
-<% if work.unrevealed? && !is_author_of?(work) && !(User.current_user.is_a?(Admin) && current_page?(controller: "works", action: "collected")) %>
-  <%= render "works/mystery_blurb", item: work %>
-<% else %>
   <!--title, author, fandom-->
   <div class="<% if work.anonymous? %>anonymous <% end %>header module">
     <!-- updated_at=<%= work.updated_at.to_i.to_s %> -->
@@ -116,5 +113,3 @@
 <% #### END CACHE stats #### %>
 
   </dl>
-
-<% end %>
