@@ -79,7 +79,7 @@ class CollectionItemsController < ApplicationController
       flash[:error] = ts("What did you want to add to a collection?")
       redirect_back_or_to root_path and return
     end
-    if !current_user.archivist && @item.respond_to?(:allow_collection_invitation?) && !@item.allow_collection_invitation?
+    if !current_user.can_force_add_to_collections? && @item.respond_to?(:allow_collection_invitation?) && !@item.allow_collection_invitation?
       flash[:error] = t(".invitation_not_sent", default: "This item could not be invited.")
       redirect_to(@item) and return
     end
