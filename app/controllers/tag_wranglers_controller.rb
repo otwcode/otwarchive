@@ -36,7 +36,7 @@ class TagWranglersController < ApplicationController
     authorize :wrangling if logged_in_as_admin?
 
     @wrangler = User.find_by!(login: params[:id])
-    @page_subtitle = @wrangler.login
+    @page_subtitle = t(".page_title", username: @wrangler.login)
     @fandoms = @wrangler.fandoms.by_name
     @counts = tag_counts_per_category
   end
