@@ -1,9 +1,10 @@
 shared_examples "an action only authorized admins can access" do |authorized_roles:|
-  before { fake_login_admin(admin) }
+  before(:all) { @admin = create(:admin, roles: []) }
+  after(:all) { @admin.destroy! }
+
+  before { fake_login_admin(@admin) }
 
   context "with no role" do
-    let(:admin) { create(:admin, roles: []) }
-
     it "redirects with an error" do
       subject
       it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
@@ -12,9 +13,9 @@ shared_examples "an action only authorized admins can access" do |authorized_rol
 
   (Admin::VALID_ROLES - authorized_roles).each do |role|
     context "with role #{role}" do
-      let(:admin) { create(:admin, roles: [role]) }
-
       it "redirects with an error" do
+        @admin.update!(roles: [role])
+
         subject
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
@@ -23,9 +24,9 @@ shared_examples "an action only authorized admins can access" do |authorized_rol
 
   authorized_roles.each do |role|
     context "with role #{role}" do
-      let(:admin) { create(:admin, roles: [role]) }
-
       it "succeeds" do
+        @admin.update!(roles: [role])
+
         subject
         success
       end
