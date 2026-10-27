@@ -246,6 +246,10 @@ Given "comment moderation on the admin post {string} is enabled" do |title|
   admin_post.update_attribute(:moderated_commenting_enabled, true)
 end
 
+When "there is/are {int} admin post(s) per page" do |amount|
+  allow_any_instance_of(ApplicationController).to receive(:pagy_get_limit).and_return(amount)
+end
+
 Given "an abuse ticket ID exists" do
   ticket = {
     "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID,
