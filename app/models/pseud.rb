@@ -457,12 +457,8 @@ class Pseud < ApplicationRecord
   ## SEARCH #######################
   #################################
 
-  def collection_ids
-    collections.pluck(:id)
-  end
-
   def document_json
-    PseudIndexer.new({}).document(self)
+    PseudIndexer.new([id]).document(self)
   end
 
   def should_reindex_creations?
