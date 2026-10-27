@@ -1,7 +1,7 @@
 @collections
 Feature: Basic collection navigation
 
-  @disable_caching
+  @disable_caching @elasticsearch
   Scenario: Create a collection and check the links
   When I am logged in as "mod" with password "password"
     And I go to the collections page

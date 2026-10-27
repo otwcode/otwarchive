@@ -23,6 +23,7 @@ Feature: Tag wrangling
     When I log out
     Then I should see "Sorry, you don't have permission"
 
+  @elasticsearch
   Scenario Outline: Tag wrangler navigation/sidebar
     Given the tag wrangling setup
       And I am logged in as a tag wrangler
@@ -357,6 +358,7 @@ Feature: Tag wrangling
       But I should not see "Oldest"
       And I should not see "Middle"
 
+  @elasticsearch
   Scenario: No call to Redis when no action is taken
     Given the tag wrangling setup
       And I am logged in as a tag wrangler

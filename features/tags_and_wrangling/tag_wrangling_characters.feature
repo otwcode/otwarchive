@@ -1,4 +1,4 @@
-@tags @users @tag_wrangling @search
+@tags @users @tag_wrangling
 
 Feature: Tag Wrangling - Characters
 
