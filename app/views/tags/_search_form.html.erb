@@ -3,7 +3,7 @@
     <dl>
       <dt>
         <%= f.label :name, t(".tag_name") %>
-        <%= link_to_help "tag-search-text-help" %>
+        <%= link_to_help_modal(help_tags_search_text_path, t(".tags_search_text_help_title")) %>
       </dt>
       <dd>
         <%= f.text_field :name %>
