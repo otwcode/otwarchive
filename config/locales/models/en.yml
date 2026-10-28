@@ -101,8 +101,9 @@ en:
               format: "%{message}"
               invalid_permissions: Comment permissions are invalid.
             translated_post_id:
-              must_be_posted_first: cannot be posted before the original post
-              translation_already_exists: already has a translation in this language
+              format: "%{message}"
+              must_be_posted_first: Translated post cannot be posted before the original post
+              translation_already_exists: Admin post already has a translation in this language.
         block:
           attributes:
             blocked:

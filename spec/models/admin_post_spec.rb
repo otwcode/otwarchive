@@ -59,7 +59,7 @@ describe AdminPost do
       drafted_post = travel_to(ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago) do
         create(:admin_post, :draft)
       end
-      drafted_post.update(posted: true)
+      drafted_post.update!(posted: true)
 
       AdminPost.disable_old_post_comments
       expect(drafted_post.reload.disable_all_comments?).to be(false)
@@ -84,7 +84,7 @@ describe AdminPost do
     let(:translation) do
       build(:admin_post, translated_post: admin_post, language: language)
     end
-    let(:message) { "already has a translation in this language" }
+    let(:message) { "Admin post already has a translation in this language." }
 
     context "when the original post has a posted translation in the language" do
       before do
