@@ -103,6 +103,9 @@ en:
             content:
               too_long: cannot be more than %{count} characters long.
               too_short: must be at least %{count} characters long.
+            title:
+              too_long: must be less than %{count} characters long.
+              too_short: must be at least %{count} characters long.
             translated_post_id:
               does_not_exist: Translated post does not exist
               format: "%{message}"
