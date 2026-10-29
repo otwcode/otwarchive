@@ -107,8 +107,18 @@ en:
             comment_permissions:
               format: "%{message}"
               invalid_permissions: Comment permissions are invalid.
+            content:
+              too_long: cannot be more than %{count} characters long.
+              too_short: must be at least %{count} characters long.
+            title:
+              too_long: must be less than %{count} characters long.
+              too_short: must be at least %{count} characters long.
             translated_post_id:
-              must_be_posted_first: cannot be posted before the original post
+              does_not_exist: Translated post does not exist
+              format: "%{message}"
+              must_be_posted_first: Translated post cannot be posted before the original post
+              same_language_as_original: Translated post cannot be same language as original post
+              translation_already_exists: Admin post already has a translation in this language.
         block:
           attributes:
             blocked:

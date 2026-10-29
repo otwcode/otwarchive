@@ -59,7 +59,7 @@ describe AdminPost do
       drafted_post = travel_to(ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago) do
         create(:admin_post, :draft)
       end
-      drafted_post.update(posted: true)
+      drafted_post.update!(posted: true)
 
       AdminPost.disable_old_post_comments
       expect(drafted_post.reload.disable_all_comments?).to be(false)
@@ -75,6 +75,61 @@ describe AdminPost do
 
       expect(translation.valid?).to be_falsey
       expect(translation.errors).to be_added(:translated_post_id, :must_be_posted_first)
+    end
+  end
+
+  describe "#translated_post_id" do
+    let(:admin_post) { create(:admin_post) }
+    let(:language) { create(:language) }
+    let(:translation) do
+      build(:admin_post, translated_post: admin_post, language: language)
+    end
+    let(:message) { "Admin post already has a translation in this language." }
+
+    context "when the original post has a posted translation in the language" do
+      before do
+        create(:admin_post, translated_post: admin_post, language: language)
+      end
+
+      it "adds an error to the translated post" do
+        expect(translation).to be_invalid
+        expect(translation.errors[:translated_post_id]).to include(message)
+      end
+    end
+
+    context "when the original post has a draft translation in the language" do
+      before do
+        create(:admin_post, :draft,
+               translated_post: admin_post, language: language)
+      end
+
+      it "adds an error to the translated post" do
+        expect(translation).to be_invalid
+        expect(translation.errors[:translated_post_id]).to include(message)
+      end
+    end
+
+    context "when another post has a translation in that language" do
+      before do
+        other_post = create(:admin_post)
+        create(:admin_post, translated_post: other_post, language: language)
+      end
+
+      it "does not add an error" do
+        expect(translation).to be_valid
+      end
+    end
+
+    context "when updating the existing translation" do
+      let!(:existing) do
+        create(:admin_post, translated_post: admin_post, language: language)
+      end
+
+      it "does not add an error" do
+        existing.title = "Updated translation title"
+
+        expect(existing).to be_valid
+      end
     end
   end
 
