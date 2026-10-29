@@ -27,8 +27,8 @@ class AdminPost < ApplicationRecord
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
 
-  validates_presence_of :content
-  validates :content, length: { minimum: ArchiveConfig.CONTENT_MIN,
+  validates :content, presence: true,
+                      length: { minimum: ArchiveConfig.CONTENT_MIN,
                                 maximum: ArchiveConfig.CONTENT_MAX }
 
   # rubocop:disable Rails/UniqueValidationWithoutIndex
