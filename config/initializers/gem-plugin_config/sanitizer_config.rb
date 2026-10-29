@@ -75,6 +75,8 @@ class Sanitize
       host = Addressable::URI.parse(env[:node]["href"]).host
 
       env[:node]["href"] = "" if host&.start_with?("[") && !host&.end_with?("]")
+    rescue Addressable::URI::InvalidURIError
+      env[:node]["href"] = ""
     end
   end
 end
