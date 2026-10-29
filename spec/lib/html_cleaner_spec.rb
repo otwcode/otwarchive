@@ -444,6 +444,18 @@ describe HtmlCleaner do
           end
         end
 
+        context "when given an <a> tag with an invalid href" do
+          it "should clean up an invalid href while preserving the link text" do
+            result = sanitize_value(field, "<a href='https://[https://test.archiveofourown.org/users/testy]' rel='nofollow'>testy</a>")
+            expect(result).to eq("<p><a href=\"\" rel=\"nofollow\">testy</a></p>")
+          end
+
+          it "should not clean up a valid href" do 
+            result = sanitize_value(field, "<a href='https://test.archiveofourown.org/users/testy' rel='nofollow'>testy</a>")
+            expect(result).to eq("<p><a href=\"https://test.archiveofourown.org/users/testy\" rel=\"nofollow\">testy</a></p>")
+          end
+        end
+
         # These are from https://github.com/rgrove/sanitize/commit/a11498de9e283cd457b35ee252983662f7452aa9
         it 'should not preserve the content of removed `math` elements' do
           content = sanitize_value(field, '<math>hello! <script>alert(0)</script></math>')

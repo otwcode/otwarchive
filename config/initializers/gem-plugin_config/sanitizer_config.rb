@@ -67,5 +67,14 @@ class Sanitize
     rescue URI::InvalidURIError
       # do nothing, the sanitizer will handle it
     end
+
+    # On a elements, blank out hrefs that aren't valid URLs
+    INVALID_HREF_TRANSFORMER = lambda do |env|
+      return unless env[:node_name] == "a" && env[:node]["href"]
+      
+      URI.parse(env[:node]["href"])
+    rescue URI::InvalidURIError
+      env[:node]["href"] = ""
+    end
   end
 end
