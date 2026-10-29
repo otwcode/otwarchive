@@ -73,7 +73,7 @@ Feature: Admin Actions to Post News
       And I am logged in as a "translation" admin
     When I make a translation of an admin post
     Then I should see "Sorry! We couldn't save this admin post because:"
-      And I should see "Translated post already has a translation in this language"
+      And I should see "Admin post already has a translation in this language."
 
   Scenario: Make a translation of an admin post that doesn't exist
     Given basic languages

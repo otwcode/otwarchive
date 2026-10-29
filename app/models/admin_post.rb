@@ -99,7 +99,7 @@ class AdminPost < ApplicationRecord
 
   def translated_post_must_exist
     if translated_post_id.present? && AdminPost.find_by(id: translated_post_id).nil?
-      errors.add(:translated_post_id, "does not exist")
+      errors.add(:translated_post_id, :does_not_exist)
     end
   end
 
@@ -107,7 +107,7 @@ class AdminPost < ApplicationRecord
     return if translated_post.blank?
     return unless translated_post.language == language
 
-    errors.add(:translated_post_id, "cannot be same language as original post")
+    errors.add(:translated_post_id, :same_language_as_original)
   end
 
   def translated_post_must_be_posted_first
