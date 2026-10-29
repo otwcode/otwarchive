@@ -450,9 +450,14 @@ describe HtmlCleaner do
             expect(result).to eq("<p><a href=\"\" rel=\"nofollow\">testy</a></p>")
           end
 
-          it "should not clean up a valid href" do 
+          it "should not clean up a valid href" do
             result = sanitize_value(field, "<a href='https://test.archiveofourown.org/users/testy' rel='nofollow'>testy</a>")
             expect(result).to eq("<p><a href=\"https://test.archiveofourown.org/users/testy\" rel=\"nofollow\">testy</a></p>")
+          end
+
+          it "should not clean up a valid href with non-ASCII characters" do
+            result = sanitize_value(field, "<a href='https://test.archiveofourown.org/users/café' rel='nofollow'>testy</a>")
+            expect(result).to eq("<p><a href=\"https://test.archiveofourown.org/users/café\" rel=\"nofollow\">testy</a></p>")
           end
         end
 

@@ -71,10 +71,10 @@ class Sanitize
     # On a elements, blank out hrefs that aren't valid URLs
     INVALID_HREF_TRANSFORMER = lambda do |env|
       return unless env[:node_name] == "a" && env[:node]["href"]
-      
-      URI.parse(env[:node]["href"])
-    rescue URI::InvalidURIError
-      env[:node]["href"] = ""
+
+      host = Addressable::URI.parse(env[:node]["href"]).host
+
+      env[:node]["href"] = "" if host&.start_with?("[") && !host&.end_with?("]")
     end
   end
 end
