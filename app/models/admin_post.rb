@@ -31,8 +31,7 @@ class AdminPost < ApplicationRecord
   validates_length_of :content, minimum: ArchiveConfig.CONTENT_MIN,
     too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.CONTENT_MIN)
 
-  validates_length_of :content, maximum: ArchiveConfig.CONTENT_MAX,
-    too_long: ts("cannot be more than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
+  validates_length_of :content, maximum: ArchiveConfig.CONTENT_MAX
 
   # rubocop:disable Rails/UniqueValidationWithoutIndex
   validates :translated_post_id,
