@@ -104,6 +104,8 @@ Feature: Gift Exchange Challenge
       And I am logged in as "myname1"
     When I sign up for "Awesome Gift Exchange" with combination A
     Then I should see "Sign-up was successfully created"
+      And I should see "Edit Request"
+      And I should see "Edit Offer"
     # Invalid signup should warn the user
     When I create an invalid signup in the gift exchange "Awesome Gift Exchange"
       And I reload the page
