@@ -444,7 +444,7 @@ When /^I edit the first prompt$/ do
   step %{I follow "Prompts ("}
   # The 'Edit Sign-up' and 'Edit Request' buttons were removed for mods in
   # Prompt Meme challenges
-  #step %{I follow "Edit Request"}
+  # step %{I follow "Edit Request"}
 end
 
 Then /^I should see prompt meme options$/ do

@@ -148,7 +148,7 @@ end
 When "I sign up for {string} with two offers and two requests" do |title|
   collection = Collection.find_by(title: title)
   collection.challenge.update!(offers_num_allowed: 2, requests_num_allowed: 2)
-  # Without JavaScript, the number of prompts on the form is set by params
+  # Sets the number of prompts on the form, as the non-JavaScript form does
   visit new_collection_signup_path(collection, num_offers: 2, num_requests: 2)
   (1..4).each do |n|
     step %{I check the #{n.ordinalize} checkbox with the value "Stargate Atlantis"}

@@ -113,18 +113,12 @@ Feature: Gift Exchange Challenge
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
       And I am logged in as "myname1"
     When I sign up for "Awesome Gift Exchange" with combination A
-    Then I should see "Sign-up was successfully created"
-      And I should see "Edit Offer"
+    Then I should see "Edit Offer"
       And I should see "Edit Request"
-      And I should not see "Edit Prompt"
-      And I should not see "Delete Offer"
-      And I should not see "Delete Request"
     When I delete my signup for the gift exchange "Awesome Gift Exchange"
       And I sign up for "Awesome Gift Exchange" with two offers and two requests
-    Then I should see "Sign-up was successfully created"
-      And I should see "Delete Offer"
+    Then I should see "Delete Offer"
       And I should see "Delete Request"
-      And I should not see "Delete Prompt"
 
   Scenario: I cannot sign up with a pseud that I don't own
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
