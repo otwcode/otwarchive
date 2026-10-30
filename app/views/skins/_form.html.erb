@@ -24,9 +24,6 @@
     <dt><%= f.label :description, t(".description") %></dt>
     <dd><%= f.text_field :description %></dd>
 
-    <dt><%= f.label :icon, t(".icon") %></dt>
-    <dd><%= f.file_field :icon %></dd>
-
     <% if @current_user&.official %>
       <dt><%= f.label :public, t(".public") %></dt>
       <dd><%= f.check_box :public %></dd>

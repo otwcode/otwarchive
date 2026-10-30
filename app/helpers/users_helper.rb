@@ -20,25 +20,9 @@ module UsersHelper
     user.pseuds.collect(&:name).join(', ')
   end
 
-  # Determine which icon to show on user pages
-  def standard_icon(pseud = nil)
-    return "/images/skins/iconsets/default/icon_user.png" unless pseud&.icon&.attached?
-
-    rails_blob_url(pseud.icon.variant(:standard))
-  end
-
-  # no alt text if there isn't specific alt text
-  def icon_display(user = nil, pseud = nil)
-    path = user ? (pseud ? user_pseud_path(pseud.user, pseud) : user_path(user)) : nil
-    pseud ||= user.default_pseud if user
-    icon = standard_icon(pseud)
-    alt_text = pseud.try(:icon_alt_text) || nil
-
-    if path
-      link_to image_tag(icon, alt: alt_text, class: 'icon', skip_pipeline: true), path
-    else
-      image_tag(icon, class: 'icon', skip_pipeline: true)
-    end
+  def icon_display
+    icon = "/images/skins/iconsets/default/icon_user.png"
+    image_tag(icon, class: "icon", alt: "Generic pseud icon", skip_pipeline: true)
   end
 
   # Prints coauthors

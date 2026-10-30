@@ -23,7 +23,7 @@ describe Admin, :ready do
     expect { create(:admin, email: "test@example.com") }
       .to change { ActionMailer::Base.deliveries.count }
       .by(1)
-    expect(ActionMailer::Base.deliveries.last.recipients)
+    expect(ActionMailer::Base.deliveries.last.to)
       .to eq(["test@example.com"])
     expect(ActionMailer::Base.deliveries.last.subject)
       .to eq("[AO3] Your AO3 admin account")

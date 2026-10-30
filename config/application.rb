@@ -1,6 +1,13 @@
 require_relative "boot"
 
-require "rails/all"
+require "rails"
+require "active_model/railtie"
+require "active_job/railtie"
+require "active_record/railtie"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "action_view/railtie"
+require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -138,18 +145,6 @@ module Otwarchive
                                                   authentication: ArchiveConfig.SMTP_AUTHENTICATION
                                                 })
     end
-
-    # Disable ActiveStorage things that we don't need and can hit the DB hard
-    config.active_storage.analyzers = []
-    config.active_storage.previewers = []
-
-    # Set ActiveStorage queue name
-    config.active_storage.queues.mirror = :active_storage
-    config.active_storage.queues.preview_image = :active_storage
-    config.active_storage.queues.purge = :active_storage
-    config.active_storage.queues.transform = :active_storage
-
-    config.active_storage.web_image_content_types = %w[image/png image/jpeg image/gif]
 
     # Use secret from archive config
     config.secret_key_base = ArchiveConfig.SESSION_SECRET

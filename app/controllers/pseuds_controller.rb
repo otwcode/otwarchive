@@ -12,7 +12,7 @@ class PseudsController < ApplicationController
   # GET /pseuds
   # GET /pseuds.xml
   def index
-    @pseuds = @user.pseuds.with_attached_icon.alphabetical.paginate(page: params[:page])
+    @pseuds = @user.pseuds.alphabetical.paginate(page: params[:page])
     @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
     @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
     @pseuds_with_works = Pseud.has_works_for(@pseuds.collect(&:id)) if @user == current_user

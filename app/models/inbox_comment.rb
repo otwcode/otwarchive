@@ -22,8 +22,7 @@ class InboxComment < ApplicationRecord
     includes(
       feedback_comment: [
         { pseud: [
-          { user: %i[roles block_of_current_user] },
-          *Pseud.with_attached_icon.includes_values
+          { user: %i[roles block_of_current_user] }
         ] },
         { parent: { work: { users: :block_of_current_user } } }
       ]
@@ -50,8 +49,7 @@ class InboxComment < ApplicationRecord
       .includes(
         feedback_comment: [
           { pseud: [
-            { user: %i[roles block_of_current_user] },
-            *Pseud.with_attached_icon.includes_values
+            { user: %i[roles block_of_current_user] }
           ] },
           { parent: { work: { users: :block_of_current_user } } }
         ]

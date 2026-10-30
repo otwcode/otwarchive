@@ -22,22 +22,22 @@ class SkinsController < ApplicationController
         redirect_to skins_path and return
       end
       if is_work_skin
-        @skins = @user.work_skins.sort_by_recent.includes(:author).with_attached_icon
+        @skins = @user.work_skins.sort_by_recent.includes(:author)
         @page_subtitle = t(".work_page_title", username: @user.login)
       else
-        @skins = @user.skins.site_skins.sort_by_recent.includes(:author).with_attached_icon
+        @skins = @user.skins.site_skins.sort_by_recent.includes(:author)
         @page_subtitle = t(".site_page_title", username: @user.login)
       end
     else
       if is_work_skin
-        @skins = WorkSkin.approved_skins.sort_by_recent_featured.includes(:author).with_attached_icon
+        @skins = WorkSkin.approved_skins.sort_by_recent_featured.includes(:author)
         @title = ts('Public Work Skins')
         @page_subtitle = t(".public_work_page_title")
       else
         @skins = if logged_in?
-                   Skin.approved_skins.usable.site_skins.sort_by_recent_featured.with_attached_icon
+                   Skin.approved_skins.usable.site_skins.sort_by_recent_featured
                  else
-                   Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured.with_attached_icon
+                   Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured
                  end
         @title = ts('Public Site Skins')
         @page_subtitle = t(".public_site_page_title")
@@ -192,7 +192,7 @@ class SkinsController < ApplicationController
     allowed_attributes = [
       :title, :description, :css, :role, :ie_condition, :unusable, :font,
       :base_em, :margin, :paragraph_margin, :background_color,
-      :foreground_color, :headercolor, :accent_color, :icon,
+      :foreground_color, :headercolor, :accent_color,
       media: [],
       skin_parents_attributes: [
         :id, :position, :parent_skin_id, :parent_skin_title, :_destroy

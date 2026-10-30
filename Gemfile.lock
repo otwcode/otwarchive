@@ -339,9 +339,6 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.8, >= 1.8.1)
       terminal-table (>= 1.5.1)
-    image_processing (1.14.0)
-      mini_magick (>= 4.9.5, < 6)
-      ruby-vips (>= 2.0.17, < 3)
     io-console (0.8.1)
     irb (1.15.2)
       pp (>= 0.6.0)
@@ -386,8 +383,6 @@ GEM
     mime-types (3.5.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2024.0206)
-    mini_magick (5.3.1)
-      logger
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     minitest (5.27.0)
@@ -597,8 +592,6 @@ GEM
     rubocop-rspec (2.6.0)
       rubocop (~> 1.19)
     ruby-progressbar (1.13.0)
-    ruby-vips (2.2.1)
-      ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     rubyntlm (0.6.3)
     rubyzip (3.7.0)
@@ -747,7 +740,6 @@ DEPENDENCIES
   htmlentities
   httparty
   i18n-tasks
-  image_processing (~> 1.14)
   kgio (= 2.10.0)
   launchy
   lograge

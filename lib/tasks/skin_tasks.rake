@@ -105,7 +105,6 @@ namespace :skins do
           puts "No preview filename #{preview_filename} found for #{title}"
           preview_filename = "#{dir}/previews/default_preview.png"
         end
-        File.open(preview_filename, 'rb') {|preview_file| skin.icon = preview_file}
       else
         puts "No skin title found for skin #{skin_content}"
         next

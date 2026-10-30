@@ -37,13 +37,13 @@
           <%= time_in_zone(single_comment.created_at) %>
         </span>
       </h4>
-      <% cache([single_comment, single_comment.comment_owner, "body", image_safety_mode_cache_key(single_comment)], expires_in: 1.week) do %>
+      <% cache([single_comment, single_comment.comment_owner, "v2-body", image_safety_mode_cache_key(single_comment)], expires_in: 1.week) do %>
         <div class="icon">
           <% if !single_comment.pseud.nil? %>
             <% if single_comment.by_anonymous_creator? %>
               <span class="anonymous icon"><!-- anonymous creator icon holder --></span>
             <% else %>
-              <%= icon_display(single_comment.pseud.user, single_comment.pseud) %>
+              <%= icon_display %>
             <% end %>
           <% else %>
             <span class="visitor icon"><!-- visitor icon holder --></span>

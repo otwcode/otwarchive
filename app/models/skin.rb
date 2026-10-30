@@ -48,17 +48,6 @@ class Skin < ApplicationRecord
 
   accepts_nested_attributes_for :skin_parents, allow_destroy: true, reject_if: proc { |attrs| attrs[:position].blank? || (attrs[:parent_skin_title].blank? && attrs[:parent_skin_id].blank?) }
 
-  has_one_attached :icon do |attachable|
-    attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
-  end
-
-  # i18n-tasks-use t("errors.attributes.icon.invalid_format")
-  # i18n-tasks-use t("errors.attributes.icon.too_large")
-  validates :icon, attachment: {
-    allowed_formats: %w[image/gif image/jpeg image/png],
-    maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
-  }
-
   after_save :skin_invalidate_cache
   def skin_invalidate_cache
     skin_chooser_expire_cache if saved_change_to_in_chooser? || in_chooser?
@@ -72,8 +61,6 @@ class Skin < ApplicationRecord
       skin_cache_version_update(child_id)
     end
   end
-
-  validates :icon_alt_text, length: { maximum: ArchiveConfig.ICON_ALT_MAX }
 
   validates :description, length: { maximum: ArchiveConfig.SUMMARY_MAX }
 
@@ -101,12 +88,6 @@ class Skin < ApplicationRecord
 
   validates :ie_condition, inclusion: {in: IE_CONDITIONS, allow_nil: true, allow_blank: true}
   validates :role, inclusion: {in: ALL_ROLES, allow_blank: true, allow_nil: true }
-
-  validate :valid_public_preview
-  def valid_public_preview
-    return true if self.official? || !self.public? || self.icon.attached?
-    errors.add(:base, :no_public_preview)
-  end
 
   validates :title, presence: true, uniqueness: { case_sensitive: false }, length: { 
     maximum: ArchiveConfig.TITLE_MAX 
@@ -493,7 +474,6 @@ class Skin < ApplicationRecord
           skin.ie_condition = skin_ie
           skin.unusable = true
           skin.official = true
-          skin.icon.attach(io: File.open("#{version_dir}preview.png", "rb"), content_type: "image/png", filename: "preview.png")
           skin.save!(validate: false)
           skins << skin
         end
@@ -507,7 +487,6 @@ class Skin < ApplicationRecord
           top_skin = Skin.new(title: "Archive #{version}", css: "", description: "Version #{version} of the default Archive style.",
                               public: true, role: "site", media: ["screen"])
         end
-        top_skin.icon.attach(io: File.open("#{version_dir}preview.png", "rb"), content_type: "image/png", filename: "preview.png")
         top_skin.official = true
         top_skin.save!(validate: false)
         skins.each_with_index do |skin, index|
@@ -564,7 +543,6 @@ class Skin < ApplicationRecord
       skin.public = true
       skin.role = "site"
       skin.css = ""
-      skin.set_thumbnail_from_current_version
 
       skin.save!
       skin
@@ -575,8 +553,6 @@ class Skin < ApplicationRecord
     transaction do
       default_skin = default
 
-      default_skin.set_thumbnail_from_current_version
-
       parent_skin = get_current_site_skin
       if parent_skin && default_skin.parent_skins != [parent_skin]
         default_skin.skin_parents.destroy_all
@@ -585,17 +561,5 @@ class Skin < ApplicationRecord
 
       default_skin.save!
     end
-  end
-
-  def set_thumbnail_from_current_version
-    current_version = self.class.get_current_version
-
-    icon_path = if current_version
-                  self.class.site_skins_dir + current_version + "/preview.png"
-                else
-                  self.class.site_skins_dir + "preview.png"
-                end
-
-    self.icon.attach(io: File.open(icon_path), content_type: "image/png", filename: "preview.png")
   end
 end

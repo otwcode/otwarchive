@@ -8,7 +8,7 @@
     <h5 class="heading"><%= authored_items(pseud, @work_counts, @rec_counts) %></h5>
   <% end %>
   <div class="icon">
-    <%= icon_display(pseud.user, pseud) %>
+    <%= icon_display %>
   </div>
   <%# created_at date to display to admins for mutes and blocks %>
   <% if local_assigns[:date] && logged_in_as_admin? %>

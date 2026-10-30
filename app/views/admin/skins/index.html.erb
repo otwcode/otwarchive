@@ -25,7 +25,6 @@
         <th scope="col"><%= ts('Skin') %></th>
         <th scope="col"><%= ts('Type') %></th>
         <th scope="col"><%= ts('Creator') %></th>
-        <th scope="col"><%= ts('Preview') %></th>
         <th scope="col"><%= ts('Description') %></th>
         <th scope="col"><%= ts('Admin Note') %></th>
         <th scope="col"><%= ts('Approve') %></th>
@@ -42,7 +41,6 @@
           </th>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
-          <td><%= skin_preview_display(skin) %></td>
           <td>
             <%= skin.description.blank? ? ts("(No Description Provided)") : raw(strip_images(sanitize_field(skin, :description))) %>
           </td>

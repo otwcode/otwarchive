@@ -206,8 +206,8 @@ class CollectionsController < ApplicationController
   def collection_params
     params.require(:collection).permit(
       :name, :title, :email, :header_image_url, :description,
-      :parent_name, :challenge_type, :icon, :delete_icon,
-      :icon_alt_text, :icon_comment_text, :tag_string, :multifandom,
+      :parent_name, :challenge_type,
+      :tag_string, :multifandom,
       collection_profile_attributes: [
         :id, :intro, :faq, :rules,
         :gift_notification, :assignment_notification

@@ -7,17 +7,6 @@ module SkinsHelper
     end
   end
 
-  # we only actually display an image if there's a file
-  def skin_preview_display(skin)
-    return unless skin&.icon&.attached?
-
-    link_to image_tag(rails_blob_url(skin.icon.variant(:standard)),
-                      alt: skin.icon_alt_text,
-                      class: "icon",
-                      skip_pipeline: true),
-            rails_blob_url(skin.icon)
-  end
-
   # Fetches the current skin. This is determined by the following
   # 1. Skin ID set by request parameter
   # 2. Skin ID set in the current session (if someone, a user or admin, is logged in)

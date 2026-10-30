@@ -138,7 +138,6 @@ Feature: Public skins
   Given the user "SkinTeam" exists and has the role "official"
     And I am logged in as "SkinTeam"
   When I set up the skin "Skin We're Gonna Add"
-    And I attach a preview for the skin
     And I check "Apply to make public"
     And I submit
   Then I should see "Skin was successfully created"

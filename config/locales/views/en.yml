@@ -878,8 +878,6 @@ en:
       header_image_url:
         footnote: PNG, JPEG, GIF
         label: Custom header URL
-      icon:
-        delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
       multifandom:
         footnote: Use this if your collection is not fandom-specific.
         label: Multifandom
@@ -3097,16 +3095,6 @@ en:
       cannot_change_matching_pseud_html: You cannot change the pseud that matches your username. However, you can %{change_username_link} instead.
       change_username: change your username
       description: Description
-      icon: Icon
-      icon_alt: Icon alt text
-      icon_comment: Icon comment text
-      icon_delete: Delete your icon and revert to our default. This will also remove your icon alt text and comment text.
-      icon_notes:
-        current: This is your icon.
-        format: Icons can be in png, jpeg or gif form.
-        limit: You can have one icon for each pseud.
-        size: Icons should be sized 100x100 pixels for best results.
-      icon_upload: Upload a new icon
       make_default: Make this name default
       name: Name (required)
       submit: Submit
@@ -3146,7 +3134,6 @@ en:
     form:
       css: CSS
       description: Description
-      icon: Upload a preview (png, jpeg or gif)
       load_archive_skin_components: 'Load Archive Skin Components:'
       parent_skins: Parent Skins
       public: Apply to make public

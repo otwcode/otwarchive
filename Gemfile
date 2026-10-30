@@ -181,5 +181,4 @@ group :staging, :production do
   gem "sentry-resque"
 end
 
-gem "image_processing", "~> 1.14"
 gem "ostruct"

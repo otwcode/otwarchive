@@ -11,8 +11,7 @@ describe "n+1 queries in the collection items controller" do
 
       populate do |n|
         create_list(:work, n, authors: [user.default_pseud]).each do |work|
-          collection_item = create(:collection_item, item: work)
-          collection_item.collection.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
+          create(:collection_item, item: work)
         end
       end
 

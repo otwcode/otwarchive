@@ -19,7 +19,7 @@
     <% if feedback_comment.by_anonymous_creator? %>
       <span class="anonymous icon"><!-- anonymous creator icon holder --></span>
     <% else %>
-      <%= icon_display(feedback_comment.pseud.user, feedback_comment.pseud) %>
+      <%= icon_display %>
     <% end %>
   <% else %>
     <span class="visitor icon"><!-- visitor icon holder --></span>

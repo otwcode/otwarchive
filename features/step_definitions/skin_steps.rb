@@ -62,7 +62,6 @@ Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name,
   step %{the user "skinner" exists and has the role "official"}
   step %{I am logged in as "skinner"}
   step %{I set up the skin "#{skin_name}" with css "#{css}"}
-  attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
   check("skin_public")
   step %{I submit}
   step %{I should see "Skin was successfully created"}
@@ -191,10 +190,6 @@ end
 When /^I preview the skin "([^\"]*)"$/ do |skin_name|
   skin = Skin.find_by(title: skin_name)
   visit preview_skin_path(skin)
-end
-
-When "I attach a preview for the skin" do
-  attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
 end
 
 ### THEN

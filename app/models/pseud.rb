@@ -4,17 +4,6 @@ class Pseud < ApplicationRecord
   include Justifiable
   include AfterCommitEverywhere
 
-  has_one_attached :icon do |attachable|
-    attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
-  end
-
-  # i18n-tasks-use t("errors.attributes.icon.invalid_format")
-  # i18n-tasks-use t("errors.attributes.icon.too_large")
-  validates :icon, attachment: {
-    allowed_formats: %w[image/gif image/jpeg image/png],
-    maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
-  }
-
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 40
   DESCRIPTION_MAX = 500
@@ -53,8 +42,6 @@ class Pseud < ApplicationRecord
 
   has_many :prompts, dependent: :destroy
 
-  before_validation :clear_icon
-
   validates_presence_of :name
   validates_length_of :name,
     within: NAME_LENGTH_MIN..NAME_LENGTH_MAX,
@@ -69,10 +56,6 @@ class Pseud < ApplicationRecord
     with: /\p{Alnum}/u
   validates_length_of :description, allow_blank: true, maximum: DESCRIPTION_MAX,
     too_long: ts("must be less than %{max} characters long.", max: DESCRIPTION_MAX)
-  validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
-  validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
 
   after_create :add_to_autocomplete
   after_create :reindex_user
@@ -88,7 +71,7 @@ class Pseud < ApplicationRecord
   scope :alphabetical, -> { order(:name) }
   scope :default_alphabetical, -> { order(is_default: :desc).alphabetical }
   scope :abbreviated_list, -> { default_alphabetical.limit(ArchiveConfig.ITEMS_PER_PAGE) }
-  scope :for_search, -> { includes(:user).with_attached_icon }
+  scope :for_search, -> { includes(:user) }
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -433,24 +416,6 @@ class Pseud < ApplicationRecord
 
   def touch_comments
     comments.touch_all
-  end
-
-  # Delete current icon (thus reverting to archive default icon)
-  def delete_icon=(value)
-    @delete_icon = !value.to_i.zero?
-  end
-
-  def delete_icon
-    !!@delete_icon
-  end
-  alias_method :delete_icon?, :delete_icon
-
-  def clear_icon
-    return unless delete_icon?
-
-    self.icon.purge
-    self.icon_alt_text = nil
-    self.icon_comment_text = nil
   end
 
   #################################

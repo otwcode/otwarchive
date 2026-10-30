@@ -13,10 +13,7 @@ module Muted
     def index
       @mutes = @user.mutes_as_muter
         .joins(:muted)
-        .includes(muted: [:pseuds, { default_pseud: { icon_attachment: { blob: {
-                    variant_records: { image_attachment: :blob },
-                    preview_image_attachment: { blob: { variant_records: { image_attachment: :blob } } }
-                  } } } }])
+        .includes(muted: [:pseuds, :default_pseud])
         .order(created_at: :desc).order(id: :desc).page(params[:page])
 
       @pseuds = @mutes.map { |b| b.muted.default_pseud }

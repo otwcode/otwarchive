@@ -9,9 +9,7 @@ describe "n+1 queries in the user pseuds controller" do
     let!(:user) { create(:user) }
 
     populate do |n|
-      create_list(:pseud, n, user: user).each do |pseud|
-        pseud.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
-      end
+      create_list(:pseud, n, user: user)
     end
 
     before do

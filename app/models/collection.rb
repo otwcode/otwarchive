@@ -3,17 +3,6 @@ class Collection < ApplicationRecord
   include WorksOwner
   include Searchable
 
-  has_one_attached :icon do |attachable|
-    attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
-  end
-
-  # i18n-tasks-use t("errors.attributes.icon.invalid_format")
-  # i18n-tasks-use t("errors.attributes.icon.too_large")
-  validates :icon, attachment: {
-    allowed_formats: %w[image/gif image/jpeg image/png],
-    maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
-  }
-
   belongs_to :parent, class_name: "Collection", inverse_of: :children
   has_many :children, class_name: "Collection", foreign_key: "parent_id", inverse_of: :parent
 
@@ -23,7 +12,6 @@ class Collection < ApplicationRecord
   has_one :collection_preference, dependent: :destroy
   accepts_nested_attributes_for :collection_preference, update_only: true
 
-  before_validation :clear_icon
   before_validation :cleanup_url
   before_create :ensure_associated
   def ensure_associated
@@ -106,10 +94,6 @@ class Collection < ApplicationRecord
   validates :name,
             format: { message: ts("must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/ }
-  validates :icon_alt_text, length: { allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
-                                      too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX) }
-  validates :icon_comment_text, length: { allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
-                                          too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX) }
 
   validates :email, email_format: { allow_blank: true }
 
@@ -155,8 +139,8 @@ class Collection < ApplicationRecord
   scope :prompt_meme, -> { where(challenge_type: "PromptMeme") }
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
-  scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).with_attached_icon }
-  scope :for_search, -> { includes(:parent, :children, :tags, :challenge, moderators: [user: :pseuds], owners: [user: :pseuds]).with_attached_icon }
+  scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]) }
+  scope :for_search, -> { includes(:parent, :children, :tags, :challenge, moderators: [user: :pseuds], owners: [user: :pseuds]) }
 
   def cleanup_url   
     self.header_image_url = begin 
@@ -369,24 +353,6 @@ class Collection < ApplicationRecord
 
   def send_reveal_notifications
     approved_collection_items.each(&:notify_of_reveal)
-  end
-
-  # Delete current icon (thus reverting to archive default icon)
-  def delete_icon=(value)
-    @delete_icon = !value.to_i.zero?
-  end
-
-  def delete_icon
-    !!@delete_icon
-  end
-  alias delete_icon? delete_icon
-
-  def clear_icon
-    return unless delete_icon?
-
-    self.icon.purge
-    self.icon_alt_text = nil
-    self.icon_comment_text = nil
   end
 
   def self.expire_blurb_cache(id)

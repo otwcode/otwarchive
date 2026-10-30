@@ -1,7 +1,7 @@
 <li class="<% if collection.user_is_owner?(current_user) %>own <% end %>collection picture blurb group" role="article">
   <% logged_in = (logged_in_as_admin? || logged_in?) ? "logged-in" : "logged-out" %>
   <%# remember to update Collection.expire_blurb_cache if you change this key (or the similar summary and body keys below) %>
-  <% cache("collection-blurb-#{logged_in}-#{collection.id}-v5-header", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
+  <% cache("collection-blurb-#{logged_in}-#{collection.id}-v6-header", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
     <div class="header module group">
       <h4 class="heading">
         <%= link_to collection.title, collection_path(collection) %>
@@ -11,7 +11,7 @@
       </h4>
       <!--collections header iconised header image-->
       <div class="icon">
-        <%= collection_icon_display(collection) %>
+        <%= collection_icon_display %>
       </div>
       <p class="datetime"><%= set_format_for_date(collection.updated_at) %></p>
       <% unless collection.tag_string.blank? %>

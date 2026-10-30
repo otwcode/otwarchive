@@ -169,38 +169,6 @@ describe PseudsController do
               end
             end
 
-            context "with delete_icon" do
-              let(:params) { { user_id: user, id: pseud, pseud: { delete_icon: "1", ticket_number: 1 } } }
-
-              before do
-                pseud.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
-              end
-
-              it_behaves_like "an attribute that can be updated by an admin"
-
-              it "removes pseud icon" do
-                expect do
-                  put :update, params: params
-                end.to change { pseud.reload.icon.attached? }
-                  .from(true)
-                  .to(false)
-              end
-            end
-
-            %w[name icon_alt_text icon_comment_text].each do |attr|
-              context "with #{attr}" do
-                let(:params) { { user_id: user, id: pseud, pseud: { "#{attr}": "admin edit", ticket_number: 1 } } }
-
-                it "raises UnpermittedParameters and does not update #{attr} or create admin activity" do
-                  expect do
-                    put :update, params: params
-                  end.to raise_exception(ActionController::UnpermittedParameters)
-                  expect(pseud.reload.send(attr)).not_to eq("admin edit")
-                  expect(AdminActivity.last).to be_nil
-                end
-              end
-            end
-
             context "with is_default" do
               let(:params) { { user_id: user, id: pseud, pseud: { is_default: "0", ticket_number: 1 } } }
 

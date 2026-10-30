@@ -26,24 +26,6 @@ describe Pseud do
         expect(pseud.errors).to be_empty
       end
     end
-
-    context "when the icon alt text is too long" do
-      let(:pseud) { build(:pseud, icon_alt_text: "a" * 251) }
-
-      it "fails" do
-        expect(pseud.save).to be_falsey
-        expect(pseud.errors[:icon_alt_text]).not_to be_empty
-      end
-    end
-
-    context "when the icon comment text is too long" do
-      let(:pseud) { build(:pseud, icon_comment_text: "a" * 51) }
-
-      it "fails" do
-        expect(pseud.save).to be_falsey
-        expect(pseud.errors[:icon_comment_text]).not_to be_empty
-      end
-    end
   end
 
   describe "touch_comments" do
@@ -115,36 +97,6 @@ describe Pseud do
       indexed_ids = IndexQueue.new("index:bookmark:main").ids
       bookmarks.each do |bookmark|
         expect(indexed_ids).to include(bookmark.id.to_s)
-      end
-    end
-  end
-
-  describe "#clear_icon" do
-    subject { create(:pseud, icon_alt_text: "icon alt", icon_comment_text: "icon comment") }
-
-    before do
-      subject.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
-    end
-
-    context "when delete_icon is false" do
-      it "does not clear the icon, icon alt, or icon comment" do
-        subject.clear_icon
-        expect(subject.icon.attached?).to be(true)
-        expect(subject.icon_alt_text).to eq("icon alt")
-        expect(subject.icon_comment_text).to eq("icon comment")
-      end
-    end
-
-    context "when delete_icon is true" do
-      before do
-        subject.delete_icon = 1
-      end
-
-      it "clears the icon, icon alt, and icon comment" do
-        subject.clear_icon
-        expect(subject.icon.attached?).to be(false)
-        expect(subject.icon_alt_text).to be_nil
-        expect(subject.icon_comment_text).to be_nil
       end
     end
   end

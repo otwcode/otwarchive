@@ -239,14 +239,6 @@ describe Skin do
       expect(skin2.errors[:title]).not_to be_empty
     end
 
-    it "requires a preview image if public" do
-      @skin.css = "body {background: #fff;}"
-      @skin.public = true
-      expect(@skin.save).not_to be_truthy
-      expect(@skin.errors[:base]).not_to be_empty
-      expect(@skin.errors[:base].join(' ').match(/upload a screencap/)).to be_truthy
-    end
-
     context "when a media query is provided" do
       [
         "all",
