@@ -3,6 +3,7 @@
 <% collection = challenge_signup.collection %>
 <% challenge = collection.challenge %>
 <% user = challenge_signup.pseud.user %>
+<% isRequest = prompt.class.name == "Request" %>
 
 <% if challenge.signup_open || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || collection.challenge_type == "PromptMeme" %>
   <ul class="actions" role="menu">
@@ -12,14 +13,14 @@
         <%= link_to(ts("Edit Sign-up"), edit_collection_signup_path(collection, challenge_signup)) %>
       </li>
       <li>
-        <%= link_to(ts("Edit #{prompt.class.name}"), edit_collection_prompt_path(collection, prompt)) %>
+        <%= link_to(isRequest ? t(".edit_request") : t(".edit_offer"), edit_collection_prompt_path(collection, prompt)) %>
       </li>
     <% end %>
 
     <% # The delete link should show up if signups are open and the current user owns the prompt, OR if the current user is a maintainer, AND only if the signup has more than the minimum number of prompts %>
     <% if ((challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user))) && prompt.can_delete? %>
     <li>
-      <%= link_to ts("Delete #{prompt.class.name}"),
+      <%= link_to isRequest ? t(".delete_request") : t(".delete_offer"),
         collection_prompt_path(collection, prompt),
         data: { confirm: ts("Are you sure? All information in this prompt will be lost.") },
         method: :delete %>

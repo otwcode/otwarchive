@@ -3064,6 +3064,11 @@ en:
   prompts:
     prompt_form:
       title_requirements: Up to %{maximum} characters, cannot begin with =, +, -, @ or a whitespace character.
+    prompt_controls:
+      edit_request: Edit Request
+      edit_offer: Edit Offer
+      delete_request: Delete Request
+      delete_offer: Delete Offer
   pseuds:
     delete_preview:
       cancel: Cancel
