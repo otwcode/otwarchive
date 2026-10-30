@@ -24,6 +24,8 @@ module Otwarchive
 
     config.load_defaults 8.1
 
+    config.active_support.message_serializer = :json
+
     %w[
       app/models/challenge_models
       app/models/feedback_reporters
