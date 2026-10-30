@@ -430,21 +430,21 @@ end
 When /^I delete my prompt in "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by(title: title))
   step %{I follow "Prompts ("}
-  step %{I press "Delete Prompt"}
+  step %{I press "Delete Request"}
 end
 
 When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by(title: "Battle 12"))
   step %{I follow "Prompts ("}
-  step %{I follow "Delete Prompt"}
+  step %{I follow "Delete Request"}
 end
 
 When /^I edit the first prompt$/ do
   visit collection_path(Collection.find_by(title: "Battle 12"))
   step %{I follow "Prompts ("}
-  # The 'Edit Sign-up' and 'Edit Prompt' buttons were removed for mods in
+  # The 'Edit Sign-up' and 'Edit Request' buttons were removed for mods in
   # Prompt Meme challenges
-  #step %{I follow "Edit Prompt"}
+  # step %{I follow "Edit Request"}
 end
 
 Then /^I should see prompt meme options$/ do
