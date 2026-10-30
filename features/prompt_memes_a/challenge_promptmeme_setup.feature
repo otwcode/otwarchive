@@ -196,8 +196,8 @@ Feature: Prompt Meme Challenge
     And I press "Update"
   Then I should see "Sorry! We couldn't save this request because:"
     And I should see "Your Request must include exactly 1 fandom tags"
-
-  Scenario: Add one new prompt to existing signup
+ 
+ Scenario: Add one new prompt to existing signup
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
@@ -206,7 +206,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Prompt was successfully added"
     And I should see "Request 3"
     And I should see "My extra tag"
-
+  
   Scenario: Sort prompts by date
   
   Given I have Battle 12 prompt meme fully set up
