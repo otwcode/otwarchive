@@ -189,15 +189,15 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I view my signup for "Battle 12"
-  When I follow "Edit Prompt"
+  When I follow "Edit Request"
   Then I should see single prompt editing
   And I should see "Edit Sign-up"
   When I uncheck "Stargate Atlantis"
     And I press "Update"
   Then I should see "Sorry! We couldn't save this request because:"
     And I should see "Your Request must include exactly 1 fandom tags"
- 
- Scenario: Add one new prompt to existing signup
+
+  Scenario: Add one new prompt to existing signup
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
@@ -206,7 +206,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Prompt was successfully added"
     And I should see "Request 3"
     And I should see "My extra tag"
-  
+
   Scenario: Sort prompts by date
   
   Given I have Battle 12 prompt meme fully set up
@@ -382,7 +382,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
     # The next step just takes you to the 'Prompts' page
   When I edit the first prompt
-  Then I should not see "Edit Prompt"
+  Then I should not see "Edit Request"
   
   Scenario: Claim an anon prompt
   
@@ -512,7 +512,7 @@ Feature: Prompt Meme Challenge
   Then I should see "These & < > ' ? are some HTML escape chars" in the "challenge_signup_requests_attributes_0_title" input
     And I should see "Request 1"
   When I view my signup for "Battle 12"
-    And I follow "Edit Prompt"
+    And I follow "Edit Request"
   Then I should see "These & < > ' ? are some HTML escape chars" in the "prompt_title" input
     And I should see "Request 1"
 
