@@ -145,6 +145,17 @@ When /^I sign up for "([^\"]*)" with combination A$/ do |title|
   click_button "Submit"
 end
 
+When "I sign up for {string} with two offers and two requests" do |title|
+  collection = Collection.find_by(title: title)
+  collection.challenge.update!(offers_num_allowed: 2, requests_num_allowed: 2)
+  # Without JavaScript, the number of prompts on the form is set by params
+  visit new_collection_signup_path(collection, num_offers: 2, num_requests: 2)
+  (1..4).each do |n|
+    step %{I check the #{n.ordinalize} checkbox with the value "Stargate Atlantis"}
+  end
+  click_button "Submit"
+end
+
 When "I sign up for {string} with combination A and my pseud {string}" do |title, pseud_name|
   step %{I set up a signup for "#{title}" with combination A}
   select pseud_name, from: "challenge_signup[pseud_id]"
