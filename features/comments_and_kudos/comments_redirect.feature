@@ -11,6 +11,13 @@ Scenario: Posting a top level comment on a one-chapter work
   Then I should see "Blabla"
     And I should see "blaaaaaa"
 
+# Checks that AO3-2815 has been fixed
+Scenario: When posting a top level comment on a one-chapter work, the work should still appear as a single-chapter without a "Chapter 1" heading
+  Given the work "The One Where Neal is Awesome"
+  When I am logged in as "commenter"
+    And I post the comment "I loved this! 😍🤩" on the work "The One Where Neal is Awesome"
+  Then I should not see "Chapter 1" within "div#chapters"
+
 Scenario: Posting top level comment on middle chapter of chaptered work, with default preferences
   Given the chaptered work setup
     And I am logged in as a random user

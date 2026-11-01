@@ -435,7 +435,8 @@ class CommentsController < ApplicationController
             elsif @comment.unreviewed?
               redirect_to_all_comments(@commentable)
             else
-              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
+              view_full_work = params[:view_full_work] == "true" || (@comment.ultimate_parent.is_a?(Work) && !@comment.ultimate_parent.chaptered?)
+              redirect_to_comment(@comment, { view_full_work: view_full_work, page: params[:page] })
             end
           end
         end
