@@ -385,7 +385,7 @@ Feature: Collection
       And I follow "Collection1"
     Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"
 
-  Scenario: Collection item counts show the correct amount for guests, registered users and admins
+  Scenario: Collection blurb item counts show the correct amount for guests, registered users and admins
 
   Given I have a collection "Item Counts"
   When I am logged in as the owner of "Item Counts"
@@ -451,3 +451,49 @@ Feature: Collection
   Then I should see "The Best Tag" within ".tags"
     And I should see "The Better Tag" within ".tags"
     But I should not see "Subcollection Only"
+
+  Scenario: Collection sidebar fandom counts for guests, registered users and admins
+    Given I have a collection "Item Counts"
+      And a canonical fandom "One"
+      And a canonical fandom "Two"
+      And a canonical fandom "Three"
+    When I am logged in as the owner of "Item Counts"
+      And I post the work "Public 1" with fandom "One" in the collection "Item Counts"
+      And I post the work "Private 1" with fandom "Two" in the collection "Item Counts"
+      And I lock the work "Private 1"
+      And the collection counts have expired
+      And I go to "Item Counts" collection's page
+      And I follow "Fandoms (2)"
+    Then I should see "One (1)"
+      And I should see "Two (1)"
+    When I am logged in as a super admin
+      And I go to "Item Counts" collection's page
+      And I follow "Fandoms (2)"
+    Then I should see "One (1)"
+      And I should see "Two (1)"
+    When I log out
+      And I go to "Item Counts" collection's page
+      And I follow "Fandoms (1)"
+    Then I should see "One (1)"
+      But I should not see "Two (1)"
+    When I am logged in as the owner of "Item Counts"
+      And I post the work "Public 2" with fandom "Three" in the collection "Item Counts"
+      And I bookmark the work "Public 2" to the collection "Item Counts"
+      And the collection counts have expired
+      And I go to "Item Counts" collection's page
+      And I follow "Fandoms (3)"
+    Then I should see "One (1)"
+      And I should see "Two (1)"
+      And I should see "Three (1)"
+    When I am logged in as a super admin
+      And I go to "Item Counts" collection's page
+      And I follow "Fandoms (3)"
+    Then I should see "One (1)"
+      And I should see "Two (1)"
+      And I should see "Three (1)"
+    When I log out
+      And I go to "Item Counts" collection's page
+      And I follow "Fandoms (2)"
+    Then I should see "One (1)"
+      And I should see "Three (1)"
+      But I should not see "Two (1)"
