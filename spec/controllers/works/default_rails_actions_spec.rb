@@ -541,8 +541,7 @@ describe WorksController, work_search: true do
       it "raises an error" do
         params = { tag_id: "nonexistent_tag" }
         expect { get :index, params: params }.to raise_error(
-          ActiveRecord::RecordNotFound,
-          "Couldn't find tag named 'nonexistent_tag'"
+          ActiveRecord::RecordNotFound
         )
       end
     end

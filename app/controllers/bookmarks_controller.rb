@@ -1,6 +1,6 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
-  before_action :load_owner, only: [:index]
+  before_action :load_bookmark_owner, only: [:index]
   before_action :load_bookmarkable, only: [:index, :new, :create]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
@@ -251,33 +251,8 @@ class BookmarksController < ApplicationController
 
   protected
 
-  def load_owner
-    if params[:user_id].present?
-      @user = User.find_by(login: params[:user_id])
-      unless @user
-        raise ActiveRecord::RecordNotFound, "Couldn't find user named '#{params[:user_id]}'"
-      end
-      if params[:pseud_id].present?
-        @pseud = @user.pseuds.find_by(name: params[:pseud_id])
-        unless @pseud
-          raise ActiveRecord::RecordNotFound, "Couldn't find pseud named '#{params[:pseud_id]}'"
-        end
-      end
-    end
-    if params[:tag_id]
-      @tag = Tag.find_by_name(params[:tag_id])
-      unless @tag
-        raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
-      end
-      unless @tag.canonical?
-        if @tag.merger.present?
-          redirect_to tag_bookmarks_path(@tag.merger) and return
-        else
-          redirect_to tag_path(@tag) and return
-        end
-      end
-    end
-    @owner = @bookmarkable || @pseud || @user || @collection || @tag
+  def load_bookmark_owner
+    load_owner("bookmark")
   end
 
   def index_page_title

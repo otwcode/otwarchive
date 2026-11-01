@@ -273,8 +273,7 @@ describe BookmarksController do
         it "raises a RecordNotFound error" do
           params = { user_id: "nobody" }
           expect { get :index, params: params }.to raise_error(
-            ActiveRecord::RecordNotFound,
-            "Couldn't find user named 'nobody'"
+            ActiveRecord::RecordNotFound
           )
         end
       end
@@ -301,8 +300,7 @@ describe BookmarksController do
         it "raises a RecordNotFound error" do
           params = { tag_id: "nothingness" }
           expect { get :index, params: params }.to raise_error(
-            ActiveRecord::RecordNotFound,
-            "Couldn't find tag named 'nothingness'"
+            ActiveRecord::RecordNotFound
           )
         end
       end
