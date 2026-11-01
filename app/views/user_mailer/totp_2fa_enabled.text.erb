@@ -1,0 +1,23 @@
+<% content_for :message do %>
+<%= t("mailer.general.greeting.formal.addressed_html", name: @user.login) %>
+
+<%= t(".changed", date: l(@time), app_name: ArchiveConfig.APP_SHORT_NAME) %>
+
+<%= t(".after_login.text", login_url: new_user_session_url) %>
+
+<%= t(".backup_codes") %>
+<% @codes.each do |code| %>
+- <%= code %>
+<% end %>
+
+<%= t(".store_codes") %>
+
+<%= t(".preferences.text",
+      preferences_url: user_preferences_url(@user),
+      contact_support_url: new_feedback_report_url) %>
+
+<%= t(".did_not_make_change.text",
+      reset_password_url: new_user_password_url,
+      contact_policy_abuse_url: new_abuse_report_url,
+      app_name: ArchiveConfig.APP_SHORT_NAME) %>
+<% end %>

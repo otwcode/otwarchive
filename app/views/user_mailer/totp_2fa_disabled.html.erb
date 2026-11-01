@@ -1,0 +1,17 @@
+<% content_for :message do %>
+  <p><%= t("mailer.general.greeting.formal.addressed_html", name: style_bold(@user.login)) %></p>
+
+  <p><%= t(".changed", date: l(@time), app_name: ArchiveConfig.APP_SHORT_NAME) %></p>
+
+  <p><%= t(".after_login.html",
+           login_link: style_link(t(".after_login.login"), new_user_session_url)) %></p>
+
+  <p><%= t(".preferences.html",
+           preferences_link: style_link(t(".preferences.your_preferences"), user_preferences_url(@user)),
+           contact_support_link: support_link(t(".preferences.contact_support"))) %></p>
+
+  <p><%= t(".did_not_make_change.html",
+           reset_password_link: style_link(t(".did_not_make_change.reset_password"), new_user_password_url),
+           contact_policy_abuse_link: abuse_link(t(".did_not_make_change.contact_policy_abuse")),
+           app_name: ArchiveConfig.APP_SHORT_NAME) %></p>
+<% end %>
