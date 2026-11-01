@@ -54,6 +54,12 @@ en:
       default_label: QR code
   series_helper:
     series_description_html: Part %{index} of %{series_link}
+  share_helper:
+    multi_fandom_short_string: Multifandom
+    tumblr_embed_link_title:
+      one: "%{title} (%{count} word) by %{creators} [%{app_name}]"
+      other: "%{title} (%{count} words) by %{creators} [%{app_name}]"
+    unrevealed_tweet_text: Mystery Work
   tags_helper:
     get_symbol_link:
       title: Symbols key

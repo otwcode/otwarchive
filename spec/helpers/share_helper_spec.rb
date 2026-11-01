@@ -12,7 +12,7 @@ describe ShareHelper do
 
   describe "#get_tumblr_embed_link_title" do
     context "on anonymous works" do
-      let(:work) { build_stubbed(:work, in_anon_collection: true) }
+      let(:work) { build_stubbed(:work, in_anon_collection: true, word_count: 0) }
 
       it "does not link to a user's profile" do
         expect(helper.get_tumblr_embed_link_title(work)).to include("by Anonymous")

@@ -83,3 +83,17 @@ Feature: Share Works
     Then the url should not include "share"
       # Shown when the share url is accessed directly
       And I should not see "Sorry, you need to have JavaScript enabled for this."
+
+  @javascript
+  Scenario: Share hides the creator for anonymous works
+    Given the anonymous collection "AnonCollection"
+      And I am logged in as "testuser"
+      And I post the work "AnonWork" in the collection "AnonCollection"
+    When I view the work "AnonWork"
+      And I follow "Share"
+    Then I should see "by Anonymous" within "#share textarea"
+      And I should not see "testuser" within "#share textarea"
+      And the twitter share link should include "by Anonymous"
+      And the twitter share link should not include "testuser"
+      And the tumblr share link should include "by Anonymous"
+      And the tumblr share link should not include "testuser"
