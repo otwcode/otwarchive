@@ -187,7 +187,7 @@ describe AdminMailer do
     end
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your admin account backup codes"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your admin account backup codes have been reset"
       expect(email).to have_subject(subject)
     end
 
@@ -198,7 +198,7 @@ describe AdminMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("A set of new backup codes has been requested")
+        expect(email).to have_html_part_content("A new set of two-step verification backup codes")
         expect(email).to have_html_part_content("<li><code>")
         codes.each do |code|
           expect(email).to have_html_part_content(code)
@@ -208,7 +208,7 @@ describe AdminMailer do
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("A set of new backup codes has been requested")
+        expect(email).to have_html_part_content("A new set of two-step verification backup codes")
         codes.each do |code|
           expect(email).to have_html_part_content(code)
         end

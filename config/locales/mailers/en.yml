@@ -40,9 +40,15 @@ en:
       url: Admin login URL
       username: Admin username
     totp_2fa_backup_codes:
-      created: 'A set of new backup codes has been requested for your account, and your old backup codes have been invalidated. Please use one of the following codes to log in:'
-      do_rely_on: We strongly recommend that you do not rely on the use of backup codes to access your account. Once you have logged in, please disable two-factor authentication and set it up again.
-      subject: "[%{app_name}] Your admin account backup codes"
+      created: A new set of two-step verification backup codes for your %{app_name} admin account was requested on %{date}.
+      invalidated: 'All of your old backup codes have been invalidated. If you do not have access to your authenticator app, you can enter one of these backup codes instead:'
+      do_rely_on: 
+        html: We strongly recommend that you do not rely on the use of backup codes to access your account. If you have lost access to your authenticator app, then please %{login_link}, disable two-step verification, and set it up again.
+        text: We strongly recommend that you do not rely on the use of backup codes to access your account. If you have lost access to your authenticator app, then please log in (%{login_url}), disable two-step verification, and set it up again.
+        login: log in
+      chairs: If you experience technical issues, please contact your Chairs.
+      did_not_make_change: If you did not make this change, someone else may have access to your admin account. Please let AD&T know immediately so they can take steps to secure your account.
+      subject: "[%{app_name}] Your admin account backup codes have been reset"
   comment_mailer:
     comment_notification:
       chapter:

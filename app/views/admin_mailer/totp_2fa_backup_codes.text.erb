@@ -1,11 +1,16 @@
 <% content_for :message do %>
 <%= t("mailer.general.greeting.informal.addressed_html", name: @admin.login) %>
 
-<%= t(".created") %>
+<%= t(".created", app_name: ArchiveConfig.APP_SHORT_NAME, date: l(Time.current)) %>
 
+<%= t(".invalidated") %>
 <% @codes.each do |code| %>
-<%= code %>
-<% end %>
+- <%= code %>
 <% end %>
 
-<%= t(".do_rely_on") %>
+<%= t(".do_rely_on.text", login_url: new_admin_session_url) %>
+
+<%= t(".chairs") %>
+
+<%= t(".did_not_make_change") %>
+<% end %>

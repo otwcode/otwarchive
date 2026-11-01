@@ -1,10 +1,13 @@
 <% content_for :message do %>
   <p><%= t("mailer.general.greeting.informal.addressed_html", name: style_bold(@admin.login)) %></p>
-  <p><%= t(".created") %></p>
+  <p><%= t(".created", app_name: ArchiveConfig.APP_SHORT_NAME, date: l(Time.current)) %></p>
+  <p><%= t(".invalidated") %></p>
   <ul>
   <% @codes.each do |code| %>
     <li><code><%= code %></code></li>
   <% end %>
   </ul>
-  <p><%= t(".do_rely_on") %></p>
+  <p><%= t(".do_rely_on.html", login_link: style_link(t(".do_rely_on.login"), new_admin_session_url)) %></p>
+  <p><%= t(".chairs") %></p>
+  <p><%= t(".did_not_make_change") %></p>
 <% end %>
