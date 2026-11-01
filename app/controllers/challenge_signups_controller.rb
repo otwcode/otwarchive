@@ -5,13 +5,13 @@ class ChallengeSignupsController < ApplicationController
   include ExportsHelper
 
   before_action :users_only, except: [:summary, :index, :show]
-  before_action :users_or_privileged_collection_admins_only, only: [:index, :show]
+  before_action :users_or_privileged_collection_admins_only, only: [:index]
   before_action :load_collection, except: [:index]
   before_action :load_challenge, except: [:index]
   before_action :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :allowed_to_destroy, only: [:destroy, :confirm_delete]
   before_action :signup_owner_only, only: [:edit, :update]
-  before_action :maintainer_or_signup_owner_only, only: [:show]
+  before_action :check_signup_visible, only: [:show]
   before_action :check_signup_open, only: [:new, :create, :edit, :update]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :check_signup_in_collection, only: [:show, :edit, :update, :destroy, :confirm_delete]
@@ -78,6 +78,22 @@ class ChallengeSignupsController < ApplicationController
       flash[:error] = ts("Sorry, that sign-up isn't associated with that collection.")
       redirect_to @collection
     end
+  end
+
+  def check_signup_visible
+    # always visible if you own the signup, are a challenge mod, or are a privileged admin
+    return if @challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user) || privileged_collection_admin?
+
+    # gift exchange: can view if requests summary visible
+    return if @collection.challenge_type == "GiftExchange" && @challenge.requests_summary_visible?
+
+    # prompt meme: can view if not all prompts on the signup are anonymous
+    # TODO: seems somewhat inefficient to check every time, let me know if there are better methods (like storing it as an attribute of the signup?)
+    return if @collection.challenge_type == "PromptMeme" && @challenge_signup.requests.any? { |request| !request.anonymous? }
+
+    # the method still hasn't returned, so the signup must not be visible
+    flash[:error] = t("challenge_signups.error.access_denied_signup")
+    redirect_to collection_path(@collection)
   end
 
   #### ACTIONS

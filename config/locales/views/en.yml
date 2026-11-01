@@ -761,6 +761,8 @@ en:
       assignments: My Assignments
       assignments_note_html: Looking for assignments you were given for a gift exchange? Try %{assignments_link}.
   challenge_signups:
+    show:
+      signup_for: Sign-up for %{person}
     signup_form:
       notice:
         preference:
@@ -3062,6 +3064,40 @@ en:
       edit_my_works: Edit My Works
       edit_profile: Edit Profile
   prompts:
+    prompt_blurb:
+      body:
+        any_tag_type: Any %{tag_type}
+        fandom: Fandom
+        optional_tags: 'Optional Tags:'
+        summary: Summary
+        tags: Tags
+        url: 'URL:'
+      footer:
+        anonymous_claimant_count:
+          one: "%{count} anonymous claimant"
+          other: "%{count} anonymous claimants"
+        claimed_by: Claimed By
+        fulfilled_by: Fulfilled By
+      header:
+        by_anonymous: by Anonymous
+        by_pseud_html: by %{pseud_link}
+        in_collection_html: in %{collection_link}
+        offer_title: Offer%{index}
+        request_title: Request%{index}
+    prompt_controls:
+      confirm:
+        delete_prompt: Are you sure? All information in this prompt will be lost.
+        delete_signup: Are you sure? All prompts in this sign-up will be lost.
+        drop_claim: Do you really want to drop this claim?
+      navigation:
+        all_requests: All Requests in Sign-up
+        claim: Claim
+        delete_prompt: Delete Prompt
+        delete_signup: Delete Sign-up
+        drop_claim: Drop Claim
+        edit_prompt: Edit Prompt
+        edit_signup: Edit Sign-up
+        fulfill: Fulfill
     prompt_form:
       title_requirements: Up to %{maximum} characters, cannot begin with =, +, -, @ or a whitespace character.
   pseuds:

@@ -106,6 +106,13 @@ When /^I allow warnings in my gift exchange$/ do
   check("gift_exchange_offer_restriction_attributes_allow_any_archive_warning")
 end
 
+When "I set {string} requests to visible" do |title|
+  step %{I am logged in as "mod1"}
+  step %{I am on "#{title}" gift exchange edit page}
+  step %{I check "Requests visible?"}
+  step %{I submit}
+end
+
 Then /^"([^\"]*)" gift exchange should be fully created$/ do |title|
   step %{I should see a create confirmation message}
   step %{"#{title}" collection exists}

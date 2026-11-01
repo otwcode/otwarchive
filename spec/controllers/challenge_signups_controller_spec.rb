@@ -49,11 +49,17 @@ describe ChallengeSignupsController do
   end
 
   describe "show" do
-    it "redirects and errors if the user does not own the sign-up or the collection" do
-      fake_login
-      get :show, params: { id: closed_signup, collection_id: closed_collection.name }
-      it_redirects_to_with_error(collection_path(closed_collection),
-                                 "Sorry, you're not allowed to do that.")
+    context "when the collection's requests are not visible" do
+      let(:invisible_challenge) { create(:gift_exchange, requests_summary_visible: false) }
+      let(:invisible_collection) { create(:collection, challenge: invisible_challenge) }
+      let(:invisible_signup) { create(:gift_exchange_signup, collection_id: invisible_collection.id) }
+
+      it "redirects and errors if the user does not own the sign-up or the collection" do
+        fake_login
+        get :show, params: { id: invisible_signup, collection_id: invisible_collection.name }
+        it_redirects_to_with_error(collection_path(invisible_collection),
+                                   "You are not allowed to access that sign-up.")
+      end
     end
 
     context "when the sign-up is from another collection" do
@@ -290,17 +296,6 @@ describe ChallengeSignupsController do
       let(:success) do
         expect(response).to have_http_status(:success)
         expect(response).to render_template(:index)
-      end
-
-      it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
-    end
-
-    describe "GET #show" do
-      subject { get :show, params: { id: closed_signup.id, collection_id: closed_collection.name } }
-
-      let(:success) do
-        expect(response).to have_http_status(:success)
-        expect(response).to render_template(:show)
       end
 
       it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
