@@ -151,6 +151,14 @@ When "I sign up for {string} with combination A and my pseud {string}" do |title
   click_button "Submit"
 end
 
+When "I select my pseud {string} on my signup" do |pseud_name|
+  select pseud_name, from: "challenge_signup[pseud_id]"
+end
+
+Then "{string} should be selected within challenge signup pseuds" do |pseud_name|
+  step %{"#{pseud_name}" should be selected within "challenge_signup[pseud_id]"}
+end
+
 When /^I attempt to sign up for "([^\"]*)" with a pseud that is not mine$/ do |title|
   step %{the user "gooduser" exists and is activated}
   step %{I am logged in as "baduser"}

@@ -52,7 +52,7 @@ Feature: Delete pseud.
       And "test" creates the pseud "testpseud"
 
     When I start signing up for "Exchange1"
-      And I select "testpseud" from "challenge_signup_pseud_id"
+      And I select my pseud "testpseud" on my signup
       And I fill in "Description:" with "Antidisestablishmentarianism."
       And I press "Submit"
     Then I should see "Sign-up was successfully created."
@@ -79,7 +79,7 @@ Feature: Delete pseud.
       And "test" creates the pseud "testpseud"
 
     When I start signing up for "PromptsGalore"
-      And I select "testpseud" from "challenge_signup_pseud_id"
+      And I select my pseud "testpseud" on my signup
       And I fill in "Description:" with "Antidisestablishmentarianism."
       And I press "Submit"
     Then I should see "Sign-up was successfully created."
