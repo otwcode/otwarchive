@@ -36,6 +36,8 @@ en:
         title: Title
         url: URL
         user_defined_tags_count: Fandom, relationship, and character tags
+      gift:
+        recipient_name: Recipient name
       gift_exchange:
         offers_num_allowed: Number of offers allowed per sign-up
         offers_num_required: Number of offers required per sign-up
@@ -199,6 +201,17 @@ en:
                 other: must be at least %{count} characters long.
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them.
+        gift:
+          already_gifted: You seem to already have given this work to that user.
+          attributes:
+            pseud_id:
+              taken: "^You can't give a gift to the same person twice."
+            recipient_name:
+              invalid: must contain at least one letter or number.
+              too_long:
+                one: must be less than %{count} character long.
+                other: must be less than %{count} characters long.
+          no_recipient: A gift must have a recipient specified.
         gift_exchange:
           attributes:
             base:
