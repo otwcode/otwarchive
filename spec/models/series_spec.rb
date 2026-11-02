@@ -361,6 +361,103 @@ describe Series do
     end
   end
 
+  describe "when associations are preloaded for blurbs" do
+    let(:hidden_work) { create(:work, hidden_by_admin: true, freeform_string: "Testing3") }
+    let(:draft_work) { create(:draft, freeform_string: "Testing4") }
+    let(:preloaded_series) { Series.for_blurb.find(series.id) }
+
+    before do
+      series.works = [unrestricted_work, restricted_work, hidden_work, draft_work]
+      # Stagger the dates so the examples can tell which works each
+      # revised_at branch uses (the column only has second precision).
+      series.works.each_with_index do |work, index|
+        work.update_column(:revised_at, (index + 1).days.from_now)
+      end
+      series.reload
+    end
+
+    it "preloads the works and their tags" do
+      expect(preloaded_series.works).to be_loaded
+      expect(preloaded_series.works.first.association(:tags)).to be_loaded
+    end
+
+    shared_examples "matches the results without preloading" do
+      it "returns the same tag groups" do
+        expect(preloaded_series.tag_groups.keys).to match_array(series.tag_groups.keys)
+        series.tag_groups.each_pair do |type, tags|
+          expect(preloaded_series.tag_groups[type]).to match_array(tags)
+        end
+      end
+
+      it "returns the same visible work count" do
+        expect(preloaded_series.visible_work_count).to eq(series.visible_work_count)
+      end
+
+      it "returns the same visible word count" do
+        expect(preloaded_series.visible_word_count).to eq(series.visible_word_count)
+      end
+
+      it "returns the same revised date" do
+        expect(preloaded_series.revised_at).to eq(series.revised_at)
+      end
+    end
+
+    context "when no user is logged in" do
+      it_behaves_like "matches the results without preloading"
+    end
+
+    context "when logged in as a regular user" do
+      before do
+        User.current_user = create(:user)
+      end
+
+      it_behaves_like "matches the results without preloading"
+    end
+
+    context "when logged in as an admin" do
+      before do
+        User.current_user = create(:admin)
+      end
+
+      it_behaves_like "matches the results without preloading"
+    end
+
+    context "when the logged-in user created a work hidden by an admin" do
+      let(:owner) { create(:user) }
+      let(:hidden_work) { create(:work, hidden_by_admin: true, authors: [owner.default_pseud]) }
+
+      before do
+        hidden_work.update_column(:revised_at, 10.days.from_now)
+        User.current_user = owner
+      end
+
+      it "includes the hidden work's revision date" do
+        expect(preloaded_series.revised_at).to eq(hidden_work.reload.revised_at)
+      end
+    end
+
+    context "when a work has no word count" do
+      before do
+        unrestricted_work.update_column(:word_count, nil)
+      end
+
+      it "returns the same visible word count" do
+        expect(preloaded_series.visible_word_count).to eq(series.visible_word_count)
+      end
+    end
+
+    context "when a guest views a series with only restricted works" do
+      before do
+        series.works = [restricted_work]
+        series.reload
+      end
+
+      it "falls back to the series update date" do
+        expect(preloaded_series.revised_at).to eq(series.updated_at)
+      end
+    end
+  end
+
   describe "#general_tags" do
     it "includes tags on unrestricted works" do
       series.works = [unrestricted_work]
