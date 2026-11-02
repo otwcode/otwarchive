@@ -297,7 +297,7 @@ class Work < ApplicationRecord
       tag.update_tag_cache
     end
 
-    series.each(&:expire_caches)
+    series.each { |work_series| work_series.expire_caches(except_work_id: id) }
 
     Work.expire_work_blurb_version(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
@@ -604,7 +604,8 @@ class Work < ApplicationRecord
   ########################################################################
 
   def set_revised_at(date=nil)
-    date ||= self.chapters.where(posted: true).maximum('published_at') ||
+    date ||= self.chapters.where(posted: true).maximum(:posted_at) ||
+             self.chapters.where(posted: true).maximum(:published_at) ||
              self.revised_at || self.created_at || Time.current
 
     if date.instance_of?(Date)
@@ -631,7 +632,7 @@ class Work < ApplicationRecord
       end
     end
 
-    if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.current
+    if chapter.posted? && (self.new_record? || chapter.new_record? || chapter.posted_changed?)
       self.set_revised_at(Time.current) # a new chapter is being posted, so most recent update is now
     else
       # Calculate the most recent chapter publication date:

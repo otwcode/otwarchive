@@ -65,7 +65,7 @@ class Series < ApplicationRecord
   end
 
   def works_in_order
-    works.order("serial_works.position")
+    works.order("works.revised_at": :desc)
   end
 
   # Get the filters for the works in this series
@@ -147,8 +147,13 @@ class Series < ApplicationRecord
     pertinent_attributes = %w[id restricted hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
-  def expire_caches
-    self.works.touch_all
+
+  # Timestamp of works should only apply to the singular work
+  # that was updates, not the entire series
+  def expire_caches(except_work_id: nil)
+    works_to_expire = self.works
+    works_to_expire = works_to_expire.where.not(id: except_work_id) if except_work_id
+    works_to_expire.pluck(:id).each { |work_id| Work.expire_work_blurb_version(work_id) }
   end
 
   def expire_byline_cache
