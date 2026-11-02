@@ -353,6 +353,13 @@ module CommentsHelper
     end
   end
 
+  def css_classes_for_inbox_comment(inbox_comment)
+    unread = inbox_comment.read? ? "read" : "unread"
+    comment = css_classes_for_comment(inbox_comment.feedback_comment)
+
+    "#{unread} #{comment}".squish
+  end
+
   # gets the css user-<id> class name for the comment
   def commenter_id_for_css_classes(comment)
     return if comment.pseud.nil?
