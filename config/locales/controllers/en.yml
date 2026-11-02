@@ -395,7 +395,9 @@ en:
         other: Could not assign fandoms %{fandom_list}. Non-canonical fandoms cannot be assigned.
   tag_wranglings:
     index:
-      page_subtitle: fandoms
+      page_title:
+        fandoms: Fandoms
+        wrangling_tools: Wrangling Tools
   tags:
     index:
       collection_page_title: "%{collection_title} - Tags"
