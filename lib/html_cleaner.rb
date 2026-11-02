@@ -59,7 +59,8 @@ module HtmlCleaner
       # We're allowing users to use HTML in this field
       transformers = [
         Sanitize::Config::OPEN_ATTRIBUTE_TRANSFORMER,
-        Sanitize::Config::RELATIVE_IMAGE_PATH_TRANSFORMER
+        Sanitize::Config::RELATIVE_IMAGE_PATH_TRANSFORMER,
+        Sanitize::Config::INVALID_HREF_TRANSFORMER
       ]
       if ArchiveConfig.FIELDS_ALLOWING_MEDIA_EMBEDS.include?(field.to_s)
         transformers << OtwSanitize::EmbedSanitizer.transformer
