@@ -169,10 +169,12 @@ class CollectionItem < ApplicationRecord
   end
 
   after_create_commit :notify_archivist_added
-  # Sends emails to item creator(s) in the case that an archivist
-  # has added them to the collection.
+  # Sends emails to item creator(s) in the case that an archivist or
+  # Open Doors user has added them to the collection.
   def notify_archivist_added
-    return unless item.is_a?(Work) && User.current_user&.archivist && collection.user_is_maintainer?(User.current_user)
+    return unless item.is_a?(Work) &&
+                  User.current_user&.can_force_add_to_collections? &&
+                  collection.user_is_maintainer?(User.current_user)
 
     item.users.each do |email_recipient|
       next if email_recipient.preference.collection_emails_off
@@ -252,7 +254,8 @@ class CollectionItem < ApplicationRecord
       approve_by_collection
     else
       author_of_item = user.is_author_of?(item) || (user == User.current_user && item.new_record?)
-      archivist_maintainer = user.archivist && self.collection.user_is_maintainer?(user)
+      archivist_maintainer = user.can_force_add_to_collections? &&
+                             self.collection.user_is_maintainer?(user)
       approve_by_user if author_of_item || archivist_maintainer
       approve_by_collection if self.collection.user_is_maintainer?(user)
     end

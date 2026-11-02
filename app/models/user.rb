@@ -411,6 +411,14 @@ class User < ApplicationRecord
     has_role?(:archivist)
   end
 
+  def opendoors
+    has_role?(:opendoors)
+  end
+
+  def can_force_add_to_collections?
+    archivist || opendoors
+  end
+
   # Is this user an authorized official?
   def official
     has_role?(:official)

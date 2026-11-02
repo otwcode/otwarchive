@@ -48,6 +48,20 @@ describe User do
     end
   end
 
+  describe "#can_force_add_to_collections?" do
+    it "is true for an archivist" do
+      expect(create(:archivist).can_force_add_to_collections?).to be true
+    end
+
+    it "is true for an opendoors user" do
+      expect(create(:opendoors_user).can_force_add_to_collections?).to be true
+    end
+
+    it "is false for an ordinary user" do
+      expect(create(:user).can_force_add_to_collections?).to be false
+    end
+  end
+
   describe "#destroy" do
     context "on a user with kudos" do
       let(:user) { create(:user) }

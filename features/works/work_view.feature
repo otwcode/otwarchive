@@ -62,6 +62,15 @@ Feature: View a work with various options
   Then I should see a link "Add to Collections"
     And I should see the "new_collection_item" form
 
+  Scenario: Open Doors users can add works to collections regardless of invitation preferences
+  Given the work "Imported Work"
+    And the user "od_member" exists and has the role "opendoors"
+    And I am logged in as "od_member"
+  When I create the collection "Open Doors Collection 2"
+    And I view the work "Imported Work"
+  Then I should see a link "Add to Collections"
+    And I should see the "new_collection_item" form
+
   Scenario: chapter title displays in View Full Work mode when chaptered work has one published chapter
   Given I am logged in as a random user
     And I set my preferences to View Full Work mode by default

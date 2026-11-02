@@ -79,7 +79,21 @@ Feature: Collectible items email
       And I press "Add"
     Then I should see "Added to collection(s): Open Doors Collection"
       And 1 email should be delivered
-      And the email to "regular_user" should be translated 
+      And the email to "regular_user" should be translated
+
+  Scenario: Open Doors user adds work to collection
+    Given I am logged in as "regular_user"
+      And I post the work "Committee Collection Work"
+      And the user "od_member" exists and has the role "opendoors"
+    When all emails have been delivered
+      And I am logged in as "od_member"
+      And I create the collection "OD Member Collection" with name "od_member_collection"
+      And I view the work "Committee Collection Work"
+      And I follow "Add to Collections"
+      And I fill in "collection_names" with "od_member_collection"
+      And I press "Add"
+    Then I should see "Added to collection(s): OD Member Collection"
+      And 1 email should be delivered
 
   Scenario: Translated email is sent when the status of a Collection item is changed to anonymous
     Given a locale with translated emails
