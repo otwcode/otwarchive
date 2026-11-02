@@ -366,19 +366,6 @@ GEM
       net-smtp
     marcel (1.0.2)
     matrix (0.4.3)
-    mechanize (2.12.2)
-      addressable (~> 2.8)
-      base64
-      domain_name (~> 0.5, >= 0.5.20190701)
-      http-cookie (~> 1.0, >= 1.0.3)
-      mime-types (~> 3.3)
-      net-http-digest_auth (~> 1.4, >= 1.4.1)
-      net-http-persistent (>= 2.5.2, < 5.0.dev)
-      nkf
-      nokogiri (~> 1.11, >= 1.11.2)
-      rubyntlm (~> 0.6, >= 0.6.3)
-      webrick (~> 1.7)
-      webrobots (~> 0.1.2)
     method_source (1.1.0)
     mime-types (3.5.2)
       mime-types-data (~> 3.2015)
@@ -397,9 +384,6 @@ GEM
     n_plus_one_control (0.7.2)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-http-digest_auth (1.4.1)
-    net-http-persistent (4.0.2)
-      connection_pool (~> 2.2)
     net-imap (0.6.6)
       date
       net-protocol
@@ -418,7 +402,6 @@ GEM
       net-ssh (>= 4.0.0)
     netrc (0.11.0)
     nio4r (2.7.5)
-    nkf (0.2.0)
     nokogiri (1.19.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -593,7 +576,6 @@ GEM
       rubocop (~> 1.19)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    rubyntlm (0.6.3)
     rubyzip (3.7.0)
     rufus-scheduler (3.9.1)
       fugit (~> 1.1, >= 1.1.6)
@@ -676,7 +658,6 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.9.1)
-    webrobots (0.1.2)
     websocket (1.2.11)
     websocket-driver (0.8.2)
       base64
@@ -744,7 +725,6 @@ DEPENDENCIES
   launchy
   lograge
   marcel (= 1.0.2)
-  mechanize
   minitest
   mysql2
   n_plus_one_control

@@ -43,7 +43,6 @@ gem "csv", "~> 3.3.5"
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', require: false
 gem 'nokogiri', '>= 1.8.5'
-gem 'mechanize'
 gem 'sanitize', '>= 4.6.5'
 gem "rest-client", "~> 2.1.0", require: "rest_client"
 gem 'resque', '>=1.14.0'

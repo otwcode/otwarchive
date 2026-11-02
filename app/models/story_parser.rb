@@ -4,7 +4,6 @@
 class StoryParser
   require 'timeout'
   require 'nokogiri'
-  require 'mechanize'
   require 'open-uri'
   include HtmlCleaner
 
@@ -468,21 +467,8 @@ class StoryParser
     url.gsub!(/\?(.*)$/, "") # strip off any existing params at the end
     url.gsub!('_', '-') # convert underscores in usernames to hyphens
     url += "?format=light" # go to light format
-    text = download_with_timeout(url)
 
-    if text.match(/adult_check/)
-      Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
-        begin
-          agent = Mechanize.new
-          url.include?("dreamwidth") ? form = agent.get(url).forms.first : form = agent.get(url).forms.third
-          page = agent.submit(form, form.buttons.first) # submits the adult concepts form
-          text = page.body.force_encoding(agent.page.encoding)
-        rescue
-          text = ""
-        end
-      }
-    end
-    text
+    download_with_timeout(url, Cookie: "adult_explicit=1")
   end
 
   # grab all the chapters of the story from ff.net
@@ -802,7 +788,7 @@ class StoryParser
     post_process_meta meta
   end
 
-  def download_with_timeout(location, limit = 10)
+  def download_with_timeout(location, headers = nil, limit = 10)
     story = +""
     Timeout.timeout(STORY_DOWNLOAD_TIMEOUT) do
       begin
@@ -820,7 +806,7 @@ class StoryParser
                  Net::HTTP.new(uri.hostname, uri.port)
                end
         http.use_ssl = true if uri.scheme == "https"
-        response = http.start { |h| h.request_get(uri.path.presence || "/") }
+        response = http.start { |h| h.request_get(uri.path.presence || "/", headers) }
 
         case response
         when Net::HTTPSuccess
@@ -829,7 +815,7 @@ class StoryParser
           if limit.positive?
             new_uri = URI.parse(response["location"])
             new_uri = URI.join(uri, new_uri) if new_uri.relative?
-            story = download_with_timeout(new_uri.to_s, limit - 1)
+            story = download_with_timeout(new_uri.to_s, headers, limit - 1)
           end
         else
           Rails.logger.error("------- STORY PARSER: download_with_timeout: response is not success or redirection ------")
