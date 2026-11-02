@@ -120,6 +120,16 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
     Then I should see "Sign Up"
+  
+  Scenario: Wrangler can't self-assign a non-canonical fandom
+    Given I am logged in as a tag wrangler
+     And a canonical fandom "Canon"
+     And a non-canonical fandom "Uncanon"
+    When I am on the wranglers page
+      And I fill in "Enter as many fandoms as you like." with "Uncanon"
+      And I press "Assign"
+    Then I should see "Could not assign fandom Uncanon. Non-canonical fandoms cannot be assigned."
+      And I should not see "Wranglers were successfully assigned!"
 
   Scenario: Updating multiple tags works.
     Given a canonical fandom "Cowboy Bebop"

@@ -62,7 +62,7 @@ class TagWranglersController < ApplicationController
 
   def create
     authorize :wrangling if logged_in_as_admin?
-
+    saved_any_assignment = false
     unless params[:tag_fandom_string].blank?
       names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
       fandoms = Fandom.where('name IN (?)', names)
@@ -77,6 +77,7 @@ class TagWranglersController < ApplicationController
           end
           assignment = current_user.wrangling_assignments.build(fandom_id: fandom.id)
           assignment.save!
+          saved_any_assignment = true
         end
         flash[:error] = t(".noncanonical_fandoms_tried_assignment", count: noncanonical_fandoms.length, fandom_list: helpers.to_sentence(noncanonical_fandoms.map(&:name))) unless noncanonical_fandoms.empty?
       end
@@ -90,12 +91,13 @@ class TagWranglersController < ApplicationController
             unless user.nil? || user.fandoms.include?(fandom)
               assignment = user.wrangling_assignments.build(fandom_id: fandom.id)
               assignment.save!
+              saved_any_assignment = true
             end
           end
         end
       end
-      flash[:notice] = "Wranglers were successfully assigned!"
     end
+    flash[:notice] = "Wranglers were successfully assigned!" if saved_any_assignment
     redirect_to tag_wranglers_path(media_id: params[:media_id], fandom_string: params[:fandom_string], wrangler_id: params[:wrangler_id])
   end
 
