@@ -124,6 +124,8 @@ class TagSetAssociation < ApplicationRecord
 
     unless search_param.blank?
       search_regex = Tag.get_search_regex(search_param)
+      return [] if search_regex.nil?
+
       results.select! {|tag| tag.match(search_regex)}
     end
     return results

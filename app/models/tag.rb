@@ -572,6 +572,8 @@ class Tag < ApplicationRecord
         results += REDIS_AUTOCOMPLETE.zrevrange(self.transliterate("autocomplete_fandom_#{single_fandom}_#{tag_type}"), 0, -1)
       else
         search_regex = Tag.get_search_regex(search_param)
+        next if search_regex.nil?
+
         results += REDIS_AUTOCOMPLETE.zrevrange(self.transliterate("autocomplete_fandom_#{single_fandom}_#{tag_type}"), 0, -1).select { |tag| tag.match(search_regex) }
       end
     end

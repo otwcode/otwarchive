@@ -313,6 +313,67 @@ describe Tag do
         expect(results).to eq([expected_tag])
       end
 
+      it "autocomplete matches tag names with parentheses" do
+        fandom = create(:canonical_fandom, name: "Star Trek")
+        tag_rel = create(:canonical_relationship, name: "Other(s)")
+        CommonTagging.create!(common_tag: tag_rel, filterable: fandom)
+        results = Tag.autocomplete_fandom_lookup(
+          term: +"others", fandom: "Star Trek", tag_type: "relationship"
+        )
+        expect(results).to eq(["#{tag_rel.id}: #{tag_rel.name}"])
+      end
+
+      it "autocomplete ignores parentheses in the search term" do
+        fandom = create(:canonical_fandom, name: "Star Trek")
+        tag_character = create(:canonical_character, name: "Original Characters")
+        CommonTagging.create!(common_tag: tag_character, filterable: fandom)
+        results = Tag.autocomplete_fandom_lookup(
+          term: +"Original Character(s)", fandom: "Star Trek",
+          tag_type: "character"
+        )
+        expect(results).to eq(["#{tag_character.id}: #{tag_character.name}"])
+      end
+
+      it "autocomplete lookup matches words with parentheses" do
+        tag_freeform = create(:canonical_freeform, name: "Soulmate(s)")
+        results = Tag.autocomplete_lookup(
+          search_param: "soulmates",
+          autocomplete_prefix: "autocomplete_tag_freeform"
+        )
+        expect(results).to eq(["#{tag_freeform.id}: #{tag_freeform.name}"])
+      end
+
+      it "autocomplete lookup ignores parentheses in the search term" do
+        tag_freeform = create(:canonical_freeform, name: "Soulmates")
+        results = Tag.autocomplete_lookup(
+          search_param: "Soulmate(s)",
+          autocomplete_prefix: "autocomplete_tag_freeform"
+        )
+        expect(results).to eq(["#{tag_freeform.id}: #{tag_freeform.name}"])
+      end
+
+      it "autocomplete returns nothing for a parentheses-only term" do
+        fandom = create(:canonical_fandom, name: "Star Trek")
+        tag_character = create(:canonical_character, name: "Original Characters")
+        CommonTagging.create!(common_tag: tag_character, filterable: fandom)
+        ["(", "()"].each do |term|
+          results = Tag.autocomplete_fandom_lookup(
+            term: +term, fandom: "Star Trek", tag_type: "character",
+            fallback: false
+          )
+          expect(results).to be_empty
+        end
+      end
+
+      it "autocomplete does not split words at parentheses" do
+        create(:canonical_freeform, name: "Foo(Bar)")
+        results = Tag.autocomplete_lookup(
+          search_param: "bar",
+          autocomplete_prefix: "autocomplete_tag_freeform"
+        )
+        expect(results).to be_empty
+      end
+
       it "old tag maker still works" do
         tag_adult = Rating.create_canonical(+"adult", true)
         tag_normal = ArchiveWarning.create_canonical(+"other")
