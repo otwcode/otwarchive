@@ -1,3 +1,4 @@
+@elasticsearch
 Feature: Large searches
   As a user
   I want to see how many results my search returns if it's more than the max

@@ -1,4 +1,4 @@
-@bookmarks @search
+@bookmarks
 Feature: Bookmarks of deleted items
 
   Scenario: Deleting a work shouldn't make its bookmarks disappear completely.

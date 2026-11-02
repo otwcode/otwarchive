@@ -1,4 +1,4 @@
-@bookmarks @search
+@bookmarks @elasticsearch
 Feature: Search Bookmarks
   In order to test search
   As a humble coder

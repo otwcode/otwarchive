@@ -1,3 +1,4 @@
+@elasticsearch
 Feature: Admin Find Users page
 
   Background:

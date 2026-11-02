@@ -99,6 +99,7 @@ Feature: Tag Wrangling - special cases
   Then I should see "Amélie"
     And I should not see "Amelie"
 
+  @elasticsearch
   Scenario: Tags with non-standard characters in them - question mark and period
   
   Given basic tags

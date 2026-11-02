@@ -1,4 +1,4 @@
-@works @search
+@works
 Feature: Work Drafts
 
   Scenario: Creating a work draft

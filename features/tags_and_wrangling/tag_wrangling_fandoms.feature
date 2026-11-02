@@ -2,7 +2,7 @@
 
 Feature: Tag Wrangling - Fandoms
 
-@javascript
+@javascript @elasticsearch
 Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
 
   Given the following activated tag wrangler exists
