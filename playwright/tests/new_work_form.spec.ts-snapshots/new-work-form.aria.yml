@@ -1,0 +1,393 @@
+- main:
+  - heading "Post New Work" [level=2]
+  - list:
+    - listitem:
+      - link "Restore From Last Unposted Draft?":
+        - /url: /works/new?load_unposted=true
+    - listitem:
+      - link "Import From An Existing URL Instead?":
+        - /url: /works/new?import=true
+  - paragraph: "* Required information"
+  - group "Tags":
+    - text: ""
+    - heading "Tags" [level=3]
+    - paragraph: /Tags are comma separated, \d+ characters per tag\. Fandom, relationship, character, and additional tags must not add up to more than \d+\. Archive warning, category, and rating tags do not count toward this limit\./
+    - term:
+      - text: Rating*
+      - link "Rating help":
+        - /url: /help/tags_ratings
+        - text: "?"
+    - definition:
+      - combobox "Rating*":
+        - option "Not Rated" [selected]
+        - option "General Audiences"
+        - option "Teen And Up Audiences"
+        - option "Mature"
+        - option "Explicit"
+    - term:
+      - text: Archive Warnings*
+      - link "Warning help":
+        - /url: /help/tags_warnings
+        - text: "?"
+    - definition:
+      - group:
+        - list:
+          - listitem:
+            - checkbox "Rape/Non-Con"
+            - text: Rape/Non-Con
+          - listitem:
+            - checkbox "Graphic Depictions Of Violence"
+            - text: Graphic Depictions Of Violence
+          - listitem:
+            - checkbox "Major Character Death"
+            - text: Major Character Death
+          - listitem:
+            - checkbox "Underage Sex"
+            - text: Underage Sex
+          - listitem:
+            - checkbox "Choose Not To Use Archive Warnings"
+            - text: Choose Not To Use Archive Warnings
+          - listitem:
+            - checkbox "No Archive Warnings Apply"
+            - text: No Archive Warnings Apply
+    - term:
+      - text: Fandoms*
+      - link "Fandom help":
+        - /url: /help/tags_fandoms
+        - text: "?"
+    - definition:
+      - list:
+        - listitem:
+          - combobox "Fandoms*" [expanded]
+      - paragraph: If this is the first work for a fandom, it may not show up in the fandoms page for a day or two.
+    - term:
+      - text: Categories
+      - link "Categories help":
+        - /url: /help/tags_categories
+        - text: "?"
+    - definition:
+      - group:
+        - list:
+          - listitem:
+            - checkbox "F/F"
+            - text: F/F
+          - listitem:
+            - checkbox "F/M"
+            - text: F/M
+          - listitem:
+            - checkbox "Gen"
+            - text: Gen
+          - listitem:
+            - checkbox "M/M"
+            - text: M/M
+          - listitem:
+            - checkbox "Multi"
+            - text: Multi
+          - listitem:
+            - checkbox "Other"
+            - text: Other
+    - term:
+      - text: Relationships
+      - link "Relationships help":
+        - /url: /help/tags_relationships
+        - text: "?"
+    - definition:
+      - list:
+        - listitem:
+          - combobox "Relationships" [expanded]
+    - term:
+      - text: Characters
+      - link "Characters help":
+        - /url: /help/tags_characters
+        - text: "?"
+    - definition:
+      - list:
+        - listitem:
+          - combobox "Characters" [expanded]
+    - term:
+      - text: Additional Tags
+      - link "Additional tags help":
+        - /url: /help/tags_additional
+        - text: "?"
+    - definition:
+      - list:
+        - listitem:
+          - combobox "Additional Tags" [expanded]
+  - article "Preface":
+    - text: ""
+    - heading "Preface" [level=3]
+    - term: Work Title*
+    - definition:
+      - textbox "Work Title*"
+      - alert
+      - paragraph: /\d+ characters left/
+    - term: Creator/Pseud(s)
+    - definition:
+      - listbox "Creator/Pseud(s)":
+        - option "Cal" [selected]
+        - option "Non-Default Pseud"
+        - option "Some other fucking pseud"
+        - option "testuser"
+        - option "thelongestpseudinthegoshdarnworldomgwtfo"
+    - term: Add co-creators?
+    - definition:
+      - checkbox "Add co-creators?"
+      - group "Add co-creators":
+        - list:
+          - listitem:
+            - combobox [expanded]
+    - term: Summary
+    - definition:
+      - textbox "Summary"
+      - alert
+      - paragraph: /\d+ characters left/
+    - term: Notes
+    - definition:
+      - list:
+        - listitem:
+          - checkbox "at the beginning"
+          - text: "at the beginning Warning: Unchecking this box will delete the existing beginning note."
+          - group "Notes":
+            - text: ""
+            - textbox "Notes"
+            - paragraph: /\d+ characters left/
+        - listitem:
+          - checkbox "at the end"
+          - text: "at the end Warning: Unchecking this box will delete the existing end note."
+          - group "End Notes":
+            - text: ""
+            - textbox "End Notes"
+            - paragraph: /\d+ characters left/
+  - article "Associations":
+    - text: ""
+    - heading "Associations" [level=3]
+    - term:
+      - text: Post to Collections / Challenges
+      - link "Adding To Collections":
+        - /url: /help/collectibles_add_to_collection
+        - text: "?"
+    - definition:
+      - list:
+        - listitem:
+          - combobox "Post to Collections / Challenges" [expanded]
+    - term:
+      - text: Gift this work to
+      - link "Recipients":
+        - /url: /help/works_recipients
+        - text: "?"
+    - definition:
+      - list:
+        - listitem:
+          - combobox "Gift this work to" [expanded]
+    - term:
+      - checkbox "This work is a remix, a translation, a podfic, or was inspired by another work"
+    - definition:
+      - text: This work is a remix, a translation, a podfic, or was inspired by another work
+      - link "Parent works help":
+        - /url: /help/works_parents
+        - text: "?"
+      - group:
+        - term: URL
+        - definition:
+          - textbox "URL"
+          - paragraph: For a work in the Archive, only the URL is required.
+        - term: Title
+        - definition:
+          - textbox "Title"
+        - term: Author
+        - definition:
+          - textbox "Author"
+        - term:
+          - text: Language
+          - link "Languages help":
+            - /url: /help/works_languages
+            - text: "?"
+        - definition:
+          - combobox "Language":
+            - option [selected]
+            - option ">中文"
+            - option "Bahasa Indonesia"
+            - option "Čeština"
+            - option "Deutsch"
+            - option "English"
+            - option "Español"
+            - option "Français"
+            - option "Italiano"
+            - option "Nederlands"
+            - option "日本語"
+            - option "Português"
+            - option "Русский"
+            - option "Suomi"
+        - term:
+          - checkbox "This is a translation"
+        - definition:
+          - text: This is a translation
+          - link "Translation link":
+            - /url: /help/works_translation_link
+            - text: "?"
+    - term:
+      - checkbox "This work is part of a series"
+    - definition:
+      - text: This work is part of a series
+      - link "Choosing series":
+        - /url: /help/works_series
+        - text: "?"
+      - group:
+        - term: "Choose one of your existing series:"
+        - definition:
+          - combobox "Choose one of your existing series:":
+            - option "Please select" [selected]
+            - option "Test Series"
+        - term: "Or create and use a new one:"
+        - definition:
+          - textbox "Or create and use a new one:"
+    - term:
+      - checkbox "This work has multiple chapters"
+    - definition:
+      - text: This work has multiple chapters
+      - group:
+        - term: Chapter 1 of
+        - definition:
+          - textbox "Chapter 1 of"
+        - term: "Chapter Title:"
+        - definition:
+          - textbox "Chapter Title:"
+    - term:
+      - checkbox "Set a different publication date"
+    - definition:
+      - text: Set a different publication date
+      - link "Publication Date Options":
+        - /url: /help/works_backdating
+        - text: "?"
+      - group:
+        - term: Set publication date
+        - definition:
+          - combobox
+          - combobox:
+            - option "January"
+            - option "February"
+            - option "March"
+            - option "April"
+            - option "May"
+            - option "June"
+            - option "July"
+            - option "August"
+            - option "September"
+            - option "October"
+            - option "November"
+            - option "December"
+          - combobox
+    - term:
+      - text: Choose a language *
+      - link "Languages help":
+        - /url: /help/works_languages
+        - text: "?"
+    - definition:
+      - combobox "Choose a language *":
+        - option "Please select a language" [selected]
+        - option ">中文"
+        - option "Bahasa Indonesia"
+        - option "Čeština"
+        - option "Deutsch"
+        - option "English"
+        - option "Español"
+        - option "Français"
+        - option "Italiano"
+        - option "Nederlands"
+        - option "日本語"
+        - option "Português"
+        - option "Русский"
+        - option "Suomi"
+    - term:
+      - text: Select work skin
+      - link "Work skins":
+        - /url: /help/works_skins
+        - text: "?"
+    - definition:
+      - combobox "Select work skin":
+        - option [selected]
+      - navigation:
+        - link "Public Work Skins":
+          - /url: /skins?skin_type=WorkSkin
+  - article "Privacy":
+    - text: ""
+    - heading "Privacy" [level=3]
+    - term:
+      - checkbox "Only show your work to registered users"
+    - definition:
+      - text: Only show your work to registered users
+      - link "Registered users":
+        - /url: /help/privacy_restricted_work
+        - text: "?"
+    - term:
+      - checkbox "Enable comment moderation"
+    - definition:
+      - text: Enable comment moderation
+      - link "Comments moderated":
+        - /url: /help/privacy_moderated_commenting
+        - text: "?"
+    - term:
+      - text: Who can comment on this work
+      - link "Who can comment on this work":
+        - /url: /help/privacy_restricted_commenting
+        - text: "?"
+    - definition:
+      - group:
+        - list:
+          - listitem:
+            - radio "Registered users and guests can comment"
+            - text: Registered users and guests can comment
+          - listitem:
+            - radio "Only registered users can comment" [checked]
+            - text: Only registered users can comment
+          - listitem:
+            - radio "No one can comment"
+            - text: No one can comment
+  - article "Work Text*":
+    - text: ""
+    - menu:
+      - listitem:
+        - link "Rich Text":
+          - /url: "#"
+      - listitem:
+        - link "HTML":
+          - /url: "#"
+    - paragraph:
+      - text: Plain text with limited HTML
+      - link "Html help":
+        - /url: /help/html
+        - text: "?"
+      - text: Type or paste formatted text.
+      - link "Rte help":
+        - /url: /help/rte
+        - text: "?"
+    - paragraph:
+      - strong: "Note:"
+      - text: Text entered in the posting form is
+      - strong: not
+      - text: automatically saved. Always keep a backup copy of your work.
+    - heading "Work Text*" [level=4]
+    - textbox
+    - alert
+    - paragraph: /\d+ characters left/
+  - group "Post Work":
+    - text: ""
+    - paragraph:
+      - text: All works on AO3 must comply with our
+      - link "Content Policy":
+        - /url: /content
+      - text: . For more information, please refer to our
+      - link "Terms of Service FAQ":
+        - /url: /tos_faq#content_faq
+      - text: .
+    - list:
+      - listitem:
+        - button "Save Draft"
+      - listitem:
+        - button "Preview"
+      - listitem:
+        - button "Post"
+      - listitem:
+        - link "Cancel":
+          - /url: /users/testuser/works
+
