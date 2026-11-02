@@ -36,7 +36,7 @@ Feature: Tag wrangling
 
     Examples:
       | link_text                     | heading                            |
-      | "Wranglers"                   | "Tag Wrangling Assignments"        |
+      | "Wranglers"                   | "Assign Wranglers to Fandoms"      |
       | "Wrangling Tools"             | "Tag Wrangling"                    |
       | "Characters by fandom (2)"    | "Mass Wrangle New/Unwrangled Tags" |
       | "Relationships by fandom (1)" | "Mass Wrangle New/Unwrangled Tags" |
