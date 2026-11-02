@@ -48,7 +48,7 @@ class Work < ApplicationRecord
 
   belongs_to :language
   belongs_to :work_skin
-  validate :work_skin_allowed
+  validate :work_skin_allowed, if: :work_skin_id_changed?
   def work_skin_allowed
     return if work_skin.blank? || (work_skin.public? && work_skin.official?)
 
