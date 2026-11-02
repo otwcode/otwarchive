@@ -26,6 +26,11 @@ class TagSetAssociation < ApplicationRecord
     where(owned_tag_set_id: tagset.id)
   end
 
+  def self.in_name_order
+    includes(:tag, :parent_tag).joins(:tag, :parent_tag)
+      .order("parent_tags_tag_set_associations.name, tags.name")
+  end
+
   # almost exactly like the same code in tag.rb
   def self.parent_names(child_type, parent_type = "fandom")
     joins(:tag, :parent_tag).where("tags.type = ? AND parent_tags_tag_set_associations.type = ?", child_type.capitalize, parent_type.capitalize).
