@@ -90,34 +90,18 @@ class Work < ApplicationRecord
   ########################################################################
   # VALIDATION
   ########################################################################
-  validates_presence_of :title
-  validates_length_of :title,
-    minimum: ArchiveConfig.TITLE_MIN,
-    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)
+  validates :title,
+            presence: true,
+            length: { minimum: ArchiveConfig.TITLE_MIN, maximum: ArchiveConfig.TITLE_MAX }
 
-  validates_length_of :title,
-    maximum: ArchiveConfig.TITLE_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
-
-  validates_length_of :summary,
-    allow_blank: true,
-    maximum: ArchiveConfig.SUMMARY_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
-
-  validates_length_of :notes,
-    allow_blank: true,
-    maximum: ArchiveConfig.NOTES_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.NOTES_MAX)
-
-  validates_length_of :endnotes,
-    allow_blank: true,
-    maximum: ArchiveConfig.NOTES_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.NOTES_MAX)
+  validates :summary, length: { maximum: ArchiveConfig.SUMMARY_MAX, allow_blank: true }
+  validates :notes, length: { maximum: ArchiveConfig.NOTES_MAX, allow_blank: true }
+  validates :endnotes, length: { maximum: ArchiveConfig.NOTES_MAX, allow_blank: true }
 
   validate :language_present_and_supported
 
   def language_present_and_supported
-    errors.add(:base, ts("Language cannot be blank.")) if self.language.blank?
+    errors.add(:language, :blank) if self.language.blank?
   end
 
   # Makes sure the title has no leading spaces
@@ -127,7 +111,7 @@ class Work < ApplicationRecord
     unless self.title.blank?
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
-        errors.add(:base, ts("Title must be at least %{min} characters long without leading spaces.", min: ArchiveConfig.TITLE_MIN))
+        errors.add(:title, :too_short_without_leading_spaces, count: ArchiveConfig.TITLE_MIN)
         throw :abort
       else
         self.title_to_sort_on = self.sorted_title
@@ -141,32 +125,29 @@ class Work < ApplicationRecord
     if !self.first_chapter.published_at
       self.first_chapter.published_at = Date.current
     elsif self.first_chapter.published_at > Date.current
-      errors.add(:base, ts("Publication date can't be in the future."))
+      errors.add(:base, :future_published_at)
       throw :abort
     end
   end
 
-  validates :fandom_string,
-            presence: { message: "^Please fill in at least one fandom." }
-  validates :archive_warning_string,
-            presence: { message: "^Please select at least one warning." }
-  validates :rating_string,
-            presence: { message: "^Please choose a rating." }
+  validates :fandom_string, presence: true
+  validates :archive_warning_string, presence: true
+  validates :rating_string, presence: true
 
   validate :only_one_rating
   def only_one_rating
     return unless split_tag_string(rating_string).count > 1
 
-    errors.add(:base, ts("Only one rating is allowed."))
+    errors.add(:base, :multiple_ratings)
   end
 
   # rephrases the "chapters is invalid" message
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
-    if self.errors[:chapters].any?
-      self.errors.add(:base, ts("Please enter your story in the text field below."))
-      self.errors.delete(:chapters)
-    end
+    return unless self.errors[:chapters].any?
+
+    self.errors.add(:base, :invalid_chapters)
+    self.errors.delete(:chapters)
   end
 
   validates :user_defined_tags_count,
@@ -457,7 +438,7 @@ class Work < ApplicationRecord
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
 
     if pseuds_with_author_removed.empty?
-      errors.add(:base, ts("Sorry, we can't remove all creators of a work."))
+      errors.add(:base, :no_creators)
       raise ActiveRecord::RecordInvalid, self
     end
 
@@ -681,7 +662,7 @@ class Work < ApplicationRecord
     if !attributes[:id].blank?
       old_series = Series.find(attributes[:id])
       if old_series.pseuds.none? { |pseud| pseud.user == User.current_user }
-        errors.add(:base, ts("You can't add a work to that series."))
+        errors.add(:base, :invalid_series_addition)
         return
       end
       unless old_series.blank? || self.series.include?(old_series)
