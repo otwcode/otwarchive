@@ -88,19 +88,19 @@
         <ul>
           <li>
             <%= f.check_box :rec  %>
-            <%= f.label :rec, ts("Rec") %>
-            <%= link_to_help "bookmark-search-rec-help" %>
+            <%= f.label :rec, t(".rec") %>
+            <%= link_to_help_modal(help_bookmark_search_rec_path, t(".rec_help_title")) %>
           </li>
           <li>
             <%= f.check_box :with_notes  %>
-            <%= f.label :with_notes, ts("With notes") %>
-            <%= link_to_help "bookmark-search-notes-help" %>
+            <%= f.label :with_notes, t(".with_notes") %>
+            <%= link_to_help_modal(help_bookmark_search_notes_path, t(".notes_help_title")) %>
           </li>
         </ul>
       </dd>
       <dt>
-        <%= f.label :date, ts("Date bookmarked") %>
-        <%= link_to_help "bookmark-search-date-bookmarked-help" %>
+        <%= f.label :date, t(".date_bookmarked") %>
+        <%= link_to_help_modal(help_bookmark_search_date_bookmarked_path, t(".date_bookmarked_help_title")) %>
       </dt>
       <dd>
         <%= f.text_field :date %>
