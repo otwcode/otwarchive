@@ -157,7 +157,7 @@ Feature: Prompt Meme Challenge
     And I press "Post"
   Then I should see "My Gift Exchange"
     And I should not see "Battle 12"
-    And I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
+    And I should not see "This work is part of a collection that has not been revealed. Please visit My Gift Exchange for details."
 
   Scenario: Mod can claim a prompt like an ordinary user
 
