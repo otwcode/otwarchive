@@ -63,7 +63,7 @@ module CssCleaner
   def clean_css_code(css_code, options = {})
     return "" if !css_code.match(/\w/) # only spaces of various kinds
     clean_css = ""
-    parser = CssParser::Parser.new
+    parser = CssParser::Parser.new(import: false)
     parser.add_block!(css_code)
 
     prefix = options[:prefix] || ''
