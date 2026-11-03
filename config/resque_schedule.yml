@@ -5,6 +5,13 @@ run_main_reindex_queues:
   args: main
   description: "Kick off a reindex of all main content indexing"
 
+cleanup_generated_downloads:
+  every: 1h
+  class: "GeneratedDownload"
+  queue: utilities
+  args: cleanup
+  description: "Remove expired generated downloads from storage and the database."
+
 run_background_reindex_queue:
   every: 11m
   class: "ScheduledReindexJob"

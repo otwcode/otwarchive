@@ -119,9 +119,12 @@ class ChallengeSignupsController < ApplicationController
         if privileged_collection_admin? ||
            (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) ||
         (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
-          csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
-          filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
-          send_csv_data(csv_data, filename)
+          filename = "#{@collection.name}_signups_#{Time.current.strftime('%Y-%m-%d-%H%M')}.csv"
+          queue_csv_download(
+            kind: "challenge_signups",
+            arguments: { collection_id: @collection.id },
+            filename: filename
+          )
         else
           flash[:error] = ts("You aren't allowed to see the CSV summary.")
           redirect_to collection_path(@collection) rescue redirect_to '/' and return

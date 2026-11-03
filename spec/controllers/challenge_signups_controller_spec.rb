@@ -308,11 +308,13 @@ describe ChallengeSignupsController do
 
     it "allows support admins to download CSV" do
       fake_login_admin(create(:support_admin))
+      allow(GeneratedDownloadJob).to receive(:perform_later)
 
       get :index, params: { collection_id: closed_collection.name, format: :csv }
 
-      expect(response).to have_http_status(:success)
-      expect(response.content_type).to include("text/csv")
+      download = GeneratedDownload.order(:created_at).last
+      expect(response).to redirect_to(generated_download_path(token: download.token))
+      expect(GeneratedDownloadJob).to have_received(:perform_later).with(download)
     end
   end
 end

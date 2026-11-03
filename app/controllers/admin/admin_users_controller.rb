@@ -46,11 +46,12 @@ class Admin::AdminUsersController < Admin::BaseController
       @users = found_users.paginate(page: params[:page] || 1)
 
       if params[:download_button]
-        header = [%w(Email Username)]
-        found = found_users.map { |u| [u.email, u.login] }
-        not_found = not_found_emails.map { |email| [email, ""] }
-        send_csv_data(header + found + not_found, "bulk_user_search_#{Time.now.strftime("%Y-%m-%d-%H%M")}.csv")
-        flash.now[:notice] = ts("Downloaded CSV")
+        queue_csv_download(
+          kind: "bulk_user_search",
+          arguments: { emails: @emails },
+          filename: "bulk_user_search_#{Time.current.strftime('%Y-%m-%d-%H%M')}.csv"
+        )
+        return
       end
       @results = {
         total: @emails.size,

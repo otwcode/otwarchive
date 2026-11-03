@@ -59,6 +59,7 @@ Rails.application.routes.draw do
   #### DOWNLOADS ####
 
   get 'downloads/:id/:download_title.:format' => 'downloads#show', as: 'download'
+  get "generated_downloads/:token" => "generated_downloads#show", as: "generated_download"
 
   #### OPEN DOORS ####
   namespace :opendoors do
