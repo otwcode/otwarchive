@@ -68,11 +68,13 @@ class TagSearchForm
     [
       %w[Name name],
       ["Date Created", "created_at"],
+      ["Date Canonized", "canonized_at"],
+      ["Date Decanonized", "decanonized_at"],
       %w[Uses uses]
     ]
   end
 
   def default_sort_direction
-    %w[created_at uses].include?(sort_column) ? "desc" : "asc"
+    %w[created_at canonized_at decanonized_at uses].include?(sort_column) ? "desc" : "asc"
   end
 end

@@ -197,6 +197,16 @@ describe TagQuery do
       expect(q.generated_query[:sort]).to eq([{ "created_at" => { order: "asc", unmapped_type: "date" } }, { id: { order: "asc" } }])
     end
 
+    it "allows you to sort by Date Canonized" do
+      q = TagQuery.new(sort_column: "canonized_at")
+      expect(q.generated_query[:sort]).to eq([{ "canonized_at" => { order: "desc", unmapped_type: "date", missing: "_last" } }, { id: { order: "desc" } }])
+    end
+
+    it "allows you to sort by Date Decanonized" do
+      q = TagQuery.new(sort_column: "decanonized_at")
+      expect(q.generated_query[:sort]).to eq([{ "decanonized_at" => { order: "desc", unmapped_type: "date", missing: "_last" } }, { id: { order: "desc" } }])
+    end
+
     it "allows you to sort by Uses" do
       q = TagQuery.new(sort_column: "uses")
       expect(q.generated_query[:sort]).to eq([{ "uses" => { order: "desc" } }, { "name.keyword" => { order: "asc" } }, { id: { order: "desc" } }])
