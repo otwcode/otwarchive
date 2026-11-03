@@ -117,7 +117,6 @@ class User < ApplicationRecord
 
   has_many :collection_participants, through: :pseuds
   has_many :collections, through: :collection_participants
-  has_many :invited_collections, -> { where("collection_participants.participant_role = ?", CollectionParticipant::INVITED) }, through: :collection_participants, source: :collection
   has_many :participated_collections, -> { where("collection_participants.participant_role IN (?)", [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR, CollectionParticipant::MEMBER]) }, through: :collection_participants, source: :collection
   has_many :maintained_collections, -> { where("collection_participants.participant_role IN (?)", [CollectionParticipant::OWNER, CollectionParticipant::MODERATOR]) }, through: :collection_participants, source: :collection
   has_many :owned_collections, -> { where("collection_participants.participant_role = ?", CollectionParticipant::OWNER) }, through: :collection_participants, source: :collection
