@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe "n+1 queries in the people controller" do
-  describe "#index", n_plus_one: true do
+  describe "#index", n_plus_one: true, work_search: true, bookmark_search: true, collection_search: true, pseud_search: true do
     context "when viewing people in a collection" do
       let!(:collection) { create(:collection) }
 
@@ -26,7 +26,7 @@ describe "n+1 queries in the people controller" do
     end
   end
 
-  describe "#search", n_plus_one: true do
+  describe "#search", n_plus_one: true, pseud_search: true, collection_search: true do
     context "when there are search results" do
       populate do |n|
         PseudIndexer.prepare_for_testing

@@ -3,7 +3,7 @@ require "spec_helper"
 describe "n+1 queries in the inbox module on the homepage: " do
   include LoginMacros
 
-  describe "#show", n_plus_one: true do
+  describe "#show", n_plus_one: true, work_search: true, bookmark_search: true, collection_search: true do
     context "displaying a user's unread messages on the homepage" do
       let!(:user) { create(:user) }
 

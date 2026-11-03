@@ -5,7 +5,7 @@ require "spec_helper"
 describe "n+1 queries in the muted users controller" do
   include LoginMacros
 
-  describe "#index", n_plus_one: true do
+  describe "#index", n_plus_one: true, work_search: true, bookmark_search: true, collection_search: true, pseud_search: true do
     context "with a logged in user who has muted someone" do
       let!(:muter) { create(:user) }
 

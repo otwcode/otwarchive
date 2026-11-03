@@ -3,7 +3,7 @@ require "spec_helper"
 describe "n+1 queries in the InboxController" do
   include LoginMacros
 
-  describe "#show" do
+  describe "#show", work_search: true, bookmark_search: true, collection_search: true do
     let!(:user) { create(:user) }
 
     shared_examples "a constant number of queries" do
