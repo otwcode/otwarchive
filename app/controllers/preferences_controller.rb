@@ -42,6 +42,7 @@ class PreferencesController < ApplicationController
 
   def available_skins
     (@user.skins.site_skins.usable +
-    Skin.approved_skins.site_skins.usable).uniq
+    Skin.approved_skins.site_skins.usable +
+    [@user.preference.skin]).compact.uniq
   end
 end
