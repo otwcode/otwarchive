@@ -35,6 +35,11 @@ class OrphansController < ApplicationController
   end
 
   def create
+    unless params[:use_default].in?(%w[true false])
+      flash[:error] = t(".pseud_option_required")
+      redirect_back_or_to(new_orphan_path(orphan_params)) && return
+    end
+
     use_default = params[:use_default] == "true"
     Creatorship.orphan(@pseuds, @orphans, use_default)
     flash[:notice] = ts("Orphaning was successful.")
@@ -91,5 +96,12 @@ class OrphansController < ApplicationController
       # We don't need to check ownership here because these pseuds are
       # guaranteed to be owned by the current user.
     end
+  end
+
+  private
+
+  def orphan_params
+    params.slice(:series_id, :pseud_id, :work_ids)
+      .permit(:series_id, :pseud_id, work_ids: [])
   end
 end

@@ -1,11 +1,11 @@
 When /^I choose to take my pseud off$/ do
-  step %{I choose "Take my pseud off as well"}
+  step %{I choose "use_default_true"}
   step %{I press "Yes, I'm sure"}
   step %{I should see "Orphaning was successful."}
 end
 
 When /^I choose to (?:keep|leave) my pseud on$/ do
-  step %{I choose "Leave a copy of my pseud on"}
+  step %{I choose "use_default_false"}
   step %{I press "Yes, I'm sure"}
   step %{I should see "Orphaning was successful."}
 end
