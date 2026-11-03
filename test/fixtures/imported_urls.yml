@@ -1,0 +1,309 @@
+---
+imported_url_00001:
+  id: 1
+  work_id: 82
+  original: http://www.trickster.org/llwyden/misc/cracked.html
+  minimal: http://www.trickster.org/llwyden/misc/cracked.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/misc/cracked.html
+  no_www: http://trickster.org/llwyden/misc/cracked.html
+  with_www: http://www.www.trickster.org/llwyden/misc/cracked.html
+  with_http: http://www.trickster.org/llwyden/misc/cracked.html
+  with_https: https://www.trickster.org/llwyden/misc/cracked.html
+  encoded: http://www.trickster.org/llwyden/misc/cracked.html
+  decoded: http://www.trickster.org/llwyden/misc/cracked.html
+  created_at: 2009-12-12 21:14:01 Z
+  updated_at: 2009-12-12 21:14:01 Z
+imported_url_00002:
+  id: 2
+  work_id: 83
+  original: http://www.trickster.org/llwyden/misc/bestmen.html
+  minimal: http://www.trickster.org/llwyden/misc/bestmen.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/misc/bestmen.html
+  no_www: http://trickster.org/llwyden/misc/bestmen.html
+  with_www: http://www.www.trickster.org/llwyden/misc/bestmen.html
+  with_http: http://www.trickster.org/llwyden/misc/bestmen.html
+  with_https: https://www.trickster.org/llwyden/misc/bestmen.html
+  encoded: http://www.trickster.org/llwyden/misc/bestmen.html
+  decoded: http://www.trickster.org/llwyden/misc/bestmen.html
+  created_at: 2008-12-06 22:56:52 Z
+  updated_at: 2008-12-06 22:56:52 Z
+imported_url_00003:
+  id: 3
+  work_id: 84
+  original: http://www.trickster.org/llwyden/misc/betterman.html
+  minimal: http://www.trickster.org/llwyden/misc/betterman.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/misc/betterman.html
+  no_www: http://trickster.org/llwyden/misc/betterman.html
+  with_www: http://www.www.trickster.org/llwyden/misc/betterman.html
+  with_http: http://www.trickster.org/llwyden/misc/betterman.html
+  with_https: https://www.trickster.org/llwyden/misc/betterman.html
+  encoded: http://trickster.org/llwyden/misc/betterman.html
+  decoded: http://trickster.org/llwyden/misc/betterman.html
+  created_at: 2009-12-12 21:14:02 Z
+  updated_at: 2009-12-12 21:14:02 Z
+imported_url_00004:
+  id: 4
+  work_id: 85
+  original: http://www.trickster.org/llwyden/misc/mazes.html
+  minimal: http://www.trickster.org/llwyden/misc/mazes.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/misc/mazes.html
+  no_www: http://trickster.org/llwyden/misc/mazes.html
+  with_www: http://www.www.trickster.org/llwyden/misc/mazes.html
+  with_http: http://www.trickster.org/llwyden/misc/mazes.html
+  with_https: https://www.trickster.org/llwyden/misc/mazes.html
+  encoded: http://www.trickster.org/llwyden/misc/mazes.html
+  decoded: http://www.trickster.org/llwyden/misc/mazes.html
+  created_at: 2009-12-12 21:14:03 Z
+  updated_at: 2009-12-12 21:14:03 Z
+imported_url_00005:
+  id: 5
+  work_id: 101
+  original: http://www.fanfiction.net/s/4093664/1/Accidental_Documentaries
+  minimal: http://www.fanfiction.net/s/4093664/1/Accidental_Documentaries
+  minimal_no_protocol_no_www: fanfiction.net/s/4093664/1/Accidental_Documentaries
+  no_www: http://fanfiction.net/s/4093664/1/Accidental_Documentaries
+  with_www: http://www.www.fanfiction.net/s/4093664/1/Accidental_Documentaries
+  with_http: http://www.fanfiction.net/s/4093664/1/Accidental_Documentaries
+  with_https: https://www.fanfiction.net/s/4093664/1/Accidental_Documentaries
+  encoded: http://www.fanfiction.net/s/4093664/1/Accidental_Documentaries
+  decoded: http://www.fanfiction.net/s/4093664/1/Accidental_Documentaries
+  created_at: 2009-12-12 23:28:00 Z
+  updated_at: 2009-12-12 23:28:00 Z
+imported_url_00006:
+  id: 6
+  work_id: 86
+  original: http://www.trickster.org/llwyden/misc/prettyface.html
+  minimal: http://www.trickster.org/llwyden/misc/prettyface.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/misc/prettyface.html
+  no_www: http://trickster.org/llwyden/misc/prettyface.html
+  with_www: http://www.www.trickster.org/llwyden/misc/prettyface.html
+  with_http: http://www.trickster.org/llwyden/misc/prettyface.html
+  with_https: https://www.trickster.org/llwyden/misc/prettyface.html
+  encoded: http://www.trickster.org/llwyden/misc/prettyface.html
+  decoded: http://www.trickster.org/llwyden/misc/prettyface.html
+  created_at: 2009-12-12 21:14:04 Z
+  updated_at: 2009-12-12 21:14:04 Z
+imported_url_00007:
+  id: 7
+  work_id: 87
+  original: http://www.trickster.org/llwyden/misc/pirates.html
+  minimal: http://www.trickster.org/llwyden/misc/pirates.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/misc/pirates.html
+  no_www: http://trickster.org/llwyden/misc/pirates.html
+  with_www: http://www.www.trickster.org/llwyden/misc/pirates.html
+  with_http: http://www.trickster.org/llwyden/misc/pirates.html
+  with_https: https://www.trickster.org/llwyden/misc/pirates.html
+  encoded: http://www.trickster.org/llwyden/misc/pirates.html
+  decoded: http://www.trickster.org/llwyden/misc/pirates.html
+  created_at: 2009-12-12 21:28:22 Z
+  updated_at: 2009-12-12 21:28:22 Z
+imported_url_00008:
+  id: 8
+  work_id: 88
+  original: http://www.trickster.org/llwyden/misc/tappedout.html
+  minimal: http://www.trickster.org/llwyden/misc/tappedout.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/misc/tappedout.html
+  no_www: http://trickster.org/llwyden/misc/tappedout.html
+  with_www: http://www.www.trickster.org/llwyden/misc/tappedout.html
+  with_http: http://www.trickster.org/llwyden/misc/tappedout.html
+  with_https: https://www.trickster.org/llwyden/misc/tappedout.html
+  encoded: http://www.trickster.org/llwyden/misc/tappedout.html
+  decoded: http://www.trickster.org/llwyden/misc/tappedout.html
+  created_at: 2009-12-12 21:14:05 Z
+  updated_at: 2009-12-12 21:14:05 Z
+imported_url_00009:
+  id: 9
+  work_id: 71
+  original: http://www.trickster.org/llwyden/gk/sometimes.html
+  minimal: http://www.trickster.org/llwyden/gk/sometimes.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/gk/sometimes.html
+  no_www: http://trickster.org/llwyden/gk/sometimes.html
+  with_www: http://www.www.trickster.org/llwyden/gk/sometimes.html
+  with_http: http://www.trickster.org/llwyden/gk/sometimes.html
+  with_https: https://www.trickster.org/llwyden/gk/sometimes.html
+  encoded: http://www.trickster.org/llwyden/gk/sometimes.html
+  decoded: http://www.trickster.org/llwyden/gk/sometimes.html
+  created_at: 2009-12-12 21:13:50 Z
+  updated_at: 2009-12-12 21:13:50 Z
+imported_url_00010:
+  id: 10
+  work_id: 72
+  original: http://www.trickster.org/llwyden/gk/christmas.html
+  minimal: http://www.trickster.org/llwyden/gk/christmas.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/gk/christmas.html
+  no_www: http://trickster.org/llwyden/gk/christmas.html
+  with_www: http://www.www.trickster.org/llwyden/gk/christmas.html
+  with_http: http://www.trickster.org/llwyden/gk/christmas.html
+  with_https: https://www.trickster.org/llwyden/gk/christmas.html
+  encoded: http://www.trickster.org/llwyden/gk/christmas.html
+  decoded: http://www.trickster.org/llwyden/gk/christmas.html
+  created_at: 2009-12-12 21:13:51 Z
+  updated_at: 2009-12-12 21:13:51 Z
+imported_url_00011:
+  id: 11
+  work_id: 73
+  original: http://www.trickster.org/llwyden/lotr/celebrations.html
+  minimal: http://www.trickster.org/llwyden/lotr/celebrations.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/lotr/celebrations.html
+  no_www: http://trickster.org/llwyden/lotr/celebrations.html
+  with_www: http://www.www.trickster.org/llwyden/lotr/celebrations.html
+  with_http: http://www.trickster.org/llwyden/lotr/celebrations.html
+  with_https: https://www.trickster.org/llwyden/lotr/celebrations.html
+  encoded: http://www.trickster.org/llwyden/lotr/celebrations.html
+  decoded: http://www.trickster.org/llwyden/lotr/celebrations.html
+  created_at: 2009-12-12 21:13:52 Z
+  updated_at: 2009-12-12 21:13:52 Z
+imported_url_00012:
+  id: 12
+  work_id: 74
+  original: http://www.trickster.org/llwyden/lotr/light.html
+  minimal: http://www.trickster.org/llwyden/lotr/light.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/lotr/light.html
+  no_www: http://trickster.org/llwyden/lotr/light.html
+  with_www: http://www.www.trickster.org/llwyden/lotr/light.html
+  with_http: http://www.trickster.org/llwyden/lotr/light.html
+  with_https: https://www.trickster.org/llwyden/lotr/light.html
+  encoded: http://www.trickster.org/llwyden/lotr/light.html
+  decoded: http://www.trickster.org/llwyden/lotr/light.html
+  created_at: 2009-12-12 21:13:53 Z
+  updated_at: 2009-12-12 21:13:53 Z
+imported_url_00013:
+  id: 13
+  work_id: 96
+  original: http://www.fanfiction.net/s/1733826/1/Bridges
+  minimal: http://www.fanfiction.net/s/1733826/1/Bridges
+  minimal_no_protocol_no_www: fanfiction.net/s/1733826/1/Bridges
+  no_www: http://fanfiction.net/s/1733826/1/Bridges
+  with_www: http://www.www.fanfiction.net/s/1733826/1/Bridges
+  with_http: http://www.fanfiction.net/s/1733826/1/Bridges
+  with_https: https://www.fanfiction.net/s/1733826/1/Bridges
+  encoded: http://www.fanfiction.net/s/1733826/1/Bridges
+  decoded: http://www.fanfiction.net/s/1733826/1/Bridges
+  created_at: 2009-12-12 22:54:18 Z
+  updated_at: 2009-12-12 22:54:18 Z
+imported_url_00014:
+  id: 14
+  work_id: 75
+  original: http://www.trickster.org/llwyden/lostboys/found.html
+  minimal: http://www.trickster.org/llwyden/lostboys/found.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/lostboys/found.html
+  no_www: http://trickster.org/llwyden/lostboys/found.html
+  with_www: http://www.www.trickster.org/llwyden/lostboys/found.html
+  with_http: http://www.trickster.org/llwyden/lostboys/found.html
+  with_https: https://www.trickster.org/llwyden/lostboys/found.html
+  encoded: http://www.trickster.org/llwyden/lostboys/found.html
+  decoded: http://www.trickster.org/llwyden/lostboys/found.html
+  created_at: 2009-12-12 21:13:55 Z
+  updated_at: 2009-12-12 21:13:55 Z
+imported_url_00015:
+  id: 15
+  work_id: 76
+  original: http://www.trickster.org/llwyden/tpm/dreams.html
+  minimal: http://www.trickster.org/llwyden/tpm/dreams.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/tpm/dreams.html
+  no_www: http://trickster.org/llwyden/tpm/dreams.html
+  with_www: http://www.www.trickster.org/llwyden/tpm/dreams.html
+  with_http: http://www.trickster.org/llwyden/tpm/dreams.html
+  with_https: https://www.trickster.org/llwyden/tpm/dreams.html
+  encoded: http://www.trickster.org/llwyden/tpm/dreams.html
+  decoded: http://www.trickster.org/llwyden/tpm/dreams.html
+  created_at: 2009-12-12 21:13:56 Z
+  updated_at: 2009-12-12 21:13:56 Z
+imported_url_00016:
+  id: 16
+  work_id: 77
+  original: http://www.trickster.org/llwyden/pros/bugged.html
+  minimal: http://www.trickster.org/llwyden/pros/bugged.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/pros/bugged.html
+  no_www: http://trickster.org/llwyden/pros/bugged.html
+  with_www: http://www.www.trickster.org/llwyden/pros/bugged.html
+  with_http: http://www.trickster.org/llwyden/pros/bugged.html
+  with_https: https://www.trickster.org/llwyden/pros/bugged.html
+  encoded: http://www.trickster.org/llwyden/pros/bugged.html
+  decoded: http://www.trickster.org/llwyden/pros/bugged.html
+  created_at: 2009-12-12 21:13:57 Z
+  updated_at: 2009-12-12 21:13:57 Z
+imported_url_00017:
+  id: 17
+  work_id: 98
+  original: http://www.fanfiction.net/s/1345146/1/Pathways
+  minimal: http://www.fanfiction.net/s/1345146/1/Pathways
+  minimal_no_protocol_no_www: fanfiction.net/s/1345146/1/Pathways
+  no_www: http://fanfiction.net/s/1345146/1/Pathways
+  with_www: http://www.www.fanfiction.net/s/1345146/1/Pathways
+  with_http: http://www.fanfiction.net/s/1345146/1/Pathways
+  with_https: https://www.fanfiction.net/s/1345146/1/Pathways
+  encoded: http://www.fanfiction.net/s/1345146/1/Pathways
+  decoded: http://www.fanfiction.net/s/1345146/1/Pathways
+  created_at: 2010-01-06 18:50:55 Z
+  updated_at: 2010-01-06 18:50:55 Z
+imported_url_00018:
+  id: 18
+  work_id: 99
+  original: http://www.fanfiction.net/s/614863/1/Ray_of_Smoke
+  minimal: http://www.fanfiction.net/s/614863/1/Ray_of_Smoke
+  minimal_no_protocol_no_www: fanfiction.net/s/614863/1/Ray_of_Smoke
+  no_www: http://fanfiction.net/s/614863/1/Ray_of_Smoke
+  with_www: http://www.www.fanfiction.net/s/614863/1/Ray_of_Smoke
+  with_http: http://www.fanfiction.net/s/614863/1/Ray_of_Smoke
+  with_https: https://www.fanfiction.net/s/614863/1/Ray_of_Smoke
+  encoded: http://www.fanfiction.net/s/614863/1/Ray_of_Smoke
+  decoded: http://www.fanfiction.net/s/614863/1/Ray_of_Smoke
+  created_at: 2009-12-12 23:21:42 Z
+  updated_at: 2009-12-12 23:21:42 Z
+imported_url_00019:
+  id: 19
+  work_id: 78
+  original: http://www.trickster.org/llwyden/pros/oncemore.html
+  minimal: http://www.trickster.org/llwyden/pros/oncemore.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/pros/oncemore.html
+  no_www: http://trickster.org/llwyden/pros/oncemore.html
+  with_www: http://www.www.trickster.org/llwyden/pros/oncemore.html
+  with_http: http://www.trickster.org/llwyden/pros/oncemore.html
+  with_https: https://www.trickster.org/llwyden/pros/oncemore.html
+  encoded: http://www.trickster.org/llwyden/pros/oncemore.html
+  decoded: http://www.trickster.org/llwyden/pros/oncemore.html
+  created_at: 2009-12-12 21:13:57 Z
+  updated_at: 2009-12-12 21:13:57 Z
+imported_url_00020:
+  id: 20
+  work_id: 80
+  original: http://www.trickster.org/llwyden/x-men/didn%27thapn.html
+  minimal: http://www.trickster.org/llwyden/x-men/didn%27thapn.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/x-men/didn%27thapn.html
+  no_www: http://trickster.org/llwyden/x-men/didn%27thapn.html
+  with_www: http://www.www.trickster.org/llwyden/x-men/didn%27thapn.html
+  with_http: http://www.trickster.org/llwyden/x-men/didn%27thapn.html
+  with_https: https://www.trickster.org/llwyden/x-men/didn%27thapn.html
+  encoded: http://www.trickster.org/llwyden/x-men/didn%2527thapn.html
+  decoded: http://www.trickster.org/llwyden/x-men/didn\'thapn.html
+  created_at: 2009-12-12 21:13:59 Z
+  updated_at: 2009-12-12 21:13:59 Z
+imported_url_00021:
+  id: 21
+  work_id: 79
+  original: http://www.trickster.org/llwyden/pros/murphy.html
+  minimal: http://www.trickster.org/llwyden/pros/murphy.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/pros/murphy.html
+  no_www: http://trickster.org/llwyden/pros/murphy.html
+  with_www: http://www.www.trickster.org/llwyden/pros/murphy.html
+  with_http: http://www.trickster.org/llwyden/pros/murphy.html
+  with_https: https://www.trickster.org/llwyden/pros/murphy.html
+  encoded: http://www.trickster.org/llwyden/pros/murphy.html
+  decoded: http://www.trickster.org/llwyden/pros/murphy.html
+  created_at: 2009-12-12 21:13:58 Z
+  updated_at: 2009-12-12 21:13:58 Z
+imported_url_00022:
+  id: 22
+  work_id: 81
+  original: http://www.trickster.org/llwyden/x-men/friends.html
+  minimal: http://www.trickster.org/llwyden/x-men/friends.html
+  minimal_no_protocol_no_www: trickster.org/llwyden/x-men/friends.html
+  no_www: http://trickster.org/llwyden/x-men/friends.html
+  with_www: http://www.www.trickster.org/llwyden/x-men/friends.html
+  with_http: http://www.trickster.org/llwyden/x-men/friends.html
+  with_https: https://www.trickster.org/llwyden/x-men/friends.html
+  encoded: http://www.trickster.org/llwyden/x-men/friends.html
+  decoded: http://www.trickster.org/llwyden/x-men/friends.html
+  created_at: 2009-12-12 21:14:00 Z
+  updated_at: 2009-12-12 21:14:00 Z

@@ -1,20 +1,18 @@
 namespace :opendoors do
-  
-  class UrlUpdater
-    def update_work(row)
-      begin
-        work = Work.find(row["AO3 id"])
-        if work&.imported_from_url.blank? || work&.imported_from_url == row["URL Imported From"]
-          work.imported_from_url = row["Original URL"]
-          work.save!
-          "#{work.id}\twas updated: its import url is now #{work.imported_from_url}"
-        else
-          "#{work.id}\twas not changed: its import url is #{work.imported_from_url}"
-        end
-      rescue StandardError => e
-        "#{row["AO3 id"]}\twas not changed: #{e}"
-      end
+  def update_work(row)
+    work = Work.find(row["AO3 id"])
+    # ImportedUrl needs an original value, so we use the imported url temporarily and only save if we're actually updating it
+    work.imported_url = ImportedUrl.new(original: row["URL Imported From"]) if work.imported_url.nil?
+
+    if work.imported_url.original == row["URL Imported From"]
+      work.imported_url.original = row["Original URL"]
+      work.imported_url.save!
+      "#{work.id}\twas updated: its import url is now #{work.imported_url.original}"
+    else
+      "#{work.id}\twas not changed: its import url is #{work.imported_url.original}"
     end
+  rescue StandardError => e
+    "#{row['AO3 id']}\twas not changed: #{e}"
   end
   
   desc "Map import urls based on spreadsheet data - required fields: 'AO3 id', 'URL Imported From', 'Original URL'"
@@ -28,10 +26,8 @@ namespace :opendoors do
 
     begin
       f = File.open("opendoors_result.txt", "w")
-      url_updater = UrlUpdater.new
-      
       CSV.foreach(loc, headers: true) do |row|
-        result = url_updater.update_work(row)
+        result = update_work(row)
         puts result
         f.write(result)
       end
