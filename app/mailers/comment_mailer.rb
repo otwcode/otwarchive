@@ -1,10 +1,10 @@
 class CommentMailer < ApplicationMailer
   # Sends email to an owner of the top-level commentable when a new comment is created
-  # This may be an admin, in which case we use the admin address instead
-  def comment_notification(user, comment)
+  # The recipient may be a User or a plain email address to send to
+  def comment_notification(recipient, comment)
     @comment = comment
     @owner = true
-    email = user.is_a?(Admin) ? ArchiveConfig.ADMIN_ADDRESS : user.email
+    email = recipient.is_a?(User) ? recipient.email : recipient
     mail(
       to: email,
       # i18n-tasks-use t("comment_mailer.comment_notification.subject.chapter")
@@ -15,11 +15,11 @@ class CommentMailer < ApplicationMailer
   end
 
   # Sends email to an owner of the top-level commentable when a comment is edited
-  # This may be an admin, in which case we use the admin address instead
-  def edited_comment_notification(user, comment)
+  # The recipient may be a User or a plain email address to send to
+  def edited_comment_notification(recipient, comment)
     @comment = comment
     @owner = true
-    email = user.is_a?(Admin) ? ArchiveConfig.ADMIN_ADDRESS : user.email
+    email = recipient.is_a?(User) ? recipient.email : recipient
     mail(
       to: email,
       # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.chapter")

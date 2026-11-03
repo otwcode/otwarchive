@@ -217,6 +217,11 @@ class Comment < ApplicationRecord
         end
       end
 
+      if self.ultimate_parent.is_a?(AdminPost)
+        CommentMailer.edited_comment_notification(ArchiveConfig.ADMIN_ADDRESS, self).deliver_after_commit
+        return
+      end
+
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
       # at this point, users contains those who've already been notified
       if users.empty?
@@ -262,6 +267,11 @@ class Comment < ApplicationRecord
     # Reply to owner of parent comment if this is a reply comment
     if (parent_comment_owner = notify_parent_comment_owner)
       users << parent_comment_owner
+    end
+
+    if self.ultimate_parent.is_a?(AdminPost)
+      CommentMailer.comment_notification(ArchiveConfig.ADMIN_ADDRESS, self).deliver_after_commit
+      return
     end
 
     # send notification to the owner(s) of the ultimate parent, who can be users or admins
