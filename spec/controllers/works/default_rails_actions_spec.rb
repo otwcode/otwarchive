@@ -189,6 +189,28 @@ describe WorksController, work_search: true do
       expect(response).to render_template("new")
     end
 
+    context "when importing" do
+      it "renders the form if logged in" do
+        fake_login
+        get :new, params: { import: "true" }
+        expect(response).to render_template("new_import")
+      end
+
+      context "importing is disabled" do
+        let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+        before do
+          admin_setting.update_attribute(:importing_enabled, false)
+        end
+
+        it "errors and redirects to homepage" do
+          fake_login
+          get :new, params: { import: "true" }
+          it_redirects_to_with_error(root_path, "Sorry, importing is currently disabled.")
+        end
+      end
+    end
+
     it "errors and redirects to user page when user is banned" do
       fake_login_known_user(banned_user)
       get :new

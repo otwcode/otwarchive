@@ -8,6 +8,19 @@ Feature: Import Works
   When I go to the import page
   Then I should see "Please log in"
 
+  Scenario: Can't see import option when importing is disabled
+  When I am logged in
+    And I go to the new work page
+  Then I should see "Import From An Existing URL Instead?"
+    And I should see "Import Work" within "#greeting"
+    And I should see "Post New Work"
+  When work importing is disabled
+    And I reload the page
+    And I am logged in
+  Then I should not see "Import From An Existing URL Instead?"
+    And I should not see "Import Work" within "#greeting"
+    But I should see "Post New Work"
+
   Scenario: Creating a new minimally valid work
     When I set up importing with a mock website
     Then I should see "Import New Work"

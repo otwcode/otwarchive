@@ -132,6 +132,13 @@ Given "comment count threshold for comment rate limit is set to {int}" do |count
   click_button("Update")
 end
 
+Given "work importing is disabled" do
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  uncheck("admin_setting_importing_enabled")
+  click_button("Update")
+end
+
 Given "I have posted known issues" do
   step %{I am logged in as a super admin}
   step %{I follow "Admin Posts"}

@@ -142,6 +142,32 @@ describe "API v2 WorksController - Create works", type: :request do
       expect(parsed_body[:works].first[:messages].first).to start_with("Unable to import this work.")
     end
 
+    context "importing is disabled" do
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:importing_enabled, false)
+      end
+
+      it "returns 403 with a helpful error" do
+        valid_params = {
+          archivist: archivist.login,
+          works: [
+            { id: "123",
+              external_author_name: "bar",
+              external_author_email: "send_invite@ao3.org",
+              chapter_urls: ["http://foo.com"] }
+          ]
+        }
+
+        post "/api/v2/works", params: valid_params.to_json, headers: valid_headers
+
+        assert_equal 403, response.status
+        parsed_body = JSON.parse(response.body, symbolize_names: true)
+        expect(parsed_body[:messages]).to include("Sorry, importing is currently disabled.")
+      end
+    end
+
     describe "Provided API metadata should be used if present" do
       before do
         create(:language, short: "es", name: "Español")

@@ -67,7 +67,8 @@ describe Admin::SettingsController do
               hide_spam: "1",
               guest_comments_off: "1",
               account_age_threshold_for_comment_spam_check: "7",
-              comment_count_threshold_for_comment_rate_limit: "10"
+              comment_count_threshold_for_comment_rate_limit: "10",
+              importing_enabled: "0"
             }
           }
 
@@ -81,7 +82,8 @@ describe Admin::SettingsController do
         {
           disable_support_form: true,
           downloads_enabled: false,
-          tag_wrangling_off: true
+          tag_wrangling_off: true,
+          importing_enabled: false
         }.each_pair do |field, value|
           it "prevents admins with policy_and_abuse role from updating #{field}" do
             expect do
@@ -117,7 +119,8 @@ describe Admin::SettingsController do
           guest_comments_off: true,
           tag_wrangling_off: true,
           account_age_threshold_for_comment_spam_check: 10,
-          comment_count_threshold_for_comment_rate_limit: 3
+          comment_count_threshold_for_comment_rate_limit: 3,
+          importing_enabled: false
         }.each_pair do |field, value|
           it "prevents admins with support role from updating #{field}" do
             expect do
@@ -150,7 +153,8 @@ describe Admin::SettingsController do
           hide_spam: true,
           guest_comments_off: true,
           account_age_threshold_for_comment_spam_check: 10,
-          comment_count_threshold_for_comment_rate_limit: 3
+          comment_count_threshold_for_comment_rate_limit: 3,
+          importing_enabled: false
         }.each_pair do |field, value|
           it "prevents admins with tag_wrangling role from updating #{field}" do
             expect do

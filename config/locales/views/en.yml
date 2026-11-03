@@ -409,6 +409,7 @@ en:
           enable_test_caching: Turn on caching (currently experimental)
           guest_comments_off: Turn off guest comments across the site
           hide_spam: Automatically hide spam works
+          importing_enabled: Allow importing
           invite_from_queue_enabled: Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)
           invite_from_queue_frequency: How often (in hours) should we invite people from the queue
           invite_from_queue_number: Number of people to invite from the queue at once

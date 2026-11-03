@@ -3,6 +3,7 @@ require "spec_helper"
 
 describe WorksController do
   include LoginMacros
+  include RedirectExpectationHelper
 
   describe "import" do
     context "should return the right error messages" do
@@ -10,6 +11,19 @@ describe WorksController do
 
       before do
         fake_login_known_user(user)
+      end
+
+      context "when importing is disabled" do
+        let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+        before do
+          admin_setting.update_attribute(:importing_enabled, false)
+        end
+
+        it "errors and redirects to homepage" do
+          post :import
+          it_redirects_to_with_error(root_path, "Sorry, importing is currently disabled.")
+        end
       end
 
       it "when urls are empty" do

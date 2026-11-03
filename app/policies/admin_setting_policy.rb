@@ -32,6 +32,7 @@ class AdminSettingPolicy < ApplicationPolicy
       request_invite_enabled
       suspend_filter_counts
       tag_wrangling_off
+      importing_enabled
     ],
     "support" => %i[disable_support_form disabled_support_form_text],
     "tag_wrangling" => %i[tag_wrangling_off]

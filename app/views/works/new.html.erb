@@ -11,11 +11,13 @@
       <%= link_to ts('Restore From Last Unposted Draft?'), url_for(:action => :new, :load_unposted => true) %>
     </li>
   <% end %>
-  <li>
-    <%= link_to( ts('Import From An Existing URL Instead?'),
-      {:url => {:controller => :works, :action => :new, :import => true}},
-      :href => url_for(:controller => :works, :action => :new, :import => true)) %>
-  </li>
+  <% if AdminSetting.current.importing_enabled? %>
+    <li>
+      <%= link_to( ts('Import From An Existing URL Instead?'),
+        {:url => {:controller => :works, :action => :new, :import => true}},
+        :href => url_for(:controller => :works, :action => :new, :import => true)) %>
+    </li>
+  <% end %>
 </ul>
 <!--/subnav-->
 

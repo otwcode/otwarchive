@@ -18,6 +18,7 @@ class WorksController < ApplicationController
   after_action :log_admin_activity, only: [:update]
   before_action :check_parent_visible, only: [:navigate]
   before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
+  before_action :check_importing_enabled, only: [:import]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
 
@@ -276,6 +277,8 @@ class WorksController < ApplicationController
     set_work_form_fields
 
     if params[:import]
+      return unless check_importing_enabled
+
       @page_subtitle = ts("Import New Work")
       render(:new_import)
     elsif @work.persisted?
@@ -766,6 +769,14 @@ class WorksController < ApplicationController
 
   def check_parent_visible
     check_visibility_for(@work)
+  end
+
+  def check_importing_enabled
+    return true if AdminSetting.current.importing_enabled?
+
+    flash[:error] = t("works.importing_disabled")
+    redirect_to root_path
+    false
   end
 
   def load_first_chapter

@@ -1,6 +1,8 @@
 class Api::V2::WorksController < Api::V2::BaseController
   respond_to :json
 
+  before_action :check_importing_enabled, only: [:create]
+
   # POST - search for works based on imported url
   def search
     works = params[:works]
@@ -47,6 +49,14 @@ class Api::V2::WorksController < Api::V2::BaseController
       messages = response_message(messages, success_responses.present?, error_responses.present?)
     end
     render_api_response(status, messages, works: works_responses.map { |r| r.except!(:work) })
+  end
+
+  protected
+
+  def check_importing_enabled
+    return if AdminSetting.current.importing_enabled?
+
+    render_api_response(:forbidden, [t("works.importing_disabled")])
   end
 
   private
