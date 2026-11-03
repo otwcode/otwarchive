@@ -17,6 +17,12 @@ module Otwarchive
   class Application < Rails::Application
     app_config = YAML.safe_load_file(Rails.root.join("config/config.yml"))
     app_config.merge!(YAML.safe_load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
+    if ENV["SECRETS_FROM_STDIN"] && !$stdin.tty?
+      injected = YAML.safe_load($stdin.read) || {}
+      app_config.merge!(injected)
+      # Reset fd 0 to /dev/null
+      $stdin.reopen(File::NULL, "r")
+    end
     ::ArchiveConfig = OpenStruct.new(app_config)
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
