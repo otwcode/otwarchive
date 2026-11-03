@@ -73,11 +73,14 @@ class Creatorship < ApplicationRecord
   ########################################
 
   after_create :add_to_parents
+  after_create :bust_anonymous_comment_cache
   after_update :add_to_parents, if: :saved_change_to_approved?
+  after_update :bust_anonymous_comment_cache, if: :saved_change_to_approved?
 
   before_destroy :expire_caches
   before_destroy :check_not_last
   before_destroy :save_original_creator
+  after_destroy :bust_anonymous_comment_cache
   after_destroy :remove_from_children
 
   after_commit :update_indices
@@ -194,6 +197,16 @@ class Creatorship < ApplicationRecord
       CacheMaster.record(creation_id, "pseud", self.pseud_id)
       CacheMaster.record(creation_id, "user", self.pseud.user_id)
     end
+  end
+
+  # On anonymous works, adding or removing a creator changes whether their
+  # comments show their username or "Anonymous Creator". Refresh that user's
+  # cached bylines directly, since removed creators leave the work's creator list.
+  def bust_anonymous_comment_cache
+    return unless approved? && creation_type == "Work" && pseud.present?
+    return if creation.nil? || creation.destroyed? || !creation.anonymous?
+
+    creation.async(:poke_cached_creator_comments_for_user, pseud.user_id)
   end
 
   ########################################
