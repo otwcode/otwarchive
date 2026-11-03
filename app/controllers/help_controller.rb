@@ -20,6 +20,9 @@ class HelpController < ApplicationController
     skins_basics
     skins_creating
     skins_parents
+    skins_wizard_font_size
+    skins_wizard_font
+    skins_wizard_vertical_gap
     symbols_key
     tag_sets_about
     tag_sets_associations
