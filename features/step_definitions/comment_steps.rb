@@ -94,6 +94,10 @@ Given "the setup for testing image safety mode on the work {string}" do |title|
   step %{I am logged in as "commentrecip"}
 end
 
+Given "{int} comment(s) displayed per page" do |per_page|
+  allow(Comment).to receive(:per_page).and_return(per_page)
+end
+
 # THEN
 
 Then /^the comment's posted date should be nowish$/ do

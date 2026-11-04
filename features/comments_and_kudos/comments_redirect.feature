@@ -117,3 +117,55 @@ Scenario: Posting top level comment on a middle chapter, while in temporary view
     And I should see "Chapter 2" within "div#chapters"
     # Once you've commented, it defaults back to your preference
     And I should see "Chapter 1" within "div#chapters"
+
+  Scenario: Posting a top level comment on a one-chapter work, when there is more than one page of comments
+    Given the work "The Collection" with 2 comments setup
+      And 2 comments displayed per page
+      And I am logged in as a random user
+    When I view the work "The Collection"
+      And I post a comment "wow, that's a lot of comments"
+    Then I should see "wow, that's a lot of comments"
+    When I view the work "The Collection"
+      And I post a comment "very over 1000 amazing"
+    Then I should see "very over 1000 amazing"
+    When I post a comment "have another comment"
+    Then I should see "have another comment"
+      And I should not see "wow, that's a lot of comments"
+
+  Scenario: Posting a top level comment on a multi-chapter work, when there is more than one page of comments,
+  with view full work in the preferences
+    Given the work "Welcome"
+      And 2 comments displayed per page
+      And a comment "hello." by "somebody" on the work "Welcome"
+      And a chapter is added to "Welcome"
+      And a comment "hi!" by "somebody" on the work "Welcome"
+      And a chapter is added to "Welcome"
+      And a comment "heyo" by "somebody" on the work "Welcome"
+      And I am logged in as a random user
+      And I set my preferences to View Full Work mode by default
+    When I view the work "Welcome"
+      And I post a comment "sup?"
+    Then I should see "sup?"
+      And I should see "heyo"
+      And I should not see "hi!"
+
+  Scenario: Posting a top level comment on the middle chapter of a work, when there is more than one page of comments,
+  with view full work in the preferences, and while in temporary view by chapter mode
+    Given the work "Welcome"
+      And 2 comments displayed per page
+      And a comment "hello." by "somebody" on the work "Welcome"
+      And a chapter is added to "Welcome"
+      And a comment "hi!" by "somebody" on the work "Welcome"
+      And a comment "hiya" by "somebody" on the work "Welcome"
+      And a chapter is added to "Welcome"
+      And a comment "heyo" by "somebody" on the work "Welcome"
+      And a comment "hey!" by "somebody" on the work "Welcome"
+      And I am logged in as a random user
+      And I set my preferences to View Full Work mode by default
+    When I view the work "Welcome" in chapter-by-chapter mode
+      And I view the 2nd chapter
+      And I post a comment "sup?"
+    # Once you've commented, it defaults back to your preference (full work)
+    Then I should see "sup?"
+      And I should see "hey!"
+      And I should not see "hiya"
