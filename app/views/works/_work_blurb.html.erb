@@ -1,6 +1,6 @@
-<% # expects "work" %>
+<%# expects "work" and "work_module_html" %>
 <li id="work_<%= work.id %>" class="<% if is_author_of?(work) %>own <% end %><% if work.anonymous? %>anonymous <% end %><% if work.unrevealed? %>mystery <% end %>work <%= css_classes_for_creation_blurb(work) %>" role="article">
-  <%= render "works/work_module", work: work %>
+  <%= work_module_html %>
   <% if is_author_of?(work) %>
     <h6 class="landmark heading"><%= ts("Author Actions") %></h6>
   	<ul class="actions">
