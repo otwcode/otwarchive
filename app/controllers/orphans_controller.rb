@@ -8,7 +8,7 @@ class OrphansController < ApplicationController
 
   def index
     @user = User.orphan_account
-    @works = @user.works
+    @works = @user.works.for_blurb
   end
 
   def new
