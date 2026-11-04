@@ -1247,17 +1247,8 @@ class Tag < ApplicationRecord
       exists: true
     )
 
-    if canonical?
-      # Calculate the fandoms associated with this tag, because we'll set any
-      # TagNominations with a matching parent_tagname to have parented: true.
-      parent_names = parents.where(type: "Fandom").pluck(:name)
-
-      # If this tag has any fandoms at all, we also want to count it as parented
-      # for nominations with a blank parent_tagname. See the set_parented
-      # function in TagNominations for the calculation that we're trying to mimic
-      # here.
-      parent_names << "" if parent_names.present?
-
+    if canonical? && parents.exists?
+      parent_names = parents.where(type: "Fandom").pluck(:name).push("", nil)
       TagNomination.where(tagname: name, parent_tagname: parent_names).update_all(parented: true)
     end
 
