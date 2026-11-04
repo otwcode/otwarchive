@@ -162,20 +162,6 @@ fieldset fieldset.listbox,
   box-shadow: inset 1px 1px 3px #000;
 }
 
-#footer a:hover,
-#footer a:focus,
-#footer button:hover,
-#footer button:focus,
-.autocomplete .dropdown ul li:hover,
-.autocomplete .dropdown li.selected,
-a.tag:hover,
-.listbox .heading a.tag:visited:hover,
-.symbol .question,
-.qtip-content {
-  background: #5998D6;
-  color: #111;
-}
-
 .splash .favorite li:nth-of-type(odd) a:hover,
 .splash .favorite li:nth-of-type(odd) a:focus {
   background: #5998D6;
@@ -203,6 +189,8 @@ span.claimed,
 .droppable,
 span.requested,
 a.work,
+a:visited:hover,
+.splash .browse li a:visited:hover,
 .blurb h4 a:link,
 .blurb h4 img,
 .splash .module h3,
@@ -215,6 +203,20 @@ a.cloud7,
 a.cloud8,
 #tos_prompt .heading {
   color: #5998D6;
+}
+
+#footer a:hover,
+#footer a:focus,
+#footer button:hover,
+#footer button:focus,
+.autocomplete .dropdown ul li:hover,
+.autocomplete .dropdown li.selected,
+a.tag:hover,
+.listbox .heading a.tag:visited:hover,
+.symbol .question,
+.qtip-content {
+  background: #5998D6;
+  color: #111;
 }
 
 #greeting .icon,
