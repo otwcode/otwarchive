@@ -16,6 +16,7 @@ Feature: Wrangling Guidelines
   When I go to the wrangling_guidelines page
     And I follow "Intro and General Concepts"
   Then I should see "This series of documents (Wrangling Guidelines) are intended to help tag wranglers remain consistent as they go about the business of wrangling tags by providing a set of formatting guidelines." within ".userstuff"
+    And the page title should include "Intro and General Concepts"
 
   Scenario: Edit Wrangling Guideline
 
