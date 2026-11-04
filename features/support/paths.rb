@@ -289,6 +289,8 @@ module NavigationHelpers
       edit_user_password_path
     when /^the (.*) mass bin$/i
       tag_wranglings_path(show: Regexp.last_match(1).pluralize)
+    when /^the unsorted tags page$/i
+      unsorted_tags_path
     when /^the tags page$/i
       tags_path
     when /^the orphan all works page$/i
