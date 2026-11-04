@@ -48,6 +48,23 @@ describe InvitationsController do
 
         expect(response).to render_template("manage")
       end
+      
+      it "assigns subtitle with username in it" do
+        admin.update!(roles: ["policy_and_abuse"])
+        fake_login_admin(admin)
+        get :manage, params: { user_id: user.login }
+
+        expect(assigns[:page_subtitle]).to eq("#{user.login} - Manage Invitations")
+      end
+    end
+
+    context "when not an admin" do
+      it "assigns subtitle with username in it" do
+        fake_login_known_user(user)
+        get :manage, params: { user_id: user.login }
+
+        expect(assigns[:page_subtitle]).to eq("#{user.login} - Manage Invitations")
+      end
     end
   end
 
