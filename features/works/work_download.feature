@@ -436,6 +436,56 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "[Restricted Work] by translator"
 
+  Scenario: Hidden inspired and inspiring works should be hidden in downloads
+    Given I have related works setup
+      And a related work has been posted and approved
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the work "Followup"
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should not see "Followup by remixer"
+    When I unhide the work "Followup"
+      And I hide the work "Worldbuilding"
+      And I view the work "Followup"
+      And I follow "HTML"
+    Then I should not see "Worldbuilding by inspiration"
+
+  Scenario: Hidden translations and translated works should be hidden in downloads
+    Given I have related works setup
+      And a translation has been posted and approved
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the work "Worldbuilding Translated"
+      And I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should not see "Worldbuilding Translated by translator"
+    When I unhide the work "Worldbuilding Translated"
+      And I hide the work "Worldbuilding"
+      And I view the work "Worldbuilding Translated"
+      And I follow "HTML"
+    Then I should not see "Worldbuilding by inspiration"
+
+  Scenario: Hidden external inspirations should be hidden in downloads
+    Given a work inspired by an external work has been posted
+    When I am logged in as a "policy_and_abuse" admin
+      And I hide the external work "Worldbuilding"
+    When I view the work "Followup"
+      And I follow "HTML"
+    Then I should not see "Worldbuilding by external_inspiration"
+
+  Scenario: Draft parent related works should not be listed in downloads
+    Given I have related works setup
+      And I am logged in as "inspiration"
+      And the draft "Worldbuilding Draft"
+    When I set up the draft "Followup"
+      And I list the work "Worldbuilding Draft" as inspiration
+      And I press "Post"
+      And I view my related works
+      And I follow "Approve"
+      And I press "Yes, link me!"
+    When I view the work "Worldbuilding"
+      And I follow "HTML"
+    Then I should not see "Followup"
+
   Scenario: Download multi-chapter work with mixed chapter titles (one without, one with)
   
   Given I am logged in as "myname"

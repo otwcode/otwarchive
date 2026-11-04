@@ -348,7 +348,7 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And a related work has been posted and approved
   When I am logged in as "remixer"
     And I lock the work "Followup"
-  When I am logged out
+  When I log out
     And I view the work "Worldbuilding"
   Then I should see "[Restricted Work] by remixer"
   When I am logged in as an admin
@@ -356,12 +356,12 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   Then I should see "Followup by remixer"
   When I am logged in as "remixer"
     And I unlock the work "Followup"
-  When I am logged out
+  When I log out
     And I view the work "Followup"
   Then I should see "Inspired by Worldbuilding by inspiration"
   When I am logged in as "inspiration"
     And I lock the work "Worldbuilding"
-  When I am logged out
+  When I log out
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
   When I am logged in as an admin
@@ -387,10 +387,60 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
   When I follow "remixer" within ".afterword .children"
   Then I should be on the dashboard page for user "remixer" with pseud "remixer"
 
-  When I am logged out
+  When I log out
     And I view the work "Worldbuilding"
   Then I should see "Works inspired by this one: Followup by Anonymous"
     And I should not see "remixer" within ".afterword .children"
+
+Scenario: Hidden inspired and inspiring works should not be listed on work pages, unless viewed by an admin
+  Given I have related works setup
+    And a related work has been posted and approved
+  # Hidden inspired work
+  When I am logged in as a "policy_and_abuse" admin
+    And I hide the work "Followup"
+  When I view the work "Worldbuilding"
+  Then I should see "Followup by remixer"
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+  Then I should not see "Followup"
+    And I view the work "Worldbuilding"
+  Then I should not see "Followup by remixer"
+  # Hidden inspiring work
+  When I am logged in as a "policy_and_abuse" admin
+    And I unhide the work "Followup"
+    And I hide the work "Worldbuilding"
+  When I view the work "Followup"
+  Then I should see "Worldbuilding by inspiration"
+  When I am logged in as "remixer"
+    And I edit the work "Followup"
+  Then I should not see "Worldbuilding"
+    And I view the work "Followup"
+  Then I should not see "Worldbuilding by inspiration"
+
+Scenario: Hidden external inspirations should not be listed on work pages, unless viewed by an admin
+  Given a work inspired by an external work has been posted
+  When I am logged in as a "policy_and_abuse" admin
+    And I hide the external work "Worldbuilding"
+    And I view the work "Followup"
+  Then I should see "Worldbuilding by external_inspiration"
+  When I am logged in as "remixer"
+    And I edit the work "Followup"
+  Then I should not see "Worldbuilding"
+    And I view the work "Followup"
+  Then I should not see "Worldbuilding by external_inspiration"
+
+Scenario: Draft parent related works should not be listed on work pages, unless viewed by an admin
+  Given I have related works setup
+    And I am logged in as "inspiration"
+    And the draft "Worldbuilding Draft"
+  When I set up the draft "Followup"
+    And I list the work "Worldbuilding Draft" as inspiration
+    And I press "Post"
+    And I view my related works
+    And I follow "Approve"
+    And I press "Yes, link me!"
+  When I view the work "Worldbuilding"
+  Then I should not see "Followup"
 
 Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
   the e-mail should link to each author's URL instead of showing escaped HTML
