@@ -34,6 +34,19 @@ Then "the page should have a dashboard sidebar" do
   expect(page).to have_css("#dashboard")
 end
 
+Then "I should not see the wrangling dashboard" do
+  expect(page).not_to have_css("#dashboard.wrangling")
+end
+
+Then "the main content should have the dashboard class" do
+  expect(page).to have_css("#main.dashboard")
+end
+
+Then "the main content should not have the dashboard class" do
+  expect(page).to have_css("#main")
+  expect(page).not_to have_css("#main.dashboard")
+end
+
 Then /^I should see errors/ do
   assert find("div.error")
 end

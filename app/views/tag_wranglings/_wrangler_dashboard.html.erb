@@ -1,6 +1,4 @@
-<% if (logged_in_as_admin? && policy(:wrangling).read_access?) || current_user.try(:is_tag_wrangler?) || @counts %>
-  <div id="dashboard" role="navigation region" class="tag wrangling region">
-    <% if (logged_in_as_admin? && policy(:wrangling).read_access?) || current_user.try(:is_tag_wrangler?) %>
+<div id="dashboard" role="navigation region" class="tag wrangling region">
       <ul class="navigation actions">
         <% if current_user.is_a?(User) %>
           <li><%= span_if_current(t(".wrangling_home"), tag_wrangler_path(current_user)) %></li>
@@ -14,7 +12,6 @@
           <li><%= span_if_current(t(".new_tag"), new_tag_path) %></li>
         <% end %>
       </ul>
-    <% end %>
 
     <% if @counts %>
       <ul class="navigation actions">
@@ -58,5 +55,4 @@
         <% end %>
       </ul>
     <% end %>
-  </div>
-<% end %>
+</div>
