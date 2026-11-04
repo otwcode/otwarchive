@@ -64,7 +64,7 @@ describe TagsHelper do
     context "when logged in as an admin" do
       %i[superadmin tag_wrangling_admin policy_and_abuse_admin].each do |factory|
         context "with the #{factory} role" do
-          let(:current_admin) { build(factory) }
+          let(:current_admin) { create!(factory) }
 
           it "returns true" do
             expect(helper.show_wrangling_dashboard).to be_truthy
