@@ -262,7 +262,7 @@ Scenario: Translate your own work
     And I approve a related work
   Then approving the related work should succeed
 
-Scenario: Draft works should not show up on related works
+Scenario: Related draft works should not show up on the related works page
 
   Given I have related works setup
     And I am logged in as "translator"
@@ -272,6 +272,26 @@ Scenario: Draft works should not show up on related works
   Then I should not see "Related Works (1)"
   When I view my related works
   Then I should not see "Worldbuilding Translated"
+
+Scenario: A user's parent draft works should only be visible to them on their related works page
+
+  Given I have related works setup
+    And I am logged in as "inspiration"
+    And the draft "Worldbuilding Draft"
+  When I set up the draft "Followup"
+    And I list the work "Worldbuilding Draft" as inspiration
+    And I press "Post"
+    And I view my related works
+    And I follow "Approve"
+    And I press "Yes, link me!"
+  When I am logged in as "translator"
+    And I go to inspiration's related works page
+  Then I should not see "Related Works (1)"
+  Then I should not see "Followup"
+  When I log out
+    And I go to inspiration's related works page
+  Then I should not see "Related Works (1)"
+  Then I should not see "Followup"
 
 Scenario: Listing external works as inspirations
 
@@ -368,6 +388,32 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And I view the work "Followup"
   Then I should see "Inspired by Worldbuilding by inspiration"
 
+Scenario: Restricted inspired and inspiring works should not be listed on related work pages for guests
+  Given I have related works setup
+    And a related work has been posted and approved
+  # Restricted inspired work
+  When I am logged in as "remixer"
+    And I lock the work "Followup"
+  When I log out
+    And I go to inspiration's related works page
+  Then I should not see "Followup"
+    And I should not see "Worldbuilding"
+  When I go to remixer's related works page
+  Then I should not see "Followup"
+    And I should not see "Worldbuilding"
+  # Restricted inspiration
+  When I am logged in as "remixer"
+    And I unlock the work "Followup"
+  When I am logged in as "inspiration"
+    And I lock the work "Worldbuilding"
+  When I log out
+    And I go to inspiration's related works page
+  Then I should not see "Followup"
+    And I should not see "Worldbuilding"
+  When I go to remixer's related works page
+  Then I should not see "Followup"
+    And I should not see "Worldbuilding"
+
 Scenario: Anonymous works listed as inspiration should have links to the authors,
   but only for the authors themselves and admins
   Given I have related works setup
@@ -391,6 +437,61 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
     And I view the work "Worldbuilding"
   Then I should see "Works inspired by this one: Followup by Anonymous"
     And I should not see "remixer" within ".afterword .children"
+
+Scenario: Hidden inspired and inspiring works should not be listed on related work pages
+  Given I have related works setup
+    And a related work has been posted and approved
+  # Hidden inspired work
+  When I am logged in as a "policy_and_abuse" admin
+    And I hide the work "Followup"
+  When I am logged in as "remixer"
+    And I view my related works
+  Then I should see "Related Works (0)"
+    And I should not see "Followup"
+  When I go to inspiration's related works page
+  Then I should not see "Followup"
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should see "Related Works (0)"
+    And I should not see "Followup"
+  When I log out
+    And I go to remixer's related works page
+  Then I should not see "Worldbuilding"
+  When I go to inspiration's related works page
+  Then I should not see "Worldbuilding"
+  # Hidden inspiration
+  When I am logged in as a "policy_and_abuse" admin
+    And I unhide the work "Followup"
+    And I hide the work "Worldbuilding"
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should see "Related Works (0)"
+    And I should not see "Worldbuilding"
+  When I go to remixer's related works page
+  Then I should not see "Worldbuilding"
+  When I am logged in as "remixer"
+    And I view my related works
+  Then I should see "Related Works (0)"
+    And I should not see "Worldbuilding"
+  When I log out
+    And I go to remixer's related works page
+  Then I should not see "Worldbuilding"
+  When I go to inspiration's related works page
+  Then I should not see "Worldbuilding"
+
+Scenario: Hidden external inspirations should not be listed on related work pages
+  Given a work inspired by an external work has been posted
+  When I am logged in as a "policy_and_abuse" admin
+    And I hide the external work "Worldbuilding"
+  When I go to remixer's related works page
+  Then I should not see "Worldbuilding"
+  When I am logged in as "remixer"
+    And I view my related works
+  Then I should see "Related Works (0)"
+    And I should not see "Worldbuilding"
+  When I log out
+    And I go to remixer's related works page
+  Then I should not see "Worldbuilding"
 
 Scenario: When a user is notified that a co-authored work has been inspired by a work they posted,
   the e-mail should link to each author's URL instead of showing escaped HTML
@@ -870,3 +971,13 @@ Scenario: Deleted inspiration relationships can be deleted from the Edit Work pa
   Then I should see "Deleted work"
   When I follow "Remove" within "#parent-options"
   Then I should not see "Deleted work"
+
+Scenario: Deleted parent works don't create empty sections on the related works page and aren't counted in the sidebar
+  Given I have related works setup
+    And a related work has been posted and approved
+  When I am logged in as "inspiration"
+    And I delete the work "Worldbuilding"
+  When I am logged in as "remixer"
+    And I view my related works
+  Then I should see "Related Works (0)"
+    And I should not see "Works that inspired"

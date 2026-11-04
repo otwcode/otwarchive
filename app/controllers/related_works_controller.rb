@@ -6,19 +6,14 @@ class RelatedWorksController < ApplicationController
 
   def index
     @page_subtitle = t(".page_title", login: @user.login)
-    @translations_of_user = @user.related_works.posted.where(translation: true)
-    @remixes_of_user = @user.related_works.posted.where(translation: false)
-    @translations_by_user = @user.parent_work_relationships.posted.where(translation: true)
-    @remixes_by_user = @user.parent_work_relationships.posted.where(translation: false)
 
-    return if @user == current_user
+    related_works = @user.related_works_for_user_page
+    parent_work_relationships = @user.parent_work_relationships_for_user_page
 
-    # Extra constraints on what we display if someone else is viewing @user's
-    # related works page:
-    @translations_of_user = @translations_of_user.merge(Work.revealed.non_anon).where(reciprocal: true)
-    @remixes_of_user = @remixes_of_user.merge(Work.revealed.non_anon).where(reciprocal: true)
-    @translations_by_user = @translations_by_user.merge(Work.revealed.non_anon).where(reciprocal: true)
-    @remixes_by_user = @remixes_by_user.merge(Work.revealed.non_anon).where(reciprocal: true)
+    @translations_of_user = related_works.translations
+    @remixes_of_user = related_works.remixes
+    @translations_by_user = parent_work_relationships.translations
+    @remixes_by_user = parent_work_relationships.remixes
   end
 
   # GET /related_works/1

@@ -38,6 +38,20 @@ Given "a translation has been posted and approved" do
   step %{I approve a related work}
 end
 
+# given for external works
+
+Given "a work inspired by an external work has been posted" do
+  step %{basic tags}
+  step %{mock websites with no content}
+  step %{I am logged in as "remixer"}
+  step %{I set up the draft "Followup"}
+  step %{I check "parent-options-show"}
+  step %{I fill in "URL" with "http://example.org/200"}
+  step %{I fill in "Title" with "Worldbuilding"}
+  step %{I fill in "Author" with "external_inspiration"}
+  step %{I press "Post"}
+end
+
 ### WHEN
 
 When "I post an inspiring parent work as testuser" do
