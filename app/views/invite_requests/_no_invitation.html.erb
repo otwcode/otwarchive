@@ -1,3 +1,7 @@
 <p class="notice">
-  <%= t(".email_not_found") %>
+  <% if @email_blank %>
+    <%= t(".no_email") %>
+  <% else %>
+    <%= t(".email_not_found") %>
+  <% end %>
 </p>
