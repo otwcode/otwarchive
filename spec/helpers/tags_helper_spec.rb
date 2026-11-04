@@ -30,7 +30,7 @@ describe TagsHelper do
     end
 
     context "when logged in as a tag wrangler" do
-      let(:current_user) { create(:tag_wrangler) }
+      let(:current_user) { create!(:tag_wrangler) }
 
       %w[tags tag_wranglings tag_wranglers tag_wrangling_requests unsorted_tags].each do |name|
         context "on the #{name} controller" do
