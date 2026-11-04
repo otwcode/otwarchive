@@ -169,6 +169,14 @@ describe AbuseReport do
       end
     end
 
+    shared_examples "enough collection reports" do |url|
+      let(:report) { build(:abuse_report, url: url) }
+      it "can't be submitted" do
+        expect(report.save).to be_falsey
+        expect(report.errors[:base].first).to include("This collection has already been reported.")
+      end
+    end
+
     shared_examples "alright" do |url|
       let(:report) { build(:abuse_report, url: url) }
       it "can be submitted" do
@@ -332,6 +340,68 @@ describe AbuseReport do
         before { travel(ArchiveConfig.ABUSE_REPORTS_PER_SERIES_PERIOD.days) }
 
         it_behaves_like "alright", series_url
+      end
+    end
+
+    context "for a collection reported the maximum number of times" do
+      collection_url = "http://archiveofourown.org/collections/collection_name"
+
+      before do
+        ArchiveConfig.ABUSE_REPORTS_PER_COLLECTION_MAX.times do
+          create(:abuse_report, url: collection_url)
+        end
+        expect(AbuseReport.count).to eq(ArchiveConfig.ABUSE_REPORTS_PER_COLLECTION_MAX)
+      end
+
+      # obviously
+      it_behaves_like "enough collection reports", collection_url
+
+      # the same collection, different protocol
+      it_behaves_like "enough collection reports", "https://archiveofourown.org/collections/collection_name"
+
+      # the same collection, with parameters/anchors
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name?show_random=true"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name#timeline"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name?show_random=true#timeline"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/?show_random=true"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/#timeline"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/?show_random=true#timeline"
+
+      # the same collection, subpages
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/profile"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/collections"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/fandoms"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/works"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/bookmarks"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/people"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/tags"
+      it_behaves_like "enough collection reports", "http://archiveofourown.org/collections/collection_name/tags/tag%20name/works"
+
+      # not the same collection
+      it_behaves_like "alright", "http://archiveofourown.org/collections/collection_name_2"
+      it_behaves_like "alright", "http://archiveofourown.org/collections/collection_name2"
+
+      # a specific work under a collection
+      it_behaves_like "alright", "http://archiveofourown.org/collections/collection_name/works/789"
+
+      it "does not count toward the collection report count" do
+        collection_report_count = lambda {
+          AbuseReport.where(
+            "url LIKE ? AND url NOT REGEXP ?",
+            "%/collections/collection_name/%",
+            "/collections/collection_name/works/[0-9]+"
+          ).count
+        }
+
+        expect do
+          create(:abuse_report, url: "http://archiveofourown.org/collections/collection_name/works/789")
+        end.not_to change { collection_report_count.call }
+      end
+
+      context "after the collection over-reporting period" do
+        before { travel(ArchiveConfig.ABUSE_REPORTS_PER_COLLECTION_PERIOD.days) }
+
+        it_behaves_like "alright", collection_url
       end
     end
 
