@@ -82,7 +82,7 @@ module MailerHelper
   # underlined text is wrapped in _
   # all other html tags are stripped
   def to_plain_text(html)
-    strip_tags(
+    ActionView::Base.full_sanitizer.sanitize(
       html.gsub(/<p>|<\/p>\z|<br( ?\/)?>\z/, "")
         .gsub(/<\/p>/, "\n\n")
         .gsub(/<br( ?\/)?>/, "\n")

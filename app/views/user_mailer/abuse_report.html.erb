@@ -18,8 +18,8 @@
   </p>
 
   <p>
-    <%# TODO: Remove to_plain_text when AO3-6519 is fixed. %>
-    <%= style_metadata_label(t(".copy.summary")) %><%= to_plain_text(raw(@summary)) %>
+    <%# TODO: Remove strip_tags when AO3-6519 is fixed. %>
+    <%= style_metadata_label(t(".copy.summary")) %><%= strip_tags(raw(@summary)) %>
   </p>
 
   <p><%= style_metadata_label(t(".copy.comment")) %></p>
