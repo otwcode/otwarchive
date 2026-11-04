@@ -155,8 +155,9 @@ module TagsHelper
   end
 
   def show_wrangling_dashboard
-    (%w(tags tag_wranglings tag_wranglers tag_wrangling_requests unsorted_tags).include?(controller.controller_name) ||
-    (@tag && controller.controller_name == 'comments')) && can_wrangle?
+    return false unless %w[tags tag_wranglings tag_wranglers tag_wrangling_requests unsorted_tags].include?(controller.controller_name)
+
+    (logged_in_as_admin? && policy(:wrangling).read_access?) || current_user.try(:is_tag_wrangler?) || false
   end
 
   # Returns a nested list of meta tags
