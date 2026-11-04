@@ -30,7 +30,7 @@ describe TagsHelper do
     end
 
     context "when logged in as a tag wrangler" do
-      let(:current_user) { create!(:tag_wrangler) }
+      let(:current_user) { create(:tag_wrangler) }
 
       %w[tags tag_wranglings tag_wranglers tag_wrangling_requests unsorted_tags].each do |name|
         context "on the #{name} controller" do
@@ -64,7 +64,7 @@ describe TagsHelper do
     context "when logged in as an admin" do
       %i[superadmin tag_wrangling_admin policy_and_abuse_admin].each do |factory|
         context "with the #{factory} role" do
-          let(:current_admin) { create!(factory) }
+          let(:current_admin) { create(factory) } # rubocop:disable Rails/SaveBang
 
           it "returns true" do
             expect(helper.show_wrangling_dashboard).to be_truthy
