@@ -176,6 +176,11 @@ When /^I review associations for "([^\"]*)"/ do |title|
   step %{I follow "Review Associations"}
 end
 
+When "I open the associations page for {string}" do |title|
+  tagset = OwnedTagSet.find_by!(title: title)
+  visit tag_set_associations_path(tagset)
+end
+
 When /^I nominate and approve fandom "([^\"]*)" and character "([^\"]*)" in "([^\"]*)"/ do |fandom, char, title|
   step %{I am logged in as "tagsetter"}
   step %{I set up the nominated tag set "#{title}" with 3 fandom noms and 3 character noms}
@@ -251,4 +256,8 @@ end
 
 Then /^"([^\"]*)" should be an unassociated tag$/ do |tag|
   step %{I should see "#{tag}" within "ol#list_for_unassociated_char_and_rel"}
+end
+
+Then "I should not see the submit button" do
+  expect(page).to_not have_button("Submit")
 end
