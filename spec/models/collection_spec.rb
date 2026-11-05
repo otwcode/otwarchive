@@ -80,10 +80,10 @@ describe Collection do
         include /Sorry, a collection can only have 10 tags./
     end
 
-    it "disallows invalid header image urls" do
+    it "disallows header image urls with an alternative file extension" do
       collection.header_image_url = "https://example.com/image.webp"
       expect(collection).not_to be_valid
-      expect(collection.errors.full_messages).to include("Header image URL can only point to a gif, jpg, jpeg, or png file.")
+      expect(collection.errors.full_messages).to include("Header image URL is not a valid URL.")
     end
 
     it "allows jpeg header image urls" do
@@ -94,6 +94,20 @@ describe Collection do
     it "allows jpg header image urls" do
       collection.header_image_url = "https://example.com/image.jpg"
       expect(collection).to be_valid
+    end
+
+    it "does not allow image urls with alternative scheme" do
+      collection.header_image_url = "file://example.com/image.jpg"
+      expect(collection).not_to be_valid
+      expect(collection.errors.full_messages).to include("Header image URL is not a valid URL.")
+    end
+
+    ["(", ")", '"', "'", " ", "\n", ";"].each do |char|
+      it "does not allow image urls with '#{char}'" do
+        collection.header_image_url = "https://example.com/image#{char}.jpg"
+        expect(collection).not_to be_valid
+        expect(collection.errors.full_messages).to include("Header image URL is not a valid URL.")
+      end
     end
     
     it "raises error when multifandom is nil" do
@@ -689,6 +703,23 @@ describe Collection do
       collection.destroy!
       expect(Collection.exists?(collection.id)).to be false
       expect(PromptMeme.exists?(challenge.id)).to be false
+    end
+  end
+
+  describe "#cleanup_url" do
+    let(:collection) { create(:collection) }
+
+    it "leaves invalid URLs unchanged" do
+      collection.header_image_url = "not a url.jpg"
+      expect do
+        collection.cleanup_url
+      end.not_to change { collection.header_image_url }
+    end
+
+    it "adds a default scheme if missing" do
+      collection.header_image_url = "example.com/image.jpg"
+      collection.cleanup_url
+      expect(collection.header_image_url).to eq("https://example.com/image.jpg")
     end
   end
 end

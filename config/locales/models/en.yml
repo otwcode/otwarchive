@@ -154,7 +154,7 @@ en:
         collection:
           attributes:
             header_image_url:
-              file_format: can only point to a gif, jpg, jpeg, or png file.
+              invalid_url: is not a valid URL.
         collection_item:
           attributes:
             collection:

@@ -3,12 +3,11 @@
 <!-- BEGIN header -->
 <% if @collection %>
   <!-- custom css for header -->
+  <%# avoid loading rejected image url %>
+  <% header_url = @collection.header_image_url_was || @collection.header_image_url || (@collection_parent && @collection_parent.header_image_url) %>
   <style type="text/css">
-  #header h2 { 
-    background: #616C90 <% if (header_url = @collection.header_image_url || (@collection_parent && @collection_parent.header_image_url)) %>
-      <% height = (size = FastImage.size(header_url, timeout: 1)) ? "#{size[1]}px" : "100%" %>
-      url(<%= header_url %>); height: <%= height %>
-    <% end %>;
+  #header h2 {
+    background: #616C90 <%- if header_url.present? %>url(<%= header_url %>)<% end %>;
   }
   </style>
 <% end %>
@@ -59,7 +58,9 @@
 
   <% if @collection %>
     <h2 class="collections">
-      <% unless @collection.header_image_url.present? %>
+      <% if header_url.present? %>
+        <%= image_tag(header_url, skip_pipeline: true, style: "visibility: hidden !important; display: block !important;") %>
+      <% else %>
         <%= @collection.title || @collection_parent&.title || t(".collections.new") %>
       <% end %>
     </h2>

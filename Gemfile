@@ -55,9 +55,6 @@ gem 'css_parser'
 
 gem "terrapin"
 
-# for looking up image dimensions quickly
-gem 'fastimage'
-
 # Gems for authentication
 gem "devise", git: "https://github.com/otwcode/devise", ref: "5dd846e"
 gem "devise-async" # To mails through queues

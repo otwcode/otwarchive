@@ -112,15 +112,16 @@ Scenario: Fill out new collection form with faulty data
    And the "This collection is closed" checkbox should not be disabled
    And "Gift Exchange" should be selected within "Type of challenge, if any"
 
-Scenario: Create a collection with a malformed header URL
+Scenario: Create a collection with a header URL missing a scheme
 
-Given I have the collection "Scotts Collection" with name "scotts_collection"
-  And I am logged in as "moderator"
-  And I am on "Scotts Collection" collection's page
-  And I follow "Collection Settings"
-  And I fill in "collection_header_image_url" with "fc00.deviantart.net/fs13/f/2007/004/a/7/Flooded_by_bingeling.jpg"
-  And I press "Update"
-  And I should see "Collection was successfully updated"
+  Given I have the collection "Scotts Collection" with name "scotts_collection"
+    And I am logged in as "moderator"
+    And I am on "Scotts Collection" collection's page
+  When I follow "Collection Settings"
+    And I fill in "collection_header_image_url" with "fc00.deviantart.net/fs13/f/2007/004/a/7/Flooded_by_bingeling.jpg"
+    And I press "Update"
+  Then I should see "Collection was successfully updated"
+    And I should see the image "src" text "https://fc00.deviantart.net/fs13/f/2007/004/a/7/Flooded_by_bingeling.jpg"
 
   Scenario: Update a collection with a HTTPS header URL
 
@@ -133,6 +134,18 @@ Given I have the collection "Scotts Collection" with name "scotts_collection"
   Then I should see "Collection was successfully updated"
   When I follow "Collection Settings"
   Then I should see "https://example.com/image.png" in the "Custom header URL" input
+
+  Scenario: Create a collection with an invalid header URL
+
+    Given I am logged in as "moderator"
+      And I have the collection "Fluffy Collection" with name "fluff"
+      And I am on "Fluffy Collection" collection's page
+    When I follow "Collection Settings"
+      And I fill in "collection_header_image_url" with "not a url.jpg"
+      And I press "Update"
+    Then I should see "Sorry! We couldn't save this collection"
+      And I should see "not a url.jpg" in the "Custom header URL" input
+      And I should not see the image "src" text "not a url.jpg"
 
   Scenario: Delete a subcollection and then its parent collection
 

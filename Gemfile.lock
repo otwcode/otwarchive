@@ -299,7 +299,6 @@ GEM
       logger
     faraday-net_http (3.4.4)
       net-http (~> 0.5)
-    fastimage (2.3.0)
     ffi (1.17.2)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
@@ -714,7 +713,6 @@ DEPENDENCIES
   factory_bot
   factory_bot_rails
   faker
-  fastimage
   globalize (~> 7.0)
   god (~> 0.13.7)
   google_visualr!
