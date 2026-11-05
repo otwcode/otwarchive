@@ -2,6 +2,10 @@
 class Feedback < ApplicationRecord
   attr_accessor :ip_address, :referer, :site_skin
 
+  # Form param must not be named "summary" or it will be treated as HTML
+  # (FIELDS_ALLOWING_HTML) and wrapped in <p> tags. See AO3-6519.
+  alias_attribute :subject, :summary
+
   # NOTE: this has NOTHING to do with the Comment class!
   # This is just the name of the text field in the Feedback
   # class which holds the user's comments.

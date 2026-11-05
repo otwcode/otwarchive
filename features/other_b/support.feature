@@ -43,6 +43,8 @@ Feature: Filing a support request
     And I press "Send"
   Then I should see "Email should look like an email address."
     And "Deutsch" should be selected within "Select language (required)"
+    And the "Brief summary" field should contain "Just a brief note"
+    And the "Brief summary" field should not contain "<p>"
     And I fill in "Your email (required)" with "test@archiveofourown.org"
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"

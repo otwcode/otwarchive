@@ -13,7 +13,7 @@ describe FeedbacksController do
         feedback: {
           comment: "Hello",
           email: "test@example.com",
-          summary: "Summary",
+          subject: "Summary",
           language: "en"
         }
       }

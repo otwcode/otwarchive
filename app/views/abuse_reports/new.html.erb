@@ -111,15 +111,15 @@
       </dd>
 
       <dt class="required">
-        <%= f.label :summary, t(".form.summary.label") %>
+        <%= f.label :subject, t(".form.summary.label") %>
       </dt>
       <dd class="required">
-        <%= f.text_field :summary, class: "observe_textlength", "aria-describedby" => "summary-field-description" %>
+        <%= f.text_field :subject, class: "observe_textlength", "aria-describedby" => "summary-field-description" %>
         <p class="footnote" id="summary-field-description">
           <%= t(".form.summary.description") %>
         </p>
-        <%= generate_countdown_html("abuse_report_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
-        <%= live_validation_for_field("abuse_report_summary",
+        <%= generate_countdown_html("abuse_report_subject", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
+        <%= live_validation_for_field("abuse_report_subject",
                                       failureMessage: t(".form.summary.error")) %>
       </dd>
 

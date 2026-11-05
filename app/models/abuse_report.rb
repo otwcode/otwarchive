@@ -1,4 +1,8 @@
 class AbuseReport < ApplicationRecord
+  # Form param must not be named "summary" or it will be treated as HTML
+  # (FIELDS_ALLOWING_HTML) and wrapped in <p> tags. See AO3-6519.
+  alias_attribute :subject, :summary
+
   validates :email, email_format: { allow_blank: false }
   validates_presence_of :language
   validates_presence_of :summary

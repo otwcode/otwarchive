@@ -55,6 +55,8 @@ Feature: Filing an abuse report
     And I press "Submit"
     And I should see "Email should look like an email address."
     And "Deutsch" should be selected within "Select language (required)"
+    And the "Brief summary of Terms of Service violation (required)" field should contain "This is a summary of bad things"
+    And the "Brief summary of Terms of Service violation (required)" field should not contain "<p>"
   Then I fill in "Your email (required)" with "valid@archiveofourown.org"
     And I press "Submit"
     And I should see "Your report was submitted to the Policy & Abuse team. A confirmation message has been sent to the email address you provided."
