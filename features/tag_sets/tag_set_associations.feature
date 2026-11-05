@@ -119,5 +119,12 @@ Feature: Reviewing tag set associations
     Then I should see "Jack Stark → Eureka"
       And I should see "Nathan Stark → Eureka"
 
+  Scenario: If there are no nominated associations to review I should not see the "Submit" button
+    When I am logged in as "tagsetter"
+      And I set up the tag set "Test tag set" with a visible tag list
+      And I open the associations page for "Test tag set"
+    Then I should see "No nominated associations to review!"
+      And I should not see the submit button
+
   # TODO
   # Scenario: Tags with brackets should work in associations
