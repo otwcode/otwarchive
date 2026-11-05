@@ -14,7 +14,7 @@ describe AbuseReportsController do
           comment: "Problem",
           url: "https://example.com/something",
           email: "test@example.com",
-          summary: "Summary",
+          subject: "Summary",
           language: "en"
         }
       }

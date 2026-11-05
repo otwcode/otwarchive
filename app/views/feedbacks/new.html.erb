@@ -72,12 +72,12 @@
                 { selected: @feedback.language || Language.default.name }) %>
         </dd>
         <dt class="required">
-          <%= f.label :summary, t(".form.summary.label") %>
+          <%= f.label :subject, t(".form.summary.label") %>
         </dt>
         <dd class="required">
-          <%= f.text_field :summary, size: 60, class: "observe_textlength" %>
-          <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
-          <%= live_validation_for_field("feedback_summary",
+          <%= f.text_field :subject, size: 60, class: "observe_textlength" %>
+          <%= generate_countdown_html("feedback_subject", ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) %>
+          <%= live_validation_for_field("feedback_subject",
                 failureMessage: t(".form.summary.error")) %>
         </dd>
         <dt class="required">
