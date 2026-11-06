@@ -1238,6 +1238,22 @@ en:
       moderated_and_anonymous_collections: 'Also note: if the collection you are submitting to is moderated, and you aren''t a member, your story will not be added to the collection automatically - it will have to be approved by one of the collection''s moderators. If this is an anonymous and/or unrevealed collection your work will be anonymous and/or hidden as soon as you post it, including while it''s waiting for approval. If your work is rejected, it will remain anonymous and/or unrevealed until you edit it to remove it from the collection or until the moderator removes it.'
       page_heading: Adding To Collections
       removing_from_collection: If you change your mind about having an item in a collection, you can either edit the list of collections when editing it, or you can manage all your collected items under the "My Collections" page in your account.
+    collections_prompt_restriction_character_and_relationship:
+      description: Very often, you will want your users to only be able to choose from the characters or relationships that belong to the fandom that they've chosen to sign up for. Unfortunately the archive can't figure out on its own that, for instance, the character "Zaphod Beeblebrox" is associated with the fandom "Hitchhiker's Guide To The Galaxy". These options are intended to help you get the results you want.
+      mode_fandom_only:
+        description: If you check this option, participants will only be allowed to sign up for a character or relationship that matches the fandom they have chosen in the request. The list of characters/relationships will be a combination of the tags that have been officially wrangled into that fandom, as well as any tag associations you have set up for that fandom in your tag set(s) if you are using any.
+        header: 'Option 3: Fandom Only'
+      mode_no_restrictions:
+        description: By default, your participants will get an autocomplete that lets the user choose from the canonical versions of character and relationship tags. This is a quick and dirty way to ensure most of your participants will sign up for the same versions of the characters or relationships and be matchable, even if you have so many characters/relationships that you don't want to create a tag set. Users will have to know at least enough of the tag they want to type in to get autocomplete results, but that is usually doable. 
+        header: 'Option 1: Nothing!'
+      mode_tag_set:
+        description: If you put character or relationship tags in your tag set, users will be given a set of checkboxes with each tag as a choice. This set of checkboxes will NOT change based on the fandom.
+        header: 'Option 2: Tag Set'
+      mode_tag_set_fandom_only:
+        description: If you don't want all the wrangled characters available, then check this option, and ONLY the characters you've associated in your tag set will be allowed.
+        header: 'Option 4: By Tag Set Fandom Only'
+      page_heading: 'Tag Options: Characters and Relationships'
+      closing_note: Hopefully with these options, you'll be able to find a solution for your challenge! If you run into difficulties or are confused by the options, please contact Archive Support for help (but we are often backed up so please do allow plenty of lead time before you're about to run your challenge if you're going to need extra help).
     csv_download:
       how_to_open: To open the file properly, you might need to tell your program that the file is TAB-separated. In Open Office and Neo Office, for example, choose the TAB separator in the File Open Wizard. In Google Docs, use "Import" instead of "Open" to be able to set the separator to TAB.
     first_login:
@@ -3061,6 +3077,9 @@ en:
       edit_my_pseuds: Manage My Pseuds
       edit_my_works: Edit My Works
       edit_profile: Edit Profile
+  prompt_restrictions:
+    prompt_restriction_form:
+      collections_prompt_restriction_character_and_relationship_help_title: Prompt restriction character and relationship
   prompts:
     prompt_form:
       title_requirements: Up to %{maximum} characters, cannot begin with =, +, -, @ or a whitespace character.
