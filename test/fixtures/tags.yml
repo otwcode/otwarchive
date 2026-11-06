@@ -5084,6 +5084,7 @@ tag_1063754109:
   type: Character
 tag_1063753824: 
   name: Testing
+  sortable_name: Testing
   merger_id: 
   last_wrangler_type: 
   canonical: true
