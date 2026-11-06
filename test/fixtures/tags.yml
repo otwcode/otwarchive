@@ -92,6 +92,7 @@ tag_1063753795:
   type: Freeform
 tag_1063753937: 
   name: Harry Potter - Fandom
+  sortable_name: Harry Potter - Fandom
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -313,6 +314,7 @@ tag_1063754133:
   type: Character
 tag_741440589: 
   name: Supernatural
+  sortable_name: Supernatural
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -378,6 +380,7 @@ tag_1063754134:
   type: Freeform
 tag_1063753801: 
   name: Bible
+  sortable_name: Bible
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -599,6 +602,7 @@ tag_1063754139:
   type: Freeform
 tag_1063753854: 
   name: Teen
+  sortable_name: Teen
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -612,6 +616,7 @@ tag_1063753854:
   type: Fandom
 tag_1063753807: 
   name: No Fandom
+  sortable_name: No Fandom
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -729,6 +734,7 @@ tag_1063754002:
   type: ArchiveWarning
 tag_1063754050: 
   name: Farscape
+  sortable_name: Farscape
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -742,6 +748,7 @@ tag_1063754050:
   type: Fandom
 tag_1063753858: 
   name: poo
+  sortable_name: poo
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -1184,6 +1191,7 @@ tag_1063753964:
   type: Freeform
 tag_1063753774: 
   name: Gilmore Girls
+  sortable_name: Gilmore Girls
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -1314,6 +1322,7 @@ tag_1063753919:
   type: Freeform
 tag_986046160: 
   name: Rowling - Harry Potter
+  sortable_name: Rowling - Harry Potter
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -1366,6 +1375,7 @@ tag_1063754112:
   type: Character
 tag_1063754160: 
   name: Completely new fandom
+  sortable_name: Completely new fandom
   merger_id: 
   last_wrangler_type: User
   canonical: false
@@ -1418,6 +1428,7 @@ tag_1063754113:
   type: Relationship
 tag_1063754161: 
   name: Tithe
+  sortable_name: Tithe
   merger_id: 
   last_wrangler_type: User
   canonical: false
@@ -1522,6 +1533,7 @@ tag_1063754115:
   type: Freeform
 tag_1063753830: 
   name: t
+  sortable_name: t
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -1600,6 +1612,7 @@ tag_1063754117:
   type: Freeform
 tag_1063753832: 
   name: Testings
+  sortable_name: Testings
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -1782,6 +1795,7 @@ tag_1063753837:
   type: Relationship
 tag_1063753885: 
   name: picky
+  sortable_name: picky
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -1951,6 +1965,7 @@ tag_1063753889:
   type: Relationship
 tag_1063754034: 
   name: Flannery O'Connor
+  sortable_name: Flannery O'Connor
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -1990,6 +2005,7 @@ tag_1063754082:
   type: Relationship
 tag_1063754035: 
   name: NCIS
+  sortable_name: NCIS
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -2471,6 +2487,7 @@ tag_1063753948:
   type: Freeform
 tag_1063753758: 
   name: Medieval romance
+  sortable_name: Medieval romance
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -2614,6 +2631,7 @@ tag_1063753811:
   type: Relationship
 tag_1063753999: 
   name: Speed Racer
+  sortable_name: Speed Racer
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -2692,6 +2710,7 @@ tag_1063753813:
   type: Relationship
 tag_177887685: 
   name: Doctor Who
+  sortable_name: Doctor Who
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -2744,6 +2763,7 @@ tag_1063753814:
   type: Relationship
 tag_1063754147: 
   name: w3c
+  sortable_name: w3c
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -2770,6 +2790,7 @@ tag_362175678:
   type: Freeform
 tag_1063753862: 
   name: Mooo
+  sortable_name: Mooo
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -2861,6 +2882,7 @@ tag_1063753864:
   type: Freeform
 tag_1063753818: 
   name: Battlestar Galactica (2003)
+  sortable_name: Battlestar Galactica (2003)
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -3069,6 +3091,7 @@ tag_1063753869:
   type: Freeform
 tag_711936337: 
   name: SGA
+  sortable_name: SGA
   merger_id: 951091623
   last_wrangler_type: 
   canonical: false
@@ -3095,6 +3118,7 @@ tag_1063754015:
   type: Character
 tag_1063754062: 
   name: Angel
+  sortable_name: Angel
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -3238,6 +3262,7 @@ tag_1063753970:
   type: Freeform
 tag_1063753780: 
   name: Supernatural RPF
+  sortable_name: Supernatural RPF
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -3381,6 +3406,7 @@ tag_1063753782:
   type: Character
 tag_569823665: 
   name: Torchwood
+  sortable_name: Torchwood
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -3394,6 +3420,7 @@ tag_569823665:
   type: Fandom
 tag_1063754019: 
   name: RPF
+  sortable_name: RPF
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -3537,6 +3564,7 @@ tag_1063753784:
   type: Relationship
 tag_211186876: 
   name: American Idol
+  sortable_name: American Idol
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -3654,6 +3682,7 @@ tag_1063753785:
   type: Character
 tag_1063754121: 
   name: House MD
+  sortable_name: House MD
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -3693,6 +3722,7 @@ tag_1063753976:
   type: Freeform
 tag_1063754122: 
   name: Sherlock Holmes
+  sortable_name: Sherlock Holmes
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -3719,6 +3749,7 @@ tag_1063753977:
   type: Freeform
 tag_1063754123: 
   name: Buffy - Fandom
+  sortable_name: Buffy - Fandom
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -3849,6 +3880,7 @@ tag_1063754126:
   type: Character
 tag_951091623: 
   name: Stargate Atlantis
+  sortable_name: Stargate Atlantis
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -4161,6 +4193,7 @@ tag_1063753898:
   type: Relationship
 tag_130714128: 
   name: Stargate SG-1
+  sortable_name: Stargate SG-1
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -4265,6 +4298,7 @@ tag_1063754092:
   type: Freeform
 tag_1063754045: 
   name: Buffy the Vampire Slayer
+  sortable_name: Buffy the Vampire Slayer
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -4681,6 +4715,7 @@ tag_1063753909:
   type: Relationship
 tag_385776504: 
   name: Iron Man (2008)
+  sortable_name: Iron Man (2008)
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -4980,6 +5015,7 @@ tag_1063754107:
   type: Freeform
 tag_1063753822: 
   name: Dr. Horrible's Blog
+  sortable_name: Dr. Horrible's Blog
   merger_id: 
   last_wrangler_type: 
   canonical: true
@@ -5006,6 +5042,7 @@ tag_1063754155:
   type: Relationship
 tag_1063753871: 
   name: BDS
+  sortable_name: BDS
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -5254,6 +5291,7 @@ tag_1063753828:
   type: Freeform
 tag_1063753829: 
   name: Test
+  sortable_name: Test
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -5280,6 +5318,7 @@ tag_1063753876:
   type: Freeform
 tag_1063754021: 
   name: "rpf - #yuletide"
+  sortable_name: "rpf - #yuletide"
   merger_id: 
   last_wrangler_type: 
   canonical: false
@@ -5319,6 +5358,7 @@ tag_1063753877:
   type: Relationship
 tag_1063754023: 
   name: RPF-#yuletide
+  sortable_name: RPF-#yuletide
   merger_id: 
   last_wrangler_type: 
   canonical: false
