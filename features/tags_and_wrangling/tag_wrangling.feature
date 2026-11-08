@@ -367,7 +367,7 @@ Feature: Tag wrangling
     When I follow "Characters by fandom (2)"
     Then I should see "Mass Wrangle New/Unwrangled Tags"
 
-  Scenario: Subtags are listed in alphabetical order
+  Scenario: Subtags are listed in alphabetical order by sortable name
     Given a canonical freeform "Angst"
       And a canonical freeform "Angstc"
       And it is currently 1 second from now
@@ -376,13 +376,18 @@ Feature: Tag wrangling
       And a canonical freeform "Angstb"
       And it is currently 1 second from now
       And a canonical freeform "Angsta"
+      And it is currently 1 second from now
+      And a canonical freeform "The Angst"
       And "Angst" is a metatag of the freeform "Angstc"
       And it is currently 1 second from now
       And "Angst" is a metatag of the freeform "Angstb"
       And it is currently 1 second from now
       And "Angst" is a metatag of the freeform "Angsta"
+      And it is currently 1 second from now
+      And "Angst" is a metatag of the freeform "The Angst"
     When I view the tag "Angst"
-    Then "Angsta" should appear before "Angstb"
+    Then "The Angst" should appear before "Angsta"
+      And "Angsta" should appear before "Angstb"
       And "Angstb" should appear before "Angstc"
 
   Scenario: Metatags are listed in alphabetical order by sortable name
