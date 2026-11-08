@@ -84,7 +84,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
       step %{I follow "Add Chapter"}
       fill_in("content", with: "Yet another chapter.")
       click_button("Post")
-      expect(page).to have_content("Chapter was successfully")
+      expect(page).to have_current_path(%r{\A/works/\d+/chapters/\d+\z}, ignore_query: true)
     end
   end
   step %{all indexing jobs have been run}
