@@ -435,6 +435,10 @@ en:
       scheduled_for_deletion: scheduled for deletion
     drafts:
       page_title: "%{username} - Drafts"
+    edit_multiple:
+      edit_multiple_no_works_selected_error_message: "Please select at least one work to edit."
+      orphan_multiple_no_works_selected_error_message: "Please select at least one work to orphan."
+      delete_multiple_no_works_selected_error_message: "Please select at least one work to delete."
     edit_tags:
       page_title: Edit Work Tags
     new:
