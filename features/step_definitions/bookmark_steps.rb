@@ -370,6 +370,8 @@ def submit_bookmark_form(pseud, note, tags, collection)
   fill_in("Your tags", with: tags) unless tags.nil?
   fill_in("bookmark_collection_names", with: collection.gsub(/[^\w]/, "_")) unless collection.nil?
   click_button("Create")
+  expect(page).to have_current_path(%r{\A/bookmarks/\d+\z}, ignore_query: true)
+  expect(page).to have_content("Bookmark was successfully created.")
   step %{all indexing jobs have been run}
 end
 
@@ -392,6 +394,7 @@ When /^I bookmark the series "([^\"]*)"$/ do |series_title|
   visit series_path(series)
   click_link("Bookmark Series")
   click_button("Create")
+  expect(page).to have_content("Bookmark was successfully created.")
   step %{all indexing jobs have been run}
 end
 
@@ -451,7 +454,10 @@ When "I follow {string} in the blurb for {word}'s bookmark of {string}" do |link
 end
 
 When "I confirm the bookmark's deletion" do
-  expect(page.accept_alert).to eq("Are you sure you want to delete this bookmark?") if @javascript
+  if @javascript
+    expect(page.accept_alert).to eq("Are you sure you want to delete this bookmark?")
+    expect(page).to have_content("Bookmark was successfully deleted.")
+  end
 end
 
 Then "the {word} bookmark form should be open in the bookmarkable blurb for {string}" do |action, title|
@@ -530,6 +536,7 @@ When /^I rec the current work$/ do
   click_link("Bookmark")
   check("bookmark_rec")
   click_button("Create")
+  expect(page).to have_content("Bookmark was successfully created.")
   step %{all indexing jobs have been run}
 end
 

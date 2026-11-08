@@ -191,6 +191,7 @@ When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |ti
   name = title.gsub(/[^\w]/, "_") if name.blank?
   step %{I set up the collection "#{title}" with name "#{name}"}
   step %{I submit}
+  expect(page).to have_content("Collection was successfully created.")
 end
 
 When /^I add (?:a|the) subcollection "([^"]*)"(?: with name "([^"]*)")? to (?:a|the) parent collection named "([^"]*)"$/ do |title, name, parent_name|

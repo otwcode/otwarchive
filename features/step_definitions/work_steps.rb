@@ -74,6 +74,8 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
     step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" with rating "#{rating}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
   end
   click_button("Post")
+  expect(page).to have_current_path(%r{\A/works/\d+\z}, ignore_query: true)
+  expect(page).to have_content("Work was successfully")
   # Now add the chapters
   if number_of_chapters.present? && number_of_chapters.to_i > 1
     work = Work.find_by(title: title)
@@ -82,6 +84,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
       step %{I follow "Add Chapter"}
       fill_in("content", with: "Yet another chapter.")
       click_button("Post")
+      expect(page).to have_content("Chapter was successfully")
     end
   end
   step %{all indexing jobs have been run}
@@ -614,18 +617,21 @@ When /^I preview the work$/ do
 end
 When /^I update the work$/ do
   click_button("Update")
+  expect(page).to have_content("Work was successfully")
   step %{all indexing jobs have been run}
 
   step "the periodic tag count task is run"
 end
 When /^I post the work without preview$/ do
   click_button "Post"
+  expect(page).to have_content("Work was successfully")
   step %{all indexing jobs have been run}
 
   step "the periodic tag count task is run"
 end
 When /^I post the work$/ do
   click_button "Post"
+  expect(page).to have_content("Work was successfully")
   step %{all indexing jobs have been run}
 end
 
