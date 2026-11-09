@@ -706,9 +706,17 @@ en:
         works: Works
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
     search_form:
+      any_field: Any field on work
+      bookmark_search_date_updated_help_title: Bookmark search date updated
       bookmark_search_text_help_title: Bookmark search text
+      bookmark_search_type_help_title: Bookmark search type
       bookmark_search_work_tag_help_title: Bookmark search work tags
+      date_updated: Date updated
+      page_heading: Bookmarked Item
+      type: Type
       word_count: Word count
+      work_language: Work language
+      work_tags: Work tags
   challenge:
     gift_exchange:
       challenge_signups:
@@ -1231,6 +1239,18 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    bookmark_search_date_updated:
+      ago_explanation: The "ago" is optional. Note that "1 day ago" is not a range, and would only find items updated at this exact instant yesterday. Create a range instead.
+      example_heading: 'Examples:'
+      explanation: 'Specify a range of times to find bookmarked items that were posted or updated during that time frame: works with new chapters, for example, or series with new works. If a work was backdated by its creator (i.e. had a different publication date set when it was uploaded to the Archive), that date will be used for this search.'
+      options: You can search by year, month, week, day, or hour.
+      page_heading: 'Bookmark Search: Date Updated'
+      three_days_ago_example_html: '&lt; 3 days ago'
+      three_days_ago_example_explanation: will find bookmarks of works that were posted or updated within the past three days
+      three_to_nine_months_ago_example_html: '3-9 months ago'
+      three_to_nine_months_ago_example_explanation: will find bookmarks of works that were posted or updated between 3 and 9 months ago
+      three_years_ago_example_html: '&gt; 3 years ago'
+      three_years_ago_example_explanation: will find bookmarks of works that were posted or updated more than three years ago
     bookmark_search_text:
       asterisk_example_html: "<kbd>book*</kbd> will find <samp>book</samp> and <samp>books</samp> and <samp>booking</samp>."
       asterisk_explanation: "*: any characters"
@@ -1245,6 +1265,9 @@ en:
       space_example_html: "<kbd>Harry Potter</kbd> will find <samp>Harry Potter</samp> and <samp>Harry James Potter</samp> but not <samp>Harry</samp>."
       space_explanation: 'space: a space acts like AND'
       special_characters: The characters ":" and "@" have special meanings. Leave them out of your search or you will get unexpected results.
+    bookmark_search_type:
+      description: Select the type of bookmarked item to limit your search results to Work, Series, or External Work. Note that selecting External Work will return any bookmarks for works hosted off the Archive.
+      page_heading: 'Bookmark Search: Type'
     bookmark_search_work_tag:
       description: 'The "Work tags" field searches all tags added to a bookmarked item by the item''s creator. This does not include tags added by the bookmarker. Tags can be any of the following: Rating, Warning, Category, Fandom, Character, Relationship, Additional Tags. The field will suggest canonical tags as you enter search terms.'
       page_heading: 'Bookmark Search: Work Tags'
