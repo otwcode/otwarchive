@@ -2,6 +2,10 @@ When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
   unselect(item, from: selector)
 end
 
+When "I clear the cache" do
+  Rails.cache.clear
+end
+
 Then /^debug$/ do
   binding.pry
 end

@@ -109,6 +109,14 @@ When /^I post the works "([^"]*)"$/ do |worklist|
   end
 end
 
+When "I add the work {string} to the collection {string}" do |title, collection|
+  work = Work.find_by(title: title)
+  c = Collection.find_by(title: collection)
+  visit edit_work_path(work)
+  fill_in("Collections", with: c.name)
+  click_button("Update")
+end
+
 ### GIVEN
 
 Given /^I have no works or comments$/ do
