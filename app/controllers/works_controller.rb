@@ -641,18 +641,18 @@ class WorksController < ApplicationController
   end
 
   def edit_multiple
-    if params[:work_ids].nil? || params[:work_ids].empty?
-      if params[:commit] == 'Orphan'
-        error = t(".orphan.no_works_selected_error")
-      elsif params[:commit] == 'Delete'
-        error = t(".delete.no_works_selected_error")
-      else
-        error = t(".edit.no_works_selected_error")
-      end
+    if params[:work_ids].blank?
+      flash[:error] =
+        case params[:commit]
+        when "Orphan"
+          t(".orphan.no_works_selected_error")
+        when "Delete"
+          t(".delete.no_works_selected_error")
+        else
+          t(".edit.no_works_selected_error")
+        end
 
-      flash[:error] = error
-      redirect_to(show_multiple_user_works_path(current_user))
-      return
+      redirect_to(show_multiple_user_works_path(current_user)) && return
     end
 
     if params[:commit] == 'Orphan'
