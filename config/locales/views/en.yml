@@ -1239,7 +1239,7 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
-    bookmark_search_text:
+    bookmark_search_text_help:
       asterisk_example_html: "<kbd>book*</kbd> will find <samp>book</samp> and <samp>books</samp> and <samp>booking</samp>."
       asterisk_explanation: "*: any characters"
       guidelines: Use the following guidelines for entering search terms and search operators. "Any field" combines all text fields in the search form, including tags. "Bookmarker" lets you search for bookmarks created by a particular user. "Notes" searches for terms within all bookmarkers' notes.
