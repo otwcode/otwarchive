@@ -271,7 +271,7 @@ Feature: Collection
       And I have the hidden collection "Secret for Now"
       And I am logged in as "classified"
       And I post the work "Top-Secret Goodness"
-      And I edit the work "Top-Secret Goodness" to be in the collections "Super-Secret,Secret_for_Now"
+      And I edit the work "Top-Secret Goodness" to be in the collections "Super_Secret,Secret_for_Now"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
@@ -285,7 +285,7 @@ Feature: Collection
       And I have the anonymous collection "Cheese Enthusiasts"
       And I am logged in as "classified"
       And I post the work "Half and Half"
-      And I edit the work "Half and Half" to be in the collections "Triple-Secret,Cheese_Enthusiasts"
+      And I edit the work "Half and Half" to be in the collections "Triple_Secret,Cheese_Enthusiasts"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
