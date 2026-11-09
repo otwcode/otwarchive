@@ -461,12 +461,12 @@ en:
     drafts:
       page_title: "%{username} - Drafts"
     edit_multiple:
+      delete:
+        no_works_selected_error: "Please select at least one work to delete."
       edit:
         no_works_selected_error: "Please select at least one work to edit."
       orphan:
         no_works_selected_error: "Please select at least one work to orphan."
-      delete:
-        no_works_selected_error: "Please select at least one work to delete."
     edit_tags:
       page_title: Edit Work Tags
     moderated_collections_message_html:
