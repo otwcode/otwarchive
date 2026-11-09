@@ -651,11 +651,11 @@ class WorksController < ApplicationController
   def edit_multiple
     if params[:work_ids].nil? || params[:work_ids].empty?
       if params[:commit] == 'Orphan'
-        error = t(".orphan_multiple_no_works_selected_error_message")
+        error = t(".orphan.no_works_selected_error_message")
       elsif params[:commit] == 'Delete'
-        error = t(".delete_multiple_no_works_selected_error_message")
+        error = t(".delete.no_works_selected_error_message")
       else
-        error = t(".edit_multiple_no_works_selected_error_message")
+        error = t(".edit.no_works_selected_error_message")
       end
 
       flash[:error] = error
