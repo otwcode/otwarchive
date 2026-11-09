@@ -7,11 +7,10 @@ describe ProfileController do
   describe "show" do
     let(:user) { create(:user) }
 
-    it "redirects and shows an error message for a non existent user" do
-      get :show, params: { user_id: 999_999_999_999 }
-
-      expect(response).to redirect_to(root_path)
-      expect(flash[:error]).to eq "Sorry, there's no user by that name."
+    it "raises a NotFound error for a nonexistent user" do
+      expect do
+        get :show, params: { user_id: 999_999_999_999 }
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "creates a new profile if one does not exist" do
