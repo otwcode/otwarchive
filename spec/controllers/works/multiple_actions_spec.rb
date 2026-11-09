@@ -46,19 +46,46 @@ describe WorksController do
     end
 
     context "when logged in as a user" do
-      it "redirects to the orphan path when the Orphan button was clicked" do
-        post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
+      context "when the Orphan button was clicked" do
+        context "when at least one work is selected" do
+          it "redirects to the orphan path" do
+            post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
 
-        it_redirects_to new_orphan_path(work_ids: work_ids)
+            it_redirects_to new_orphan_path(work_ids: work_ids)
+          end
+        end
+
+        context "when no works are selected" do
+          it "errors and redirects to show multiple page" do
+            post :edit_multiple, params: { id: work1.id, work_ids: nil, commit: "Orphan" }
+            
+            it_redirects_to_with_error(show_multiple_user_works_path(multiple_works_user), "Please select at least one work to orphan.")
+          end
+        end
       end
     end
 
     context "when logged in as a banned user" do
-      it "redirects to the orphan path when the Orphan button was clicked" do
+      before do
         multiple_works_user.update!(banned: true)
-        post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
+      end
 
-        it_redirects_to new_orphan_path(work_ids: work_ids)
+      context "when the Orphan button was clicked" do
+        context "when at least one work is selected" do
+          it "redirects to the orphan path" do
+            post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
+
+            it_redirects_to new_orphan_path(work_ids: work_ids)
+          end
+        end
+
+        context "when no work is selected" do
+          it "errors and redirects to show multiple page" do
+            post :edit_multiple, params: { id: work1.id, work_ids: nil, commit: "Orphan" }
+
+            it_redirects_to_with_error(show_multiple_user_works_path(multiple_works_user), "Please select at least one work to orphan.")
+          end
+        end
       end
     end
 
