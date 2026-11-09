@@ -97,6 +97,7 @@ describe Admin::SettingsController do
           hide_spam: 1,
           invite_from_queue_enabled: 0,
           invite_from_queue_number: 11,
+          invite_from_queue_frequency: 5,
           request_invite_enabled: 1
         }.each_pair do |field, value|
           it "allows admins with policy_and_abuse role to update #{field}" do

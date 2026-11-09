@@ -16,8 +16,13 @@
     <div class="image"><p class="qr"><%= qr_code_as_svg(current_admin.totp_qr_code_uri) %></p></div>
     <div class="notes">
       <h4 class="heading"><%= t(".app_setup.key.heading") %></h4>
-      <code><%= current_admin.otp_secret.scan(/.{1,4}/).join(" ") %></code>
+      <code><%= setup_key = current_admin.otp_secret.scan(/.{1,4}/).join(" ") %></code>
       <p class="footnote"><%= t(".app_setup.key.format_note") %></p>
+      <p class="actions">  
+          <button id="copy-totp-setup-key" onclick="copySetupKey()" style="visibility: hidden;">
+            <%= t(".app_setup.key.copy_to_clipboard") %>
+          </button>
+      </p>
     </div>
   </div>
 </section>
@@ -34,3 +39,15 @@
   <% end %>
 </section>
 <!--/content-->
+
+<% content_for :footer_js do %>
+  <script type="text/javascript">
+    document.getElementById("copy-totp-setup-key").style.visibility = "visible";
+
+    async function copySetupKey() {
+      await navigator.clipboard.writeText("<%= setup_key %>");
+      document.getElementById("copy-totp-setup-key").textContent = "<%= t(".app_setup.key.copied") %>";
+    }
+  </script>
+<% end %>
+

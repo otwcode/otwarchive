@@ -12,6 +12,7 @@ Feature: There is a list of unassigned Fandoms
     When I go to the unassigned fandoms page
     Then I should see "Steven Universe"
       And I should see "High School Musical"
+      And the page title should include "Unassigned Fandoms"
     When I select "TV Shows" from "media_id"
       And I press "Sort and Filter"
     Then I should see "Steven Universe"

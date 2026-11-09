@@ -123,6 +123,12 @@ from the main flow. */
   float: none;
 }
 
+.annotation .actions {
+  float: none;
+  margin-block-end: 0;
+  padding-block-end: 0;
+}
+
 /* contexts */
 
 .actions + .footnote {

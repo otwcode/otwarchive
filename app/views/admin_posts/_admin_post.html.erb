@@ -9,13 +9,13 @@
   <dl class="meta">
     <% if admin_post.posted? %>
       <dt class="published"><%= t(".published") %></dt>
-      <dd class="published"><%= l(admin_post.published_at) %></dd>
+      <dd class="published"><%= time_in_zone(admin_post.published_at) %></dd>
     <% end %>
     <% if admin_post.translated_post %>
       <dt class="original translations"><%= ts("Original:") %></dt>
       <dd class="original translations"><%= link_to admin_post.translated_post.title.html_safe, admin_post.translated_post %></dd>
     <% else %>
-      <% translations = sorted_translations(admin_post) %>
+      <% translations = admin_post.posted? ? admin_post.translations.posted : admin_post.translations %>
       <% unless translations.blank? %>
       <dt class="translations"><%= ts("Translations:") %></dt>
       <dd class="translations">

@@ -9,7 +9,30 @@ Scenario: Posting a remix / related work emails the creator of the original work
   Given I have related works setup
   When I post a related work as remixer
   Then a parent related work should be seen
-    And the original author should be emailed
+    And the original author should receive a related work email
+
+Scenario: Posting a remix in a variatey of ways should always send related work emails the creator of the original work and list the parent work in the proper location on the remix / related work
+
+  Given I have related works setup
+    And all emails have been delivered
+  When I post a related work as remixer without previewing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+
+  Given all emails have been delivered
+  When I post a related work as remixer after saving it as a draft
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+
+  Given all emails have been delivered
+  When I post a related work as remixer after saving it as a draft and then editing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
+    
+  Given all emails have been delivered
+  When I post a related work as remixer after previewing it and then editing it
+  Then a parent related work should be seen
+    And the original author should receive a related work email
 
 Scenario: Remixer can see their remix / related work on their related works page
 
@@ -44,7 +67,7 @@ Scenario: Posting a translation emails the creator of the original work and list
   Given I have related works setup
   When I post a translation as translator
   Then a parent translated work should be seen
-    And the original author should be emailed
+    And the original author should receive a related work email
 
 Scenario: Translator can see their translation on their related works page
 
@@ -287,16 +310,6 @@ Scenario: Listing external works as inspirations
     And I should see "Inspired by Worldbuilding Two by BNF"
   When I view my related works
   Then I should see "From N/A to English"
-  # inactive URL should give a helpful message (AO3-1783)
-  # unreachable URL should give a more helpful message (A03-3536)
-  When I edit the work "Followup"
-    And I check "parent-options-show"
-    And I fill in "URL" with "http://example.org/404"
-    And I fill in "Title" with "Worldbuilding Two"
-    And I fill in "Author" with "BNF"
-    And I press "Preview"
-  Then I should see "Parent work URL could not be reached. If the URL is correct and the site is currently down, please try again later."
-
 Scenario: External work language
 
   Given basic tags
@@ -330,7 +343,7 @@ Scenario: External work language
 # especially during posting / editing / previewing a work
 # especially from the related_works page, which works but redirects to a non-existant page right now
 
-Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
+Scenario: Restricted works listed as Inspiration show up [Restricted] for guests, but normally for admins
   Given I have related works setup
     And a related work has been posted and approved
   When I am logged in as "remixer"
@@ -338,6 +351,9 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   When I am logged out
     And I view the work "Worldbuilding"
   Then I should see "[Restricted Work] by remixer"
+  When I am logged in as an admin
+    And I view the work "Worldbuilding"
+  Then I should see "Followup by remixer"
   When I am logged in as "remixer"
     And I unlock the work "Followup"
   When I am logged out
@@ -348,6 +364,9 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
   When I am logged out
     And I view the work "Followup"
   Then I should see "Inspired by [Restricted Work] by inspiration"
+  When I am logged in as an admin
+    And I view the work "Followup"
+  Then I should see "Inspired by Worldbuilding by inspiration"
 
 Scenario: Anonymous works listed as inspiration should have links to the authors,
   but only for the authors themselves and admins
@@ -429,7 +448,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Given I have related works setup
     And the user "inspiration" is a protected user
   When I post a related work as remixer
-  Then I should see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should see "This work cannot be listed as an inspiration."
 
   Scenario: When editing a work with an existing citation of a protected user's work, the citation remains
   Given I have related works setup
@@ -479,7 +498,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding" to be in the collection "Anonymous"
   When I post a related work as remixer
-  Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should not see "This work cannot be listed as an inspiration."
   When I am logged in as "remixer"
     And I go to remixer's related works page
   Then I should see "Works that inspired remixer"
@@ -493,7 +512,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding" to be in the collection "Hidden"
   When I post a related work as remixer
-  Then I should not see "You can't use the related works function to cite works by the protected user inspiration."
+  Then I should not see "This work cannot be listed as an inspiration."
   When I am logged in as "remixer"
     And I go to remixer's related works page
   Then I should see "Works that inspired remixer"
@@ -545,6 +564,17 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Then I should see "Works inspired by inspiration"
       And I should see "A work in an unrevealed collection"
       And I should not see "remixer"
+
+  Scenario: When an unrevealed work is cited, its title is not visible on the remixer's work edit page
+    Given a hidden collection "Hidden"
+      And I have related works setup
+      And I post a related work as remixer
+      And I am logged in as "inspiration"
+      And I edit the work "Worldbuilding" to be in the collection "Hidden"
+    When I am logged in as "remixer"
+      And I edit the work "Followup"
+    Then I should see "Mystery Work"
+      And I should not see "Worldbuilding"
 
   Scenario: A remix of an anonymous work is shown on the remixer's related works page, but not on the original creator's related works page
     Given an anonymous collection "Anonymous"

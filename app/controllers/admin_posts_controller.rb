@@ -6,7 +6,7 @@ class AdminPostsController < Admin::BaseController
   # GET /admin_posts
   def index
     @page_subtitle = t(".page_title")
-    @pagy, @admin_posts = pagy(@admin_posts.posted.order(published_at: :desc))
+    @pagy, @admin_posts = pagy(@admin_posts.posted.includes(:language, :tags, :translated_post).order(published_at: :desc))
   end
 
   # GET /admin_posts/drafts
@@ -34,6 +34,7 @@ class AdminPostsController < Admin::BaseController
       @next_admin_post = admin_posts.unposted.order(created_at: :asc).where("created_at > ?", @admin_post.created_at).first
       @page_subtitle = t(".page_title_draft", title: @admin_post.title.html_safe)
     end
+    @kudos = @admin_post.kudos.with_user.includes(:user).order(created_at: :desc)
     respond_to do |format|
       format.html # show.html.erb
       format.js
@@ -45,11 +46,14 @@ class AdminPostsController < Admin::BaseController
     @preview_mode = true
     @admin_post = AdminPost.find(params[:id])
     authorize(@admin_post)
+    
+    @page_subtitle = t(".page_title", title: @admin_post.title.html_safe)
   end
 
   # GET /admin_posts/new
   # GET /admin_posts/new.xml
   def new
+    @page_subtitle = t(".page_title")
     @admin_post = AdminPost.new
     authorize @admin_post
   end
@@ -70,6 +74,7 @@ class AdminPostsController < Admin::BaseController
     if !params[:edit_button] && @admin_post.valid?
       if params[:preview_button]
         @preview_mode = true
+        @page_subtitle = t("admin_posts.preview.page_title", title: @admin_post.title.html_safe)
         render action: "preview" and return
       elsif !params[:edit_button] && @admin_post.save
         flash[:notice] = t(".success")
@@ -90,6 +95,7 @@ class AdminPostsController < Admin::BaseController
     if !params[:edit_button] && @admin_post.valid?
       if params[:preview_button]
         @preview_mode = true
+        @page_subtitle = t("admin_posts.preview.page_title", title: @admin_post.title.html_safe)
         render :preview and return
       elsif @admin_post.save
         flash[:notice] = t(".success")

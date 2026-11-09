@@ -672,5 +672,59 @@ namespace :After do
   task(remove_noncanonical_fandom_wrangling_assignments: :environment) do
     WranglingAssignment.joins("LEFT JOIN tags ON (tags.id = wrangling_assignments.fandom_id)").where(tags: { canonical: false }).find_each(&:destroy!)
   end
+
+  desc "Backfill missing username-matching pseuds"
+  task(backfill_missing_pseuds: :environment) do
+    # BINARY: also include users whose only match differs by case/diacritics
+    users = User.where(
+      "NOT EXISTS (SELECT 1 FROM pseuds WHERE BINARY pseuds.name = BINARY users.login AND pseuds.user_id = users.id LIMIT 1)"
+    )
+    total = users.count
+    puts "Backfilling pseuds: found #{total} #{'user'.pluralize(total)} missing an exact username-matching pseud"
+
+    created = 0
+    updated = 0
+    failed = 0
+    users.find_each do |user|
+      # Collation-aware: matches ignoring case/diacritics
+      existing = user.pseuds.where(name: user.login).first
+      if existing
+        existing.name = user.login
+        existing.save!(validate: false)
+        updated += 1
+        puts "  Updated pseud to \"#{user.login}\" for user #{user.id}"
+      else
+        Pseud.create!(name: user.login, user_id: user.id, is_default: !user.default_pseud)
+        created += 1
+        puts "  Created pseud \"#{user.login}\" for user #{user.id}"
+      end
+    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved => e
+      failed += 1
+      puts "  Failed to backfill pseud \"#{user.login}\" for user #{user.id}: #{e.message}"
+    end
+
+    puts "Done: #{created} created, #{updated} updated, #{failed} failed"
+    $stdout.flush
+  end
+
+  desc "Rename collections with duplicate names"
+  task(rename_duplicate_collections: :environment) do
+    duplicates = Collection.group(:name).having("COUNT(*) > 1").count
+    puts "Renaming duplicates for #{duplicates.count} collections"
+
+    duplicates.each do |name, _|
+      collections = Collection.where(name: name)
+      collections.each_with_index do |collection, index|
+        next if index.zero?
+
+        new_name = "#{collection.name}_#{collection.id}"
+        collection.name = new_name
+        collection.save!
+        puts "Renamed collection to #{new_name}"
+      end
+    end
+    puts "Finished renaming collections"
+  end
+
   # This is the end that you have to put new tasks above.
 end

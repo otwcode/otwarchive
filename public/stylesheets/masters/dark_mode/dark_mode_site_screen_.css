@@ -425,7 +425,6 @@ input[type="submit"] {
 
 .own,
 .draft,
-.draft .wrapper,
 .unread,
 .child,
 .unwrangled,
@@ -477,7 +476,7 @@ a.tag:hover,
   color: #111;
 }
 
-.wrapper {
+.wrapper:has(> table, > .meta) {
     box-shadow: 1px 1px 3px #000;
 }
 
@@ -536,6 +535,10 @@ dl.meta {
 
 dl.meta .wrapper {
   border-bottom-color: #2a2a2a;
+}
+
+.news .wrapper {
+    box-shadow: none;
 }
 
 /* 13-GROUP-BLURB */

@@ -119,7 +119,6 @@ module SkinWizard
         .javascript .work.navigation .download .secondary,
         .own,
         .draft,
-        .draft .wrapper,
         .unread,
         .child,
         .unwrangled,
@@ -155,7 +154,7 @@ module SkinWizard
         .secondary,
         .work.navigation .download,
         .javascript .work.navigation .download .secondary,
-        .wrapper {
+        .wrapper:has(> table, > .meta) {
           box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5)
         }
 
@@ -166,6 +165,10 @@ module SkinWizard
         
         .listbox .index {
           box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .news .wrapper {
+          box-shadow: none;
         }
       "
     else

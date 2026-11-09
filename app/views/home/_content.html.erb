@@ -89,7 +89,11 @@
 </p>
 
 <h4 class="heading" id="II.D"><span id="copyright"><%= t(".copyright_infringement.heading") %></span></h4>
-<p><%= t(".copyright_infringement.not_allowed") %></p>
+<p>
+  <%= t(".copyright_infringement.not_allowed_html",
+        the_right_to_upload_link: link_to(t(".copyright_infringement.the_right_to_upload"), tos_faq_path(anchor: "repost_credit")),
+        permission_link: link_to(t(".copyright_infringement.permission"), tos_faq_path(anchor: "obtain_permission"))) %>
+</p>
 <p><%= t(".copyright_infringement.epigraphs_small_quotations_allowed") %></p>
 <p>
   <%= t(".copyright_infringement.transformative_works_legal_html",

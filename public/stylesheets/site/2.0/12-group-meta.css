@@ -72,7 +72,6 @@ dl.meta .wrapper {
   width: 100%;
   border-bottom: 1px solid #ccc;
   padding-block: 1.286em;
-    box-shadow: none;
 }
 
 dl.meta .wrapper:last-of-type {

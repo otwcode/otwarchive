@@ -31,6 +31,15 @@ describe ReadingsController do
         end
       end
 
+      context "when the target user does not exist" do
+        it "raises a 404 error" do
+          fake_login
+          expect do
+            get :index, params: { user_id: "nonexistent_user" }
+          end.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+
       context "when logged in as the user" do
         it "includes user's readings sorted by last_viewed" do
           reading1 = create(:reading, user: user, last_viewed: 2.days.ago)

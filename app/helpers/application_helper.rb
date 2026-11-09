@@ -4,10 +4,10 @@ module ApplicationHelper
 
   # TODO: Official recommendation from Rails indicates we should switch to
   # unobtrusive JavaScript instead of using anything like `link_to_function`
-  def link_to_function(name, *args, &block)
+  def link_to_function(name, *args)
     html_options = args.extract_options!.symbolize_keys
 
-    function = block_given? ? update_page(&block) : args[0] || ''
+    function = args[0] || ""
 
     onclick = "#{"#{html_options[:onclick]}; " if html_options[:onclick]}#{function}; return false;"
     href = html_options[:href] || 'javascript:void(0)'

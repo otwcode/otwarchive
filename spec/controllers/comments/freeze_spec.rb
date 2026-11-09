@@ -145,7 +145,7 @@ describe CommentsController do
 
             expect(comment.reload.iced).to be true
             it_redirects_to_with_comment_notice(
-              work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+              chapter_path(comment.parent, show_comments: true, anchor: :comments),
               "Comment thread successfully frozen!"
             )
           end
@@ -300,7 +300,7 @@ describe CommentsController do
 
               expect(comment.reload.iced).to be false
               it_redirects_to_with_comment_error(
-                work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+                chapter_path(comment.parent, show_comments: true, anchor: :comments),
                 "Sorry, that comment thread could not be frozen."
               )
             end
@@ -449,7 +449,7 @@ describe CommentsController do
 
                 expect(comment.reload.iced).to be_truthy
                 it_redirects_to_with_comment_error(
-                  work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+                  chapter_path(comment.parent, show_comments: true, anchor: :comments),
                   "Sorry, that comment thread could not be frozen."
                 )
               end
@@ -474,7 +474,7 @@ describe CommentsController do
 
             expect(comment.reload.iced).to be_truthy
             it_redirects_to_with_comment_error(
-              work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+              chapter_path(comment.parent, show_comments: true, anchor: :comments),
               "Sorry, that comment thread could not be frozen."
             )
           end
@@ -495,7 +495,7 @@ describe CommentsController do
             expect(comment.reload.iced).to be_truthy
           end
           it_redirects_to_with_comment_error(
-            work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+            chapter_path(comment.parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be frozen."
           )
         end
@@ -515,7 +515,7 @@ describe CommentsController do
             expect(comment.reload.iced).to be_truthy
           end
           it_redirects_to_with_comment_error(
-            work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+            chapter_path(comment.parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be frozen."
           )
         end
@@ -535,7 +535,7 @@ describe CommentsController do
             expect(comment.reload.iced).to be_truthy
           end
           it_redirects_to_with_comment_error(
-            work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+            chapter_path(comment.parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be frozen."
           )
         end
@@ -554,7 +554,7 @@ describe CommentsController do
 
           expect(comment.reload.iced).to be true
           it_redirects_to_with_comment_error(
-            work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+            chapter_path(comment.parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be frozen."
           )
         end
@@ -703,7 +703,7 @@ describe CommentsController do
 
                 expect(comment.reload.iced).to be_falsey
                 it_redirects_to_with_comment_error(
-                  work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+                  chapter_path(comment.parent, show_comments: true, anchor: :comments),
                   "Sorry, that comment thread could not be unfrozen."
                 )
               end
@@ -728,7 +728,7 @@ describe CommentsController do
 
             expect(comment.reload.iced).to be_falsey
             it_redirects_to_with_comment_error(
-              work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+              chapter_path(comment.parent, show_comments: true, anchor: :comments),
               "Sorry, that comment thread could not be unfrozen."
             )
           end
@@ -749,7 +749,7 @@ describe CommentsController do
             expect(comment.reload.iced).to be_falsey
           end
           it_redirects_to_with_comment_error(
-            work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+            chapter_path(comment.parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be unfrozen."
           )
         end
@@ -769,7 +769,7 @@ describe CommentsController do
             expect(comment.reload.iced).to be_falsey
           end
           it_redirects_to_with_comment_error(
-            work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+            chapter_path(comment.parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be unfrozen."
           )
         end
@@ -789,7 +789,7 @@ describe CommentsController do
             expect(comment.reload.iced).to be_falsey
           end
           it_redirects_to_with_comment_error(
-            work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+            chapter_path(comment.parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be unfrozen."
           )
         end
@@ -808,7 +808,7 @@ describe CommentsController do
 
           expect(comment.reload.iced).to be false
           it_redirects_to_with_comment_error(
-            work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+            chapter_path(comment.parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be unfrozen."
           )
         end
@@ -929,7 +929,7 @@ describe CommentsController do
 
             expect(comment.reload.iced).to be false
             it_redirects_to_with_comment_notice(
-              work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+              chapter_path(comment.parent, show_comments: true, anchor: :comments),
               "Comment thread successfully unfrozen!"
             )
           end
@@ -1065,7 +1065,7 @@ describe CommentsController do
 
               expect(comment.reload.iced).to be true
               it_redirects_to_with_comment_error(
-                work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+                chapter_path(comment.parent, show_comments: true, anchor: :comments),
                 "Sorry, that comment thread could not be unfrozen."
               )
             end

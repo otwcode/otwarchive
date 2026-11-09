@@ -50,6 +50,10 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Highlight code that triggered database queries in logs.
+  # This slows down the test suite, so skip this when running in CI.
+  config.active_record.verbose_query_logs = ENV["CI"].blank?
+
   # Configure strong parameters to raise an exception if an unpermitted attribute is used
   config.action_controller.action_on_unpermitted_parameters = :raise
 

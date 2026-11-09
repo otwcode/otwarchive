@@ -18,6 +18,20 @@ describe WorksController do
         expect(flash[:error]).to eq "Did you want to enter a URL?"
       end
 
+      context "when the work doesn't save" do
+        before do
+          WebMock.stub_request(:get, /import-site-without-tags/)
+            .to_return(status: 200,
+                       body: "stubbed response",
+                       headers: {})
+        end
+
+        it "shows an error message" do
+          get :import, params: { urls: "http://import-site-without-tags.net", language_id: "en", work: { fandom_string: "Testing" } }
+          expect(flash[:error]).to eq "We were only partially able to import this work and couldn't save it. Please review below!"
+        end
+      end
+
       it "there is an external author name but importing_for_others is NOT turned on" do
         params = {
           urls: "url1, url2",

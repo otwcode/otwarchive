@@ -172,6 +172,62 @@ Feature: Gift Exchange Challenge
       And I submit
     Then I should see "Offer URL does not appear to be a valid URL."
 
+  Scenario: Custom URL and description labels are used in emails when available
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I edit settings for "Awesome Gift Exchange" challenge
+      And I check "gift_exchange[request_restriction_attributes][url_allowed]"
+      And I fill in "gift_exchange[request_url_label]" with "Custom Request URL Label"
+      And I fill in "gift_exchange[request_description_label]" with "Custom Request Description Label"
+      And I submit
+    When I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with combination A
+      And I follow "Edit Sign-up"
+      And I fill in "Custom Request URL Label" with "https://example.com/myname1_prompt"
+      And I fill in "Custom Request Description Label" with "myname1 wrote a description!"
+      And I submit
+    When I am logged in as "myname2"
+      And I sign up for "Awesome Gift Exchange" with combination B
+      And I follow "Edit Sign-up"
+      And I fill in "Custom Request URL Label" with "https://example.com/myname2_prompt"
+      And I fill in "Custom Request Description Label" with "myname2 wrote a description!"
+      And I submit
+    When I am logged in as "mod1"
+      And I have generated matches for "Awesome Gift Exchange"
+    When I press "Send Assignments"
+    Then I should see "Assignments are now being sent out"
+    When I reload the page
+    Then I should not see "Assignments are now being sent out"
+      And 1 email should be delivered to "myname1"
+      And the email should contain "Custom Request URL Label"
+      And the email should contain "Custom Request Description Label"
+
+  Scenario: When custom URL and description labels aren't set, the default values for them show up in emails
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I edit settings for "Awesome Gift Exchange" challenge
+      And I check "gift_exchange[request_restriction_attributes][url_allowed]"
+      And I submit
+    When I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with combination A
+      And I follow "Edit Sign-up"
+      And I fill in "Prompt URL:" with "https://example.com/myname1_prompt"
+      And I fill in "Description:" with "myname1 wrote a description!"
+      And I submit
+    When I am logged in as "myname2"
+      And I sign up for "Awesome Gift Exchange" with combination B
+      And I follow "Edit Sign-up"
+      And I fill in "Prompt URL:" with "https://example.com/myname2_prompt"
+      And I fill in "Description:" with "myname2 wrote a description!"
+      And I submit
+    When I am logged in as "mod1"
+      And I have generated matches for "Awesome Gift Exchange"
+    When I press "Send Assignments"
+    Then I should see "Assignments are now being sent out"
+    When I reload the page
+    Then I should not see "Assignments are now being sent out"
+      And 1 email should be delivered to "myname1"
+      And the email should contain "Prompt URL"
+      And the email should contain "Description"
+
   Scenario: Sign-ups can be seen in the dashboard
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
     When I am logged in as "myname1"
@@ -824,6 +880,10 @@ Feature: Gift Exchange Challenge
     Then I should see "collection_1"
     When I follow "2" within ".pagination"
     Then I should see "collection_2"
+    When there are 20 assignments per page
+      And I reload the page
+    Then I should see "My Assignments"
+      But I should not see "collection_2"
 
   Scenario: Mod can approve a posted assignment in a moderated gift exchange
     Given everyone has their assignments for "Awesome Gift Exchange"
@@ -842,3 +902,41 @@ Feature: Gift Exchange Challenge
     Then I should not see "Approve"
     When I follow "Complete"
     Then I should see "Fulfilled Story" 
+
+  @javascript
+  Scenario: Can hide and show warnings on a request
+    Given I have set up the gift exchange "Awesome Gift Exchange"
+      And I check "Sign-up open?"
+      And I check "Requests visible?"
+      And I allow warnings in my gift exchange
+      And I submit
+      And I start signing up for "Awesome Gift Exchange"
+      And I check "No Archive Warnings Apply"
+      And I submit
+    When I am logged in as "myname2"
+      And I set my preferences to hide warnings
+      And I go to "Awesome Gift Exchange" collection's page
+      And I follow "Requests Summary"
+    Then I should see "Show warnings"
+      And I should not see "No Archive Warnings" within "li.warnings"
+    When I follow "Show warnings"
+    Then I should not see "Show warnings"
+      And I should see "No Archive Warnings" within "li.warnings"
+
+  @javascript
+  Scenario: Can hide and show additional tags on a request
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I am logged in as "mod1"
+      And I go to "Awesome Gift Exchange" gift exchange edit page
+      And I check "Requests visible?"
+      And I submit
+      And I sign up for "Awesome Gift Exchange" with combination A
+    When I am logged in as "myname2"
+      And I set my preferences to hide freeform
+      And I go to "Awesome Gift Exchange" collection's page
+      And I follow "Requests Summary"
+    Then I should see "Show additional tags"
+      And I should not see "Alternate Universe - Historical"
+    When I follow "Show additional tags"
+    Then I should not see "Show additional tags"
+      And I should see "Alternate Universe - Historical"

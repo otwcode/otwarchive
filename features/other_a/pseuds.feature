@@ -103,9 +103,33 @@ Scenario: Manage pseuds - add, edit
     And I follow "Manage My Pseuds"
   Then I should see "Edit My new name"
 
-  # Edit your new pseud's name and description.
+  # Edit your new pseud with a blank name.
   When I follow "edit_my_new_name"
-    And I fill in "Description" with "I wanted to add another fancy name"
+    And I fill in "Description" with "I wanted to make my new name blank"
+    And I fill in "Name" with ""
+    And I press "Update"
+  Then I should not see "Pseud was successfully updated."
+    And I should see "can't be blank"
+    And I should see "can contain letters, numbers, spaces, underscores, and dashes"
+
+  # Check that the show button works and the pseud hasn't actually updated.
+  When I follow "Show"
+  Then I should be on the dashboard page for user "editpseuds" with pseud "My new name"
+  When I follow "Back To Pseuds"
+  Then I should see "Edit My new name"
+    And I should see "I wanted to add another name"
+    And I should not see "I wanted to make my new name blank"
+
+  # Edit your new pseud with an invalid name.
+  When I follow "edit_my_new_name"
+    And I fill in "Description" with "I wanted to make my new name smiley"
+    And I fill in "Name" with ":-)"
+    And I press "Update"
+  Then I should not see "Pseud was successfully updated."
+    And I should see "can contain letters, numbers, spaces, underscores, and dashes"
+
+  # Edit your new pseud with a valid name this time.
+  When I fill in "Description" with "I wanted to add another fancy name"
     And I fill in "Name" with "My new fancy name"
     And I press "Update"
   Then I should see "Pseud was successfully updated."
@@ -253,6 +277,27 @@ Scenario: Edit pseud updates series blurbs
 
   When I follow "Series"
   Then I should see "Best Series by Me3 (Myself)"
+
+Scenario: Edit pseud updates gift blurbs
+  Given "giftee1" has the pseud "Me2"
+    And the user "giftee1" allows gifts
+    And I am logged in as "gifter"
+    And I set up the draft "GiftStory1"
+    And I give the work to "Me2 (giftee1)"
+    And I press "Post"
+    And I am logged in as "giftee1"
+  When I go to giftee1's gifts page
+  Then I should see "GiftStory1 by gifter for Me2 (giftee1)"
+  When I view my profile
+    And I follow "Manage My Pseuds"
+    And I follow "Edit Me2"
+    And I fill in "Name" with "Me3"
+    # Delay before renaming to make sure the cache is expired
+    And it is currently 1 second from now
+    And I press "Update"
+  Then I should see "Pseud was successfully updated."
+  When I go to giftee1's gifts page
+  Then I should see "GiftStory1 by gifter for Me3 (giftee1)"
 
 Scenario: Change details as an admin
 

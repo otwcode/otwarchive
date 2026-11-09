@@ -9,7 +9,8 @@ on:
 jobs:
   en-keys-to-remove:
     if: github.head_ref == 'phrase-translations'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
     name: Check for outdated English keys in Phrase
 
     steps:
@@ -36,7 +37,8 @@ jobs:
 
   unused-keys:
     if: github.head_ref == 'phrase-translations'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
     needs: en-keys-to-remove
     name: Check unused keys for all locales
 
@@ -61,7 +63,8 @@ jobs:
 
   inconsistent-interpolations:
     if: github.head_ref == 'phrase-translations'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
     name: Check consistent interpolations for all locales
 
     steps:

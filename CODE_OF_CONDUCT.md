@@ -35,7 +35,7 @@ any platform:
 * Actual or threatened violence.
 * Sharing someone's personally identifying information ("doxxing") or private content (including communications sent
   privately), or otherwise linking identities without explicit permission.
-  Discrimination based on race, color, ethnicity, caste, national origin, age, ability, gender identity, marital status,
+* Discrimination based on race, color, ethnicity, caste, national origin, age, ability, gender identity, marital status,
   familial status, parental status, religion, sexual orientation, genetic information, political beliefs, status within
   fannish contexts, or role within the OTW itself.
 
@@ -47,7 +47,7 @@ individuals directly first, with respect and recognition of other community memb
 
 If there is behavior you believe violates this Code of Conduct, email the AO3 development team leads at
 [adt-chair@transformativeworks.org](mailto:adt-chair@transformativeworks.org). All reports will be taken seriously,
-investigated and responded to as promptly as possible and as appropriate for the circumstances.
+investigated, and responded to as promptly as possible and as appropriate for the circumstances.
 
 **Note:** The Archive of Our Own (AO3) is not considered to be a project space, and conduct there is governed by its
 [Terms of Service](https://archiveofourown.org/tos). Potential violations thereof must be reported via

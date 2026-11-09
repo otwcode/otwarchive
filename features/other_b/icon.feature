@@ -41,6 +41,17 @@ Feature: User icons
   Then I should see "Collection was successfully updated."
     And the "Pretty" collection should not have an icon
 
+  Scenario: Users should not be able to upload collection icons using the .webp format
+
+    Given I have a collection "Pretty"
+      And I am logged in as "moderator"
+      And I am on "Pretty" collection's page
+      And I follow "Settings"
+    When I attach a "collection" icon with the extension "webp"
+      And I press "Update"
+    Then I should see "Sorry! We couldn't save this collection because:"
+      And I should see "Icon content type is invalid"
+
   Scenario: Users can delete icon and alt text
 
   Given I have an icon uploaded
@@ -52,3 +63,12 @@ Feature: User icons
   Then I should see "Pseud was successfully updated."
   When I follow "Edit Pseud"
   Then I should see the icon and alt text boxes are blank
+
+  Scenario: Users should not be able to upload skin icons using the .bmp format
+
+    Given I am logged in as "SkinTeam"
+    When I set up the skin "good style"
+      And I attach a "skin" icon with the extension "bmp"
+      And I submit
+    Then I should see "Sorry! We couldn't save this skin because:"
+      And I should see "Icon content type is invalid"

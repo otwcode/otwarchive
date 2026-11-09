@@ -344,10 +344,8 @@ class CommentsController < ApplicationController
   end
 
   def unreviewed
-    @comments = @commentable.find_all_comments
-      .unreviewed_only
-      .for_display
-      .page(params[:page])
+    @comments = @commentable.unreviewed_comments_to_show(logged_in_as_admin?)
+    @comments = @comments.for_display.page(params[:page])
   end
 
   # GET /comments/1
@@ -406,6 +404,7 @@ class CommentsController < ApplicationController
       @comment.cloudflare_bot_score = request.env["HTTP_CF_BOT_SCORE"]
       @comment.cloudflare_ja3_hash = request.env["HTTP_CF_JA3_HASH"]
       @comment.cloudflare_ja4 = request.env["HTTP_CF_JA4"]
+      @comment.request_host = request.host
       @comment.commentable = Comment.commentable_object(@commentable)
       @controller_name = params[:controller_name]
 
@@ -450,6 +449,7 @@ class CommentsController < ApplicationController
   # PUT /comments/1
   # PUT /comments/1.xml
   def update
+    @comment.request_host = request.host
     updated_comment_params = comment_params.merge(edited_at: Time.current)
     if @comment.update(updated_comment_params)
       flash[:comment_notice] = ts('Comment was successfully updated.')
@@ -538,13 +538,13 @@ class CommentsController < ApplicationController
   def approve
     authorize @comment
     @comment.mark_as_ham!
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   end
 
   def reject
     authorize @comment if logged_in_as_admin?
     @comment.mark_as_spam!
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   end
 
   # PUT /comments/1/freeze
@@ -559,10 +559,10 @@ class CommentsController < ApplicationController
       flash[:comment_notice] = t(".success")
     end
 
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   rescue StandardError
     flash[:comment_error] = t(".error")
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   end
 
   # PUT /comments/1/unfreeze
@@ -577,10 +577,10 @@ class CommentsController < ApplicationController
       flash[:comment_error] = t(".error")
     end
 
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   rescue StandardError
     flash[:comment_error] = t(".error")
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+    redirect_to_all_comments(@comment.parent, show_comments: true)
   end
 
   # PUT /comments/1/hide
@@ -610,13 +610,18 @@ class CommentsController < ApplicationController
   def show_comments
     respond_to do |format|
       format.html do
-        # if non-ajax it could mean sudden javascript failure OR being redirected from login
-        # so we're being extra-nice and preserving any intention to comment along with the show comments option
-        options = {show_comments: true}
-        options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
-        options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
-        options[:page] = params[:page]
-        redirect_to_all_comments(@commentable, options)
+        if @commentable.nil?
+          flash[:error] = t(".error")
+          redirect_back_or_to root_path
+        else
+          # if non-ajax it could mean sudden javascript failure OR being redirected from login
+          # so we're being extra-nice and preserving any intention to comment along with the show comments option
+          options = { show_comments: true }
+          options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
+          options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
+          options[:page] = params[:page]
+          redirect_to_all_comments(@commentable, options)
+        end
       end
 
       format.js do

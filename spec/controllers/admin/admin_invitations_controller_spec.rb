@@ -6,39 +6,40 @@ describe Admin::AdminInvitationsController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  index_roles = %w[superadmin open_doors policy_and_abuse support tag_wrangling].freeze
+
   describe "GET #index" do
-    let(:admin) { create(:admin) }
+    subject { get :index }
+    let(:success) do
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template("index")
+    end
+
+    it_behaves_like "an action only authorized admins can access", authorized_roles: index_roles
 
     it "denies non-admins access to index" do
       fake_login
-      get :index
-      it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
-    end
+      subject
 
-    it "allows admins to access index" do
-      fake_login_admin(admin)
-      get :index
-      expect(response).to have_http_status(:success)
+      it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
   end
 
+  create_roles = %w[superadmin policy_and_abuse support tag_wrangling].freeze
+
   describe "POST #create" do
-    let(:admin) { create(:admin) }
-
-    it "does not allow non-admins to create invites" do
-      email = "test_email@example.com"
-      fake_login
-      post :create, params: { invitation: { invitee_email: email } }
-
-      it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
+    subject { post :create, params: { invitation: { invitee_email: "test_email@example.com" } } }
+    let(:success) do
+      it_redirects_to_with_notice(admin_invitations_path, "An invitation was sent to test_email@example.com")
     end
 
-    it "allows admins to create invites" do
-      email = "test_email@example.com"
-      fake_login_admin(admin)
-      post :create, params: { invitation: { invitee_email: email } }
+    it_behaves_like "an action only authorized admins can access", authorized_roles: create_roles
 
-      it_redirects_to_with_notice(admin_invitations_path, "An invitation was sent to #{email}")
+    it "does not allow non-admins to create invites" do
+      fake_login
+      subject
+
+      it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
   end
 

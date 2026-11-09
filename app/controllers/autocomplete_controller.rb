@@ -110,7 +110,8 @@ class AutocompleteController < ApplicationController
         body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: search_list } } }
       )
       render_output((match + search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] }).uniq)
-    rescue Elastic::Transport::Transport::Errors::BadRequest
+    rescue Elastic::Transport::Transport::Errors::BadRequest => e
+      Sentry.capture_exception(e) if defined?(Sentry) && $rollout.active?(:log_elasticsearch_errors)
       render_output(match)
     end
   end
@@ -138,7 +139,13 @@ class AutocompleteController < ApplicationController
 
   # For creating collections, autocomplete the name of a parent collection owned by the user only
   def collection_parent_name
-    render_output(current_user.maintained_collections.top_level.with_name_like(params[:term]).pluck(:name).sort)
+    results = current_user.maintained_collections.top_level
+      .with_name_or_title_like(params[:term])
+      .limit(10)
+      .order(:title)
+      .pluck(:name, :title)
+      .map { |name, title| { id: name, name: "#{title} (#{name})" } }
+    respond_with(results)
   end
 
   # for looking up existing urls for external works to avoid duplication

@@ -5,7 +5,7 @@
       <legend><%= ts("Name, Order and Date") %></legend>
       <h4 class="landmark heading"><%= ts("Name, Order and Date") %></h4>
       <dl>
-        <dt><%= f.label :title, ts("Chapter Title") %> <%= link_to_help "chapter-title" %></dt>
+        <dt><%= f.label :title, t(".chapter_title") %> <%= link_to_help_modal(help_chapters_title_path, t(".chapters_title_help_title")) %></dt>
         <dd>
           <%= f.text_field :title, class: "observe_textlength" %>
           <%= live_validation_for_field("chapter_title", presence: false, maximum_length: ArchiveConfig.TITLE_MAX) %>

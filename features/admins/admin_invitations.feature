@@ -254,8 +254,13 @@ Feature: Admin Actions to Manage Invitations
       And I should not see "Create an Account!"
       And I should not see "Joining the Archive currently requires an invitation; however, we are not accepting new invitation requests at this time."
 
-  Scenario: An admin can send an invitation to a user via email
+  Scenario: An admin without a role has no Invitations entry in the admin header
     Given I am logged in as an admin
+    Then I should not see "Invite New Users"
+      And I should not see "Invitations"
+
+  Scenario: An admin can send an invitation to a user via email
+    Given I am logged in as a "tag_wrangling" admin
       And all emails have been delivered
     When I follow "Invite New Users"
       And I fill in "invitation[invitee_email]" with "fred@bedrock.com"
@@ -264,7 +269,7 @@ Feature: Admin Actions to Manage Invitations
       And 1 email should be delivered
 
   Scenario: An admin can't create an invite with invalid email
-    Given I am logged in as an admin
+    Given I am logged in as a "tag_wrangling" admin
       And all emails have been delivered
     When I follow "Invite New Users"
       And I fill in "invitation[invitee_email]" with "abcdefgh"
@@ -273,7 +278,7 @@ Feature: Admin Actions to Manage Invitations
       And 0 emails should be delivered
 
   Scenario: An admin can't create an invite without an email address.
-    Given I am logged in as an admin
+    Given I am logged in as a "tag_wrangling" admin
       And all emails have been delivered
     When I follow "Invite New Users"
       And I press "Invite user"

@@ -14,22 +14,15 @@ class ExternalWork < ApplicationRecord
 
   AUTHOR_LENGTH_MAX = 500
 
-  validates_presence_of :title
-  validates_length_of :title, minimum: ArchiveConfig.TITLE_MIN,
-                              too_short: ts("must be at least %{min} characters long.",
-                                            min: ArchiveConfig.TITLE_MIN)
-  validates_length_of :title, maximum: ArchiveConfig.TITLE_MAX,
-                              too_long: ts("must be less than %{max} characters long.",
-                                           max: ArchiveConfig.TITLE_MAX)
+  validates :title,
+            presence: true,
+            length: { minimum: ArchiveConfig.TITLE_MIN, maximum: ArchiveConfig.TITLE_MAX }
 
-  validates_length_of :summary, allow_blank: true, maximum: ArchiveConfig.SUMMARY_MAX,
-                                too_long: ts("must be less than %{max} characters long.",
-                                             max: ArchiveConfig.SUMMARY_MAX)
+  validates :summary, length: { maximum: ArchiveConfig.SUMMARY_MAX, allow_blank: true }
 
-  validates :author, presence: { message: ts("can't be blank") }
-  validates_length_of :author, maximum: AUTHOR_LENGTH_MAX,
-                               too_long: ts("must be less than %{max} characters long.",
-                                            max: AUTHOR_LENGTH_MAX)
+  validates :author,
+            presence: true,
+            length: { maximum: AUTHOR_LENGTH_MAX }
 
   validates :user_defined_tags_count,
             at_most: { maximum: proc { ArchiveConfig.USER_DEFINED_TAGS_MAX } }
@@ -40,7 +33,7 @@ class ExternalWork < ApplicationRecord
 
   before_validation :cleanup_url
   # i18n-tasks-use t("errors.attributes.url.invalid")
-  validates :url, presence: true, url_format: true, url_active: true
+  validates :url, presence: true, url_format: true
   def cleanup_url
     self.url = Addressable::URI.heuristic_parse(self.url) if self.url
   rescue Addressable::URI::InvalidURIError
