@@ -694,9 +694,9 @@ en:
     filters:
       bookmark_search_text_help_title: Bookmark search text
       from: From
-      to: To
       search_bookmarker_tags_and_notes: Search bookmarker's tags and notes
       search_within_results: Search within results
+      to: To
       word_count: Word count
     index:
       advanced_search: try our advanced search
@@ -711,9 +711,9 @@ en:
     search_form:
       any_field_on_bookmark: Any field on bookmark
       any_field_on_work: Any field on work
-      bookmarker: Bookmarker
       bookmark_search_text_help_title: Bookmark search text
       bookmark_search_work_tag_help_title: Bookmark search work tags
+      bookmarker: Bookmarker
       notes: Notes
       word_count: Word count
       work_tags: Work tags
