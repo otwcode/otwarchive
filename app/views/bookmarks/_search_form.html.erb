@@ -34,7 +34,7 @@
         <%= f.text_field :word_count %>
       </dd>
       <dt>
-        <%= f.label :language_id, ts("Work Language") %>
+        <%= f.label :language_id, ts("Work language") %>
       </dt>
       <dd>
         <%= f.select(:language_id, language_options_for_select(@languages, "short"), include_blank: true) %>
