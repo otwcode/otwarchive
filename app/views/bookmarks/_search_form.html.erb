@@ -2,10 +2,10 @@
     html: { class: "search", method: :get } do |f| %>
   <fieldset>
     <legend><%= ts("Bookmarked Item") %></legend>
-    <h3 class="landmark heading"><%= t(".page_heading") %></h3>
+    <h3 class="landmark heading"><%= ts("Bookmarked Item") %></h3>
     <dl>
       <dt>
-        <%= f.label :bookmarkable_query, t(".any_field") %>
+        <%= f.label :bookmarkable_query, t(".any_field_on_work") %>
         <%= link_to_help_modal(help_bookmark_search_text_path, t(".bookmark_search_text_help_title")) %>
       </dt>
       <dd>
@@ -19,8 +19,8 @@
         <%= f.text_field :other_tag_names, autocomplete_options("tag") %>
       </dd>
       <dt>
-        <%= f.label :bookmarkable_type, t(".type") %>
-        <%= link_to_help_modal(help_bookmark_search_type_path, t(".bookmark_search_type_help_title")) %>
+        <%= f.label :bookmarkable_type, ts("Type") %>
+        <%= link_to_help "bookmark-search-type-help" %>
       </dt>
       <dd>
         <%= f.select :bookmarkable_type,
@@ -34,14 +34,14 @@
         <%= f.text_field :word_count %>
       </dd>
       <dt>
-        <%= f.label :language_id, t(".work_language") %>
+        <%= f.label :language_id, ts("Work Language") %>
       </dt>
       <dd>
         <%= f.select(:language_id, language_options_for_select(@languages, "short"), include_blank: true) %>
       </dd>
       <dt>
-        <%= f.label :bookmarkable_date, t(".date_updated") %>
-        <%= link_to_help_modal(help_bookmark_search_date_updated_path, t(".bookmark_search_date_updated_help_title")) %>
+        <%= f.label :bookmarkable_date, ts("Date updated") %>
+        <%= link_to_help "bookmark-search-date-updated-help" %>
       </dt>
       <dd>
         <%= f.text_field :bookmarkable_date %>
@@ -54,8 +54,8 @@
     <h3 class="landmark heading"><%= ts("Bookmark") %></h3>
     <dl>
       <dt>
-        <%= f.label :bookmark_query, ts("Any field on bookmark") %>
-        <%= link_to_help "bookmark-search-text-help" %>
+        <%= f.label :bookmark_query, t(".any_field_on_bookmark") %>
+        <%= link_to_help_modal(help_bookmark_search_text_path, t(".bookmark_search_text_help_title")) %>
       </dt>
       <dd>
         <%= f.text_field :bookmark_query %>
@@ -68,15 +68,15 @@
         <%= f.text_field :other_bookmark_tag_names, autocomplete_options("tag") %>
       </dd>
       <dt>
-        <%= f.label :bookmarker, ts("Bookmarker") %>
-        <%= link_to_help "bookmark-search-text-help" %>
+        <%= f.label :bookmarker, t(".bookmarker") %>
+        <%= link_to_help_modal(help_bookmark_search_text_path, t(".bookmark_search_text_help_title")) %>
       </dt>
       <dd>
         <%= f.text_field :bookmarker %>
       </dd>
       <dt>
-        <%= f.label :bookmark_notes, ts("Notes") %>
-        <%= link_to_help "bookmark-search-text-help" %>
+        <%= f.label :bookmark_notes, t(".notes") %>
+        <%= link_to_help_modal(help_bookmark_search_text_path, t(".bookmark_search_text_help_title")) %>
       </dt>
       <dd>
         <%= f.text_field :bookmark_notes %>
