@@ -29,6 +29,20 @@ Feature: Edit Multiple Works
       And I should not see "Excellent"
       And I should see "Lovely"
 
+  Scenario: Deleting multiple works with no works selected should return to the show multiple works page with an error message
+    Given I am logged in as "author"
+      And I post the work "Glorious" with fandom "SGA"
+      And I post the work "Excellent" with fandom "Star Trek"
+      And I post the work "Lovely" with fandom "Steven Universe"
+      And I go to author's works page
+    When I follow "Edit Works"
+    Then I should see the page title "Edit Multiple Works"
+      And I should see "Edit Multiple Works"
+      And I press "Delete"
+    Then I should see "Please select at least one work to delete"
+      And the page title should not include "Delete Works?"
+      And I should not see "Delete Works?"
+
   Scenario: I can edit multiple works at once
     Given I am logged in as "author"
       And I post the work "Glorious" with fandom "SGA"
@@ -57,6 +71,18 @@ Feature: Edit Multiple Works
     When I view the work "Excellent"
     Then I should see "Random"
       And I should not see "Star Trek"
+
+  Scenario: Editing multiple works with no works selected should return to the show multiple works page with an error message
+    Given I am logged in as "author"
+      And I post the work "Glorious" with fandom "SGA"
+      And I post the work "Excellent" with fandom "Star Trek"
+      And I post the work "Lovely" with fandom "Steven Universe"
+      And I go to author's works page
+    When I follow "Edit Works"
+    Then I should see the page title "Edit Multiple Works"
+      And I should see "Edit Multiple Works"
+      And I press "Edit"
+    Then I should see "Please select at least one work to edit"
 
   Scenario: I can disable anon commenting on multiple works at once
     Given I am logged in as "author"
@@ -269,3 +295,17 @@ Feature: Edit Multiple Works
       Then I should not see "MyCollection"
     When I view the work "Excellent"
       Then I should not see "MyCollection"
+
+  Scenario: Orphaning multiple works with no works selected should return to the show multiple works page with an error message
+    Given I am logged in as "author"
+      And I post the work "Glorious" with fandom "SGA"
+      And I post the work "Excellent" with fandom "Star Trek"
+      And I post the work "Lovely" with fandom "Steven Universe"
+      And I go to author's works page
+    When I follow "Edit Works"
+    Then I should see the page title "Edit Multiple Works"
+      And I should see "Edit Multiple Works"
+      And I press "Orphan"
+    Then I should see "Please select at least one work to orphan"
+      And the page title should not include "Orphan Works"
+      And I should not see "Orphan Works"
