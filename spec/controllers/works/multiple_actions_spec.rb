@@ -47,7 +47,7 @@ describe WorksController do
 
     context "when logged in as a user" do
       context "when the Orphan button was clicked" do
-        context "when at least one work is selected" do
+        context "when at least one work was selected" do
           it "redirects to the orphan path" do
             post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
 
@@ -55,8 +55,8 @@ describe WorksController do
           end
         end
 
-        context "when no works are selected" do
-          it "errors and redirects to show multiple page" do
+        context "when no works were selected" do
+          it "errors and redirects to the show multiple works page" do
             post :edit_multiple, params: { id: work1.id, work_ids: nil, commit: "Orphan" }
             
             it_redirects_to_with_error(show_multiple_user_works_path(multiple_works_user), "Please select at least one work to orphan.")
@@ -71,7 +71,7 @@ describe WorksController do
       end
 
       context "when the Orphan button was clicked" do
-        context "when at least one work is selected" do
+        context "when at least one work was selected" do
           it "redirects to the orphan path" do
             post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
 
@@ -79,8 +79,8 @@ describe WorksController do
           end
         end
 
-        context "when no work is selected" do
-          it "errors and redirects to show multiple page" do
+        context "when no works were selected" do
+          it "errors and redirects to the show multiple works page" do
             post :edit_multiple, params: { id: work1.id, work_ids: nil, commit: "Orphan" }
 
             it_redirects_to_with_error(show_multiple_user_works_path(multiple_works_user), "Please select at least one work to orphan.")
