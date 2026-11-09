@@ -6,7 +6,7 @@
     <dl>
       <dt>
         <%= f.label :bookmarkable_query, ts("Any field on work") %>
-        <%= link_to_help "bookmark-search-text-help" %>
+        <%= link_to_help_modal(help_bookmark_search_text_path, t(".bookmark_search_text_help_title")) %>
       </dt>
       <dd>
         <%= f.text_field :bookmarkable_query %>
