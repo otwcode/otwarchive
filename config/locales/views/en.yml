@@ -692,8 +692,11 @@ en:
       ratings_help_title: Rating help
       relationships_help_title: Relationships help
     filters:
+      bookmark_search_text_help_title: Bookmark search text
       from: From
       to: To
+      search_bookmarker_tags_and_notes: Search bookmarker's tags and notes
+      search_within_results: Search within results
       word_count: Word count
     index:
       advanced_search: try our advanced search
