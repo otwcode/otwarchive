@@ -707,6 +707,7 @@ en:
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
     search_form:
       bookmark_search_text_help_title: Bookmark search text
+      bookmark_search_work_tag_help_title: Bookmark search work tags
       word_count: Word count
   challenge:
     gift_exchange:
@@ -1244,6 +1245,9 @@ en:
       space_example_html: "<kbd>Harry Potter</kbd> will find <samp>Harry Potter</samp> and <samp>Harry James Potter</samp> but not <samp>Harry</samp>."
       space_explanation: 'space: a space acts like AND'
       special_characters: The characters ":" and "@" have special meanings. Leave them out of your search or you will get unexpected results.
+    bookmark_search_work_tag:
+      description: 'The "Work tags" field searches all tags added to a bookmarked item by the item''s creator. This does not include tags added by the bookmarker. Tags can be any of the following: Rating, Warning, Category, Fandom, Character, Relationship, Additional Tags. The field will suggest canonical tags as you enter search terms.'
+      page_heading: 'Bookmark Search: Work Tags'
     chapters_title:
       description: You can add a chapter title, but it's not required.
       page_heading: Chapter Title

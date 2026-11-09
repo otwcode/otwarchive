@@ -13,7 +13,7 @@
       </dd>
       <dt>
         <%= f.label :other_tag_names, ts("Work tags") %>
-        <%= link_to_help "bookmark-search-work-tag" %>
+        <%= link_to_help_modal(help_bookmark_search_work_tag_path, t(".bookmark_search_work_tag_help_title")) %>
       </dt>
       <dd>
         <%= f.text_field :other_tag_names, autocomplete_options("tag") %>
