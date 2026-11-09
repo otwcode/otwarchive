@@ -4,7 +4,6 @@ class ProfileController < ApplicationController
   before_action :check_ownership_or_admin, only: [:edit, :update]
 
   def show
-    @user = User.find_by(login: params[:user_id])
     if @user.profile.nil?
       Profile.create(user_id: @user.id)
       @user.reload
@@ -54,15 +53,8 @@ class ProfileController < ApplicationController
   private
 
   def load_user_and_pseuds
-    @user = User.find_by(login: params[:user_id])
+    @user = User.find_by!(login: params[:user_id])
     @check_ownership_of = @user
-
-    if @user.nil?
-      flash[:error] = ts("Sorry, there's no user by that name.")
-      redirect_to root_path
-      return
-    end
-
     @pseuds = @user.pseuds.default_alphabetical.paginate(page: params[:page])
   end
 
