@@ -205,7 +205,7 @@ class SkinsController < ApplicationController
   end
 
   def load_skin
-    @skin = Skin.find_by!(id: params[:id])
+    @skin = Skin.find(params[:id])
     @check_ownership_of = @skin
     @check_visibility_of = @skin
   end
