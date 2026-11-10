@@ -225,13 +225,14 @@ class UsersController < ApplicationController
     @sole_owned_collections = @user.sole_owned_collections
 
     if @works.empty? && @sole_owned_collections.empty?
-      @user.wipeout_unposted_works
-      @user.destroy_empty_series
-
-      @user.destroy
-      flash[:notice] = ts('You have successfully deleted your account.')
-
-      redirect_to(delete_confirmation_path)
+      begin
+        Users::DeleteAccount.new(@user).call
+        flash[:notice] = ts("You have successfully deleted your account.")
+        redirect_to(delete_confirmation_path)
+      rescue Users::DeleteAccount::DeleteFailed, ActiveRecord::RecordNotDestroyed, ActiveRecord::RecordInvalid
+        flash[:error] = ts("Sorry, something went wrong! Please try again.")
+        redirect_to(@user)
+      end
     elsif params[:coauthor].blank? && params[:sole_author].blank?
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
@@ -322,66 +323,23 @@ class UsersController < ApplicationController
   end
 
   def destroy_author
-    @sole_authored_works = @user.sole_authored_works
-    @coauthored_works = @user.coauthored_works
-
     if params[:cancel_button]
-      flash[:notice] = ts('Account deletion canceled.')
+      flash[:notice] = ts("Account deletion canceled.")
       redirect_to user_profile_path(@user)
-
       return
     end
 
-    if params[:coauthor] == 'keep_pseud' || params[:coauthor] == 'orphan_pseud'
-      # Orphans co-authored works.
-
-      pseuds = @user.pseuds
-      works = @coauthored_works
-
-      # We change the pseud to the default orphan pseud if use_default is true.
-      use_default = params[:use_default] == 'true' || params[:coauthor] == 'orphan_pseud'
-
-      Creatorship.orphan(pseuds, works, use_default)
-
-    elsif params[:coauthor] == 'remove'
-      # Removes user as an author from co-authored works
-
-      @coauthored_works.each do |w|
-        w.remove_author(@user)
-      end
-    end
-
-    if params[:sole_author] == 'keep_pseud' || params[:sole_author] == 'orphan_pseud'
-      # Orphans works where user is the sole author.
-
-      pseuds = @user.pseuds
-      works = @sole_authored_works
-
-      # We change the pseud to default orphan pseud if use_default is true.
-      use_default = params[:use_default] == 'true' || params[:sole_author] == 'orphan_pseud'
-
-      Creatorship.orphan(pseuds, works, use_default)
-      Collection.orphan(pseuds, @sole_owned_collections, default: use_default)
-    elsif params[:sole_author] == 'delete'
-      # Deletes works where user is sole author
-      @sole_authored_works.each(&:destroy)
-
-      # Deletes collections where user is sole author
-      @sole_owned_collections.each(&:destroy)
-    end
-
-    @works = @user.works.where(posted: true)
-
-    if @works.blank?
-      @user.wipeout_unposted_works
-      @user.destroy_empty_series
-
-      @user.destroy
-
-      flash[:notice] = ts('You have successfully deleted your account.')
+    begin
+      preferences = {
+        coauthor: params[:coauthor],
+        sole_author: params[:sole_author],
+        use_default: params[:use_default] == "true",
+      }
+      Users::DeleteAccount.new(@user, preferences: preferences).call
+      flash[:notice] = ts("You have successfully deleted your account.")
       redirect_to(delete_confirmation_path)
-    else
-      flash[:error] = ts('Sorry, something went wrong! Please try again.')
+    rescue Users::DeleteAccount::DeleteFailed, ActiveRecord::RecordNotDestroyed, ActiveRecord::RecordInvalid
+      flash[:error] = ts("Sorry, something went wrong! Please try again.")
       redirect_to(@user)
     end
   end
