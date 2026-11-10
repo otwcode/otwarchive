@@ -156,6 +156,14 @@ When "I sign up for {string} with two offers and two requests" do |title|
   click_button "Submit"
 end
 
+When "I follow the first {string} link" do |link|
+  first(:link, link).click
+end
+
+When "I accept the confirmation {string}" do |message|
+  expect(page.accept_alert).to eq(message)
+end
+
 When "I sign up for {string} with combination A and my pseud {string}" do |title, pseud_name|
   step %{I set up a signup for "#{title}" with combination A}
   select pseud_name, from: "challenge_signup[pseud_id]"

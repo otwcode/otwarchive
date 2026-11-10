@@ -326,6 +326,10 @@ en:
       page_title: "%{username} - Profile"
     update:
       success: Your profile has been successfully updated
+  prompts:
+    destroy:
+      offer_deleted: Offer was deleted.
+      request_deleted: Request was deleted.
   pseuds:
     create:
       already_have_pseud_with_name: You already have a pseud with that name.

@@ -3064,7 +3064,9 @@ en:
   prompts:
     prompt_controls:
       delete_offer: Delete Offer
+      delete_offer_confirmation: Are you sure? All information in this offer will be lost.
       delete_request: Delete Request
+      delete_request_confirmation: Are you sure? All information in this request will be lost.
       edit_offer: Edit Offer
       edit_request: Edit Request
     prompt_form:

@@ -22,7 +22,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
     And I view prompts for "Battle 12"
     And I follow "Delete Request"
-  Then I should see "Prompt was deleted."
+  Then I should see "Request was deleted."
     And I should not see "Delete Request"
     And I should see "Delete Sign-up"
 
@@ -43,7 +43,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod2"
     And I view prompts for "Battle 12"
     And I follow "Delete Request"
-  Then I should see "Prompt was deleted."
+  Then I should see "Request was deleted."
     And I should not see "Delete Request"
     And I should see "Delete Sign-up"
 
@@ -63,7 +63,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
     And I view prompts for "Battle 12"
     And I follow "Delete Request"
-  Then I should see "Prompt was deleted."
+  Then I should see "Request was deleted."
     And I should see "Sign-up for myname1"
     And I should see "Delete Sign-up"
     And I should not see "Delete Request"

@@ -152,7 +152,7 @@ class PromptsController < ApplicationController
         flash[:error] = ts("That would make your sign-up invalid, sorry! Please edit instead.")
       else
         @prompt.destroy
-        flash[:notice] = ts("Prompt was deleted.")
+        flash[:notice] = @prompt.is_a?(Offer) ? t(".offer_deleted") : t(".request_deleted")
       end
     end
     if @collection.user_is_maintainer?(current_user) && @collection.challenge_type == "PromptMeme"

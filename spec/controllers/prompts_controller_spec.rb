@@ -254,7 +254,16 @@ describe PromptsController do
         prompt.save
         delete :destroy, params: { collection_id: open_signup.collection.name, id: prompt.id }
         it_redirects_to_with_notice("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
-                                    "Prompt was deleted.")
+                                    "Offer was deleted.")
+      end
+
+      it "deletes a request and redirects with a request-specific success message" do
+        prompt = open_signup.requests.build(pseud_id: ChallengeSignup.in_collection(open_signup.collection).first.pseud_id,\
+                                            collection_id: open_signup.collection.id)
+        prompt.save
+        delete :destroy, params: { collection_id: open_signup.collection.name, id: prompt.id }
+        it_redirects_to_with_notice("#{collection_signups_path(open_signup.collection)}/#{open_signup.id}",
+                                    "Request was deleted.")
       end
     end
   end

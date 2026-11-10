@@ -21,7 +21,7 @@
     <li>
       <%= link_to prompt.is_a?(Offer) ? t(".delete_offer") : t(".delete_request"),
         collection_prompt_path(collection, prompt),
-        data: { confirm: ts("Are you sure? All information in this prompt will be lost.") },
+        data: { confirm: prompt.is_a?(Offer) ? t(".delete_offer_confirmation") : t(".delete_request_confirmation") },
         method: :delete %>
     </li>
     <% end %>
