@@ -364,12 +364,16 @@ Given "pseud {string} has a bookmark of a work titled {string} by {string}" do |
   step %{all indexing jobs have been run}
 end
 
-def submit_bookmark_form(pseud, note, tags, collection)
+def submit_bookmark_form(pseud, note, tags, collection, success_expected: true)
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
   fill_in("Your tags", with: tags) unless tags.nil?
   fill_in("bookmark_collection_names", with: collection.gsub(/[^\w]/, "_")) unless collection.nil?
   click_button("Create")
+  return unless success_expected
+
+  expect(page).to have_current_path(%r{/bookmarks/\d+\z}, ignore_query: true)
+  expect(page).to have_content("Bookmark was successfully created.")
   step %{all indexing jobs have been run}
 end
 
@@ -387,11 +391,19 @@ When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?:
 end
 # rubocop:enable Cucumber/RegexStepName
 
+# rubocop:disable Cucumber/RegexStepName
+When /^I attempt to bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?(?: to the collection "(.*?)")? from new bookmark page$/ do |title, pseud, note, tags, collection|
+  step %{I go to the new bookmark page for work "#{title}"}
+  submit_bookmark_form(pseud, note, tags, collection, success_expected: false)
+end
+# rubocop:enable Cucumber/RegexStepName
+
 When /^I bookmark the series "([^\"]*)"$/ do |series_title|
   series = Series.find_by(title: series_title)
   visit series_path(series)
   click_link("Bookmark Series")
   click_button("Create")
+  expect(page).to have_content("Bookmark was successfully created.")
   step %{all indexing jobs have been run}
 end
 
@@ -451,7 +463,10 @@ When "I follow {string} in the blurb for {word}'s bookmark of {string}" do |link
 end
 
 When "I confirm the bookmark's deletion" do
-  expect(page.accept_alert).to eq("Are you sure you want to delete this bookmark?") if @javascript
+  if @javascript
+    expect(page.accept_alert).to eq("Are you sure you want to delete this bookmark?")
+    expect(page).to have_content("Bookmark was successfully deleted.")
+  end
 end
 
 Then "the {word} bookmark form should be open in the bookmarkable blurb for {string}" do |action, title|
@@ -530,6 +545,7 @@ When /^I rec the current work$/ do
   click_link("Bookmark")
   check("bookmark_rec")
   click_button("Create")
+  expect(page).to have_content("Bookmark was successfully created.")
   step %{all indexing jobs have been run}
 end
 

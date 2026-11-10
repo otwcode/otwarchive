@@ -169,7 +169,6 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I follow "Bookmark"
     And I fill in "bookmark_collection_names" with "jbs_greatest"
     And I press "Create"
-    And all indexing jobs have been run
   Then I should see "Bookmark was successfully created"
     And I should see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
     # UPDATE the bookmark and add it to a second MODERATED collection and
@@ -177,15 +176,14 @@ Scenario: bookmarks added to moderated collections appear correctly
   When I follow "Edit"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms"
     And I press "Update"
-    And all indexing jobs have been run
   Then I should see "Bookmark was successfully updated."
     And I should see "to the moderated collection 'Bedknobs and Broomsticks'."
   When I follow "Edit"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,death_by_demographics,murder_a_la_mode"
     And I press "Update"
-    And all indexing jobs have been run
   Then I should see "You have submitted your bookmark to moderated collections (Death by Demographics, Murder a la Mode)."
-  When I go to bookmarker's bookmarks page
+  When all indexing jobs have been run
+    And I go to bookmarker's bookmarks page
     And I should see "The Murder of Sherlock Holmes"
     And I should see "Bookmarker's Collections: JBs Greatest"
     And I should see "The collection JBs Greatest is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there."
@@ -213,10 +211,10 @@ Scenario: bookmarks added to moderated collections appear correctly
     And I follow "Edit Bookmark"
     And I fill in "bookmark_collection_names" with "jbs_greatest,beds_and_brooms,mrs_pots"
     And I press "Update" within "div#bookmark-form"
-    And all indexing jobs have been run
   Then I should see "Bookmark was successfully updated."
     And I should see "The collection JBs Greatest is currently moderated."
-  When I go to bookmarker's bookmarks page
+  When all indexing jobs have been run
+    And I go to bookmarker's bookmarks page
     Then I should see "The Murder of Sherlock Holmes"
     And I should see "JBs Greatest" within "ul.meta"
     And I should see "Mrs. Pots" within "ul.meta"
@@ -392,9 +390,9 @@ Scenario: User can't bookmark same work twice
     And I am logged in as "Mara"
     And "Mara" creates the pseud "Audrey"
     And I bookmark the work "Haven" as "Mara"
-  When I bookmark the work "Haven" as "Mara" from new bookmark page
+  When I attempt to bookmark the work "Haven" as "Mara" from new bookmark page
   Then I should see "You have already bookmarked that."
-  When I bookmark the work "Haven" as "Audrey" from new bookmark page
+  When I attempt to bookmark the work "Haven" as "Audrey" from new bookmark page
   Then I should see "You have already bookmarked that."
 
 Scenario: I cannot create a bookmark that I don't own

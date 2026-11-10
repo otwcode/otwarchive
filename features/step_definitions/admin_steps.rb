@@ -26,6 +26,7 @@ Given "I am logged in as a(n) {string} admin" do |role|
   fill_in "Admin username", with: login
   fill_in "Admin password", with: "adminpassword"
   click_button "Log In as Admin"
+  expect(page).to have_current_path(admins_path, ignore_query: true)
   step %{I should see "Successfully logged in"}
 end
 
@@ -36,6 +37,7 @@ Given "I am logged in as an admin" do
   fill_in "Admin username", with: "testadmin"
   fill_in "Admin password", with: "adminpassword"
   click_button "Log In as Admin"
+  expect(page).to have_current_path(admins_path, ignore_query: true)
   step %{I should see "Successfully logged in"}
 end
 

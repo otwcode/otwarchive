@@ -100,6 +100,7 @@ Feature: Edit chapters
   # view chapters in the right order
   When I am logged out
     And all indexing jobs have been run
+    And I clear the cache
     And I go to epicauthor's works page
     And I follow "New Epic Work"
     And I follow "Entire Work"
@@ -276,14 +277,18 @@ Feature: Edit chapters
       And I fill in "work_wip_length" with "?"
       And I press "Update"
     Then I should see Updated today
-    When I post the work "A Whole New Work"
+    When it is currently 1 second from now
+      And I post the work "A Whole New Work"
       And I go to the works page
     Then "A Whole New Work" should appear before "First work"
     When I view the work "First work"
+      And it is currently 1 second from now
     When I follow "Add Chapter"
       And I fill in "content" with "this is my third chapter"
       And I set the publication date to today
       And I press "Post"
+    Then I should see "Chapter has been posted!"
+    When all indexing jobs have been run
       And I go to the works page
     Then "First work" should appear before "A Whole New Work"
 

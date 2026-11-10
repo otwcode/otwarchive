@@ -12,6 +12,7 @@ DEFAULT_BOOKMARK_TAGS = "Awesome"
 Given /^an external work$/ do
   step %{I set up an external work}
   click_button("Create")
+  expect(page).to have_content("successfully created")
 end
 
 Given /^I set up an external work$/ do

@@ -288,7 +288,7 @@ Feature: Create Gifts
     When all emails have been delivered
       And I edit the work "Yuck"
       And I give the work to "associate, associate2 (associate)"
-      And I update the work
+      And I press "Update"
     Then I should see "You seem to already have given this work to that user."
       And I should not see "For associate, associate2"
       And 0 emails should be delivered to "associate@example.com"
@@ -307,6 +307,7 @@ Feature: Create Gifts
     When I follow "Refuse Gift"
     Then I should see "This work will no longer be listed among your gifts."
       And I should not see "GiftStory1"
+      And I clear the cache
     When I follow "Refused Gifts"
     Then I should see "GiftStory1"
       And I should not see "by gifter for associate"
@@ -374,7 +375,8 @@ Feature: Create Gifts
   Scenario: Can't give a gift to a user who disallows them
     Given the user "giftee1" disallows gifts
     When I am logged in as "gifter"
-      And I post the work "Rude Gift" as a gift for "giftee1"
+      And I set up the draft "Rude Gift" as a gift for "giftee1"
+      And I press "Post"
     Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts."
       And 0 emails should be delivered to "giftee1@example.com"
 
@@ -398,7 +400,8 @@ Feature: Create Gifts
   Scenario: Can't give a gift to a user who has blocked you
     Given the user "giftee1" has blocked the user "gifter"
     When I am logged in as "gifter"
-      And I post the work "Rude Gift" as a gift for "giftee1"
+      And I set up the draft "Rude Gift" as a gift for "giftee1"
+      And I press "Post"
     Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
       And 0 emails should be delivered to "giftee1@example.com"
 
@@ -422,7 +425,8 @@ Feature: Create Gifts
     Given the user "giftee1" disallows gifts
       And the user "giftee1" has blocked the user "gifter"
     When I am logged in as "gifter"
-      And I post the work "Rude Gift" as a gift for "giftee1"
+      And I set up the draft "Rude Gift" as a gift for "giftee1"
+      And I press "Post"
     Then I should see "Sorry! We couldn't save this work because:"
       And I should see "giftee1 does not accept gifts."
       And I should not see "giftee1 does not accept gifts from you."
