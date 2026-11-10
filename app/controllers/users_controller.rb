@@ -333,7 +333,7 @@ class UsersController < ApplicationController
       preferences = {
         coauthor: params[:coauthor],
         sole_author: params[:sole_author],
-        use_default: params[:use_default] == "true",
+        use_default: params[:use_default] == "true"
       }
       Users::DeleteAccount.new(@user, preferences: preferences).call
       flash[:notice] = t("users.delete.success")
