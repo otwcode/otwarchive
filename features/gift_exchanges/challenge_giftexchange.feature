@@ -109,6 +109,29 @@ Feature: Gift Exchange Challenge
       And I reload the page
     Then I should see "sign-up is invalid"
 
+  Scenario: Prompt controls are labeled as offers or requests
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I am logged in as "myname1"
+    When I sign up for "Awesome Gift Exchange" with combination A
+    Then I should see "Edit Offer"
+      And I should see "Edit Request"
+    When I delete my signup for the gift exchange "Awesome Gift Exchange"
+      And I sign up for "Awesome Gift Exchange" with two offers and two requests
+    Then I should see "Delete Offer"
+      And I should see "Delete Request"
+
+  @javascript
+  Scenario: Deleting offers and requests uses offer and request wording
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with two offers and two requests
+    When I follow the first "Delete Offer" link
+      And I accept the confirmation "Are you sure? All information in this offer will be lost."
+    Then I should see "Offer was deleted."
+    When I follow the first "Delete Request" link
+      And I accept the confirmation "Are you sure? All information in this request will be lost."
+    Then I should see "Request was deleted."
+
   Scenario: I cannot sign up with a pseud that I don't own
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
     When I attempt to sign up for "Awesome Gift Exchange" with a pseud that is not mine

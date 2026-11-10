@@ -3062,6 +3062,13 @@ en:
       edit_my_works: Edit My Works
       edit_profile: Edit Profile
   prompts:
+    prompt_controls:
+      delete_offer: Delete Offer
+      delete_offer_confirmation: Are you sure? All information in this offer will be lost.
+      delete_request: Delete Request
+      delete_request_confirmation: Are you sure? All information in this request will be lost.
+      edit_offer: Edit Offer
+      edit_request: Edit Request
     prompt_form:
       title_requirements: Up to %{maximum} characters, cannot begin with =, +, -, @ or a whitespace character.
   pseuds:
