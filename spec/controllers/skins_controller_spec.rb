@@ -666,7 +666,7 @@ describe SkinsController do
     context "when the target skin does not exist" do
       it "raises a 404 error" do
         expect do
-          get :show, params: { id: 999999 }
+          get :show, params: { id: 0 }
         end.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
@@ -676,7 +676,7 @@ describe SkinsController do
     context "when the target skin does not exist" do
       it "raises a 404 error" do
         expect do
-          get :preview, params: { id: 999999 }
+          get :preview, params: { id: 0 }
         end.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
