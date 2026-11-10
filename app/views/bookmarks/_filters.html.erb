@@ -96,16 +96,16 @@
           </dd>
 
           <dt class="search">
-            <%= f.label :bookmarkable_query, ts("Search within results") %>
-            <%= link_to_help "bookmark-search-text-help" %>
+            <%= f.label :bookmarkable_query, t(".search_within_results") %>
+            <%= link_to_help_modal(help_bookmark_search_text_help_path, t(".bookmark_search_text_help_title")) %>
           </dt>
           <dd class="search">
             <%= f.text_field :bookmarkable_query %>
           </dd>
 
           <dt class="bookmarker search">
-            <%= f.label :bookmark_query, ts("Search bookmarker's tags and notes") %>
-            <%= link_to_help "bookmark-search-text-help" %>
+            <%= f.label :bookmark_query, t(".search_bookmarker_tags_and_notes") %>
+            <%= link_to_help_modal(help_bookmark_search_text_help_path, t(".bookmark_search_text_help_title")) %>
           </dt>
           <dd class="bookmarker search">
             <%= f.text_field :bookmark_query %>

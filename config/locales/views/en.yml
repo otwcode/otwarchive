@@ -692,7 +692,10 @@ en:
       ratings_help_title: Rating help
       relationships_help_title: Relationships help
     filters:
+      bookmark_search_text_help_title: Bookmark search text
       from: From
+      search_bookmarker_tags_and_notes: Search bookmarker's tags and notes
+      search_within_results: Search within results
       to: To
       word_count: Word count
     index:
@@ -706,7 +709,14 @@ en:
         works: Works
       recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
     search_form:
+      any_field_on_bookmark: Any field on bookmark
+      any_field_on_work: Any field on work
+      bookmark_search_text_help_title: Bookmark search text
+      bookmark_search_work_tag_help_title: Bookmark search work tags
+      bookmarker: Bookmarker
+      notes: Notes
       word_count: Word count
+      work_tags: Work tags
   challenge:
     gift_exchange:
       challenge_signups:
@@ -1229,6 +1239,23 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    bookmark_search_text_help:
+      asterisk_example_html: "<kbd>book*</kbd> will find <samp>book</samp> and <samp>books</samp> and <samp>booking</samp>."
+      asterisk_explanation: "*: any characters"
+      guidelines: Use the following guidelines for entering search terms and search operators. "Any field" combines all text fields in the search form, including tags. "Bookmarker" lets you search for bookmarks created by a particular user. "Notes" searches for terms within all bookmarkers' notes.
+      not_example_html: "<kbd>Harry -Lockhart</kbd> will find <samp>Harry Potter</samp> but not <samp>Harry Lockhart</samp> or <samp>Gilderoy Lockhart/Harry Potter</samp>."
+      not_explanation: "-: NOT"
+      or_example_html: "<kbd>Harry || Potter</kbd> will find <samp>Harry</samp>, <samp>Harry Potter</samp>, and <samp>Potter</samp>."
+      or_explanation: "||: OR (not exclusive)"
+      page_heading: 'Bookmark Search: Text'
+      quotation_example_html: <kbd>"Harry Lockhart"</kbd> will find <samp>Harry Lockhart</samp> but not <samp>Harry Potter/Gilderoy Lockhart</samp>.
+      quotation_explanation: '"": words in exact sequence'
+      space_example_html: "<kbd>Harry Potter</kbd> will find <samp>Harry Potter</samp> and <samp>Harry James Potter</samp> but not <samp>Harry</samp>."
+      space_explanation: 'space: a space acts like AND'
+      special_characters: The characters ":" and "@" have special meanings. Leave them out of your search or you will get unexpected results.
+    bookmark_search_work_tag:
+      description: 'The "Work tags" field searches all tags added to a bookmarked item by the item''s creator. This does not include tags added by the bookmarker. Tags can be any of the following: Rating, Warning, Category, Fandom, Character, Relationship, Additional Tags. The field will suggest canonical tags as you enter search terms.'
+      page_heading: 'Bookmark Search: Work Tags'
     chapters_title:
       description: You can add a chapter title, but it's not required.
       page_heading: Chapter Title
