@@ -227,17 +227,17 @@ class UsersController < ApplicationController
     if @works.empty? && @sole_owned_collections.empty?
       begin
         Users::DeleteAccount.new(@user).call
-        flash[:notice] = ts("You have successfully deleted your account.")
+        flash[:notice] = t("users.delete.success")
         redirect_to(delete_confirmation_path)
       rescue Users::DeleteAccount::DeleteFailed, ActiveRecord::RecordNotDestroyed, ActiveRecord::RecordInvalid
-        flash[:error] = ts("Sorry, something went wrong! Please try again.")
+        flash[:error] = t("users.delete.error")
         redirect_to(@user)
       end
     elsif params[:coauthor].blank? && params[:sole_author].blank?
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
 
-      render('delete_preview') && return
+      render("delete_preview") && return
     elsif params[:coauthor] || params[:sole_author]
       destroy_author
     end
@@ -324,7 +324,7 @@ class UsersController < ApplicationController
 
   def destroy_author
     if params[:cancel_button]
-      flash[:notice] = ts("Account deletion canceled.")
+      flash[:notice] = t("users.delete.canceled")
       redirect_to user_profile_path(@user)
       return
     end
@@ -336,10 +336,10 @@ class UsersController < ApplicationController
         use_default: params[:use_default] == "true",
       }
       Users::DeleteAccount.new(@user, preferences: preferences).call
-      flash[:notice] = ts("You have successfully deleted your account.")
+      flash[:notice] = t("users.delete.success")
       redirect_to(delete_confirmation_path)
     rescue Users::DeleteAccount::DeleteFailed, ActiveRecord::RecordNotDestroyed, ActiveRecord::RecordInvalid
-      flash[:error] = ts("Sorry, something went wrong! Please try again.")
+      flash[:error] = t("users.delete.error")
       redirect_to(@user)
     end
   end
