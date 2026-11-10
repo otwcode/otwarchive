@@ -370,11 +370,11 @@ def submit_bookmark_form(pseud, note, tags, collection, success_expected: true)
   fill_in("Your tags", with: tags) unless tags.nil?
   fill_in("bookmark_collection_names", with: collection.gsub(/[^\w]/, "_")) unless collection.nil?
   click_button("Create")
-  if success_expected
-    expect(page).to have_current_path(%r{/bookmarks/\d+\z}, ignore_query: true)
-    expect(page).to have_content("Bookmark was successfully created.")
-    step %{all indexing jobs have been run}
-  end
+  return unless success_expected
+
+  expect(page).to have_current_path(%r{/bookmarks/\d+\z}, ignore_query: true)
+  expect(page).to have_content("Bookmark was successfully created.")
+  step %{all indexing jobs have been run}
 end
 
 # rubocop:disable Cucumber/RegexStepName
