@@ -11,15 +11,12 @@ module DateHelper
   end
 
   def date_in_user_time_zone(datetime)
-    if logged_in? && current_user.preference.time_zone
-      zone = current_user.preference.time_zone
-      begin
-        date_in_user_time_zone = datetime.in_time_zone(current_user.preference.time_zone)
-      rescue
-        datetime
-      end
-    else
-      date_in_user_time_zone = datetime
+    return datetime unless logged_in? && current_user.time_zone
+
+    begin
+      datetime.in_time_zone(current_user.time_zone)
+    rescue ArgumentError
+      datetime
     end
   end
 

@@ -388,6 +388,11 @@ class User < ApplicationRecord
     Work.owned_by(self).visible_to_user(User.current_user).revealed.non_anon.distinct.count(:id)
   end
 
+  def time_zone
+    zone = preference&.time_zone
+    zone && ActiveSupport::TimeZone[zone]&.name
+  end
+
   # Gets the user account for authored objects if orphaning is enabled
   def self.orphan_account
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED

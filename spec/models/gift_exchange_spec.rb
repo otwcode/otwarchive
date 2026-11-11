@@ -120,4 +120,16 @@ describe GiftExchange do
       end
     end
   end
+
+  describe "#valid_time_zone" do
+    it "returns valid time zones" do
+      challenge = GiftExchange.new(time_zone: "Kyiv")
+      expect(challenge.valid_time_zone).to eq("Kyiv")
+    end
+
+    it "returns nil when the time zone is invalid" do
+      challenge = GiftExchange.new(time_zone: "Invalid Time Zone")
+      expect(challenge.valid_time_zone).to be_nil
+    end
+  end
 end

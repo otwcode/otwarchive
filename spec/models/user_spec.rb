@@ -570,4 +570,18 @@ describe User do
       end
     end
   end
+
+  describe "#time_zone" do
+    it "returns valid time zones" do
+      user = User.new
+      user.preference = Preference.new(time_zone: "Kyiv")
+      expect(user.time_zone).to eq("Kyiv")
+    end
+
+    it "returns nil instead of bad data" do
+      user = User.new
+      user.preference = Preference.new(time_zone: "Garbage Time Zone")
+      expect(user.time_zone).to eq(nil)
+    end
+  end
 end

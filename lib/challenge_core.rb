@@ -47,6 +47,11 @@ module ChallengeCore
     "#{required(type)}" + (allowed(type) != required(type) ? " - #{allowed(type)}" : '')
   end
 
+  # Avoid issues with time zones becoming invalid and causing errors
+  def valid_time_zone
+    time_zone && ActiveSupport::TimeZone[time_zone]&.name
+  end
+
   #### Management 
   
   def user_allowed_to_see_signups?(user)
@@ -99,11 +104,11 @@ module ChallengeCore
         define_method("#{datetime_attr}_string") do
           return unless (datetime = self[datetime_attr])
 
-          datetime.in_time_zone(time_zone.presence || Time.zone).strftime(ArchiveConfig.DEFAULT_DATETIME_FORMAT)
+          datetime.in_time_zone(valid_time_zone.presence || Time.zone).strftime(ArchiveConfig.DEFAULT_DATETIME_FORMAT)
         end
 
         define_method("#{datetime_attr}_string=") do |datetimestring|
-          self[datetime_attr] = Timeliness.parse(datetimestring, zone: (time_zone.presence || Time.zone))
+          self[datetime_attr] = Timeliness.parse(datetimestring, zone: (valid_time_zone.presence || Time.zone))
         end
       end
     end
