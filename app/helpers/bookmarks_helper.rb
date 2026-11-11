@@ -43,18 +43,21 @@ module BookmarksHelper
   def get_symbol_for_bookmark(bookmark)
     if bookmark.private?
       css_class = "private"
-      title_string = "Private Bookmark"
+      title_string = t("bookmarks_helper.get_symbol_for_bookmark.private")
     elsif bookmark.hidden_by_admin?
       css_class = "hidden"
-      title_string = "Bookmark Hidden by Admin"
+      title_string = t("bookmarks_helper.get_symbol_for_bookmark.hidden")
     elsif bookmark.rec?
       css_class = "rec"
-      title_string = "Rec"
+      title_string = t("bookmarks_helper.get_symbol_for_bookmark.rec")
     else
       css_class = "public"
-      title_string = "Public Bookmark"
+      title_string = t("bookmarks_helper.get_symbol_for_bookmark.public")
     end
-    link_to_help('bookmark-symbols-key', content_tag(:span, content_tag(:span, title_string, class: "text"), class: css_class, title: title_string))
+
+    symbol = content_tag(:span, content_tag(:span, title_string, class: "text"), class: css_class, title: title_string)
+
+    link_to_modal(symbol, for: help_bookmark_symbols_key_path, title: t("bookmarks_helper.get_symbol_for_bookmark.title"), class: "help symbol question")
   end
 
   def bookmark_form_path(bookmark, bookmarkable)

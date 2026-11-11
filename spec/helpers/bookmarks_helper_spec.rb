@@ -11,6 +11,53 @@ describe BookmarksHelper do
   let(:work) { work_bookmark.bookmarkable }
   let(:work_creator) { work.users.first }
 
+  describe "#get_symbol_for_bookmark" do
+    {
+      "public" => {
+        attributes: { private: false, rec: false, hidden_by_admin: false },
+        css_class: "public",
+        text: "Public Bookmark"
+      },
+      "private" => {
+        attributes: { private: true, rec: false, hidden_by_admin: false },
+        css_class: "private",
+        text: "Private Bookmark"
+      },
+      "recommended" => {
+        attributes: { private: false, rec: true, hidden_by_admin: false },
+        css_class: "rec",
+        text: "Rec"
+      },
+      "hidden by admin" => {
+        attributes: { private: false, rec: false, hidden_by_admin: true },
+        css_class: "hidden",
+        text: "Bookmark Hidden by Admin"
+      }
+    }.each do |state, config|
+      context "when bookmark is #{state}" do
+        let(:bookmark) { create(:bookmark, **config[:attributes]) }
+
+        it "renders the correct symbol inside a modal link" do
+          html = helper.get_symbol_for_bookmark(bookmark)
+          fragment = Nokogiri::HTML5.fragment(html)
+
+          link = fragment.at_css("a")
+          symbol = fragment.at_css("span")
+
+          expect(link["href"]).to eq("/help/bookmark_symbols_key")
+          expect(link["title"]).to eq("Bookmark symbols key")
+          expect(link["class"].split).to include("help", "symbol", "question", "modal")
+          expect(link["aria-label"]).to be_nil
+          expect(link.text.strip).to eq(config[:text])
+
+          expect(symbol["class"]).to eq(config[:css_class])
+          expect(symbol["title"]).to eq(config[:text])
+          expect(symbol.at_css(".text").text).to eq(config[:text])
+        end
+      end
+    end
+  end
+
   describe "#css_classes_for_bookmark_blurb" do
     let(:default_classes) { "bookmark blurb group" }
 

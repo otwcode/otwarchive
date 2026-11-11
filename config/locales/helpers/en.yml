@@ -10,6 +10,13 @@ en:
       type_paste_rich_text_html: Type or paste formatted text. %{help_link}
     text_limited_html: Plain text with limited HTML %{help_link}
     text_limited_html_strip_images_html: Plain text with limited HTML %{help_link} Embedded images (&lt;img&gt; tags) will be displayed as HTML, including the image's source link and any alt text.
+  bookmarks_helper:
+    get_symbol_for_bookmark:
+      hidden: Bookmark Hidden by Admin
+      private: Private Bookmark
+      public: Public Bookmark
+      rec: Rec
+      title: Bookmark symbols key
   byline_helper:
     anonymous_byline: Anonymous
     anonymous_with_name_byline_html: Anonymous [%{pseud_byline}]
