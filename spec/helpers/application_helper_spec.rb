@@ -385,4 +385,80 @@ describe ApplicationHelper do
       expect(first_paragraph("<p>first</p><p>second</p>")).to eq("<p>first</p>")
     end
   end
+
+  describe "#time_in_zone" do
+    let(:time) { Time.rfc3339("1999-12-31T16:00:00Z") }
+    let(:zone_tokyo) { Time.find_zone("Asia/Tokyo") }
+
+    it "returns a message if no time is present" do
+      expect(helper.time_in_zone("")).to eq("(no time specified)")
+    end
+
+    context "when a time zone is provided" do
+      it "is used if valid" do
+        result = helper.time_in_zone(time, "Asia/Tokyo")
+
+        expect(result).to match("<abbr class=\"day\" title=\"Saturday\">Sat</abbr>")
+        expect(result).to match("<abbr class=\"timezone\" title=\"Asia/Tokyo\">")
+        expect(result).to be_html_safe
+      end
+
+      it "displays both that and the user time zone" do
+        user = User.new(login: "foo")
+        user.preference = Preference.new(time_zone: "Kyiv")
+        result = helper.time_in_zone(time, "Asia/Tokyo", user)
+
+        expect(result).to match("<abbr class=\"timezone\" title=\"Asia/Tokyo\">")
+        expect(result).to match("<abbr class=\"timezone\" title=\"Kyiv\">")
+        expect(result).to be_html_safe
+      end
+
+      it "falls back to UTC if invalid and no user time zone is present" do
+        result = helper.time_in_zone(time, "Invalid time zone")
+
+        expect(result).to match("<abbr class=\"day\" title=\"Friday\">Fri</abbr>")
+        expect(result).to match("<abbr class=\"timezone\" title=\"UTC\">")
+        expect(result).to be_html_safe
+      end
+    end
+
+    context "for a user with a time zone" do
+      let(:user) do
+        user = User.new(login: "foo")
+        user.preference = Preference.new(time_zone: "Asia/Tokyo")
+        user
+      end
+
+      it "returns html_safe localized time" do
+        result = helper.time_in_zone(time, nil, user)
+
+        expect(result).to match("<abbr class=\"day\" title=\"Saturday\">Sat</abbr>")
+        expect(result).to match("<abbr class=\"timezone\" title=\"Asia/Tokyo\">")
+        expect(result).to be_html_safe
+      end
+    end
+
+    context "for a user without a time zone" do
+      let(:user) do
+        user = User.new(login: "foo")
+        user.preference = Preference.new
+        user
+      end
+
+      it "falls back to UTC" do
+        result = helper.time_in_zone(time, nil, user)
+
+        expect(result).to match("<abbr class=\"day\" title=\"Friday\">Fri</abbr>")
+        expect(result).to match("<abbr class=\"timezone\" title=\"UTC\">")
+        expect(result).to be_html_safe
+      end
+
+      # Currently not working
+      xit "suggests setting a time zone" do
+        result = helper.time_in_zone(time, "Kyiv", user)
+
+        expect(result).to match("set timezone")
+      end
+    end
+  end
 end
