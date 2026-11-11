@@ -1229,6 +1229,20 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    bookmark_symbols_key:
+      hidden:
+        alt: Bookmark Hidden by Admin
+        definition: This bookmark has been hidden by an admin
+      page_heading: Bookmark symbols
+      private:
+        alt: Private Bookmark
+        definition: Private Bookmark
+      public:
+        alt: Public Bookmark
+        definition: Public Bookmark
+      rec:
+        alt: Rec
+        definition: Rec
     chapters_title:
       description: You can add a chapter title, but it's not required.
       page_heading: Chapter Title
