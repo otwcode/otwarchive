@@ -80,7 +80,7 @@ gem "pundit"
 gem 'escape_utils', '1.2.1'
 
 gem 'timeliness'
-gem 'tzinfo-data'
+gem "tzinfo-data"
 
 # for generating graphs
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'

@@ -266,8 +266,9 @@ module ApplicationHelper
     if user.is_a?(User) && user_time_zone
       if user_time_zone != zone
         user_time = time.in_time_zone(user_time_zone)
-        user_time_string = "(" + user_time.strftime('<span class="time">%I:%M%p</span>') +
-                           " <abbr class=\"timezone\" title=\"#{user_time_zone}\">#{user_time.zone}</abbr>)"
+        time_stamp = user_time.strftime("<span class=\"time\">%I:%M%p</span>")
+        tz_abbr = "<abbr class=\"timezone\" title=\"#{user_time_zone}\">#{user_time.zone}</abbr>"
+        user_time_string = "(#{time_stamp} #{tz_abbr})"
       # This branch can't actually be reached and never renders
       elsif !user_time_zone
         user_time_string = link_to ts("(set timezone)"), user_preferences_path(user)
