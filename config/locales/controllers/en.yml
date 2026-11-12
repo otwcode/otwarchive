@@ -218,6 +218,8 @@ en:
       success: Comment successfully hidden!
     index:
       page_title: Comments on %{name}
+    invalid_comment:
+      error: What did you want to comment on?
     new:
       page_title: New Comment on %{name}
     rate_limited:

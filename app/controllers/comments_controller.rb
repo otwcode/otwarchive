@@ -360,7 +360,7 @@ class CommentsController < ApplicationController
   # GET /comments/new
   def new
     if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = t("comments.invalid_comment.error")
       redirect_back_or_to root_path
     else
       @comment = Comment.new
@@ -395,7 +395,7 @@ class CommentsController < ApplicationController
   # POST /comments.xml
   def create
     if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = t("comments.invalid_comment.error")
       redirect_back_or_to root_path
     else
       @comment = Comment.new(comment_params)
@@ -740,7 +740,7 @@ class CommentsController < ApplicationController
     options = default_options.merge(options)
 
     if commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = t("comments.invalid_comment.error")
       return redirect_back_or_to root_path
     end
 
