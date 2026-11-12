@@ -739,6 +739,11 @@ class CommentsController < ApplicationController
     default_options = {anchor: "comments"}
     options = default_options.merge(options)
 
+    if commentable.nil?
+      flash[:error] = ts("What did you want to comment on?")
+      return redirect_back_or_to root_path
+    end
+
     if commentable.is_a?(Tag)
       redirect_to comments_path(tag_id: commentable.to_param,
                   add_comment_reply_id: options[:add_comment_reply_id],
@@ -749,6 +754,7 @@ class CommentsController < ApplicationController
       if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
         commentable = commentable.work
       end
+
       redirect_to polymorphic_path(commentable,
                                    options.slice(:show_comments,
                                                  :add_comment_reply_id,
