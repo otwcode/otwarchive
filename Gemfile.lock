@@ -114,7 +114,7 @@ GEM
       uri (>= 0.13.1)
     acts_as_list (0.9.19)
       activerecord (>= 3.0)
-    addressable (2.9.0)
+    addressable (2.9.1)
       public_suffix (>= 2.0.2, < 8.0)
     after_commit_everywhere (1.6.0)
       activerecord (>= 4.2)
