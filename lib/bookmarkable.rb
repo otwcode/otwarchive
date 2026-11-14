@@ -3,7 +3,7 @@ module Bookmarkable
     bookmarkable.class_eval do
       has_many :bookmarks, as: :bookmarkable, inverse_of: :bookmarkable
       has_many :user_tags, through: :bookmarks, source: :tags
-      after_update :update_bookmarks_index
+      after_update :update_bookmarks_index, if: :should_update_bookmarks_index?
       after_update :update_bookmarker_pseuds_index, :update_bookmarker_collections_index
       after_destroy :update_bookmarker_pseuds_index, :update_bookmarker_collections_index
     end
@@ -17,6 +17,13 @@ module Bookmarkable
 
   def update_bookmarks_index
     IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :background)
+  end
+
+  # The bookmarkable's date (Bookmark#bookmarkable_date) is the only thing
+  # bookmark documents take from it. Bookmarkables that can tell when that
+  # date changed override this.
+  def should_update_bookmarks_index?
+    true
   end
 
   def update_bookmarker_pseuds_index

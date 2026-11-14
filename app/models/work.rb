@@ -320,6 +320,11 @@ class Work < ApplicationRecord
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
+  # Bookmark documents only use the work's revised_at.
+  def should_update_bookmarks_index?
+    saved_change_to_revised_at?
+  end
+
   def update_series_indexes
     return unless should_update_series_indexes?
 

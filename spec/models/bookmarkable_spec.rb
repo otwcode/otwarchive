@@ -1,6 +1,36 @@
 require "spec_helper"
 
 describe Bookmarkable do
+  describe "reindexing bookmarks" do
+    context "when the bookmarkable is a work" do
+      let(:work) { create(:work) }
+      let!(:bookmark) { create(:bookmark, bookmarkable: work) }
+
+      it "doesn't enqueue the bookmarks when the date doesn't change" do
+        expect do
+          work.update!(notes: "New notes")
+        end.to not_add_to_reindex_queue(bookmark, :background)
+      end
+
+      it "enqueues the bookmarks when the date changes" do
+        expect do
+          work.update!(revised_at: 1.day.from_now)
+        end.to add_to_reindex_queue(bookmark, :background)
+      end
+    end
+
+    context "when the bookmarkable is a series" do
+      let(:series) { create(:series) }
+      let!(:bookmark) { create(:bookmark, bookmarkable: series) }
+
+      it "enqueues the bookmarks" do
+        expect do
+          series.update!(title: "New title")
+        end.to add_to_reindex_queue(bookmark, :background)
+      end
+    end
+  end
+
   describe "reindexing" do
     let!(:parent_collection) { create(:collection) }
     let!(:collection) { create_invalid(:collection, parent: parent_collection) }
