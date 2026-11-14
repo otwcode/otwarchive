@@ -1,11 +1,11 @@
-<% # expects 'form' and 'works' which can be 1 or more works %>
-<% # used exclusively for the edit_multiple works view %>
+<%# expects 'form' and 'works' which can be 1 or more works %>
+<%# used exclusively for the edit_multiple works view %>
 
 <!-- change pseud -->
 <% has_cocreators = (works.flat_map(&:pseuds).uniq - current_user.pseuds).any? %>
 <% has_multiple_pseuds = current_user.pseuds.length > 1 %>
 <% if has_multiple_pseuds || has_cocreators %>
-  <dt><%= form.label :current_user_pseud_ids, ts("Creator/Pseud(s)") %></dt>
+  <dt><%= form.label :current_user_pseud_ids, t("works.form.byline.creators") %></dt>
   <dd>
       <% if has_multiple_pseuds %>
         <%= form.collection_select :current_user_pseud_ids, current_user.pseuds, :id, :name, { include_hidden: false }, { multiple: true } %>
@@ -13,11 +13,11 @@
       <% if has_cocreators %>
         <%= label_tag :remove_me, class: "action" do %>
           <%= check_box_tag :remove_me, "1", false %>
-          <%= ts("Remove me as co-creator") %>
+          <%= t("works.form.byline.remove_self") %>
         <% end %>
       <% end %>
   </dd>
 <% end %>
 
-<dt><%= form.label :pseuds_to_add, t("works.byline.add_co-creators") %></dt>
+<dt><%= form.label :pseuds_to_add, t("works.form.byline.add_co-creators") %></dt>
 <dd><%= form.text_field :pseuds_to_add, autocomplete_options("pseud", data: { autocomplete_min_chars: 0 }) %></dd>
