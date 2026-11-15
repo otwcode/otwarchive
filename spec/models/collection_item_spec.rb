@@ -75,6 +75,38 @@ describe CollectionItem, :ready do
         create(:collection_item, item: work, collection: collection)
       end
     end
+
+    context "when a collection maintainer invites a work" do
+      include ActiveJob::TestHelper
+      def queue_adapter_for_test
+        ActiveJob::QueueAdapters::TestAdapter.new
+      end
+
+      let(:maintainer) { create(:user) }
+      let(:collection) { create(:collection, owner: maintainer.default_pseud) }
+
+      before do
+        work
+        collection
+        User.current_user = maintainer
+      end
+
+      context "when the email to the work's creator can't be sent" do
+        before do
+          smtp_error = Net::SMTPFatalError.new(
+            Net::SMTP::Response.parse("550 restricted characters in address")
+          )
+          allow_any_instance_of(ActionMailer::MessageDelivery)
+            .to receive(:deliver_now).and_raise(smtp_error)
+        end
+
+        it "still saves the invitation" do
+          item = build(:collection_item, item: work, collection: collection)
+          item.save!
+          expect(item).to be_persisted
+        end
+      end
+    end
   end
 
   describe "include_for_works scope" do

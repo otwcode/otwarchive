@@ -88,7 +88,7 @@ class CollectionItem < ApplicationRecord
       next if email_author.preference.collection_emails_off
 
       I18n.with_locale(email_author.preference.locale_for_mails) do
-        UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
+        UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_after_commit
       end
     end
   end
