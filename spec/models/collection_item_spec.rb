@@ -78,6 +78,9 @@ describe CollectionItem, :ready do
 
     context "when a collection maintainer invites a work" do
       include ActiveJob::TestHelper
+      def queue_adapter_for_test
+        ActiveJob::QueueAdapters::TestAdapter.new
+      end
 
       let(:maintainer) { create(:user) }
       let(:collection) { create(:collection, owner: maintainer.default_pseud) }
