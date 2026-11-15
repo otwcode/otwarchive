@@ -3694,6 +3694,15 @@ en:
       privacy_restricted_work_help_title: Registered users
       tos_faq: Terms of Service FAQ
       works_languages_help_title: Languages help
+    notes_form:
+      at_beginning: at the beginning
+      at_end: at the end
+      chapter_notes: Chapter Notes
+      legend_end_notes: End Notes
+      legend_notes: Notes
+      notes: Notes
+      warning_beginning_notes: 'Warning: Unchecking this box will delete the existing beginning note.'
+      warning_end_notes: 'Warning: Unchecking this box will delete the existing end note.'
     permissions:
       privacy: Privacy
       visibility:

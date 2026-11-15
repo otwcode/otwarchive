@@ -3,6 +3,8 @@ en:
   application_helper:
     allowed_html_instructions:
       html_help_title: Html help
+    generate_countdown_html:
+      characters_left_html: "%{characters} characters left"
     help_modal:
       help_symbol: "?"
     rich_text_instructions:
