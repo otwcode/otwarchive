@@ -144,7 +144,28 @@ Feature: Rich text editor for Comments
       | the work "Generic Work" |
       | the admin post "Five Things" |
 
-  # TODO: Scenario: Using the RTE from inbox
+  Scenario: Using the RTE from inbox
+    Given the work "Generic Work" by "creator"
+      And I am logged in as "commenter"
+      And I post the comment "This is awesome!" on the work "Generic Work"
+    When I am logged in as "creator"
+      And I go to creator's inbox page
+    Then I should see "commenter on Generic Work"
+      And I should see "This is awesome!"
+      And I should see a link "Reply"
+    When I follow "Reply"
+      And I follow "Rich Text"
+      And I send keys "Thank you so much!" to Lexxy
+      And I press "Comment"
+    Then I should see "Comment created!"
+      And I should see "replied to"
+    When I go to the homepage
+    Then I should not see "Unread messages"
+      And I should not see "This is awesome!"
+    When I am logged in as "commenter"
+      And I go to the homepage
+    Then I should see "creator on Generic Work"
+      And I should see "Thank you so much!"
 
   Scenario: Using the RTE from the home page
     Given the work "Generic Work" by "creator"
@@ -168,3 +189,41 @@ Feature: Rich text editor for Comments
       And I go to the homepage
     Then I should see "creator on Generic Work"
       And I should see "Thank you so much!"
+
+  Scenario Outline: Trying to send an empty comment with RTE
+    Given <commentable>
+      And I am logged in as "commenter"
+      And I view <commentable> with comments
+    Then I should see "Rich Text"
+    When I follow "Rich Text"
+      And I press "Comment"
+    Then I should not see "Comment created!"
+    When I send keys "cats" to Lexxy
+      And I press "Comment"
+    Then I should see "Comment created!"
+      And I should see the text with tags "<p>cats</p>"
+
+    Examples:
+      | commentable                  |
+      | the work "Generic Work"      |
+      | the admin post "Five Things" |
+
+  Scenario Outline: Checking character counter while using RTE
+    Given <commentable>
+      And I am logged in as "commenter"
+      And I view <commentable> with comments
+    Then I should see "Rich Text"
+    When I follow "Rich Text"
+      And I send keys "a" to Lexxy
+    Then I should see "9992 characters left"
+    When I send keys ":backspace" to Lexxy
+    Then I should see "9989 characters left"
+    When I send keys "cats! cats!" to Lexxy
+    Then I should see "9982 characters left"
+
+    Examples:
+      | commentable                  |
+      | the work "Generic Work"      |
+      | the admin post "Five Things" |
+
+  # TODO: switching, deleting, saving and all combinations.
