@@ -3768,7 +3768,13 @@ en:
       additional_tags_help_title: Additional tags help
       categories_help_title: Categories help
       characters_help_title: Characters help
+      fandom_show_up_delay: If this is the first work for a fandom, it may not show up in the fandoms page for a day or two.
       fandoms_help_title: Fandom help
+      landmark: Tags
+      legend: Tags
+      note:
+        one: Tags are comma separated, %{count} character per tag. Fandom, relationship, character, and additional tags must not add up to more than %{limit}. Archive warning, category, and rating tags do not count toward this limit.
+        other: Tags are comma separated, %{count} characters per tag. Fandom, relationship, character, and additional tags must not add up to more than %{limit}. Archive warning, category, and rating tags do not count toward this limit.
       ratings_help_title: Rating help
       relationships_help_title: Relationships help
       warnings_help_title: Warning help
