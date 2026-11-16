@@ -1045,6 +1045,23 @@ describe CommentsController do
       get :show, params: { id: comment.id }
       expect(assigns[:page_subtitle]).to eq("Comment #{comment.id} on #{tag.name}")
     end
+
+    context "when the chapter the comment was left on no longer exists" do
+      render_views
+
+      let(:reply) { create(:comment, commentable: comment) }
+
+      before do
+        reply
+        comment.parent.delete
+      end
+
+      it "shows the comment" do
+        get :show, params: { id: reply.id }
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include(reply.comment_content)
+      end
+    end
   end
 
   describe "GET #index" do
