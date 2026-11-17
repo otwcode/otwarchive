@@ -57,7 +57,7 @@ class Challenge::PromptMemeController < ChallengesController
   private
 
   def prompt_meme_params
-    params.require(:prompt_meme).permit(
+    params.expect(prompt_meme: [
       :signup_open, :time_zone, :signups_open_at_string, :signups_close_at_string,
       :assignments_due_at_string, :anonymous, :requests_num_required, :requests_num_allowed,
       :signup_instructions_general, :signup_instructions_requests, :request_url_label,
@@ -75,7 +75,7 @@ class Challenge::PromptMemeController < ChallengesController
         :character_restrict_to_tag_set, :relationship_restrict_to_fandom,
         :relationship_restrict_to_tag_set, tag_sets_to_remove: []
       ]
-    )
+    ])
   end
 
 end

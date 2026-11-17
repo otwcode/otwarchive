@@ -131,6 +131,6 @@ class CollectionParticipantsController < ApplicationController
   private
 
   def collection_participant_params
-    params.require(:collection_participant).permit(:participant_role)
+    params.expect(collection_participant: [:participant_role])
   end
 end

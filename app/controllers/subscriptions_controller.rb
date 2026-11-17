@@ -87,9 +87,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def subscription_params
-    params.require(:subscription).permit(
-      :subscribable_id, :subscribable_type
-    )
+    params.expect(subscription: [:subscribable_id, :subscribable_type])
   end
 
 end

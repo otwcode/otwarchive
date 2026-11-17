@@ -58,9 +58,7 @@ class Admin::ApiController < Admin::BaseController
   private
 
   def api_key_params
-    params.require(:api_key).permit(
-      :name, :access_token, :banned
-    )
+    params.expect(api_key: [:name, :access_token, :banned])
   end
 
   def check_for_cancel

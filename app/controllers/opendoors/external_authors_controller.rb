@@ -70,9 +70,9 @@ class Opendoors::ExternalAuthorsController < ApplicationController
   private
 
   def external_author_params
-    params.require(:external_author).permit(
+    params.expect(external_author: [
       :email, :do_not_email, :do_not_import
-    )
+    ])
   end
 
 end

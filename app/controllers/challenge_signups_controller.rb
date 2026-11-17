@@ -347,15 +347,15 @@ protected
   private
 
   def challenge_signup_params
-    params.require(:challenge_signup).permit(
+    params.expect(challenge_signup: [
       :pseud_id,
       requests_attributes: nested_prompt_params,
       offers_attributes: nested_prompt_params
-    )
+    ])
   end
 
   def nested_prompt_params
-    [
+    [[
       :id,
       :title,
       :url,
@@ -390,6 +390,6 @@ protected
       optional_tag_set_attributes: [
         :tagnames
       ]
-    ]
+    ]]
   end
 end

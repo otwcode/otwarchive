@@ -770,9 +770,7 @@ class CommentsController < ApplicationController
   private
 
   def comment_params
-    params.require(:comment).permit(
-      :pseud_id, :comment_content, :name, :email, :edited_at
-    )
+    params.expect(comment: [:pseud_id, :comment_content, :name, :email, :edited_at])
   end
 
   def filter_params

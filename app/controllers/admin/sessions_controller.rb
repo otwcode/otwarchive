@@ -64,7 +64,7 @@ class Admin
     end
   
     def admin_params
-      params.require(:admin).permit(:login, :password)
+      params.expect(admin: [:login, :password])
     end
   
     def find_admin

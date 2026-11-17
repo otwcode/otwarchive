@@ -117,8 +117,6 @@ class InviteRequestsController < ApplicationController
   private
 
   def invite_request_params
-    params.require(:invite_request).permit(
-      :email, :query
-    )
+    params.expect(invite_request: [:email, :query])
   end
 end

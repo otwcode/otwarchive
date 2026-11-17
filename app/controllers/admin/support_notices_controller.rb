@@ -80,6 +80,6 @@ class Admin::SupportNoticesController < Admin::BaseController
   end
 
   def support_notice_params
-    params.require(:support_notice).permit(:notice_content, :support_notice_type, :active)
+    params.expect(support_notice: [:notice_content, :support_notice_type, :active])
   end
 end

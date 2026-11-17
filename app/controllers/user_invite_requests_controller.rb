@@ -83,6 +83,6 @@ class UserInviteRequestsController < ApplicationController
   private
 
   def user_invite_request_params
-    params.require(:user_invite_request).permit(:quantity, :reason)
+    params.expect(user_invite_request: [:quantity, :reason])
   end
 end

@@ -261,7 +261,7 @@ describe SkinsController do
           it "raises an exception" do
             expect do
               put :update, params: { id: skin.id, skin: { attribute => value } }
-            end.to raise_exception(ActionController::UnpermittedParameters)
+            end.to raise_exception(ActionController::ParameterMissing)
             expect(skin.reload.send(attribute)).not_to eq(value)
           end
         end
@@ -330,7 +330,7 @@ describe SkinsController do
           it "raises an exception" do
             expect do
               put :update, params: { id: skin.id, skin: { attribute => value } }
-            end.to raise_exception(ActionController::UnpermittedParameters)
+            end.to raise_exception(ActionController::ParameterMissing)
             expect(skin.reload.send(attribute)).not_to eq(value)
           end
         end

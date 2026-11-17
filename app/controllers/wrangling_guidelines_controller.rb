@@ -77,6 +77,6 @@ class WranglingGuidelinesController < ApplicationController
   private
 
   def wrangling_guideline_params
-    params.require(:wrangling_guideline).permit(:title, :content)
+    params.expect(wrangling_guideline: [:title, :content])
   end
 end

@@ -98,6 +98,6 @@ class KudosController < ApplicationController
   end
 
   def kudo_params
-    params.require(:kudo).permit(:commentable_id, :commentable_type)
+    params.expect(kudo: [:commentable_id, :commentable_type])
   end
 end
