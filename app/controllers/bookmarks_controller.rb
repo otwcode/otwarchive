@@ -333,20 +333,18 @@ class BookmarksController < ApplicationController
   private
 
   def bookmark_params
-    params.require(:bookmark).permit(
-      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec
-    )
+    params.expect(bookmark: [:pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec])
   end
 
   def external_work_params
-    params.require(:external_work).permit(
+    params.expect(external_work: [
       :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
       :character_string, :summary, category_strings: []
-    )
+    ])
   end
 
   def bookmark_search_params
-    params.require(:bookmark_search).permit(
+    params.expect(bookmark_search: [
       :bookmark_query,
       :bookmarkable_query,
       :bookmarker,
@@ -374,6 +372,6 @@ class BookmarksController < ApplicationController
       relationship_ids: [],
       freeform_ids: [],
       tag_ids: [],
-    )
+    ])
   end
 end

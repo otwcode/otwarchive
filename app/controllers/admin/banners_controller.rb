@@ -86,7 +86,7 @@ class Admin::BannersController < Admin::BaseController
   private
 
   def admin_banner_params
-    params.require(:admin_banner).permit(:content, :banner_type, :active)
+    params.expect(admin_banner: [:content, :banner_type, :active])
   end
 
 end

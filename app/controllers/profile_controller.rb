@@ -67,8 +67,6 @@ class ProfileController < ApplicationController
   end
 
   def profile_params
-    params.require(:profile).permit(
-      :title, :about_me, :ticket_number
-    )
+    params.expect(profile: [:title, :about_me, :ticket_number])
   end
 end

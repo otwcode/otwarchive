@@ -53,6 +53,6 @@ class KnownIssuesController < ApplicationController
   private
 
   def known_issue_params
-    params.require(:known_issue).permit(:title, :content)
+    params.expect(known_issue: [:title, :content])
   end
 end

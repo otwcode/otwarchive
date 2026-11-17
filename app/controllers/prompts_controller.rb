@@ -169,7 +169,7 @@ class PromptsController < ApplicationController
   private
 
   def prompt_params
-    params.require(:prompt).permit(
+    params.expect(prompt: [
       :title,
       :url,
       :anonymous,
@@ -202,6 +202,6 @@ class PromptsController < ApplicationController
       optional_tag_set_attributes: [
         :tagnames
       ]
-    )
+    ])
   end
 end

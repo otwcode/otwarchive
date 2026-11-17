@@ -31,8 +31,6 @@ class AbuseReportsController < ApplicationController
   end
 
   def abuse_report_params
-    params.require(:abuse_report).permit(
-      :username, :email, :language, :summary, :url, :comment
-    )
+    params.expect(abuse_report: [:username, :email, :language, :summary, :url, :comment])
   end
 end

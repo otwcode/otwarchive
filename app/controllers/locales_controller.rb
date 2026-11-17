@@ -48,8 +48,6 @@ class LocalesController < ApplicationController
   private
 
   def locale_params
-    params.require(:locale).permit(
-      :name, :iso, :language_id, :email_enabled, :interface_enabled
-    )
+    params.expect(locale: [:name, :iso, :language_id, :email_enabled, :interface_enabled])
   end
 end

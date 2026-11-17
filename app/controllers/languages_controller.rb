@@ -46,8 +46,6 @@ class LanguagesController < ApplicationController
   private
 
   def language_params
-    params.require(:language).permit(
-      :name, :short, :support_available, :abuse_support_available, :sortable_name
-    )
+    params.expect(language: [:name, :short, :support_available, :abuse_support_available, :sortable_name])
   end
 end

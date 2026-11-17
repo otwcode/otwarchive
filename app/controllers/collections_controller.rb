@@ -197,14 +197,14 @@ class CollectionsController < ApplicationController
   private
 
   def collection_filter_params
-    params.require(:collection_search).permit(
+    params.expect(collection_search: [
       :title, :challenge_type, :moderated, :multifandom, :closed, :tag,
       :sort_column, :sort_direction
-    )
+    ])
   end
 
   def collection_params
-    params.require(:collection).permit(
+    params.expect(collection: [
       :name, :title, :email, :header_image_url, :description,
       :parent_name, :challenge_type, :icon, :delete_icon,
       :icon_alt_text, :icon_comment_text, :tag_string, :multifandom,
@@ -216,6 +216,6 @@ class CollectionsController < ApplicationController
         :id, :moderated, :closed, :unrevealed, :anonymous,
         :gift_exchange, :show_random, :prompt_meme, :email_notify
       ]
-    )
+    ])
   end
 end

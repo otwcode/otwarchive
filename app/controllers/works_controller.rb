@@ -909,7 +909,7 @@ class WorksController < ApplicationController
   end
 
   def work_params
-    params.require(:work).permit(
+    params.expect(work: [
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string,
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
@@ -923,27 +923,27 @@ class WorksController < ApplicationController
       archive_warning_strings: [],
       author_attributes: [:byline, ids: [], coauthors: []],
       series_attributes: [:id, :title],
-      parent_work_relationships_attributes: [
+      parent_work_relationships_attributes: [[
         :url, :title, :author, :language_id, :translation
-      ],
+      ]],
       chapter_attributes: [
         :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
         :published_at, :content
       ]
-    )
+    ])
   end
 
   def work_tag_params
-    params.require(:work).permit(
+    params.expect(work: [
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :freeform_string, :language_id,
       category_strings: [],
       archive_warning_strings: []
-    )
+    ])
   end
 
   def work_search_params
-    params.require(:work_search).permit(
+    params.expect(work_search: [
       :query,
       :title,
       :creators,
@@ -981,7 +981,7 @@ class WorksController < ApplicationController
       freeform_ids: [],
 
       collection_ids: []
-    )
+    ])
   end
 
 end

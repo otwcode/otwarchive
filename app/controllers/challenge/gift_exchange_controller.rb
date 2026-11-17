@@ -65,7 +65,7 @@ class Challenge::GiftExchangeController < ChallengesController
   private
 
   def gift_exchange_params
-    params.require(:gift_exchange).permit(
+    params.expect(gift_exchange: [
       :signup_open, :time_zone, :signups_open_at_string, :signups_close_at_string,
       :assignments_due_at_string, :requests_summary_visible, :requests_num_required,
       :requests_num_allowed, :offers_num_required, :offers_num_allowed,
@@ -111,6 +111,6 @@ class Challenge::GiftExchangeController < ChallengesController
         :include_optional_freeforms, :include_optional_categories, :include_optional_ratings,
         :include_optional_archive_warnings
       ]
-    )
+    ])
   end
 end

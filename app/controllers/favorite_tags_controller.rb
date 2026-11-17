@@ -44,8 +44,6 @@ class FavoriteTagsController < ApplicationController
   end
 
   def favorite_tag_params
-    params.require(:favorite_tag).permit(
-      :tag_id
-    )
+    params.expect(favorite_tag: [:tag_id])
   end
 end

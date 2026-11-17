@@ -60,15 +60,13 @@ class ExternalWorksController < ApplicationController
   private
 
   def external_work_params
-    params.require(:external_work).permit(
-      :url, :author, :title, :summary, :language_id
-    )
+    params.expect(external_work: [:url, :author, :title, :summary, :language_id])
   end
 
   def work_params
-    params.require(:work).permit(
+    params.expect(work: [
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :freeform_string, category_strings: [], archive_warning_strings: []
-    )
+    ])
   end
 end

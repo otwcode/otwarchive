@@ -266,9 +266,9 @@ class ChaptersController < ApplicationController
   private
 
   def chapter_params
-    params.require(:chapter).permit(:title, :position, :wip_length, :"published_at(3i)",
+    params.expect(chapter: [:title, :position, :wip_length, :"published_at(3i)",
                                     :"published_at(2i)", :"published_at(1i)", :summary,
                                     :notes, :endnotes, :content, :published_at,
-                                    author_attributes: [:byline, ids: [], coauthors: []])
+                                    author_attributes: [:byline, ids: [], coauthors: []]])
   end
 end

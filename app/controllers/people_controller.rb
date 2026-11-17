@@ -26,6 +26,6 @@ class PeopleController < ApplicationController
   private
 
   def people_search_params
-    params.require(:people_search).permit(:query, :name, :collection_id, :fandom)
+    params.expect(people_search: [:query, :name, :collection_id, :fandom])
   end
 end

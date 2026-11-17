@@ -342,28 +342,28 @@ class TagSetNominationsController < ApplicationController
   private
 
   def tag_set_nomination_params
-    params.require(:tag_set_nomination).permit(
+    params.expect(tag_set_nomination: [
       :pseud_id,
-      fandom_nominations_attributes: [
+      fandom_nominations_attributes: [[
         :id,
         :tagname,
-        character_nominations_attributes: [
+        character_nominations_attributes: [[
           :id, :tagname, :from_fandom_nomination
-        ],
-        relationship_nominations_attributes: [
+        ]],
+        relationship_nominations_attributes: [[
           :id, :tagname, :from_fandom_nomination
-        ],
-      ],
-      freeform_nominations_attributes: [
+        ]],
+      ]],
+      freeform_nominations_attributes: [[
         :id, :tagname
-      ],
-      character_nominations_attributes: [
+      ]],
+      character_nominations_attributes: [[
         :id, :tagname, :parent_tagname
-      ],
-      relationship_nominations_attributes: [
+      ]],
+      relationship_nominations_attributes: [[
         :id, :tagname, :parent_tagname
-      ]
-    )
+      ]]
+    ])
   end
 
 end

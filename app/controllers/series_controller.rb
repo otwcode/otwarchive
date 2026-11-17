@@ -149,9 +149,9 @@ class SeriesController < ApplicationController
   private
 
   def series_params
-    params.require(:series).permit(
+    params.expect(series: [
       :title, :summary, :series_notes, :complete,
       author_attributes: [:byline, ids: [], coauthors: []]
-    )
+    ])
   end
 end

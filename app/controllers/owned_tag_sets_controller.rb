@@ -217,14 +217,14 @@ class OwnedTagSetsController < ApplicationController
   private
 
   def owned_tag_set_params
-    params.require(:owned_tag_set).permit(
+    params.expect(owned_tag_set: [
       :owner_changes, :moderator_changes, :title, :description, :visible,
       :usable, :nominated, :fandom_nomination_limit, :character_nomination_limit,
       :relationship_nomination_limit, :freeform_nomination_limit,
       associations_to_remove: [],
-      tag_set_associations_attributes: [
+      tag_set_associations_attributes: [[
         :id, :create_association, :tag_id, :parent_tag_id, :_destroy
-      ],
+      ]],
       tag_set_attributes: [
         :id,
         :from_owned_tag_set, :fandom_tagnames_to_add, :character_tagnames_to_add,
@@ -233,7 +233,7 @@ class OwnedTagSetsController < ApplicationController
         category_tagnames: [], fandom_tags_to_remove: [], character_tags_to_remove: [],
         relationship_tags_to_remove: [], freeform_tags_to_remove: []
       ]
-    )
+    ])
   end
 
 end

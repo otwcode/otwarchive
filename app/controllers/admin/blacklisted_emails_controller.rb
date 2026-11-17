@@ -33,8 +33,6 @@ class Admin::BlacklistedEmailsController < Admin::BaseController
   private
 
   def admin_blacklisted_email_params
-    params.require(:admin_blacklisted_email).permit(
-      :email
-    )
+    params.expect(admin_blacklisted_email: [:email])
   end
 end
