@@ -19,6 +19,13 @@ describe ChallengeClaimsController do
       expect(assigns(:claims))
     end
 
+    it "raises a 404 error for a nonexistent user" do
+      fake_login
+      expect do
+        get :index, params: { user_id: "deleted_user" }
+      end.to raise_exception(ActiveRecord::RecordNotFound)
+    end
+
     it 'will not allow you to see someone elses claims' do
       second_user = create(:user)
       fake_login_known_user(user)
