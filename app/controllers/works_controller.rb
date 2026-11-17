@@ -915,21 +915,23 @@ class WorksController < ApplicationController
       :freeform_string, :summary, :notes, :endnotes, :collection_names, :recipients, :wip_length,
       :backdate, :language_id, :work_skin_id, :restricted, :comment_permissions,
       :moderated_commenting_enabled, :title, :pseuds_to_add, :collections_to_add,
-      current_user_pseud_ids: [],
-      collections_to_remove: [],
-      challenge_assignment_ids: [],
-      challenge_claim_ids: [],
-      category_strings: [],
-      archive_warning_strings: [],
-      author_attributes: [:byline, ids: [], coauthors: []],
-      series_attributes: [:id, :title],
-      parent_work_relationships_attributes: [[
-        :url, :title, :author, :language_id, :translation
-      ]],
-      chapter_attributes: [
-        :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
-        :published_at, :content
-      ]
+      {
+        current_user_pseud_ids: [],
+        collections_to_remove: [],
+        challenge_assignment_ids: [],
+        challenge_claim_ids: [],
+        category_strings: [],
+        archive_warning_strings: [],
+        author_attributes: [:byline, { ids: [], coauthors: [] }],
+        series_attributes: [:id, :title],
+        parent_work_relationships_attributes: [[
+          :url, :title, :author, :language_id, :translation
+        ]],
+        chapter_attributes: [
+          :title, :"published_at(3i)", :"published_at(2i)", :"published_at(1i)",
+          :published_at, :content
+        ]
+      }
     ])
   end
 
@@ -937,8 +939,10 @@ class WorksController < ApplicationController
     params.expect(work: [
       :rating_string, :fandom_string, :relationship_string, :character_string,
       :archive_warning_string, :category_string, :freeform_string, :language_id,
-      category_strings: [],
-      archive_warning_strings: []
+      {
+        category_strings: [],
+        archive_warning_strings: []
+      }
     ])
   end
 
@@ -970,18 +974,18 @@ class WorksController < ApplicationController
       :date_to,
       :words_from,
       :words_to,
+      {
+        archive_warning_ids: [],
+        warning_ids: [], # backwards compatibility
+        category_ids: [],
+        rating_ids: [],
+        fandom_ids: [],
+        character_ids: [],
+        relationship_ids: [],
+        freeform_ids: [],
 
-      archive_warning_ids: [],
-      warning_ids: [], # backwards compatibility
-      category_ids: [],
-      rating_ids: [],
-      fandom_ids: [],
-      character_ids: [],
-      relationship_ids: [],
-      freeform_ids: [],
-
-      collection_ids: []
+        collection_ids: []
+      }
     ])
   end
-
 end
