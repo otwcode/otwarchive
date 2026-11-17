@@ -110,7 +110,7 @@ class UsersController < ApplicationController
     @user = User.find_by(confirmation_token: params[:id])
 
     unless @user
-      flash[:error] = ts("Your activation key is invalid. If you didn't activate within #{AdminSetting.current.days_to_purge_unactivated * 7} days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
+      flash[:error] = t(".invalid_key", count: AdminSetting.current.days_to_purge_unactivated)
       redirect_to root_path
 
       return
