@@ -199,9 +199,11 @@ class ArchiveFaqsController < ApplicationController
   def archive_faq_params
     params.expect(archive_faq: [
       :title,
-      questions_attributes: [[
-        :id, :question, :anchor, :content, :screencast, :_destroy, :is_translated
-      ]]
+      {
+        questions_attributes: [[
+          :id, :question, :anchor, :content, :screencast, :_destroy, :is_translated
+        ]]
+      }
     ])
   end
 end

@@ -61,7 +61,6 @@ class Admin::AdminInvitationsController < Admin::BaseController
   private
 
   def invitation_params
-    params.expect(invitation: [:invitee_email, :invite_from_queue,
-      :user_group, :number_of_invites, :user_name, :token])
+    params.expect(invitation: [:invitee_email, :invite_from_queue, :user_group, :number_of_invites, :user_name, :token])
   end
 end

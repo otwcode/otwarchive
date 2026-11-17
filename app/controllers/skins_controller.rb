@@ -193,10 +193,12 @@ class SkinsController < ApplicationController
       :title, :description, :css, :role, :ie_condition, :unusable, :font,
       :base_em, :margin, :paragraph_margin, :background_color,
       :foreground_color, :headercolor, :accent_color, :icon,
-      media: [],
-      skin_parents_attributes: [[
-        :id, :position, :parent_skin_id, :parent_skin_title, :_destroy
-      ]]
+      {
+        media: [],
+        skin_parents_attributes: [[
+          :id, :position, :parent_skin_id, :parent_skin_title, :_destroy
+        ]]
+      }
     ]
 
     allowed_attributes += [:public] if current_user.is_a?(User) && current_user.official
