@@ -2,6 +2,7 @@ class HelpController < ApplicationController
   HELP_ACTIONS = %i[
     chapters_title
     collectibles_add_to_collection
+    collections_prompt_restriction_character_and_relationship
     csv_download
     first_login
     html
