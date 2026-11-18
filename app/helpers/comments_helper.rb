@@ -138,6 +138,7 @@ module CommentsHelper
   def can_reply_to_comment?(comment)
     admin_settings = AdminSetting.current
 
+    return false if comment.parent.nil?
     return false if comment.unreviewed?
     return false if comment.iced?
     return false if comment.hidden_by_admin?

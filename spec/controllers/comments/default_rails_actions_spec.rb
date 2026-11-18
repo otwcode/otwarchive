@@ -1060,6 +1060,12 @@ describe CommentsController do
         get :show, params: { id: reply.id }
         expect(response).to have_http_status(:success)
         expect(response.body).to include(reply.comment_content)
+        expect(response.body).to include("This comment is part of a deleted thread.")
+      end
+
+      it "doesn't show the reply link" do
+        get :show, params: { id: reply.id }
+        expect(response.body).not_to include("add_comment_reply_link_#{reply.id}")
       end
     end
   end

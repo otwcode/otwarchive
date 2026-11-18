@@ -1,7 +1,11 @@
 <%= flash_div :comment_error, :comment_notice %>
 
-<h3 class="heading">
-  <%= t(".comment_on_html", commentable_link: link_to_comment_ultimate_parent(@comment)) %>
-</h3>
+<% if @comment.parent.nil? %>
+  <p class="notice"><%= t(".deleted_thread") %></p>
+<% else %>
+  <h3 class="heading">
+    <%= t(".comment_on_html", commentable_link: link_to_comment_ultimate_parent(@comment)) %>
+  </h3>
+<% end %>
 
 <%= render :partial => 'comments/comment_thread', :locals => { :comments => @comments, :depth => 0 } %></ol>
