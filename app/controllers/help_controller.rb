@@ -1,10 +1,12 @@
 class HelpController < ApplicationController
   HELP_ACTIONS = %i[
+    chapters_title
     collectibles_add_to_collection
     comments_html
     comments_rte
     csv_download
     first_login
+    people_search_all_fields
     preferences_collection
     preferences_comment
     preferences_display
@@ -21,12 +23,17 @@ class HelpController < ApplicationController
     skins_creating
     skins_parents
     symbols_key
+    tag_sets_about
+    tag_sets_associations
+    tag_sets_batch_load
     tags_additional
     tags_categories
     tags_characters
     tags_fandoms
     tags_ratings
     tags_relationships
+    tags_search_results
+    tags_search_text
     tags_warnings
     works_assignment
     works_backdating

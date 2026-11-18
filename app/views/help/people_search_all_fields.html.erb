@@ -1,0 +1,16 @@
+<h4><%= t(".page_heading") %></h4>
+
+<p><%= t(".page_description") %></p>
+
+<p><%= t(".page_note") %></p>
+
+<dl>
+  <dt><%= t(".asterisk.title") %></dt>
+  <dd><%= t(".asterisk.description_html", user_any_keyboard_input: tag.kbd(t(".asterisk.user_any_keyboard_input")), user_sample: tag.samp(t(".asterisk.user_sample")), users_sample: tag.samp(t(".asterisk.users_sample")), username_sample: tag.samp(t(".asterisk.username_sample"))) %></dd>
+  <dt><%= t(".space.title") %></dt>
+  <dd><%= t(".space.description_html", a_user_keyboard_input: tag.kbd(t(".space.a_user_keyboard_input")), a_user_sample: tag.samp(t(".space.a_user_sample")), a_test_user_sample: tag.samp(t(".space.a_test_user_sample")), user_sample: tag.samp(t(".space.user_sample"))) %></dd>
+  <dt><%= t(".or.title") %></dt>
+  <dd><%= t(".or.description_html", user_a_or_keyboard_input: tag.kbd(t(".or.user_a_or_keyboard_input")), a_user_sample: tag.samp(t(".or.a_user_sample")), user_sample: tag.samp(t(".or.user_sample")), a_sample: tag.samp(t(".or.a_sample"))) %></dd>
+  <dt><%= t(".double_quotes.title") %></dt>
+  <dd><%= t(".double_quotes.description_html", a_user_keyboard_input: tag.kbd(t(".double_quotes.a_user_keyboard_input")), a_user_sample: tag.samp(t(".double_quotes.a_user_sample")), a_test_user_sample: tag.samp(t(".double_quotes.a_test_user_sample"))) %></dd>
+</dl>

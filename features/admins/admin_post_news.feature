@@ -129,6 +129,20 @@ Feature: Admin Actions to Post News
       And "quotes" should be selected within "Tag"
       And "Deutsch" should be selected within "Language"
 
+  Scenario: Admin post list is empty if page parameter is too large
+    Given the admin post "first"
+      And it is currently 1 second from now
+      And the admin post "second"
+      And there is 1 admin post per page
+    When I go to the admin-posts page
+    Then I should see "second"
+      And I should see "2" within ".pagination"
+      But I should not see "first"
+    When there are 20 admin posts per page
+      And I follow "2" within ".pagination"
+    Then I should see "AO3 News"
+      But I should not see "first"
+
   Scenario: Translation of an admin post keeps tags of original post
     Given I have posted an admin post with tags "original1, original2"
       And basic languages

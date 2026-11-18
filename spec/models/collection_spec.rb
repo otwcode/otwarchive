@@ -105,6 +105,12 @@ describe Collection do
       expect { create(:collection, open_doors: nil) }
         .to raise_error(ActiveRecord::NotNullViolation)
     end
+
+    it "raises error when duplicate database inserts happen despite Rails validations" do
+      create(:collection, name: "taken")
+      expect { create_invalid(:collection, name: "taken") }
+        .to raise_error(ActiveRecord::RecordNotUnique)
+    end
   end
 
   describe "#clear_icon" do

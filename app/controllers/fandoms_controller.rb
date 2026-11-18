@@ -43,5 +43,7 @@ class FandomsController < ApplicationController
 
     order = params[:sort] == "count" ? "count DESC" : "sortable_name ASC"
     @fandoms = @fandoms.order(order).with_count.paginate(page: params[:page], per_page: 250)
+
+    @page_subtitle = t(".page_title")
   end
 end

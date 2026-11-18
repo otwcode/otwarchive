@@ -182,6 +182,7 @@ Rails.application.routes.draw do
       put :post
       get :preview
     end
+    resources :kudos, only: [:index]
   end
 
   namespace :admin do
@@ -654,10 +655,12 @@ Rails.application.routes.draw do
   end
 
   # Redirects for moved help files
+  get "/help/chapter-title.html", to: redirect("/help/chapters_title")
   get "/help/add-collectible-to-collection.html", to: redirect("/help/collectibles_add_to_collection")
   get "/help/csv-download.html", to: redirect("/help/csv_download")
   get "/first_login_help", to: redirect("/help/first_login")
   get "/help/html-help.html", to: redirect("/help/html")
+  get "/help/people-search-all-fields.html", to: redirect("/help/people_search_all_fields")
   get "/help/collection-preferences.html", to: redirect("/help/preferences_collection")
   get "/help/comment-preferences.html", to: redirect("/help/preferences_comment")
   get "/help/display-preferences.html", to: redirect("/help/preferences_display")
@@ -672,12 +675,17 @@ Rails.application.routes.draw do
   get "/help/skins-creating.html", to: redirect("/help/skins_creating")
   get "/help/skins-parents.html", to: redirect("/help/skins_parents")
   get "/help/symbols-key.html", to: redirect("/help/symbols_key")
+  get "/help/tagset-about.html", to: redirect("/help/tag_sets_about")
+  get "/help/tagset-tag-associations.html", to: redirect("/help/tag_sets_associations")
+  get "/help/tagset-batch-load.html", to: redirect("/help/tag_sets_batch_load")
   get "/help/additional-tags-help.html", to: redirect("/help/tags_additional")
   get "/help/categories-help.html", to: redirect("/help/tags_categories")
   get "/help/characters-help.html", to: redirect("/help/tags_characters")
   get "/help/fandom-help.html", to: redirect("/help/tags_fandoms")
   get "/help/rating-help.html", to: redirect("/help/tags_ratings")
   get "/help/relationships-help.html", to: redirect("/help/tags_relationships")
+  get "/help/tag-search-results-help.html", to: redirect("/help/tags_search_results")
+  get "/help/tag-search-text-help.html", to: redirect("/help/tags_search_text")
   get "/help/warning-help.html", to: redirect("/help/tags_warnings")
   get "/help/add-work-to-assignment.html", to: redirect("/help/works_assignment")
   get "/help/backdating-help.html", to: redirect("/help/works_backdating")

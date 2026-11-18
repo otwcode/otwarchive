@@ -215,3 +215,39 @@ Feature: Create bookmarks of external works
     Given I am logged in as "bookmarker"
     When I am on the new external work page
     Then I should see the page title "Bookmark External Work"
+
+  @javascript
+  Scenario: Can hide and show warnings on an external bookmark
+    Given I am logged in as "regular_user"
+      And I bookmark the external work "External Changes"
+      And I am logged in as a "policy_and_abuse" admin
+      And I view the external work "External Changes"
+      And I follow "Edit External Work"
+      And I check "No Archive Warnings Apply"
+      And I press "Update External work"
+    When I am logged in as "regular_user"
+      And I set my preferences to hide warnings
+      And I view the external work "External Changes"
+    Then I should see "Show warnings"
+      And I should not see "No Archive Warnings Apply" within "li.warnings"
+    When I follow "Show warnings"
+    Then I should not see "Show warnings"
+      And I should see "No Archive Warnings Apply" within "li.warnings"
+
+  @javascript
+  Scenario: Can hide and show additional tags on an external bookmark
+    Given I am logged in as "regular_user"
+      And I bookmark the external work "External Changes"
+      And I am logged in as a "policy_and_abuse" admin
+      And I view the external work "External Changes"
+      And I follow "Edit External Work"
+      And I fill in "Additional Tags" with "Admin-Added Freeform"
+      And I press "Update External work"
+    When I am logged in as "regular_user"
+      And I set my preferences to hide freeform
+      And I view the external work "External Changes"
+    Then I should see "Show additional tags"
+      And I should not see "Admin-Added Freeform"
+    When I follow "Show additional tags"
+    Then I should not see "Show additional tags"
+      And I should see "Admin-Added Freeform"
