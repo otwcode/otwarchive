@@ -1010,6 +1010,7 @@ en:
         comment: Comment
     show:
       comment_on_html: Comment on %{commentable_link}
+      deleted_thread: This comment is part of a deleted thread. It will not be accessible in the overall comments section.
     single_comment:
       on_chapter_html: on %{commentable_link}
     unreviewed:
