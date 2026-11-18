@@ -46,7 +46,7 @@
             <% for chapter in @chapters %>
               <%= render "chapters/chapter", chapter: chapter %>
             <% end %>
-          <% else %>
+          <% elsif @chapter %>
             <h3 class="landmark heading" id="work"><%= ts("Work Text:") %></h3>
             <% cache("#{@chapter.cache_key}-show-content", skip_digest: true) do %>
               <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
