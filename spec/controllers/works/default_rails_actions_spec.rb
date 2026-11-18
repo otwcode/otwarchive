@@ -388,6 +388,20 @@ describe WorksController, work_search: true do
       end
     end
 
+    context "when the work has no chapters" do
+      render_views
+
+      before do
+        Chapter.where(work_id: work.id).delete_all
+      end
+
+      it "doesn't error" do
+        expect do
+          get :show, params: { id: work.id }
+        end.not_to raise_error
+      end
+    end
+
     context "when the work has no posted chapters" do
       render_views
 
