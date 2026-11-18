@@ -227,3 +227,70 @@ Feature: Rich text editor for Comments
       | the admin post "Five Things" |
 
   # TODO: switching, deleting, saving and all combinations.
+  Rule: Screwing around with RTE content
+    Background:
+      Given the work "Generic Work"
+        And I am logged in as "commenter"
+        And I view the work "Generic Work"
+
+    Example: Enter comment to RTE, submit
+      When I follow "Rich Text"
+        And I send keys "cats" to Lexxy
+        And I press "Comment"
+      Then I should see "Comment created!"
+        And I should see the text with tags "<p>cats</p>"
+
+    Example: Enter comment to RTE, switch to HTML, submit
+      When I follow "Rich Text"
+        And I send keys "cats" to Lexxy
+        And I follow "HTML"
+        And I press "Comment"
+      Then I should see "Comment created!"
+        And I should see the text with tags "<p>cats</p>"
+
+    Example: Enter comment to HTML, switch to RTE, submit
+      When I send keys "cats" to HTML editor
+        And I follow "Rich Text"
+        And I press "Comment"
+      Then I should see "Comment created!"
+        And I should see the text with tags "<p>cats</p>"
+
+    Example: Enter comment to RTE, switch to HTML, switch to RTE, submit
+      When I follow "Rich Text"
+        And I send keys "cats" to Lexxy
+        And I follow "HTML"
+        And I follow "Rich Text"
+        And I press "Comment"
+      Then I should see "Comment created!"
+        And I should see the text with tags "<p>cats</p>"
+
+    Example: Enter comment to HTML, switch to RTE, switch to HTML, submit
+      When I send keys "cats" to HTML editor
+        And I follow "Rich Text"
+        And I follow "HTML"
+        And I press "Comment"
+      Then I should see "Comment created!"
+        And I should see the text with tags "<p>cats</p>"
+
+    Example: Enter comment to RTE, switch to HTML, delete all content, submit
+      When I follow "Rich Text"
+        And I send keys "cats" to Lexxy
+        And I follow "HTML"
+        And I send keys "[:control, a]" to HTML editor
+        And I send keys ":backspace" to HTML editor
+        And I press "Comment"
+      Then I should not see "Comment created!"
+        And I should not see "cats"
+
+    Example: Enter comment to HTML, switch to RTE, delete all content, submit
+      When I send keys "cats" to HTML editor
+        And I follow "Rich Text"
+        And I send keys "[:control, a]" to Lexxy
+        And I send keys ":backspace" to Lexxy
+        And I press "Comment"
+      Then I should not see "Comment created!"
+        And I should not see "cats"
+
+
+
+

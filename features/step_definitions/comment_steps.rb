@@ -434,6 +434,10 @@ When "I send keys {string} to Lexxy" do |keys|
   step %{I send keys "#{keys}" to ".lexxy-editor__content"}
 end
 
+When "I send keys {string} to HTML editor" do |keys|
+  step %{I send keys "#{keys}" to '.comment_form'}
+end
+
 # This time use Session's method to simulate pressing a key on a page
 When "I press the {string} key" do |key|
   send_keys(key.to_sym)
