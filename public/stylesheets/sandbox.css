@@ -18,11 +18,6 @@ background:purple; color:#555;}
 0.875em/1.286 line height = 14px with 18px leading
 0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements */
 
-/* Heading buttons have transparent background, resulting in overlapped text */
-lexxy-toolbar-dropdown button {
-  background: #333;
-}
-
 /* Content is glued to the left, add some padding. */
 .lexxy-editor__content {
   padding: 1em;
@@ -31,11 +26,6 @@ lexxy-toolbar-dropdown button {
 /* Delete this table? text gets overlapped */
 .lexxy-table-control__button--delete-table {
   position: static
-}
-
-/* Background is dark as is the text, make it white for contrast */
-lexxy-table-tools button {
-  background: white
 }
 
 /* AO3-6869 -- Workaround for a layout bug in WebKit, triggered by `float` and LiveValidation's placeholder span */

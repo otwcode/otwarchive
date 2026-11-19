@@ -835,3 +835,13 @@ lexxy-table-tools * {
   --lexxy-color-accent-light: #46576BFF !important;
   --lexxy-color-accent-lightest: #2C3C4FFF !important;
 }
+
+/* Heading buttons have transparent background, resulting in overlapped text */
+lexxy-toolbar-dropdown button {
+  background: #333;
+}
+
+/* Background is dark as is the text, make it white for contrast */
+lexxy-table-tools button {
+  background: white
+}
