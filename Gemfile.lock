@@ -356,7 +356,7 @@ GEM
     kgio (2.10.0)
     launchy (2.5.2)
       addressable (~> 2.8)
-    lexxy (1.0.0)
+    lexxy (1.0.4)
       railties (>= 8.0.2)
     logger (1.7.0)
     lograge (0.14.0)
@@ -758,7 +758,7 @@ DEPENDENCIES
   importmap-rails (~> 2.2)
   kgio (= 2.10.0)
   launchy
-  lexxy (>= 1.0)
+  lexxy (~> 1.0.4)
   lograge
   marcel (= 1.0.2)
   mechanize
