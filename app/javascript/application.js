@@ -6,8 +6,8 @@ import * as Lexxy from "lexxy";
 Lexxy.configure({
     default: {
         highlight: {
-            permit: { // I don't know if this works either
-                color: [],
+            permit: { // TODO: I don't know if this works either
+                color: [], // update: it doesn't
                 "background-color": []
             }
         },
@@ -23,7 +23,9 @@ class EditingField {
     constructor(comment_field) {
         this.comment_field = comment_field;
         this.rte = null; // TODO: this probably is supposed to be temporary and need to be replaced with error handling of rte not loading properly
+        // let's keep it this way for now
         // TODO: also add tests for RTE not loading properly for any reason, maybe JS being disabled?
+        // update: tried and decided not test js-disabled, js is what removes class hidden's anyway which's hard to test
         this.html_editor = comment_field.querySelector("textarea.comment_form");
         this.html_link = comment_field.querySelector(".html-link");
         this.rtf_link = comment_field.querySelector(".rtf-link");
@@ -129,11 +131,10 @@ class EditingField {
             this.rte.querySelector(".lexxy-editor__content").classList.add("userstuff");
 
             let attributes = this.comment_field.querySelector("#lexxy_attributes");
-            this.rte.setAttribute("class", attributes.dataset.class); // TODO: explain what each of these do
-            this.rte.setAttribute("title", attributes.dataset.title);
-            this.rte.setAttribute("name", attributes.dataset.name);
+            this.rte.setAttribute("class", attributes.dataset.class); // character counter
+            this.rte.setAttribute("title", attributes.dataset.title); // hover and screen readers
+            this.rte.setAttribute("name", attributes.dataset.name); // so form knows this is for comment content
             this.rte.setAttribute("aria-labelledby", attributes.dataset.labelledby);
-            this.rte.setAttribute("id", attributes.dataset.id); // TODO: does this break validation and/or is the id it replaces used
 
             this.rte.querySelector("lexxy-toolbar").setAttribute("aria-label", attributes.dataset.toolbarlabel);
             this.rte.querySelector(".lexxy-editor__content").setAttribute("aria-label", attributes.dataset.editorlabel);
@@ -142,7 +143,7 @@ class EditingField {
                 "button[name=\"code\"], " +
                 "lexxy-code-language-picker";
             if(this.rte.querySelectorAll(selectors).length > 0) { // remove all the menus we don't want
-                this.rte.querySelectorAll(selectors).forEach((elem) => elem.parentNode.removeChild(elem)); // for IE compatibility
+                this.rte.querySelectorAll(selectors).forEach((elem) => elem.parentNode.removeChild(elem)); // for IE
 
                 this.switchToRTE();
             }
