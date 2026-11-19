@@ -1759,6 +1759,15 @@ en:
       loading_error_note: If the batch load is taking too long and you're getting 502 errors, please split up the number of tags you're trying to load!
       page_heading: Batch Loading
       submit_note: Only the associations that didn't work will remain in the form after you select the "Submit" button.
+    tag_sets_fandom_for_child:
+      description: You only need to specify the fandom if your nomination is new or not in the fandom already -- for instance, if you're submitting a character who has just appeared in the fandom. This information is just used to help the moderators sort out new tags.
+      page_heading: Specifying Fandom
+    tag_sets_nominated_tags:
+      canonical_synonym_note: If you see one of your tags listed with a slightly different tag afterwards in parentheses, this means that the tag you have nominated is wrangled and has a canonical synonym on the archive. The moderators may decide to use the canonical synonym instead of the version you used.
+      description_html: Some of your tags may be marked as %{unwrangled}, meaning they currently exist in the archive but have not been organized into our tagging system, and some may be marked as %{nonexistent}, meaning they don't exist in the archive at all. If you have tags marked this way, please make sure you have them typed correctly!
+      nonexistent: nonexistent
+      page_heading: Nominated Tags
+      unwrangled: unwrangled
     tags_additional:
       description: Any other tags you want to give your work (for example, "Angst", "Crossover", or "Tentacles"). You may also use this field to warn for things not covered by the Archive Warnings. Please do not enter fandom, relationship, or character names in this field. Multiple tags should be separated by commas.
       more_info:
@@ -3208,6 +3217,12 @@ en:
         works: My Work Subscriptions
       series: "(Series)"
       work: "(Work)"
+  tag_set_nominations:
+    show:
+      nominated_tags_heading: Nominated Tags
+      nominated_tags_help_title: Nominated Tags
+    tag_nominations:
+      fandom_for_child_help_title: Specifying Fandom
   tag_sets:
     nomination_review_heading:
       already_approved_fandoms: Already Approved Fandoms

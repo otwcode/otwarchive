@@ -18,7 +18,7 @@
           <dt>
             <%= nom_form.label :parent_tagname, ts("Fandom?") %>
             <% unless @past_first %>
-              <%= link_to_help 'tagset-fandom-for-child' %>
+              <%= link_to_help_modal(help_tag_sets_fandom_for_child_path, t(".fandom_for_child_help_title")) %>
               <% @past_first = true %>
             <% end %>
           </dt>

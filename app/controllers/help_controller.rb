@@ -24,6 +24,8 @@ class HelpController < ApplicationController
     tag_sets_about
     tag_sets_associations
     tag_sets_batch_load
+    tag_sets_fandom_for_child
+    tag_sets_nominated_tags
     tags_additional
     tags_categories
     tags_characters

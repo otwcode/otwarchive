@@ -678,6 +678,8 @@ Rails.application.routes.draw do
   get "/help/tagset-about.html", to: redirect("/help/tag_sets_about")
   get "/help/tagset-tag-associations.html", to: redirect("/help/tag_sets_associations")
   get "/help/tagset-batch-load.html", to: redirect("/help/tag_sets_batch_load")
+  get "/help/tagset-fandom-for-child.html", to: redirect("/help/tag_sets_fandom_for_child")
+  get "/help/tagset-nominated-tags.html", to: redirect("/help/tag_sets_nominated_tags")
   get "/help/additional-tags-help.html", to: redirect("/help/tags_additional")
   get "/help/categories-help.html", to: redirect("/help/tags_categories")
   get "/help/characters-help.html", to: redirect("/help/tags_characters")
