@@ -5,9 +5,9 @@ module WorksHelper
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter&.published_at
     list = []
-    list << [ts("Published:"), "published", localize(published_date)] if published_date
-    list.concat([[ts("Words:"), "words", number_with_delimiter(work.word_count)],
-                 [ts("Chapters:"), "chapters", chapter_total_display(work)]])
+    list << [t("works_helper.work_meta_list.published"), "published", localize(published_date)] if published_date
+    list.concat([[t("works_helper.work_meta_list.words"), "words", number_with_delimiter(work.word_count)],
+                 [t("works_helper.work_meta_list.chapters"), "chapters", chapter_total_display(work)]])
 
     if (comment_count = work.count_visible_comments) > 0
       list.concat([[ts("Comments:"), "comments", number_with_delimiter(work.count_visible_comments)]])
