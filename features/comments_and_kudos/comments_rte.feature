@@ -226,7 +226,6 @@ Feature: Rich text editor for Comments
       | the work "Generic Work"      |
       | the admin post "Five Things" |
 
-  # TODO: switching, deleting, saving and all combinations.
   Rule: Screwing around with RTE content
     Background:
       Given the work "Generic Work"
@@ -244,14 +243,16 @@ Feature: Rich text editor for Comments
       When I follow "Rich Text"
         And I send keys "cats" to Lexxy
         And I follow "HTML"
-        And I press "Comment"
+      Then I should see "<p>cats</p>"
+      When I press "Comment"
       Then I should see "Comment created!"
         And I should see the text with tags "<p>cats</p>"
 
     Example: Enter comment to HTML, switch to RTE, submit
       When I send keys "cats" to HTML editor
         And I follow "Rich Text"
-        And I press "Comment"
+      Then I should see "cats"
+      When I press "Comment"
       Then I should see "Comment created!"
         And I should see the text with tags "<p>cats</p>"
 
@@ -259,16 +260,20 @@ Feature: Rich text editor for Comments
       When I follow "Rich Text"
         And I send keys "cats" to Lexxy
         And I follow "HTML"
-        And I follow "Rich Text"
-        And I press "Comment"
+      Then I should see "<p>cats</p>"
+      When I follow "Rich Text"
+      Then I should see "cats"
+      When I press "Comment"
       Then I should see "Comment created!"
         And I should see the text with tags "<p>cats</p>"
 
     Example: Enter comment to HTML, switch to RTE, switch to HTML, submit
       When I send keys "cats" to HTML editor
         And I follow "Rich Text"
-        And I follow "HTML"
-        And I press "Comment"
+      Then I should see "cats"
+      When I follow "HTML"
+      Then I should see "<p>cats</p>"
+      When I press "Comment"
       Then I should see "Comment created!"
         And I should see the text with tags "<p>cats</p>"
 
@@ -291,6 +296,10 @@ Feature: Rich text editor for Comments
       Then I should not see "Comment created!"
         And I should not see "cats"
 
-
-
-
+    Example: Switch to RTE and back to HTML, enter comment and submit
+      When I follow "Rich Text"
+        And I follow "HTML"
+        And I send keys "cats" to HTML editor
+        And I press "Comment"
+      Then I should see "Comment created!"
+        And I should see the text with tags "<p>cats</p>"
