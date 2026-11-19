@@ -96,6 +96,10 @@ en:
       collections: 'Collections:'
     mark_as_read_button: Mark as Read
     mark_for_later_button: Mark for Later
+    work_meta_list:
+      chapters: 'Chapters:'
+      published: 'Published:'
+      words: 'Words:'
     work_page_title:
       anonymous: Anonymous
       multifandom: Multifandom
