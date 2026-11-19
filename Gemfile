@@ -184,5 +184,5 @@ end
 gem "image_processing", "~> 1.14"
 gem "ostruct"
 
-gem 'lexxy', '~> 1.0.4'
+gem "lexxy", "~> 1.0.4"
 gem "importmap-rails", "~> 2.2"
