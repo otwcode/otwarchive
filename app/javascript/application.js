@@ -5,12 +5,6 @@ import * as Lexxy from "lexxy";
 
 Lexxy.configure({
     default: {
-        highlight: {
-            permit: { // TODO: I don't know if this works either
-                color: [], // update: it doesn't
-                "background-color": []
-            }
-        },
         markdown: false,
         attachments: false
     }
@@ -22,10 +16,7 @@ Lexxy.configure({
 class EditingField {
     constructor(comment_field) {
         this.comment_field = comment_field;
-        this.rte = null; // TODO: this probably is supposed to be temporary and need to be replaced with error handling of rte not loading properly
-        // let's keep it this way for now
-        // TODO: also add tests for RTE not loading properly for any reason, maybe JS being disabled?
-        // update: tried and decided not test js-disabled, js is what removes class hidden's anyway which's hard to test
+        this.rte = null;
         this.html_editor = comment_field.querySelector("textarea.comment_form");
         this.html_link = comment_field.querySelector(".html-link");
         this.rtf_link = comment_field.querySelector(".rtf-link");
