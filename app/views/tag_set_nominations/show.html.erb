@@ -44,7 +44,7 @@
   </div>
 
 
-  <h3 class="heading"><%= ts("Nominated Tags") %> <%= link_to_help "tagset-nominated-tags" %></h3>
+  <h3 class="heading"><%= t(".nominated_tags_heading") %> <%= link_to_help_modal(help_tag_sets_nominated_tags_path, t(".nominated_tags_help_title")) %></h3>
 
   <ol class="index group">
     <% if @limit[:fandom] > 0 && (@limit[:character] > 0 || @limit[:relationship] > 0) %>
