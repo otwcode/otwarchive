@@ -78,29 +78,20 @@ class EditingField {
         this.comment_field.querySelector(".rtf-html-switch").classList.remove('hidden');
         this.html_link.classList.add("current");
 
-        // Validation. Only works when RTE is active, not HTML. Adds a warning when lexxy is empty or longer than max.
+        // Validation. Selects the active editor and adds a warning to it when it's empty or longer than max.
         this.comment_field.querySelector("input[type=submit]").onclick = () => {
             let validation = this.comment_field.querySelector("#lexxy_validation");
+            let active_editor = this.html_link.classList.contains("current") ? this.html_editor : this.rte
 
-            if(this.rtf_link.classList.contains("current")) {
-                if (this.rte.classList.contains("lexxy-editor--empty")) {
-                    this.rte.setCustomValidity(validation.dataset.commenttooshort);
-                } else if (this.rte.value.length > validation.dataset.commentmax) {
-                    this.rte.setCustomValidity(validation.dataset.commenttoolong);
-                } else {
-                    this.rte.setCustomValidity("");
-                }
-                this.rte.reportValidity();
+            console.log(active_editor)
+            if (active_editor.value.length === 0) {
+                active_editor.setCustomValidity(validation.dataset.commenttooshort);
+            } else if (active_editor.value.length > validation.dataset.commentmax) {
+                active_editor.setCustomValidity(validation.dataset.commenttoolong);
             } else {
-                if (this.html_editor.value.length === 0) {
-                    this.html_editor.setCustomValidity(validation.dataset.commenttooshort);
-                } else if (this.html_editor.value.length > validation.dataset.commentmax) {
-                    this.html_editor.setCustomValidity(validation.dataset.commenttoolong);
-                } else {
-                    this.html_editor.setCustomValidity("");
-                }
-                this.html_editor.reportValidity();
+                active_editor.setCustomValidity("");
             }
+            active_editor.reportValidity();
         };
 
         // Fix for editing comments, it doesn't save the correct content without copying RTE's content to HTML editor.
