@@ -27,7 +27,8 @@ class EditingField {
     }
 
     // Method to call when Rich Text button is pressed. It makes the Rich Text button selected, copies HTML editor's
-    // value to RTE, hides HTML and its notes and reveals RTE and its notes.
+    // value to RTE, hides HTML and its notes and reveals RTE and its notes. Finally, moves RTE after HTML so RTE's
+    // content gets saved
     switchToRTE() {
         this.rtf_link.classList.add("current");
         this.html_link.classList.remove("current");
@@ -39,10 +40,13 @@ class EditingField {
 
         this.html_notes.classList.add("hidden");
         this.rtf_notes.classList.remove("hidden");
+
+        this.comment_field.querySelector("#lexxy_parent").insertBefore(this.html_editor, this.rte);
     }
 
     // Method to call when HTML button is pressed. It makes the HTML button selected, copies RTE's value to HTML via
-    // another method, hides RTE and its notes and reveals HTML and its notes.
+    // another method, hides RTE and its notes and reveals HTML and its notes. Finally, moves HTML after RTE so HTML's
+    // content gets saved
     switchToHTML() {
         this.html_link.classList.add("current");
         this.rtf_link.classList.remove("current");
@@ -54,6 +58,8 @@ class EditingField {
 
         this.html_notes.classList.remove("hidden");
         this.rtf_notes.classList.add("hidden");
+
+        this.comment_field.querySelector("#lexxy_parent").appendChild(this.html_editor);
     }
 
     // Because Lexxy keeps <p><br></p> in its content even when it's empty, when it has a custom class for being empty

@@ -242,7 +242,7 @@ Feature: Rich text editor for Comments
     Example: Enter comment to RTE, switch to HTML, submit
       When I follow "Rich Text"
         And I send keys "cats" to Lexxy
-        And I follow "HTML"
+        And I follow "HTML" within ".rtf-html-switch"
       Then I should see "cats"
       When I press "Comment"
       Then I should see "Comment created!"
@@ -259,7 +259,7 @@ Feature: Rich text editor for Comments
     Example: Enter comment to RTE, switch to HTML, switch to RTE, submit
       When I follow "Rich Text"
         And I send keys "cats" to Lexxy
-        And I follow "HTML"
+        And I follow "HTML" within ".rtf-html-switch"
       Then I should see "cats"
       When I follow "Rich Text"
       Then I should see "cats"
@@ -277,11 +277,10 @@ Feature: Rich text editor for Comments
       Then I should see "Comment created!"
         And I should see the text with tags "<p>cats</p>"
 
-      # TODO
     Example: Enter comment to RTE, switch to HTML, delete all content, submit
       When I follow "Rich Text"
         And I send keys "cats" to Lexxy
-        And I follow "HTML"
+        And I follow "HTML" within ".rtf-html-switch"
         And I send keys "[:control, a]" to HTML editor
         And I send keys ":backspace" to HTML editor
         And I press "Comment"
@@ -297,10 +296,9 @@ Feature: Rich text editor for Comments
       Then I should not see "Comment created!"
         And I should not see "cats"
 
-      # TODO
     Example: Switch to RTE and back to HTML, enter comment and submit
       When I follow "Rich Text"
-        And I follow "HTML"
+        And I follow "HTML" within ".rtf-html-switch"
         And I send keys "cats" to HTML editor
         And I press "Comment"
       Then I should see "Comment created!"
