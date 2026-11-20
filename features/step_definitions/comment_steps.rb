@@ -442,3 +442,7 @@ end
 When "I press the {string} key" do |key|
   send_keys(key.to_sym)
 end
+
+Given "maximum comment length is {int}" do |comment_max|
+  allow(ArchiveConfig).to receive(:COMMENT_MAX).and_return(comment_max)
+end

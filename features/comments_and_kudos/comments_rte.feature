@@ -208,6 +208,52 @@ Feature: Rich text editor for Comments
       | the work "Generic Work"      |
       | the admin post "Five Things" |
 
+  Scenario Outline: Trying to send an empty comment with HTML editor
+    Given <commentable>
+      And I am logged in as "commenter"
+      And I view <commentable> with comments
+      And I press "Comment"
+    Then I should not see "Comment created!"
+    When I send keys "cats" to HTML editor
+      And I press "Comment"
+    Then I should see "Comment created!"
+      And I should see the text with tags "<p>cats</p>"
+
+    Examples:
+      | commentable                  |
+      | the work "Generic Work"      |
+      | the admin post "Five Things" |
+
+  Scenario Outline: Trying to send too long of a comment with RTE
+    Given <commentable>
+      And I am logged in as "commenter"
+      And I view <commentable> with comments
+    Then I should see "Rich Text"
+    Given maximum comment length is 10
+    When I follow "Rich Text"
+      And I send keys "The quick brown fox jumps over the lazy dog" to Lexxy
+      And I press "Comment"
+    Then I should not see "Comment created!"
+
+    Examples:
+      | commentable                  |
+      | the work "Generic Work"      |
+      | the admin post "Five Things" |
+
+  Scenario Outline: Trying to send too long of a comment with RTE
+    Given <commentable>
+      And I am logged in as "commenter"
+      And I view <commentable> with comments
+    Given maximum comment length is 10
+    When I send keys "The quick brown fox jumps over the lazy dog" to HTML editor
+      And I press "Comment"
+    Then I should not see "Comment created!"
+
+    Examples:
+      | commentable                  |
+      | the work "Generic Work"      |
+      | the admin post "Five Things" |
+
   Scenario Outline: Checking character counter while using RTE
     Given <commentable>
       And I am logged in as "commenter"

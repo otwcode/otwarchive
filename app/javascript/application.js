@@ -78,15 +78,29 @@ class EditingField {
         this.comment_field.querySelector(".rtf-html-switch").classList.remove('hidden');
         this.html_link.classList.add("current");
 
-        // Validations, currently only for presence. Adds a warning when lexxy is empty and RTE is being used, not HTML.
+        // Validation. Only works when RTE is active, not HTML. Adds a warning when lexxy is empty or longer than max.
         this.comment_field.querySelector("input[type=submit]").onclick = () => {
-            if(this.rte.classList.contains("lexxy-editor--empty") && this.rtf_link.classList.contains("current")) {
-                let validation_messages = this.comment_field.querySelector("#lexxy_validation");
-                this.rte.setCustomValidity(validation_messages.dataset.commenttooshort);
+            let validation = this.comment_field.querySelector("#lexxy_validation");
+
+            if(this.rtf_link.classList.contains("current")) {
+                if (this.rte.classList.contains("lexxy-editor--empty")) {
+                    this.rte.setCustomValidity(validation.dataset.commenttooshort);
+                } else if (this.rte.value.length > validation.dataset.commentmax) {
+                    this.rte.setCustomValidity(validation.dataset.commenttoolong);
+                } else {
+                    this.rte.setCustomValidity("");
+                }
+                this.rte.reportValidity();
             } else {
-                this.rte.setCustomValidity("");
+                if (this.html_editor.value.length === 0) {
+                    this.html_editor.setCustomValidity(validation.dataset.commenttooshort);
+                } else if (this.html_editor.value.length > validation.dataset.commentmax) {
+                    this.html_editor.setCustomValidity(validation.dataset.commenttoolong);
+                } else {
+                    this.html_editor.setCustomValidity("");
+                }
+                this.html_editor.reportValidity();
             }
-            this.rte.reportValidity();
         };
 
         // Fix for editing comments, it doesn't save the correct content without copying RTE's content to HTML editor.
