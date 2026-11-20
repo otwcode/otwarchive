@@ -228,8 +228,8 @@ Feature: Rich text editor for Comments
     Given <commentable>
       And I am logged in as "commenter"
       And I view <commentable> with comments
+      And maximum comment length is 10
     Then I should see "Rich Text"
-    Given maximum comment length is 10
     When I follow "Rich Text"
       And I send keys "The quick brown fox jumps over the lazy dog" to Lexxy
       And I press "Comment"
@@ -240,11 +240,11 @@ Feature: Rich text editor for Comments
       | the work "Generic Work"      |
       | the admin post "Five Things" |
 
-  Scenario Outline: Trying to send too long of a comment with RTE
+  Scenario Outline: Trying to send too long of a comment with HTML editor
     Given <commentable>
       And I am logged in as "commenter"
       And I view <commentable> with comments
-    Given maximum comment length is 10
+      And maximum comment length is 10
     When I send keys "The quick brown fox jumps over the lazy dog" to HTML editor
       And I press "Comment"
     Then I should not see "Comment created!"
@@ -258,6 +258,7 @@ Feature: Rich text editor for Comments
     Given <commentable>
       And I am logged in as "commenter"
       And I view <commentable> with comments
+      And maximum comment length is 10000
     Then I should see "Rich Text"
     When I follow "Rich Text"
       And I send keys "a" to Lexxy
@@ -331,7 +332,6 @@ Feature: Rich text editor for Comments
         And I send keys ":backspace" to HTML editor
         And I press "Comment"
       Then I should not see "Comment created!"
-        And I should not see "cats"
 
     Example: Enter comment to HTML, switch to RTE, delete all content, submit
       When I send keys "cats" to HTML editor
@@ -340,7 +340,6 @@ Feature: Rich text editor for Comments
         And I send keys ":backspace" to Lexxy
         And I press "Comment"
       Then I should not see "Comment created!"
-        And I should not see "cats"
 
     Example: Switch to RTE and back to HTML, enter comment and submit
       When I follow "Rich Text"

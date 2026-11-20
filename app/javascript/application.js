@@ -51,7 +51,7 @@ class EditingField {
         this.html_link.classList.add("current");
         this.rtf_link.classList.remove("current");
 
-        this.copyContentToHTML();
+        this.html_editor.value = this.rte.value;
 
         this.html_editor.classList.remove("hidden");
         this.rte.classList.add("hidden");
@@ -62,16 +62,6 @@ class EditingField {
         this.comment_field.querySelector("#lexxy_parent").appendChild(this.html_editor);
     }
 
-    // Because Lexxy keeps <p><br></p> in its content even when it's empty, when it has a custom class for being empty
-    // set HTML editor's value to null, otherwise copy RTE's content to it normally
-    copyContentToHTML() {
-        if(!this.rte.classList.contains("lexxy-editor--empty")) {
-            this.html_editor.value = this.rte.value;
-        } else {
-            this.html_editor.value = null;
-        }
-    }
-
     // Get the field ready for Lexxy initialization: unhide switch, make HTML current, set events for buttons Submit,
     // Update, Rich Text and HTML.
     getReady() {
@@ -79,11 +69,11 @@ class EditingField {
         this.html_link.classList.add("current");
 
         // Validation. Selects the active editor and adds a warning to it when it's empty or longer than max.
-        this.comment_field.querySelector("input[type=submit]").onclick = () => {
+        const submit_button = this.comment_field.querySelector("input[type=submit]")
+        submit_button.onclick = () => {
             let validation = this.comment_field.querySelector("#lexxy_validation");
             let active_editor = this.html_link.classList.contains("current") ? this.html_editor : this.rte
 
-            console.log(active_editor)
             if (active_editor.value.length === 0) {
                 active_editor.setCustomValidity(validation.dataset.commenttooshort);
             } else if (active_editor.value.length > validation.dataset.commentmax) {
@@ -92,15 +82,12 @@ class EditingField {
                 active_editor.setCustomValidity("");
             }
             active_editor.reportValidity();
-        };
 
-        // Fix for editing comments, it doesn't save the correct content without copying RTE's content to HTML editor.
-        const update_button = this.comment_field.querySelector("input[value=Update]");
-        if(update_button) {
-            update_button.onclick = () => {
-                this.copyContentToHTML();
-            };
-        }
+            // Fix for editing comments, it doesn't save the correct content without copying RTE's content to HTML editor
+            if(submit_button.getAttribute("value") === "Update") {
+                this.html_editor.value = this.rte.value;
+            }
+        };
 
         this.rtf_link.onclick = (e) => {
             e.preventDefault(); // so page scroll position don't reset
