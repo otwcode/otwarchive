@@ -1,16 +1,16 @@
 <fieldset class="work meta">
-  <legend><%= ts('Tags') %></legend>
-  <h3 class="landmark heading"><%= ts('Tags') %></h3>
+  <legend><%= t(".legend") %></legend>
+  <h3 class="landmark heading"><%= t(".landmark") %></h3>
 
   <p class="note">
-    <%= ts("Tags are comma separated, %{max} characters per tag. Fandom, relationship, character, and additional tags must not add up to more than %{limit}. Archive warning, category, and rating tags do not count toward this limit.",
+    <%= t(".note",
            limit: ArchiveConfig.USER_DEFINED_TAGS_MAX,
-           max: ArchiveConfig.TAG_MAX) %>
+           count: ArchiveConfig.TAG_MAX) %>
   </p>
 
   <dl>
     <dt class="rating required">
-      <label for="work_rating_string"><%= Rating::NAME %>*</label>
+      <label for="work_rating_string"><%= Rating.model_name.human %>*</label>
       <%= link_to_help_modal(help_tags_ratings_path, t(".ratings_help_title")) %>
     </dt>
     <dd class="rating required">
@@ -25,12 +25,11 @@
     </dd>
 
     <dt class="warning required">
-      <label><%= ArchiveWarning::NAME.pluralize %>*</label>
+      <label><%= ArchiveWarning.model_name.human(count: :many) %>*</label>
       <%= link_to_help_modal(help_tags_warnings_path, t(".warnings_help_title")) %>
     </dt>
     <dd class="warning required">
       <fieldset class="warnings">
-        <!--<legend class="landmark">Warning</legend>-->
         <ul>
           <%= collection_check_boxes(
             :work, :archive_warning_strings,
@@ -48,24 +47,20 @@
     </dd>
 
     <dt class="fandom required">
-      <label for="work_fandom" title="<%= ts('fandoms') %>"><%= Fandom::NAME.pluralize %>*</label>
+      <label for="work_fandom"><%= Fandom.model_name.human(count: :many) %>*</label>
       <%= link_to_help_modal(help_tags_fandoms_path, t(".fandoms_help_title")) %>
     </dt>
-    <dd class="fandom required" title="<%= ts('fandoms') %>">
-      <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, 
-                         autocomplete_options('fandom', 
-                          :id => "work_fandom",
-                          :title => ts('fandoms')) %>
-      <p class="footnote"><%= ts('If this is the first work for a fandom, it may not show up in the fandoms page for a day or two.') %></p>
+    <dd class="fandom required">
+      <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, autocomplete_options("fandom", id: "work_fandom") %>
+      <p class="footnote"><%= t(".fandom_show_up_delay") %></p>
     </dd>
 
     <dt class="category">
-      <label><%= Category::NAME.pluralize %></label>
+      <label><%= Category.model_name.human(count: :many) %></label>
       <%= link_to_help_modal(help_tags_categories_path, t(".categories_help_title")) %>
     </dt>
     <dd class="category">
       <fieldset>
-        <!--<legend class="landmark">Category</legend>-->
         <ul>
           <%= collection_check_boxes(
             :work, :category_strings,
@@ -82,38 +77,34 @@
       </fieldset>
     </dd>
 
-    <dt class="relationship" title="<%= ts('relationships') %>">
-      <label for="work_relationship"><%= Relationship::NAME.pluralize %></label>
+    <dt class="relationship">
+      <label for="work_relationship"><%= Relationship.model_name.human(count: :many) %></label>
       <%= link_to_help_modal(help_tags_relationships_path, t(".relationships_help_title")) %>
     </dt>
-    <dd class="relationship" title="<%= ts('relationships') %>">
+    <dd class="relationship">
       <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, 
                          autocomplete_options("relationship_in_fandom",
                            id: "work_relationship",
-                           title: ts('relationships'),
                            data: { autocomplete_live_params: "fandom=work_fandom" }) %>
     </dd>
 
-    <dt class="character" title="<%= ts('characters') %>">
-      <label for="work_character"><%= Character::NAME.pluralize %></label>
+    <dt class="character">
+      <label for="work_character"><%= Character.model_name.human(count: :many) %></label>
       <%= link_to_help_modal(help_tags_characters_path, t(".characters_help_title")) %>
     </dt>
-    <dd class="character" title="<%= ts('characters') %>">
+    <dd class="character">
       <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, 
                         autocomplete_options('character_in_fandom', 
                           id: "work_character",
-                          title: ts('characters'),
                           data: { autocomplete_live_params: "fandom=work_fandom" }) %>
     </dd>
 
-    <dt class="freeform" title="<%= ts('additional tags') %>">
-      <label for="work_freeform"><%= Freeform::NAME %></label>
+    <dt class="freeform">
+      <label for="work_freeform"><%= Freeform.model_name.human(count: :many) %></label>
       <%= link_to_help_modal(help_tags_additional_path, t(".additional_tags_help_title")) %>
     </dt>
-    <dd class="freeform" title="<%= ts('additional tags') %>">
-      <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, autocomplete_options('freeform',
-                          :id => "work_freeform",
-                          :title => ts('additional tags')) %>
+    <dd class="freeform">
+      <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, autocomplete_options("freeform", id: "work_freeform") %>
     </dd>
 
   </dl>

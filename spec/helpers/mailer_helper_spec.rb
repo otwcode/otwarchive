@@ -81,7 +81,7 @@ describe MailerHelper do
     {
       "Fandom" => ["Fandom: ", "Fandoms: "],
       "Rating" => ["Rating: ", "Ratings: "],
-      "ArchiveWarning" => ["Warning: ", "Warnings: "],
+      "ArchiveWarning" => ["Archive Warning: ", "Archive Warnings: "],
       "Relationship" => ["Relationship: ", "Relationships: "],
       "Character" => ["Character: ", "Characters: "],
       "Freeform" => ["Additional Tag: ", "Additional Tags: "]
@@ -135,7 +135,7 @@ describe MailerHelper do
 
     {
       "Rating" => ["Rating:", "Ratings:"],
-      "ArchiveWarning" => ["Warning:", "Warnings:"],
+      "ArchiveWarning" => ["Archive Warning:", "Archive Warnings:"],
       "Relationship" => ["Relationship:", "Relationships:"],
       "Character" => ["Character:", "Characters:"],
       "Freeform" => ["Additional Tag:", "Additional Tags:"]
