@@ -344,8 +344,8 @@ en:
         one: Banned Email
         other: Banned Emails
       archive_warning:
-        one: Warning
-        other: Warnings
+        one: Archive Warning
+        other: Archive Warnings
       bookmark:
         one: Bookmark
         other: Bookmarks
