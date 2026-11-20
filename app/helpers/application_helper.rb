@@ -75,15 +75,31 @@ module ApplicationHelper
     link_to content_tag(:span, ts("RSS Feed")), link_to_feed, title: ts("RSS Feed"), class: "rss"
   end
 
-  def allowed_html_instructions(strip_images: false)
+  def allowed_html_instructions(page: "other", strip_images: false)
+    help_path = case page
+                when "work"
+                  help_works_html_path
+                when "comment"
+                  help_comments_html_path
+                else
+                  help_others_html_path
+                end
     # i18n-tasks-use t("application_helper.text_limited_html")
     # i18n-tasks-use t("application_helper.text_limited_html_strip_images_html")
-    t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help_modal(help_html_path, t("application_helper.allowed_html_instructions.html_help_title")))
+    t(strip_images ? "application_helper.text_limited_html_strip_images_html" : "application_helper.text_limited_html", help_link: link_to_help_modal(help_path, t("application_helper.allowed_html_instructions.html_help_title")))
   end
 
   # Returns instructions and help button that is shown above the RTE window
-  def rich_text_instructions
-    t("application_helper.rich_text_instructions.type_paste_rich_text_html", help_link: link_to_help_modal(help_rte_path, t("application_helper.rich_text_instructions.rte_help_title")))
+  def rich_text_instructions(page: "other")
+    help_path = case page
+                when "work"
+                  help_works_rte_path
+                when "comment"
+                  help_comments_rte_path
+                else
+                  help_others_rte_path
+                end
+    t("application_helper.rich_text_instructions.type_paste_rich_text_html", help_link: link_to_help_modal(help_path, t("application_helper.rich_text_instructions.rte_help_title")))
   end
 
   def link_to_modal(content = "", options = {})
@@ -187,6 +203,14 @@ module ApplicationHelper
   def allow_tinymce?(controller)
     %w(admin_posts archive_faqs known_issues chapters works wrangling_guidelines).include?(controller.controller_name) &&
       %w(new create edit update).include?(controller.action_name)
+  end
+
+  # load JavaScript and CSS of Lexxy, this will use importmaps to also import node modules of Lexical and other necessary libraries  
+  def use_lexxy
+    content_for(:lexxy, flush: true) { javascript_importmap_tags }
+    content_for :lexxy do
+      stylesheet_link_tag "lexxy"
+    end
   end
 
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow

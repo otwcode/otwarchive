@@ -71,7 +71,6 @@
           <% comment.set_parent_and_unreviewed %>
           <% comment.pseud = current_user.default_pseud %>
         <% end %>
-        <p class="footnote"><%= allowed_html_instructions(strip_images: comment.use_image_safety_mode?) %></p>
       <% else %>
         <dl>
           <dt class="landmark"><%= t(".landmark.note") %>:</dt>
@@ -87,20 +86,36 @@
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", failureMessage: t(".guest_email_failure")) %>
           </dd>
         </dl>
-        <p class="footnote"><%= allowed_html_instructions(strip_images: true) %></p>
       <% end %>
+      <ul class="hidden rtf-html-switch actions" role="menu">
+        <li><a class="rtf-link" href="#"><%= t(".rte_button") %></a></li>
+        <li><a class="html-link" href="#"><%= t(".html_button") %></a></li>
+      </ul>
+      <p class="rtf-html-instructions note">
+        <% strip_images = logged_in? ? comment.use_image_safety_mode? : true %>
+        <span class="html-notes"><%= allowed_html_instructions(page: "comment", strip_images: strip_images) %></span>
+        <span class="hidden rtf-notes"><%= rich_text_instructions(page: "comment") %></span>
+      </p>
 
-      <p>
+      <p id="lexxy_parent">
         <% content_id = "comment_content_for_#{commentable.id}" %>
-        <label for="<%= content_id %>" class="landmark"><%= t(".landmark.comment") %></label>
+        <label for="<%= content_id %>" class="landmark" id="lexxy-label"><%= t(".landmark.comment") %></label>
+          <% use_lexxy %>
+        <input type="hidden" id="lexxy_attributes"
+               data-class="comment_form observe_textlength"
+               data-title="<%= t(".comment_field_title") %>"
+               data-name="comment[comment_content]"
+               data-labelledby="lexxy-label"
+               data-editorlabel="Rich Text Editor Field"
+               data-toolbarlabel="Rich Text Formatting" />
         <%= f.text_area :comment_content, id: content_id, class: "comment_form observe_textlength", title: t(".comment_field_title") %>
         <input type="hidden" id="controller_name_for_<%= commentable.id %>" name="controller_name" value="<%= @controller_name ||= controller.controller_name %>" />
       </p>
       <%= generate_countdown_html("comment_content_for_#{commentable.id}", ArchiveConfig.COMMENT_MAX) %>
-      <%= live_validation_for_field "comment_content_for_#{commentable.id}",
-            failureMessage: t(".comment_too_short"),
-            maximum_length: ArchiveConfig.COMMENT_MAX,
-            tooLongMessage: t(".comment_too_long", count: ArchiveConfig.COMMENT_MAX) %>
+      <input type="hidden" id="lexxy_validation"
+             data-commentmax="<%= ArchiveConfig.COMMENT_MAX %>"
+             data-commenttoolong="<%= t(".comment_too_long", count: ArchiveConfig.COMMENT_MAX) %>"
+             data-commenttooshort="<%= t(".comment_too_short") %>" />
       <% unless logged_in? %>
         <p class="footnote"><%= t(".guest_edit_warning") %></p>
       <% end %>

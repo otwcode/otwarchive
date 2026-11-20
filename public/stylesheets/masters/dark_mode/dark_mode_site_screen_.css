@@ -814,3 +814,34 @@ span.question {
 #admin_users_table th a:hover {
   color: #73c4c4;
 }
+
+lexxy-toolbar *,
+lexxy-table-tools * {
+  box-shadow: none;
+}
+
+:root {
+  --lexxy-color-canvas: initial !important;
+
+  --lexxy-color-ink: #F2F2F2FF !important;
+  --lexxy-color-ink-medium: #AEAEAEFF !important;
+  --lexxy-color-ink-light: #717171FF !important;
+  --lexxy-color-ink-lighter: #484848FF !important;
+  --lexxy-color-ink-lightest: #222222FF !important;
+  --lexxy-color-ink-inverted: #0B0B0BFF !important;
+
+  --lexxy-color-accent-dark: #008BFFFF !important;
+  --lexxy-color-accent-medium: #57ACFFFF !important;
+  --lexxy-color-accent-light: #46576BFF !important;
+  --lexxy-color-accent-lightest: #2C3C4FFF !important;
+}
+
+/* Heading buttons have transparent background, resulting in overlapped text */
+lexxy-toolbar-dropdown button {
+  background: #333;
+}
+
+/* Background is dark as is the text, make it white for contrast */
+lexxy-table-tools button {
+  background: white
+}

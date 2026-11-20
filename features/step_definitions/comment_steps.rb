@@ -411,3 +411,38 @@ end
 When "I reply on a new page" do
   visit find(:link, "Reply")["href"]
 end
+
+# Capybara's fill_in method doesn't work with contenteditable div elements. Instead, let's use Capybara::Node::Element's
+# send_keys method, which also accepts chords.
+# parse_arr proc takes strings in either array ("[:control, z]") or normal ("foo") format, for arrays recursively calls 
+# itself on every element, for strings starting with colons converts them to symbols and returns that, for other strings
+# returns themselves.
+When "I send keys {string} to {string}" do |keys, target|
+  parse_arr = lambda { |val|
+    if (md = /\[(.*)\]/.match(val))
+      [*md[1].split(",").map { |v| parse_arr.call(v) }]
+    elsif (md = /^:(.*)/.match(val))
+      md[1].to_sym
+    else
+      val.strip
+    end
+  }
+  find(target).base.send_keys(parse_arr.call(keys))
+end
+
+When "I send keys {string} to Lexxy" do |keys|
+  step %{I send keys "#{keys}" to ".lexxy-editor__content"}
+end
+
+When "I send keys {string} to HTML editor" do |keys|
+  step %{I send keys "#{keys}" to 'textarea.comment_form'}
+end
+
+# This time use Session's method to simulate pressing a key on a page
+When "I press the {string} key" do |key|
+  send_keys(key.to_sym)
+end
+
+Given "maximum comment length is {int}" do |comment_max|
+  allow(ArchiveConfig).to receive(:COMMENT_MAX).and_return(comment_max)
+end

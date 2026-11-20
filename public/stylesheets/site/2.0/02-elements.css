@@ -140,11 +140,11 @@ pre {
   white-space: pre-wrap;
 }
 
-strong, b {
+strong, b, .lexxy-content__bold {
   font-weight: bold;
 }
 
-em, cite, i {
+em, cite, i, .lexxy-content__italic {
   font-style: oblique;
 }
 
@@ -152,11 +152,15 @@ cite em, em cite, cite i, i cite, i em, em i, em em, i i, cite cite {
   font-style: normal;
 }
 
-em cite, i cite, ins, u {
+.lexxy-content__strikethrough.lexxy-content__underline {
+  text-decoration: underline line-through;
+}
+
+em cite, i cite, ins, u, .lexxy-content__underline {
   text-decoration: underline;
 }
 
-del, strike {
+del, strike, .lexxy-content__strikethrough {
   text-decoration: line-through;
 }
 

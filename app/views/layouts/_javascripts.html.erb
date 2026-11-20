@@ -2,6 +2,8 @@
 <% if allow_tinymce?(controller) %>
   <%= yield :tinymce %>
 <% end %>
+<!-- the js and CSS of Lexxy only gets loaded when use_lexxy is called, so we can yield it here without problems. -->
+<%= yield :lexxy %>
 <script src="/javascripts/jquery.min.js" type="text/javascript"></script>
 <script src="/javascripts/jquery-ui.min.js" type="text/javascript"></script>
 

@@ -54,8 +54,8 @@
     <li><a class="html-link" href="#"><%= ts("HTML") %></a></li>
   </ul>
   <p class="rtf-html-instructions note">
-    <span class="html-notes"><%= allowed_html_instructions %></span>
-    <span class="hidden rtf-notes"><%= rich_text_instructions %></span>
+    <span class="html-notes"><%= allowed_html_instructions(page: "work") %></span>
+    <span class="hidden rtf-notes"><%= rich_text_instructions(page: "work") %></span>
   </p>
   <div class="rtf-html-field">
     <%= f.text_area :content, id: "content", class: "mce-editor observe_textlength large" %>

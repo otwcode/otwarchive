@@ -310,8 +310,8 @@
         <li><a class="html-link" href="#"><%= ts("HTML") %></a></li>
       </ul>
       <p class="rtf-html-instructions note">
-        <span class="html-notes"><%= allowed_html_instructions %></span>
-        <span class="hidden rtf-notes"><%= rich_text_instructions %></span>
+        <span class="html-notes"><%= allowed_html_instructions(page: "work") %></span>
+        <span class="hidden rtf-notes"><%= rich_text_instructions(page: "work") %></span>
       </p>
       <p class="notice">
         <%= ts("<strong>Note:</strong> Text entered in the posting form is <strong>not</strong> automatically saved. Always keep a backup copy of your work.").html_safe %>

@@ -9,7 +9,7 @@ gem 'bundler'
 gem "rails", "~> 8.1.0"
 gem "rails-i18n", "~> 8.0", git: "https://github.com/svenfuchs/rails-i18n", ref: "54c1c7c2fdcc311427ec6f1dadd298a60db1ddef"
 gem "rack", "~> 2.2"
-gem "sprockets", "< 4"
+gem "propshaft"
 
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers'
 gem 'actionpack-page_caching'
@@ -183,3 +183,6 @@ end
 
 gem "image_processing", "~> 1.14"
 gem "ostruct"
+
+gem "lexxy", "~> 1.0.4"
+gem "importmap-rails", "~> 2.2"
