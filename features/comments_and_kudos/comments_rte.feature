@@ -226,9 +226,9 @@ Feature: Rich text editor for Comments
 
   Scenario Outline: Trying to send too long of a comment with RTE
     Given <commentable>
+      And maximum comment length is 10
       And I am logged in as "commenter"
       And I view <commentable> with comments
-      And maximum comment length is 10
     Then I should see "Rich Text"
     When I follow "Rich Text"
       And I send keys "The quick brown fox jumps over the lazy dog" to Lexxy
@@ -242,9 +242,9 @@ Feature: Rich text editor for Comments
 
   Scenario Outline: Trying to send too long of a comment with HTML editor
     Given <commentable>
+      And maximum comment length is 10
       And I am logged in as "commenter"
       And I view <commentable> with comments
-      And maximum comment length is 10
     When I send keys "The quick brown fox jumps over the lazy dog" to HTML editor
       And I press "Comment"
     Then I should not see "Comment created!"
@@ -256,9 +256,9 @@ Feature: Rich text editor for Comments
 
   Scenario Outline: Checking character counter while using RTE
     Given <commentable>
+      And maximum comment length is 10000
       And I am logged in as "commenter"
       And I view <commentable> with comments
-      And maximum comment length is 10000
     Then I should see "Rich Text"
     When I follow "Rich Text"
       And I send keys "a" to Lexxy
