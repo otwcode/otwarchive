@@ -221,7 +221,7 @@ LiveValidation.prototype = {
      */
     getElementType: function(){
       switch(true){
-        case (this.element.nodeName.toUpperCase() == 'TEXTAREA' || this.element.nodeName.toUpperCase() == 'LEXXY-EDITOR'):
+        case (this.element.nodeName.toUpperCase() == 'TEXTAREA'):
         return LiveValidation.TEXTAREA;
       case (this.element.nodeName.toUpperCase() == 'INPUT' && this.element.type.toUpperCase() == 'TEXT'):
         return LiveValidation.TEXT;
