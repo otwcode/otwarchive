@@ -115,7 +115,7 @@
       <input type="hidden" id="lexxy_validation"
              data-commentmax="<%= ArchiveConfig.COMMENT_MAX %>"
              data-commenttoolong="<%= t(".comment_too_long", count: ArchiveConfig.COMMENT_MAX) %>"
-             data-commenttooshort="<%= t(".comment_too_short") %>"/>
+             data-commenttooshort="<%= t(".comment_too_short") %>" />
       <% unless logged_in? %>
         <p class="footnote"><%= t(".guest_edit_warning") %></p>
       <% end %>

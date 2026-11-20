@@ -69,10 +69,10 @@ class EditingField {
         this.html_link.classList.add("current");
 
         // Validation. Selects the active editor and adds a warning to it when it's empty or longer than max.
-        const submit_button = this.comment_field.querySelector("input[type=submit]")
+        const submit_button = this.comment_field.querySelector("input[type=submit]");
         submit_button.onclick = () => {
             let validation = this.comment_field.querySelector("#lexxy_validation");
-            let active_editor = this.html_link.classList.contains("current") ? this.html_editor : this.rte
+            let active_editor = this.html_link.classList.contains("current") ? this.html_editor : this.rte;
 
             if (active_editor.value.length === 0) {
                 active_editor.setCustomValidity(validation.dataset.commenttooshort);
