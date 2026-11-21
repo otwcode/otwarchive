@@ -29,11 +29,6 @@ every 1.days, at: 'midnight' do
   command "date"
 end
 
-# Purge user accounts that haven't been activated
-every 1.days, at: '6:31 am' do
-  rake "admin:purge_unvalidated_users"
-end
-
 # Unsuspend selected users
 every 1.day, at: '6:51 am'  do
   rake "admin:unsuspend_users"

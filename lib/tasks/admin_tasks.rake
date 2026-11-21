@@ -13,20 +13,4 @@ namespace :admin do
     end
     puts "Sign-up notification emails resent"
   end
-
-  desc "Purge unvalidated accounts created more than 2 weeks ago"
-  task(:purge_unvalidated_users => :environment) do
-    users = User.where("confirmed_at IS NULL AND created_at < ?", AdminSetting.current.days_to_purge_unactivated.weeks.ago)
-    puts users.map(&:login).join(", ")
-    users.map(&:destroy)
-    puts "Unvalidated accounts created more than two weeks ago have been purged"
-
-    # Purged users are allowed to reuse their invitations:
-    invite_ids = users.map(&:invitation_id)
-    Invitation.includes(:creator).where(id: invite_ids).each do |invite|
-      invite.update(redeemed_at: nil, invitee: nil)
-    end
-    puts "Invitations for the purged accounts have been reset"
-  end
-
 end

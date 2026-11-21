@@ -403,6 +403,10 @@ en:
     new:
       page_title: Request Invitations
   users:
+    activate:
+      invalid_key:
+        one: Your activation key is invalid. If you didn't activate within %{count} day, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.
+        other: Your activation key is invalid. If you didn't activate within %{count} days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.
     change_email:
       page_title: Change Email
     change_password:
