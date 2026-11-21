@@ -163,54 +163,52 @@ Feature: Authenticate Admin Users With TOTP 2FA
     Then I should see "Incorrect two-step verification code."
       And I should not see "Successfully logged in"
 
-  # TODO: AO3-7220: Enable the following tests with the requisite changes
+  Scenario: Admins with TOTP 2FA enabled can reset their password after providing their code
+    Given the following admin exists
+      | login | password     | email             |
+      | admin | testpassword | admin@example.com |
+      And admin "admin" has TOTP 2FA enabled
+      And all emails have been delivered
+    When I go to the admin login page
+      And I follow "Forgot admin password?"
+      And I fill in "Admin username" with "admin"
+      And I press "Reset Admin Password"
+      And 1 email should be delivered to "admin@example.com"
+      And I follow "Change my password" in the email
+      And I fill in "New password" with "newpassword"
+      And I fill in "Confirm new password" with "newpassword"
+      And I fill in a valid TOTP recovery code for admin "admin"
+      And I press "Set Admin Password"
+    Then I should see "Your password has been changed. You are now logged in."
 
-#  Scenario: Admins with TOTP 2FA enabled can reset their password after providing their code
-#    Given the following admin exists
-#      | login | password     | email             |
-#      | admin | testpassword | admin@example.com |
-#      And admin "admin" has TOTP 2FA enabled
-#      And all emails have been delivered
-#    When I go to the admin login page
-#      And I follow "Forgot admin password?"
-#      And I fill in "Admin username" with "admin"
-#      And I press "Reset Admin Password"
-#      And 1 email should be delivered to "admin@example.com"
-#      And I follow "Change my password" in the email
-#      And I fill in "New password" with "newpassword"
-#      And I fill in "Confirm new password" with "newpassword"
-#      And I fill in a valid TOTP recovery code for admin "admin"
-#      And I press "Set Admin Password"
-#    Then I should see "Your password has been changed. You are now logged in."
-#
-#  Scenario: Admins with TOTP 2FA enabled cannot reset their password if they provide a wrong code
-#    Given the following admin exists
-#      | login | password     | email             |
-#      | admin | testpassword | admin@example.com |
-#      And admin "admin" has TOTP 2FA enabled
-#      And all emails have been delivered
-#    When I go to the admin login page
-#      And I follow "Forgot admin password?"
-#      And I fill in "Admin username" with "admin"
-#      And I press "Reset Admin Password"
-#      And 1 email should be delivered to "admin@example.com"
-#      And I follow "Change my password" in the email
-#      And I fill in "New password" with "newpassword"
-#      And I fill in "Confirm new password" with "newpassword"
-#    When I fill in "6-digit verification code" with "000000"
-#      And I press "Set Admin Password"
-#    Then I should see "Incorrect two-step verification code."
-#      And I should not see "Your password has been changed successfully."
-#
-#  Scenario: Admins with TOTP 2FA disabled cannot see the TOTP field when resetting their password
-#    Given the following admin exists
-#      | login | password     | email             |
-#      | admin | testpassword | admin@example.com |
-#      And all emails have been delivered
-#    When I go to the admin login page
-#      And I follow "Forgot admin password?"
-#      And I fill in "Admin username" with "admin"
-#      And I press "Reset Admin Password"
-#      And 1 email should be delivered to "admin@example.com"
-#      And I follow "Change my password" in the email
-#    Then I should not see "Two-Step Verification"
+  Scenario: Admins with TOTP 2FA enabled cannot reset their password if they provide a wrong code
+    Given the following admin exists
+      | login | password     | email             |
+      | admin | testpassword | admin@example.com |
+      And admin "admin" has TOTP 2FA enabled
+      And all emails have been delivered
+    When I go to the admin login page
+      And I follow "Forgot admin password?"
+      And I fill in "Admin username" with "admin"
+      And I press "Reset Admin Password"
+      And 1 email should be delivered to "admin@example.com"
+      And I follow "Change my password" in the email
+      And I fill in "New password" with "newpassword"
+      And I fill in "Confirm new password" with "newpassword"
+    When I fill in "6-digit verification code" with "000000"
+      And I press "Set Admin Password"
+    Then I should see "Incorrect two-step verification code."
+      And I should not see "Your password has been changed successfully."
+
+  Scenario: Admins with TOTP 2FA disabled cannot see the TOTP field when resetting their password
+    Given the following admin exists
+      | login | password     | email             |
+      | admin | testpassword | admin@example.com |
+      And all emails have been delivered
+    When I go to the admin login page
+      And I follow "Forgot admin password?"
+      And I fill in "Admin username" with "admin"
+      And I press "Reset Admin Password"
+      And 1 email should be delivered to "admin@example.com"
+      And I follow "Change my password" in the email
+    Then I should not see "Two-Step Verification"
