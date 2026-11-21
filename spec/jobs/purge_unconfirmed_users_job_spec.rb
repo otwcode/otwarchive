@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe PurgeUnconfirmedUsersJob do
-  let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+  let(:admin_setting) { AdminSetting.first || AdminSetting.create! }
 
   before do
     # value is in weeks.
