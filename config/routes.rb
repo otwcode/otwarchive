@@ -657,6 +657,7 @@ Rails.application.routes.draw do
   # Redirects for moved help files
   get "/help/chapter-title.html", to: redirect("/help/chapters_title")
   get "/help/add-collectible-to-collection.html", to: redirect("/help/collectibles_add_to_collection")
+  get "/help/prompt-restriction-character-and-relationship.html", to: redirect("/help/collections_prompt_restriction_character_and_relationship")
   get "/help/csv-download.html", to: redirect("/help/csv_download")
   get "/first_login_help", to: redirect("/help/first_login")
   get "/help/html-help.html", to: redirect("/help/html")
