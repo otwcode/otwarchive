@@ -3080,6 +3080,9 @@ en:
   prompt_restrictions:
     prompt_restriction_form:
       collections_prompt_restriction_character_and_relationship_help_title: Prompt restriction character and relationship
+      tag_type_settings:
+        character: 'Character Settings:'
+        relationship: 'Relationship Settings:'
   prompts:
     prompt_form:
       title_requirements: Up to %{maximum} characters, cannot begin with =, +, -, @ or a whitespace character.
