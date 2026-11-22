@@ -22,27 +22,26 @@ describe InviteRequest do
     end
 
     context "Duplicate email" do
-      before :all do
-        @original_request = create(:invite_request, email: "thegodthor@gmail.com")
-      end
+      let!(:original_request) { create(:invite_request, email: "thegodthor@gmail.com") }
 
       it "should not let you sign up again with the same email" do
-        dup_request = build(:invite_request, email: @original_request.email)
+        dup_request = build(:invite_request, email: original_request.email)
         expect(dup_request.valid?).to be_falsey
-        expect(dup_request.errors[:email]).to include("is already part of our queue.")
+        expect(dup_request.errors[:simplified_email]).to include("is already part of our queue.")
       end
 
       it "should not allow duplicates with periods and plus signs" do
         dup_request = build(:invite_request, email: "the.god.thor+marvel@gmail.com")
         expect(dup_request.valid?).to be_falsey
-        expect(dup_request.errors[:email]).to include("is already part of our queue.")
+        expect(dup_request.errors[:simplified_email]).to include("is already part of our queue.")
       end
 
-      it "should not return error for duplicate simplified email if duplicate raw email error already present" do
-        dup_request = build(:invite_request, email: "the.god.thor+marvel@gmail.com")
+      it "should not return error for duplicate raw email if duplicate simplified error already present" do
+        dup_request = build(:invite_request, email: "thegodthor@gmail.com")
         dup_request.valid?
-        expect(dup_request.errors[:email].count).to eq(1)
-        expect(dup_request.errors[:email]).to include("is already part of our queue.")
+        expect(dup_request.errors[:email].count).to eq(0)
+        expect(dup_request.errors[:simplified_email].count).to eq(1)
+        expect(dup_request.errors[:simplified_email]).to include("is already part of our queue.")
       end
     end
   end
