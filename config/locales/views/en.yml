@@ -365,13 +365,17 @@ en:
       edit:
         describedby:
           password_length: "%{minimum} to %{maximum} characters"
+          totp_attempt: If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
+        enter_totp: Enter the verification code from your authenticator app to finish resetting your admin password.
         label:
           confirmation: Confirm new password
           password: New password
+          totp_attempt: 6-digit verification code
         landmark:
           submit: Submit
         page_heading: Set My Admin Password
         submit: Set Admin Password
+        totp_heading: Two-Step Verification
       new:
         instructions: If you've forgotten or would like to change your admin password, we can send instructions that will allow you to reset it. Please tell us the username for your admin account.
         page_heading: Forgotten your admin password?

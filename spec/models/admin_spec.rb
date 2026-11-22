@@ -139,4 +139,43 @@ describe Admin, :ready do
       expect(admin.otp_backup_codes).not_to include(*original_codes)
     end
   end
+
+  describe "#valid_totp_attempt?" do
+    let(:admin) { create(:admin) }
+    let!(:backup_codes) { admin.generate_otp_backup_codes! }
+
+    before do
+      admin.generate_totp_secret_if_missing!
+      admin.enable_totp!
+    end
+
+    it "accepts a code from the authenticator app" do
+      expect(admin.valid_totp_attempt?(admin.current_otp)).to be(true)
+    end
+
+    it "doesn't accept the same authenticator app code twice" do
+      code = admin.current_otp
+      admin.valid_totp_attempt?(code)
+
+      expect(admin.valid_totp_attempt?(code)).to be(false)
+    end
+
+    it "accepts a backup code" do
+      expect(admin.valid_totp_attempt?(backup_codes.first)).to be(true)
+    end
+
+    it "doesn't accept the same backup code twice" do
+      admin.valid_totp_attempt?(backup_codes.first)
+
+      expect(admin.valid_totp_attempt?(backup_codes.first)).to be(false)
+    end
+
+    it "doesn't accept a wrong code" do
+      expect(admin.valid_totp_attempt?("000000")).to be(false)
+    end
+
+    it "doesn't accept a blank code" do
+      expect(admin.valid_totp_attempt?(nil)).to be(false)
+    end
+  end
 end

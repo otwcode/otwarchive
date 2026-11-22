@@ -33,6 +33,8 @@ en:
         banner_on: Setting banner back on for all users. This may take some time.
         minor_edit: Updating banner for users who have not already dismissed it. This may take some time.
         success: Banner successfully updated.
+    passwords:
+      invalid_totp: Incorrect two-step verification code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
     sessions:
       invalid_totp: Incorrect two-step verification code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
     support_notices:

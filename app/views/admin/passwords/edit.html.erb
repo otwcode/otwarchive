@@ -1,6 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= t(".page_heading") %></h2>
 <%= error_messages_for resource %>
+<% if @totp_admin %>
+  <h3 class="heading"><%= t(".totp_heading") %></h3>
+  <p class="note"><%= t(".enter_totp") %></p>
+<% end %>
 <!--/descriptions-->
 
 <!--main content-->
@@ -19,6 +23,15 @@
     </dd>
     <dt><%= label_tag :edit_password_confirmation, t(".label.confirmation") %></dt>
     <dd><%= f.password_field :password_confirmation, id: :edit_password_confirmation %></dd>
+    <% if @totp_admin %>
+      <dt><%= label_tag :totp_attempt, t(".label.totp_attempt") %></dt>
+      <dd>
+        <%= text_field_tag :totp_attempt, nil, autocomplete: "one-time-code", "aria-describedby" => "totp-field-description" %>
+        <p class="footnote" id="totp-field-description">
+          <%= t(".describedby.totp_attempt") %>
+        </p>
+      </dd>
+    <% end %>
     <dt class="landmark"><%= t(".landmark.submit") %></dt>
     <dd class="submit actions"><%= f.submit t(".submit") %></dd>
   </dl>

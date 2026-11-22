@@ -28,11 +28,6 @@ class Admin
   
     private
   
-    def valid_totp_attempt?(admin)
-      admin.validate_and_consume_otp!(params[:totp_attempt]) ||
-        admin.invalidate_otp_backup_code!(params[:totp_attempt])
-    end
-  
     def prompt_for_otp_two_factor(admin)
       @admin = admin
   
@@ -43,7 +38,7 @@ class Admin
     end
   
     def authenticate_admin_with_otp_two_factor(admin)
-      if valid_totp_attempt?(admin)
+      if admin.valid_totp_attempt?(params[:totp_attempt])
         pwned = session[:pwned]
         # Remove any lingering admin data from login
         session.delete(:otp_admin_id)
