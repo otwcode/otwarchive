@@ -26,9 +26,7 @@
     <% if @totp_admin %>
       <dt><%= label_tag :totp_attempt, t(".label.totp_attempt") %></dt>
       <dd>
-        <%= text_field_tag :totp_attempt, nil,
-                           autocomplete: "one-time-code",
-                           "aria-describedby" => "totp-field-description" %>
+        <%= text_field_tag :totp_attempt, nil, autocomplete: "one-time-code", "aria-describedby" => "totp-field-description" %>
         <p class="footnote" id="totp-field-description">
           <%= t(".describedby.totp_attempt") %>
         </p>
