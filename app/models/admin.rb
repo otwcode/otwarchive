@@ -78,6 +78,12 @@ class Admin < ApplicationRecord
     otp_required_for_login
   end
 
+  # Check a code from the authenticator app or one of the backup codes.
+  # Valid codes are consumed so they can't be used again.
+  def valid_totp_attempt?(code)
+    validate_and_consume_otp!(code) || invalidate_otp_backup_code!(code)
+  end
+
   # URI for TOTP two-factor QR code
   def totp_qr_code_uri
     otp_provisioning_uri(login, issuer: ArchiveConfig.APP_NAME)

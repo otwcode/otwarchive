@@ -22,7 +22,8 @@ class Admin::PasswordsController < Devise::PasswordsController
   end
 
   def require_valid_totp_attempt
-    return if @totp_admin.nil? || valid_totp_attempt?(@totp_admin)
+    return if @totp_admin.nil? ||
+              @totp_admin.valid_totp_attempt?(params[:totp_attempt])
 
     self.resource = resource_class.new
     set_minimum_password_length
@@ -30,10 +31,5 @@ class Admin::PasswordsController < Devise::PasswordsController
 
     flash.now[:error] = t("admin.passwords.invalid_totp")
     render :edit
-  end
-
-  def valid_totp_attempt?(admin)
-    admin.validate_and_consume_otp!(params[:totp_attempt]) ||
-      admin.invalidate_otp_backup_code!(params[:totp_attempt])
   end
 end
