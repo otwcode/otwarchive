@@ -1,10 +1,9 @@
 class InviteRequest < ApplicationRecord
   validates :email, presence: true, email_format: true
-  validates :email, uniqueness: { message: "is already part of our queue." }
+  validates :simplified_email, uniqueness: true
   before_validation :set_simplified_email, on: :create
   validate :check_admin_banned_list, on: :create
   validate :compare_with_users, on: :create
-  validate :simplified_email_uniqueness, on: :create
 
   # Borrow the blacklist cleaner but just strip out all the periods for all domains
   def set_simplified_email
@@ -12,14 +11,6 @@ class InviteRequest < ApplicationRecord
 
     simplified = EmailCanonicalizer.canonicalize(email).split("@")
     self.simplified_email = simplified.first.delete(".").gsub(/\+.+$/, "") + "@#{simplified.last}"
-  end
-
-  # Doing this with a method so the error message makes more sense
-  def simplified_email_uniqueness
-    # Exit if raw email uniqueness error already exists
-    return if errors.of_kind?(:email, :taken)
-
-    errors.add(:email, "is already part of our queue.") if InviteRequest.exists?(simplified_email: simplified_email)
   end
 
   def proposed_fill_time

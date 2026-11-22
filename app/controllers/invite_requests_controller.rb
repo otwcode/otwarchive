@@ -65,6 +65,10 @@ class InviteRequestsController < ApplicationController
     else
       render action: :index
     end
+  rescue ActiveRecord::RecordNotUnique
+    # If we pass Rails validations but get rejected by database unique indices, use the usual duplicate error message.
+    @invite_request.errors.add(:simplified_email, :taken)
+    render action: :index
   end
 
   def manage

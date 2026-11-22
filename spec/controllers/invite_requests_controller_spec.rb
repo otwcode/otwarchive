@@ -85,6 +85,37 @@ describe InviteRequestsController do
       expect(response).to render_template("index")
     end
 
+    context "when using a taken email" do
+      let!(:invite_request) { create(:invite_request, email: "foo@gmail.com") }
+
+      it "shows a validation error" do
+        post :create, params: { invite_request: { email: "foo+bar@gmail.com" } }
+        expect(response).to render_template(:index)
+        expect(assigns[:invite_request].errors.full_messages).to include("Email is already part of our queue.")
+      end
+    end
+
+    context "when using a taken email despite Rails validations" do
+      # https://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of-label-Concurrency+and+integrity
+      #
+      # We fake this scenario by skipping Rails validations.
+      before do
+        allow_any_instance_of(InviteRequest).to receive(:save).and_call_original
+        allow_any_instance_of(InviteRequest).to receive(:save).with(no_args) do |request|
+          request.set_simplified_email # this normally runs before validation so it'd get skipped because we don't validate
+          request.save(validate: false) # rubocop:disable Rails/SaveBang
+        end
+
+        create(:invite_request, email: "foo@gmail.com")
+      end
+
+      it "shows a validation error" do
+        post :create, params: { invite_request: { email: "fo.o+bar@googlemail.com" } }
+        expect(response).to render_template(:index)
+        expect(assigns[:invite_request].errors.full_messages).to include("Email is already part of our queue.")
+      end
+    end
+
     context "with valid emails" do
       let(:ip) { "127.0.0.1" }
 
