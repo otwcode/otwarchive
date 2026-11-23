@@ -150,6 +150,13 @@ describe LanguagesController do
           expect(response).to render_template("edit")
         end
 
+        it "responds with error 404 for a language that does not exist" do
+          fake_login_admin(admin)
+          expect do
+            get :edit, params: { id: "notalanguage" }
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+
         it "redirects for the default language" do
           fake_login_admin(admin)
           get :edit, params: { id: "en" }
