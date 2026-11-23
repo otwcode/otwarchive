@@ -69,7 +69,7 @@ class WorksController < ApplicationController
 
     if params[:include_work_search].present?
       include_params = work_filter_params(:include_work_search)
-      include_params.keys.each do |key|
+      include_params.each_key do |key|
         options[key] ||= []
         options[key] << include_params[key]
         options[key].flatten!
@@ -78,7 +78,7 @@ class WorksController < ApplicationController
 
     if params[:exclude_work_search].present?
       exclude_params = work_filter_params(:exclude_work_search)
-      exclude_params.keys.each do |key|
+      exclude_params.each_key do |key|
         options[:excluded_tag_ids] ||= []
         options[:excluded_tag_ids] << exclude_params[key]
         options[:excluded_tag_ids].flatten!

@@ -413,7 +413,7 @@ describe BookmarksController do
       let!(:fandom) { create(:canonical_fandom) }
       let!(:to_filter) { create(:canonical_fandom) }
       let!(:work_with_tag) { create(:work, fandom_string: "#{fandom.name},#{to_filter.name}") }
-      let!(:work_without_tag) { create(:work, fandom_string: "#{fandom.name}") }
+      let!(:work_without_tag) { create(:work, fandom_string: fandom.name) }
       let!(:bookmark_with_tag) { create(:bookmark, bookmarkable: work_with_tag) }
       let!(:bookmark_without_tag) { create(:bookmark, bookmarkable: work_without_tag) }
 
@@ -439,7 +439,7 @@ describe BookmarksController do
 
       context "with an exclude filters" do
         it "doesn't returns bookmarks with the tag" do
-          get :index, params: { exclude_bookmark_search: { freeform_ids: [to_filter.id]}, bookmark_search: { sort_column: "created_at" }, tag_id: fandom.name }
+          get :index, params: { exclude_bookmark_search: { freeform_ids: [to_filter.id] }, bookmark_search: { sort_column: "created_at" }, tag_id: fandom.name }
           expect(assigns(:bookmarkable_items).items).not_to include(work_with_tag)
           expect(assigns(:bookmarkable_items).items).to include(work_without_tag)
         end

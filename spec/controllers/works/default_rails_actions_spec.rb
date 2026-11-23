@@ -625,7 +625,7 @@ describe WorksController, work_search: true do
 
       context "with an exclude filters" do
         it "doesn't returns works with the tag" do
-          get :index, params: { exclude_work_search: { freeform_ids: [to_filter.id]}, work_search: { sort_column: "revised_at" }, tag_id: fandom.name }
+          get :index, params: { exclude_work_search: { freeform_ids: [to_filter.id] }, work_search: { sort_column: "revised_at" }, tag_id: fandom.name }
           expect(assigns(:works).items).not_to include(work_with_tag)
           expect(assigns(:works).items).to include(work)
         end

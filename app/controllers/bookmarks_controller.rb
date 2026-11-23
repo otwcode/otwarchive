@@ -76,7 +76,7 @@ class BookmarksController < ApplicationController
 
       if params[:include_bookmark_search].present?
         include_params = bookmark_filter_params(:include_bookmark_search)
-        include_params.keys.each do |key|
+        include_params.each_key do |key|
           options[key] ||= []
           options[key] << include_params[key]
           options[key].flatten!
@@ -85,7 +85,7 @@ class BookmarksController < ApplicationController
 
       if params[:exclude_bookmark_search].present?
         exclude_params = bookmark_filter_params(:exclude_bookmark_search)
-        exclude_params.keys.each do |key|
+        exclude_params.each_key do |key|
           # Keep bookmarker tags separate, so we can search for them on bookmarks
           # and search for the rest on bookmarkables
           options_key = key == "tag_ids" ? :excluded_bookmark_tag_ids : :excluded_tag_ids
