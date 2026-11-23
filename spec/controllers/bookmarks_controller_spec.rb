@@ -409,7 +409,7 @@ describe BookmarksController do
       end
     end
 
-    context "filtering" do
+    context "filtering", bookmark_search: true do
       let!(:fandom) { create(:canonical_fandom) }
       let!(:to_filter) { create(:canonical_fandom) }
       let!(:work_with_tag) { create(:work, fandom_string: "#{fandom.name},#{to_filter.name}") }
