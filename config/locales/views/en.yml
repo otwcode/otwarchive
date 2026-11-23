@@ -3673,7 +3673,7 @@ en:
       byline:
         add_co-creators: Add co-creators
         ambiguous_pseuds: 'There''s more than one user with the pseud %{name}. Please choose the one you want:'
-        creators: Creator/Pseud(s)
+        creators: Creator/pseud(s)
         current_co-creators: Current co-creators
         invited_co-creators: Invited co-creators
         remove_self: Remove me as co-creator
