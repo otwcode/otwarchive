@@ -408,6 +408,51 @@ describe BookmarksController do
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
+
+    context "filtering", bookmark_search: true do
+      let!(:fandom) { create(:canonical_fandom) }
+      let!(:to_filter) { create(:canonical_fandom) }
+      let!(:work_with_tag) { create(:work, fandom_string: "#{fandom.name},#{to_filter.name}") }
+      let!(:work_without_tag) { create(:work, fandom_string: fandom.name) }
+      let!(:bookmark_with_tag) { create(:bookmark, bookmarkable: work_with_tag) }
+      let!(:bookmark_without_tag) { create(:bookmark, bookmarkable: work_without_tag) }
+
+      before do
+        run_all_indexing_jobs
+      end
+
+      context "with an include filters" do
+        it "doesn't returns bookmarks without the tag" do
+          get :index, params: { include_bookmark_search: { freeform_ids: [to_filter.id] }, bookmark_search: { sort_column: "created_at" }, tag_id: fandom.name }
+          expect(assigns(:bookmarkable_items).items).to include(work_with_tag)
+          expect(assigns(:bookmarkable_items).items).not_to include(work_without_tag)
+        end
+      end
+
+      context "with invalid include filters" do
+        it "discards the invalid filter" do
+          expect do
+            get :index, params: { include_bookmark_search: { freeform_ids: { "0": to_filter.id } }, bookmark_search: { sort_column: "created_at" }, tag_id: fandom.name }
+          end.to raise_exception(ActionController::UnpermittedParameters)
+        end
+      end
+
+      context "with an exclude filters" do
+        it "doesn't returns bookmarks with the tag" do
+          get :index, params: { exclude_bookmark_search: { freeform_ids: [to_filter.id] }, bookmark_search: { sort_column: "created_at" }, tag_id: fandom.name }
+          expect(assigns(:bookmarkable_items).items).not_to include(work_with_tag)
+          expect(assigns(:bookmarkable_items).items).to include(work_without_tag)
+        end
+      end
+
+      context "with invalid exclude filters" do
+        it "discards the invalid filter" do
+          expect do
+            get :index, params: { exclude_bookmark_search: { freeform_ids: { "0": to_filter.id } }, bookmark_search: { sort_column: "created_at" }, tag_id: fandom.name }
+          end.to raise_exception(ActionController::UnpermittedParameters)
+        end
+      end
+    end
   end
 
   describe "show" do
