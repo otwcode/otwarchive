@@ -1,19 +1,19 @@
-<dt class="notes"><%= type == "chapter" ? ts("Chapter Notes") : ts("Notes") %></dt>
+<dt class="notes"><%= type == "chapter" ? t(".chapter_notes") : t(".notes") %></dt>
 <dd class="notes">
   <ul>
     <li class="start">
       <% if !params[:claim_id].blank? %>
           <%= check_box_tag "front-notes-options-show", "1", true, :class => "toggle_formfield" %>
-          <%= label_tag 'front-notes-options-show', ts("at the beginning") %>
+          <%= label_tag "front-notes-options-show", t(".at_beginning") %>
         <% else %>
           <%= check_box_tag "front-notes-options-show", "1", !f.object.notes.blank?, :class => "toggle_formfield" %>
-          <%= label_tag 'front-notes-options-show', ts("at the beginning") %>
+          <%= label_tag "front-notes-options-show", t(".at_beginning") %>
         <% end %>
       <span class="warning<%= f.object.notes.blank? ? ' hidden' : '' %>">
-        <%= ts("Warning: Unchecking this box will delete the existing beginning note.") %>
+        <%= t(".warning_beginning_notes") %>
       </span>
       <fieldset id="front-notes-options" class="start">
-        <legend><%= f.label :notes, ts("Notes") %></legend>
+        <legend><%= f.label :notes, t(".legend_notes") %></legend>
         <% if @posting_claim && @posting_claim.prompt_description.present? %>
           <%= f.text_area :notes, :class => "observe_textlength", :value => "<strong>Prompt:</strong> #{@posting_claim.prompt_description}" %>
           <%= generate_countdown_html("#{type}_notes", ArchiveConfig.NOTES_MAX) %>
@@ -26,12 +26,12 @@
 
     <li class="end">
       <%= check_box_tag "end-notes-options-show", "1", !f.object.endnotes.blank?, :class => "toggle_formfield" %>
-      <%= label_tag 'end-notes-options-show', ts("at the end") %>
+      <%= label_tag "end-notes-options-show", t(".at_end") %>
       <span class="warning<%= f.object.endnotes.blank? ? ' hidden' : '' %>">
-        <%= ts("Warning: Unchecking this box will delete the existing end note.") %>
+        <%= t(".warning_end_notes") %>
       </span>
       <fieldset id="end-notes-options" class="end">
-        <legend><%= f.label :endnotes, ts("End Notes") %></legend>
+        <legend><%= f.label :endnotes, t(".legend_end_notes") %></legend>
         <%= f.text_area :endnotes, :class => "observe_textlength" %>
         <%= generate_countdown_html("#{type}_endnotes", ArchiveConfig.NOTES_MAX) %>
       </fieldset>

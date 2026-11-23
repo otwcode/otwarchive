@@ -193,7 +193,7 @@ module ApplicationHelper
   def generate_countdown_html(field_id, max)
     max = max.to_s
     span = content_tag(:span, max, id: "#{field_id}_counter", class: "value", "data-maxlength" => max)
-    content_tag(:p, span + ts(' characters left'), class: "character_counter", "tabindex" => 0)
+    content_tag(:p, t("application_helper.generate_countdown_html.characters_left_html", characters: span), class: "character_counter", "tabindex" => 0)
   end
 
   # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc)
