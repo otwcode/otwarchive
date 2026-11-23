@@ -68,17 +68,19 @@ class WorksController < ApplicationController
     end
 
     if params[:include_work_search].present?
-      params[:include_work_search].keys.each do |key|
+      include_params = work_filter_params(:include_work_search)
+      include_params.keys.each do |key|
         options[key] ||= []
-        options[key] << params[:include_work_search][key]
+        options[key] << include_params[key]
         options[key].flatten!
       end
     end
 
     if params[:exclude_work_search].present?
-      params[:exclude_work_search].keys.each do |key|
+      exclude_params = work_filter_params(:exclude_work_search)
+      exclude_params.keys.each do |key|
         options[:excluded_tag_ids] ||= []
-        options[:excluded_tag_ids] << params[:exclude_work_search][key]
+        options[:excluded_tag_ids] << exclude_params[key]
         options[:excluded_tag_ids].flatten!
       end
     end
@@ -984,4 +986,16 @@ class WorksController < ApplicationController
     )
   end
 
+  def work_filter_params(key)
+    params[key].permit(
+      archive_warning_ids: [],
+      warning_ids: [], # backwards compatibility
+      category_ids: [],
+      rating_ids: [],
+      fandom_ids: [],
+      character_ids: [],
+      relationship_ids: [],
+      freeform_ids: []
+    )
+  end
 end

@@ -75,20 +75,22 @@ class BookmarksController < ApplicationController
       options = params[:bookmark_search].present? ? bookmark_search_params : {}
 
       if params[:include_bookmark_search].present?
-        params[:include_bookmark_search].keys.each do |key|
+        include_params = bookmark_filter_params(:include_bookmark_search)
+        include_params.keys.each do |key|
           options[key] ||= []
-          options[key] << params[:include_bookmark_search][key]
+          options[key] << include_params[key]
           options[key].flatten!
         end
       end
 
       if params[:exclude_bookmark_search].present?
-        params[:exclude_bookmark_search].keys.each do |key|
+        exclude_params = bookmark_filter_params(:exclude_bookmark_search)
+        exclude_params.keys.each do |key|
           # Keep bookmarker tags separate, so we can search for them on bookmarks
           # and search for the rest on bookmarkables
           options_key = key == "tag_ids" ? :excluded_bookmark_tag_ids : :excluded_tag_ids
           options[options_key] ||= []
-          options[options_key] << params[:exclude_bookmark_search][key]
+          options[options_key] << exclude_params[key]
           options[options_key].flatten!
         end
       end
@@ -374,6 +376,20 @@ class BookmarksController < ApplicationController
       relationship_ids: [],
       freeform_ids: [],
       tag_ids: [],
+    )
+  end
+
+  def bookmark_filter_params(key)
+    params[key].permit(
+      rating_ids: [],
+      warning_ids: [], # backwards compatibility
+      archive_warning_ids: [],
+      category_ids: [],
+      fandom_ids: [],
+      character_ids: [],
+      relationship_ids: [],
+      freeform_ids: [],
+      tag_ids: []
     )
   end
 end
