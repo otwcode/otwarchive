@@ -94,7 +94,7 @@ class PseudsController < ApplicationController
   # PUT /pseuds/1
   # PUT /pseuds/1.xml
   def update
-    @pseud = @user.pseuds.find_by(name: params[:id])
+    @pseud = @user.pseuds.find_by!(name: params[:id])
     authorize @pseud if logged_in_as_admin?
     default = @user.default_pseud
     if @pseud.update(permitted_attributes(@pseud))
