@@ -93,7 +93,7 @@ class ChallengeSignupsController < ApplicationController
         redirect_to '/' and return
       end
     else
-      load_collection
+      @collection = Collection.find_by!(name: params[:collection_id])
       load_challenge if @collection
       return false unless @challenge
     end
