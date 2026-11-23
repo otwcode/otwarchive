@@ -1,4 +1,4 @@
-<% # expects locals form, object %>
+<%# expects locals form, object %>
 <%
   editor_pseuds = User.current_user.pseuds.to_a
   editor_selected = (object.current_user_pseuds || object.pseuds) & editor_pseuds
@@ -21,7 +21,7 @@
     <%= creator_form.hidden_field :ids, value: editor_pseuds.first.id, multiple: true %>
   <% else %>
     <dt class="byline">
-      <%= creator_form.label :ids, ts("Creator/Pseud(s)") %>
+      <%= creator_form.label :ids, t("works.form.byline.creators") %>
     </dt>
     <dd class="byline">
       <%= creator_form.collection_select :ids, editor_pseuds, :id, :name, { selected: editor_selected.map(&:id) }, { multiple: true } %>
@@ -30,7 +30,7 @@
 
   <% if approved.any? %>
     <dt class="byline">
-      <%= ts("Current co-creators") %>
+      <%= t("works.form.byline.current_co-creators") %>
     </dt>
     <dd class="byline">
       <fieldset>
@@ -50,7 +50,7 @@
 
   <% if invited.any? %>
     <dt class="byline">
-      <%= ts("Invited co-creators") %>
+      <%= t("works.form.byline.invited_co-creators") %>
     </dt>
     <dd class="byline">
       <fieldset>
@@ -69,11 +69,11 @@
   <% end %>
 
   <dt class="byline coauthors">
-   <%= label_tag "co-authors-options-show", t("works.byline.show_co-creator_options") %>
+   <%= label_tag "co-authors-options-show", t("works.form.byline.show_co-creator_options") %>
   </dt>
   <dd class="byline coauthors">
     <%= check_box_tag "co-authors-options-show", "1", object.creatorships.any?(&:ambiguous?), class: "toggle_formfield" %>
-    <fieldset id="co-authors-options" title="<%= t("works.byline.add_co-creators") %>">
+    <fieldset id="co-authors-options" title="<%= t("works.form.byline.add_co-creators") %>">
       <%= creator_form.text_field :byline, autocomplete_options("pseud", size: 50).merge(id: "pseud_byline") %>
       <% object.creatorships.each do |creatorship| %>
         <% next unless creatorship.ambiguous? %>
@@ -81,7 +81,7 @@
         <% pseuds = creatorship.ambiguous_pseuds %>
         <% key = :"author_attributes_#{name.downcase.gsub(/\W+/, "")}" %>
         <p class="error">
-          <%= label_tag key, ts("There's more than one user with the pseud %{name}. Please choose the one you want:", name: name) %>
+          <%= label_tag key, t("works.form.byline.ambiguous_pseuds", name: name) %>
           <%= creator_form.collection_select :coauthors, pseuds, :id, :user_login, { include_blank: true }, { id: key, name: "#{creator_form.object_name}[coauthors][]" } %>
         </p>
       <% end %>

@@ -3647,9 +3647,6 @@ en:
       language:
         choose: Choose a language
       title: Associations
-    byline:
-      add_co-creators: Add co-creators
-      show_co-creator_options: Add co-creators?
     drafts:
       page_heading: Unposted Draft
       please_note: 'Please note:'
@@ -3672,6 +3669,15 @@ en:
       works_skins_help_title: Work skins
     edit_tags:
       page_heading_html: Edit Work Tags for %{title}
+    form:
+      byline:
+        add_co-creators: Add co-creators
+        ambiguous_pseuds: 'There''s more than one user with the pseud %{name}. Please choose the one you want:'
+        creators: Creator/pseud(s)
+        current_co-creators: Current co-creators
+        invited_co-creators: Invited co-creators
+        remove_self: Remove me as co-creator
+        show_co-creator_options: Add co-creators?
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works
