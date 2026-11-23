@@ -23,7 +23,7 @@ class LanguagesController < ApplicationController
   end
 
   def edit
-    @language = Language.find_by(short: params[:id])
+    @language = Language.find_by!(short: params[:id])
     authorize @language
     return unless @language == Language.default
 
