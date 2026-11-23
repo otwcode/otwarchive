@@ -82,6 +82,22 @@ describe ChallengeSignupsController do
                                  "You aren't allowed to see the CSV summary.")
     end
 
+    context "when collection does not exist" do
+      before { fake_login }
+
+      it "raises RecordNotFound for a missing collection" do
+        expect do
+          get :index, params: { collection_id: "fake_collection" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+
+      it "raises RecordNotFound for a CSV request with a missing collection" do
+        expect do
+          get :index, params: { collection_id: "fake_collection", format: :csv }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
     context "when user visits their own sign-ups" do
       it "sets the page subtitle correctly" do
         fake_login_known_user(user)
