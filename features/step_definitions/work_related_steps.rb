@@ -163,14 +163,14 @@ When "I draft a translation" do
   FactoryBot.create(:language, name: "Deutsch", short: "de")
 
   step %{I go to the new work page}
-    step %{I check "No Archive Warnings Apply"}
-    step %{I fill in "Fandoms" with "Stargate"}
-    step %{I fill in "Work title" with "Worldbuilding Translated"}
-    step %{I fill in "content" with "That could be an amusing crossover."}
-    step %{I list the work "Worldbuilding" as inspiration}
-    step %{I check "This is a translation"}
-    step %{I select "Deutsch" from "Choose a language"}
-    step %{I press "Preview"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work title" with "Worldbuilding Translated"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I check "This is a translation"}
+  step %{I select "Deutsch" from "Choose a language"}
+  step %{I press "Preview"}
 end
 
 When "I list a series as inspiration" do

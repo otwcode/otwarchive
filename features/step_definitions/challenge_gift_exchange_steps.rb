@@ -344,12 +344,12 @@ When /^I start to fulfill my assignment$/ do
   step %{I follow "My Dashboard"}
   step %{I follow "Assignments ("}
   step %{I follow "Fulfill"}
-    step %{I fill in "Work title" with "Fulfilled Story"}
-    step %{I select "Not Rated" from "Rating"}
-    step %{I check "No Archive Warnings Apply"}
-    step %{I select "English" from "Choose a language"}
-    step %{I fill in "Fandom" with "Final Fantasy X"}
-    step %{I fill in "content" with "This is a really cool story about Final Fantasy X"}
+  step %{I fill in "Work title" with "Fulfilled Story"}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandom" with "Final Fantasy X"}
+  step %{I fill in "content" with "This is a really cool story about Final Fantasy X"}
 end
 
 When /^I fulfill my assignment$/ do

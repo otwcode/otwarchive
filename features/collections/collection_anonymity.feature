@@ -448,13 +448,13 @@ Feature: Collection
 
     When I am logged in as "creator"
       And I set up the draft "Secret Work"
-      And I fill in "Collections" with "Anonymizing,Fluffy"
+      And I fill in "Post to collections/challenges" with "Anonymizing,Fluffy"
       And I press "Post"
       And I go to creator's works page
     Then I should not see "Secret Work"
 
     When I edit the work "Secret Work"
-      And I fill in "Collections" with "Holidays,Fluffy"
+      And I fill in "Post to collections/challenges" with "Holidays,Fluffy"
       # Delay before posting to make sure the cache is expired
       And it is currently 1 second from now
       And I press "Update"
