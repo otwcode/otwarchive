@@ -49,7 +49,7 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with cha
   end
   if collection.present?
     c = Collection.find_by(title: collection)
-    fill_in("Collections", with: c.name)
+    fill_in("Post to collections/challenges", with: c.name)
   end
   if series.present?
     if page.has_select?("work[series_attributes][id]", with_options: [series])
