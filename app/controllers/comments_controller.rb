@@ -111,22 +111,22 @@ class CommentsController < ApplicationController
 
   def check_modify_parent
     parent = find_parent
-    parent_path = parent.is_a?(AdminPost) ? admin_post_path(parent) : work_path(parent)
     # No one can create or update comments on something hidden by an admin.
     if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
       flash[:error] = ts("Sorry, you can't add or edit comments on a hidden work.")
-      redirect_to parent_path
+      redirect_to work_path(parent)
     end
     # No one can create or update comments on unrevealed works.
     if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
       flash[:error] = ts("Sorry, you can't add or edit comments on an unrevealed work.")
-      redirect_to parent_path
+      redirect_to work_path(parent)
     end
 
     # No one can create or update comments on unpublished (A.K.A. unposted) works or admin posts.
     return unless parent.respond_to?(:posted) && !parent.posted
 
     flash[:error] = t("comments.check_modify_parent.draft")
+    parent_path = parent.is_a?(AdminPost) ? admin_post_path(parent) : work_path(parent)
     redirect_to parent_path
   end
 
