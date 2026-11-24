@@ -316,10 +316,10 @@ module ApplicationHelper
 
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
   def checkbox_section_toggle(checkboxes_id, checkboxes_size, options = {})
-    toggle_show = content_tag(:a, ts("Expand %{checkboxes_size} Checkboxes", checkboxes_size: checkboxes_size),
+    toggle_show = content_tag(:a, t("application_helper.checkbox_section_toggle.expand", count: checkboxes_size),
                               class: "toggle #{checkboxes_id}_show") + "\n".html_safe
 
-    toggle_hide = content_tag(:a, ts("Collapse Checkboxes"),
+    toggle_hide = content_tag(:a, t("application_helper.checkbox_section_toggle.collapse"),
                                   style: "display: none;",
                                   class: "toggle #{checkboxes_id}_hide",
                                   href: "##{checkboxes_id}") + "\n".html_safe
