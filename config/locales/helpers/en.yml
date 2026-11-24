@@ -3,6 +3,11 @@ en:
   application_helper:
     allowed_html_instructions:
       html_help_title: Html help
+    checkbox_section_toggle:
+      collapse: Collapse Checkboxes
+      expand:
+        one: Expand %{count} Checkbox
+        other: Expand %{count} Checkboxes
     help_modal:
       help_symbol: "?"
     rich_text_instructions:
