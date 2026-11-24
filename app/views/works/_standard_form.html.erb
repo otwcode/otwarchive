@@ -1,24 +1,22 @@
 <!--REVIEW: trying out articles on these fieldsets to see if that's a better chunker, but may revert after testing. Have also tossed in landmark headings on top level groups-->
 <%= form_for(@work, html: { id: "work-form", class: "verbose post work" }) do |f| %>
-  <p class="required notice">* <%= ts("Required information") %></p>
+  <p class="required notice">* <%= t("works.form.required_information") %></p>
 
   <%= render "work_form_tags", include_blank: false %>
 
   <fieldset class="preface" role="article">
-    <legend><%= t("works.preface.title") %></legend>
-    <h3 class="landmark heading"><%= t("works.preface.title") %></h3>
+    <legend><%= t("works.form.preface.legend") %></legend>
+    <h3 class="landmark heading"><%= t("works.form.preface.legend") %></h3>
     <dl>
       <dt class="title required">
-        <%= f.label :title, ts("Work Title") + "*" %>
+        <%= f.label :title, "#{t('works.form.preface.title.label')}*" %>
       </dt>
       <dd class="title required">
         <%= f.text_field :title, class: "observe_textlength text" %>
         <%= live_validation_for_field("work_title",
               maximum_length: ArchiveConfig.TITLE_MAX,
               minimum_length: ArchiveConfig.TITLE_MIN,
-              failureMessage: ts("We need a title! (At least %{min_length} character long, please.)",
-                min_length: ArchiveConfig.TITLE_MIN.to_s))
-        %>
+              failureMessage: t("works.form.preface.title.validation", count: ArchiveConfig.TITLE_MIN)) %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
 
@@ -26,7 +24,7 @@
       <%= render "pseuds/byline", form: f, object: @work %>
 
       <dt class="summary">
-        <%= f.label :summary, ts("Summary", max: ArchiveConfig.SUMMARY_MAX.to_s) %>
+        <%= f.label :summary, t("works.form.preface.summary") %>
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, class: "observe_textlength" %>
@@ -42,18 +40,18 @@
   </fieldset>
 
   <fieldset id="associations" role="article">
-    <legend><%= t("works.associations.title") %></legend>
-    <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
+    <legend><%= t("works.form.associations.legend") %></legend>
+    <h3 class="landmark heading"><%= t("works.form.associations.legend") %></h3>
     <dl>
       <% @assignments = get_open_assignments(current_user) %>
       <% if @assignments.any? || @work.challenge_assignments.any? %>
         <!-- if the user has open assignments? -->
         <dt class="collection">
-          <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %>
-          <%= link_to_help_modal(help_works_assignment_path, t(".works_assignment_help_title")) %>
+          <%= f.label "challenge_assignment_ids[]", t("works.form.associations.fulfill_assignment") %>
+          <%= link_to_help_modal(help_works_assignment_path, t("works.form.associations.works_assignment_help_title")) %>
         </dt>
         <dd class="collection listbox group">
-          <h4 class="heading"><%= ts("Open Assignments") %></h4>
+          <h4 class="heading"><%= t("works.form.associations.open_assignments") %></h4>
           <%= checkbox_section f, :challenge_assignment_ids, (@work.challenge_assignments + @assignments).uniq,
                 :checked_method => "challenge_assignments", :name_method => "title" %>
         </dd>
@@ -62,30 +60,30 @@
       <% if !(@claims = current_user.request_claims.unstarted).empty? || !@work.challenge_claims.empty? %>
         <!-- if the user has open claims? -->
         <dt class="collection">
-          <%= f.label "challenge_claim_ids[]", ts("Fulfill a Claim") %>
-          <%= link_to_help_modal(help_works_assignment_path, t(".works_assignment_help_title")) %>
+          <%= f.label "challenge_claim_ids[]", t("works.form.associations.fulfill_claim") %>
+          <%= link_to_help_modal(help_works_assignment_path, t("works.form.associations.works_assignment_help_title")) %>
         </dt>
         <dd class="collection listbox group">
-          <h4 class="heading"><%= ts("Open Claims") %></h4>
+          <h4 class="heading"><%= t("works.form.associations.open_claims") %></h4>
           <%= checkbox_section f, :challenge_claim_ids, (@work.challenge_claims + @claims).uniq,
               :checked_method => "challenge_claims", :name_helper_method => "claim_title" %>
         </dd>
       <% end %>
 
       <!-- Add collection -->
-      <dt class="collection" title="<%= ts("post to collection or challenge") %>">
-        <%= f.label :collection_names, ts("Post to Collections / Challenges") %>
-        <%= link_to_help_modal(help_collectibles_add_to_collection_path, t(".collectibles_add_to_collection_help_title")) %>
+      <dt class="collection">
+        <%= f.label :collection_names, t("works.form.associations.post_to_collections") %>
+        <%= link_to_help_modal(help_collectibles_add_to_collection_path, t("works.form.associations.collectibles_add_to_collection_help_title")) %>
       </dt>
-      <dd class="collection" title="<%= ts("post to collection or challenge") %>">
+      <dd class="collection">
         <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>
       </dd>
 
-      <dt class="recipient" title="<%= ts("gift to") %>">
-        <%= f.label :recipients, ts("Gift this work to") %>
-        <%= link_to_help_modal(help_works_recipients_path, t(".works_recipients_help_title")) %>
+      <dt class="recipient">
+        <%= f.label :recipients, t("works.form.associations.gift_to") %>
+        <%= link_to_help_modal(help_works_recipients_path, t("works.form.associations.works_recipients_help_title")) %>
       </dt>
-      <dd class="recipient" title="<%= ts("gift to") %>">
+      <dd class="recipient">
         <%= f.text_field :recipients, autocomplete_options("pseud", value: @work.recipients(for_form = true)) %>
       </dd>
 
@@ -94,8 +92,8 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), class: "toggle_formfield" %>
       </dt>
       <dd class="parent">
-        <%= label_tag "parent-options-show", t(".header") %>
-        <%= link_to_help_modal(help_works_parents_path, t(".works_parents_help_title")) %>
+        <%= label_tag "parent-options-show", t("works.form.works_parents.header") %>
+        <%= link_to_help_modal(help_works_parents_path, t("works.form.works_parents.help_title")) %>
 
         <!-- Toggles on with parent checkbox -->
         <fieldset id="parent-options">
@@ -104,24 +102,24 @@
             <% new_parent << @work.parent_work_relationships.build if new_parent.empty? %>
 
             <%= f.fields_for :parent_work_relationships, new_parent do |p| %>
-              <dt><%= p.label :url, ts("URL") %></dt>
+              <dt><%= p.label :url, t("works.form.works_parents.url.label") %></dt>
               <dd>
                 <%= p.text_field :url,
                       "aria-describedby" => "parent-attributes-url-field-description" %>
                 <p class="important footnote" id="parent-attributes-url-field-description">
-                  <%= ts("For a work in the Archive, only the URL is required.") %>
+                  <%= t("works.form.works_parents.url.description") %>
                 </p>
               </dd>
 
-              <dt><%= p.label :title %></dt>
+              <dt><%= p.label :title, t("works.form.works_parents.title") %></dt>
               <dd><%= p.text_field :title %></dd>
 
-              <dt><%= p.label :author %></dt>
+              <dt><%= p.label :author, t("works.form.works_parents.author") %></dt>
               <dd><%= p.text_field :author %></dd>
 
               <dt>
-                <%= p.label :language_id, ts("Language") %>
-                <%= link_to_help_modal(help_works_languages_path, t(".works_languages_help_title")) %>
+                <%= p.label :language_id, t("works.form.works_parents.language") %>
+                <%= link_to_help_modal(help_works_languages_path, t("works.form.works_parents.language_help_title")) %>
               </dt>
               <dd>
                 <%= p.select(:language_id, language_options_for_select(sorted_languages, "id"), prompt: " ") %>
@@ -129,29 +127,29 @@
 
               <dt class="translation"><%= p.check_box :translation %></dt>
               <dd class="translation">
-                <%= p.label :translation, ts("This is a translation") %>
-                <%= link_to_help_modal(help_works_translation_link_path, t(".works_translation_link_help_title")) %>
+                <%= p.label :translation, t("works.form.works_parents.translation") %>
+                <%= link_to_help_modal(help_works_translation_link_path, t("works.form.works_parents.translation_link_help_title")) %>
               </dd>
             <% end %>
 
             <% unless existing_parents.blank? %>
-              <dt><%= ts("Current parent works") %></dt>
+              <dt><%= t("works.form.works_parents.current_parents") %></dt>
               <% existing_parents.each do |related_work| %>
                 <dd>
                   <ul class="actions">
                     <li>
                       <% if related_work.parent %>
                         <% if related_work.parent.try(:unrevealed?) %>
-                          <%= link_to t(".unrevealed_work"), related_work.parent %>
-                        <%  else %>
+                          <%= link_to t("works.form.works_parents.unrevealed_work"), related_work.parent %>
+                        <% else %>
                           <%= link_to related_work.parent.title, related_work.parent %>
                         <% end %>
                       <% else %>
-                        <%= t(".deleted_work") %>
+                        <%= t("works.form.works_parents.deleted_work") %>
                       <% end %>
                     </li>
                     <li>
-                      <%= link_to t(".remove"), related_work, data: { confirm: t(".remove_confirm") }, method: :delete %>
+                      <%= link_to t("works.form.works_parents.remove"), related_work, data: { confirm: t("works.form.works_parents.remove_confirm") }, method: :delete %>
                     </li>
                   </ul>
                 </dd>
@@ -167,24 +165,24 @@
         <%= check_box_tag "series-options-show", "1", check_series_box(@work), class: "toggle_formfield" %>
       </dt>
       <dd class="serial">
-        <%= label_tag "series-options-show", ts("This work is part of a series") %>
-        <%= link_to_help_modal(help_works_series_path, t(".works_series_help_title")) %>
+        <%= label_tag "series-options-show", t("works.form.associations.show_series_options") %>
+        <%= link_to_help_modal(help_works_series_path, t("works.form.associations.works_series_help_title")) %>
 
         <!-- Toggles on with series checkbox -->
         <fieldset id="series-options">
           <dl>
             <%= fields_for "work[series_attributes]" do |s| %>
-              <dt><%= s.label "id", ts("Choose one of your existing series:") %></dt>
+              <dt><%= s.label "id", t("works.form.associations.choose_series") %></dt>
               <dd>
                 <%= s.collection_select(:id, @series, :id, :title, { selected: work_series_value(:id), prompt: true }) %>
               </dd>
 
-              <dt><%= s.label :title, ts("Or create and use a new one:") %></dt>
+              <dt><%= s.label :title, t("works.form.associations.create_new_series") %></dt>
               <dd><%= s.text_field :title, value: work_series_value(:title) %></dd>
             <% end %>
 
             <% unless @serial_works.blank? || @work.new_record? %>
-              <dt><%= ts("Current Series") %></dt>
+              <dt><%= t("works.form.associations.current_series") %></dt>
               <% for serial in @serial_works %>
                 <% unless serial.new_record? %>
                   <dd>
@@ -193,8 +191,7 @@
                         <%= link_to serial.series.title, serial.series %>
                       </li>
                       <li>
-                        <%= link_to ts("Remove Work From Series"), serial_work_path(serial),
-                                method: :delete %>
+                        <%= link_to t("works.form.associations.remove_from_series"), serial_work_path(serial), method: :delete %>
                       </li>
                     </ul>
                   </dd>
@@ -212,13 +209,13 @@
           <%= check_box_tag "chapters-options-show", "1", @work.chaptered?, class: "toggle_formfield" %>
         </dt>
         <dd class="chaptered wip">
-          <%= label_tag "chapters-options-show", ts("This work has multiple chapters") %>
+          <%= label_tag "chapters-options-show", t("works.form.associations.show_chapters_options") %>
 
           <fieldset id="chapters-options">
             <dl>
-              <dt><%= f.label :wip_length, ts("Chapter 1 of") %></dt>
+              <dt><%= f.label :wip_length, t("works.form.associations.chapter_1_of") %></dt>
               <dd><%= f.text_field :wip_length, class: "number" %></dd>
-              <dt><%= c.label :title, ts("Chapter Title:") %></dt>
+              <dt><%= c.label :title, t("works.form.associations.chapter_title") %></dt>
               <dd><%= c.text_field :title, value: @chapter.title %></dd>
             </dl>
           </fieldset>
@@ -229,13 +226,13 @@
           <%= f.check_box :backdate, { id: "backdate-options-show", class: "toggle_formfield" } %>
         </dt>
         <dd class="backdate">
-          <%= label_tag "backdate-options-show", ts("Set a different publication date") %>
-          <%= link_to_help_modal(help_works_backdating_path, t(".works_backdating_help_title")) %>
+          <%= label_tag "backdate-options-show", t("works.form.associations.show_publication_date_options") %>
+          <%= link_to_help_modal(help_works_backdating_path, t("works.form.associations.works_backdating_help_title")) %>
 
           <fieldset id="backdate-options" class="optional">
             <dl>
-              <dt><%= label_tag "published_at", ts("Set publication date") %></dt>
-              <dd id="managePublicationDate" class="datetime" title="<%= ts("set date") %>">
+              <dt><%= label_tag "published_at", t("works.form.associations.set_publication_date") %></dt>
+              <dd id="managePublicationDate" class="datetime">
                 <!--BACK END, this select box does not seem to be acquiring the label published_at -->
                 <%= c.date_select("published_at", :start_year => Date.current.year, :end_year => 1950, :default => Date.current, :value => @chapter.published_at, :order => [:day, :month, :year]) %>
               </dd>
@@ -246,14 +243,14 @@
         <%= render "work_form_associations_language", f: f %>
 
         <dt class="skin">
-          <%= f.label :work_skin_id, t("works.skin.select") %>
-          <%= link_to_help_modal(help_works_skins_path, t(".works_skins_help_title")) %>
+          <%= f.label :work_skin_id, t("works.form.associations.select_skin") %>
+          <%= link_to_help_modal(help_works_skins_path, t("works.form.associations.works_skins_help_title")) %>
         </dt>
         <dd class="skin">
           <%= f.collection_select :work_skin_id, all_coauthor_skins, :id, :title,
                 { :selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), include_blank: true } %>
           <p class="actions" role="navigation">
-            <%= link_to ts("Public Work Skins"), skins_path(:skin_type => "WorkSkin") %>
+            <%= link_to t("works.form.associations.public_work_skins"), skins_path(skin_type: "WorkSkin") %>
           </p>
         </dd>
       </dl>
@@ -262,8 +259,8 @@
 
   <!-- privacy settings -->
   <fieldset class="privacy" role="article">
-    <legend><%= t("works.permissions.privacy") %></legend>
-    <h3 class="landmark heading"><%= t("works.permissions.privacy") %></h3>
+    <legend><%= t("works.form.privacy.legend") %></legend>
+    <h3 class="landmark heading"><%= t("works.form.privacy.legend") %></h3>
     <dl>
       <!-- Privacy dropdown (storyprivacy) -->
       <dt class="restrict">
@@ -271,8 +268,8 @@
       </dt>
 
       <dd class="restrict">
-        <%= f.label :restricted, t("works.permissions.visibility.restricted") %>
-        <%= link_to_help_modal(help_privacy_restricted_work_path, t(".privacy_restricted_work_help_title")) %>
+        <%= f.label :restricted, t("works.form.privacy.visibility.restricted") %>
+        <%= link_to_help_modal(help_privacy_restricted_work_path, t("works.form.privacy.visibility.help_title")) %>
       </dd>
 
       <dt class="moderated comments">
@@ -280,12 +277,12 @@
       </dt>
       <dd class="moderated comments">
         <%= f.label :moderated_commenting_enabled, t("comments.commentable.permissions.moderated_commenting.enable") %>
-        <%= link_to_help_modal(help_privacy_moderated_commenting_path, t(".privacy_moderated_commenting_help_title")) %>
+        <%= link_to_help_modal(help_privacy_moderated_commenting_path, t("comments.commentable.permissions.moderated_commenting.help_title")) %>
       </dd>
 
       <dt class="permissions comments">
         <%= t("comments.commentable.permissions.options.label") %>
-        <%= link_to_help_modal(help_privacy_restricted_commenting_path, t(".privacy_restricted_commenting_help_title")) %>
+        <%= link_to_help_modal(help_privacy_restricted_commenting_path, t("comments.commentable.permissions.options.help_title")) %>
       </dt>
       <dd class="permissions comments">
         <fieldset>
@@ -304,34 +301,30 @@
   <% unless @chapters %>
     <!-- Work text field (chapter_attributes_content) -->
     <fieldset class="work text" role="article">
-      <legend class="required"><%= ts("Work Text") %>*</legend>
+      <legend class="required"><%= t("works.form.content.legend") %>*</legend>
       <ul class="hidden rtf-html-switch actions" role="menu">
-        <li><a class="rtf-link" href="#"><%= ts("Rich Text") %></a></li>
-        <li><a class="html-link" href="#"><%= ts("HTML") %></a></li>
+        <li><a class="rtf-link" href="#"><%= t("works.form.content.rich_text") %></a></li>
+        <li><a class="html-link" href="#"><%= t("works.form.content.html") %></a></li>
       </ul>
       <p class="rtf-html-instructions note">
         <span class="html-notes"><%= allowed_html_instructions %></span>
         <span class="hidden rtf-notes"><%= rich_text_instructions %></span>
       </p>
       <p class="notice">
-        <%= ts("<strong>Note:</strong> Text entered in the posting form is <strong>not</strong> automatically saved. Always keep a backup copy of your work.").html_safe %>
+        <%= t("works.form.content.not_automatically_saved_html", not_automatically_saved_note_bold: tag.strong(t("works.form.content.not_automatically_saved_note")), not_automatically_saved_negation_bold: tag.strong(t("works.form.content.not_automatically_saved_negation"))) %>
       </p>
 
       <% use_tinymce %>
         <div class="rtf-html-field">
-          <h4 class="landmark heading"><%= ts("Work Text") %>*</h4>
+          <h4 class="landmark heading"><%= t("works.form.content.legend") %>*</h4>
           <%= c.text_area :content, value: @chapter.content,
                 class: "mce-editor observe_textlength large", id: "content" %>
           <%= live_validation_for_field("content",
-            maximum_length: ArchiveConfig.CONTENT_MAX_DISPLAYED,
-            minimum_length: ArchiveConfig.CONTENT_MIN,
-            tooLongMessage: ts("We salute your ambition! But sadly the content must be less than %{max} characters long. (Maybe you want to create a multi-chaptered work?)",
-              max: ArchiveConfig.CONTENT_MAX_DISPLAYED.to_s),
-            tooShortMessage: ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.",
-              min: ArchiveConfig.CONTENT_MIN.to_s),
-            failureMessage: ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.",
-              min: ArchiveConfig.CONTENT_MIN.to_s))
-          %>
+                maximum_length: ArchiveConfig.CONTENT_MAX_DISPLAYED,
+                minimum_length: ArchiveConfig.CONTENT_MIN,
+                tooLongMessage: t("works.form.content.validation.too_long", count: ArchiveConfig.CONTENT_MAX_DISPLAYED),
+                tooShortMessage: t("works.form.content.validation.too_short", count: ArchiveConfig.CONTENT_MIN),
+                failureMessage: t("works.form.content.validation.too_short", count: ArchiveConfig.CONTENT_MIN)) %>
 
           <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX_DISPLAYED) %>
         </div>
