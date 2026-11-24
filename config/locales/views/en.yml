@@ -3644,8 +3644,6 @@ en:
         preferences: Set your preferences now
       page_title: Adult Content Warning
     associations:
-      language:
-        choose: Choose a language
       title: Associations
     byline:
       add_co-creators: Add co-creators
@@ -3668,10 +3666,15 @@ en:
       privacy_moderated_commenting_help_title: Comments moderated
       privacy_restricted_commenting_help_title: Who can comment on these works
       privacy_restricted_work_help_title: Registered users
-      works_languages_help_title: Languages help
       works_skins_help_title: Work skins
     edit_tags:
       page_heading_html: Edit Work Tags for %{title}
+    form:
+      associations:
+        language:
+          help_title: Languages help
+          label: Choose a language
+          required_to_select: Please select a language
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works
@@ -3762,8 +3765,6 @@ en:
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
-    work_form_associations_language:
-      works_languages_help_title: Languages help
     work_form_tags:
       additional_tags_help_title: Additional tags help
       categories_help_title: Categories help
