@@ -8,8 +8,13 @@
 
       <% if child_comments && child_comments.size > 0 %>
         <!-- cut off the recursion when we get too deep, but not if there's just one last measly comment left -->
-        <% if depth >= ArchiveConfig.COMMENT_THREAD_MAX_DEPTH && child_comments.size > 1 %>
+        <% if depth >= ArchiveConfig.COMMENT_THREAD_MAX_DEPTH  && child_comments.size > 1 %>
           <li class="comment"><p>(<%= link_to ts("%{count} more comments in this thread", count: comment.children_count), comment_path(comment) %>)</p></li>
+          <!-- if depth reached and one child comment left and child comment has no children-->
+        <% elsif depth >= ArchiveConfig.COMMENT_THREAD_MAX_DEPTH && child_comments.size == 1 %>
+          <% child_comment = child_comments[0] %>
+          <% if child_comment.reviewed_replies.size > 0 %>
+            <li class="comment"><p>(<%= link_to ts("%{count} more comments in this thread", count: comment.children_count), comment_path(comment) %>)</p></li>
         <% else %>
           <li>
             <%= render 'comments/comment_thread', comments: child_comments, depth: depth+1 %>
