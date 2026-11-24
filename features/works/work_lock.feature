@@ -14,7 +14,7 @@ Scenario: Posting locked work
       And I select "English" from "Choose a language"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Characters" with "Sammy"
-      And I fill in "Work Title" with "Awesomeness"
+      And I fill in "Work title" with "Awesomeness"
       And I fill in "content" with "The story of how they met and how they got into trouble"
       And I lock the work
     When I press "Preview"

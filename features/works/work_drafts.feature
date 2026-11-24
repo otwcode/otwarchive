@@ -16,7 +16,7 @@ Feature: Work Drafts
     And I check "No Archive Warnings Apply"
     And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "MASH (TV)"
-    And I fill in "Work Title" with "Draft Dodging"
+    And I fill in "Work title" with "Draft Dodging"
     And I fill in "content" with "Klinger lay under his porch."
     And I press "Preview"
   Then I should see "Draft was successfully created. It will be scheduled for deletion on"

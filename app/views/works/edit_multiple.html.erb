@@ -23,16 +23,16 @@
 
   <%= render "work_form_tags", include_blank: true %>
   <fieldset class="preface" role="article">
-    <legend><%= t("works.preface.title") %></legend>
-    <h3 class="landmark heading"><%= t("works.preface.title") %></h3>
+    <legend><%= t("works.form.preface.legend") %></legend>
+    <h3 class="landmark heading"><%= t("works.form.preface.legend") %></h3>
     <dl>
       <%= render "works/work_form_pseuds", form: form, works: @works %>
     </dl>
   </fieldset>
 
   <fieldset id="associations" role="article">
-    <legend><%= t("works.associations.title") %></legend>
-    <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
+    <legend><%= t("works.form.associations.legend") %></legend>
+    <h3 class="landmark heading"><%= t("works.form.associations.legend") %></h3>
     <dl>
       <%= render "collectibles/collectible_form", form: form, collectibles: @works %>
       <dt>
@@ -44,8 +44,8 @@
       </dd>
 
       <dt>
-        <%= form.label :work_skin_id, t("works.skin.select") %>
-        <%= link_to_help_modal(help_works_skins_path, t(".works_skins_help_title")) %>
+        <%= form.label :work_skin_id, t("works.form.associations.select_skin") %>
+        <%= link_to_help_modal(help_works_skins_path, t("works.form.associations.works_skins_help_title")) %>
       </dt>
       <dd>
         <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title,
@@ -55,20 +55,20 @@
   </fieldset>
 
   <fieldset class="privacy" role="article">
-    <legend><%= t("works.permissions.privacy") %></legend>
-    <h3 class="landmark heading"><%= t("works.permissions.privacy") %></h3>
+    <legend><%= t("works.form.privacy.legend") %></legend>
+    <h3 class="landmark heading"><%= t("works.form.privacy.legend") %></h3>
     <dl>
 
       <dt>
-        <%= t("works.permissions.visibility.label") %>
-        <%= link_to_help_modal(help_privacy_restricted_work_path, t(".privacy_restricted_work_help_title")) %>
+        <%= t("works.form.privacy.visibility.label") %>
+        <%= link_to_help_modal(help_privacy_restricted_work_path, t("works.form.privacy.visibility.help_title")) %>
       </dt>
       <dd>
         <fieldset>
         <%= radio_button_list(form, :restricted, [
-              ["", t("works.permissions.visibility.keep_current")],
-              ["1", t("works.permissions.visibility.multiple_works_restricted")],
-              ["0", t("works.permissions.visibility.unrestricted")]
+              ["", t("works.form.privacy.visibility.keep_current")],
+              ["1", t("works.form.privacy.visibility.multiple_works_restricted")],
+              ["0", t("works.form.privacy.visibility.unrestricted")]
             ])
           %>
         </fieldset>
@@ -76,7 +76,7 @@
 
       <dt>
         <%= t("comments.commentable.permissions.moderated_commenting.label") %>
-        <%= link_to_help_modal(help_privacy_moderated_commenting_path, t(".privacy_moderated_commenting_help_title")) %>
+        <%= link_to_help_modal(help_privacy_moderated_commenting_path, t("comments.commentable.permissions.moderated_commenting.help_title")) %>
       </dt>
       <dd>
         <fieldset>
@@ -91,7 +91,7 @@
 
       <dt>
         <%= t("comments.commentable.permissions.options.multiple_works_label") %>
-        <%= link_to_help_modal(help_privacy_restricted_commenting_path, t(".privacy_restricted_commenting_help_title")) %>
+        <%= link_to_help_modal(help_privacy_restricted_commenting_path, t("comments.commentable.permissions.options.multiple_works_help_title")) %>
       </dt>
       <dd>
         <fieldset>

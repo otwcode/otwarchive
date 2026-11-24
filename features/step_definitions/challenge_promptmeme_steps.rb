@@ -382,12 +382,12 @@ When /^I start to fulfill my claim with "([^\"]*)"$/ do |title|
   step %{I follow "My Dashboard"}
   step %{I follow "Claims ("}
   step %{I follow "Fulfill"}
-    step %{I fill in "Work Title" with "#{title}"}
-    step %{I select "Not Rated" from "Rating"}
-    step %{I check "No Archive Warnings Apply"}
-    step %{I select "English" from "Choose a language"}
-    step %{I fill in "Fandom" with "Stargate Atlantis"}
-    step %{I fill in "content" with "This is an exciting story about Atlantis"}
+  step %{I fill in "Work title" with "#{title}"}
+  step %{I select "Not Rated" from "Rating"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I select "English" from "Choose a language"}
+  step %{I fill in "Fandom" with "Stargate Atlantis"}
+  step %{I fill in "content" with "This is an exciting story about Atlantis"}
 end
 
 When /^I start to fulfill my claim$/ do
@@ -406,7 +406,7 @@ When /^I fulfill my claim again$/ do
   step %{I follow "Claims ("}
   step %{I follow "Fulfilled Claims"}
   step %{I follow "Fulfill"}
-  step %{I fill in "Work Title" with "Second Story"}
+  step %{I fill in "Work title" with "Second Story"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
     step %{I select "English" from "Choose a language"}
@@ -421,10 +421,10 @@ When /^mod fulfills claim$/ do
   step %{I am logged in as "mod1"}
   step %{I claim a prompt from "Battle 12"}
   step %{I start to fulfill my claim}
-    step %{I fill in "Work Title" with "Fulfilled Story-thing"}
-    step %{I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"}
+  step %{I fill in "Work title" with "Fulfilled Story-thing"}
+  step %{I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"}
   step %{I press "Preview"}
-    step %{I press "Post"}
+  step %{I press "Post"}
 end
 
 When /^I delete my prompt in "([^\"]*)"$/ do |title|

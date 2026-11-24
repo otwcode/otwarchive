@@ -422,7 +422,7 @@ Feature: Collection
     And I should see "Fulfill"
   When I follow "Fulfill"
   Then I should see "Post New Work"
-  When I fill in "Work Title" with "Fulfilling Story 1"
+  When I fill in "Work title" with "Fulfilling Story 1"
     And I fill in "Fandoms" with "Stargate Atlantis"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"

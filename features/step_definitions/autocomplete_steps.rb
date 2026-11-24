@@ -231,7 +231,7 @@ Given /^a set of collections for testing autocomplete$/ do
 end
 
 Then /^the collection item autocomplete field should list matching collections$/ do
-  step %{I enter "gre" in the "Post to Collections / Challenges" autocomplete field}
+  step %{I enter "gre" in the "Post to collections/challenges" autocomplete field}
   step %{I should see "great" in the autocomplete}
   step %{I should see "really great" in the autocomplete}
   step %{I should not see "awesome" in the autocomplete}

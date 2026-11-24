@@ -977,6 +977,7 @@ en:
         moderated_commenting:
           disable: Disable comment moderation
           enable: Enable comment moderation
+          help_title: Comments moderated
           keep_current: Keep current comment moderation settings
           label: Comment moderation
           notice:
@@ -986,8 +987,10 @@ en:
           disable_all: No one can comment
           disable_anon: Only registered users can comment
           enable_all: Registered users and guests can comment
+          help_title: Who can comment on this work
           keep_current: Keep current comment settings
           label: Who can comment on this work
+          multiple_works_help_title: Who can comment on these works
           multiple_works_label: Who can comment on these works
         work:
           alt_action: You can however still leave Kudos!
@@ -3646,7 +3649,6 @@ en:
     associations:
       language:
         choose: Choose a language
-      title: Associations
     byline:
       add_co-creators: Add co-creators
       show_co-creator_options: Add co-creators?
@@ -3665,13 +3667,86 @@ en:
       page_heading: Edit Work
       remove_me_as_co_creator: Remove Me As Co-Creator
     edit_multiple:
-      privacy_moderated_commenting_help_title: Comments moderated
-      privacy_restricted_commenting_help_title: Who can comment on these works
-      privacy_restricted_work_help_title: Registered users
       works_languages_help_title: Languages help
-      works_skins_help_title: Work skins
     edit_tags:
       page_heading_html: Edit Work Tags for %{title}
+    form:
+      associations:
+        chapter_1_of: Chapter 1 of
+        chapter_title: 'Chapter title:'
+        choose_series: 'Choose one of your existing series:'
+        collectibles_add_to_collection_help_title: Adding to collections
+        create_new_series: 'Or create and use a new one:'
+        current_series: Current series
+        fulfill_assignment: Does this fulfill a challenge assignment
+        fulfill_claim: Fulfill a claim
+        gift_to: Gift this work to
+        legend: Associations
+        open_assignments: Open Assignments
+        open_claims: Open Claims
+        post_to_collections: Post to collections/challenges
+        public_work_skins: Public Work Skins
+        remove_from_series: Remove Work From Series
+        select_skin: Select work skin
+        set_publication_date: Set publication date
+        show_chapters_options: This work has multiple chapters
+        show_publication_date_options: Set a different publication date
+        show_series_options: This work is part of a series
+        works_assignment_help_title: Fulfilling assignments
+        works_backdating_help_title: Publication date options
+        works_recipients_help_title: Recipients
+        works_series_help_title: Choosing series
+        works_skins_help_title: Work skins
+      content:
+        html: HTML
+        legend: Work Text
+        not_automatically_saved_html: "%{not_automatically_saved_note_bold} Text entered in the posting form is %{not_automatically_saved_negation_bold} automatically saved. Always keep a backup copy of your work."
+        not_automatically_saved_negation: not
+        not_automatically_saved_note: 'Note:'
+        rich_text: Rich Text
+        validation:
+          too_long:
+            one: We salute your ambition! But sadly the content must be less than %{count} character long. (Maybe you want to create a multi-chaptered work?)
+            other: We salute your ambition! But sadly the content must be less than %{count} characters long. (Maybe you want to create a multi-chaptered work?)
+          too_short:
+            one: Brevity is the soul of wit, but your content does have to be at least %{count} character long.
+            other: Brevity is the soul of wit, but your content does have to be at least %{count} characters long.
+      preface:
+        legend: Preface
+        summary: Summary
+        title:
+          label: Work title
+          validation:
+            one: We need a title! (At least %{count} character long, please.)
+            other: We need a title! (At least %{count} characters long, please.)
+      privacy:
+        legend: Privacy
+        visibility:
+          help_title: Registered users
+          import_works_restricted: Only show imported works to registered users
+          keep_current: Keep current visibility settings
+          label: Visibility
+          multiple_works_restricted: Only show to registered users
+          restricted: Only show your work to registered users
+          unrestricted: Show to all
+      required_information: Required information
+      works_parents:
+        author: Author
+        current_parents: Current parent works
+        deleted_work: Deleted work
+        header: This work is a remix, a translation, a podfic, or was inspired by another work
+        help_title: Parent works help
+        language: Language
+        language_help_title: Languages help
+        remove: Remove
+        remove_confirm: Are you sure you want to remove the connection to this work?
+        title: Title
+        translation: This is a translation
+        translation_link_help_title: Translation link
+        unrevealed_work: Mystery Work
+        url:
+          description: For a work in the Archive, only the URL is required.
+          label: URL
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works
@@ -3689,20 +3764,8 @@ en:
     new_import:
       content_policy: Content Policy
       post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
-      privacy_moderated_commenting_help_title: Comments moderated
-      privacy_restricted_commenting_help_title: Who can comment on these works
-      privacy_restricted_work_help_title: Registered users
       tos_faq: Terms of Service FAQ
       works_languages_help_title: Languages help
-    permissions:
-      privacy: Privacy
-      visibility:
-        import_works_restricted: Only show imported works to registered users
-        keep_current: Keep current visibility settings
-        label: Visibility
-        multiple_works_restricted: Only show to registered users
-        restricted: Only show your work to registered users
-        unrestricted: Show to all
     posting_fieldset:
       actions:
         cancel: Cancel
@@ -3716,8 +3779,6 @@ en:
       legend: Post Work
       post_notice_html: All works on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
-    preface:
-      title: Preface
     preview:
       page_heading: Preview
     preview_tags:
@@ -3736,26 +3797,6 @@ en:
     show_multiple:
       draft: " (Draft)"
       no_works: You have no works or drafts to edit.
-    skin:
-      select: Select work skin
-    standard_form:
-      collectibles_add_to_collection_help_title: Adding To Collections
-      deleted_work: Deleted work
-      header: This work is a remix, a translation, a podfic, or was inspired by another work
-      privacy_moderated_commenting_help_title: Comments moderated
-      privacy_restricted_commenting_help_title: Who can comment on this work
-      privacy_restricted_work_help_title: Registered users
-      remove: Remove
-      remove_confirm: Are you sure you want to remove the connection to this work?
-      unrevealed_work: Mystery Work
-      works_assignment_help_title: Fulfilling Assignments
-      works_backdating_help_title: Publication Date Options
-      works_languages_help_title: Languages help
-      works_parents_help_title: Parent works help
-      works_recipients_help_title: Recipients
-      works_series_help_title: Choosing series
-      works_skins_help_title: Work skins
-      works_translation_link_help_title: Translation link
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"

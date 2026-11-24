@@ -51,7 +51,7 @@ Feature: Sanitizing HTML
     And I check "No Archive Warnings Apply"
     And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Supernatural"
-    And I fill in "Work Title" with "All Hell Breaks Loose"
+    And I fill in "Work title" with "All Hell Breaks Loose"
     And I fill in "content" with 'BODY{-moz-binding:url("http://ha.ckers.org/xssmoz.xml#xss")}'
     And I press "Preview"
   Then I should see "Preview"

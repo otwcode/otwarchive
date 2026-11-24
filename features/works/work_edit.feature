@@ -235,7 +235,7 @@ Feature: Edit Works
       And I go to the works page
       And I follow "What a title! :< :& :>"
       And I follow "Edit"
-    Then I should see "What a title! :< :& :>" in the "Work Title" input
+    Then I should see "What a title! :< :& :>" in the "Work title" input
 
   Scenario: When a user changes their co-creator preference, it does not remove them from works they have already co-created.
     Given basic tags
@@ -256,7 +256,7 @@ Feature: Edit Works
     Then I should see "Michael (Burnham), testuser"
     When the user "Burnham" disallows co-creators
       And I edit the work "Thats not my Spock"
-      And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
+      And I fill in "Work title" with "Thats not my Spock, it has too much beard"
       And I press "Update"
     Then I should see "Thats not my Spock, it has too much beard"
       And I should see "Michael (Burnham), testuser"
@@ -279,7 +279,7 @@ Feature: Edit Works
     Then I should see "Michael (Burnham), testuser"
     When the user "Burnham" disallows co-creators
       And I edit the work "Thats not my Spock"
-      And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
+      And I fill in "Work title" with "Thats not my Spock, it has too much beard"
       And I press "Update"
     Then I should see "Thats not my Spock, it has too much beard"
       And I should see "Michael (Burnham), testuser"

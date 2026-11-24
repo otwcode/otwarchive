@@ -35,7 +35,7 @@ Feature: Prompt Meme Challenge
     And I should see "promptcollection" in the "work_collection_names" input
     And the "Untitled Prompt in The Kissing Game (Anonymous)" checkbox should be checked
     And the "work_recipients" field should not contain "myname1"
-    And I fill in "Work Title" with "Kinky Story"
+    And I fill in "Work title" with "Kinky Story"
     And I fill in "content" with "Story written for your kinks, oh mystery reader!"
   Given all emails have been delivered
     And I press "Post"
@@ -72,7 +72,7 @@ Feature: Prompt Meme Challenge
     And I check "No Archive Warnings Apply"
     And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "GhostSoup"
-    And I fill in "Work Title" with "Kinky Story"
+    And I fill in "Work title" with "Kinky Story"
     And I fill in "Additional Tags" with "yourkink1, yourkink2"
     And I fill in "content" with "Story written for your kinks, oh mystery reader!"
   When all emails have been delivered
@@ -483,7 +483,7 @@ Feature: Prompt Meme Challenge
     And I should see "canon SGA love by myname4 in Battle 12" within "div#main.challenge_claims-index h4"
   When I follow "Fulfill"
     And I fill in "Fandoms" with "Stargate Atlantis"
-    And I fill in "Work Title*" with "Fulfilled Story-thing"
+    And I fill in "Work title*" with "Fulfilled Story-thing"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I select "English" from "Choose a language"
@@ -499,7 +499,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
   When I claim a prompt from "Battle 12"
   When I start to fulfill my claim
-    And I fill in "Work Title" with "Fulfilled Story-thing"
+    And I fill in "Work title" with "Fulfilled Story-thing"
     And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
   When I press "Preview"
     And I press "Post"
@@ -517,7 +517,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
   When I claim a prompt from "Battle 12"
   When I start to fulfill my claim
-    And I fill in "Work Title" with "Fulfilled Story-thing"
+    And I fill in "Work title" with "Fulfilled Story-thing"
     And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
   When I press "Preview"
     And I press "Post"

@@ -67,7 +67,7 @@ When "I post a related work as remixer" do
   step %{I check "No Archive Warnings Apply"}
   step %{I select "English" from "Choose a language"}
   step %{I fill in "Fandoms" with "Stargate"}
-  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "Work title" with "Followup"}
   step %{I fill in "content" with "That could be an amusing crossover."}
   step %{I list the work "Worldbuilding" as inspiration}
   step %{I press "Preview"}
@@ -81,7 +81,7 @@ When "I post a related work as remixer without previewing it" do
   step %{I check "No Archive Warnings Apply"}
   step %{I select "English" from "Choose a language"}
   step %{I fill in "Fandoms" with "Stargate"}
-  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "Work title" with "Followup"}
   step %{I fill in "content" with "That could be an amusing crossover."}
   step %{I list the work "Worldbuilding" as inspiration}
   step %{I press "Post"}
@@ -94,7 +94,7 @@ When "I post a related work as remixer after saving it as a draft" do
   step %{I check "No Archive Warnings Apply"}
   step %{I select "English" from "Choose a language"}
   step %{I fill in "Fandoms" with "Stargate"}
-  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "Work title" with "Followup"}
   step %{I fill in "content" with "That could be an amusing crossover."}
   step %{I list the work "Worldbuilding" as inspiration}
   step %{I press "Save Draft"}
@@ -108,7 +108,7 @@ When "I post a related work as remixer after saving it as a draft and then editi
   step %{I check "No Archive Warnings Apply"}
   step %{I select "English" from "Choose a language"}
   step %{I fill in "Fandoms" with "Stargate"}
-  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "Work title" with "Followup"}
   step %{I fill in "content" with "That could be an amusing crossover."}
   step %{I list the work "Worldbuilding" as inspiration}
   step %{I press "Save Draft"}
@@ -123,7 +123,7 @@ When "I post a related work as remixer after previewing it and then editing it" 
   step %{I check "No Archive Warnings Apply"}
   step %{I select "English" from "Choose a language"}
   step %{I fill in "Fandoms" with "Stargate"}
-  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "Work title" with "Followup"}
   step %{I fill in "content" with "That could be an amusing crossover."}
   step %{I list the work "Worldbuilding" as inspiration}
   step %{I press "Preview"}
@@ -138,7 +138,7 @@ When "I post a related work as remixer for an external work" do
   step %{I check "No Archive Warnings Apply"}
   step %{I select "English" from "Choose a language"}
   step %{I fill in "Fandoms" with "Stargate"}
-  step %{I fill in "Work Title" with "Followup"}
+  step %{I fill in "Work title" with "Followup"}
   step %{I fill in "content" with "That could be an amusing crossover."}
   step %{I list an external work as inspiration}
   step %{I press "Preview"}
@@ -163,14 +163,14 @@ When "I draft a translation" do
   FactoryBot.create(:language, name: "Deutsch", short: "de")
 
   step %{I go to the new work page}
-    step %{I check "No Archive Warnings Apply"}
-    step %{I fill in "Fandoms" with "Stargate"}
-    step %{I fill in "Work Title" with "Worldbuilding Translated"}
-    step %{I fill in "content" with "That could be an amusing crossover."}
-    step %{I list the work "Worldbuilding" as inspiration}
-    step %{I check "This is a translation"}
-    step %{I select "Deutsch" from "Choose a language"}
-    step %{I press "Preview"}
+  step %{I check "No Archive Warnings Apply"}
+  step %{I fill in "Fandoms" with "Stargate"}
+  step %{I fill in "Work title" with "Worldbuilding Translated"}
+  step %{I fill in "content" with "That could be an amusing crossover."}
+  step %{I list the work "Worldbuilding" as inspiration}
+  step %{I check "This is a translation"}
+  step %{I select "Deutsch" from "Choose a language"}
+  step %{I press "Preview"}
 end
 
 When "I list a series as inspiration" do

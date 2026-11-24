@@ -67,7 +67,7 @@ Feature: View a work with various options
     And I set my preferences to View Full Work mode by default
   When I set up the draft "multiChap"
     And I check "This work has multiple chapters"
-    And I fill in "Chapter Title" with "cool chapter title"
+    And I fill in "Chapter title" with "cool chapter title"
     And I fill in "Chapter 1 of" with "?"
     And I press "Post"
   Then I should see "Chapter 1: "

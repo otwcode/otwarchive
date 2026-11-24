@@ -228,7 +228,7 @@ Scenario: AO3-2147 Creating a new merger to a non-can tag while adding character
     And I follow "New Work"
     And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "Up with Testing"
-    And I fill in "Work Title" with "whatever"
+    And I fill in "Work title" with "whatever"
     And I fill in "Relationships" with "Testypants/Testyskirt"
     And I fill in "content" with "a long story about nothing"
     And I press "Preview"

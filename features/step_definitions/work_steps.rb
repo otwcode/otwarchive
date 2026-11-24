@@ -14,7 +14,7 @@ DEFAULT_CATEGORY = "Other"
 When /^I fill in the basic work information for "([^"]*)"$/ do |title|
   step %{I fill in basic work tags}
   check(DEFAULT_WARNING)
-  fill_in("Work Title", with: title)
+  fill_in("Work title", with: title)
   select("English", from: "work_language_id")
   fill_in("content", with: DEFAULT_CONTENT)
 end
@@ -49,7 +49,7 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with cha
   end
   if collection.present?
     c = Collection.find_by(title: collection)
-    fill_in("Collections", with: c.name)
+    fill_in("Post to collections/challenges", with: c.name)
   end
   if series.present?
     if page.has_select?("work[series_attributes][id]", with_options: [series])

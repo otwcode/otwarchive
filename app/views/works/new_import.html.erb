@@ -123,15 +123,15 @@
   </fieldset>
 
   <fieldset>
-    <legend><%= t("works.permissions.privacy") %></legend>
-    <h3 class="landmark heading"><%= t("works.permissions.privacy") %></h3>
+    <legend><%= t("works.form.privacy.legend") %></legend>
+    <h3 class="landmark heading"><%= t("works.form.privacy.legend") %></h3>
     <dl>
       <dt class="restricted">
         <%= check_box_tag "restricted" %>
       </dt>
       <dd class="restricted">
-        <%= label_tag "restricted", t("works.permissions.visibility.import_works_restricted") %>
-        <%= link_to_help_modal(help_privacy_restricted_work_path, t(".privacy_restricted_work_help_title")) %>
+        <%= label_tag "restricted", t("works.form.privacy.visibility.import_works_restricted") %>
+        <%= link_to_help_modal(help_privacy_restricted_work_path, t("works.form.privacy.visibility.help_title")) %>
       </dd>
 
       <dt class="moderated comments">
@@ -139,12 +139,12 @@
       </dt>
       <dd class="moderated comments">
         <%= label_tag :moderated_commenting_enabled, t("comments.commentable.permissions.moderated_commenting.enable") %>
-        <%= link_to_help_modal(help_privacy_moderated_commenting_path, t(".privacy_moderated_commenting_help_title")) %>
+        <%= link_to_help_modal(help_privacy_moderated_commenting_path, t("comments.commentable.permissions.moderated_commenting.help_title")) %>
       </dd>
 
       <dt class="permissions comments">
         <%= t("comments.commentable.permissions.options.multiple_works_label") %>
-        <%= link_to_help_modal(help_privacy_restricted_commenting_path, t(".privacy_restricted_commenting_help_title")) %>
+        <%= link_to_help_modal(help_privacy_restricted_commenting_path, t("comments.commentable.permissions.options.multiple_works_help_title")) %>
       </dt>
       <dd class="permissions comments">
         <fieldset>
