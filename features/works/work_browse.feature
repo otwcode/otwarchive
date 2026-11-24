@@ -164,7 +164,7 @@ Scenario: Can also browse work indexed by language
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Weiß Kreuz"
-      And I fill in "Work Title" with "Überraschende Überraschung"
+      And I fill in "Work title" with "Überraschende Überraschung"
       And I fill in "content" with "Dies ist eine Fanfic in Deutsch."
       And I select "Deutsch" from "Choose a language"
     When I press "Post"

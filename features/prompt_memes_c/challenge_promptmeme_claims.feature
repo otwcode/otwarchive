@@ -153,7 +153,7 @@ Feature: Prompt Meme Challenge
   When I start to fulfill my claim
   When I check "My Gift Exchange (myname2)"
     And I uncheck "canon SGA love in Battle 12 (myname4)"
-    And I fill in "Post to Collections / Challenges" with ""
+    And I fill in "Post to collections/challenges" with ""
     And I press "Post"
   Then I should see "My Gift Exchange"
     And I should not see "Battle 12"

@@ -12,7 +12,7 @@ Feature: Download a work
 
   Given I am logged in as "myname"
     And I set up the draft "Foo"
-    And I fill in "Work Title" with
+    And I fill in "Work title" with
         """
         "Has double quotes"
         """
@@ -72,8 +72,8 @@ Feature: Download a work
     And I set the publication date to 10 January 2015
     And I check "This work is part of a series"
     And I fill in "Or create and use a new one:" with "THE DOWN"
-    And I fill in "Post to Collections / Challenges" with "mycollection1, mycollection2"
-    And I fill in "Work Title" with "Downloadable"
+    And I fill in "Post to collections/challenges" with "mycollection1, mycollection2"
+    And I fill in "Work title" with "Downloadable"
     And I fill in "content" with "Could be downloaded"
     And I select "English" from "Choose a language"
     And I press "Post"
@@ -440,7 +440,7 @@ Feature: Download a work
   
   Given I am logged in as "myname"
     And I set up the draft "Multi-Chapter Download"
-    And I fill in "Work Title" with "Multi-Chapter Download"
+    And I fill in "Work title" with "Multi-Chapter Download"
     And I fill in "content" with "Content for chapter one."
     And I press "Post"
     And I follow "Add Chapter"
@@ -457,7 +457,7 @@ Feature: Download a work
   
   Given I am logged in as "myname"
     And I set up the draft "Download"
-    And I fill in "Work Title" with "Download"
+    And I fill in "Work title" with "Download"
     And I fill in "content" with "Content for chapter one."
     And I check "This work has multiple chapters"
     And I fill in "Chapter 1 of" with "?"

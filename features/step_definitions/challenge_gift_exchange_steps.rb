@@ -344,7 +344,7 @@ When /^I start to fulfill my assignment$/ do
   step %{I follow "My Dashboard"}
   step %{I follow "Assignments ("}
   step %{I follow "Fulfill"}
-    step %{I fill in "Work Title" with "Fulfilled Story"}
+    step %{I fill in "Work title" with "Fulfilled Story"}
     step %{I select "Not Rated" from "Rating"}
     step %{I check "No Archive Warnings Apply"}
     step %{I select "English" from "Choose a language"}

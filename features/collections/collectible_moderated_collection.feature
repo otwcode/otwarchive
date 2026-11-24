@@ -10,7 +10,7 @@ Feature: Collectible items in moderated collections
   Scenario: Add my work to a moderated collection by editing the work
     Given I post the work "Blabla"
     When I edit the work "Blabla"
-      And I fill in "Post to Collections / Challenges" with "various_penguins"
+      And I fill in "Post to collections/challenges" with "various_penguins"
       And I press "Preview"
     Then I should see "the moderated collection 'Various Penguins'"
     When I press "Update"

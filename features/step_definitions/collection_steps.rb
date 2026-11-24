@@ -38,7 +38,7 @@ end
 
 When "I edit the work {string} to be in the collection(s) {string}" do |work, collection|
   step %{I edit the work "#{work}"}
-  fill_in("Post to Collections / Challenges", with: collection)
+  fill_in("Post to collections/challenges", with: collection)
   step %{I update the work}
 end
 

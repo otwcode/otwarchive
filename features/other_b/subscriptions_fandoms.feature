@@ -45,7 +45,7 @@ Feature: Subscriptions
   When I am logged in as "myname1"
     And I post the work "Old Snippet"
     And I edit the work "Old Snippet"
-    And I fill in "Post to Collections / Challenges" with "hidden_treasury"
+    And I fill in "Post to collections/challenges" with "hidden_treasury"
     And I check "F/F"
     And I press "Update"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
@@ -65,7 +65,7 @@ Feature: Subscriptions
   When I am logged in as "myname1"
     And I post the work "Old Snippet"
     And I edit the work "Old Snippet"
-    And I fill in "Post to Collections / Challenges" with "hidden_treasury"
+    And I fill in "Post to collections/challenges" with "hidden_treasury"
     And I check "F/F"
     And I press "Update"
     And all indexing jobs have been run

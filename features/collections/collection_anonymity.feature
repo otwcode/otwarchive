@@ -349,7 +349,7 @@ Feature: Collection
       And I post the work "My Work"
 
     When I edit the work "My Work"
-      And I fill in "Post to Collections / Challenges" with "anonymous_collection"
+      And I fill in "Post to collections/challenges" with "anonymous_collection"
       And I press "Preview"
 
     Then I should see "Anonymous Collection"
@@ -366,7 +366,7 @@ Feature: Collection
       And I am logged in as "creator"
       And I post the work "My Work"
     When I edit the work "My Work"
-      And I fill in "Post to Collections / Challenges" with "anonymous_collection"
+      And I fill in "Post to collections/challenges" with "anonymous_collection"
       And I press "Preview"
     Then I should see "Anonymous Collection"
       And I should see "Anonymous [creator]"
