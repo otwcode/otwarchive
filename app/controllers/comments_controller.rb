@@ -122,11 +122,12 @@ class CommentsController < ApplicationController
       redirect_to work_path(parent)
     end
 
-    # No one can create or update comments on unpublished (A.K.A. unposted) works.
+    # No one can create or update comments on unpublished (A.K.A. unposted) works or admin posts.
     return unless parent.respond_to?(:posted) && !parent.posted
 
     flash[:error] = t("comments.check_modify_parent.draft")
-    redirect_to work_path(parent)
+    parent_path = parent.is_a?(AdminPost) ? admin_post_path(parent) : work_path(parent)
+    redirect_to parent_path
   end
 
   def find_parent

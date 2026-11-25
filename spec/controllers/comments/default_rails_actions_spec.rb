@@ -25,6 +25,13 @@ describe CommentsController do
       expect(assigns[:page_subtitle]).to eq("New Comment on #{admin_post.title}")
     end
 
+    it "redirects to the admin post if it is a draft" do
+      admin_post = create(:admin_post, posted: false)
+      get :new, params: { admin_post_id: admin_post.id }
+      expect(response).to redirect_to(admin_post_path(admin_post))
+      expect(flash[:error]).to eq(I18n.t("comments.check_modify_parent.draft"))
+    end
+
     context "when the commentable is a valid tag" do
       let(:fandom) { create(:fandom) }
 
