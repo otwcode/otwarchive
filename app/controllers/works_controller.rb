@@ -747,7 +747,7 @@ class WorksController < ApplicationController
         end
       end
     end
-    @language = Language.find_by(short: params[:language_id]) if params[:language_id].present?
+    @language = Language.find_by!(short: params[:language_id]) if params[:language_id].present?
     @owner = @pseud || @user || @collection || @tag || @language
   end
 
