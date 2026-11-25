@@ -444,6 +444,14 @@ describe WorksController, work_search: true do
       end
     end
 
+    describe "when the language id is invalid" do
+      it "raises a 404 for an invalid language id" do
+        params = { fandom_id: fandom.id, language_id: "notalanguage" }
+        expect { get :index, params: params }
+          .to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
     describe "when the fandom id is empty" do
       it "returns the work" do
         params = { fandom_id: nil }
