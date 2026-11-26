@@ -5,6 +5,20 @@ describe CollectionsController, collection_search: true do
   include RedirectExpectationHelper
 
   describe "POST #create" do
+    context "when the challenge type is invalid" do
+      it "redirects to the new collection form without creating a collection" do
+        fake_login
+        collection_attributes = attributes_for(:collection)
+
+        expect do
+          post :create, params: { collection: collection_attributes, challenge_type: "FooBar" }
+        end.not_to change(Collection, :count)
+
+        expect(response).to redirect_to(new_collection_path)
+        expect(flash[:error]).to eq("FooBar is not a valid challenge type.")
+      end
+    end
+
     context "when the header_image_url is invalid" do
       it "fails validation but does not result in error 500" do
         fake_login
@@ -16,6 +30,22 @@ describe CollectionsController, collection_search: true do
         expect(collection.errors[:header_image_url]).to include("is not a valid URL.")
         # but does not result in error 500
         expect(response.status).not_to be >= 500
+      end
+    end
+  end
+
+  describe "PATCH #update" do
+    context "when the challenge type is invalid" do
+      it "redirects to the edit form without changing the collection" do
+        collection = create(:collection, challenge: create(:gift_exchange))
+        fake_login_known_user(collection.owners.first.user)
+
+        expect do
+          patch :update, params: { id: collection.to_param, collection: { title: "Changed title" }, challenge_type: "FooBar" }
+        end.not_to change { collection.reload.attributes }
+
+        expect(response).to redirect_to(edit_collection_path(collection))
+        expect(flash[:error]).to eq("FooBar is not a valid challenge type.")
       end
     end
   end
