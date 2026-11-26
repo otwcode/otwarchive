@@ -21,9 +21,10 @@ describe "Mass updating tags" do
     end
     let(:make_request) do
       post mass_update_tag_path(fandom),
-           params: { "canonicals" => freeforms.map { |freeform| freeform.id.to_s } }
+           params: { "canonicals" => freeforms.map { |tag| tag.id.to_s } }
     end
+    let(:expected_flash_text) { "and 37 more" }
 
-    it_behaves_like "a bulk action that fits in the session cookie"
+    it_behaves_like "an action whose flash fits in the session cookie"
   end
 end

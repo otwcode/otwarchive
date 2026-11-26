@@ -22,7 +22,8 @@ describe "Adding a work to collections" do
       post work_collection_items_path(work),
            params: { "collection_names" => collection_names.join(",") }
     end
+    let(:expected_flash_text) { "27 more errors" }
 
-    it_behaves_like "a bulk action that fits in the session cookie"
+    it_behaves_like "an action whose flash fits in the session cookie"
   end
 end

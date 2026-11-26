@@ -22,8 +22,9 @@ describe "Deleting multiple works" do
                       authors: [user.default_pseud])
       end
     end
+    let(:expected_flash_text) { "and 17 more were deleted." }
 
-    it_behaves_like "a bulk action that fits in the session cookie"
+    it_behaves_like "an action whose flash fits in the session cookie"
 
     it "deletes the works" do
       make_request
@@ -40,12 +41,12 @@ describe "Deleting multiple works" do
       end
     end
 
-    it "deletes the works and lists every title in the flash" do
+    it "deletes the works and lists only the first titles in the flash" do
       make_request
 
       expect(response).to redirect_to(show_multiple_user_works_path(user))
       expect(Work.where(id: works.map(&:id))).to be_empty
-      expect(flash[:notice]).to include("Work 0", "Work 19")
+      expect(flash[:notice]).to include("and 17 more")
     end
   end
 end

@@ -24,15 +24,17 @@ describe "Reviewing multiple tag set nominations" do
     end
     let(:make_request) do
       put update_multiple_tag_set_nominations_path(owned_tag_set),
-          params: tagnames.to_h { |tagname| ["freeform_reject_#{tagname}", "1"] }
+          params: tagnames.to_h { |name| ["freeform_reject_#{name}", "1"] }
     end
+    let(:expected_flash_text) { "and 37 more" }
 
     before do
       tagnames.each do |tagname|
-        FreeformNomination.create!(tag_set_nomination: tag_set_nomination, tagname: tagname)
+        FreeformNomination.create!(tag_set_nomination: tag_set_nomination,
+                                   tagname: tagname)
       end
     end
 
-    it_behaves_like "a bulk action that fits in the session cookie"
+    it_behaves_like "an action whose flash fits in the session cookie"
   end
 end
