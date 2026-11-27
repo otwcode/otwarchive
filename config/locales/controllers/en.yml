@@ -183,6 +183,7 @@ en:
   collections:
     index:
       subcollections_page_title: "%{collection_title} - Subcollections"
+    invalid_challenge_type: "%{challenge_type} is not a valid challenge type."
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
