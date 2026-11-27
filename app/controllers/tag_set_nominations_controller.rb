@@ -265,8 +265,14 @@ class TagSetNominationsController < ApplicationController
       end
 
       @notice ||= []
-      @notice << ts("Successfully added to set: %{approved}", approved: helpers.limited_list(@tagnames_to_add).join(', ')) unless @tagnames_to_add.empty?
-      @notice << ts("Successfully rejected: %{rejected}", rejected: helpers.limited_list(@tagnames_to_remove).join(', ')) unless @tagnames_to_remove.empty?
+      unless @tagnames_to_add.empty?
+        approved = helpers.limited_list(@tagnames_to_add).join(", ")
+        @notice << t(".added_to_set", approved: approved)
+      end
+      unless @tagnames_to_remove.empty?
+        rejected = helpers.limited_list(@tagnames_to_remove).join(", ")
+        @notice << t(".rejected", rejected: rejected)
+      end
     end
 
     # If we got here we made it through, YAY

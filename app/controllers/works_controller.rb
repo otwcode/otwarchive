@@ -586,7 +586,8 @@ class WorksController < ApplicationController
 
     message = t("works.moderated_collections_message_html",
                 count: moderated_collections.length,
-                collections: helpers.safe_join(helpers.limited_list(links), ", "))
+                collections: helpers.safe_join(helpers.limited_list(links),
+                                               ", "))
 
     flash[:notice] = view_context.safe_join([flash[:notice], message].compact, " ")
   end
@@ -660,11 +661,11 @@ class WorksController < ApplicationController
   def delete_multiple
     @user = current_user
     @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id).where(id: params[:work_ids]).readonly(false)
-    titles = @works.collect(&:title)
+    titles = helpers.limited_list(@works.collect(&:title))
 
     @works.each(&:destroy)
 
-    flash[:notice] = ts('Your works %{titles} were deleted.', titles: helpers.limited_list(titles).join(', '))
+    flash[:notice] = ts('Your works %{titles} were deleted.', titles: titles.join(', '))
     redirect_to show_multiple_user_works_path(@user)
   end
 

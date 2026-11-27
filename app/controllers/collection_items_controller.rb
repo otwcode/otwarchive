@@ -142,8 +142,9 @@ class CollectionItemsController < ApplicationController
     end
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
-      flash[:notice] = ts("Added to collection(s): %{collections}.",
-                          collections: helpers.limited_list(new_collections.collect(&:title)).join(", "))
+      collections = helpers.limited_list(new_collections.map(&:title))
+      flash[:notice] = t(".added_to_collections",
+                         collections: collections.join(", "))
     end
     unless invited_collections.empty?
       invited_collections.each do |needs_user_approval|
@@ -156,7 +157,11 @@ class CollectionItemsController < ApplicationController
     end
     unless unapproved_collections.empty?
       flash[:notice] ||= ""
-      flash[:notice] += ts(" You have submitted your work to #{unapproved_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: helpers.limited_list(unapproved_collections.map(&:title)).join(', '))
+      collections = helpers.limited_list(unapproved_collections.map(&:title))
+      submitted = t(".submitted_to_moderated_collections",
+                    count: unapproved_collections.size,
+                    collections: collections.join(", "))
+      flash[:notice] += " #{submitted}"
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
