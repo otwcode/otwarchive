@@ -385,4 +385,29 @@ describe ApplicationHelper do
       expect(first_paragraph("<p>first</p><p>second</p>")).to eq("<p>first</p>")
     end
   end
+
+  describe "#limited_list" do
+    it "returns the items unchanged when there are no more than the limit" do
+      expect(limited_list(%w[a b c])).to eq(%w[a b c])
+    end
+
+    it "replaces a single item over the limit" do
+      expect(limited_list(%w[a b c d])).to eq(["a", "b", "c", "and 1 more"])
+    end
+
+    it "replaces the items over the limit with how many there are" do
+      expect(limited_list(%w[a b c d e])).to eq(["a", "b", "c", "and 2 more"])
+    end
+
+    it "uses the given limit" do
+      expect(limited_list(%w[a b c], limit: 1)).to eq(["a", "and 2 more"])
+    end
+
+    it "uses the given key for the items over the limit" do
+      items = limited_list(%w[a b c d e],
+                           more: "works.update_multiple.more_errors")
+
+      expect(items).to eq(["a", "b", "c", "2 more errors"])
+    end
+  end
 end

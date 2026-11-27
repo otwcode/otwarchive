@@ -5,6 +5,10 @@ en:
       html_help_title: Html help
     help_modal:
       help_symbol: "?"
+    limited_list:
+      more:
+        one: and 1 more
+        other: and %{count} more
     rich_text_instructions:
       rte_help_title: Rte help
       type_paste_rich_text_html: Type or paste formatted text. %{help_link}

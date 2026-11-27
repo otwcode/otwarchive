@@ -148,6 +148,16 @@ module ApplicationHelper
     }.join.html_safe
   end
 
+  # Shortens long lists so flash messages fit in the 4KB session cookie.
+  # Pass a different `more` key to customize the "and N more" text.
+  # i18n-tasks-use t("application_helper.limited_list.more")
+  def limited_list(items, limit: 3,
+                   more: "application_helper.limited_list.more")
+    return items if items.size <= limit
+
+    items.first(limit) + [t(more, count: items.size - limit)]
+  end
+
   # Generates sorting links for index pages, with column names and directions
   def sort_link(title, column=nil, options = {})
     condition = options[:unless] if options.has_key?(:unless)

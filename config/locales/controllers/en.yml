@@ -167,8 +167,15 @@ en:
       preview_notice: This is a preview of what this chapter will look like after your changes have been applied. You should probably read the whole thing to check for problems before posting.
   collection_items:
     create:
+      added_to_collections: 'Added to collection(s): %{collections}.'
       invited: invited
       invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
+      more_errors:
+        one: 1 more error
+        other: "%{count} more errors"
+      submitted_to_moderated_collections:
+        one: You have submitted your work to the moderated collection '%{collections}'. It will not become a part of the collection until it has been approved by a moderator.
+        other: You have submitted your work to moderated collections (%{collections}). It will not become a part of those collections until it has been approved by a moderator.
   collection_participants:
     destroy:
       success: Removed %{participant} from collection.
@@ -238,6 +245,9 @@ en:
       page_title: Unreviewed Comments on %{name}
   creatorships:
     update:
+      more_creations:
+        one: You are also listed as a co-creator on 1 more work.
+        other: You are also listed as a co-creator on %{count} more works.
       must_select_request: Please select at least one co-creator request first.
   errors:
     auth_error:
@@ -388,6 +398,10 @@ en:
     index:
       page_title: "%{username} - Subscriptions"
       subscription_type_page_title: "%{username} - %{subscription_type} Subscriptions"
+  tag_set_nominations:
+    update_multiple:
+      added_to_set: 'Successfully added to set: %{approved}'
+      rejected: 'Successfully rejected: %{rejected}'
   tag_wranglers:
     create:
       noncanonical_fandoms_tried_assignment:
@@ -399,6 +413,13 @@ en:
   tags:
     index:
       collection_page_title: "%{collection_title} - Tags"
+    mass_update:
+      canonical_failure: 'The following tags couldn''t be made canonical: %{tags}'
+      canonical_success: 'The following tags were successfully made canonical: %{tags}'
+      noncanonical_fandoms: 'The following names are not canonical fandoms: %{fandoms}.'
+      remove_failure: 'The following tags couldn''t be removed: %{tags}'
+      remove_success: 'The following tags were successfully removed: %{tags}'
+      wrangle_success: 'The following tags were successfully wrangled to %{fandoms}: %{tags}'
   user_invite_requests:
     new:
       page_title: Request Invitations
@@ -474,6 +495,10 @@ en:
       tags_updated: Tags were successfully updated.
       unposted_notice: Your changes have not been saved. Please post your work or save the draft if you want to keep them.
       work_updated: Work was successfully updated.
+    update_multiple:
+      more_errors:
+        one: 1 more error
+        other: "%{count} more errors"
     update_tags:
       page_title: Preview Work Tags
   wrangling_guidelines:

@@ -314,8 +314,14 @@ class TagsController < ApplicationController
         end
       end
 
-      error_messages << ts('The following tags couldn\'t be made canonical: %{tags_not_saved}', tags_not_saved: not_saved_canonicals.collect(&:name).join(', ')) unless not_saved_canonicals.empty?
-      notice_messages << ts('The following tags were successfully made canonical: %{tags_saved}', tags_saved: saved_canonicals.collect(&:name).join(', ')) unless saved_canonicals.empty?
+      unless not_saved_canonicals.empty?
+        names = helpers.limited_list(not_saved_canonicals.map(&:name))
+        error_messages << t(".canonical_failure", tags: names.join(", "))
+      end
+      unless saved_canonicals.empty?
+        names = helpers.limited_list(saved_canonicals.map(&:name))
+        notice_messages << t(".canonical_success", tags: names.join(", "))
+      end
     end
 
     # remove associated tags
@@ -332,8 +338,14 @@ class TagsController < ApplicationController
         end
       end
 
-      error_messages << ts('The following tags couldn\'t be removed: %{tags_not_saved}', tags_not_saved: not_saved_removed_associateds.collect(&:name).join(', ')) unless not_saved_removed_associateds.empty?
-      notice_messages << ts('The following tags were successfully removed: %{tags_saved}', tags_saved: saved_removed_associateds.collect(&:name).join(', ')) unless saved_removed_associateds.empty?
+      unless not_saved_removed_associateds.empty?
+        names = helpers.limited_list(not_saved_removed_associateds.map(&:name))
+        error_messages << t(".remove_failure", tags: names.join(", "))
+      end
+      unless saved_removed_associateds.empty?
+        names = helpers.limited_list(saved_removed_associateds.map(&:name))
+        notice_messages << t(".remove_success", tags: names.join(", "))
+      end
     end
 
     # wrangle to fandom(s)
@@ -364,11 +376,17 @@ class TagsController < ApplicationController
 
         canonical_fandom_names = canonical_fandoms.collect(&:name)
         options[:fandom_string] = canonical_fandom_names.join(',')
-        notice_messages << ts('The following tags were successfully wrangled to %{canonical_fandoms}: %{tags_saved}', canonical_fandoms: canonical_fandom_names.join(', '), tags_saved: saved_to_fandoms.collect(&:name).join(', ')) unless saved_to_fandoms.empty?
+        unless saved_to_fandoms.empty?
+          fandoms = helpers.limited_list(canonical_fandom_names).join(", ")
+          names = helpers.limited_list(saved_to_fandoms.map(&:name)).join(", ")
+          notice_messages << t(".wrangle_success",
+                               fandoms: fandoms, tags: names)
+        end
       end
 
       if noncanonical_fandom_names.present?
-        error_messages << ts('The following names are not canonical fandoms: %{noncanonical_fandom_names}.', noncanonical_fandom_names: noncanonical_fandom_names.join(', '))
+        fandoms = helpers.limited_list(noncanonical_fandom_names).join(", ")
+        error_messages << t(".noncanonical_fandoms", fandoms: fandoms)
       end
     end
 
