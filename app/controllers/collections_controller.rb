@@ -191,7 +191,7 @@ class CollectionsController < ApplicationController
     challenge_type = params[:challenge_type]
     return if challenge_type.nil? || Collection::CHALLENGE_TYPE_OPTIONS.any? { |_, value| value == challenge_type }
 
-    flash[:error] = ts("%{challenge_type} is not a valid challenge type.", challenge_type: ERB::Util.html_escape(challenge_type))
+    flash[:error] = t("collections.invalid_challenge_type", challenge_type: ERB::Util.html_escape(challenge_type))
     redirect_to @collection ? edit_collection_path(@collection) : new_collection_path
   end
 
