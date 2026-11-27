@@ -4,6 +4,34 @@ Feature: Filter bookmarks
   As a humble user
   I want to filter some bookmarks
 
+  @javascript @load-default-skin
+  Scenario: Open Include tag help from the bookmark filters
+    Given a canonical fandom "Filter Help Fandom"
+      And I am logged in as "bookmarker"
+      And I post the work "Filter Help Work" with fandom "Filter Help Fandom"
+      And I bookmark the work "Filter Help Work"
+    When I go to the bookmarks page for the tag "Filter Help Fandom"
+      And I open help modal "Include tags help"
+    Then I should see "Tag Filters: Include Tags" within "#modal .content"
+      And I should see "an AND search" within "#modal .content"
+      And I should see a link "Tag Search" within "#modal .content"
+      And I should not see "translation missing" within "#modal .content"
+      And I should not see "<em>" within "#modal .content"
+
+  @javascript @load-default-skin
+  Scenario: Open Exclude tag help from the bookmark filters
+    Given a canonical fandom "Filter Help Fandom"
+      And I am logged in as "bookmarker"
+      And I post the work "Filter Help Work" with fandom "Filter Help Fandom"
+      And I bookmark the work "Filter Help Work"
+    When I go to the bookmarks page for the tag "Filter Help Fandom"
+      And I open help modal "Exclude tags help"
+    Then I should see "Tag Filters: Exclude Tags" within "#modal .content"
+      And I should see "an OR search" within "#modal .content"
+      And I should see a link "Tag Search" within "#modal .content"
+      And I should not see "translation missing" within "#modal .content"
+      And I should not see "<em>" within "#modal .content"
+
   Scenario: Filter a user's bookmarks by work language
     Given "recengine" has bookmarks of works in various languages
       And I am logged in as "recengine"

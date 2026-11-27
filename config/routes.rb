@@ -655,6 +655,8 @@ Rails.application.routes.draw do
   end
 
   # Redirects for moved help files
+  get "/help/bookmark-filters-exclude-tags.html", to: redirect("/help/bookmark_filters_exclude_tags")
+  get "/help/bookmark-filters-include-tags.html", to: redirect("/help/bookmark_filters_include_tags")
   get "/help/chapter-title.html", to: redirect("/help/chapters_title")
   get "/help/add-collectible-to-collection.html", to: redirect("/help/collectibles_add_to_collection")
   get "/help/csv-download.html", to: redirect("/help/csv_download")

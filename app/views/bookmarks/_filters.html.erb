@@ -22,7 +22,7 @@
           <h4 class="heading">
             <%= ts("%{filter_action}", filter_action: filter_action.titleize) %>
           </h4>
-          <%= link_to_help "bookmark-filters-#{filter_action}-tags" %>
+          <%= link_to_help_modal(public_send("help_bookmark_filters_#{filter_action}_tags_path"), t(".#{filter_action}_tags_help_title")) %>
         </dt>
         <dd class="<%= filter_action %> tags group">
           <dl>

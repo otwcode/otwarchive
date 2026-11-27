@@ -1,0 +1,22 @@
+<h4><%= t(".page_heading") %></h4>
+
+<p><%= t(".popular_tags") %></p>
+
+<p><%= t(".autocomplete_html") %></p>
+
+<p><%= t(".exact_tags") %></p>
+
+<% filtered_bookmarks_path = bookmarks_path(
+     tag_id: "F*s*F",
+     exclude_bookmark_search: { warning_ids: [18], freeform_ids: [968] },
+     bookmark_search: { sort_column: "created_at", excluded_tag_names: "Drama" }
+   ) %>
+<p><%= t(".example.html",
+         category_bookmarks_link: link_to(t(".example.category_bookmarks"), tag_bookmarks_path("F*s*F")),
+         filtered_bookmarks_link: link_to(t(".example.filtered_bookmarks_html"), filtered_bookmarks_path)) %></p>
+
+<p><%= t(".canonical_tags.html", tag_search_link: link_to(t(".canonical_tags.tag_search"), search_tags_path)) %></p>
+
+<p><%= t(".more_info.html",
+         tags_faq_link: link_to(t(".more_info.tags_faq"), archive_faq_path("tags")),
+         wrangling_guidelines_link: link_to(t(".more_info.wrangling_guidelines"), wrangling_guidelines_path)) %></p>
