@@ -51,17 +51,7 @@ Capybara.register_driver :selenium_chrome_headless do |app|
               { browser: :chrome, options: browser_options }
             end
 
-  driver = Capybara::Selenium::Driver.new(app, **options)
-
-  def driver.reset!
-    super
-  rescue Selenium::WebDriver::Error::InvalidArgumentError => error
-    # Chrome 158 rejects the wildcard origin Capybara uses to clear browser state.
-    raise unless error.message.include?("* is not a valid URL")
-    quit
-  end
-
-  driver
+  Capybara::Selenium::Driver.new(app, **options)
 end
 
 # Make sure we get full-page screenshots on failure:
