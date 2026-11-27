@@ -7,10 +7,10 @@
 <p><%= t(".exact_tags") %></p>
 
 <% filtered_bookmarks_path = bookmarks_path(
-  tag_id: "F*s*F",
-  include_bookmark_search: { rating_ids: [11], freeform_ids: [60] },
-  bookmark_search: { sort_column: "created_at", other_tag_names: "Drama" }
-) %>
+     tag_id: "F*s*F",
+     include_bookmark_search: { rating_ids: [11], freeform_ids: [60] },
+     bookmark_search: { sort_column: "created_at", other_tag_names: "Drama" }
+   ) %>
 <p><%= t(".example.html",
          category_bookmarks_link: link_to(t(".example.category_bookmarks"), tag_bookmarks_path("F*s*F")),
          filtered_bookmarks_link: link_to(t(".example.filtered_bookmarks"), filtered_bookmarks_path)) %></p>
