@@ -692,7 +692,9 @@ en:
       ratings_help_title: Rating help
       relationships_help_title: Relationships help
     filters:
+      exclude_tags_help_title: Exclude tags help
       from: From
+      include_tags_help_title: Include tags help
       to: To
       word_count: Word count
     index:
@@ -1229,6 +1231,39 @@ en:
         status_page: status page
         tumblr: ao3org
   help:
+    bookmark_filters_exclude_tags:
+      autocomplete_html: "If the tag you want to exclude isn't in the top ten, start entering the tag you need in either the \"Other work tags to exclude\" or \"Other bookmarker's tags to exclude\" field—all tag categories are valid here, and you can add as many tags as you want. The autocomplete will help you find the <em>canonical</em> version of the tag. Use these to take full advantage of the wrangled tagging structure, which will exclude all works using subtags and tags with synonymous meanings."
+      canonical_tags:
+        html: "To look up tags and see which ones are canonical, use the %{tag_search_link}."
+        tag_search: "Tag Search"
+      exact_tags: "You can also enter tags that aren't in the autocomplete. If the tag you enter has been used on the Archive but is not marked canonical, then the filters will look for works that use the exact tag you've entered. If the tag you've entered has never been used on the Archive, but in that case the filters will do a simple text match and may bring up unexpected results. The \"Search within results\" and \"Search bookmarker's tags and notes\" fields will text-match more accurately, especially in the case of relationship tags and other tags with \"/\" or other non-text characters."
+      example:
+        category_bookmarks: "bookmarks tagged with the F/F category"
+        filtered_bookmarks_html: "bookmarks of works or series tagged without <em>any</em> of these tags"
+        html: "Choosing any tag from a category or entering a tag in the \"Other work tags to exclude\" or \"Other bookmarker's tags to exclude\" field will do an OR search with all the tags you select. This means that if you're filtering the %{category_bookmarks_link}, select the <samp>Major Character Death</samp> warning, the canonical <samp>Alternate Universe</samp> tag in the Additional Tags category, and enter or select the canonical tag <samp>Drama</samp> in the \"Other work tags to exclude\" field, only %{filtered_bookmarks_link} will be included in the results."
+      more_info:
+        html: "You can find more information about tags in our %{tags_faq_link}. To read the guidelines tag wranglers use to mark tags canonical, among other things, or to better understand the AO3-specific vocabulary for tags, read the %{wrangling_guidelines_link}."
+        tags_faq: "Tags FAQ"
+        wrangling_guidelines: "Wrangling Guidelines"
+      page_heading: "Tag Filters: Exclude Tags"
+      popular_tags: "The filters list the ten most popular tags for each tag category. To filter by any other tags, use the \"Other work tags to exclude\" or \"Other bookmarker's tags to exclude\" fields."
+    bookmark_filters_include_tags:
+      autocomplete_html: "If the tag that interests you isn't in the top ten, start entering the tag you need in either the \"Other work tags to include\" or \"Other bookmarker's tags to include\" field—all tag categories are valid here, and you can add as many tags as you want. The autocomplete will help you find the <em>canonical</em> version of the tag. Use these to take full advantage of the wrangled tagging structure, which will find all works using subtags and tags with synonymous meanings."
+      canonical_tags:
+        html: "To look up tags and see which ones are canonical, use the %{tag_search_link}."
+        tag_search: "Tag Search"
+      either_tag: "To get results with Tag A OR Tag B, use the \"Search within results\" or \"Search bookmarker's tags and notes\" fields."
+      exact_tags: "You can also enter tags that aren't in the autocomplete. If the tag you enter has been used on the Archive but is not marked canonical, then the filters will look for works that use the exact tag you've entered. If the tag you've entered has never been used on the Archive, the filters will do a simple text match and may bring up unexpected results. The \"Search within results\" and \"Search bookmarker's tags and notes\" fields will text-match more accurately, especially in the case of relationship tags and other tags with \"/\" or other non-text characters."
+      example:
+        category_bookmarks: "bookmarks tagged with the F/F category"
+        filtered_bookmarks: "bookmarks of works or series tagged with all these tags"
+        html: "Choosing any tag from a category or entering a tag in the \"Other work tags to include\" or \"Other bookmarker's tags to include\" field will do an AND search with all the tags you select. This means that if you're filtering the %{category_bookmarks_link}, select the <samp>Teen and Up Audiences</samp> rating, the canonical <samp>Romance</samp> tag in the Additional Tags category, and enter or select the canonical tag <samp>Drama</samp> in the \"Other work tags to include\" field, only %{filtered_bookmarks_link} will be included in the results."
+      more_info:
+        html: "You can find more information about tags in our %{tags_faq_link}. To read the guidelines tag wranglers use to mark tags canonical, among other things, or to better understand the AO3-specific vocabulary for tags, read the %{wrangling_guidelines_link}."
+        tags_faq: "Tags FAQ"
+        wrangling_guidelines: "Wrangling Guidelines"
+      page_heading: "Tag Filters: Include Tags"
+      popular_tags: "The filters list the ten most popular tags for each tag category. To filter by any other tags, use the \"Other work tags to include\" and \"Other bookmarker's tags to include\" fields."
     chapters_title:
       description: You can add a chapter title, but it's not required.
       page_heading: Chapter Title
