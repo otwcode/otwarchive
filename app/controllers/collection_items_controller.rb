@@ -134,12 +134,16 @@ class CollectionItemsController < ApplicationController
 
     # messages to the user
     unless errors.empty?
+      # i18n-tasks-use t("collection_items.create.more_errors")
+      errors = helpers.limited_list(
+        errors, more: "collection_items.create.more_errors"
+      )
       flash[:error] = ts("We couldn't add your submission to the following collection(s): ") + "<br><ul><li />" + errors.join("<li />") + "</ul>"
     end
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
       flash[:notice] = ts("Added to collection(s): %{collections}.",
-                            collections: new_collections.collect(&:title).join(", "))
+                          collections: helpers.limited_list(new_collections.collect(&:title)).join(", "))
     end
     unless invited_collections.empty?
       invited_collections.each do |needs_user_approval|
@@ -152,7 +156,7 @@ class CollectionItemsController < ApplicationController
     end
     unless unapproved_collections.empty?
       flash[:notice] ||= ""
-      flash[:notice] += ts(" You have submitted your work to #{unapproved_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
+      flash[:notice] += ts(" You have submitted your work to #{unapproved_collections.size > 1 ? "moderated collections (%{all_collections}). It will not become a part of those collections" : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: helpers.limited_list(unapproved_collections.map(&:title)).join(', '))
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?

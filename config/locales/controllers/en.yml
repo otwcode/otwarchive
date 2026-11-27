@@ -169,6 +169,9 @@ en:
     create:
       invited: invited
       invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
+      more_errors:
+        one: 1 more error
+        other: "%{count} more errors"
   collection_participants:
     destroy:
       success: Removed %{participant} from collection.
@@ -238,6 +241,9 @@ en:
       page_title: Unreviewed Comments on %{name}
   creatorships:
     update:
+      more_creations:
+        one: You are also listed as a co-creator on 1 more work.
+        other: You are also listed as a co-creator on %{count} more works.
       must_select_request: Please select at least one co-creator request first.
   errors:
     auth_error:
@@ -474,6 +480,10 @@ en:
       tags_updated: Tags were successfully updated.
       unposted_notice: Your changes have not been saved. Please post your work or save the draft if you want to keep them.
       work_updated: Work was successfully updated.
+    update_multiple:
+      more_errors:
+        one: 1 more error
+        other: "%{count} more errors"
     update_tags:
       page_title: Preview Work Tags
   wrangling_guidelines:

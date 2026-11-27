@@ -43,6 +43,11 @@ class CreatorshipsController < ApplicationController
       flash[:notice] << ts("You are now listed as a co-creator on %{link}.",
                            link: link).html_safe
     end
+
+    # i18n-tasks-use t("creatorships.update.more_creations")
+    flash[:notice] = helpers.limited_list(
+      flash[:notice], more: "creatorships.update.more_creations"
+    )
   end
 
   # When the user presses "Reject" on the co-creator request listing, this is

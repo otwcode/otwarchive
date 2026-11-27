@@ -586,7 +586,7 @@ class WorksController < ApplicationController
 
     message = t("works.moderated_collections_message_html",
                 count: moderated_collections.length,
-                collections: view_context.safe_join(links, ", "))
+                collections: helpers.safe_join(helpers.limited_list(links), ", "))
 
     flash[:notice] = view_context.safe_join([flash[:notice], message].compact, " ")
   end
@@ -664,7 +664,7 @@ class WorksController < ApplicationController
 
     @works.each(&:destroy)
 
-    flash[:notice] = ts('Your works %{titles} were deleted.', titles: titles.join(', '))
+    flash[:notice] = ts('Your works %{titles} were deleted.', titles: helpers.limited_list(titles).join(', '))
     redirect_to show_multiple_user_works_path(@user)
   end
 
@@ -694,7 +694,10 @@ class WorksController < ApplicationController
     if @errors.empty?
       flash[:notice] = ts('Your edits were put through! Please check over the works to make sure everything is right.')
     else
-      flash[:error] = @errors
+      # i18n-tasks-use t("works.update_multiple.more_errors")
+      flash[:error] = helpers.limited_list(
+        @errors, more: "works.update_multiple.more_errors"
+      )
     end
 
     redirect_to show_multiple_user_works_path(@user, work_ids: @works.map(&:id))
