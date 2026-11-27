@@ -18,11 +18,6 @@ Feature: Filter bookmarks
       And I should not see "translation missing" within "#modal .content"
       And I should not see "<em>" within "#modal .content"
 
-    Examples:
-      | action  | matching rule |
-      | Include | an AND        |
-      | Exclude | an OR         |
-
   Scenario: Filter a user's bookmarks by work language
     Given "recengine" has bookmarks of works in various languages
       And I am logged in as "recengine"
